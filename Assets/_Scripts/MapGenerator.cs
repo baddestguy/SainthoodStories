@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEditor;
 
 public class TileData
 {
@@ -31,13 +32,15 @@ public class MapGenerator : MonoBehaviour
 {
     public List<MapData> MapGrounds = new List<MapData>();
     public List<MapData> MapSurface = new List<MapData>();
+    public TextAsset MapGroundsCSV, MapSurfaceCSV;
 
-    public IEnumerator LoadAllMaps() {
-        yield return StartCoroutine(LoadMapObject("GameData/Map_Grounds", MapGrounds));
+    public IEnumerator LoadAllMaps() 
+    {
+        yield return StartCoroutine(LoadMapObject(MapGroundsCSV, MapGrounds));
 
         yield return null;
 
-        yield return StartCoroutine(LoadMapObject("GameData/Map_Surface", MapSurface));
+        yield return StartCoroutine(LoadMapObject(MapSurfaceCSV, MapSurface));
 
         StartCoroutine("DisplayMap", 0);
     }
@@ -73,6 +76,47 @@ public class MapGenerator : MonoBehaviour
 
         Debug.Log("MAPS: " + MapGrounds.Count);
         foreach (var map in MapGrounds) {
+            Debug.Log("Map row: " + map.Rows);
+            Debug.Log("Map columns: " + map.Columns);
+        }
+    }
+
+    //Overload that uses files dragged in Inspector
+    IEnumerator LoadMapObject(TextAsset mapGroundsText, List<MapData> mapObjectList)
+    {
+        string[] mapRawData = mapGroundsText.text.Split('x');
+        int mapId = 0;
+
+        foreach (var map in mapRawData)
+        {
+            var tileList = new List<TileData>();
+            string[] mapRows = map.Split('\n');
+
+            int rowCount = 0;
+            int columnCount = 0;
+
+            foreach (string row in mapRows)
+            {
+                if (string.IsNullOrEmpty(row) || string.IsNullOrWhiteSpace(row)) continue;
+
+                string[] columns = row.Split(',');
+                foreach (var col in columns)
+                {
+                    tileList.Add(new TileData(int.Parse(col)));
+                }
+
+                columnCount = columns.Length;
+                rowCount++;
+            }
+
+            mapId++;
+            mapObjectList.Add(new MapData(mapId, rowCount, columnCount, tileList));
+            yield return null;
+        }
+
+        Debug.Log("MAPS: " + MapGrounds.Count);
+        foreach (var map in MapGrounds)
+        {
             Debug.Log("Map row: " + map.Rows);
             Debug.Log("Map columns: " + map.Columns);
         }

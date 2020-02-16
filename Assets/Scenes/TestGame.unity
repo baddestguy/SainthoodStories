@@ -240,6 +240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0724bf97248144445bfb2a0fb5deb6b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MapGroundsCSV: {fileID: 4900000, guid: 955a80f7d8feb4b4eb8389035fd83770, type: 3}
+  MapSurfaceCSV: {fileID: 4900000, guid: 0981f7d1fbe5cc646a9f20db1e8efe5c, type: 3}
 --- !u!4 &280322744
 Transform:
   m_ObjectHideFlags: 0
