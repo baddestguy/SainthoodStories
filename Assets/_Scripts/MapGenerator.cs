@@ -47,38 +47,7 @@ public class MapGenerator : MonoBehaviour
 
     IEnumerator LoadMapObject(string mapObject, List<MapData> mapObjectList) {
         TextAsset mapGroundsText = Resources.Load<TextAsset>(mapObject);
-        string[] mapRawData = mapGroundsText.text.Split('x');
-        int mapId = 0;
-
-        foreach (var map in mapRawData) {
-            var tileList = new List<TileData>();
-            string[] mapRows = map.Split('\n');
-
-            int rowCount = 0;
-            int columnCount = 0;
-
-            foreach (string row in mapRows) {
-                if (string.IsNullOrEmpty(row) || string.IsNullOrWhiteSpace(row)) continue;
-
-                string[] columns = row.Split(',');
-                foreach (var col in columns) {
-                    tileList.Add(new TileData(int.Parse(col)));
-                }
-
-                columnCount = columns.Length;
-                rowCount++;
-            }
-
-            mapId++;
-            mapObjectList.Add(new MapData(mapId, rowCount, columnCount, tileList));
-            yield return null;
-        }
-
-        Debug.Log("MAPS: " + MapGrounds.Count);
-        foreach (var map in MapGrounds) {
-            Debug.Log("Map row: " + map.Rows);
-            Debug.Log("Map columns: " + map.Columns);
-        }
+        yield return StartCoroutine(LoadMapObject(mapGroundsText, mapObjectList));
     }
 
     //Overload that uses files dragged in Inspector
