@@ -3,27 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using EventCallbacks;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MapTile : MonoBehaviour
 {
     private SpriteRenderer SpriteRenderer;
-    private TileData TileData { get; set; }
+    public TileData TileData { get; set; }
 
     [NonSerialized]
     public bool active;
+    public static event UnityAction<MapTile> OnClickEvent;
+
+
     private void Awake(){
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     private void OnEnable(){
-        OnTouchComplete.RegisterListener(ResetTile);
+     //   OnTouchComplete.RegisterListener(ResetTile);
     }
 
     private void OnDisable(){
-        OnTouchComplete.UnregisterListener(ResetTile);
+    //    OnTouchComplete.UnregisterListener(ResetTile);
     }
 
-    public void LoadSprite(TileData tileData, Sprite [] sprites, int sortingOrder = 0) {
+    public void Init(TileData tileData, Sprite [] sprites, int sortingOrder = 0) {
         TileData = tileData;
         if(TileData.TileId >= 0) {
             SpriteRenderer.sprite = sprites[TileData.TileId];
@@ -31,16 +35,27 @@ public class MapTile : MonoBehaviour
         }
     }
 
-    public void OnMouseEnter(){
-        OnTileEnter tileEnter = new OnTileEnter();
-        tileEnter.FireEvent();
-        gameObject.SetActive(false);
-        active = true;
+    public void OnClick()
+    {
+        OnClickEvent?.Invoke(this);
+    }
+
+    public void OnRelease()
+    {
+
+    }
+
+    public void OnMouseDown(){
+        OnClickEvent?.Invoke(this);
+        //OnTileEnter tileEnter = new OnTileEnter();
+        //tileEnter.FireEvent();
+        //gameObject.SetActive(false);
+        //active = true;
     }
 
     public void OnMouseExit(){
-        OnTileExit tileExit = new OnTileExit();
-        tileExit.FireEvent();
+        //OnTileExit tileExit = new OnTileExit();
+        //tileExit.FireEvent();
     }
 
     private void ResetTile(OnTouchComplete touchComplete){

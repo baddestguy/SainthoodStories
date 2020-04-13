@@ -5,6 +5,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    public MapGenerator MapGenerator;
+    public Player Player;
+    public int GameTimer;
+
     private void Awake()
     {
         Instance = this;
@@ -12,12 +16,38 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        SceneManager.LoadScene("TestGame", LoadSceneMode.Additive);
+        LoadGame();
+        SceneManager.sceneLoaded += OnLevelLoaded;
+        Player.OnMoveSuccessEvent += OnPlayerMove;
+        SceneManager.LoadScene("TestGame", LoadSceneMode.Single);
+    }
+
+    public void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        MapGenerator.DisplayMap(0, OnMapGenerated);
+    }
+
+    private void OnMapGenerated()
+    {
+        Player.GameStart(new Mission(1, 25, 1, MapGenerator.MapTiles[37]));
+    }
+
+    public void OnPlayerMove()
+    {
+        GameTimer++;
+        //Debug.Log("GAMEMANAGER TRIGGERD MOVED!");
+        //Trigger Status effects if any
+        //Check if House reached, Check against mission requirements
+    }
+
+    public void Undo()
+    {
+
     }
 
     public void LoadGame()
     {
-
+        MapGenerator.LoadAllMaps();
     }
 
     public void SaveGame()
