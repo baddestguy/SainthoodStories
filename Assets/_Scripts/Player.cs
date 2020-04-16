@@ -6,10 +6,11 @@ using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
-    public static event UnityAction OnMoveSuccessEvent;
+    public static event UnityAction<Energy> OnMoveSuccessEvent;
     public MapGenerator MapGenerator;
     
-    private int Energy; //Create class
+    private Energy Energy;
+    private int EnergyConsumption;
     private MapTile CurrentTile;
     private IEnumerable<MapTile> AdjacentTiles;
 
@@ -23,23 +24,30 @@ public class Player : MonoBehaviour
         Energy = missionDetails.StartingEnergy;
         CurrentTile = missionDetails.StartingTile;
         AdjacentTiles = MapGenerator.GetAdjacentTiles(CurrentTile);
+        ModifyEnergyConsumption(CurrentTile.TileData);
     }
 
     public void OnMove(MapTile newTile)
     {
         Debug.Log("CHECKING: " + newTile.TileData.Id);
-        //Debug.Log("CHECKING: " + newTile);
-        //Debug.Log("CHECKING: " + AdjacentTiles);
-        //Debug.Log("CHECKING: " + AdjacentTiles.Count());
 
         if (CurrentTile == newTile) return;
         if (!AdjacentTiles.Contains(newTile)) return;
         if (newTile.TileData.TileType == TileType.BARRIER) return;
         
         CurrentTile = newTile;
-        Energy--; //Subtract by modifiers
+
+        ModifyEnergyConsumption(CurrentTile.TileData);
+        Energy.Consume(EnergyConsumption); //Subtract by modifiers
+
         AdjacentTiles = MapGenerator.GetAdjacentTiles(CurrentTile);
+        
         Debug.LogWarning("MOVED TO: " + CurrentTile.TileData.Id);
-        OnMoveSuccessEvent?.Invoke();
+        OnMoveSuccessEvent?.Invoke(Energy);
+    }
+
+    public void ModifyEnergyConsumption(TileData tile)
+    {
+        EnergyConsumption = 1; //tile.EnergyConsumption
     }
 }

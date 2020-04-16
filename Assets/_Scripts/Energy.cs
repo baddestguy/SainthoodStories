@@ -1,21 +1,24 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
-public class Energy : MonoBehaviour
+public class Energy
 {
-    public int Amount;
+    public static UnityAction<int> EnergyConsumed;
+    private int Amount;
 
-    void Start()
-    {
-        
-    }
-
-    public void Init(int amount)
+    public Energy(int amount)
     {
         Amount = amount;
     }
 
-    public void Consume()
+    public void Consume(int amount)
     {
+        Amount = Mathf.Max(0, (Amount - amount));
+        EnergyConsumed?.Invoke(Amount);
+    }
 
+    public bool Depleted()
+    {
+        return Amount == 0;
     }
 }
