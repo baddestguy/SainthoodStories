@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     {
         LoadGame();
         SceneManager.sceneLoaded += OnLevelLoaded;
-        Player.OnMoveSuccessEvent += OnPlayerMove;
+        Player.OnMoveSuccessEvent += OnPlayerMoved;
         SceneManager.LoadScene("TestGame", LoadSceneMode.Single);
     }
 
@@ -29,12 +29,16 @@ public class GameManager : MonoBehaviour
 
     private void OnMapGenerated()
     {
-        Player.GameStart(new Mission(1, 25, 1, MapGenerator.MapTiles[37]));
+        Player.GameStart(new Mission(1, 5, 1, MapGenerator.MapTiles[37]));
     }
 
-    public void OnPlayerMove()
+    public void OnPlayerMoved(Energy energy)
     {
         GameTimer++;
+        if (energy.Depleted())
+        {
+            Debug.LogError("GAME OVER!!");
+        }
         //Debug.Log("GAMEMANAGER TRIGGERD MOVED!");
         //Trigger Status effects if any
         //Check if House reached, Check against mission requirements
