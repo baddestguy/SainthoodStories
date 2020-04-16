@@ -6,13 +6,11 @@ public class Mission
     public int TargetNumber;
     public Energy StartingEnergy;
     public int StartingTimer;
-    public MapTile StartingTile;
 
-    public Mission(int targetNumber, int startingEnergy, int startingTimer, MapTile startingTile)
+    public Mission(int targetNumber, int startingEnergy, int startingTimer)
     {
         TargetNumber = targetNumber;
         StartingEnergy = new Energy(startingEnergy);
         StartingTimer = startingTimer;
-        StartingTile = startingTile;
     }
 }
