@@ -1,15 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.Events;
 
 public enum TileType
 {
-    WALKABLE = 0,
-    INTERACTABLE,
-    BARRIER
+    PLAYER = 0,
+    ROAD,
+    BARRIER,
+    WATER,
+    SNOW,
+    ICE,
+    TREE,
+    HOUSE,
+    BANDIT,
+    CHILD
 }
 
 public class TileData
@@ -28,11 +35,11 @@ public class TileData
 public class MapData
 {
     public int MapId { get; }
-    public IEnumerable<TileData> Tiles{ get; }
+    public List<TileData> Tiles{ get; }
     public int Rows { get; }
     public int Columns { get; }
 
-    public MapData(int mapId, int rows, int columns, IEnumerable<TileData> tiles) {
+    public MapData(int mapId, int rows, int columns, List<TileData> tiles) {
         MapId = mapId;
         Rows = rows;
         Columns = columns;
@@ -46,6 +53,7 @@ public class MapGenerator : MonoBehaviour
     public List<MapData> MapSurface = new List<MapData>();
     public TextAsset MapGroundsCSV, MapSurfaceCSV;
     public List<MapTile> MapTiles = new List<MapTile>();
+    public List<InteractableObject> Interactables = new List<InteractableObject>();
 
     private int CurrentMapId;
     private bool Loading;
@@ -82,7 +90,7 @@ public class MapGenerator : MonoBehaviour
     {
         string[] mapRawData = mapGroundsText.text.Split('x');
         int mapId = 0;
-        int tileId = 0; //TODO: HACK!
+        int tileId = 0; //TODO: HACK! Read from FILE!
 
         foreach (var map in mapRawData)
         {
@@ -100,8 +108,10 @@ public class MapGenerator : MonoBehaviour
                 string[] columns = row.Split(',');
                 foreach (var col in columns)
                 {
+                    string[] tileData = col.Split('|');
+                    if (tileData.Length < 2) continue;
                     tileId++;
-                    tileList.Add(new TileData(tileId, int.Parse(col), TileType.WALKABLE)); //TODO: HACK! Read TileType from FILE! Not all tiles are WALKABLE!
+                    tileList.Add(new TileData(tileId, int.Parse(tileData[0]), (TileType)int.Parse(tileData[1])));
                 }
 
                 columnCount = columns.Length;
@@ -149,7 +159,7 @@ public class MapGenerator : MonoBehaviour
 
             mapTileTransform.position += (columnCount * shiftVectorX) - (rowCount * shiftVectorY);
 
-            mapGroundTile.GetComponent<MapTile>().Init(mapGrounds.Tiles.ElementAt(i), sprites);
+            mapGroundTile.AddComponent<MapTile>().Init(mapGrounds.Tiles.ElementAt(i), sprites);
 
             MapTiles.Add(mapGroundTile.GetComponent<MapTile>());
 
@@ -161,7 +171,7 @@ public class MapGenerator : MonoBehaviour
         columnCount = 0;
         rowCount = 0;
         for (int i = 0; i < mapSurface.Tiles.Count(); i++) {
-            if (mapSurface.Tiles.ElementAt(i).TileId == -1)
+            if (mapSurface.Tiles[i].TileId == -1)
             {
                 if (columnCount >= mapSurface.Columns)
                 {
@@ -181,15 +191,24 @@ public class MapGenerator : MonoBehaviour
                 columnCount = 0;
             }
 
-            mapTileTransform.position += (columnCount * shiftVectorX) - (rowCount * shiftVectorY - new Vector3(0,1,0)); //Hack
-            mapGroundTile.GetComponent<MapTile>().Init(mapSurface.Tiles.ElementAt(i), sprites, 2);
+            mapTileTransform.position += (columnCount * shiftVectorX) - (rowCount * shiftVectorY - new Vector3(0,0,-5)); //TODO: Hack!
+            var interac = mapGroundTile.AddComponent<InteractableObject>();
+            interac.Init(MapTiles[i], mapSurface.Tiles[i], sprites, (i+1));
+            
+            Interactables.Add(interac);
 
             columnCount++;
 
             yield return null;
         }
 
+        transform.position = new Vector3(-6.2f, -3.2f, -4.9f); //TODO: HACK!
         complete?.Invoke();
+    }
+
+    public MapTile GetPlayerStartingTile()
+    {
+        return Interactables.Where(i => i.TileData.TileType == TileType.PLAYER).FirstOrDefault(); //TODO: HACK!
     }
 
     public IEnumerable<MapTile> GetAdjacentTiles(MapTile mapTile)

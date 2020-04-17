@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class Player : MonoBehaviour
 {
-    public static event UnityAction<Energy> OnMoveSuccessEvent;
+    public static event UnityAction<Energy, MapTile> OnMoveSuccessEvent;
     public MapGenerator MapGenerator;
     
     private Energy Energy;
@@ -16,38 +16,74 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        MapTile.OnClickEvent += OnMove;
     }
 
     public void GameStart(Mission missionDetails)
     {
         Energy = missionDetails.StartingEnergy;
-        CurrentTile = missionDetails.StartingTile;
+        CurrentTile = MapGenerator.GetPlayerStartingTile();
         AdjacentTiles = MapGenerator.GetAdjacentTiles(CurrentTile);
         ModifyEnergyConsumption(CurrentTile.TileData);
     }
 
-    public void OnMove(MapTile newTile)
+    private bool WeCanMove(MapTile tile)
     {
-        Debug.Log("CHECKING: " + newTile.TileData.Id);
+        return (CurrentTile != tile && AdjacentTiles.Contains(tile) && tile.TileData.TileType != TileType.BARRIER);
+    }
 
-        if (CurrentTile == newTile) return;
-        if (!AdjacentTiles.Contains(newTile)) return;
-        if (newTile.TileData.TileType == TileType.BARRIER) return;
-        
+    public void OnMove(MapTile newTile)
+    {        
         CurrentTile = newTile;
 
-        ModifyEnergyConsumption(CurrentTile.TileData);
-        Energy.Consume(EnergyConsumption); //Subtract by modifiers
+        EnergyConsumption = ModifyEnergyConsumption(CurrentTile.TileData);
+        Energy.Consume(EnergyConsumption);
 
         AdjacentTiles = MapGenerator.GetAdjacentTiles(CurrentTile);
         
         Debug.LogWarning("MOVED TO: " + CurrentTile.TileData.Id);
-        OnMoveSuccessEvent?.Invoke(Energy);
     }
 
-    public void ModifyEnergyConsumption(TileData tile)
+    public void OnInteract(MapTile newTile)
     {
-        EnergyConsumption = 1; //tile.EnergyConsumption
+        if(newTile is InteractableObject)
+        {
+            var iTile = newTile as InteractableObject;
+            if (WeCanMove(iTile.CurrentGroundTile))
+            {
+                OnMove(iTile.CurrentGroundTile);
+                OnMoveSuccessEvent?.Invoke(Energy, iTile);
+            }
+            else
+            {
+                TileDance(iTile);
+            }
+        }
+        else
+        {
+            if (WeCanMove(newTile))
+            {
+                OnMove(newTile);
+                OnMoveSuccessEvent?.Invoke(Energy, newTile);
+            }
+            else
+            {
+                TileDance(newTile);
+            }
+        }
+    }
+
+    public int ModifyEnergyConsumption(TileData tile)
+    {
+        return 1; //tile.EnergyConsumption
+    }
+
+    public void TileDance(MapTile tile)
+    {
+        //Trigger cute tile animation
+        Debug.Log("Tile bubbly animation!");
+    }
+
+    private void OnDisable()
+    {
     }
 }

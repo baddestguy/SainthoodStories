@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class Energy
 {
-    public static UnityAction<int> EnergyConsumed;
+    public static UnityAction<Energy> EnergyConsumed;
     private int Amount;
 
     public Energy(int amount)
@@ -14,7 +14,7 @@ public class Energy
     public void Consume(int amount)
     {
         Amount = Mathf.Max(0, (Amount - amount));
-        EnergyConsumed?.Invoke(Amount);
+        EnergyConsumed?.Invoke(this);
     }
 
     public bool Depleted()

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using EventCallbacks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,17 +25,12 @@ public class MapTile : MonoBehaviour
     //    OnTouchComplete.UnregisterListener(ResetTile);
     }
 
-    public void Init(TileData tileData, Sprite [] sprites, int sortingOrder = 0) {
+    public virtual void Init(TileData tileData, Sprite [] sprites, int sortingOrder = 0) {
         TileData = tileData;
         if(TileData.TileId >= 0) {
             SpriteRenderer.sprite = sprites[TileData.TileId];
             SpriteRenderer.sortingOrder = sortingOrder;
         }
-    }
-
-    public void OnClick()
-    {
-        OnClickEvent?.Invoke(this);
     }
 
     public void OnRelease()
