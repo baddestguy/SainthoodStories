@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    public static UnityAction<Mission> MissionBegin;
 
     public MissionManager MissionManager;
     public MapGenerator MapGenerator;
     public Player Player;
-    public int GameTimer;
+    public GameClock GameClock;
 
     private void Awake()
     {
@@ -32,7 +34,8 @@ public class GameManager : MonoBehaviour
     private void OnMapGenerated()
     {
         MissionManager.LoadAllMissions();
-        Player.GameStart(MissionManager.CurrentMission);
+        GameClock = new GameClock(MissionManager.CurrentMission.StartingClock);
+        MissionBegin?.Invoke(MissionManager.CurrentMission);
     }
 
     private void OnTap(MapTile tile)
@@ -42,7 +45,7 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerMoved(Energy energy, MapTile tile)
     {
-        GameTimer++; //Create class
+        GameClock.Tick();
         MissionManager.MissionUpdate(tile);
         //Trigger Status effects if any
     }

@@ -17,7 +17,7 @@ public class MissionManager : MonoBehaviour
     {
         //Load all Missions from File!
 
-        CurrentMission = new Mission(2, 15, 1);
+        CurrentMission = new Mission(2, 15, 9);
     }
 
     public void MissionUpdate(MapTile tile)
@@ -38,6 +38,7 @@ public class MissionManager : MonoBehaviour
                         CurrentTargetHits++;
                         Houses.Add(tile);
                         tile.gameObject.SetActive(false); //TODO: TEMPORARY!
+                        //Add Energy Points!
                     }
                 }
                 break;

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameDataManager : MonoBehaviour
@@ -9,5 +8,49 @@ public class GameDataManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+    }
+}
+
+public enum TileType
+{
+    PLAYER = 0,
+    ROAD,
+    BARRIER,
+    WATER,
+    SNOW,
+    ICE,
+    TREE,
+    HOUSE,
+    BANDIT,
+    CHILD
+}
+
+public class TileData
+{
+    public int Id { get; }
+    public int TileSpriteId { get; }
+    public TileType TileType { get; }
+
+    public TileData(int id, int tileId, TileType tileType)
+    {
+        Id = id;
+        TileSpriteId = tileId;
+        TileType = tileType;
+    }
+}
+
+public class MapData
+{
+    public int MapId { get; }
+    public List<TileData> Tiles { get; }
+    public int Rows { get; }
+    public int Columns { get; }
+
+    public MapData(int mapId, int rows, int columns, List<TileData> tiles)
+    {
+        MapId = mapId;
+        Rows = rows;
+        Columns = columns;
+        Tiles = tiles;
     }
 }

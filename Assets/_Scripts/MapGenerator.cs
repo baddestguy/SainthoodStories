@@ -5,48 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum TileType
-{
-    PLAYER = 0,
-    ROAD,
-    BARRIER,
-    WATER,
-    SNOW,
-    ICE,
-    TREE,
-    HOUSE,
-    BANDIT,
-    CHILD
-}
-
-public class TileData
-{
-    public int Id { get; }
-    public int TileId { get; }
-    public TileType TileType { get; }
-
-    public TileData(int id, int tileId, TileType tileType) {
-        Id = id;
-        TileId = tileId;
-        TileType = tileType;
-    }
-}
-
-public class MapData
-{
-    public int MapId { get; }
-    public List<TileData> Tiles{ get; }
-    public int Rows { get; }
-    public int Columns { get; }
-
-    public MapData(int mapId, int rows, int columns, List<TileData> tiles) {
-        MapId = mapId;
-        Rows = rows;
-        Columns = columns;
-        Tiles = tiles;
-    }
-}
-
 public class MapGenerator : MonoBehaviour
 {
     public List<MapData> MapGrounds = new List<MapData>();
@@ -146,7 +104,7 @@ public class MapGenerator : MonoBehaviour
         int columnCount = 0;
         int rowCount = 0;
         for (int i = 0; i < mapGrounds.Tiles.Count(); i++) {
-            if (mapGrounds.Tiles.ElementAt(i).TileId == -1) continue;
+            if (mapGrounds.Tiles.ElementAt(i).TileSpriteId == -1) continue;
 
             GameObject mapGroundTile = GameObject.Instantiate(mapTileObj, originalPosition, Quaternion.identity) as GameObject;
             Transform mapTileTransform = mapGroundTile.GetComponent<Transform>();
@@ -171,7 +129,7 @@ public class MapGenerator : MonoBehaviour
         columnCount = 0;
         rowCount = 0;
         for (int i = 0; i < mapSurface.Tiles.Count(); i++) {
-            if (mapSurface.Tiles[i].TileId == -1)
+            if (mapSurface.Tiles[i].TileSpriteId == -1)
             {
                 if (columnCount >= mapSurface.Columns)
                 {
@@ -192,8 +150,7 @@ public class MapGenerator : MonoBehaviour
             }
 
             mapTileTransform.position += (columnCount * shiftVectorX) - (rowCount * shiftVectorY - new Vector3(0,0,-5)); //TODO: Hack!
-            var interac = mapGroundTile.AddComponent<InteractableObject>();
-            interac.Init(MapTiles[i], mapSurface.Tiles[i], sprites, (i+1));
+            var interac = MapTile.GetInteractableObject(mapSurface.Tiles[i], mapGroundTile, MapTiles[i], sprites, (i+1));
             
             Interactables.Add(interac);
 

@@ -12,23 +12,26 @@ public class MapTile : MonoBehaviour
     public bool active;
     public static event UnityAction<MapTile> OnClickEvent;
 
-
     private void Awake(){
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     private void OnEnable(){
-     //   OnTouchComplete.RegisterListener(ResetTile);
+        //   OnTouchComplete.RegisterListener(ResetTile);
+        GameClock.Ticked += Tick;
+        GameManager.MissionBegin += MissionBegin;
     }
 
     private void OnDisable(){
-    //    OnTouchComplete.UnregisterListener(ResetTile);
+        //    OnTouchComplete.UnregisterListener(ResetTile);
+        GameClock.Ticked -= Tick;
+        GameManager.MissionBegin -= MissionBegin;
     }
 
-    public virtual void Init(TileData tileData, Sprite [] sprites, int sortingOrder = 0) {
+    public void Init(TileData tileData, Sprite [] sprites, int sortingOrder = 0) {
         TileData = tileData;
-        if(TileData.TileId >= 0) {
-            SpriteRenderer.sprite = sprites[TileData.TileId];
+        if(TileData.TileSpriteId >= 0) {
+            SpriteRenderer.sprite = sprites[TileData.TileSpriteId];
             SpriteRenderer.sortingOrder = sortingOrder;
         }
     }
@@ -56,5 +59,36 @@ public class MapTile : MonoBehaviour
         gameObject.SetActive(true);
         SpriteRenderer.color = Color.white;
         active = false;
+    }
+
+    public static InteractableObject GetInteractableObject(TileData tileData, GameObject tileGameObject, MapTile groundTile, Sprite [] sprites, int sortingOrder)
+    {
+
+        switch (tileData.TileType)
+        {
+            case TileType.HOUSE:
+                var house = tileGameObject.AddComponent<InteractableHouse>();
+                house.Init(UnityEngine.Random.Range(15, 19), groundTile, tileData, sprites, sortingOrder); //TODO: HACK! Read from file!
+                return house;
+
+            case TileType.BANDIT:
+                var enemy = tileGameObject.AddComponent<InteractableEnemy>();
+                enemy.Init(groundTile, tileData, sprites, sortingOrder);
+                return enemy;
+        }
+
+        var interac = tileGameObject.AddComponent<InteractableObject>();
+        interac.Init(tileData, sprites, sortingOrder);
+        return interac;
+    }
+
+    public virtual void Tick(int time)
+    {
+
+    }
+
+    public virtual void MissionBegin(Mission mission)
+    {
+
     }
 }

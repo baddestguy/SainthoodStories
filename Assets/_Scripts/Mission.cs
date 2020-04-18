@@ -5,12 +5,12 @@ public class Mission
     //public MissionType MissionType;
     public int TargetNumber;
     public Energy StartingEnergy;
-    public int StartingTimer;
+    public int StartingClock;
 
     public Mission(int targetNumber, int startingEnergy, int startingTimer)
     {
         TargetNumber = targetNumber;
         StartingEnergy = new Energy(startingEnergy);
-        StartingTimer = startingTimer;
+        StartingClock = startingTimer;
     }
 }
