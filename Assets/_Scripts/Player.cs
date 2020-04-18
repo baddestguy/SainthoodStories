@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        GameManager.MissionBegin += GameStart;
     }
 
     public void GameStart(Mission missionDetails)
