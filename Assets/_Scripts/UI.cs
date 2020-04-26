@@ -24,11 +24,11 @@ public class UI : MonoBehaviour
     {
         if (complete)
         {
-            Debug.Log("Mission Copmlete!!");
+            Debug.LogWarning("Mission Copmlete!!");
         }
         else
         {
-            Debug.Log("Mission Failed!");
+            Debug.LogError("Mission Failed!");
         }
     }
 

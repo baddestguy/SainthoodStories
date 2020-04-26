@@ -3,7 +3,7 @@
 public class DayNightCycle : MonoBehaviour
 {
     [SerializeField]
-    private Light Light;
+    public Light Light;
     private Vector3 TargetRotation = new Vector3(0, 0, 0);
     private Color TargetColor = new Color();
     void Start()
@@ -26,8 +26,8 @@ public class DayNightCycle : MonoBehaviour
             case 7: TargetRotation = new Vector3(62.5f,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
             case 8: TargetRotation = new Vector3(70,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
             case 9: TargetRotation = new Vector3(77.5f,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
-            case 10: TargetRotation = new Vector3(85f,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
-            case 11: TargetRotation = new Vector3(87,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
+            case 10: TargetRotation = new Vector3(85f,-30,0); TargetColor = new Color32(225, 255, 255, 255); break;
+            case 11: TargetRotation = new Vector3(87,-30,0); TargetColor = new Color32(225, 255, 255, 255); break;
             case 12: TargetRotation = new Vector3(90,-30,0); TargetColor = new Color32(255, 255, 255, 255); break;
             case 13: TargetRotation = new Vector3(96.6f,-30,0); TargetColor = new Color32(255, 255, 255, 255); break;
             case 14: TargetRotation = new Vector3(102,-30,0); TargetColor = new Color32(255, 255, 255, 255); break;
@@ -39,7 +39,7 @@ public class DayNightCycle : MonoBehaviour
             case 20: TargetRotation = new Vector3(141,-30,0); TargetColor = new Color32(255, 187, 110, 255); break;
             case 21: TargetRotation = new Vector3(148,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
             case 22: TargetRotation = new Vector3(154,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
-            case 23: TargetRotation = new Vector3(170,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
+            case 23: TargetRotation = new Vector3(160,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
         }
     }
 
