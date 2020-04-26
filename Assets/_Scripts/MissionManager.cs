@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MissionManager : MonoBehaviour
 {
     public Mission CurrentMission;
+    public static UnityAction<bool> MissionComplete;
+    
     private int CurrentTargetHits;
     private List<MapTile> Houses;
 
@@ -17,28 +20,25 @@ public class MissionManager : MonoBehaviour
     {
         //Load all Missions from File!
 
-        CurrentMission = new Mission(2, 15, 9);
+        CurrentMission = new Mission(2, 15, 6);
     }
 
     public void MissionUpdate(MapTile tile)
     {
-        switch (tile.TileData.TileType)
+        switch (tile.TileType)
         {
             case TileType.HOUSE:
                 if (!Houses.Contains(tile))
                 {
                     if ((CurrentTargetHits + 1) == CurrentMission.TargetNumber)
                     {
-                        tile.gameObject.SetActive(false); //TODO: TEMPORARY!
-                        Debug.LogError("Mission COMPLETE! WOHOO!!");
+                        MissionComplete?.Invoke(true);
                     }
                     else
                     {
                         Debug.Log("GOT ONE!");
                         CurrentTargetHits++;
                         Houses.Add(tile);
-                        tile.gameObject.SetActive(false); //TODO: TEMPORARY!
-                        //Add Energy Points!
                     }
                 }
                 break;
@@ -49,7 +49,7 @@ public class MissionManager : MonoBehaviour
     {
         if (energy.Depleted())
         {
-            Debug.LogError("GAME OVER!! YOU FAILED!!");
+            MissionComplete?.Invoke(false);
         }
     }
 }

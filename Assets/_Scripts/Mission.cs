@@ -7,10 +7,10 @@ public class Mission
     public Energy StartingEnergy;
     public int StartingClock;
 
-    public Mission(int targetNumber, int startingEnergy, int startingTimer)
+    public Mission(int targetNumber, int startingEnergy, int startTime)
     {
         TargetNumber = targetNumber;
         StartingEnergy = new Energy(startingEnergy);
-        StartingClock = startingTimer;
+        StartingClock = startTime;
     }
 }

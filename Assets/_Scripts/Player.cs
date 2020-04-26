@@ -7,10 +7,11 @@ using UnityEngine.Events;
 public class Player : MonoBehaviour
 {
     public static event UnityAction<Energy, MapTile> OnMoveSuccessEvent;
-    public MapGenerator MapGenerator;
+    public GameMap Map;
     
     private Energy Energy;
     private int EnergyConsumption;
+    [SerializeField]
     private MapTile CurrentTile;
     private IEnumerable<MapTile> AdjacentTiles;
 
@@ -22,26 +23,26 @@ public class Player : MonoBehaviour
     public void GameStart(Mission missionDetails)
     {
         Energy = missionDetails.StartingEnergy;
-        CurrentTile = MapGenerator.GetPlayerStartingTile();
-        AdjacentTiles = MapGenerator.GetAdjacentTiles(CurrentTile);
-        ModifyEnergyConsumption(CurrentTile.TileData);
+        AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
+        ModifyEnergyConsumption(CurrentTile);
     }
 
     private bool WeCanMove(MapTile tile)
     {
-        return (CurrentTile != tile && AdjacentTiles.Contains(tile) && tile.TileData.TileType != TileType.BARRIER);
+        return (CurrentTile != tile && AdjacentTiles.Contains(tile) && tile.TileType != TileType.BARRIER);
     }
 
     public void OnMove(MapTile newTile)
     {        
         CurrentTile = newTile;
 
-        EnergyConsumption = ModifyEnergyConsumption(CurrentTile.TileData);
+        EnergyConsumption = ModifyEnergyConsumption(CurrentTile);
         Energy.Consume(EnergyConsumption);
 
-        AdjacentTiles = MapGenerator.GetAdjacentTiles(CurrentTile);
+        AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
+
+        transform.position = CurrentTile.transform.position;
         
-        Debug.LogWarning("MOVED TO: " + CurrentTile.TileData.Id);
     }
 
     public void OnInteract(MapTile newTile)
@@ -73,7 +74,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public int ModifyEnergyConsumption(TileData tile)
+    public int ModifyEnergyConsumption(MapTile tile)
     {
         return 1; //tile.EnergyConsumption
     }

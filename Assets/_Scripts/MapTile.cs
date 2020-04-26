@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class MapTile : MonoBehaviour
 {
+    public TileType TileType;
     private SpriteRenderer SpriteRenderer;
     public TileData TileData { get; set; }
 
@@ -20,12 +21,14 @@ public class MapTile : MonoBehaviour
         //   OnTouchComplete.RegisterListener(ResetTile);
         GameClock.Ticked += Tick;
         GameManager.MissionBegin += MissionBegin;
+        Player.OnMoveSuccessEvent += OnPlayerMoved;
     }
 
     private void OnDisable(){
         //    OnTouchComplete.UnregisterListener(ResetTile);
         GameClock.Ticked -= Tick;
         GameManager.MissionBegin -= MissionBegin;
+        Player.OnMoveSuccessEvent -= OnPlayerMoved;
     }
 
     public void Init(TileData tileData, Sprite [] sprites, int sortingOrder = 0) {
@@ -41,7 +44,7 @@ public class MapTile : MonoBehaviour
 
     }
 
-    public void OnMouseDown(){
+    public void OnMouseUp(){
         OnClickEvent?.Invoke(this);
         //OnTileEnter tileEnter = new OnTileEnter();
         //tileEnter.FireEvent();
@@ -88,6 +91,11 @@ public class MapTile : MonoBehaviour
     }
 
     public virtual void MissionBegin(Mission mission)
+    {
+
+    }
+
+    public virtual void OnPlayerMoved(Energy energy, MapTile tile)
     {
 
     }

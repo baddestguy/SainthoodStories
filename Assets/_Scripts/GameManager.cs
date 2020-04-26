@@ -8,8 +8,11 @@ public class GameManager : MonoBehaviour
     public static UnityAction<Mission> MissionBegin;
 
     public MissionManager MissionManager;
+    [HideInInspector]
     public MapGenerator MapGenerator;
-    public Player Player;
+    [HideInInspector]
+    public GameMap Map;
+    private Player Player;
     public GameClock GameClock;
 
     private void Awake()
@@ -28,14 +31,16 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-        MapGenerator.DisplayMap(0, OnMapGenerated);
+        // MapGenerator.DisplayMap(0, OnMapGenerated);
+        Player = FindObjectOfType<Player>();
+        MissionManager.LoadAllMissions();
+        GameClock = new GameClock(MissionManager.CurrentMission.StartingClock);
+        Player.GameStart(MissionManager.CurrentMission);
+        MissionBegin?.Invoke(MissionManager.CurrentMission);
     }
 
     private void OnMapGenerated()
     {
-        MissionManager.LoadAllMissions();
-        GameClock = new GameClock(MissionManager.CurrentMission.StartingClock);
-        MissionBegin?.Invoke(MissionManager.CurrentMission);
     }
 
     private void OnTap(MapTile tile)
@@ -53,7 +58,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadGame()
     {
-        MapGenerator.LoadAllMaps();
+        //MapGenerator.LoadAllMaps();
     }
 
     public void SaveGame()

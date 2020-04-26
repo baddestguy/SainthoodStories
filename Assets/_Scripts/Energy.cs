@@ -4,7 +4,8 @@ using UnityEngine.Events;
 public class Energy
 {
     public static UnityAction<Energy> EnergyConsumed;
-    private int Amount;
+
+    public int Amount { get; private set; }
 
     public Energy(int amount)
     {

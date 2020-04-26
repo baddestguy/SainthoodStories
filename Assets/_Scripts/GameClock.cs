@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class GameClock
 {
-    private int Time; 
+    public int Time { get; private set; }
     public static UnityAction<int> Ticked;
 
     public GameClock(int startTime)
@@ -25,6 +25,5 @@ public class GameClock
         }
 
         Ticked?.Invoke(Time);
-        Debug.Log("TIME: " + Time);
     }
 }
