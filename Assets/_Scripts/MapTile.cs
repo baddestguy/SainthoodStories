@@ -45,7 +45,9 @@ public class MapTile : MonoBehaviour
     }
 
     public void OnMouseUp(){
-        OnClickEvent?.Invoke(this);
+        if(!CameraControls.CameraMove && !CameraControls.CameraZoom)
+            OnClickEvent?.Invoke(this);
+        
         //OnTileEnter tileEnter = new OnTileEnter();
         //tileEnter.FireEvent();
         //gameObject.SetActive(false);
