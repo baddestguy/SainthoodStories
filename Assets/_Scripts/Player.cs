@@ -15,9 +15,20 @@ public class Player : MonoBehaviour
     private MapTile CurrentTile;
     private IEnumerable<MapTile> AdjacentTiles;
 
+    private Vector3 TargetPosition;
+
     void Start()
     {
         GameManager.MissionBegin += GameStart;
+        TargetPosition = transform.position;
+    }
+
+    void Update()
+    {
+        if((transform.position - TargetPosition).magnitude > 0.01)
+        {
+            transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime*5);
+        }
     }
 
     public void GameStart(Mission missionDetails)
@@ -41,8 +52,7 @@ public class Player : MonoBehaviour
 
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
 
-        transform.position = CurrentTile.transform.position;
-        
+        TargetPosition = CurrentTile.transform.position;        
     }
 
     public void OnInteract(MapTile newTile)
