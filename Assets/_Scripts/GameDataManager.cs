@@ -20,9 +20,21 @@ public enum TileType
     SNOW,
     ICE,
     TREE,
-    HOUSE,
+    SHELTER,
+    CHURCH,
+    MARKET,
+    HOSPITAL,
+    SCHOOL,
     BANDIT,
     CHILD
+}
+
+public enum ItemType
+{
+    FOOD = 0,
+    CLOTHES,
+    MEDICINE,
+    STATIONARY
 }
 
 public class TileData

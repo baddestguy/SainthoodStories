@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public MapGenerator MapGenerator;
     [HideInInspector]
     public GameMap Map;
-    private Player Player;
+    public Player Player;
     public GameClock GameClock;
 
     private void Awake()
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnLevelLoaded;
         MapTile.OnClickEvent += OnTap;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
-        SceneManager.LoadScene("TestGame", LoadSceneMode.Single);
+        SceneManager.LoadScene("Level1", LoadSceneMode.Single);
     }
 
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
