@@ -32,8 +32,8 @@ public class UI : MonoBehaviour
         }
     }
 
-    private void OnTick(int time)
+    private void OnTick(int time, int day)
     {
-        Debug.Log($"TIME: {time}:00");
+        Debug.Log($"DAY:{day}, TIME: {time}:00");
     }
 }

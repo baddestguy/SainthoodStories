@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private MapTile CurrentTile;
     private IEnumerable<MapTile> AdjacentTiles;
+    private List<PlayerItem> Inventory = new List<PlayerItem>();
 
     private Vector3 TargetPosition;
 
@@ -43,7 +44,7 @@ public class Player : MonoBehaviour
         return (CurrentTile != tile && AdjacentTiles.Contains(tile) && tile.TileType != TileType.BARRIER);
     }
 
-    public void OnMove(MapTile newTile)
+    private void OnMove(MapTile newTile)
     {        
         CurrentTile = newTile;
 
@@ -93,6 +94,22 @@ public class Player : MonoBehaviour
     {
         //Trigger cute tile animation
         Debug.Log("Tile bubbly animation!");
+    }
+
+    public void AddToInventory(PlayerItem item)
+    {
+        Inventory.Add(item);
+    }
+
+    public PlayerItem GetItem(ItemType itemType)
+    {
+        int index = Inventory.FindIndex(i => i.Item == itemType);
+        if (index < 0) return null;
+
+        PlayerItem item = Inventory[index];
+        Inventory.RemoveAt(index);
+
+        return item;
     }
 
     private void OnDisable()

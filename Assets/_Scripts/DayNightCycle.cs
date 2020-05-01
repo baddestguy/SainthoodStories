@@ -9,10 +9,10 @@ public class DayNightCycle : MonoBehaviour
     void Start()
     {
         GameClock.Ticked += OnTick;
-        OnTick(GameManager.Instance.GameClock.Time);
+        OnTick(GameManager.Instance.GameClock.Time, GameManager.Instance.GameClock.Day);
     }
 
-    private void OnTick(int time)
+    private void OnTick(int time, int day)
     {
         switch (time)
         {

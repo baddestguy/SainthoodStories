@@ -34,7 +34,7 @@ public class CameraControls : MonoBehaviour
             Zoom(diff * 0.1f);
         }
         else if (CameraMove || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved 
-            && (Input.GetTouch(0).deltaPosition.magnitude) > 2.5f)
+            && (Input.GetTouch(0).deltaPosition.magnitude) > 10f)
         {
             CameraMove = true;
             Vector3 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
@@ -44,8 +44,8 @@ public class CameraControls : MonoBehaviour
             //    && newPos.y > BoundaryY.x
             //    && newPos.y < BoundaryY.y)
             {
-                transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime);
-                //transform.Translate(-touchDeltaPosition.x * Speed, -touchDeltaPosition.y * Speed, 0); //Move Camera
+                //transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime);
+                transform.Translate(-touchDeltaPosition.x * Speed, -touchDeltaPosition.y * Speed, 0); //Move Camera
             }
         }
 

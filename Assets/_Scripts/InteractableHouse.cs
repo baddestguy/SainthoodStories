@@ -5,6 +5,8 @@ public class InteractableHouse : InteractableObject
     private int CountdownTimer;
     public int DeadlineTime;
     public int RestEnergy;
+    public int OpenTime;
+    public int ClosingTime;
 
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)
     {
@@ -12,10 +14,10 @@ public class InteractableHouse : InteractableObject
         Init(groundTile, tileData, sprites, sortingOrder);
     }
 
-    public override void Tick(int time)
+    public override void Tick(int time, int day)
     {
         CountdownTimer--;
-        if (CountdownTimer <= 0 || time >= DeadlineTime)
+        if ((DeadlineTime != -1) && (CountdownTimer <= 0 || time >= DeadlineTime))
         {
             Debug.LogError("TIME UP!");
             MissionManager.MissionComplete?.Invoke(false);
@@ -29,15 +31,4 @@ public class InteractableHouse : InteractableObject
         CountdownTimer = DeadlineTime - mission.StartingClock;
     }
 
-    public override void OnPlayerMoved(Energy energy, MapTile tile)
-    {
-        if(tile.GetInstanceID() == GetInstanceID())
-        {
-            energy.Consume(-RestEnergy);
-            GameManager.Instance.GameClock.Tick();
-            GameManager.Instance.GameClock.Tick();
-            GameManager.Instance.GameClock.Tick();
-            tile.gameObject.SetActive(false); //TODO: TEMPORARY!
-        }
-    }
 }

@@ -27,12 +27,12 @@ public class MissionManager : MonoBehaviour
     {
         switch (tile.TileType)
         {
-            case TileType.HOUSE:
+            case TileType.SHELTER:
                 if (!Houses.Contains(tile))
                 {
                     if ((CurrentTargetHits + 1) == CurrentMission.TargetNumber)
                     {
-                        MissionComplete?.Invoke(true);
+                    //    MissionComplete?.Invoke(true);
                     }
                     else
                     {

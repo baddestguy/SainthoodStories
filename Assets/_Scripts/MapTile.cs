@@ -71,7 +71,7 @@ public class MapTile : MonoBehaviour
 
         switch (tileData.TileType)
         {
-            case TileType.HOUSE:
+            case TileType.SHELTER:
                 var house = tileGameObject.AddComponent<InteractableHouse>();
                 house.Init(UnityEngine.Random.Range(15, 19), groundTile, tileData, sprites, sortingOrder); //TODO: HACK! Read from file!
                 return house;
@@ -87,7 +87,7 @@ public class MapTile : MonoBehaviour
         return interac;
     }
 
-    public virtual void Tick(int time)
+    public virtual void Tick(int time, int day)
     {
 
     }
