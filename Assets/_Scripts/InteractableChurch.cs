@@ -1,21 +1,48 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class InteractableChurch : InteractableHouse
+﻿public class InteractableChurch : InteractableHouse
 {
+    void Start()
+    {
+        UI.Prayed += Pray;
+    }
+
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
-        GameClock clock = GameManager.Instance.GameClock;
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            //TODO: Pop up button to choose between End the Day/Attend Service/Wait One Hour
-            if (clock.Time >= OpenTime && clock.Time <= ClosingTime)
-            {
-                Debug.Log("ATTENDED SERVICE!");
-                GameManager.Instance.Player.AddToInventory(new PlayerItem(ItemType.FOOD));
-                energy.Consume(-RestEnergy);
-            }
-        } 
+            UI.Instance.EnableChurch(true);
+        }
+        else
+        {
+            UI.Instance.EnableChurch(false);
+        }
+    }
+
+    public void Pray()
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        Player player = GameManager.Instance.Player;
+
+        if (clock.Time >= OpenTime && clock.Time <= ClosingTime)
+        {
+            player.ConsumeEnergy(-RestEnergy);
+            clock.Tick();
+            UI.Instance.DisplayMessage("ATTENDED SERVICE!!");
+        }
+        else
+        {
+            player.ConsumeEnergy(-1);
+            clock.Tick();
+            UI.Instance.DisplayMessage("PRAYED");
+        }
+    }
+
+    public void EndDay()
+    {
+        //Fast Forward to Midnight
+    }
+
+    private void OnDisable()
+    {
+        UI.Prayed -= Pray;
     }
 }

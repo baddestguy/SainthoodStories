@@ -112,7 +112,13 @@ public class Player : MonoBehaviour
         return item;
     }
 
+    public void ConsumeEnergy(int amount)
+    {
+        Energy.Consume(amount);
+    }
+
     private void OnDisable()
     {
+        GameManager.MissionBegin -= GameStart;
     }
 }

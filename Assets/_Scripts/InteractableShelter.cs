@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class InteractableShelter : InteractableHouse
+﻿public class InteractableShelter : InteractableHouse
 {
     private bool Done;
 
@@ -10,7 +6,7 @@ public class InteractableShelter : InteractableHouse
     {
         if (Done)
         {
-            gameObject.SetActive(false);
+        //    gameObject.SetActive(false);
         }
 
         if (tile.GetInstanceID() == GetInstanceID())
@@ -20,12 +16,12 @@ public class InteractableShelter : InteractableHouse
 
             if(item != null)
             {
-                Debug.Log("FED THE HUNGRY!");
+                UI.Instance.DisplayMessage("FED THE HUNGRY!");
                 Done = true;
             }
             else
             {
-                Debug.Log("YOU HAVE NO FOOD TO GIVE!");
+                UI.Instance.DisplayMessage("YOU HAVE NO FOOD TO GIVE!");
             }
         }
     }
