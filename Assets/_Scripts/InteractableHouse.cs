@@ -19,9 +19,7 @@ public class InteractableHouse : InteractableObject
         CountdownTimer--;
         if ((DeadlineTime != -1) && (CountdownTimer <= 0 || time >= DeadlineTime))
         {
-            Debug.LogError("TIME UP!");
-            MissionManager.MissionComplete?.Invoke(false);
-            gameObject.SetActive(false);
+            UI.Instance.DisplayMessage($"{name}: TIME UP!");
         }
     }
 
