@@ -98,6 +98,11 @@ public class Player : MonoBehaviour
 
     public void AddToInventory(PlayerItem item)
     {
+        if (Inventory.Any())
+        {
+            UI.Instance.DisplayMessage("INVENTORY FULL!");
+            return;
+        }
         Inventory.Add(item);
     }
 

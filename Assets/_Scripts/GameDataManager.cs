@@ -25,6 +25,8 @@ public enum TileType
     MARKET,
     HOSPITAL,
     SCHOOL,
+    CLOTHESBANK,
+    ORPHANAGE,
     BANDIT,
     CHILD
 }

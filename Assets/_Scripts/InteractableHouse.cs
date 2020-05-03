@@ -4,7 +4,7 @@ public class InteractableHouse : InteractableObject
 {
     private int CountdownTimer;
     public int DeadlineTime;
-    public int RestEnergy;
+    public int EnergyConsumption;
     public int OpenTime;
     public int ClosingTime;
 

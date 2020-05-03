@@ -11,7 +11,7 @@
         GameClock clock = GameManager.Instance.GameClock;
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            if (clock.Time >= OpenTime && clock.Time <= ClosingTime)
+            if (clock.Time >= OpenTime && clock.Time < ClosingTime)
             {
                 UI.Instance.EnableShop(true);
             }

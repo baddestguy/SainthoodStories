@@ -20,7 +20,7 @@ public class MissionManager : MonoBehaviour
     {
         //Load all Missions from File!
 
-        CurrentMission = new Mission(2, 15, 6);
+        CurrentMission = new Mission(2, 20, 6);
     }
 
     public void MissionUpdate(MapTile tile)
@@ -36,7 +36,6 @@ public class MissionManager : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("GOT ONE!");
                         CurrentTargetHits++;
                         Houses.Add(tile);
                     }
