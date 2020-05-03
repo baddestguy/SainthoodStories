@@ -1,8 +1,9 @@
 ﻿public class InteractableSchool : InteractableHouse
 {
-    void Start()
+    protected override void Start()
     {
         UI.Taught += Teach;
+        base.Start();
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
@@ -12,16 +13,16 @@
         {
             if (clock.Time >= OpenTime && clock.Time < ClosingTime)
             {
-                UI.Instance.EnableSchool(true);
             }
             else
             {
                 UI.Instance.DisplayMessage("SCHOOL CLOSED!");
             }
+            UI.Instance.EnableSchool(true, this);
         }
         else
         {
-            UI.Instance.EnableSchool(false);
+            UI.Instance.EnableSchool(false, this);
         }
     }
 
@@ -36,15 +37,15 @@
             clock.Tick();
             UI.Instance.DisplayMessage("Taught a Class!!");
         }
-
-        if (clock.Time < OpenTime || clock.Time >= ClosingTime)
+        else
         {
-            UI.Instance.EnableSchool(false);
+            UI.Instance.DisplayMessage("SCHOOL CLOSED!");
         }
     }
 
     private void OnDisable()
     {
         UI.Taught -= Teach;
+        UI.Meditate -= Meditated;
     }
 }

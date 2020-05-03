@@ -15,6 +15,12 @@
             {
                 UI.Instance.DisplayMessage("YOU HAVE NO FOOD TO GIVE!");
             }
+            
+            UI.Instance.EnableFood(true, this);
+        }
+        else
+        {
+            UI.Instance.EnableFood(false, this);
         }
     }
 }

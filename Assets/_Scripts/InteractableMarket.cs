@@ -1,9 +1,10 @@
 ﻿public class InteractableMarket : InteractableHouse
 {
-    void Start()
+    protected override void Start()
     {
         UI.BoughtFood += Food;
         UI.BoughtClothes += Clothes;
+        base.Start();
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
@@ -13,34 +14,51 @@
         {
             if (clock.Time >= OpenTime && clock.Time < ClosingTime)
             {
-                UI.Instance.EnableShop(true);
             }
             else
             {
                 UI.Instance.DisplayMessage("SHOP CLOSED!");
             }
+            UI.Instance.EnableShop(true, this);
         }
         else
         {
-            UI.Instance.EnableShop(false);
+            UI.Instance.EnableShop(false, this);
         }
     }
 
     public void Food()
     {
-        UI.Instance.DisplayMessage("PICKED UP FOOD!");
-        GameManager.Instance.Player.AddToInventory(new PlayerItem(ItemType.FOOD));
+        GameClock clock = GameManager.Instance.GameClock;
+        if (clock.Time >= OpenTime && clock.Time < ClosingTime)
+        {
+            UI.Instance.DisplayMessage("PICKED UP FOOD!");
+            GameManager.Instance.Player.AddToInventory(new PlayerItem(ItemType.FOOD));
+        }
+        else
+        {
+            UI.Instance.DisplayMessage("SHOP CLOSED!");
+        }
     }
 
     public void Clothes()
     {
-        UI.Instance.DisplayMessage("PICKED UP CLOTHES!");
-        GameManager.Instance.Player.AddToInventory(new PlayerItem(ItemType.CLOTHES));
+        GameClock clock = GameManager.Instance.GameClock;
+        if (clock.Time >= OpenTime && clock.Time < ClosingTime)
+        {
+            UI.Instance.DisplayMessage("PICKED UP CLOTHES!");
+            GameManager.Instance.Player.AddToInventory(new PlayerItem(ItemType.CLOTHES));
+        }
+        else
+        {
+            UI.Instance.DisplayMessage("SHOP CLOSED!");
+        }
     }
 
     private void OnDisable()
     {
         UI.BoughtFood -= Food;
         UI.BoughtClothes -= Clothes;
+        UI.Meditate -= Meditated;
     }
 }

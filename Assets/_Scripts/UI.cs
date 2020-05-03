@@ -14,6 +14,9 @@ public class UI : MonoBehaviour
     public GameObject SchoolUI;
     public GameObject HospitalUI;
     public GameObject ChurchUI;
+    public GameObject OrphanageUI;
+    public GameObject FoodShelterUI;
+    public GameObject ClothesBankUI;
 
     public static UnityAction BoughtFood;
     public static UnityAction BoughtClothes;
@@ -21,8 +24,10 @@ public class UI : MonoBehaviour
     public static UnityAction DeliverBaby;
     public static UnityAction Prayed;
     public static UnityAction Slept;
+    public static UnityAction<InteractableHouse> Meditate;
 
     private bool ClearDisplay;
+    private InteractableHouse CurrentHouse;
 
     void Awake()
     {
@@ -70,23 +75,42 @@ public class UI : MonoBehaviour
         TimeAndDayDisplay.text = $"Day:{day}, Time: {time}:00";
     }
 
-    public void EnableShop(bool enable)
+    public void EnableShop(bool enable, InteractableHouse house)
     {
+        CurrentHouse = house;
         ShopUI.SetActive(enable);
     }
 
-    public void EnableSchool(bool enable)
+    public void EnableSchool(bool enable, InteractableHouse house)
     {
+        CurrentHouse = house;
         SchoolUI.SetActive(enable);
     }
 
-    public void EnableHospital(bool enable)
+    public void EnableHospital(bool enable, InteractableHouse house)
     {
+        CurrentHouse = house;
         HospitalUI.SetActive(enable);
     }
+
     public void EnableChurch(bool enable)
     {
         ChurchUI.SetActive(enable);
+    }
+    public void EnableFood(bool enable, InteractableHouse house)
+    {
+        CurrentHouse = house;
+        FoodShelterUI.SetActive(enable);
+    }
+    public void EnableClothes(bool enable, InteractableHouse house)
+    {
+        CurrentHouse = house;
+        ClothesBankUI.SetActive(enable);
+    }
+    public void EnableOrphanage(bool enable, InteractableHouse house)
+    {
+        CurrentHouse = house;
+        OrphanageUI.SetActive(enable);
     }
 
     public void BuyFood()
@@ -117,6 +141,11 @@ public class UI : MonoBehaviour
     public void Sleep()
     {
         Slept?.Invoke();
+    }
+
+    public void Meditated()
+    {
+        Meditate?.Invoke(CurrentHouse);
     }
 
     public void DisplayMessage(string message)
