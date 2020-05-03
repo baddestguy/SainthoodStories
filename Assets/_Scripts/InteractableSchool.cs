@@ -37,7 +37,7 @@
             UI.Instance.DisplayMessage("Taught a Class!!");
         }
 
-        if (clock.Time < OpenTime || clock.Time > ClosingTime)
+        if (clock.Time < OpenTime || clock.Time >= ClosingTime)
         {
             UI.Instance.EnableSchool(false);
         }
