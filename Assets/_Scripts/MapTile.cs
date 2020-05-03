@@ -18,14 +18,12 @@ public class MapTile : MonoBehaviour
     }
 
     private void OnEnable(){
-        //   OnTouchComplete.RegisterListener(ResetTile);
         GameClock.Ticked += Tick;
         GameManager.MissionBegin += MissionBegin;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
     }
 
     private void OnDisable(){
-        //    OnTouchComplete.UnregisterListener(ResetTile);
         GameClock.Ticked -= Tick;
         GameManager.MissionBegin -= MissionBegin;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
@@ -47,23 +45,6 @@ public class MapTile : MonoBehaviour
     public void OnMouseUp(){
         if(!CameraControls.CameraMove && !CameraControls.CameraZoom)
             OnClickEvent?.Invoke(this);
-        
-        //OnTileEnter tileEnter = new OnTileEnter();
-        //tileEnter.FireEvent();
-        //gameObject.SetActive(false);
-        //active = true;
-    }
-
-    public void OnMouseExit(){
-        //OnTileExit tileExit = new OnTileExit();
-        //tileExit.FireEvent();
-    }
-
-    private void ResetTile(OnTouchComplete touchComplete){
-        Debug.Log("I reset");
-        gameObject.SetActive(true);
-        SpriteRenderer.color = Color.white;
-        active = false;
     }
 
     public static InteractableObject GetInteractableObject(TileData tileData, GameObject tileGameObject, MapTile groundTile, Sprite [] sprites, int sortingOrder)

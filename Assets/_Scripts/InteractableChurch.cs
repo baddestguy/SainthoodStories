@@ -1,8 +1,14 @@
 ﻿public class InteractableChurch : InteractableHouse
 {
+    public int SleepEnergy;
+    public int MeditateEnergy;
+    public int PrayEnergy;
+    public int ServiceEnergy;
+
     void Start()
     {
         UI.Prayed += Pray;
+        UI.Slept += Sleep;
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
@@ -22,27 +28,43 @@
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
 
-        if (clock.Time >= OpenTime && clock.Time <= ClosingTime)
+        if (clock.Time >= OpenTime && clock.Time < ClosingTime)
         {
-            player.ConsumeEnergy(-RestEnergy);
+            player.ConsumeEnergy(ServiceEnergy);
             clock.Tick();
             UI.Instance.DisplayMessage("ATTENDED SERVICE!!");
         }
         else
         {
-            player.ConsumeEnergy(-1);
+            player.ConsumeEnergy(PrayEnergy);
             clock.Tick();
             UI.Instance.DisplayMessage("PRAYED");
         }
     }
 
-    public void EndDay()
+    public void Sleep()
     {
-        //Fast Forward to Midnight
+        GameClock clock = GameManager.Instance.GameClock;
+        Player player = GameManager.Instance.Player;
+
+        player.ConsumeEnergy(SleepEnergy);
+        clock.Tick();
+        UI.Instance.DisplayMessage("SLEPT!");
+    }
+
+    public void Meditate()
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        Player player = GameManager.Instance.Player;
+
+        player.ConsumeEnergy(MeditateEnergy);
+        clock.Tick();
+        UI.Instance.DisplayMessage("MEDITATE!");
     }
 
     private void OnDisable()
     {
         UI.Prayed -= Pray;
+        UI.Slept -= Sleep;
     }
 }

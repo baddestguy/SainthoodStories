@@ -14,7 +14,7 @@ public class Energy
 
     public void Consume(int amount)
     {
-        Amount = Mathf.Max(0, (Amount - amount));
+        Amount = Mathf.Clamp((Amount - amount), 0, 50);
         EnergyConsumed?.Invoke(this);
     }
 

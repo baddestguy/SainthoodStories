@@ -20,6 +20,7 @@ public class UI : MonoBehaviour
     public static UnityAction Taught;
     public static UnityAction DeliverBaby;
     public static UnityAction Prayed;
+    public static UnityAction Slept;
 
     private bool ClearDisplay;
 
@@ -113,9 +114,9 @@ public class UI : MonoBehaviour
         Prayed?.Invoke();
     }
 
-    public void EndDay()
+    public void Sleep()
     {
-
+        Slept?.Invoke();
     }
 
     public void DisplayMessage(string message)
