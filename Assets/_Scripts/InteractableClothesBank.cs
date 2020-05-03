@@ -15,6 +15,12 @@
             {
                 UI.Instance.DisplayMessage("YOU HAVE NO CLOTHES TO GIVE!");
             }
+
+            UI.Instance.EnableClothes(true, this);
+        }
+        else
+        {
+            UI.Instance.EnableClothes(false, this);
         }
     }
 }

@@ -5,10 +5,11 @@
     public int PrayEnergy;
     public int ServiceEnergy;
 
-    void Start()
+    protected override void Start()
     {
         UI.Prayed += Pray;
         UI.Slept += Sleep;
+        base.Start();
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
@@ -66,5 +67,6 @@
     {
         UI.Prayed -= Pray;
         UI.Slept -= Sleep;
+        UI.Meditate -= Meditated;
     }
 }

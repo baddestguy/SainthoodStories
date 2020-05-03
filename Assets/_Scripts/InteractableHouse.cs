@@ -8,6 +8,11 @@ public class InteractableHouse : InteractableObject
     public int OpenTime;
     public int ClosingTime;
 
+    protected virtual void Start()
+    {
+        UI.Meditate += Meditated;
+    }
+
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)
     {
         DeadlineTime = deadline;        
@@ -29,4 +34,20 @@ public class InteractableHouse : InteractableObject
         CountdownTimer = DeadlineTime - mission.StartingClock;
     }
 
+    public virtual void Meditated(InteractableHouse house)
+    {
+        if (house != this) return;
+
+        GameClock clock = GameManager.Instance.GameClock;
+        Player player = GameManager.Instance.Player;
+
+        player.ConsumeEnergy(-1);
+        clock.Tick();
+        UI.Instance.DisplayMessage("MEDITATED!!");
+    }
+
+    private void OnDisable()
+    {
+        UI.Meditate -= Meditated;
+    }
 }

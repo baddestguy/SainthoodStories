@@ -42,6 +42,8 @@ public class GameClock
 
     public static bool operator >(GameClock gameClock1, GameClock gameClock2)
     {
+        if (gameClock1 == null || gameClock2 == null) return false;
+   
         if (gameClock1.Day > gameClock2.Day) return true;
         if (gameClock1.Day < gameClock2.Day) return false;
 
@@ -53,6 +55,8 @@ public class GameClock
 
     public static bool operator <(GameClock gameClock1, GameClock gameClock2)
     {
+        if (gameClock1 == null || gameClock2 == null) return false;
+   
         if (gameClock1.Day < gameClock2.Day) return true;
         if (gameClock1.Day > gameClock2.Day) return false;
 
@@ -64,6 +68,8 @@ public class GameClock
 
     public static bool operator >=(GameClock gameClock1, GameClock gameClock2)
     {
+        if (gameClock1 == null || gameClock2 == null) return false;
+  
         if (gameClock1.Day > gameClock2.Day) return true;
         if (gameClock1.Day < gameClock2.Day) return false;
 
@@ -75,6 +81,8 @@ public class GameClock
 
     public static bool operator <=(GameClock gameClock1, GameClock gameClock2)
     {
+        if (gameClock1 == null || gameClock2 == null) return false;
+   
         if (gameClock1.Day < gameClock2.Day) return true;
         if (gameClock1.Day > gameClock2.Day) return false;
 
@@ -82,5 +90,48 @@ public class GameClock
         if (gameClock1.Time > gameClock2.Time) return false;
 
         return true;
+    }
+
+    public static bool operator ==(GameClock gameClock1, GameClock gameClock2)
+    {
+        if (gameClock1?.Day == null && gameClock2?.Day == null) return true;
+        if (gameClock1?.Day == null || gameClock2?.Day == null) return false;
+
+        if (gameClock1.Day == gameClock2.Day && gameClock1.Time == gameClock2.Time) return true;
+
+        return false;
+    }
+
+
+    public static bool operator !=(GameClock gameClock1, GameClock gameClock2)
+    {
+        if (gameClock1 == null && gameClock2 == null) return false;
+        if (gameClock1 == null || gameClock2 == null) return true;
+
+        if (gameClock1.Day != gameClock2.Day || gameClock1.Time != gameClock2.Time) return true;
+
+        return false;
+    }
+
+    public override bool Equals(object o)
+    {
+        var gameClock2 = o as GameClock;
+        if (gameClock2 == null) return false;
+
+        return Day == gameClock2.Day && Time == gameClock2.Time;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            const int HashingBase = (int)2166136261;
+            const int HashingMultiplier = 16777619;
+
+            int hash = HashingBase;
+            hash = (hash * HashingMultiplier) ^ (!Object.ReferenceEquals(null, Day) ? Day.GetHashCode() : 0);
+            hash = (hash * HashingMultiplier) ^ (!Object.ReferenceEquals(null, Time) ? Time.GetHashCode() : 0);
+            return hash;
+        }
     }
 }

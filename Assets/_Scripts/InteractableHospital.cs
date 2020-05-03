@@ -6,12 +6,14 @@ public class InteractableHospital : InteractableHouse
     public GameClock EndDelivery;
     private bool DeliveryTimeSet;
 
-    void Start()
+    protected override void Start()
     {
         UI.DeliverBaby += DeliveredBaby;
         UI.Taught += CheckBabyDelivery;
         UI.Slept += CheckBabyDelivery;
         UI.Prayed += CheckBabyDelivery;
+        UI.Meditate += CheckBabyDelivery;
+        base.Start();
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
@@ -19,14 +21,11 @@ public class InteractableHospital : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            if (clock >= StartDelivery && clock < EndDelivery)
-            {
-                UI.Instance.EnableHospital(true);
-            }
+            UI.Instance.EnableHospital(true, this);
         }
         else
         {
-            UI.Instance.EnableHospital(false);
+            UI.Instance.EnableHospital(false, this);
             if (!DeliveryTimeSet && !(tile is InteractableHouse) && Random.Range(0, 1.0f) > 0.95f)
             {
                 DeliveryTimeSet = true;
@@ -44,6 +43,11 @@ public class InteractableHospital : InteractableHouse
             DeliveryTimeSet = false;
             UI.Instance.DisplayMessage($"FAILED TO DELIVER BABY!");
         }
+    }
+
+    private void CheckBabyDelivery(InteractableHouse house)
+    {
+        CheckBabyDelivery();
     }
 
     private void CheckBabyDelivery()
@@ -72,13 +76,17 @@ public class InteractableHospital : InteractableHouse
         {
             player.ConsumeEnergy(EnergyConsumption);
             clock.Tick();
-            UI.Instance.DisplayMessage("Delivered a Baby!!");
+            UI.Instance.DisplayMessage("Delivering a Baby!!");
         }
 
-        if (clock < StartDelivery || clock >= EndDelivery)
+        if (clock == EndDelivery)
         {
             UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
-            UI.Instance.EnableHospital(false);
+        }
+
+        if(StartDelivery == null || EndDelivery == null || clock < StartDelivery || clock > EndDelivery)
+        {
+            UI.Instance.DisplayMessage($"NO BABY TO DELIVER!");
         }
     }
 
@@ -88,5 +96,6 @@ public class InteractableHospital : InteractableHouse
         UI.Taught -= CheckBabyDelivery;
         UI.Slept -= CheckBabyDelivery;
         UI.Prayed -= CheckBabyDelivery;
+        UI.Meditate -= Meditated;
     }
 }
