@@ -5,6 +5,8 @@ public class InteractableHospital : InteractableHouse
     public GameClock StartDelivery;
     public GameClock EndDelivery;
     private bool DeliveryTimeSet;
+    private bool FailedDelivery;
+    public int BabyPoints;
 
     protected override void Start()
     {
@@ -41,6 +43,7 @@ public class InteractableHospital : InteractableHouse
         if (DeliveryTimeSet && clock > EndDelivery)
         {
             DeliveryTimeSet = false;
+            FailedDelivery = true;
             UI.Instance.DisplayMessage($"FAILED TO DELIVER BABY!");
         }
     }
@@ -77,17 +80,36 @@ public class InteractableHospital : InteractableHouse
             player.ConsumeEnergy(EnergyConsumption);
             clock.Tick();
             UI.Instance.DisplayMessage("Delivering a Baby!!");
+            UpdateTownPoints(BabyPoints);
         }
 
         if (clock == EndDelivery)
         {
             UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
+            UpdateTownPoints(BabyPoints*2);
         }
 
-        if(StartDelivery == null || EndDelivery == null || clock < StartDelivery || clock > EndDelivery)
+        if (StartDelivery == null || EndDelivery == null || clock < StartDelivery || clock > EndDelivery)
         {
             UI.Instance.DisplayMessage($"NO BABY TO DELIVER!");
         }
+    }
+
+    public override void ReportScores()
+    {
+        GameManager.Instance.MissionManager.UpdateTownPoints(CurrentTownPoints > 0 ? CurrentTownPoints : FailedDelivery ? (NeglectedPoints * NeglectedMultiplier) : 0, this);
+        FailedDelivery = false;
+
+        if (CurrentTownPoints <= 0 && FailedDelivery)
+        {
+            NeglectedMultiplier++;
+        }
+        else
+        {
+            NeglectedMultiplier = 1;
+        }
+
+        CurrentTownPoints = 0;
     }
 
     private void OnDisable()

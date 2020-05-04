@@ -9,6 +9,9 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI EnergyDisplay;
     public TextMeshProUGUI TimeAndDayDisplay;
     public TextMeshProUGUI MessageDisplay;
+    public TextMeshProUGUI ReportDisplay;
+    public TextMeshProUGUI TPDisplay;
+    public TextMeshProUGUI FPDisplay;
 
     public GameObject ShopUI;
     public GameObject SchoolUI;
@@ -20,10 +23,14 @@ public class UI : MonoBehaviour
 
     public static UnityAction BoughtFood;
     public static UnityAction BoughtClothes;
+    public static UnityAction BoughtToys;
     public static UnityAction Taught;
     public static UnityAction DeliverBaby;
     public static UnityAction Prayed;
     public static UnityAction Slept;
+    public static UnityAction DonatedToys;
+    public static UnityAction DonatedFood;
+    public static UnityAction DonatedClothes;
     public static UnityAction<InteractableHouse> Meditate;
 
     private bool ClearDisplay;
@@ -42,6 +49,12 @@ public class UI : MonoBehaviour
         GameClock.Ticked += OnTick;
     }
 
+    public void InitTimeEnergy(GameClock clock, Energy energy)
+    {
+        EnergyDisplay.text = $"Energy: {energy.Amount}";
+        TimeAndDayDisplay.text = $"Day: {clock.Day}, Time: {clock.Time}:00";
+    }
+
     private void OnPlayerMoved(Energy energy, MapTile tile)
     {
 
@@ -50,6 +63,14 @@ public class UI : MonoBehaviour
     private void OnEnergyConsumed(Energy energy)
     {
         EnergyDisplay.text = $"Energy: {energy.Amount}";
+        if(energy.Amount <= 5)
+        {
+            EnergyDisplay.color = Color.red;
+        }
+        else
+        {
+            EnergyDisplay.color = Color.white;
+        }
     }
 
     private void MissionComplete(bool complete)
@@ -60,7 +81,7 @@ public class UI : MonoBehaviour
         }
         else
         {
-            MessageDisplay.text = "Mission Failed!";
+            MessageDisplay.text = "ENERGY DEPLETED! RESETTING TO CHURCH";
         }
     }
 
@@ -71,8 +92,12 @@ public class UI : MonoBehaviour
             ClearDisplay = false;
             DisplayMessage("");
         }
+        if (time > 0)
+        {
+            ReportDisplay.text = "";
+        }
 
-        TimeAndDayDisplay.text = $"Day:{day}, Time: {time}:00";
+        TimeAndDayDisplay.text = $"Day: {day}, Time: {time}:00";
     }
 
     public void EnableShop(bool enable, InteractableHouse house)
@@ -120,7 +145,12 @@ public class UI : MonoBehaviour
 
     public void BuyClothes()
     {
-        BoughtClothes.Invoke();
+        BoughtClothes?.Invoke();
+    }
+
+    public void BuyToys()
+    {
+        BoughtToys?.Invoke();
     }
 
     public void Teach()
@@ -131,6 +161,21 @@ public class UI : MonoBehaviour
     public void Deliver()
     {
         DeliverBaby?.Invoke();
+    }
+
+    public void DonateToys()
+    {
+        DonatedToys?.Invoke();
+    }
+    
+    public void DonateFood()
+    {
+        DonatedFood?.Invoke();
+    }
+
+    public void DonateClothes()
+    {
+        DonatedClothes?.Invoke();
     }
 
     public void Pray()
@@ -146,6 +191,17 @@ public class UI : MonoBehaviour
     public void Meditated()
     {
         Meditate?.Invoke(CurrentHouse);
+    }
+
+    public void RefreshPoints(int tp, int fp)
+    {
+        TPDisplay.text = $"TP: {tp}";
+        FPDisplay.text = $"FP: {fp}";
+    }
+
+    public void DisplayReport(string report)
+    {
+        ReportDisplay.text += report + '\n';
     }
 
     public void DisplayMessage(string message)

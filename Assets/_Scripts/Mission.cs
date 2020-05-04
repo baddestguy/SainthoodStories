@@ -6,10 +6,13 @@ public class Mission
     public int TargetNumber;
     public Energy StartingEnergy;
     public int StartingClock;
+    public int StartingFaithPoints;
+    public int StartingTownPoints;
 
-    public Mission(int targetNumber, int startingEnergy, int startTime)
+    public Mission(int faithPoints, int townPoints, int startingEnergy, int startTime)
     {
-        TargetNumber = targetNumber;
+        StartingFaithPoints = faithPoints;
+        StartingTownPoints = townPoints;
         StartingEnergy = new Energy(startingEnergy);
         StartingClock = startTime;
     }

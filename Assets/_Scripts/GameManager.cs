@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
         GameClock = new GameClock(MissionManager.CurrentMission.StartingClock);
         Player.GameStart(MissionManager.CurrentMission);
         MissionBegin?.Invoke(MissionManager.CurrentMission);
+        UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
     }
 
     private void OnMapGenerated()
@@ -51,7 +52,6 @@ public class GameManager : MonoBehaviour
     private void OnPlayerMoved(Energy energy, MapTile tile)
     {
         GameClock.Tick();
-        MissionManager.MissionUpdate(tile);
         //Trigger Status effects if any
     }
 

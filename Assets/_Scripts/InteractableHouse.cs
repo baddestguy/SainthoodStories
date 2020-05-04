@@ -8,9 +8,16 @@ public class InteractableHouse : InteractableObject
     public int OpenTime;
     public int ClosingTime;
 
+    protected int CurrentTownPoints;
+    protected int CurrentFaithPoints;
+    protected const int MeditationPoints = 1;
+    public int NeglectedPoints;
+    protected int NeglectedMultiplier = 1;
+
     protected virtual void Start()
     {
         UI.Meditate += Meditated;
+        MissionManager.EndOfDay += ReportScores;
     }
 
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)
@@ -30,7 +37,6 @@ public class InteractableHouse : InteractableObject
 
     public override void MissionBegin(Mission mission)
     {
-        Debug.Log($"House: {gameObject.name} DEADLINE: {DeadlineTime}:00");
         CountdownTimer = DeadlineTime - mission.StartingClock;
     }
 
@@ -44,10 +50,41 @@ public class InteractableHouse : InteractableObject
         player.ConsumeEnergy(-1);
         clock.Tick();
         UI.Instance.DisplayMessage("MEDITATED!!");
+        UpdateFaithPoints(MeditationPoints);
+    }
+
+    public virtual void UpdateTownPoints(int amount)
+    {
+        CurrentTownPoints += amount;
+    }
+
+    public virtual void UpdateFaithPoints(int amount)
+    {
+        CurrentFaithPoints += amount;
+        Debug.LogWarning("FAITH: " + CurrentFaithPoints);
+    }
+
+    public virtual void ReportScores()
+    {
+        GameManager.Instance.MissionManager.UpdateTownPoints(CurrentTownPoints > 0 ? CurrentTownPoints : (NeglectedPoints * NeglectedMultiplier), this);
+        GameManager.Instance.MissionManager.UpdateFaithPoints(CurrentFaithPoints);
+
+        if (CurrentTownPoints <= 0)
+        {
+            NeglectedMultiplier++;
+        }
+        else
+        {
+            NeglectedMultiplier = 1;
+        }
+
+        CurrentTownPoints = 0;
+        CurrentFaithPoints = 0;
     }
 
     private void OnDisable()
     {
         UI.Meditate -= Meditated;
+        MissionManager.EndOfDay -= ReportScores;
     }
 }

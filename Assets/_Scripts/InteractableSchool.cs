@@ -1,5 +1,7 @@
 ﻿public class InteractableSchool : InteractableHouse
 {
+    public int TeachPoints;
+
     protected override void Start()
     {
         UI.Taught += Teach;
@@ -36,6 +38,7 @@
             player.ConsumeEnergy(EnergyConsumption);
             clock.Tick();
             UI.Instance.DisplayMessage("Taught a Class!!");
+            UpdateTownPoints(TeachPoints);
         }
         else
         {
