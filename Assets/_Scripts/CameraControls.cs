@@ -34,7 +34,7 @@ public class CameraControls : MonoBehaviour
             Zoom(diff * 0.1f);
         }
         else if (CameraMove || Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved 
-            && (Input.GetTouch(0).deltaPosition.magnitude) > 10f)
+            && (Input.GetTouch(0).deltaPosition.magnitude) > 25f)
         {
             CameraMove = true;
             Vector3 touchDeltaPosition = Input.GetTouch(0).deltaPosition;

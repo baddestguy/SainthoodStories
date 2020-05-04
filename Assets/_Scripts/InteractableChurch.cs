@@ -1,9 +1,10 @@
 ﻿public class InteractableChurch : InteractableHouse
 {
     public int SleepEnergy;
-    public int MeditateEnergy;
     public int PrayEnergy;
     public int ServiceEnergy;
+
+    public int PrayerPoints;
 
     protected override void Start()
     {
@@ -33,14 +34,22 @@
         {
             player.ConsumeEnergy(ServiceEnergy);
             clock.Tick();
-            UI.Instance.DisplayMessage("ATTENDED SERVICE!!");
+            UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
+            UpdateFaithPoints(PrayerPoints*2);
         }
         else
         {
             player.ConsumeEnergy(PrayEnergy);
             clock.Tick();
             UI.Instance.DisplayMessage("PRAYED");
+            UpdateFaithPoints(PrayerPoints);
         }
+    }
+
+    public override void ReportScores()
+    {
+        GameManager.Instance.MissionManager.UpdateFaithPoints(CurrentFaithPoints - NeglectedPoints);
+        CurrentFaithPoints = 0;
     }
 
     public void Sleep()
@@ -51,16 +60,6 @@
         player.ConsumeEnergy(SleepEnergy);
         clock.Tick();
         UI.Instance.DisplayMessage("SLEPT!");
-    }
-
-    public void Meditate()
-    {
-        GameClock clock = GameManager.Instance.GameClock;
-        Player player = GameManager.Instance.Player;
-
-        player.ConsumeEnergy(MeditateEnergy);
-        clock.Tick();
-        UI.Instance.DisplayMessage("MEDITATE!");
     }
 
     private void OnDisable()

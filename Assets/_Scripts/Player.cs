@@ -15,8 +15,9 @@ public class Player : MonoBehaviour
     private MapTile CurrentTile;
     private IEnumerable<MapTile> AdjacentTiles;
     private List<PlayerItem> Inventory = new List<PlayerItem>();
-
     private Vector3 TargetPosition;
+
+    private int FaithPoints;
 
     void Start()
     {
@@ -98,7 +99,7 @@ public class Player : MonoBehaviour
 
     public void AddToInventory(PlayerItem item)
     {
-        if (Inventory.Any())
+        if (Inventory.Count == 2)
         {
             UI.Instance.DisplayMessage("INVENTORY FULL!");
             return;

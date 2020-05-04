@@ -35,7 +35,7 @@ public enum ItemType
 {
     FOOD = 0,
     CLOTHES,
-    MEDICINE,
+    TOYS,
     STATIONARY
 }
 

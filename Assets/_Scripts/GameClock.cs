@@ -5,6 +5,9 @@ public class GameClock
 {
     public int Time { get; private set; }
     public int Day { get; private set; }
+
+    public static bool EndofDay;
+
     public static UnityAction<int, int> Ticked;
 
     public GameClock(int startTime, int day = 1)
@@ -35,6 +38,11 @@ public class GameClock
         {
             Day++;
             Time = 0;
+            EndofDay = true;
+        }
+        else
+        {
+            EndofDay = false;
         }
 
         Ticked?.Invoke(Time, Day);

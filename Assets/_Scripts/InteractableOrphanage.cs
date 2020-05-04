@@ -1,10 +1,20 @@
 ﻿public class InteractableOrphanage : InteractableHouse
 {
+    public int ToyPoints;
+    public int AdoptionPoints;
+
+    protected override void Start()
+    {
+        UI.DonatedToys += GiveToys;
+        base.Start();
+    }
+
+
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            GiveToys();
+            UI.Instance.EnableOrphanage(true, this);
         }
         else
         {
@@ -18,11 +28,12 @@
         if (clock.Time >= OpenTime && clock.Time < ClosingTime)
         {
             Player player = GameManager.Instance.Player;
-            PlayerItem item = player.GetItem(ItemType.CLOTHES);
+            PlayerItem item = player.GetItem(ItemType.TOYS);
 
             if (item != null)
             {
                 UI.Instance.DisplayMessage("GAVE TOYS TO THE KIDS!");
+                UpdateTownPoints(ToyPoints);
             }
             else
             {
@@ -34,14 +45,17 @@
         {
             UI.Instance.DisplayMessage("ORPHANAGE CLOSED!");
         }
-
-        UI.Instance.EnableOrphanage(true, this);
     }
 
     public override void Meditated(InteractableHouse house)
     {
         if (house != this) return;
         base.Meditated(house);
-        GiveToys();
+    }
+
+    private void OnDisable()
+    {
+        UI.DonatedToys -= GiveToys;
+        UI.Meditate -= Meditated;
     }
 }
