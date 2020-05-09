@@ -23,7 +23,7 @@ public class MissionManager : MonoBehaviour
     {
         //Load all Missions from File!
 
-        CurrentMission = new Mission(75, 75, 5, 0);
+        CurrentMission = new Mission(75, 75, 25, 0);
         TownPoints = CurrentMission.StartingTownPoints;
         FaithPoints = CurrentMission.StartingFaithPoints;
         UI.Instance.RefreshPoints(TownPoints, FaithPoints);
@@ -34,7 +34,7 @@ public class MissionManager : MonoBehaviour
 
     }
 
-    private void OnTicked(int time, int day)
+    private void OnTicked(double time, int day)
     {
         if (GameClock.EndofDay)
         {

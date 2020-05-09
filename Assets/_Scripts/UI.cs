@@ -86,7 +86,7 @@ public class UI : MonoBehaviour
         }
     }
 
-    private void OnTick(int time, int day)
+    private void OnTick(double time, int day)
     {
         if (ClearDisplay)
         {
@@ -98,7 +98,7 @@ public class UI : MonoBehaviour
             ReportDisplay.text = "";
         }
 
-        TimeAndDayDisplay.text = $"Day: {day}, Time: {time}:00";
+        TimeAndDayDisplay.text = $"Day: {day}, Time: {(int)time}:{(time % 1 == 0 ? "00" : "30")}";
     }
 
     public void EnableCurrentUI(bool enable)

@@ -12,7 +12,7 @@ public class DayNightCycle : MonoBehaviour
         OnTick(GameManager.Instance.GameClock.Time, GameManager.Instance.GameClock.Day);
     }
 
-    private void OnTick(int time, int day)
+    private void OnTick(double time, int day)
     {
         switch (time)
         {

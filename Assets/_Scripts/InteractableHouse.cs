@@ -27,7 +27,7 @@ public class InteractableHouse : InteractableObject
         Init(groundTile, tileData, sprites, sortingOrder);
     }
 
-    public override void Tick(int time, int day)
+    public override void Tick(double time, int day)
     {
         CountdownTimer--;
         if ((DeadlineTime != -1) && (CountdownTimer <= 0 || time >= DeadlineTime))

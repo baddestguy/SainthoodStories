@@ -3,14 +3,14 @@ using UnityEngine.Events;
 
 public class GameClock
 {
-    public int Time { get; private set; }
+    public double Time { get; private set; }
     public int Day { get; private set; }
 
     public static bool EndofDay;
 
-    public static UnityAction<int, int> Ticked;
+    public static UnityAction<double, int> Ticked;
 
-    public GameClock(int startTime, int day = 1)
+    public GameClock(double startTime, int day = 1)
     {
         Time = startTime;
         Day = day;
@@ -24,7 +24,7 @@ public class GameClock
     public void AddTime(int deltaTime)
     {
         Time += deltaTime;
-        if (Time > 23)
+        if (Time > 23.5)
         {
             Day++;
             Time = Time - 24;
@@ -33,8 +33,8 @@ public class GameClock
 
     public void Tick()
     {
-        Time++;
-        if(Time > 23)
+        Time += 0.5;
+        if(Time > 23.5)
         {
             Day++;
             Time = 0;
@@ -50,7 +50,7 @@ public class GameClock
 
     public void Reset()
     {
-        int timeDiff = 23 - Time;
+        double timeDiff = 23.5 - Time;
         Time += timeDiff;
         Tick();
     }
