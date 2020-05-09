@@ -68,7 +68,7 @@ public class MapTile : MonoBehaviour
         return interac;
     }
 
-    public virtual void Tick(int time, int day)
+    public virtual void Tick(double time, int day)
     {
 
     }
