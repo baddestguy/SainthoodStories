@@ -39,7 +39,7 @@
             player.ConsumeEnergy(EnergyConsumption);
             clock.Tick();
             UI.Instance.DisplayMessage("Taught a Class!!");
-            UpdateTownPoints(TeachPoints);
+            UpdateCharityPoints(TeachPoints);
         }
         else
         {

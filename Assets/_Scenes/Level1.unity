@@ -6828,7 +6828,7 @@ GameObject:
   - component: {fileID: 934912268}
   - component: {fileID: 934912267}
   m_Layer: 5
-  m_Name: TP
+  m_Name: CP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7240,7 +7240,7 @@ MonoBehaviour:
   TimeAndDayDisplay: {fileID: 527051166}
   MessageDisplay: {fileID: 135472159}
   ReportDisplay: {fileID: 320591164}
-  TPDisplay: {fileID: 934912267}
+  CPDisplay: {fileID: 934912267}
   FPDisplay: {fileID: 1138263737}
   ShopUI: {fileID: 1883931489}
   SchoolUI: {fileID: 910704718}

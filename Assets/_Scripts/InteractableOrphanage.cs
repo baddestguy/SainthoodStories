@@ -33,7 +33,7 @@
             if (item != null)
             {
                 UI.Instance.DisplayMessage("GAVE TOYS TO THE KIDS!");
-                UpdateTownPoints(ToyPoints);
+                UpdateCharityPoints(ToyPoints);
             }
             else
             {

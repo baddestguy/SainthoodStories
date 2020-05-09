@@ -10,7 +10,7 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI TimeAndDayDisplay;
     public TextMeshProUGUI MessageDisplay;
     public TextMeshProUGUI ReportDisplay;
-    public TextMeshProUGUI TPDisplay;
+    public TextMeshProUGUI CPDisplay;
     public TextMeshProUGUI FPDisplay;
 
     public GameObject ShopUI;
@@ -209,9 +209,9 @@ public class UI : MonoBehaviour
         Meditate?.Invoke(CurrentHouse);
     }
 
-    public void RefreshPoints(int tp, int fp)
+    public void RefreshPoints(int cp, int fp)
     {
-        TPDisplay.text = $"TP: {tp}";
+        CPDisplay.text = $"CP: {cp}";
         FPDisplay.text = $"FP: {fp}";
     }
 

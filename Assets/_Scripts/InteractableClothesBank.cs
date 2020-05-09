@@ -28,7 +28,7 @@
         if (item != null)
         {
             UI.Instance.DisplayMessage("CLOTHED THE NAKED!");
-            UpdateTownPoints(ClothePoints);
+            UpdateCharityPoints(ClothePoints);
         }
         else
         {

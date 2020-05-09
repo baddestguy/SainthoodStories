@@ -28,7 +28,7 @@
         if (item != null)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateTownPoints(FeedPoints);
+            UpdateCharityPoints(FeedPoints);
         }
         else
         {

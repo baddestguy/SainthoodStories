@@ -70,6 +70,11 @@
         }
     }
 
+    public override void ReportScores()
+    {
+        //Do absolutely nothing!
+    }
+
     private void OnDisable()
     {
         UI.BoughtFood -= Food;

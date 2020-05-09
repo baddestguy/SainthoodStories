@@ -9,7 +9,7 @@ public class MissionManager : MonoBehaviour
     public static UnityAction EndOfDay;
 
     public Dictionary<TileType, int> HouseScores;
-    public int TownPoints { get; private set; }
+    public int CharityPoints { get; private set; }
     public int FaithPoints { get; private set; }
 
     private void Start()
@@ -24,9 +24,9 @@ public class MissionManager : MonoBehaviour
         //Load all Missions from File!
 
         CurrentMission = new Mission(75, 75, 25, 0);
-        TownPoints = CurrentMission.StartingTownPoints;
+        CharityPoints = CurrentMission.StartingCharityPoints;
         FaithPoints = CurrentMission.StartingFaithPoints;
-        UI.Instance.RefreshPoints(TownPoints, FaithPoints);
+        UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
     }
 
     public void MissionUpdate(MapTile tile)
@@ -41,7 +41,7 @@ public class MissionManager : MonoBehaviour
             UI.Instance.ReportDisplay.text += "DAY REPORT" + "\n\n";
 
             EndOfDay?.Invoke();
-            UI.Instance.RefreshPoints(TownPoints, FaithPoints);
+            UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
         }
     }
 
@@ -50,9 +50,9 @@ public class MissionManager : MonoBehaviour
         FaithPoints = Mathf.Clamp(FaithPoints + amount, 0, 100);
     }
 
-    public void UpdateTownPoints(int amount, InteractableHouse house)
+    public void UpdateCharityPoints(int amount, InteractableHouse house)
     {
-        TownPoints = Mathf.Clamp(TownPoints + amount, 0, 100);
+        CharityPoints = Mathf.Clamp(CharityPoints + amount, 0, 100);
         HouseScores[house.TileType] = amount;
 
         UI.Instance.DisplayReport(house.TileType + " : " + amount);
