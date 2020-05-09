@@ -6,6 +6,9 @@
 
     public int PrayerPoints;
 
+    private int LiturgyStartTime;
+    private int LiturgyEndTime;
+
     protected override void Start()
     {
         UI.Prayed += Pray;
@@ -25,12 +28,43 @@
         }
     }
 
+    public override void Tick(double time, int day)
+    {
+        UpdateLiturgyTimes();
+        base.Tick(time, day);
+    }
+
+    private void UpdateLiturgyTimes()
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        if (clock.Time > 21.5 || clock.Time < 6)
+        {
+            LiturgyStartTime = 6;
+            LiturgyEndTime = 7;
+        }
+        else if(clock.Time > 18.5)
+        {
+            LiturgyStartTime = 21;
+            LiturgyEndTime = 22;
+        }
+        else if(clock.Time > 12.5)
+        {
+            LiturgyStartTime = 18;
+            LiturgyEndTime = 19;
+        }
+        else if(clock.Time > 6.5)
+        {
+            LiturgyStartTime = 12;
+            LiturgyEndTime = 13;
+        }
+    }
+
     public void Pray()
     {
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
 
-        if (clock.Time >= OpenTime && clock.Time < ClosingTime)
+        if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
         {
             player.ConsumeEnergy(ServiceEnergy);
             clock.Tick();
