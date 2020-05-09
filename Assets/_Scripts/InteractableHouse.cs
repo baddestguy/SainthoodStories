@@ -18,6 +18,7 @@ public class InteractableHouse : InteractableObject
     {
         UI.Meditate += Meditated;
         MissionManager.EndOfDay += ReportScores;
+        Player.OnReset += OnReset;
     }
 
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)
@@ -80,6 +81,11 @@ public class InteractableHouse : InteractableObject
 
         CurrentTownPoints = 0;
         CurrentFaithPoints = 0;
+    }
+
+    public virtual void OnReset()
+    {
+
     }
 
     private void OnDisable()
