@@ -5396,8 +5396,8 @@ MonoBehaviour:
   CurrentGroundTile: {fileID: 414956708}
   DeadlineTime: -1
   EnergyConsumption: -3
-  OpenTime: 19
-  ClosingTime: 21
+  OpenTime: 0
+  ClosingTime: 23
   NeglectedPoints: 10
   SleepEnergy: -3
   PrayEnergy: -1
