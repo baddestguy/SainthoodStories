@@ -7,12 +7,12 @@ public class Mission
     public Energy StartingEnergy;
     public int StartingClock;
     public int StartingFaithPoints;
-    public int StartingTownPoints;
+    public int StartingCharityPoints;
 
-    public Mission(int faithPoints, int townPoints, int startingEnergy, int startTime)
+    public Mission(int faithPoints, int charityPoints, int startingEnergy, int startTime)
     {
         StartingFaithPoints = faithPoints;
-        StartingTownPoints = townPoints;
+        StartingCharityPoints = charityPoints;
         StartingEnergy = new Energy(startingEnergy);
         StartingClock = startTime;
     }

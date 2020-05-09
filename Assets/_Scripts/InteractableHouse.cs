@@ -8,7 +8,7 @@ public class InteractableHouse : InteractableObject
     public int OpenTime;
     public int ClosingTime;
 
-    protected int CurrentTownPoints;
+    protected int CurrentCharityPoints;
     protected int CurrentFaithPoints;
     protected const int MeditationPoints = 1;
     public int NeglectedPoints;
@@ -54,9 +54,9 @@ public class InteractableHouse : InteractableObject
         UpdateFaithPoints(MeditationPoints);
     }
 
-    public virtual void UpdateTownPoints(int amount)
+    public virtual void UpdateCharityPoints(int amount)
     {
-        CurrentTownPoints += amount;
+        CurrentCharityPoints += amount;
     }
 
     public virtual void UpdateFaithPoints(int amount)
@@ -67,10 +67,10 @@ public class InteractableHouse : InteractableObject
 
     public virtual void ReportScores()
     {
-        GameManager.Instance.MissionManager.UpdateTownPoints(CurrentTownPoints > 0 ? CurrentTownPoints : (NeglectedPoints * NeglectedMultiplier), this);
+        GameManager.Instance.MissionManager.UpdateCharityPoints(CurrentCharityPoints > 0 ? CurrentCharityPoints : (NeglectedPoints * NeglectedMultiplier), this);
         GameManager.Instance.MissionManager.UpdateFaithPoints(CurrentFaithPoints);
 
-        if (CurrentTownPoints <= 0)
+        if (CurrentCharityPoints <= 0)
         {
             NeglectedMultiplier++;
         }
@@ -79,7 +79,7 @@ public class InteractableHouse : InteractableObject
             NeglectedMultiplier = 1;
         }
 
-        CurrentTownPoints = 0;
+        CurrentCharityPoints = 0;
         CurrentFaithPoints = 0;
     }
 

@@ -37,7 +37,7 @@ public class InteractableHospital : InteractableHouse
                 StartDelivery.AddTime(6);
                 EndDelivery.AddTime(9);
 
-                UI.Instance.DisplayMessage($"BABY DUE B/W {StartDelivery.Time}:00 AND {EndDelivery.Time}:00!");
+                UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
             }
         }
         CheckFailedDelivery();
@@ -60,7 +60,7 @@ public class InteractableHospital : InteractableHouse
             StartDelivery.AddTime(6);
             EndDelivery.AddTime(9);
 
-            UI.Instance.DisplayMessage($"BABY DUE B/W {StartDelivery.Time}:00 AND {EndDelivery.Time}:00!");
+            UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
         }
     }
 
@@ -87,13 +87,13 @@ public class InteractableHospital : InteractableHouse
             player.ConsumeEnergy(EnergyConsumption);
             clock.Tick();
             UI.Instance.DisplayMessage("Delivering a Baby!!");
-            UpdateTownPoints(BabyPoints);
+            UpdateCharityPoints(BabyPoints);
         }
 
         if (clock == EndDelivery)
         {
             UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
-            UpdateTownPoints(BabyPoints*2);
+            UpdateCharityPoints(BabyPoints*2);
         }
 
         if (StartDelivery == null || EndDelivery == null || clock < StartDelivery || clock > EndDelivery)
@@ -105,10 +105,10 @@ public class InteractableHospital : InteractableHouse
     public override void ReportScores()
     {
         CheckFailedDelivery();
-        GameManager.Instance.MissionManager.UpdateTownPoints(CurrentTownPoints > 0 ? CurrentTownPoints : FailedDelivery ? (NeglectedPoints * NeglectedMultiplier) : 0, this);
+        GameManager.Instance.MissionManager.UpdateCharityPoints(CurrentCharityPoints > 0 ? CurrentCharityPoints : FailedDelivery ? (NeglectedPoints * NeglectedMultiplier) : 0, this);
         FailedDelivery = false;
 
-        if (CurrentTownPoints <= 0 && FailedDelivery)
+        if (CurrentCharityPoints <= 0 && FailedDelivery)
         {
             NeglectedMultiplier++;
         }
@@ -117,7 +117,7 @@ public class InteractableHospital : InteractableHouse
             NeglectedMultiplier = 1;
         }
 
-        CurrentTownPoints = 0;
+        CurrentCharityPoints = 0;
     }
 
     private void OnDisable()
