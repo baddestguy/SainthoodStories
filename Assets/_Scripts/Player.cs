@@ -7,17 +7,18 @@ using UnityEngine.Events;
 public class Player : MonoBehaviour
 {
     public static event UnityAction<Energy, MapTile> OnMoveSuccessEvent;
+    public static event UnityAction OnReset;
     public GameMap Map;
     
     private Energy Energy;
     private int EnergyConsumption;
     [SerializeField]
     private MapTile CurrentTile;
+    private MapTile StartTile;
     private IEnumerable<MapTile> AdjacentTiles;
     private List<PlayerItem> Inventory = new List<PlayerItem>();
     private Vector3 TargetPosition;
-
-    private int FaithPoints;
+    private int StartingEnergy;
 
     void Start()
     {
@@ -35,7 +36,9 @@ public class Player : MonoBehaviour
 
     public void GameStart(Mission missionDetails)
     {
+        StartTile = CurrentTile;
         Energy = missionDetails.StartingEnergy;
+        StartingEnergy = Energy.Amount;
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
         ModifyEnergyConsumption(CurrentTile);
     }
@@ -54,12 +57,21 @@ public class Player : MonoBehaviour
 
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
 
-        TargetPosition = CurrentTile.transform.position;        
+        TargetPosition = CurrentTile.transform.position;
     }
 
     public void OnInteract(MapTile newTile)
     {
-        if(newTile is InteractableObject)
+        EnergyConsumption = ModifyEnergyConsumption(newTile);
+        if (Energy.Depleted(EnergyConsumption) && !(newTile is InteractableHouse)) //Reset if out of energy & not in a building
+        {
+            OnMove(StartTile);
+            Energy.Consume(-StartingEnergy);
+            GameManager.Instance.GameClock.Reset();
+            UI.Instance.EnableCurrentUI(false);
+            OnReset?.Invoke();
+        }
+        else if (newTile is InteractableObject)
         {
             var iTile = newTile as InteractableObject;
             if (WeCanMove(iTile.CurrentGroundTile))
@@ -121,6 +133,11 @@ public class Player : MonoBehaviour
     public void ConsumeEnergy(int amount)
     {
         Energy.Consume(amount);
+    }
+
+    public bool EnergyDepleted()
+    {
+        return Energy.Depleted();
     }
 
     private void OnDisable()

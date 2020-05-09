@@ -48,6 +48,13 @@ public class GameClock
         Ticked?.Invoke(Time, Day);
     }
 
+    public void Reset()
+    {
+        int timeDiff = 23 - Time;
+        Time += timeDiff;
+        Tick();
+    }
+
     public static bool operator >(GameClock gameClock1, GameClock gameClock2)
     {
         if (gameClock1 == null || gameClock2 == null) return false;

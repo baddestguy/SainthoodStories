@@ -14,12 +14,12 @@ public class Energy
 
     public void Consume(int amount)
     {
-        Amount = Mathf.Clamp((Amount - amount), 0, 50);
+        Amount = Mathf.Clamp((Amount - amount), 0, 100);
         EnergyConsumed?.Invoke(this);
     }
 
-    public bool Depleted()
+    public bool Depleted(int consumption = 0)
     {
-        return Amount == 0;
+        return (Amount-consumption) <= 0;
     }
 }

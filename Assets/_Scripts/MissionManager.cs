@@ -14,7 +14,6 @@ public class MissionManager : MonoBehaviour
 
     private void Start()
     {
-        Energy.EnergyConsumed += OnEnergyConsumed;
         GameClock.Ticked += OnTicked;
 
         HouseScores = new Dictionary<TileType, int>();
@@ -24,7 +23,7 @@ public class MissionManager : MonoBehaviour
     {
         //Load all Missions from File!
 
-        CurrentMission = new Mission(75, 75, 20, 0);
+        CurrentMission = new Mission(75, 75, 5, 0);
         TownPoints = CurrentMission.StartingTownPoints;
         FaithPoints = CurrentMission.StartingFaithPoints;
         UI.Instance.RefreshPoints(TownPoints, FaithPoints);
@@ -60,20 +59,8 @@ public class MissionManager : MonoBehaviour
         Debug.Log(house.TileType + " : " + amount);
     }
 
-    private void OnEnergyConsumed(Energy energy)
-    {
-        if (energy.Depleted())
-        {
-            MissionComplete?.Invoke(false);
-            //Reset Player back to Church.
-            //Fast forward to next day at 5am.
-            //Reset Energy to 20.
-        }
-    }
-
     private void OnDisable()
     {
-        Energy.EnergyConsumed -= OnEnergyConsumed;
         GameClock.Ticked -= OnTicked;
     }
 }

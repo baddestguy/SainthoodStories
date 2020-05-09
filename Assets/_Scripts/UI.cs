@@ -35,6 +35,7 @@ public class UI : MonoBehaviour
 
     private bool ClearDisplay;
     private InteractableHouse CurrentHouse;
+    private GameObject CurrentActiveUIGameObject;
 
     void Awake()
     {
@@ -100,42 +101,57 @@ public class UI : MonoBehaviour
         TimeAndDayDisplay.text = $"Day: {day}, Time: {time}:00";
     }
 
+    public void EnableCurrentUI(bool enable)
+    {
+        CurrentActiveUIGameObject.SetActive(enable);
+    }
+
     public void EnableShop(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         ShopUI.SetActive(enable);
+        CurrentActiveUIGameObject = ShopUI;
     }
 
     public void EnableSchool(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         SchoolUI.SetActive(enable);
+        CurrentActiveUIGameObject = SchoolUI;
     }
 
     public void EnableHospital(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         HospitalUI.SetActive(enable);
+        CurrentActiveUIGameObject = HospitalUI;
     }
 
     public void EnableChurch(bool enable)
     {
         ChurchUI.SetActive(enable);
+        CurrentActiveUIGameObject = ChurchUI;
     }
+
     public void EnableFood(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         FoodShelterUI.SetActive(enable);
+        CurrentActiveUIGameObject = FoodShelterUI;
     }
+
     public void EnableClothes(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         ClothesBankUI.SetActive(enable);
+        CurrentActiveUIGameObject = ClothesBankUI;
     }
+
     public void EnableOrphanage(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         OrphanageUI.SetActive(enable);
+        CurrentActiveUIGameObject = OrphanageUI;
     }
 
     public void BuyFood()

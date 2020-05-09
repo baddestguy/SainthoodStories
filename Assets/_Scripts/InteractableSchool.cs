@@ -32,6 +32,7 @@
     {
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
+        if (player.EnergyDepleted()) return;
 
         if (clock.Time >= OpenTime && clock.Time < ClosingTime)
         {
