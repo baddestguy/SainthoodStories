@@ -33,10 +33,12 @@ public enum TileType
 
 public enum ItemType
 {
-    FOOD = 0,
+    GROCERIES = 0,
     CLOTHES,
     TOYS,
-    STATIONARY
+    STATIONERY,
+    MEDS,
+    MEAL
 }
 
 public class TileData

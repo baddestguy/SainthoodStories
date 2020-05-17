@@ -2,9 +2,7 @@
 {
     protected override void Start()
     {
-        UI.BoughtFood += Food;
-        UI.BoughtClothes += Clothes;
-        UI.BoughtToys += Toys;
+        UI.BoughtItem += BoughtItem;
         base.Start();
     }
 
@@ -28,41 +26,13 @@
         }
     }
 
-    public void Food()
+    public void BoughtItem(ItemType item)
     {
         GameClock clock = GameManager.Instance.GameClock;
         if (clock.Time >= OpenTime && clock.Time < ClosingTime)
         {
-            UI.Instance.DisplayMessage("PICKED UP FOOD!");
-            GameManager.Instance.Player.AddToInventory(new PlayerItem(ItemType.FOOD));
-        }
-        else
-        {
-            UI.Instance.DisplayMessage("SHOP CLOSED!");
-        }
-    }
-
-    public void Clothes()
-    {
-        GameClock clock = GameManager.Instance.GameClock;
-        if (clock.Time >= OpenTime && clock.Time < ClosingTime)
-        {
-            UI.Instance.DisplayMessage("PICKED UP CLOTHES!");
-            GameManager.Instance.Player.AddToInventory(new PlayerItem(ItemType.CLOTHES));
-        }
-        else
-        {
-            UI.Instance.DisplayMessage("SHOP CLOSED!");
-        }
-    }
-
-    public void Toys()
-    {
-        GameClock clock = GameManager.Instance.GameClock;
-        if (clock.Time >= OpenTime && clock.Time < ClosingTime)
-        {
-            UI.Instance.DisplayMessage("PICKED UP TOYS!");
-            GameManager.Instance.Player.AddToInventory(new PlayerItem(ItemType.TOYS));
+            UI.Instance.DisplayMessage($"PICKED UP {item}!");
+            GameManager.Instance.Player.AddToInventory(new PlayerItem(item));
         }
         else
         {
@@ -77,9 +47,7 @@
 
     public override void OnDisable()
     {
-        UI.BoughtFood -= Food;
-        UI.BoughtClothes -= Clothes;
-        UI.BoughtToys -= Toys;
+        UI.BoughtItem -= BoughtItem;
         base.OnDisable();
     }
 }

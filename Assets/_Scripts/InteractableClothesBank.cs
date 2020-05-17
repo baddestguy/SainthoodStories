@@ -1,10 +1,7 @@
 ﻿public class InteractableClothesBank : InteractableHouse
 {
-    public int ClothePoints;
-
     protected override void Start()
     {
-        UI.DonatedClothes += GiveClothes;
         base.Start();
     }
 
@@ -20,15 +17,17 @@
         }
     }
 
-    public void GiveClothes()
+    public override void DeliverItem(InteractableHouse house)
     {
+        if (house != this) return;
+
         Player player = GameManager.Instance.Player;
         PlayerItem item = player.GetItem(ItemType.CLOTHES);
 
         if (item != null)
         {
             UI.Instance.DisplayMessage("CLOTHED THE NAKED!");
-            UpdateCharityPoints(ClothePoints);
+            UpdateCharityPoints(ItemDeliveryPoints);
         }
         else
         {
@@ -38,7 +37,6 @@
 
     public override void OnDisable()
     {
-        UI.DonatedClothes -= GiveClothes;
         base.OnDisable();
     }
 }

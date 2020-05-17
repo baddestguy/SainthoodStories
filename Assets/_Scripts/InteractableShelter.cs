@@ -1,10 +1,7 @@
 ﻿public class InteractableShelter : InteractableHouse
 {
-    public int FeedPoints;
-
     protected override void Start()
     {
-        UI.DonatedFood += GiveFood;
         base.Start();
     }
 
@@ -20,15 +17,17 @@
         }
     }
 
-    public void GiveFood()
+    public override void DeliverItem(InteractableHouse house)
     {
+        if (house != this) return;
+
         Player player = GameManager.Instance.Player;
-        PlayerItem item = player.GetItem(ItemType.FOOD);
+        PlayerItem item = player.GetItem(ItemType.GROCERIES);
 
         if (item != null)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateCharityPoints(FeedPoints);
+            UpdateCharityPoints(ItemDeliveryPoints);
         }
         else
         {
@@ -37,7 +36,6 @@
     }
     public override void OnDisable()
     {
-        UI.DonatedFood -= GiveFood;
         base.OnDisable();
     }
 }
