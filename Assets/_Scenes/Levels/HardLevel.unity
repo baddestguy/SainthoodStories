@@ -6102,6 +6102,9 @@ MonoBehaviour:
   PrayEnergy: -1
   ServiceEnergy: -1
   PrayerPoints: 1
+  ConfessionTime: 18.5
+  MassStartTime: 19
+  MassEndTime: 20
 --- !u!1 &759295276
 GameObject:
   m_ObjectHideFlags: 0
