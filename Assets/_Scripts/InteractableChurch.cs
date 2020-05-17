@@ -8,11 +8,15 @@
 
     private int LiturgyStartTime;
     private int LiturgyEndTime;
+    public double ConfessionTime;
+    public double MassStartTime;
+    public double MassEndTime;
 
     protected override void Start()
     {
         UI.Prayed += Pray;
         UI.Slept += Sleep;
+        UpdateLiturgyTimes();
         base.Start();
     }
 
@@ -64,12 +68,44 @@
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
 
-        if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
+        if (clock.Day % 7 == 0)
         {
-            player.ConsumeEnergy(ServiceEnergy);
+            if (clock.Time == ConfessionTime)
+            {
+                player.ConsumeEnergy(ServiceEnergy);
+                clock.Tick();
+                UI.Instance.DisplayMessage("ATTENDED CONFESSION!!");
+                UpdateFaithPoints(PrayerPoints * 4);
+            }
+            else if (clock.Time >= MassStartTime && clock.Time < MassEndTime)
+            {
+                player.ConsumeEnergy(ServiceEnergy);
+                clock.Tick();
+                UI.Instance.DisplayMessage("ATTENDED MASS!!");
+                UpdateFaithPoints(PrayerPoints * 4);
+            }
+            else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
+            {
+                player.ConsumeEnergy(ServiceEnergy);
+                clock.Tick();
+                UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
+                UpdateFaithPoints(PrayerPoints * 2);
+                player.ConsumeEnergy(ServiceEnergy);
+            }
+            else
+            {
+                player.ConsumeEnergy(PrayEnergy);
+                clock.Tick();
+                UI.Instance.DisplayMessage("PRAYED");
+                UpdateFaithPoints(PrayerPoints);
+            }
+        }
+        else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
+        {
             clock.Tick();
             UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
-            UpdateFaithPoints(PrayerPoints*2);
+            UpdateFaithPoints(PrayerPoints * 2);
+            player.ConsumeEnergy(ServiceEnergy);
         }
         else
         {
