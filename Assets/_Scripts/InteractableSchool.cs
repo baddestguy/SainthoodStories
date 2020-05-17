@@ -47,6 +47,24 @@
         }
     }
 
+    public override void DeliverItem(InteractableHouse house)
+    {
+        if (house != this) return;
+
+        Player player = GameManager.Instance.Player;
+        PlayerItem item = player.GetItem(ItemType.STATIONERY);
+
+        if (item != null)
+        {
+            UI.Instance.DisplayMessage("DELIVERED STATIONERY!");
+            UpdateCharityPoints(ItemDeliveryPoints);
+        }
+        else
+        {
+            UI.Instance.DisplayMessage("YOU HAVE NO STATIONERY TO GIVE!");
+        }
+    }
+
     public override void OnDisable()
     {
         UI.Taught -= Teach;

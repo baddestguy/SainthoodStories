@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -23,17 +24,13 @@ public class UI : MonoBehaviour
     public GameObject ClothesBankUI;
     public GameObject EndGameUI;
 
-    public static UnityAction BoughtFood;
-    public static UnityAction BoughtClothes;
-    public static UnityAction BoughtToys;
+    public static UnityAction<ItemType> BoughtItem;
     public static UnityAction Taught;
     public static UnityAction DeliverBaby;
     public static UnityAction Prayed;
     public static UnityAction Slept;
-    public static UnityAction DonatedToys;
-    public static UnityAction DonatedFood;
-    public static UnityAction DonatedClothes;
     public static UnityAction<InteractableHouse> Meditate;
+    public static UnityAction<InteractableHouse> DeliverItem;
 
     private bool ClearDisplay;
     private InteractableHouse CurrentHouse;
@@ -110,23 +107,32 @@ public class UI : MonoBehaviour
 
     public void EnableShop(bool enable, InteractableHouse house)
     {
-        CurrentHouse = house;
         ShopUI.SetActive(enable);
-        if(ShopUI.activeSelf) CurrentActiveUIGameObject = ShopUI;
+        if (ShopUI.activeSelf)
+        {
+            CurrentActiveUIGameObject = ShopUI;
+            CurrentHouse = house;
+        }
     }
 
     public void EnableSchool(bool enable, InteractableHouse house)
     {
-        CurrentHouse = house;
         SchoolUI.SetActive(enable);
-        if(SchoolUI.activeSelf) CurrentActiveUIGameObject = SchoolUI;
+        if (SchoolUI.activeSelf)
+        {
+            CurrentHouse = house;
+            CurrentActiveUIGameObject = SchoolUI;
+        }
     }
 
     public void EnableHospital(bool enable, InteractableHouse house)
     {
-        CurrentHouse = house;
         HospitalUI.SetActive(enable);
-        if(HospitalUI.activeSelf) CurrentActiveUIGameObject = HospitalUI;
+        if (HospitalUI.activeSelf)
+        {
+            CurrentHouse = house;
+            CurrentActiveUIGameObject = HospitalUI;
+        }
     }
 
     public void EnableChurch(bool enable)
@@ -137,44 +143,38 @@ public class UI : MonoBehaviour
 
     public void EnableFood(bool enable, InteractableHouse house)
     {
-        CurrentHouse = house;
         FoodShelterUI.SetActive(enable);
-        if(FoodShelterUI.activeSelf) CurrentActiveUIGameObject = FoodShelterUI;
+        if (FoodShelterUI.activeSelf)
+        {
+            CurrentActiveUIGameObject = FoodShelterUI;
+            CurrentHouse = house;
+        }    
     }
 
     public void EnableClothes(bool enable, InteractableHouse house)
     {
-        CurrentHouse = house;
         ClothesBankUI.SetActive(enable);
-        if(ClothesBankUI.activeSelf) CurrentActiveUIGameObject = ClothesBankUI;
+        if (ClothesBankUI.activeSelf)
+        {
+            CurrentActiveUIGameObject = ClothesBankUI;
+            CurrentHouse = house;
+        }
     }
 
     public void EnableOrphanage(bool enable, InteractableHouse house)
     {
-        CurrentHouse = house;
         OrphanageUI.SetActive(enable);
-        if(OrphanageUI.activeSelf) CurrentActiveUIGameObject = OrphanageUI;
+        if (OrphanageUI.activeSelf)
+        {
+            CurrentActiveUIGameObject = OrphanageUI;
+            CurrentHouse = house;
+        }
     }
 
     public void EnableEndGame(bool enable)
     {
         EnableCurrentUI(false);
         EndGameUI.SetActive(enable);
-    }
-
-    public void BuyFood()
-    {
-        BoughtFood?.Invoke();
-    }
-
-    public void BuyClothes()
-    {
-        BoughtClothes?.Invoke();
-    }
-
-    public void BuyToys()
-    {
-        BoughtToys?.Invoke();
     }
 
     public void Teach()
@@ -185,21 +185,6 @@ public class UI : MonoBehaviour
     public void Deliver()
     {
         DeliverBaby?.Invoke();
-    }
-
-    public void DonateToys()
-    {
-        DonatedToys?.Invoke();
-    }
-    
-    public void DonateFood()
-    {
-        DonatedFood?.Invoke();
-    }
-
-    public void DonateClothes()
-    {
-        DonatedClothes?.Invoke();
     }
 
     public void Pray()
@@ -215,6 +200,17 @@ public class UI : MonoBehaviour
     public void Meditated()
     {
         Meditate?.Invoke(CurrentHouse);
+    }
+
+    public void BuyItem(string item)
+    {
+        ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), item);
+        BoughtItem?.Invoke(itemType);
+    }
+
+    public void DeliverItems()
+    {
+        DeliverItem?.Invoke(CurrentHouse);
     }
 
     public void RefreshPoints(int cp, int fp)

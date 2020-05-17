@@ -1,11 +1,9 @@
 ﻿public class InteractableOrphanage : InteractableHouse
 {
-    public int ToyPoints;
     public int AdoptionPoints;
 
     protected override void Start()
     {
-        UI.DonatedToys += GiveToys;
         base.Start();
     }
 
@@ -22,8 +20,10 @@
         }
     }
 
-    public void GiveToys()
+    public override void DeliverItem(InteractableHouse house)
     {
+        if (house != this) return;
+
         GameClock clock = GameManager.Instance.GameClock;
         if (clock.Time >= OpenTime && clock.Time < ClosingTime)
         {
@@ -33,7 +33,7 @@
             if (item != null)
             {
                 UI.Instance.DisplayMessage("GAVE TOYS TO THE KIDS!");
-                UpdateCharityPoints(ToyPoints);
+                UpdateCharityPoints(ItemDeliveryPoints);
             }
             else
             {
@@ -55,7 +55,6 @@
 
     public override void OnDisable()
     {
-        UI.DonatedToys -= GiveToys;
         base.OnDisable();
     }
 }

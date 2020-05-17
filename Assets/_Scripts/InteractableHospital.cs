@@ -7,6 +7,7 @@ public class InteractableHospital : InteractableHouse
     private bool DeliveryTimeSet;
     private bool FailedDelivery;
     public int BabyPoints;
+    public int FailedDeliveryPoints;
 
     protected override void Start()
     {
@@ -102,10 +103,28 @@ public class InteractableHospital : InteractableHouse
         }
     }
 
+    public override void DeliverItem(InteractableHouse house)
+    {
+        if (house != this) return;
+
+        Player player = GameManager.Instance.Player;
+        PlayerItem item = player.GetItem(ItemType.MEDS);
+
+        if (item != null)
+        {
+            UI.Instance.DisplayMessage("DELIVERED MEDS!");
+            UpdateCharityPoints(ItemDeliveryPoints);
+        }
+        else
+        {
+            UI.Instance.DisplayMessage("YOU HAVE NO MEDS TO GIVE!");
+        }
+    }
+
     public override void ReportScores()
     {
         CheckFailedDelivery();
-        GameManager.Instance.MissionManager.UpdateCharityPoints(CurrentCharityPoints > 0 ? CurrentCharityPoints : FailedDelivery ? (NeglectedPoints * NeglectedMultiplier) : 0, this);
+        GameManager.Instance.MissionManager.UpdateCharityPoints(CurrentCharityPoints > 0 ? CurrentCharityPoints : FailedDelivery ? (FailedDeliveryPoints * NeglectedMultiplier) : (NeglectedPoints * NeglectedMultiplier), this);
         FailedDelivery = false;
 
         if (CurrentCharityPoints <= 0 && FailedDelivery)

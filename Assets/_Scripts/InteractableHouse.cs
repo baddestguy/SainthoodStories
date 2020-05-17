@@ -7,6 +7,7 @@ public class InteractableHouse : InteractableObject
     public int EnergyConsumption;
     public int OpenTime;
     public int ClosingTime;
+    public int ItemDeliveryPoints;
 
     protected int CurrentCharityPoints;
     protected int CurrentFaithPoints;
@@ -17,6 +18,7 @@ public class InteractableHouse : InteractableObject
     protected virtual void Start()
     {
         UI.Meditate += Meditated;
+        UI.DeliverItem += DeliverItem;
         MissionManager.EndOfDay += ReportScores;
         Player.OnReset += OnReset;
     }
@@ -52,6 +54,10 @@ public class InteractableHouse : InteractableObject
         clock.Tick();
         UI.Instance.DisplayMessage("MEDITATED!!");
         UpdateFaithPoints(MeditationPoints);
+    }
+
+    public virtual void DeliverItem(InteractableHouse house)
+    {
     }
 
     public virtual void UpdateCharityPoints(int amount)
@@ -91,6 +97,7 @@ public class InteractableHouse : InteractableObject
     public override void OnDisable()
     {
         UI.Meditate -= Meditated;
+        UI.DeliverItem -= DeliverItem;
         MissionManager.EndOfDay -= ReportScores;
         base.OnDisable();
     }
