@@ -31,6 +31,7 @@ public class UI : MonoBehaviour
     public static UnityAction Slept;
     public static UnityAction<InteractableHouse> Meditate;
     public static UnityAction<InteractableHouse> DeliverItem;
+    public static UnityAction<InteractableHouse> Volunteer;
 
     private bool ClearDisplay;
     private InteractableHouse CurrentHouse;
@@ -211,6 +212,11 @@ public class UI : MonoBehaviour
     public void DeliverItems()
     {
         DeliverItem?.Invoke(CurrentHouse);
+    }
+
+    public void VolunteerWork()
+    {
+        Volunteer?.Invoke(CurrentHouse);
     }
 
     public void RefreshPoints(int cp, int fp)

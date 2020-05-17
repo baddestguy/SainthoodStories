@@ -139,6 +139,20 @@ public class InteractableHospital : InteractableHouse
         CurrentCharityPoints = 0;
     }
 
+    public override void VolunteerWork(InteractableHouse house)
+    {
+        if (house != this) return;
+
+        GameClock clock = GameManager.Instance.GameClock;
+        Player player = GameManager.Instance.Player;
+        if (player.EnergyDepleted()) return;
+
+        player.ConsumeEnergy(EnergyConsumption);
+        clock.Tick();
+        UI.Instance.DisplayMessage("VOLUNTEERED HOSPITAL!");
+        UpdateCharityPoints(VolunteerPoints);
+    }
+
     public override void OnDisable()
     {
         UI.DeliverBaby -= DeliveredBaby;

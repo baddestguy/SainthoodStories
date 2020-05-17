@@ -8,6 +8,7 @@ public class InteractableHouse : InteractableObject
     public int OpenTime;
     public int ClosingTime;
     public int ItemDeliveryPoints;
+    public int VolunteerPoints;
 
     protected int CurrentCharityPoints;
     protected int CurrentFaithPoints;
@@ -19,6 +20,7 @@ public class InteractableHouse : InteractableObject
     {
         UI.Meditate += Meditated;
         UI.DeliverItem += DeliverItem;
+        UI.Volunteer += VolunteerWork;
         MissionManager.EndOfDay += ReportScores;
         Player.OnReset += OnReset;
     }
@@ -60,6 +62,10 @@ public class InteractableHouse : InteractableObject
     {
     }
 
+    public virtual void VolunteerWork(InteractableHouse house)
+    {
+    }
+
     public virtual void UpdateCharityPoints(int amount)
     {
         CurrentCharityPoints += amount;
@@ -89,6 +95,12 @@ public class InteractableHouse : InteractableObject
         CurrentFaithPoints = 0;
     }
 
+    public bool DuringOpenHours()
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        return clock.Time >= OpenTime && clock.Time < ClosingTime;
+    }
+
     public virtual void OnReset()
     {
 
@@ -98,6 +110,7 @@ public class InteractableHouse : InteractableObject
     {
         UI.Meditate -= Meditated;
         UI.DeliverItem -= DeliverItem;
+        UI.Volunteer -= VolunteerWork;
         MissionManager.EndOfDay -= ReportScores;
         base.OnDisable();
     }

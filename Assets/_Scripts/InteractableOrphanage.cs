@@ -2,12 +2,6 @@
 {
     public int AdoptionPoints;
 
-    protected override void Start()
-    {
-        base.Start();
-    }
-
-
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         if (tile.GetInstanceID() == GetInstanceID())
@@ -24,8 +18,7 @@
     {
         if (house != this) return;
 
-        GameClock clock = GameManager.Instance.GameClock;
-        if (clock.Time >= OpenTime && clock.Time < ClosingTime)
+        if (DuringOpenHours())
         {
             Player player = GameManager.Instance.Player;
             PlayerItem item = player.GetItem(ItemType.TOYS);
@@ -39,7 +32,6 @@
             {
                 UI.Instance.DisplayMessage("YOU HAVE NO TOYS TO GIVE!");
             }
-
         }
         else
         {
@@ -47,14 +39,24 @@
         }
     }
 
-    public override void Meditated(InteractableHouse house)
+    public override void VolunteerWork(InteractableHouse house)
     {
         if (house != this) return;
-        base.Meditated(house);
-    }
 
-    public override void OnDisable()
-    {
-        base.OnDisable();
+        GameClock clock = GameManager.Instance.GameClock;
+        Player player = GameManager.Instance.Player;
+        if (player.EnergyDepleted()) return;
+
+        if (DuringOpenHours())
+        {
+            player.ConsumeEnergy(EnergyConsumption);
+            clock.Tick();
+            UI.Instance.DisplayMessage("VOLUNTEERED AT ORPHANAGE!");
+            UpdateCharityPoints(VolunteerPoints);
+        }
+        else
+        {
+            UI.Instance.DisplayMessage("ORPHANAGE CLOSED!");
+        }
     }
 }

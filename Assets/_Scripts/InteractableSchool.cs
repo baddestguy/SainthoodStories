@@ -34,7 +34,7 @@
         Player player = GameManager.Instance.Player;
         if (player.EnergyDepleted()) return;
 
-        if (clock.Time >= OpenTime && clock.Time < ClosingTime)
+        if (DuringOpenHours())
         {
             player.ConsumeEnergy(EnergyConsumption);
             clock.Tick();
@@ -50,6 +50,11 @@
     public override void DeliverItem(InteractableHouse house)
     {
         if (house != this) return;
+        if (!DuringOpenHours())
+        {
+            UI.Instance.DisplayMessage("SCHOOL CLOSED!");
+            return;
+        }
 
         Player player = GameManager.Instance.Player;
         PlayerItem item = player.GetItem(ItemType.STATIONERY);
