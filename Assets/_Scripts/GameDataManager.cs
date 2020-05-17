@@ -27,6 +27,7 @@ public enum TileType
     SCHOOL,
     CLOTHESBANK,
     ORPHANAGE,
+    KITCHEN,
     BANDIT,
     CHILD
 }
