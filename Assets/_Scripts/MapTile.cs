@@ -17,13 +17,13 @@ public class MapTile : MonoBehaviour
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
-    private void OnEnable(){
+    public virtual void OnEnable(){
         GameClock.Ticked += Tick;
         GameManager.MissionBegin += MissionBegin;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
     }
 
-    private void OnDisable(){
+    public virtual void OnDisable(){
         GameClock.Ticked -= Tick;
         GameManager.MissionBegin -= MissionBegin;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;

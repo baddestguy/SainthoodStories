@@ -88,9 +88,10 @@ public class InteractableHouse : InteractableObject
 
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
         UI.Meditate -= Meditated;
         MissionManager.EndOfDay -= ReportScores;
+        base.OnDisable();
     }
 }

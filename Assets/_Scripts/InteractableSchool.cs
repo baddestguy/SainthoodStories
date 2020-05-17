@@ -47,9 +47,9 @@
         }
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
         UI.Taught -= Teach;
-        UI.Meditate -= Meditated;
+        base.OnDisable();
     }
 }

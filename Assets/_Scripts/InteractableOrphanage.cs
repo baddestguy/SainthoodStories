@@ -53,9 +53,9 @@
         base.Meditated(house);
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
         UI.DonatedToys -= GiveToys;
-        UI.Meditate -= Meditated;
+        base.OnDisable();
     }
 }
