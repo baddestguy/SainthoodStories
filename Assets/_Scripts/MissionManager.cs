@@ -19,11 +19,11 @@ public class MissionManager : MonoBehaviour
         HouseScores = new Dictionary<TileType, int>();
     }
 
-    public void LoadAllMissions()
+    public void LoadAllMissions(Mission mission)
     {
         //Load all Missions from File!
 
-        CurrentMission = new Mission(75, 75, 25, 0);
+        CurrentMission = mission;
         CharityPoints = CurrentMission.StartingCharityPoints;
         FaithPoints = CurrentMission.StartingFaithPoints;
         UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
@@ -42,6 +42,11 @@ public class MissionManager : MonoBehaviour
 
             EndOfDay?.Invoke();
             UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
+            
+            if(day > CurrentMission.TotalDays)
+            {
+                EndMission();
+            }
         }
     }
 
@@ -57,6 +62,13 @@ public class MissionManager : MonoBehaviour
 
         UI.Instance.DisplayReport(house.TileType + " : " + amount);
         Debug.Log(house.TileType + " : " + amount);
+    }
+
+    public void EndMission()
+    {
+        UI.Instance.EnableEndGame(true);
+        //disable movement
+        //Evaluate Mission Success/Failure
     }
 
     private void OnDisable()

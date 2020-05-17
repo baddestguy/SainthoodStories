@@ -75,10 +75,11 @@
         //Do absolutely nothing!
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
         UI.BoughtFood -= Food;
         UI.BoughtClothes -= Clothes;
-        UI.Meditate -= Meditated;
+        UI.BoughtToys -= Toys;
+        base.OnDisable();
     }
 }

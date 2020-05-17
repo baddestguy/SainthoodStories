@@ -1,6 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class UI : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class UI : MonoBehaviour
     public GameObject OrphanageUI;
     public GameObject FoodShelterUI;
     public GameObject ClothesBankUI;
+    public GameObject EndGameUI;
 
     public static UnityAction BoughtFood;
     public static UnityAction BoughtClothes;
@@ -110,48 +112,54 @@ public class UI : MonoBehaviour
     {
         CurrentHouse = house;
         ShopUI.SetActive(enable);
-        CurrentActiveUIGameObject = ShopUI;
+        if(ShopUI.activeSelf) CurrentActiveUIGameObject = ShopUI;
     }
 
     public void EnableSchool(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         SchoolUI.SetActive(enable);
-        CurrentActiveUIGameObject = SchoolUI;
+        if(SchoolUI.activeSelf) CurrentActiveUIGameObject = SchoolUI;
     }
 
     public void EnableHospital(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         HospitalUI.SetActive(enable);
-        CurrentActiveUIGameObject = HospitalUI;
+        if(HospitalUI.activeSelf) CurrentActiveUIGameObject = HospitalUI;
     }
 
     public void EnableChurch(bool enable)
     {
         ChurchUI.SetActive(enable);
-        CurrentActiveUIGameObject = ChurchUI;
+        if(ChurchUI.activeSelf) CurrentActiveUIGameObject = ChurchUI;
     }
 
     public void EnableFood(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         FoodShelterUI.SetActive(enable);
-        CurrentActiveUIGameObject = FoodShelterUI;
+        if(FoodShelterUI.activeSelf) CurrentActiveUIGameObject = FoodShelterUI;
     }
 
     public void EnableClothes(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         ClothesBankUI.SetActive(enable);
-        CurrentActiveUIGameObject = ClothesBankUI;
+        if(ClothesBankUI.activeSelf) CurrentActiveUIGameObject = ClothesBankUI;
     }
 
     public void EnableOrphanage(bool enable, InteractableHouse house)
     {
         CurrentHouse = house;
         OrphanageUI.SetActive(enable);
-        CurrentActiveUIGameObject = OrphanageUI;
+        if(OrphanageUI.activeSelf) CurrentActiveUIGameObject = OrphanageUI;
+    }
+
+    public void EnableEndGame(bool enable)
+    {
+        EnableCurrentUI(false);
+        EndGameUI.SetActive(enable);
     }
 
     public void BuyFood()
@@ -224,5 +232,33 @@ public class UI : MonoBehaviour
     {
         ClearDisplay = true;
         MessageDisplay.text = message;
+    }
+
+    public void ReturnToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+    }
+
+    public void EasyRun()
+    {
+        GameManager.Instance.SetMissionParameters(MissionDifficulty.EASY);
+    }
+
+    public void NormalRun()
+    {
+        GameManager.Instance.SetMissionParameters(MissionDifficulty.NORMAL);
+    }
+
+    public void HardRun()
+    {
+        GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD);
+    }
+
+    private void OnDisable()
+    {
+        Player.OnMoveSuccessEvent -= OnPlayerMoved;
+        Energy.EnergyConsumed -= OnEnergyConsumed;
+        MissionManager.MissionComplete -= MissionComplete;
+        GameClock.Ticked -= OnTick;
     }
 }

@@ -36,9 +36,9 @@
         }
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
-        UI.DonatedClothes += GiveClothes;
-        UI.Meditate -= Meditated;
+        UI.DonatedClothes -= GiveClothes;
+        base.OnDisable();
     }
 }

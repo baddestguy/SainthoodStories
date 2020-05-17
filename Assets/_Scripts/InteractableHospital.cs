@@ -120,12 +120,12 @@ public class InteractableHospital : InteractableHouse
         CurrentCharityPoints = 0;
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
         UI.DeliverBaby -= DeliveredBaby;
         UI.Taught -= CheckBabyDelivery;
         UI.Slept -= CheckBabyDelivery;
         UI.Prayed -= CheckBabyDelivery;
-        UI.Meditate -= Meditated;
+        base.OnDisable();
     }
 }

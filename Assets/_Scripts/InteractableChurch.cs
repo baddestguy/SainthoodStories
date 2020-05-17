@@ -96,10 +96,10 @@
         UI.Instance.DisplayMessage("SLEPT!");
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
         UI.Prayed -= Pray;
         UI.Slept -= Sleep;
-        UI.Meditate -= Meditated;
+        base.OnDisable();
     }
 }

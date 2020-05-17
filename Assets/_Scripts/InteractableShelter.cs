@@ -35,9 +35,9 @@
             UI.Instance.DisplayMessage("YOU HAVE NO FOOD TO GIVE!");
         }
     }
-    private void OnDisable()
+    public override void OnDisable()
     {
         UI.DonatedFood -= GiveFood;
-        UI.Meditate -= Meditated;
+        base.OnDisable();
     }
 }
