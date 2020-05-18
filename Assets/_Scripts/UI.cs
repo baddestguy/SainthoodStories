@@ -23,12 +23,14 @@ public class UI : MonoBehaviour
     public GameObject FoodShelterUI;
     public GameObject ClothesBankUI;
     public GameObject EndGameUI;
+    public GameObject KitchenUI;
 
     public static UnityAction<ItemType> BoughtItem;
     public static UnityAction Taught;
     public static UnityAction DeliverBaby;
     public static UnityAction Prayed;
     public static UnityAction Slept;
+    public static UnityAction Cooked;
     public static UnityAction<InteractableHouse> Meditate;
     public static UnityAction<InteractableHouse> DeliverItem;
     public static UnityAction<InteractableHouse> Volunteer;
@@ -172,6 +174,16 @@ public class UI : MonoBehaviour
         }
     }
 
+    public void EnableKitchen(bool enable, InteractableHouse house)
+    {
+        KitchenUI.SetActive(enable);
+        if (KitchenUI.activeSelf)
+        {
+            CurrentActiveUIGameObject = KitchenUI;
+            CurrentHouse = house;
+        }        
+    }
+
     public void EnableEndGame(bool enable)
     {
         EnableCurrentUI(false);
@@ -196,6 +208,11 @@ public class UI : MonoBehaviour
     public void Sleep()
     {
         Slept?.Invoke();
+    }
+
+    public void Cook()
+    {
+        Cooked?.Invoke();
     }
 
     public void Meditated()

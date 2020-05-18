@@ -1,10 +1,5 @@
 ﻿public class InteractableShelter : InteractableHouse
 {
-    protected override void Start()
-    {
-        base.Start();
-    }
-
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         if (tile.GetInstanceID() == GetInstanceID())
@@ -22,20 +17,23 @@
         if (house != this) return;
 
         Player player = GameManager.Instance.Player;
-        PlayerItem item = player.GetItem(ItemType.GROCERIES);
+        PlayerItem groceries = player.GetItem(ItemType.GROCERIES);
 
-        if (item != null)
+        if (groceries != null)
+        {
+            UI.Instance.DisplayMessage("DELIVERED GROCERIES!");
+            UpdateCharityPoints(ItemDeliveryPoints);
+            return;
+        }
+
+        PlayerItem meal = player.GetItem(ItemType.MEAL);
+        if (meal != null)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateCharityPoints(ItemDeliveryPoints);
+            UpdateCharityPoints(ItemDeliveryPoints*2);
+            return;
         }
-        else
-        {
-            UI.Instance.DisplayMessage("YOU HAVE NO FOOD TO GIVE!");
-        }
-    }
-    public override void OnDisable()
-    {
-        base.OnDisable();
+
+        UI.Instance.DisplayMessage("YOU HAVE NO FOOD TO GIVE!");
     }
 }
