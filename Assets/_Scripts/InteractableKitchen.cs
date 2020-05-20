@@ -40,6 +40,16 @@
         }
     }
 
+    public override void SetDeadlineTime(double time, int day)
+    {
+
+    }
+
+    public override void ReportScores()
+    {
+        //Do absolutely nothing!
+    }
+
     public override void OnDisable()
     {
         UI.Cooked -= Cook;

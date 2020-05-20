@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameMap Map;
     public Player Player;
     public GameClock GameClock;
+    public static MissionDifficulty MissionDifficulty;
 
     public Mission CurrentMission;
     private void Awake()
@@ -76,6 +77,8 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadScene("HardLevel", LoadSceneMode.Single);
                 break;
         }
+
+        MissionDifficulty = missionDifficulty;
     }
 
     public void SaveGame()

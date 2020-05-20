@@ -132,6 +132,11 @@
         UI.Instance.DisplayMessage("SLEPT!");
     }
 
+    public override void SetDeadlineTime(double time, int day)
+    {
+
+    }
+
     public override void OnDisable()
     {
         UI.Prayed -= Pray;

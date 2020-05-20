@@ -22,7 +22,8 @@
         if (groceries != null)
         {
             UI.Instance.DisplayMessage("DELIVERED GROCERIES!");
-            UpdateCharityPoints(ItemDeliveryPoints);
+            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);
+            base.DeliverItem(house);
             return;
         }
 
@@ -30,7 +31,8 @@
         if (meal != null)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateCharityPoints(ItemDeliveryPoints*2);
+            UpdateCharityPoints(ItemDeliveryPoints*2 * DeadlineDeliveryBonus);
+            base.DeliverItem(house);
             return;
         }
 

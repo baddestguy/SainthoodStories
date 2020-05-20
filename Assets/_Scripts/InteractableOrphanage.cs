@@ -1,4 +1,6 @@
-﻿public class InteractableOrphanage : InteractableHouse
+﻿using UnityEngine;
+
+public class InteractableOrphanage : InteractableHouse
 {
     public int AdoptionPoints;
 
@@ -26,7 +28,8 @@
             if (item != null)
             {
                 UI.Instance.DisplayMessage("GAVE TOYS TO THE KIDS!");
-                UpdateCharityPoints(ItemDeliveryPoints);
+                UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);
+                base.DeliverItem(house);
             }
             else
             {
@@ -36,6 +39,60 @@
         else
         {
             UI.Instance.DisplayMessage("ORPHANAGE CLOSED!");
+        }
+    }
+
+    public override void SetDeadlineTime(double time, int day)
+    {
+        if (time < OpenTime || time >= ClosingTime) return;
+        if ((DeadlineTime.Time != -1)) return;
+
+        double futureTime = time + RandomFutureTimeByDifficulty();
+        if (futureTime > ClosingTime) return;
+
+        switch (MissionDifficulty)
+        {
+            case MissionDifficulty.EASY:
+                if (DeadlineCounter < 1)
+                {
+                    if (Random.Range(0, 100) < 1)
+                    {
+                        DeadlineCounter++;
+                        DeadlineTime.SetClock(futureTime, day);
+                        DeadlineDeliveryBonus = 4;
+                        DeadlineSet = true;
+                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
+                    }
+                }
+                break;
+
+            case MissionDifficulty.NORMAL:
+                if (DeadlineCounter < 2)
+                {
+                    if (Random.Range(0, 100) < 3)
+                    {
+                        DeadlineCounter++;
+                        DeadlineTime.SetClock(futureTime, day);
+                        DeadlineDeliveryBonus = 3;
+                        DeadlineSet = true;
+                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
+                    }
+                }
+                break;
+
+            case MissionDifficulty.HARD:
+                if (DeadlineCounter < 3)
+                {
+                    if (Random.Range(0, 100) < 5)
+                    {
+                        DeadlineCounter++;
+                        DeadlineTime.SetClock(futureTime, day);
+                        DeadlineDeliveryBonus = 2;
+                        DeadlineSet = true;
+                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
+                    }
+                }
+                break;
         }
     }
 
