@@ -45,6 +45,11 @@
         //Do absolutely nothing!
     }
 
+    public override void SetDeadlineTime(double time, int day)
+    {
+
+    }
+
     public override void OnDisable()
     {
         UI.BoughtItem -= BoughtItem;

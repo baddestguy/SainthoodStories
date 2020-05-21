@@ -2,13 +2,17 @@
 
 public class InteractableHouse : InteractableObject
 {
-    private int CountdownTimer;
-    public int DeadlineTime;
+    public GameClock DeadlineTime;
     public int EnergyConsumption;
     public int OpenTime;
     public int ClosingTime;
     public int ItemDeliveryPoints;
     public int VolunteerPoints;
+    public int DeadlineDeliveryBonus;
+    public bool DeadlineSet;
+
+    public MissionDifficulty MissionDifficulty;
+    public static int DeadlineCounter;
 
     protected int CurrentCharityPoints;
     protected int CurrentFaithPoints;
@@ -22,27 +26,103 @@ public class InteractableHouse : InteractableObject
         UI.DeliverItem += DeliverItem;
         UI.Volunteer += VolunteerWork;
         MissionManager.EndOfDay += ReportScores;
+        MissionManager.EndOfDay += EndofDay;
         Player.OnReset += OnReset;
     }
 
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)
     {
-        DeadlineTime = deadline;        
         Init(groundTile, tileData, sprites, sortingOrder);
     }
 
     public override void Tick(double time, int day)
     {
-        CountdownTimer--;
-        if ((DeadlineTime != -1) && (CountdownTimer <= 0 || time >= DeadlineTime))
+        if (DeadlineTime.Time != -1) Debug.LogWarning($"{name}: Deadline: {DeadlineTime.Time} : {DeadlineTime.Day}!");
+        SetDeadlineTime(time, day);
+
+        if ((DeadlineTime.Time != -1) && (time >= DeadlineTime.Time && day >= DeadlineTime.Day))
         {
-            UI.Instance.DisplayMessage($"{name}: TIME UP!");
+            Debug.LogError($"{name}: TIME UP!");
+            NeglectedMultiplier++;
+            DeadlineCounter--;
+            DeadlineTime.SetClock(-1, day);
+            DeadlineDeliveryBonus = 1;
+            DeadlineSet = false;
         }
+    }
+
+    public virtual void SetDeadlineTime(double time, int day)
+    {
+        if (time < 6 || time >= 18) return;
+        if ((DeadlineTime.Time != -1)) return;
+
+        switch (MissionDifficulty)
+        {
+            case MissionDifficulty.EASY:
+                if (DeadlineCounter < 1)
+                {
+                    if(Random.Range(0, 100) < 1)
+                    {
+                        DeadlineCounter++;
+                        DeadlineTime.SetClock(time + RandomFutureTimeByDifficulty(), day);
+                        DeadlineDeliveryBonus = 4;
+                        DeadlineSet = true;
+                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
+                    }
+                }
+                break;
+
+            case MissionDifficulty.NORMAL:
+                if (DeadlineCounter < 2)
+                {
+                    if (Random.Range(0, 100) < 1)
+                    {
+                        DeadlineCounter++;
+                        DeadlineTime.SetClock(time + RandomFutureTimeByDifficulty(), day);
+                        DeadlineDeliveryBonus = 3;
+                        DeadlineSet = true;
+                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
+                    }
+                }
+                break;
+
+            case MissionDifficulty.HARD:
+                if (DeadlineCounter < 3)
+                {
+                    if (Random.Range(0, 100) < 2)
+                    {
+                        DeadlineCounter++;
+                        DeadlineTime.SetClock(time + RandomFutureTimeByDifficulty(), day);
+                        DeadlineDeliveryBonus = 2;
+                        DeadlineSet = true;
+                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
+                    }
+                }
+                break;
+        }
+    }
+
+    public double RandomFutureTimeByDifficulty()
+    {
+        switch (MissionDifficulty)
+        {
+            case MissionDifficulty.EASY: return Random.Range(6, 9);
+            case MissionDifficulty.NORMAL: return Random.Range(5, 8);
+            case MissionDifficulty.HARD: return Random.Range(4, 7);
+        }
+
+        return -1;
+    }
+
+    public virtual void EndofDay()
+    {        
     }
 
     public override void MissionBegin(Mission mission)
     {
-        CountdownTimer = DeadlineTime - mission.StartingClock;
+        MissionDifficulty = GameManager.MissionDifficulty;
+        DeadlineTime = new GameClock(-1);
+        DeadlineDeliveryBonus = 1;
     }
 
     public virtual void Meditated(InteractableHouse house)
@@ -60,6 +140,12 @@ public class InteractableHouse : InteractableObject
 
     public virtual void DeliverItem(InteractableHouse house)
     {
+        if (house != this) return;
+
+        DeadlineCounter = Mathf.Max(0, DeadlineCounter - 1);
+        DeadlineTime.SetClock(-1, DeadlineTime.Day);
+        DeadlineDeliveryBonus = 1;
+        DeadlineSet = false;
     }
 
     public virtual void VolunteerWork(InteractableHouse house)
@@ -95,9 +181,9 @@ public class InteractableHouse : InteractableObject
         CurrentFaithPoints = 0;
     }
 
-    public bool DuringOpenHours()
+    public bool DuringOpenHours(GameClock newClock = null)
     {
-        GameClock clock = GameManager.Instance.GameClock;
+        GameClock clock = newClock ?? GameManager.Instance.GameClock;
         return clock.Time >= OpenTime && clock.Time < ClosingTime;
     }
 
@@ -111,6 +197,7 @@ public class InteractableHouse : InteractableObject
         UI.Meditate -= Meditated;
         UI.DeliverItem -= DeliverItem;
         UI.Volunteer -= VolunteerWork;
+        MissionManager.EndOfDay -= EndofDay;
         MissionManager.EndOfDay -= ReportScores;
         base.OnDisable();
     }

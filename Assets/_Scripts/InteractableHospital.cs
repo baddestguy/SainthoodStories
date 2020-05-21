@@ -113,7 +113,8 @@ public class InteractableHospital : InteractableHouse
         if (item != null)
         {
             UI.Instance.DisplayMessage("DELIVERED MEDS!");
-            UpdateCharityPoints(ItemDeliveryPoints);
+            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);
+            base.DeliverItem(house);
         }
         else
         {

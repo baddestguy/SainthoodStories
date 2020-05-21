@@ -3533,12 +3533,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileType: 13
   CurrentGroundTile: {fileID: 7296448825920895205}
-  DeadlineTime: -1
   EnergyConsumption: 0
   OpenTime: 16
   ClosingTime: 20
   ItemDeliveryPoints: 1
   VolunteerPoints: 1
+  DeadlineDeliveryBonus: 0
+  MissionDifficulty: 0
   NeglectedPoints: -1
   AdoptionPoints: 3
 --- !u!65 &498165099
@@ -6189,12 +6190,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileType: 12
   CurrentGroundTile: {fileID: 448387515}
-  DeadlineTime: -1
   EnergyConsumption: 0
   OpenTime: 0
   ClosingTime: 23
   ItemDeliveryPoints: 1
   VolunteerPoints: 0
+  DeadlineDeliveryBonus: 0
+  MissionDifficulty: 0
   NeglectedPoints: -1
 --- !u!65 &710143203
 BoxCollider:
@@ -6604,12 +6606,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileType: 8
   CurrentGroundTile: {fileID: 414956708}
-  DeadlineTime: -1
   EnergyConsumption: -3
   OpenTime: 0
   ClosingTime: 23
   ItemDeliveryPoints: 0
   VolunteerPoints: 0
+  DeadlineDeliveryBonus: 0
+  MissionDifficulty: 0
   NeglectedPoints: 10
   SleepEnergy: -3
   PrayEnergy: -1
@@ -8271,13 +8274,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileType: 14
   CurrentGroundTile: {fileID: 1293577686}
-  DeadlineTime: -1
   EnergyConsumption: 1
   OpenTime: 0
   ClosingTime: 23
   ItemDeliveryPoints: 0
   VolunteerPoints: 0
-  NeglectedPoints: -1
+  DeadlineDeliveryBonus: 0
+  MissionDifficulty: 0
+  NeglectedPoints: 0
 --- !u!65 &947683248
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9021,12 +9025,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileType: 10
   CurrentGroundTile: {fileID: 61612241}
-  DeadlineTime: -1
   EnergyConsumption: 1
   OpenTime: 0
   ClosingTime: 23
   ItemDeliveryPoints: 1
   VolunteerPoints: 1
+  DeadlineDeliveryBonus: 0
+  MissionDifficulty: 0
   NeglectedPoints: -3
   BabyPoints: 1
   FailedDeliveryPoints: -1
@@ -9968,12 +9973,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileType: 7
   CurrentGroundTile: {fileID: 591043095}
-  DeadlineTime: -1
   EnergyConsumption: 0
   OpenTime: 0
   ClosingTime: 23
   ItemDeliveryPoints: 1
   VolunteerPoints: 0
+  DeadlineDeliveryBonus: 0
+  MissionDifficulty: 0
   NeglectedPoints: -1
 --- !u!1001 &1190360825
 PrefabInstance:
@@ -12213,12 +12219,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileType: 11
   CurrentGroundTile: {fileID: 1364997796}
-  DeadlineTime: -1
   EnergyConsumption: 1
   OpenTime: 9
   ClosingTime: 15
   ItemDeliveryPoints: 1
   VolunteerPoints: 0
+  DeadlineDeliveryBonus: 0
+  MissionDifficulty: 0
   NeglectedPoints: -1
   TeachPoints: 1
 --- !u!65 &1454008471
@@ -13832,12 +13839,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TileType: 9
   CurrentGroundTile: {fileID: 876771829}
-  DeadlineTime: -1
   EnergyConsumption: 0
   OpenTime: 6
   ClosingTime: 18
   ItemDeliveryPoints: 0
   VolunteerPoints: 0
+  DeadlineDeliveryBonus: 0
+  MissionDifficulty: 0
   NeglectedPoints: 0
 --- !u!1001 &1757405440
 PrefabInstance:

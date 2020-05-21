@@ -16,9 +16,16 @@ public class GameClock
         Day = day;
     }
 
-    public void SetTime(int startTime)
+    public void SetClock(double time, int day)
     {
-        Time = startTime;
+        Time = time;
+        Day = day;
+
+        if (Time > 23.5)
+        {
+            Day++;
+            Time = Time - 24;
+        }
     }
 
     public void AddTime(int deltaTime)

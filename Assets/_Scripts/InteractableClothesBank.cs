@@ -27,7 +27,8 @@
         if (item != null)
         {
             UI.Instance.DisplayMessage("CLOTHED THE NAKED!");
-            UpdateCharityPoints(ItemDeliveryPoints);
+            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);
+            base.DeliverItem(house);
         }
         else
         {
