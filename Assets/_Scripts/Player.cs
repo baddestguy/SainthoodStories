@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class Player : MonoBehaviour
 {
     public static event UnityAction<Energy, MapTile> OnMoveSuccessEvent;
-    public static event UnityAction OnReset;
+    public static event UnityAction OnEnergyDepleted;
     public GameMap Map;
     
     private Energy Energy;
@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
             Energy.Consume(-StartingEnergy);
             GameManager.Instance.GameClock.Reset();
             UI.Instance.EnableCurrentUI(false);
-            OnReset?.Invoke();
+            OnEnergyDepleted?.Invoke();
         }
         else if (newTile is InteractableObject)
         {
