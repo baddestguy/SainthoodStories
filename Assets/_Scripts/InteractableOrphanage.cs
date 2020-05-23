@@ -60,6 +60,7 @@ public class InteractableOrphanage : InteractableHouse
                         DeadlineCounter++;
                         DeadlineTime.SetClock(futureTime, day);
                         DeadlineDeliveryBonus = 4;
+                        RequiredItems = 1;
                         DeadlineSet = true;
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
@@ -74,6 +75,7 @@ public class InteractableOrphanage : InteractableHouse
                         DeadlineCounter++;
                         DeadlineTime.SetClock(futureTime, day);
                         DeadlineDeliveryBonus = 3;
+                        RequiredItems = Random.Range(1, 3);
                         DeadlineSet = true;
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
@@ -88,6 +90,7 @@ public class InteractableOrphanage : InteractableHouse
                         DeadlineCounter++;
                         DeadlineTime.SetClock(futureTime, day);
                         DeadlineDeliveryBonus = 2;
+                        RequiredItems = Random.Range(1,4);
                         DeadlineSet = true;
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }

@@ -10,6 +10,7 @@ public class InteractableHouse : InteractableObject
     public int VolunteerPoints;
     public int DeadlineDeliveryBonus;
     public bool DeadlineSet;
+    public int RequiredItems;    
 
     public MissionDifficulty MissionDifficulty;
     public static int DeadlineCounter;
@@ -36,7 +37,7 @@ public class InteractableHouse : InteractableObject
 
     public override void Tick(double time, int day)
     {
-        if (DeadlineTime.Time != -1) Debug.LogWarning($"{name}: Deadline: {DeadlineTime.Time} : {DeadlineTime.Day}!");
+        if (DeadlineTime.Time != -1) Debug.LogWarning($"{name}: Deadline: {DeadlineTime.Time} : DAY {DeadlineTime.Day} : {RequiredItems} Items!!");
         SetDeadlineTime(time, day);
 
         if ((DeadlineTime.Time != -1) && (time >= DeadlineTime.Time && day >= DeadlineTime.Day))
@@ -64,9 +65,10 @@ public class InteractableHouse : InteractableObject
                     {
                         DeadlineCounter++;
                         DeadlineTime.SetClock(time + RandomFutureTimeByDifficulty(), day);
+                        RequiredItems = 1;
                         DeadlineDeliveryBonus = 4;
                         DeadlineSet = true;
-                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
+                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
                     }
                 }
                 break;
@@ -78,9 +80,10 @@ public class InteractableHouse : InteractableObject
                     {
                         DeadlineCounter++;
                         DeadlineTime.SetClock(time + RandomFutureTimeByDifficulty(), day);
+                        RequiredItems = Random.Range(1,3);
                         DeadlineDeliveryBonus = 3;
                         DeadlineSet = true;
-                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
+                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
                     }
                 }
                 break;
@@ -92,9 +95,10 @@ public class InteractableHouse : InteractableObject
                     {
                         DeadlineCounter++;
                         DeadlineTime.SetClock(time + RandomFutureTimeByDifficulty(), day);
+                        RequiredItems = Random.Range(1,4);
                         DeadlineDeliveryBonus = 2;
                         DeadlineSet = true;
-                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
+                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
                     }
                 }
                 break;
@@ -141,10 +145,15 @@ public class InteractableHouse : InteractableObject
     {
         if (house != this) return;
 
-        DeadlineCounter = Mathf.Max(0, DeadlineCounter - 1);
-        DeadlineTime.SetClock(-1, DeadlineTime.Day);
-        DeadlineDeliveryBonus = 1;
-        DeadlineSet = false;
+        RequiredItems--;
+        if (RequiredItems <= 0)
+        {
+            DeadlineCounter = Mathf.Max(0, DeadlineCounter - 1);
+            DeadlineTime.SetClock(-1, DeadlineTime.Day);
+            DeadlineDeliveryBonus = 1;
+            DeadlineSet = false;
+            RequiredItems = 0;
+        }
     }
 
     public virtual void VolunteerWork(InteractableHouse house)
