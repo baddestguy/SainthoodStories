@@ -174,7 +174,6 @@ public class InteractableHouse : InteractableObject
     public virtual void ReportScores()
     {
         GameManager.Instance.MissionManager.UpdateCharityPoints(CurrentCharityPoints > 0 ? CurrentCharityPoints : (NeglectedPoints * NeglectedMultiplier), this);
-        GameManager.Instance.MissionManager.UpdateFaithPoints(CurrentFaithPoints);
 
         if (CurrentCharityPoints <= 0)
         {
