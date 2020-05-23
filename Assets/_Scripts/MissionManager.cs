@@ -38,6 +38,20 @@ public class MissionManager : MonoBehaviour
 
             EndOfDay?.Invoke();
             UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
+
+            if (FaithPoints < 30 || CharityPoints < 30)
+            {
+                if (FaithPoints < 30)
+                {
+                    UI.Instance.ReportDisplay.text += "Existential Crisis!\n";
+                }
+                if (CharityPoints < 30)
+                {
+                    UI.Instance.ReportDisplay.text += "Town Riots!";
+                }
+                GameOver();
+                return;
+            }
             
             if(day > CurrentMission.TotalDays)
             {

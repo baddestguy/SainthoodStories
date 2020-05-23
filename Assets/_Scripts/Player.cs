@@ -68,7 +68,6 @@ public class Player : MonoBehaviour
             OnMove(StartTile);
             Energy.Consume(-StartingEnergy);
             GameManager.Instance.GameClock.Reset();
-            UI.Instance.EnableCurrentUI(false);
             OnEnergyDepleted?.Invoke();
         }
         else if (newTile is InteractableObject)
