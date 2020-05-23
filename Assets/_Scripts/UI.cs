@@ -80,11 +80,11 @@ public class UI : MonoBehaviour
     {
         if (complete)
         {
-            MessageDisplay.text = "Mission Copmlete!!";
+            MessageDisplay.text = "Mission Complete!!";
         }
         else
         {
-            MessageDisplay.text = "ENERGY DEPLETED! RESETTING TO CHURCH";
+            MessageDisplay.text = "Energy Depleted! Mission Failed!";
         }
     }
 
@@ -105,6 +105,7 @@ public class UI : MonoBehaviour
 
     public void EnableCurrentUI(bool enable)
     {
+        if (CurrentActiveUIGameObject == null) return;
         CurrentActiveUIGameObject.SetActive(enable);
     }
 

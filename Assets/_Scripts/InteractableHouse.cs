@@ -27,7 +27,6 @@ public class InteractableHouse : InteractableObject
         UI.Volunteer += VolunteerWork;
         MissionManager.EndOfDay += ReportScores;
         MissionManager.EndOfDay += EndofDay;
-        Player.OnReset += OnReset;
     }
 
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)
@@ -185,11 +184,6 @@ public class InteractableHouse : InteractableObject
     {
         GameClock clock = newClock ?? GameManager.Instance.GameClock;
         return clock.Time >= OpenTime && clock.Time < ClosingTime;
-    }
-
-    public virtual void OnReset()
-    {
-
     }
 
     public override void OnDisable()

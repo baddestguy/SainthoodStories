@@ -15,6 +15,7 @@ public class MissionManager : MonoBehaviour
     private void Start()
     {
         GameClock.Ticked += OnTicked;
+        Player.OnEnergyDepleted += GameOver;
 
         HouseScores = new Dictionary<TileType, int>();
     }
@@ -27,11 +28,6 @@ public class MissionManager : MonoBehaviour
         CharityPoints = CurrentMission.StartingCharityPoints;
         FaithPoints = CurrentMission.StartingFaithPoints;
         UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
-    }
-
-    public void MissionUpdate(MapTile tile)
-    {
-
     }
 
     private void OnTicked(double time, int day)
@@ -67,12 +63,20 @@ public class MissionManager : MonoBehaviour
     public void EndMission()
     {
         UI.Instance.EnableEndGame(true);
+        MissionComplete?.Invoke(true);
         //disable movement
         //Evaluate Mission Success/Failure
+    }
+
+    public void GameOver()
+    {
+        UI.Instance.EnableEndGame(true);
+        MissionComplete?.Invoke(false);
     }
 
     private void OnDisable()
     {
         GameClock.Ticked -= OnTicked;
+        Player.OnEnergyDepleted -= GameOver;
     }
 }
