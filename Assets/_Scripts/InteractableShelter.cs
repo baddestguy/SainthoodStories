@@ -16,7 +16,7 @@
     {
         if (house != this) return;
 
-        if(DeadlineCounter > 0)
+        if(DeadlineSet)
         {
             DeliverDeadlineItem();
             return;

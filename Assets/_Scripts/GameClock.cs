@@ -157,3 +157,20 @@ public class GameClock
         }
     }
 }
+
+public static class GameClockExtensions
+{
+    public static double TimeDifference(this GameClock gameClock1, GameClock gameClock2)
+    {
+        double time;
+        if (gameClock2.Day > gameClock1.Day)
+        {
+            time = gameClock2.Time + ((gameClock2.Day - gameClock1.Day) * 24);
+        }
+        else
+        {
+            time = gameClock2.Time;
+        }
+        return time - gameClock1.Time;
+    }
+}
