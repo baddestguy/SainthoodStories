@@ -34,13 +34,13 @@ public class GameManager : MonoBehaviour
     {
         if(scene.name.Contains("Level"))
         {
+            Instantiate(Resources.Load("UI") as GameObject);
             Player = FindObjectOfType<Player>();
             MissionManager.LoadAllMissions(CurrentMission);
             GameClock = new GameClock(MissionManager.CurrentMission.StartingClock);
             Player.GameStart(MissionManager.CurrentMission);
             MissionBegin?.Invoke(MissionManager.CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
-            UI.Instance.DisplayMessage($"DAYS: {CurrentMission.TotalDays}");
         }
     }
 

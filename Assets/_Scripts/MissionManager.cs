@@ -43,11 +43,11 @@ public class MissionManager : MonoBehaviour
             {
                 if (FaithPoints < 30)
                 {
-                    UI.Instance.ReportDisplay.text += "Existential Crisis!\n";
+                    UI.Instance.ReportDisplay.text += "You Suffered Existential Crisis!\n";
                 }
                 if (CharityPoints < 30)
                 {
-                    UI.Instance.ReportDisplay.text += "Town Riots!";
+                    UI.Instance.ReportDisplay.text += "You fled from Town Riots!";
                 }
                 GameOver();
                 return;

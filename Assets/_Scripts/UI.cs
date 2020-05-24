@@ -9,7 +9,8 @@ public class UI : MonoBehaviour
     public static UI Instance { get; private set; }
 
     public TextMeshProUGUI EnergyDisplay;
-    public TextMeshProUGUI TimeAndDayDisplay;
+    public TextMeshProUGUI TimeDisplay;
+    public TextMeshProUGUI DayDisplay;
     public TextMeshProUGUI MessageDisplay;
     public TextMeshProUGUI ReportDisplay;
     public TextMeshProUGUI CPDisplay;
@@ -54,8 +55,9 @@ public class UI : MonoBehaviour
 
     public void InitTimeEnergy(GameClock clock, Energy energy)
     {
-        EnergyDisplay.text = $"Energy: {energy.Amount}";
-        TimeAndDayDisplay.text = $"Day: {clock.Day}, Time: {clock.Time}:00";
+        EnergyDisplay.text = $"{energy.Amount}";
+        TimeDisplay.text = $"{(int)clock.Time}:{(clock.Time % 1 == 0 ? "00" : "30")}";
+        DayDisplay.text = $"{clock.Day}/{GameManager.Instance.CurrentMission.TotalDays}";
     }
 
     private void OnPlayerMoved(Energy energy, MapTile tile)
@@ -65,8 +67,8 @@ public class UI : MonoBehaviour
 
     private void OnEnergyConsumed(Energy energy)
     {
-        EnergyDisplay.text = $"Energy: {energy.Amount}";
-        if(energy.Amount <= 5)
+        EnergyDisplay.text = $"{energy.Amount}";
+        if (energy.Amount <= 5)
         {
             EnergyDisplay.color = Color.red;
         }
@@ -100,7 +102,8 @@ public class UI : MonoBehaviour
             ReportDisplay.text = "";
         }
 
-        TimeAndDayDisplay.text = $"Day: {day}, Time: {(int)time}:{(time % 1 == 0 ? "00" : "30")}";
+        TimeDisplay.text = $"{(int)time}:{(time % 1 == 0 ? "00" : "30")}";
+        DayDisplay.text = $"{day}/{GameManager.Instance.CurrentMission.TotalDays}";
     }
 
     public void EnableCurrentUI(bool enable)
@@ -239,8 +242,34 @@ public class UI : MonoBehaviour
 
     public void RefreshPoints(int cp, int fp)
     {
-        CPDisplay.text = $"CP: {cp}";
-        FPDisplay.text = $"FP: {fp}";
+        CPDisplay.text = $"{cp}";
+        FPDisplay.text = $"{fp}";
+
+        if (cp < 50)
+        {
+            CPDisplay.color = Color.red;
+        }
+        else if (cp < 75)
+        {
+            CPDisplay.color = Color.yellow;
+        }
+        else
+        {
+            CPDisplay.color = Color.green;
+        }
+
+        if (fp < 50)
+        {
+            FPDisplay.color = Color.red;
+        }
+        else if (fp < 75)
+        {
+            FPDisplay.color = Color.yellow;
+        }
+        else
+        {
+            FPDisplay.color = Color.green;
+        }
     }
 
     public void DisplayReport(string report)

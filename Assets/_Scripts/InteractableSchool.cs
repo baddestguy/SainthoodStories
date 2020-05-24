@@ -93,6 +93,7 @@ public class InteractableSchool : InteractableHouse
                         DeadlineDeliveryBonus = 4;
                         RequiredItems = 1;
                         DeadlineSet = true;
+                        PopMyIcon();
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
                 }
@@ -108,6 +109,7 @@ public class InteractableSchool : InteractableHouse
                         DeadlineDeliveryBonus = 3;
                         RequiredItems = Random.Range(1, 3);
                         DeadlineSet = true;
+                        PopMyIcon();
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
                 }
@@ -123,6 +125,7 @@ public class InteractableSchool : InteractableHouse
                         DeadlineDeliveryBonus = 2;
                         RequiredItems = Random.Range(1,4);
                         DeadlineSet = true;
+                        PopMyIcon();
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
                 }

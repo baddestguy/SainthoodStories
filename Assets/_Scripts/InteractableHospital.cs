@@ -9,19 +9,16 @@ public class InteractableHospital : InteractableHouse
     public int BabyPoints;
     public int FailedDeliveryPoints;
 
+    private string RandomBabyIcon;
+
     protected override void Start()
     {
         UI.DeliverBaby += DeliveredBaby;
-        UI.Taught += CheckBabyDelivery;
-        UI.Slept += CheckBabyDelivery;
-        UI.Prayed += CheckBabyDelivery;
-        UI.Meditate += CheckBabyDelivery;
         base.Start();
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
-        GameClock clock = GameManager.Instance.GameClock;
         if (tile.GetInstanceID() == GetInstanceID())
         {
             UI.Instance.EnableHospital(true, this);
@@ -29,56 +26,62 @@ public class InteractableHospital : InteractableHouse
         else
         {
             UI.Instance.EnableHospital(false, this);
-            if (!DeliveryTimeSet && !(tile is InteractableHouse) && Random.Range(0, 1.0f) > 0.95f)
-            {
-                DeliveryTimeSet = true;
-
-                StartDelivery = new GameClock(clock.Time, clock.Day);
-                EndDelivery = new GameClock(clock.Time, clock.Day);
-                StartDelivery.AddTime(6);
-                EndDelivery.AddTime(9);
-
-                UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
-            }
         }
-        CheckFailedDelivery();
     }
 
-    private void CheckBabyDelivery(InteractableHouse house)
+    public override void Tick(double time, int day)
     {
         CheckBabyDelivery();
+        CheckFailedDelivery();
+        base.Tick(time, day);
     }
 
     private void CheckBabyDelivery()
     {
-        GameClock clock = GameManager.Instance.GameClock;
-        if (!DeliveryTimeSet && Random.Range(0, 1.0f) > 0.95f)
+        if ((!DeliveryTimeSet && !DeadlineSet) && Random.Range(0, 1.0f) > 0.95f)
         {
-            DeliveryTimeSet = true;
-
-            StartDelivery = new GameClock(clock.Time, clock.Day);
-            EndDelivery = new GameClock(clock.Time, clock.Day);
-            StartDelivery.AddTime(6);
-            EndDelivery.AddTime(9);
-
-            UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
+            SetBabyDelivery();
         }
+    }
+
+    private void SetBabyDelivery()
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        DeliveryTimeSet = true;
+
+        StartDelivery = new GameClock(clock.Time, clock.Day);
+        EndDelivery = new GameClock(clock.Time, clock.Day);
+        StartDelivery.AddTime(6);
+        EndDelivery.AddTime(9);
+        RandomBabyIcon = "Baby" + Random.Range(1, 3);
+        PopBabyIcon();
+        UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
+    }
+
+    public void PopBabyIcon()
+    {
+        PopIcon.gameObject.SetActive(true);
+        PopIcon.Init(RandomBabyIcon, RequiredItems, StartDelivery);
     }
 
     private void CheckFailedDelivery()
     {
         GameClock clock = GameManager.Instance.GameClock;
-        if (DeliveryTimeSet && clock > EndDelivery)
+        if (DeliveryTimeSet)
         {
-            DeliveryTimeSet = false;
-            FailedDelivery = true;
-            UI.Instance.DisplayMessage($"FAILED TO DELIVER BABY!");
+            PopBabyIcon();
+            if (clock > EndDelivery)
+            {
+                DeliveryTimeSet = false;
+                FailedDelivery = true;
+                PopIcon.gameObject.SetActive(false);
+                UI.Instance.DisplayMessage($"FAILED TO DELIVER BABY!");
+            }
         }
     }
 
     public void DeliveredBaby()
     {
-        DeliveryTimeSet = false;
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
         if (player.EnergyDepleted()) return;
@@ -95,6 +98,8 @@ public class InteractableHospital : InteractableHouse
         {
             UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
             UpdateCharityPoints(BabyPoints*2);
+            PopIcon.gameObject.SetActive(false);
+            DeliveryTimeSet = false;
         }
 
         if (StartDelivery == null || EndDelivery == null || clock < StartDelivery || clock > EndDelivery)
@@ -120,6 +125,12 @@ public class InteractableHospital : InteractableHouse
         {
             UI.Instance.DisplayMessage("YOU HAVE NO MEDS TO GIVE!");
         }
+    }
+
+    public override void SetDeadlineTime(double time, int day)
+    {
+        if (DeliveryTimeSet) return;
+        base.SetDeadlineTime(time, day);
     }
 
     public override void ReportScores()
@@ -157,9 +168,6 @@ public class InteractableHospital : InteractableHouse
     public override void OnDisable()
     {
         UI.DeliverBaby -= DeliveredBaby;
-        UI.Taught -= CheckBabyDelivery;
-        UI.Slept -= CheckBabyDelivery;
-        UI.Prayed -= CheckBabyDelivery;
         base.OnDisable();
     }
 }

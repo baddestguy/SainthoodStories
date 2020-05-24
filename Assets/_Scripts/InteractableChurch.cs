@@ -1,4 +1,6 @@
-﻿public class InteractableChurch : InteractableHouse
+﻿using UnityEngine;
+
+public class InteractableChurch : InteractableHouse
 {
     public int SleepEnergy;
     public int PrayEnergy;
@@ -16,8 +18,9 @@
     {
         UI.Prayed += Pray;
         UI.Slept += Sleep;
-        UpdateLiturgyTimes();
         base.Start();
+        UpdateLiturgyTimes();
+        PopIcon.transform.localPosition += new Vector3 (0, 0.5f, 0);
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
@@ -41,7 +44,7 @@
     private void UpdateLiturgyTimes()
     {
         GameClock clock = GameManager.Instance.GameClock;
-        if (clock.Time > 21.5 || clock.Time < 6)
+        if (clock.Time > 21.5 || clock.Time <= 6.5)
         {
             LiturgyStartTime = 6;
             LiturgyEndTime = 7;
@@ -61,6 +64,13 @@
             LiturgyStartTime = 12;
             LiturgyEndTime = 13;
         }
+        PopChurchIcon();
+    }
+
+    private void PopChurchIcon()
+    {
+        PopIcon.gameObject.SetActive(true);
+        PopIcon.Init(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, GameManager.Instance.GameClock.Day));
     }
 
     public void Pray()
