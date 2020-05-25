@@ -11,6 +11,13 @@ public class GameDataManager : MonoBehaviour
     }
 }
 
+public enum WeatherType
+{
+    NONE = 0,
+    RAIN,
+    SNOW
+}
+
 public enum TileType
 {
     PLAYER = 0,

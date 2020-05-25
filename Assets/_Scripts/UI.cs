@@ -15,6 +15,7 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI ReportDisplay;
     public TextMeshProUGUI CPDisplay;
     public TextMeshProUGUI FPDisplay;
+    public TextMeshProUGUI WeatherDisplay;
 
     public GameObject ShopUI;
     public GameObject SchoolUI;
@@ -25,6 +26,7 @@ public class UI : MonoBehaviour
     public GameObject ClothesBankUI;
     public GameObject EndGameUI;
     public GameObject KitchenUI;
+    public GameObject WeatherIcon;
 
     public static UnityAction<ItemType> BoughtItem;
     public static UnityAction Taught;
@@ -51,6 +53,7 @@ public class UI : MonoBehaviour
         Energy.EnergyConsumed += OnEnergyConsumed;
         MissionManager.MissionComplete += MissionComplete;
         GameClock.Ticked += OnTick;
+        WeatherManager.WeatherForecastActive += WeatherAlert;
     }
 
     public void InitTimeEnergy(GameClock clock, Energy energy)
@@ -104,6 +107,13 @@ public class UI : MonoBehaviour
 
         TimeDisplay.text = $"{(int)time}:{(time % 1 == 0 ? "00" : "30")}";
         DayDisplay.text = $"{day}/{GameManager.Instance.CurrentMission.TotalDays}";
+    }
+
+    public void WeatherAlert(GameClock start, GameClock end)
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        WeatherIcon.SetActive(clock < end);
+        WeatherDisplay.text = clock >= start ? "" : $"{(int)start.Time}:{(start.Time % 1 == 0 ? "00" : "30")}";
     }
 
     public void EnableCurrentUI(bool enable)
@@ -308,6 +318,7 @@ public class UI : MonoBehaviour
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
         Energy.EnergyConsumed -= OnEnergyConsumed;
         MissionManager.MissionComplete -= MissionComplete;
+        WeatherManager.WeatherForecastActive -= WeatherAlert;
         GameClock.Ticked -= OnTick;
     }
 }
