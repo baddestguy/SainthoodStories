@@ -99,7 +99,13 @@ public class Player : MonoBehaviour
 
     public int ModifyEnergyConsumption(MapTile tile)
     {
-        return 1; //tile.EnergyConsumption
+        int energyAmount = 1;
+
+        if(WeatherManager.Instance.WeatherType != WeatherType.NONE)
+        {
+            energyAmount++;
+        }
+        return energyAmount; 
     }
 
     public void TileDance(MapTile tile)
