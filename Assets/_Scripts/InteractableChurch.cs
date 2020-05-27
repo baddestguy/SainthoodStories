@@ -56,8 +56,11 @@ public class InteractableChurch : InteractableHouse
         }
         else if(clock.Time > 12.5)
         {
-            LiturgyStartTime = 18;
-            LiturgyEndTime = 19;
+            if(clock.Day % 7 != 0) //No 6pm liturgy of the hours on Sundays
+            {
+                LiturgyStartTime = 18;
+                LiturgyEndTime = 19;
+            }
         }
         else if(clock.Time > 6.5)
         {
@@ -71,6 +74,19 @@ public class InteractableChurch : InteractableHouse
     {
         PopIcon.gameObject.SetActive(true);
         PopIcon.Init(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, GameManager.Instance.GameClock.Day));
+
+        GameClock clock = GameManager.Instance.GameClock;
+        if (clock.Day % 7 == 0)
+        {
+            if(clock.Time > ConfessionTime && clock.Time < MassEndTime)
+            {
+                PopIcon.Init(GetType().Name, RequiredItems, new GameClock(MassStartTime, GameManager.Instance.GameClock.Day));
+            }
+            else if(clock.Time > 12.5 && clock.Time <= ConfessionTime)
+            {
+                PopIcon.Init(GetType().Name, RequiredItems, new GameClock(ConfessionTime, GameManager.Instance.GameClock.Day));
+            }
+        }
     }
 
     public void Pray()

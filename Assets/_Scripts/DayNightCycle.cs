@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class DayNightCycle : MonoBehaviour
 {
     [SerializeField]
     public Light Light;
+    public PostProcessVolume PostProcessor;
+
+    private Bloom Bloom;
     private Vector3 TargetRotation = new Vector3(0, 0, 0);
     private Color TargetColor = new Color();
+    private Color TargetBloomColor = new Color();
     private float ShadowStrength;
 
 
@@ -13,6 +18,7 @@ public class DayNightCycle : MonoBehaviour
     {
         GameClock.Ticked += OnTick;
         ShadowStrength = Light.shadowStrength;
+        PostProcessor.profile.TryGetSettings(out Bloom);
         OnTick(GameManager.Instance.GameClock.Time, GameManager.Instance.GameClock.Day);
     }
 
@@ -20,7 +26,7 @@ public class DayNightCycle : MonoBehaviour
     {
         switch (time)
         {
-            case 0: TargetRotation = new Vector3(10,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
+            case 0: TargetRotation = new Vector3(10,-30,0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; break;
             case 0.5: TargetRotation = new Vector3(13,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
             case 1: TargetRotation = new Vector3(17.5f,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
             case 1.5: TargetRotation = new Vector3(21.5f,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
@@ -32,7 +38,7 @@ public class DayNightCycle : MonoBehaviour
             case 4.5: TargetRotation = new Vector3(43,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
             case 5: TargetRotation = new Vector3(47.5f,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
             case 5.5: TargetRotation = new Vector3(50f,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
-            case 6: TargetRotation = new Vector3(55,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
+            case 6: TargetRotation = new Vector3(55,-30,0); TargetColor = new Color32(198, 255, 250, 255); TargetBloomColor = Color.cyan; break;
             case 6.5: TargetRotation = new Vector3(58,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
             case 7: TargetRotation = new Vector3(62.5f,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
             case 7.5: TargetRotation = new Vector3(66f,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
@@ -40,7 +46,7 @@ public class DayNightCycle : MonoBehaviour
             case 8.5: TargetRotation = new Vector3(75,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
             case 9: TargetRotation = new Vector3(77.5f,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
             case 9.5: TargetRotation = new Vector3(81f,-30,0); TargetColor = new Color32(198, 255, 250, 255); break;
-            case 10: TargetRotation = new Vector3(85f,-30,0); TargetColor = new Color32(225, 255, 255, 255); break;
+            case 10: TargetRotation = new Vector3(85f,-30,0); TargetColor = new Color32(225, 255, 255, 255); TargetBloomColor = Color.white; break;
             case 10.5: TargetRotation = new Vector3(86f,-30,0); TargetColor = new Color32(225, 255, 255, 255); break;
             case 11: TargetRotation = new Vector3(87,-30,0); TargetColor = new Color32(225, 255, 255, 255); break;
             case 11.5: TargetRotation = new Vector3(88.5f,-30,0); TargetColor = new Color32(225, 255, 255, 255); break;
@@ -52,17 +58,17 @@ public class DayNightCycle : MonoBehaviour
             case 14.5: TargetRotation = new Vector3(105,-30,0); TargetColor = new Color32(255, 255, 255, 255); break;
             case 15: TargetRotation = new Vector3(108,-30,0); TargetColor = new Color32(255, 255, 255, 255);break;
             case 15.5: TargetRotation = new Vector3(112,-30,0); TargetColor = new Color32(255, 255, 255, 255);break;
-            case 16: TargetRotation = new Vector3(115,-30,0); TargetColor = new Color32(255, 211, 160, 255); break;
+            case 16: TargetRotation = new Vector3(115,-30,0); TargetColor = new Color32(255, 211, 160, 255); TargetBloomColor = Color.red; break;
             case 16.5: TargetRotation = new Vector3(117,-30,0); TargetColor = new Color32(255, 211, 160, 255); break;
             case 17: TargetRotation = new Vector3(121,-30,0); TargetColor = new Color32(255, 211, 160, 255); break;
             case 17.5: TargetRotation = new Vector3(125,-30,0); TargetColor = new Color32(255, 211, 160, 255); break;
             case 18: TargetRotation = new Vector3(128,-30,0); TargetColor = new Color32(255, 211, 160, 255);break;
             case 18.5: TargetRotation = new Vector3(131,-30,0); TargetColor = new Color32(255, 211, 160, 255);break;
-            case 19: TargetRotation = new Vector3(135,-30,0); TargetColor = new Color32(255, 187, 110, 255);break;
+            case 19: TargetRotation = new Vector3(135,-30,0); TargetColor = new Color32(255, 187, 110, 255);  break;
             case 19.5: TargetRotation = new Vector3(137,-30,0); TargetColor = new Color32(255, 187, 110, 255);break;
             case 20: TargetRotation = new Vector3(141,-30,0); TargetColor = new Color32(255, 187, 110, 255); break;
             case 20.5: TargetRotation = new Vector3(145,-30,0); TargetColor = new Color32(255, 187, 110, 255); break;
-            case 21: TargetRotation = new Vector3(148,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
+            case 21: TargetRotation = new Vector3(148,-30,0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; break;
             case 21.5: TargetRotation = new Vector3(151,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
             case 22: TargetRotation = new Vector3(154,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
             case 22.5: TargetRotation = new Vector3(156,-30,0); TargetColor = new Color32(104, 222, 211, 255); break;
@@ -79,6 +85,12 @@ public class DayNightCycle : MonoBehaviour
         {
             lightTransform.rotation = Quaternion.Lerp(lightTransform.rotation, target, Time.deltaTime * 1.5f);
         }
+
+        if (Mathf.Abs(Bloom.color.GetValue<Color>().r - TargetBloomColor.r) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().g - TargetBloomColor.g) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().b - TargetBloomColor.b) > 0.001f)
+        {
+            Bloom.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
+        }
+
         if (Mathf.Abs(Light.color.r - TargetColor.r) > 0.001f || Mathf.Abs(Light.color.g - TargetColor.g) > 0.001f || Mathf.Abs(Light.color.b - TargetColor.b) > 0.001f)
         {
             Light.color = Color.Lerp(Light.color, TargetColor, Time.deltaTime);
@@ -92,5 +104,7 @@ public class DayNightCycle : MonoBehaviour
         {
             Light.shadowStrength = Mathf.Lerp(Light.shadowStrength, ShadowStrength, Time.deltaTime);
         }
+
+        //Lerp Bloom
     }
 }
