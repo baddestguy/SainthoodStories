@@ -1,14 +1,22 @@
 ﻿public class InteractableShelter : InteractableHouse
 {
+    protected override void Start()
+    {
+        PopUILocation = "UI/FoodShelterUI";
+        base.Start();
+    }
+
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         if (tile.GetInstanceID() == GetInstanceID())
-        {            
-            UI.Instance.EnableFood(true, this);
+        {
+            PopUI.gameObject.SetActive(true);
+            PopIcon.UIPopped(true);
         }
         else
         {
-            UI.Instance.EnableFood(false, this);
+            PopUI.gameObject.SetActive(false);
+            PopIcon.UIPopped(false);
         }
     }
 
@@ -56,4 +64,19 @@
             base.DeliverItem(this);
         }
     }
+
+    public override void PopUICallback(string button)
+    {
+        switch (button)
+        {
+            case "FOOD":
+                DeliverItem(this);
+                break;
+
+            case "PRAY":
+                UI.Meditate?.Invoke(this);
+                break;
+        }
+    }
+
 }

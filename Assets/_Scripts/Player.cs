@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     private Dictionary<PlayerFacingDirection, MapTile> AdjacentTiles;
     private List<PlayerItem> Inventory = new List<PlayerItem>();
     private Vector3 TargetPosition;
-    private bool LockMovement;
+    public static bool LockMovement;
     public Animator Animator;
 
     void Start()
@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
         Energy = missionDetails.StartingEnergy;
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
         ModifyEnergyConsumption(CurrentTile);
+        LockMovement = false;
     }
 
     private bool WeCanMove(MapTile tile)

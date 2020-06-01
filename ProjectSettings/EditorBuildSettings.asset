@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Isometric Pack 3d/Demo/Scene_simple.unity
     guid: cf66226672373eb47b49bd0625d23d5b
   - enabled: 1
+    path: Assets/Isometric Pack 3d/Demo/Content.unity
+    guid: 6939c71944f0ade4fb38961b7c8fa4ed
+  - enabled: 1
     path: Assets/_Scenes/Bootloader.unity
     guid: 0a636c8150afe2d44997ae96fd718f21
   - enabled: 1

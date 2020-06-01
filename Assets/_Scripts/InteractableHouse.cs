@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class InteractableHouse : InteractableObject
 {
@@ -22,6 +23,10 @@ public class InteractableHouse : InteractableObject
     protected int NeglectedMultiplier = 1;
 
     protected PopIcon PopIcon;
+    protected PopUI PopUI;
+    protected string PopUILocation = "";
+
+    public UnityEvent ButtonCallback;
 
     protected virtual void Start()
     {
@@ -31,10 +36,19 @@ public class InteractableHouse : InteractableObject
         MissionManager.EndOfDay += ReportScores;
         MissionManager.EndOfDay += EndofDay;
 
-        PopIcon = Instantiate(Resources.Load<GameObject>("Icons/PopIcon")).GetComponent<PopIcon>();
+        PopIcon = Instantiate(Resources.Load<GameObject>("UI/PopIcon")).GetComponent<PopIcon>();
         PopIcon.transform.SetParent(transform);
         PopIcon.transform.localPosition = new Vector3(0, 1, 0);
         PopIcon.gameObject.SetActive(false);
+
+        if (!string.IsNullOrEmpty(PopUILocation))
+        {
+            PopUI = Instantiate(Resources.Load<GameObject>(PopUILocation)).GetComponent<PopUI>();
+            PopUI.transform.SetParent(transform);
+            PopUI.transform.localPosition = new Vector3(0, 3, 0);
+            PopUI.Init(PopUICallback);
+            PopUI.gameObject.SetActive(false);
+        }
     }
 
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)
@@ -172,6 +186,16 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
         }
+    }
+
+    public virtual void PopMyUI(bool active)
+    {
+
+    }
+
+    public virtual void PopUICallback(string button)
+    {
+
     }
 
     public virtual void VolunteerWork(InteractableHouse house)

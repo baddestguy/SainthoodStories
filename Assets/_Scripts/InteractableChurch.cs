@@ -16,9 +16,10 @@ public class InteractableChurch : InteractableHouse
 
     protected override void Start()
     {
+        PopUILocation = "UI/ChurchUI";
+        base.Start();
         UI.Prayed += Pray;
         UI.Slept += Sleep;
-        base.Start();
         UpdateLiturgyTimes();
         PopIcon.transform.localPosition += new Vector3 (0, 0.5f, 0);
     }
@@ -27,11 +28,13 @@ public class InteractableChurch : InteractableHouse
     {
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            UI.Instance.EnableChurch(true);
+            PopUI.gameObject.SetActive(true);
+            PopIcon.UIPopped(true);
         }
         else
         {
-            UI.Instance.EnableChurch(false);
+            PopUI.gameObject.SetActive(false);
+            PopIcon.UIPopped(false);
         }
     }
 
@@ -68,6 +71,25 @@ public class InteractableChurch : InteractableHouse
             LiturgyEndTime = 13;
         }
         PopChurchIcon();
+    }
+
+    public override void PopMyUI(bool active)
+    {
+        PopUI.gameObject.SetActive(active);
+    }
+
+    public override void PopUICallback(string button)
+    {
+        switch (button)
+        {
+            case "PRAY":
+                Pray();
+                break;
+
+            case "SLEEP":
+                Sleep();
+                break;
+        }
     }
 
     private void PopChurchIcon()

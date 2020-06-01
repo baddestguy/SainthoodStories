@@ -1,8 +1,12 @@
-﻿public class InteractableMarket : InteractableHouse
+﻿using System;
+using UnityEngine;
+
+public class InteractableMarket : InteractableHouse
 {
     protected override void Start()
     {
         UI.BoughtItem += BoughtItem;
+        PopUILocation = "UI/MarketUI";
         base.Start();
     }
 
@@ -18,11 +22,13 @@
             {
                 UI.Instance.DisplayMessage("SHOP CLOSED!");
             }
-            UI.Instance.EnableShop(true, this);
+            PopUI.gameObject.SetActive(true);
+            PopIcon.UIPopped(true);
         }
         else
         {
-            UI.Instance.EnableShop(false, this);
+            PopUI.gameObject.SetActive(false);
+            PopIcon.UIPopped(false);
         }
     }
 
@@ -39,6 +45,19 @@
             UI.Instance.DisplayMessage("SHOP CLOSED!");
         }
     }
+
+    public override void PopUICallback(string button)
+    {
+        if(button == "PRAY")
+        {
+            UI.Meditate?.Invoke(this);
+            return;
+        }
+
+        ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), button);
+        BoughtItem(itemType);
+    }
+
 
     public override void ReportScores()
     {

@@ -4,15 +4,23 @@ public class InteractableOrphanage : InteractableHouse
 {
     public int AdoptionPoints;
 
+    protected override void Start()
+    {
+        PopUILocation = "UI/OrphanageUI";
+        base.Start();
+    }
+
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            UI.Instance.EnableOrphanage(true, this);
+            PopUI.gameObject.SetActive(true);
+            PopIcon.UIPopped(true);
         }
         else
         {
-            UI.Instance.EnableOrphanage(false, this);
+            PopUI.gameObject.SetActive(false);
+            PopIcon.UIPopped(false);
         }
     }
 
@@ -122,4 +130,23 @@ public class InteractableOrphanage : InteractableHouse
             UI.Instance.DisplayMessage("ORPHANAGE CLOSED!");
         }
     }
+
+    public override void PopUICallback(string button)
+    {
+        switch (button)
+        {
+            case "TOYS":
+                DeliverItem(this);
+                break;
+
+            case "VOLUNTEER":
+                VolunteerWork(this);
+                break;
+
+            case "PRAY":
+                UI.Meditate?.Invoke(this);
+                break;
+        }
+    }
+
 }

@@ -2,6 +2,7 @@
 using EventCallbacks;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class MapTile : MonoBehaviour
 {
@@ -42,7 +43,8 @@ public class MapTile : MonoBehaviour
 
     }
 
-    public void OnMouseUp(){
+    public void OnMouseUpAsButton(){
+        if (EventSystem.current.currentSelectedGameObject != null) return;
         if(!CameraControls.CameraMove && !CameraControls.CameraZoom)
             OnClickEvent?.Invoke(this);
     }

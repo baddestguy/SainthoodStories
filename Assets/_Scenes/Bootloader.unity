@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8655f059cda00c341bc65e4bf22ee0c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WeatherType: 0
   WeatherActive: 0
 --- !u!1 &577018751
 GameObject:

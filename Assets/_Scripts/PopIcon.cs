@@ -9,6 +9,7 @@ public class PopIcon : MonoBehaviour
     public TextMeshProUGUI DeadlineDisplay;
 
     private Transform CamTransform;
+    private bool PoppedUI;
 
     private void Start()
     {
@@ -39,6 +40,15 @@ public class PopIcon : MonoBehaviour
         {
             DeadlineDisplay.color = Color.white;
         }
+    }
+
+    public void UIPopped(bool active)
+    {
+        if (active == PoppedUI) return;
+
+        PoppedUI = active;
+        BuildingIcon.transform.localPosition += new Vector3(0, active ? 1 : -1, 0);
+        ItemsRequiredDisplay.transform.localPosition += new Vector3(0, active ? 1 : -1, 0);
     }
 
     void Update()

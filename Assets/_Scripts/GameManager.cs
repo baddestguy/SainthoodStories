@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     {
         if(scene.name.Contains("Level"))
         {
-            Instantiate(Resources.Load("UI") as GameObject);
+            Instantiate(Resources.Load("UI/UI") as GameObject);
             Player = FindObjectOfType<Player>();
             MissionManager.LoadAllMissions(CurrentMission);
             GameClock = new GameClock(MissionManager.CurrentMission.StartingClock);
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         {
             case MissionDifficulty.EASY: 
                 CurrentMission = new Mission(75, 75, 30, 6, 1); 
-                SceneManager.LoadScene("EasyLevel", LoadSceneMode.Single);
+                SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
                 break;
             case MissionDifficulty.NORMAL: 
                 CurrentMission = new Mission(50, 50, 20, 0, Random.Range(3,6)); 
