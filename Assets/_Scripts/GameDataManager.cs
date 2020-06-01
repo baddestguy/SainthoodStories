@@ -11,6 +11,14 @@ public class GameDataManager : MonoBehaviour
     }
 }
 
+public enum PlayerFacingDirection
+{
+    UP = 0,
+    DOWN,
+    LEFT,
+    RIGHT
+}
+
 public enum WeatherType
 {
     NONE = 0,

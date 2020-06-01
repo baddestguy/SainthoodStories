@@ -15,22 +15,29 @@ public class Player : MonoBehaviour
     [SerializeField]
     private MapTile CurrentTile;
     private MapTile StartTile;
-    private IEnumerable<MapTile> AdjacentTiles;
+    private Dictionary<PlayerFacingDirection, MapTile> AdjacentTiles;
     private List<PlayerItem> Inventory = new List<PlayerItem>();
     private Vector3 TargetPosition;
-    private int StartingEnergy;
+    private bool LockMovement;
+    public Animator Animator;
 
     void Start()
     {
         GameManager.MissionBegin += GameStart;
         TargetPosition = transform.position;
+        Animator.SetBool("Idle", true);
     }
 
     void Update()
     {
-        if((transform.position - TargetPosition).magnitude > 0.01)
+        if((transform.position - TargetPosition).magnitude > 0.11)
         {
             transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime*5);
+        }
+        else
+        {
+            Animator.SetBool("Idle", true);
+            Animator.SetBool("Run", false);
         }
     }
 
@@ -38,39 +45,56 @@ public class Player : MonoBehaviour
     {
         StartTile = CurrentTile;
         Energy = missionDetails.StartingEnergy;
-        StartingEnergy = Energy.Amount;
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
         ModifyEnergyConsumption(CurrentTile);
     }
 
     private bool WeCanMove(MapTile tile)
     {
-        return (CurrentTile != tile && AdjacentTiles.Contains(tile) && tile.TileType != TileType.BARRIER);
+        return (CurrentTile != tile && AdjacentTiles.ContainsValue(tile) && tile.TileType != TileType.BARRIER);
+    }
+
+    private void FaceNewDirection(MapTile newTile)
+    {
+        var direction = AdjacentTiles.Where(t => t.Value == newTile).First().Key;
+        switch (direction)
+        {
+            case PlayerFacingDirection.UP:
+                transform.eulerAngles = new Vector3(0, 310, 0);
+                break;
+            case PlayerFacingDirection.DOWN:
+                transform.eulerAngles = new Vector3(0, 140, 0);
+                break;
+            case PlayerFacingDirection.LEFT:
+                transform.eulerAngles = new Vector3(0, 210, 0);
+                break;
+            case PlayerFacingDirection.RIGHT:
+                transform.eulerAngles = new Vector3(0, 30, 0);
+                break;
+        }
     }
 
     private void OnMove(MapTile newTile)
-    {        
+    {
         CurrentTile = newTile;
 
         EnergyConsumption = ModifyEnergyConsumption(CurrentTile);
         Energy.Consume(EnergyConsumption);
 
+        FaceNewDirection(CurrentTile);
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
 
         TargetPosition = CurrentTile.transform.position;
+
+        Animator.SetBool("Run", true);
+        Animator.SetBool("Idle", false);
     }
 
     public void OnInteract(MapTile newTile)
     {
-        EnergyConsumption = ModifyEnergyConsumption(newTile);
-        if (Energy.Depleted(EnergyConsumption) && !(newTile is InteractableHouse)) //Reset if out of energy & not in a building
-        {
-            OnMove(StartTile);
-            Energy.Consume(-StartingEnergy);
-            GameManager.Instance.GameClock.Reset();
-            OnEnergyDepleted?.Invoke();
-        }
-        else if (newTile is InteractableObject)
+        if (LockMovement) return;
+
+        if (newTile is InteractableObject)
         {
             var iTile = newTile as InteractableObject;
             if (WeCanMove(iTile.CurrentGroundTile))
@@ -95,6 +119,14 @@ public class Player : MonoBehaviour
                 TileDance(newTile);
             }
         }
+
+        if (Energy.Depleted() && !(newTile is InteractableHouse)) //Reset if out of energy & not in a building
+        {
+            GameManager.Instance.GameClock.Reset();
+            OnEnergyDepleted?.Invoke();
+            LockMovement = true;
+        }
+
     }
 
     public int ModifyEnergyConsumption(MapTile tile)

@@ -9,35 +9,33 @@ public class GameMap : MonoBehaviour
     public List<MapTile> MapTiles = new List<MapTile>();
     public List<InteractableObject> Interactables = new List<InteractableObject>();
 
-    public IEnumerable<MapTile> GetAdjacentTiles(MapTile mapTile)
+    public Dictionary<PlayerFacingDirection, MapTile> GetAdjacentTiles(MapTile mapTile)
     {
-        var currentPosition = -1;
-        var list = new List<MapTile>();
+        var list = new Dictionary<PlayerFacingDirection, MapTile>();
 
         for (int i = 0; i < MapTiles.Count; i++)
         {
             if (mapTile.GetInstanceID() == MapTiles[i].GetInstanceID())
             {
-                currentPosition = i;
                 var tile = (i - Columns) < 0 ? null : MapTiles[i - Columns];
                 if (tile != null && tile.TileType != TileType.BARRIER)
                 {
-                    list.Add(tile);
+                    list.Add(PlayerFacingDirection.UP, tile);
                 }
-                tile = (i - 1) < 0 ? null : MapTiles[i - 1];
+                tile = (i - 1) < 0 || (i) % Rows == 0 ? null : MapTiles[i - 1];
                 if (tile != null && tile.TileType != TileType.BARRIER)
                 {
-                    list.Add(tile);
+                    list.Add(PlayerFacingDirection.LEFT, tile);
                 }
-                tile = (i + 1) >= MapTiles.Count ? null : MapTiles[i + 1];
+                tile = (i + 1) >= MapTiles.Count || (i + 1) % Rows == 0 ? null : MapTiles[i + 1];
                 if (tile != null && tile.TileType != TileType.BARRIER)
                 {
-                    list.Add(tile);
+                    list.Add(PlayerFacingDirection.RIGHT, tile);
                 }
                 tile = (i + Columns) >= MapTiles.Count ? null : MapTiles[i + Columns];
                 if (tile != null && tile.TileType != TileType.BARRIER)
                 {
-                    list.Add(tile);
+                    list.Add(PlayerFacingDirection.DOWN, tile);
                 }
                 return list;
             }
