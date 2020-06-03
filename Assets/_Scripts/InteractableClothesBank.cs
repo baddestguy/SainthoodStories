@@ -2,6 +2,7 @@
 {
     protected override void Start()
     {
+        PopUILocation = "UI/ClothesBankUI";
         base.Start();
     }
 
@@ -9,11 +10,13 @@
     {
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            UI.Instance.EnableClothes(true, this);
+            PopUI.gameObject.SetActive(true);
+            PopIcon.UIPopped(true);
         }
         else
         {
-            UI.Instance.EnableClothes(false, this);
+            PopUI.gameObject.SetActive(false);
+            PopIcon.UIPopped(false);
         }
     }
 
@@ -36,8 +39,17 @@
         }
     }
 
-    public override void OnDisable()
+    public override void PopUICallback(string button)
     {
-        base.OnDisable();
+        switch (button)
+        {
+            case "CLOTHES":
+                DeliverItem(this);
+                break;
+
+            case "PRAY":
+                UI.Meditate?.Invoke(this);
+                break;
+        }
     }
 }

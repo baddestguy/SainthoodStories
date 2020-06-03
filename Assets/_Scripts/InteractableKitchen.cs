@@ -3,6 +3,7 @@
     protected override void Start()
     {
         UI.Cooked += Cook;
+        PopUILocation = "UI/KitchenUI";
         base.Start();
     }
 
@@ -10,11 +11,13 @@
     {
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            UI.Instance.EnableKitchen(true, this);
+            PopUI.gameObject.SetActive(true);
+            PopIcon.UIPopped(true);
         }
         else
         {
-            UI.Instance.EnableKitchen(false, this);
+            PopUI.gameObject.SetActive(false);
+            PopIcon.UIPopped(false);
         }
     }
 
@@ -48,6 +51,20 @@
     public override void ReportScores()
     {
         //Do absolutely nothing!
+    }
+
+    public override void PopUICallback(string button)
+    {
+        switch (button)
+        {
+            case "COOK":
+                Cook();
+                break;
+
+            case "PRAY":
+                UI.Meditate?.Invoke(this);
+                break;
+        }
     }
 
     public override void OnDisable()

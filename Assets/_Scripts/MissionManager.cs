@@ -78,7 +78,7 @@ public class MissionManager : MonoBehaviour
     {
         UI.Instance.EnableEndGame(true);
         MissionComplete?.Invoke(true);
-        //disable movement
+        Player.LockMovement = true;
         //Evaluate Mission Success/Failure
     }
 

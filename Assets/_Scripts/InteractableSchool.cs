@@ -7,6 +7,7 @@ public class InteractableSchool : InteractableHouse
     protected override void Start()
     {
         UI.Taught += Teach;
+        PopUILocation = "UI/SchoolUI";
         base.Start();
     }
 
@@ -22,11 +23,13 @@ public class InteractableSchool : InteractableHouse
             {
                 UI.Instance.DisplayMessage("SCHOOL CLOSED!");
             }
-            UI.Instance.EnableSchool(true, this);
+            PopUI.gameObject.SetActive(true);
+            PopIcon.UIPopped(true);
         }
         else
         {
-            UI.Instance.EnableSchool(false, this);
+            PopUI.gameObject.SetActive(false);
+            PopIcon.UIPopped(false);
         }
     }
 
@@ -70,6 +73,24 @@ public class InteractableSchool : InteractableHouse
         else
         {
             UI.Instance.DisplayMessage("YOU HAVE NO STATIONERY TO GIVE!");
+        }
+    }
+
+    public override void PopUICallback(string button)
+    {
+        switch (button)
+        {
+            case "TEACH":
+                Teach();
+                break;
+
+            case "STATIONERY":
+                DeliverItem(this);
+                break;
+
+            case "PRAY":
+                UI.Meditate?.Invoke(this);
+                break;
         }
     }
 
