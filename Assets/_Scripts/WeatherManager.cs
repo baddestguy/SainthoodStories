@@ -14,6 +14,7 @@ public class WeatherManager : MonoBehaviour
     private GameObject CurrentWeatherGO;
     private GameClock WeatherStartTime;
     private GameClock WeatherEndTime;
+    private DayNightCycle DayNightCycle;
 
     public static UnityAction<GameClock, GameClock> WeatherForecastActive;
 
@@ -34,6 +35,7 @@ public class WeatherManager : MonoBehaviour
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         WeatherType = WeatherType.NONE;
+        DayNightCycle = FindObjectOfType<DayNightCycle>();
     }
 
     private void TriggerWeatherForecast(double time, int day)
@@ -44,9 +46,10 @@ public class WeatherManager : MonoBehaviour
             {
                 if (GameManager.Instance.GameClock == WeatherEndTime)
                 {
-                    CurrentWeatherGO.SetActive(false);
+                    CurrentWeatherGO.GetComponent<StormyWeather>().StopStorm();
                     WeatherForecastTriggered = false;
                     WeatherType = WeatherType.NONE;
+                    DayNightCycle.SetFutureSkyBox(WeatherType);
                     WeatherForecastActive?.Invoke(WeatherStartTime, WeatherEndTime);
                 }
             }
@@ -55,6 +58,7 @@ public class WeatherManager : MonoBehaviour
                 if (GameManager.Instance.GameClock == WeatherStartTime)
                 {
                     CurrentWeatherGO.SetActive(true);
+                    CurrentWeatherGO.GetComponent<StormyWeather>().StartStorm();
                     WeatherType = WeatherType.RAIN;
                     WeatherForecastActive?.Invoke(WeatherStartTime, WeatherEndTime);
                 }
@@ -98,6 +102,13 @@ public class WeatherManager : MonoBehaviour
         CurrentWeatherGO = Instantiate(RainResource) as GameObject;
         CurrentWeatherGO.SetActive(false);
         WeatherForecastActive?.Invoke(WeatherStartTime, WeatherEndTime);
+        WeatherType = WeatherType.PRESTORM;
+        DayNightCycle.SetFutureSkyBox(WeatherType);
+    }
+
+    public bool IsStormy()
+    {
+        return WeatherType != WeatherType.NONE && WeatherType != WeatherType.PRESTORM; 
     }
 
     private void OnDisable()

@@ -134,7 +134,7 @@ public class Player : MonoBehaviour
     {
         int energyAmount = 1;
 
-        if(WeatherManager.Instance.WeatherType != WeatherType.NONE)
+        if(WeatherManager.Instance.IsStormy())
         {
             energyAmount++;
         }
