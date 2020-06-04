@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
                 break;
             case MissionDifficulty.HARD: 
                 CurrentMission = new Mission(25, 25, 15, 0, Random.Range(7, 11));
-                SceneManager.LoadScene("HardLevel", LoadSceneMode.Single);
+                SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
                 break;
         }
 
