@@ -55,10 +55,13 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerMoved(Energy energy, MapTile tile)
     {
-        GameClock.Tick();
         //Trigger Status effects if any
     }
 
+    public void PassTime()
+    {
+        GameClock.Tick();
+    }
 
     public void SetMissionParameters(MissionDifficulty missionDifficulty)
     {

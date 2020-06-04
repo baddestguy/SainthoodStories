@@ -12,6 +12,7 @@ public class InteractableMarket : InteractableHouse
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
+        base.OnPlayerMoved(energy, tile);
         GameClock clock = GameManager.Instance.GameClock;
         if (tile.GetInstanceID() == GetInstanceID())
         {
@@ -23,6 +24,7 @@ public class InteractableMarket : InteractableHouse
                 UI.Instance.DisplayMessage("SHOP CLOSED!");
             }
             PopUI.gameObject.SetActive(true);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
             PopIcon.UIPopped(true);
         }
         else

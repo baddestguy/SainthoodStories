@@ -18,6 +18,12 @@ public class PopIcon : MonoBehaviour
 
     public void Init(string sprite, int items, GameClock deadline)
     {
+        if (PoppedUI)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{sprite}");
         ItemsRequiredDisplay.text = $"{items}";
         DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
@@ -44,11 +50,12 @@ public class PopIcon : MonoBehaviour
 
     public void UIPopped(bool active)
     {
-        if (active == PoppedUI) return;
-
         PoppedUI = active;
-        BuildingIcon.transform.localPosition += new Vector3(0, active ? 1 : -1, 0);
-        ItemsRequiredDisplay.transform.localPosition += new Vector3(0, active ? 1 : -1, 0);
+        if (!active) return;
+
+        gameObject.SetActive(false);
+    //    BuildingIcon.transform.localPosition += new Vector3(0, active ? 1 : -1, 0);
+    //    ItemsRequiredDisplay.transform.localPosition += new Vector3(0, active ? 1 : -1, 0);
     }
 
     void Update()

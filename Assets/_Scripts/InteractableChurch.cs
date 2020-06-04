@@ -22,13 +22,17 @@ public class InteractableChurch : InteractableHouse
         UI.Slept += Sleep;
         UpdateLiturgyTimes();
         PopIcon.transform.localPosition += new Vector3 (0, 0.5f, 0);
+        PopUI.transform.localPosition += new Vector3(0, 1, 0);
+        EnergyConsumption = ServiceEnergy;
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
+        base.OnPlayerMoved(energy, tile);
         if (tile.GetInstanceID() == GetInstanceID())
         {
             PopUI.gameObject.SetActive(true);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
             PopIcon.UIPopped(true);
         }
         else
@@ -73,11 +77,6 @@ public class InteractableChurch : InteractableHouse
         PopChurchIcon();
     }
 
-    public override void PopMyUI(bool active)
-    {
-        PopUI.gameObject.SetActive(active);
-    }
-
     public override void PopUICallback(string button)
     {
         switch (button)
@@ -115,7 +114,6 @@ public class InteractableChurch : InteractableHouse
     {
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
-
         if (clock.Day % 7 == 0)
         {
             if (clock.Time == ConfessionTime)
@@ -176,6 +174,7 @@ public class InteractableChurch : InteractableHouse
         Player player = GameManager.Instance.Player;
 
         player.ConsumeEnergy(SleepEnergy);
+        PopUIFXIcons("Energy", -SleepEnergy);
         clock.Tick();
         UI.Instance.DisplayMessage("SLEPT!");
     }

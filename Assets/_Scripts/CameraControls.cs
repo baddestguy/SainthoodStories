@@ -10,9 +10,16 @@ public class CameraControls : MonoBehaviour
     public Vector2 BoundaryX; //-1.842995, 3.956034
     public Vector2 BoundaryY; //17.9911, 16.3156
 
+    private Vector3 OriginalCamTarget;
+    private Vector3 CamTarget;
+    private float ZoomTarget;
+
+    public Camera UICam3D;
     void Start()
     {
-        
+        OriginalCamTarget = transform.position;
+        CamTarget = OriginalCamTarget;
+        ZoomTarget = Camera.main.orthographicSize;
     }
 
     void Update()
@@ -54,10 +61,30 @@ public class CameraControls : MonoBehaviour
             CameraMove = false;
             CameraZoom = false;
         }
+
+        Zoom(0);
+        transform.position = Vector3.Lerp(transform.position, CamTarget, Time.deltaTime*3);
+    }
+
+    public void SetCameraTarget(Vector3 newTarget)
+    {
+        CamTarget = newTarget.magnitude != 0 ? newTarget : OriginalCamTarget;
+
+        if(newTarget.magnitude == 0)
+        {
+            ZoomTarget = 6f;
+        }
+        else
+        {
+            ZoomTarget = 3f;
+        }
     }
 
     private void Zoom(float increment)
     {
-        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - increment, MinZoom, MaxZoom);
+        //  Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - increment, MinZoom, MaxZoom);
+        Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, ZoomTarget, Time.deltaTime*3);
+        UICam3D.orthographicSize = Mathf.Lerp(UICam3D.orthographicSize, ZoomTarget, Time.deltaTime * 3); ;
     }
+
 }
