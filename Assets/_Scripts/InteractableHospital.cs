@@ -20,9 +20,12 @@ public class InteractableHospital : InteractableHouse
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
+        base.OnPlayerMoved(energy, tile);
+
         if (tile.GetInstanceID() == GetInstanceID())
         {
             PopUI.gameObject.SetActive(true);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
             PopIcon.UIPopped(true);
         }
         else

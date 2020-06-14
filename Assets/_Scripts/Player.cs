@@ -21,11 +21,17 @@ public class Player : MonoBehaviour
     public static bool LockMovement;
     public Animator Animator;
 
+    private PopUIFX PopUIFX;
+    private bool DissapearInHouse;
+
     void Start()
     {
         GameManager.MissionBegin += GameStart;
         TargetPosition = transform.position;
         Animator.SetBool("Idle", true);
+
+        PopUIFX = Instantiate(Resources.Load("UI/PopUIFX") as GameObject).GetComponent<PopUIFX>();
+        PopUIFX.gameObject.SetActive(false);
     }
 
     void Update()
@@ -38,6 +44,12 @@ public class Player : MonoBehaviour
         {
             Animator.SetBool("Idle", true);
             Animator.SetBool("Run", false);
+
+            if (DissapearInHouse)
+            {
+                transform.localScale = Vector3.zero;
+                DissapearInHouse = false;
+            }
         }
     }
 
@@ -75,6 +87,13 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void PopUIFXIcons()
+    {
+        PopUIFX.transform.position = transform.position + new Vector3(0, 1, 0);
+        PopUIFX.gameObject.SetActive(true);
+        PopUIFX.Init("Energy", -EnergyConsumption);
+    }
+
     private void OnMove(MapTile newTile)
     {
         CurrentTile = newTile;
@@ -89,6 +108,8 @@ public class Player : MonoBehaviour
 
         Animator.SetBool("Run", true);
         Animator.SetBool("Idle", false);
+
+        PopUIFXIcons();
     }
 
     public void OnInteract(MapTile newTile)
@@ -100,8 +121,11 @@ public class Player : MonoBehaviour
             var iTile = newTile as InteractableObject;
             if (WeCanMove(iTile.CurrentGroundTile))
             {
+                transform.localScale = Vector3.one;
+                DissapearInHouse = true;
                 OnMove(iTile.CurrentGroundTile);
                 OnMoveSuccessEvent?.Invoke(Energy, iTile);
+                GameManager.Instance.PassTime();
             }
             else
             {
@@ -112,8 +136,10 @@ public class Player : MonoBehaviour
         {
             if (WeCanMove(newTile))
             {
+                transform.localScale = Vector3.one;
                 OnMove(newTile);
                 OnMoveSuccessEvent?.Invoke(Energy, newTile);
+                GameManager.Instance.PassTime();
             }
             else
             {

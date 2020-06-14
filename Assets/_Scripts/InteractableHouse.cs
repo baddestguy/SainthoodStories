@@ -1,5 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class InteractableHouse : InteractableObject
 {
@@ -27,6 +31,8 @@ public class InteractableHouse : InteractableObject
     protected string PopUILocation = "";
 
     public UnityEvent ButtonCallback;
+    private bool CameraLockOnMe;
+    private PopUIFX PopUIFX;
 
     protected virtual void Start()
     {
@@ -45,10 +51,12 @@ public class InteractableHouse : InteractableObject
         {
             PopUI = Instantiate(Resources.Load<GameObject>(PopUILocation)).GetComponent<PopUI>();
             PopUI.transform.SetParent(transform);
-            PopUI.transform.localPosition = new Vector3(0, 3, 0);
-            PopUI.Init(PopUICallback);
+            PopUI.transform.localPosition = new Vector3(0, 1, 0);
             PopUI.gameObject.SetActive(false);
         }
+
+        PopUIFX = Instantiate(Resources.Load("UI/PopUIFX") as GameObject).GetComponent<PopUIFX>();
+        PopUIFX.gameObject.SetActive(false);
     }
 
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)
@@ -76,6 +84,7 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
         }
+        PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
     }
 
     public virtual void SetDeadlineTime(double time, int day)
@@ -177,6 +186,7 @@ public class InteractableHouse : InteractableObject
 
         RequiredItems--;
         PopMyIcon();
+        PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
         if (RequiredItems <= 0)
         {
             DeadlineCounter = Mathf.Max(0, DeadlineCounter - 1);
@@ -188,10 +198,23 @@ public class InteractableHouse : InteractableObject
         }
     }
 
-    public virtual void PopMyUI(bool active)
+    protected void PopUIFXIcons(string icon, int amount)
     {
-
+        PopUIFX.transform.position = transform.position + new Vector3(0, 0, 0);
+        PopUIFX.gameObject.SetActive(true);
+        PopUIFX.Init(icon, amount, 0);
     }
+
+    protected IEnumerator PopUIFXIconsAsync(Stack<Tuple<string, int>> stack)
+    {
+        while(stack.Count > 0)
+        {
+            var item = stack.Pop();
+            PopUIFXIcons(item.Item1, item.Item2);
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
 
     public virtual void PopUICallback(string button)
     {
@@ -205,11 +228,20 @@ public class InteractableHouse : InteractableObject
     public virtual void UpdateCharityPoints(int amount)
     {
         CurrentCharityPoints += amount;
+        Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
+        stack.Push(new Tuple<string, int>("CPHappy", amount));
+        stack.Push(new Tuple<string, int>("Energy", -EnergyConsumption));
+        StartCoroutine(PopUIFXIconsAsync(stack));
     }
 
     public virtual void UpdateFaithPoints(int amount)
     {
         CurrentFaithPoints += amount;
+        Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
+        stack.Push(new Tuple<string, int>("InteractableChurch", amount));
+        stack.Push(new Tuple<string, int>("Energy", 1)); //Prayer Energy should be a variable
+        StartCoroutine(PopUIFXIconsAsync(stack));
+  
         Debug.LogWarning("FAITH: " + CurrentFaithPoints);
     }
 
@@ -240,6 +272,21 @@ public class InteractableHouse : InteractableObject
     {
         PopIcon.gameObject.SetActive(true);
         PopIcon.Init(GetType().Name, RequiredItems, DeadlineTime);
+    }
+
+    public override void OnPlayerMoved(Energy energy, MapTile tile)
+    {
+        base.OnPlayerMoved(energy, tile);
+        if (tile.GetInstanceID() == GetInstanceID())
+        {
+            Camera.main.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.53f, 11.6f, -5.78f));
+            CameraLockOnMe = true;
+        }
+        else if(CameraLockOnMe)
+        {
+            Camera.main.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
+            CameraLockOnMe = false;
+        }
     }
 
     public override void OnDisable()

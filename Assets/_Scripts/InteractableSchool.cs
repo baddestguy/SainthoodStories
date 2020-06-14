@@ -13,6 +13,7 @@ public class InteractableSchool : InteractableHouse
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
+        base.OnPlayerMoved(energy, tile);
         GameClock clock = GameManager.Instance.GameClock;
         if (tile.GetInstanceID() == GetInstanceID())
         {
@@ -24,6 +25,7 @@ public class InteractableSchool : InteractableHouse
                 UI.Instance.DisplayMessage("SCHOOL CLOSED!");
             }
             PopUI.gameObject.SetActive(true);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
             PopIcon.UIPopped(true);
         }
         else
