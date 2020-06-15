@@ -11,6 +11,12 @@ public class GameDataManager : MonoBehaviour
     }
 }
 
+public enum PlayerStatusEffect
+{
+    NONE = 0,
+    FATIGUED
+}
+
 public enum PlayerFacingDirection
 {
     UP = 0,
