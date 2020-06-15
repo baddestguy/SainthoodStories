@@ -174,6 +174,7 @@ public class InteractableChurch : InteractableHouse
         Player player = GameManager.Instance.Player;
 
         player.ConsumeEnergy(SleepEnergy);
+        player.ModifyStatusEffect(PlayerStatusEffect.NONE);
         PopUIFXIcons("Energy", -SleepEnergy);
         clock.Tick();
         UI.Instance.DisplayMessage("SLEPT!");

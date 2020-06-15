@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
 
     private PopUIFX PopUIFX;
     private bool DissapearInHouse;
+    private PlayerStatusEffect StatusEffect = PlayerStatusEffect.NONE; //Likely going to be a List of status effects that Stack.
 
     void Start()
     {
@@ -58,7 +59,6 @@ public class Player : MonoBehaviour
         StartTile = CurrentTile;
         Energy = missionDetails.StartingEnergy;
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
-        ModifyEnergyConsumption(CurrentTile);
         LockMovement = false;
     }
 
@@ -147,6 +147,11 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (Energy.Depleted())
+        {
+            StatusEffect = PlayerStatusEffect.FATIGUED;
+        }
+
         if (Energy.Depleted() && !(newTile is InteractableHouse)) //Reset if out of energy & not in a building
         {
             GameManager.Instance.GameClock.Reset();
@@ -156,14 +161,19 @@ public class Player : MonoBehaviour
 
     }
 
-    public int ModifyEnergyConsumption(MapTile tile)
+    public int ModifyEnergyConsumption(MapTile tile = null, int amount = 1)
     {
-        int energyAmount = 1;
+        int energyAmount = amount;
 
-        if(WeatherManager.Instance.IsStormy())
+        if(StatusEffect == PlayerStatusEffect.FATIGUED)
         {
             energyAmount++;
         }
+        if(tile != null && WeatherManager.Instance.IsStormy())
+        {
+            energyAmount++;
+        }        
+
         return energyAmount; 
     }
 
@@ -196,7 +206,16 @@ public class Player : MonoBehaviour
 
     public void ConsumeEnergy(int amount)
     {
+        if(amount >= 0)
+        {
+            amount = ModifyEnergyConsumption(amount: amount);
+        }
         Energy.Consume(amount);
+    }
+
+    public void ModifyStatusEffect(PlayerStatusEffect newStatus)
+    {
+        StatusEffect = newStatus;
     }
 
     public bool EnergyDepleted()

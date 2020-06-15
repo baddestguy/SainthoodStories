@@ -21,6 +21,7 @@ public class WeatherManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;   
+        MissionManager.MissionComplete += MissionComplete;
     }
 
     void Start()
@@ -111,9 +112,16 @@ public class WeatherManager : MonoBehaviour
         return WeatherType != WeatherType.NONE && WeatherType != WeatherType.PRESTORM; 
     }
 
+    private void MissionComplete(bool complete)
+    {
+        WeatherType = WeatherType.NONE;
+        WeatherForecastTriggered = false;
+    }
+
     private void OnDisable()
     {
         GameClock.Ticked -= TriggerWeatherForecast;
+        MissionManager.MissionComplete -= MissionComplete;
         SceneManager.sceneLoaded -= OnLevelLoaded;
     }
 }
