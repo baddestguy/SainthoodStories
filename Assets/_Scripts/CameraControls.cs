@@ -15,6 +15,7 @@ public class CameraControls : MonoBehaviour
     private Vector3 CamTarget;
     private float ZoomTarget;
     private DepthOfField DepthOfField;
+    private Bloom Bloom;
 
     public Camera UICam3D;
     public PostProcessVolume PostProcessor;
@@ -25,7 +26,9 @@ public class CameraControls : MonoBehaviour
         CamTarget = OriginalCamTarget;
         ZoomTarget = Camera.main.orthographicSize;
         PostProcessor.profile.TryGetSettings(out DepthOfField);
+        PostProcessor.profile.TryGetSettings(out Bloom);
         DepthOfField.active = false;
+        Bloom.active = true;
     }
 
     void Update()
@@ -80,11 +83,13 @@ public class CameraControls : MonoBehaviour
         {
             ZoomTarget = 6f;
             DepthOfField.active = false;
+            Bloom.active = true;
         }
         else
         {
             ZoomTarget = 3f;
             DepthOfField.active = true;
+            Bloom.active = false;
         }
     }
 
