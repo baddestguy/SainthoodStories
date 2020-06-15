@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class CameraControls : MonoBehaviour
 {
@@ -13,13 +14,18 @@ public class CameraControls : MonoBehaviour
     private Vector3 OriginalCamTarget;
     private Vector3 CamTarget;
     private float ZoomTarget;
+    private DepthOfField DepthOfField;
 
     public Camera UICam3D;
+    public PostProcessVolume PostProcessor;
+
     void Start()
     {
         OriginalCamTarget = transform.position;
         CamTarget = OriginalCamTarget;
         ZoomTarget = Camera.main.orthographicSize;
+        PostProcessor.profile.TryGetSettings(out DepthOfField);
+        DepthOfField.active = false;
     }
 
     void Update()
@@ -73,10 +79,12 @@ public class CameraControls : MonoBehaviour
         if(newTarget.magnitude == 0)
         {
             ZoomTarget = 6f;
+            DepthOfField.active = false;
         }
         else
         {
             ZoomTarget = 3f;
+            DepthOfField.active = true;
         }
     }
 
