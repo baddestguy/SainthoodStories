@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
@@ -41,6 +44,9 @@ public class UI : MonoBehaviour
     private bool ClearDisplay;
     private InteractableHouse CurrentHouse;
     private GameObject CurrentActiveUIGameObject;
+    private GameObject SideNotificationResource;
+    public ScrollRect SideNotificationScroller;
+    private Dictionary<string, Tuple<GameClock, GameObject, int>> InstantiatedSideNotifications = new Dictionary<string, Tuple<GameClock, GameObject, int>>();
 
     void Awake()
     {
@@ -54,6 +60,8 @@ public class UI : MonoBehaviour
         MissionManager.MissionComplete += MissionComplete;
         GameClock.Ticked += OnTick;
         WeatherManager.WeatherForecastActive += WeatherAlert;
+
+        SideNotificationResource = Resources.Load("UI/SideNotification") as GameObject;
     }
 
     public void InitTimeEnergy(GameClock clock, Energy energy)
@@ -107,6 +115,65 @@ public class UI : MonoBehaviour
 
         TimeDisplay.text = $"{(int)time}:{(time % 1 == 0 ? "00" : "30")}";
         DayDisplay.text = $"{day}/{GameManager.Instance.CurrentMission.TotalDays}";
+    }
+
+    public void SideNotificationPush(string sprite, int items, GameClock deadline, string owner)
+    {
+        if (IsDuplicateSideNotification(owner, items, deadline)) return;
+
+        GameObject SideNotifGO = Instantiate(SideNotificationResource);
+        SideNotifGO.transform.SetParent(SideNotificationScroller.content, false);
+        SideNotifGO.GetComponent<SideNotification>().Init(sprite, items, deadline);
+
+        InstantiatedSideNotifications.Add(owner, new Tuple<GameClock, GameObject, int>(deadline, SideNotifGO, items));
+        SortSideNotifications();
+    }
+
+    public void SideNotificationPop(string owner)
+    {
+        if (SideNotificationScroller.content.childCount <= 0 || !InstantiatedSideNotifications.ContainsKey(owner)) return;
+        
+        Destroy(InstantiatedSideNotifications[owner].Item2);
+        InstantiatedSideNotifications.Remove(owner);
+    }
+
+    private void SortSideNotifications()
+    {
+        var unsortedList = InstantiatedSideNotifications.ToList();
+        for(int i = 0; i < unsortedList.Count; i++)
+        {
+            int min = i;
+            for(int j = i+1; j < unsortedList.Count; j++)
+            {
+                if(unsortedList[j].Value.Item1 < unsortedList[min].Value.Item1)
+                {
+                    min = j;
+                }
+            }
+
+            if(min != i)
+            {
+                var temp = unsortedList[i];
+                unsortedList[i] = unsortedList[min];
+                unsortedList[min] = temp;
+            }
+        }
+
+        for(int i = unsortedList.Count-1; i >= 0; i--)
+        {
+            unsortedList[i].Value.Item2.transform.SetAsFirstSibling();
+        }
+    }
+
+    private bool IsDuplicateSideNotification(string owner, int items, GameClock deadline)
+    {
+        if(InstantiatedSideNotifications.ContainsKey(owner) && (InstantiatedSideNotifications[owner].Item3 != items || InstantiatedSideNotifications[owner].Item1 != deadline))
+        {
+            SideNotificationPop(owner);
+            return false;
+        }
+
+        return InstantiatedSideNotifications.ContainsKey(owner);
     }
 
     public void WeatherAlert(GameClock start, GameClock end)

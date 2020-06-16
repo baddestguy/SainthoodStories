@@ -68,15 +68,15 @@ public class GameManager : MonoBehaviour
         switch (missionDifficulty)
         {
             case MissionDifficulty.EASY: 
-                CurrentMission = new Mission(75, 75, 30, 6, 1); 
+                CurrentMission = new Mission(75, 75, 30, 5.5, 1); 
                 SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
                 break;
             case MissionDifficulty.NORMAL: 
-                CurrentMission = new Mission(50, 50, 20, 0, Random.Range(3,6)); 
+                CurrentMission = new Mission(50, 50, 20, 5.5, 7); 
                 SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
                 break;
             case MissionDifficulty.HARD: 
-                CurrentMission = new Mission(25, 25, 15, 0, Random.Range(7, 11));
+                CurrentMission = new Mission(30, 30, 20, 5.5, 7);
                 SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
                 break;
         }

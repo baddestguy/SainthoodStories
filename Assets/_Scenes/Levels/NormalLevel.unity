@@ -15825,7 +15825,7 @@ MonoBehaviour:
   CurrentGroundTile: {fileID: 876771829}
   EnergyConsumption: 0
   OpenTime: 6
-  ClosingTime: 18
+  ClosingTime: 20
   ItemDeliveryPoints: 0
   VolunteerPoints: 0
   DeadlineDeliveryBonus: 0
