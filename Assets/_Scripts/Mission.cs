@@ -9,12 +9,12 @@ public class Mission
 {
     public int TargetNumber;
     public Energy StartingEnergy;
-    public int StartingClock;
+    public double StartingClock;
     public int StartingFaithPoints;
     public int StartingCharityPoints;
     public int TotalDays;
 
-    public Mission(int faithPoints, int charityPoints, int startingEnergy, int startTime, int days)
+    public Mission(int faithPoints, int charityPoints, int startingEnergy, double startTime, int days)
     {
         StartingFaithPoints = faithPoints;
         StartingCharityPoints = charityPoints;

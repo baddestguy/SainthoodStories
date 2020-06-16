@@ -33,6 +33,7 @@ public class InteractableHouse : InteractableObject
     public UnityEvent ButtonCallback;
     private bool CameraLockOnMe;
     private PopUIFX PopUIFX;
+    public static bool HouseUIActive;
 
     protected virtual void Start()
     {
@@ -83,6 +84,7 @@ public class InteractableHouse : InteractableObject
             DeadlineSet = false;
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
+            UI.Instance.SideNotificationPop(GetType().Name);
         }
         PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
     }
@@ -195,6 +197,7 @@ public class InteractableHouse : InteractableObject
             DeadlineSet = false;
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
+            UI.Instance.SideNotificationPop(GetType().Name);
         }
     }
 
@@ -268,10 +271,25 @@ public class InteractableHouse : InteractableObject
         return clock.Time >= OpenTime && clock.Time < ClosingTime;
     }
 
-    public virtual void PopMyIcon()
+    public virtual void PopMyIcon(string name = "", int items = -1, GameClock time = null)
     {
+        if (string.IsNullOrEmpty(name)) name = GetType().Name;
+        if (items < 0) items = RequiredItems;
+        if (time == null) time = DeadlineTime;
+
+        if (HouseUIActive)
+        {
+            UI.Instance.SideNotificationPush(name, items, time, GetType().Name);
+            PopIcon.gameObject.SetActive(false);
+            return;
+        }
+        else
+        {
+            UI.Instance.SideNotificationPop(GetType().Name);
+        }
+
         PopIcon.gameObject.SetActive(true);
-        PopIcon.Init(GetType().Name, RequiredItems, DeadlineTime);
+        PopIcon.Init(name, items, time);
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
@@ -281,11 +299,15 @@ public class InteractableHouse : InteractableObject
         {
             Camera.main.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.53f, 11.6f, -5.78f));
             CameraLockOnMe = true;
+            HouseUIActive = true;
+            PopIcon.gameObject.SetActive(false);
+
         }
         else if(CameraLockOnMe)
         {
             Camera.main.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
             CameraLockOnMe = false;
+            HouseUIActive = false;
         }
     }
 
