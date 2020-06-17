@@ -136,10 +136,9 @@ public class InteractableHospital : InteractableHouse
     {
         if (house != this) return;
 
-        Player player = GameManager.Instance.Player;
-        PlayerItem item = player.GetItem(ItemType.MEDS);
+        ItemType item = InventoryManager.Instance.GetItem(ItemType.MEDS);
 
-        if (item != null)
+        if (item != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED MEDS!");
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);

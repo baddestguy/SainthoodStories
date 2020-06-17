@@ -48,6 +48,8 @@ public class UI : MonoBehaviour
     public ScrollRect SideNotificationScroller;
     private Dictionary<string, Tuple<GameClock, GameObject, int>> InstantiatedSideNotifications = new Dictionary<string, Tuple<GameClock, GameObject, int>>();
 
+    public GameObject InventoryUI;
+
     void Awake()
     {
         Instance = this;
@@ -181,6 +183,11 @@ public class UI : MonoBehaviour
         GameClock clock = GameManager.Instance.GameClock;
         WeatherIcon.SetActive(clock < end);
         WeatherDisplay.text = clock >= start ? "" : $"{(int)start.Time}:{(start.Time % 1 == 0 ? "00" : "30")}";
+    }
+
+    public void EnableInventoryUI(bool enable)
+    {
+        InventoryUI.SetActive(enable);
     }
 
     public void EnableCurrentUI(bool enable)

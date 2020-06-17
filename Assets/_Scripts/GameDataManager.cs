@@ -56,12 +56,24 @@ public enum TileType
 
 public enum ItemType
 {
-    GROCERIES = 0,
+    NONE = 0,
+    GROCERIES,
     CLOTHES,
     TOYS,
     STATIONERY,
     MEDS,
     MEAL
+}
+
+public enum Provision
+{
+    UMBRELLA,
+    EXTRA_INVENTORY,
+    ENERGY_DRINK,
+    ROSARY,
+    SHOES,
+    COOKING_UTENSILS,
+    DISCOUNT_CARD
 }
 
 public class TileData

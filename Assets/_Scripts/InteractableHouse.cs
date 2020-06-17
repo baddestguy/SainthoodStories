@@ -233,7 +233,7 @@ public class InteractableHouse : InteractableObject
         CurrentCharityPoints += amount;
         Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
         stack.Push(new Tuple<string, int>("CPHappy", amount));
-        stack.Push(new Tuple<string, int>("Energy", -EnergyConsumption));
+        if (EnergyConsumption != 0) stack.Push(new Tuple<string, int>("Energy", -EnergyConsumption));
         StartCoroutine(PopUIFXIconsAsync(stack));
     }
 
@@ -301,6 +301,7 @@ public class InteractableHouse : InteractableObject
             CameraLockOnMe = true;
             HouseUIActive = true;
             PopIcon.gameObject.SetActive(false);
+            UI.Instance.EnableInventoryUI(true);
 
         }
         else if(CameraLockOnMe)
@@ -308,6 +309,7 @@ public class InteractableHouse : InteractableObject
             Camera.main.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
             CameraLockOnMe = false;
             HouseUIActive = false;
+            UI.Instance.EnableInventoryUI(false);
         }
     }
 
