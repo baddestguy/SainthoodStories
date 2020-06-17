@@ -32,10 +32,9 @@
             return;
         }
 
-        Player player = GameManager.Instance.Player;
-        PlayerItem groceries = player.GetItem(ItemType.GROCERIES);
+        ItemType groceries = InventoryManager.Instance.GetItem(ItemType.GROCERIES);
 
-        if (groceries != null)
+        if (groceries != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED GROCERIES!");
             UpdateCharityPoints(ItemDeliveryPoints);
@@ -43,8 +42,8 @@
             return;
         }
 
-        PlayerItem meal = player.GetItem(ItemType.MEAL);
-        if (meal != null)
+        ItemType meal = InventoryManager.Instance.GetItem(ItemType.MEAL);
+        if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
             UpdateCharityPoints(ItemDeliveryPoints*2);
@@ -57,9 +56,8 @@
 
     private void DeliverDeadlineItem()
     {
-        Player player = GameManager.Instance.Player;
-        PlayerItem meal = player.GetItem(ItemType.MEAL);
-        if (meal != null)
+        ItemType meal = InventoryManager.Instance.GetItem(ItemType.MEAL);
+        if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
             UpdateCharityPoints(ItemDeliveryPoints * 2 * DeadlineDeliveryBonus);

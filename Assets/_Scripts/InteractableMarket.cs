@@ -40,7 +40,7 @@ public class InteractableMarket : InteractableHouse
         if (clock.Time >= OpenTime && clock.Time < ClosingTime)
         {
             UI.Instance.DisplayMessage($"PICKED UP {item}!");
-            GameManager.Instance.Player.AddToInventory(new PlayerItem(item));
+            InventoryManager.Instance.AddToInventory(item);
         }
         else
         {

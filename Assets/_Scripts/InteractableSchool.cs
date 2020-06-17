@@ -63,10 +63,9 @@ public class InteractableSchool : InteractableHouse
             return;
         }
 
-        Player player = GameManager.Instance.Player;
-        PlayerItem item = player.GetItem(ItemType.STATIONERY);
+        ItemType item = InventoryManager.Instance.GetItem(ItemType.STATIONERY);
 
-        if (item != null)
+        if (item != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED STATIONERY!");
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);

@@ -29,14 +29,14 @@
         Player player = GameManager.Instance.Player;
         if (player.EnergyDepleted()) return;
 
-        PlayerItem item = player.GetItem(ItemType.GROCERIES);
+        ItemType item = InventoryManager.Instance.GetItem(ItemType.GROCERIES);
         GameClock clock = GameManager.Instance.GameClock;
 
-        if (item != null)
+        if (item != ItemType.NONE)
         {
             player.ConsumeEnergy(EnergyConsumption);
             clock.Tick();
-            player.AddToInventory(new PlayerItem(ItemType.MEAL));
+            InventoryManager.Instance.AddToInventory(ItemType.MEAL);
             UI.Instance.DisplayMessage("COOKED MEAL!");
         }
         else

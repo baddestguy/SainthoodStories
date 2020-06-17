@@ -183,27 +183,6 @@ public class Player : MonoBehaviour
         Debug.Log("Tile bubbly animation!");
     }
 
-    public void AddToInventory(PlayerItem item)
-    {
-        if (Inventory.Count == 2)
-        {
-            UI.Instance.DisplayMessage("INVENTORY FULL!");
-            return;
-        }
-        Inventory.Add(item);
-    }
-
-    public PlayerItem GetItem(ItemType itemType)
-    {
-        int index = Inventory.FindIndex(i => i.Item == itemType);
-        if (index < 0) return null;
-
-        PlayerItem item = Inventory[index];
-        Inventory.RemoveAt(index);
-
-        return item;
-    }
-
     public void ConsumeEnergy(int amount)
     {
         if(amount >= 0)

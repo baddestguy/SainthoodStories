@@ -26,10 +26,9 @@
     {
         if (house != this) return;
 
-        Player player = GameManager.Instance.Player;
-        PlayerItem item = player.GetItem(ItemType.CLOTHES);
+        ItemType item = InventoryManager.Instance.GetItem(ItemType.CLOTHES);
 
-        if (item != null)
+        if (item != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("CLOTHED THE NAKED!");
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);

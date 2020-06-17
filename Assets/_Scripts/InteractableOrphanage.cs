@@ -32,10 +32,9 @@ public class InteractableOrphanage : InteractableHouse
 
         if (DuringOpenHours())
         {
-            Player player = GameManager.Instance.Player;
-            PlayerItem item = player.GetItem(ItemType.TOYS);
+            ItemType item = InventoryManager.Instance.GetItem(ItemType.TOYS);
 
-            if (item != null)
+            if (item != ItemType.NONE)
             {
                 UI.Instance.DisplayMessage("GAVE TOYS TO THE KIDS!");
                 UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);
