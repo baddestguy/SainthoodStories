@@ -19,7 +19,7 @@ public class PopUIFX : MonoBehaviour
     public void Init(string sprite, int value, float speed = 0.5f)
     {
         Icon.sprite = Resources.Load<Sprite>($"Icons/{sprite}");
-        OperatorDisplay.text = value >= 0 ? "+" : "-";
+        OperatorDisplay.text = value > 0 ? "+" : value < 0 ? "-" : "";
         ValueDisplay.text = $"{Mathf.Abs(value)}";
 
         if(value > 0)

@@ -239,9 +239,10 @@ public class InteractableHouse : InteractableObject
 
     public virtual void UpdateFaithPoints(int amount)
     {
-        CurrentFaithPoints += amount;
+        int faithMultiplier = InventoryManager.Instance.HasProvision(Provision.ROSARY) ? 2 : 1;
+        CurrentFaithPoints += amount * faithMultiplier;
         Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
-        stack.Push(new Tuple<string, int>("InteractableChurch", amount));
+        stack.Push(new Tuple<string, int>("InteractableChurch", amount * faithMultiplier));
         stack.Push(new Tuple<string, int>("Energy", 1)); //Prayer Energy should be a variable
         StartCoroutine(PopUIFXIconsAsync(stack));
   
@@ -320,6 +321,7 @@ public class InteractableHouse : InteractableObject
         UI.Volunteer -= VolunteerWork;
         MissionManager.EndOfDay -= EndofDay;
         MissionManager.EndOfDay -= ReportScores;
+        HouseUIActive = false;
         base.OnDisable();
     }
 }

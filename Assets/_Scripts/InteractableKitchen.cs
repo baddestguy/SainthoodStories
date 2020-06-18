@@ -34,8 +34,11 @@
 
         if (item != ItemType.NONE)
         {
-            player.ConsumeEnergy(EnergyConsumption);
-            clock.Tick();
+            if (!InventoryManager.Instance.HasProvision(Provision.COOKING_UTENSILS))
+            {
+                player.ConsumeEnergy(EnergyConsumption);
+                clock.Tick();
+            }
             InventoryManager.Instance.AddToInventory(ItemType.MEAL);
             UI.Instance.DisplayMessage("COOKED MEAL!");
         }

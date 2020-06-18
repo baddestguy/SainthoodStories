@@ -38,6 +38,7 @@ public class MissionManager : MonoBehaviour
 
             EndOfDay?.Invoke();
             UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
+            InventoryManager.Instance.ClearProvisions();
 
             if (FaithPoints < 30 || CharityPoints < 30)
             {

@@ -164,12 +164,19 @@ public class Player : MonoBehaviour
     public int ModifyEnergyConsumption(MapTile tile = null, int amount = 1)
     {
         int energyAmount = amount;
-
+        
+        if (InventoryManager.Instance.HasProvision(Provision.SHOES))
+        {
+            if (Random.Range(0,100) < 30)
+            {
+                energyAmount--;
+            }
+        }
         if(StatusEffect == PlayerStatusEffect.FATIGUED)
         {
             energyAmount++;
         }
-        if(tile != null && WeatherManager.Instance.IsStormy())
+        if(tile != null && WeatherManager.Instance.IsStormy() && !InventoryManager.Instance.HasProvision(Provision.UMBRELLA))
         {
             energyAmount++;
         }        
