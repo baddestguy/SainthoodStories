@@ -79,6 +79,7 @@ public class InteractableChurch : InteractableHouse
 
     public override void PopUICallback(string button)
     {
+        base.PopUICallback(button);
         switch (button)
         {
             case "PRAY":

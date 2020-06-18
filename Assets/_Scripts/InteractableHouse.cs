@@ -29,11 +29,17 @@ public class InteractableHouse : InteractableObject
     protected PopIcon PopIcon;
     protected PopUI PopUI;
     protected string PopUILocation = "";
+    protected string OriginalPopUILocation = "";
 
     public UnityEvent ButtonCallback;
     private bool CameraLockOnMe;
     private PopUIFX PopUIFX;
     public static bool HouseUIActive;
+
+    public BuildingState BuildingState;
+    public int BuildPoints = 3;
+    public GameObject RubbleGo;
+    public GameObject BuildingGo;
 
     protected virtual void Start()
     {
@@ -43,7 +49,25 @@ public class InteractableHouse : InteractableObject
         MissionManager.EndOfDay += ReportScores;
         MissionManager.EndOfDay += EndofDay;
 
-        PopIcon = Instantiate(Resources.Load<GameObject>("UI/PopIcon")).GetComponent<PopIcon>();
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        if (BuildingState == BuildingState.NORMAL)
+        {
+            PopIcon = Instantiate(Resources.Load<GameObject>("UI/PopIcon")).GetComponent<PopIcon>();
+        }
+        else if (BuildingState == BuildingState.RUBBLE)
+        {
+            PopIcon = Instantiate(Resources.Load<GameObject>("UI/PopConstructIcon")).GetComponent<PopIcon>();
+            OriginalPopUILocation = PopUILocation;
+            PopUILocation = "UI/ConstructUI";
+        }
+
+        RubbleGo.SetActive(BuildingState == BuildingState.RUBBLE);
+        BuildingGo.SetActive(BuildingState == BuildingState.NORMAL);
+
         PopIcon.transform.SetParent(transform);
         PopIcon.transform.localPosition = new Vector3(0, 1, 0);
         PopIcon.gameObject.SetActive(false);
@@ -56,8 +80,11 @@ public class InteractableHouse : InteractableObject
             PopUI.gameObject.SetActive(false);
         }
 
-        PopUIFX = Instantiate(Resources.Load("UI/PopUIFX") as GameObject).GetComponent<PopUIFX>();
-        PopUIFX.gameObject.SetActive(false);
+        if(PopUIFX == null)
+        {
+            PopUIFX = Instantiate(Resources.Load("UI/PopUIFX") as GameObject).GetComponent<PopUIFX>();
+            PopUIFX.gameObject.SetActive(false);
+        }
     }
 
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)
@@ -91,6 +118,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual void SetDeadlineTime(double time, int day)
     {
+        if (BuildingState != BuildingState.NORMAL) return;
         if (time < 6 || time >= 18) return;
         if ((DeadlineTime.Time != -1)) return;
 
@@ -218,10 +246,34 @@ public class InteractableHouse : InteractableObject
         }
     }
 
+    public virtual void Build()
+    {
+        BuildPoints--;
+        UI.Instance.DisplayMessage("BUILDING!");
+        if(BuildPoints <= 0)
+        {
+            //Play Cool Construction Vfx and Animation!
+            BuildingState = BuildingState.NORMAL;
+            PopUILocation = OriginalPopUILocation;
+            Destroy(PopUI.gameObject);
+            Initialize();
+            PopUI.gameObject.SetActive(true);
+        }
+        UpdateCharityPoints(VolunteerPoints);
+        GameClock clock = GameManager.Instance.GameClock;
+        Player player = GameManager.Instance.Player;
+        player.ConsumeEnergy(EnergyConsumption); //Umm...?
+        clock.Tick();
+    }
 
     public virtual void PopUICallback(string button)
     {
-
+        switch (button)
+        {
+            case "BUILD":
+                Build();
+                break;
+        }
     }
 
     public virtual void VolunteerWork(InteractableHouse house)

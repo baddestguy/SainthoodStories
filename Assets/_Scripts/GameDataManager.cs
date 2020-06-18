@@ -76,6 +76,13 @@ public enum Provision
     DISCOUNT_CARD
 }
 
+public enum BuildingState
+{
+    NORMAL,
+    RUBBLE,
+    FIRE
+}
+
 public class TileData
 {
     public int Id { get; }

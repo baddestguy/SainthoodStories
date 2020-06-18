@@ -58,8 +58,8 @@ public class PopUI : MonoBehaviour
     {
         if (LockUI) return;
 
-        Callback?.Invoke(button);
         StartCoroutine(ActionPauseCycle());
+        Callback?.Invoke(button);
     }
 
     private IEnumerator ActionPauseCycle()
@@ -86,5 +86,11 @@ public class PopUI : MonoBehaviour
     void Update()
     {
         transform.forward = CamTransform.forward;
+    }
+
+    private void OnDisable()
+    {
+        LockUI = false;
+        Player.LockMovement = false;
     }
 }
