@@ -67,6 +67,8 @@
 
     public override void PopUICallback(string button)
     {
+        base.PopUICallback(button);
+
         switch (button)
         {
             case "FOOD":

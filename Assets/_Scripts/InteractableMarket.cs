@@ -50,7 +50,9 @@ public class InteractableMarket : InteractableHouse
 
     public override void PopUICallback(string button)
     {
-        if(button == "PRAY")
+        base.PopUICallback(button);
+
+        if (button == "PRAY")
         {
             UI.Meditate?.Invoke(this);
             return;

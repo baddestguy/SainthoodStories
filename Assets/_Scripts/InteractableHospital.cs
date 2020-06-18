@@ -83,6 +83,8 @@ public class InteractableHospital : InteractableHouse
 
     public override void PopUICallback(string button)
     {
+        base.PopUICallback(button);
+
         switch (button)
         {
             case "BABY":

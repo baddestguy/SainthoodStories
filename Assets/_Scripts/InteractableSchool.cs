@@ -79,6 +79,8 @@ public class InteractableSchool : InteractableHouse
 
     public override void PopUICallback(string button)
     {
+        base.PopUICallback(button);
+
         switch (button)
         {
             case "TEACH":
@@ -97,6 +99,8 @@ public class InteractableSchool : InteractableHouse
 
     public override void SetDeadlineTime(double time, int day)
     {
+        if (BuildingState != BuildingState.NORMAL) return;
+
         if (time < OpenTime || time >= ClosingTime) return;
         if ((DeadlineTime.Time != -1)) return;
 
