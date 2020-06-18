@@ -16,7 +16,7 @@ public class WeatherManager : MonoBehaviour
     private GameClock WeatherEndTime;
     private DayNightCycle DayNightCycle;
 
-    public static UnityAction<GameClock, GameClock> WeatherForecastActive;
+    public static UnityAction<WeatherType, GameClock, GameClock> WeatherForecastActive;
 
     private void Awake()
     {
@@ -26,17 +26,20 @@ public class WeatherManager : MonoBehaviour
 
     void Start()
     {
-        SceneManager.sceneLoaded += OnLevelLoaded;
         GameClock.Ticked += TriggerWeatherForecast;
+        GameManager.MissionBegin += MissionBegin;
         RainResource = Resources.Load("Weather/Rain");
         WeatherStartTime = new GameClock(0);
         WeatherEndTime = new GameClock(0);
     }
 
-    private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    private void MissionBegin(Mission mission)
     {
-        WeatherType = WeatherType.NONE;
+        WeatherStartTime = new GameClock(0);
+        WeatherEndTime = new GameClock(0);
         DayNightCycle = FindObjectOfType<DayNightCycle>();
+        SetWeather(GameManager.Instance.GameClock.Time);
+        UI.Instance.WeatherAlert(WeatherType, WeatherStartTime, WeatherEndTime);
     }
 
     private void TriggerWeatherForecast(double time, int day)
@@ -49,9 +52,8 @@ public class WeatherManager : MonoBehaviour
                 {
                     CurrentWeatherGO.GetComponent<StormyWeather>().StopStorm();
                     WeatherForecastTriggered = false;
-                    WeatherType = WeatherType.NONE;
+                    SetWeather(time);
                     DayNightCycle.SetFutureSkyBox(WeatherType);
-                    WeatherForecastActive?.Invoke(WeatherStartTime, WeatherEndTime);
                 }
             }
             else
@@ -61,12 +63,16 @@ public class WeatherManager : MonoBehaviour
                     CurrentWeatherGO.SetActive(true);
                     CurrentWeatherGO.GetComponent<StormyWeather>().StartStorm();
                     WeatherType = WeatherType.RAIN;
-                    WeatherForecastActive?.Invoke(WeatherStartTime, WeatherEndTime);
+                    WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
                 }
             }
 
             return;
-        } 
+        }
+        else
+        {
+            SetWeather(time);
+        }
 
         switch (GameManager.MissionDifficulty)
         {
@@ -76,19 +82,19 @@ public class WeatherManager : MonoBehaviour
                     WeatherForecastTriggered = true;
                     WeatherStartTime.SetClock(time + Random.Range(4, 7), day);
                     WeatherEndTime.SetClock(WeatherStartTime.Time + Random.Range(2, 3), WeatherStartTime.Day);
-                    SetWeather();
+                    SetStormyWeather();
                     UI.Instance.DisplayMessage($"INCOMING STORM IN {WeatherStartTime} hours!!");
                     Debug.LogWarning($"INCOMING STORM AT {WeatherStartTime.Time}!! Ends AT {WeatherEndTime.Time}");
                 }
 
                 break;
             case MissionDifficulty.HARD:
-                if (Random.Range(0, 100) < 2)
+                if (Random.Range(0, 100) < 20)
                 {
                     WeatherForecastTriggered = true;
                     WeatherStartTime.SetClock(time + Random.Range(3, 5), day);
                     WeatherEndTime.SetClock(WeatherStartTime.Time + Random.Range(4, 5), WeatherStartTime.Day);
-                    SetWeather();
+                    SetStormyWeather();
                     UI.Instance.DisplayMessage($"INCOMING STORM IN {WeatherStartTime} hours!!");
                     Debug.LogWarning($"INCOMING STORM AT {WeatherStartTime.Time}!! Ends AT {WeatherEndTime.Time}");
                 }
@@ -97,31 +103,50 @@ public class WeatherManager : MonoBehaviour
         }
     }
 
-    private void SetWeather()
+    private void SetWeather(double time)
+    {
+        if (time >= 21 || time < 6)
+        {
+            WeatherType = WeatherType.NIGHT;
+        }
+        else if (time >= 6)
+        {
+            WeatherType = WeatherType.DAY;
+        }
+
+        WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
+    }
+
+    private void SetStormyWeather()
     {
         //pick weather type depending on current environment
         CurrentWeatherGO = Instantiate(RainResource) as GameObject;
         CurrentWeatherGO.SetActive(false);
-        WeatherForecastActive?.Invoke(WeatherStartTime, WeatherEndTime);
-        WeatherType = WeatherType.PRESTORM;
+        WeatherType = WeatherType.PRERAIN;
         DayNightCycle.SetFutureSkyBox(WeatherType);
+        WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
     }
 
     public bool IsStormy()
     {
-        return WeatherType != WeatherType.NONE && WeatherType != WeatherType.PRESTORM; 
+        return WeatherType != WeatherType.DAY && WeatherType != WeatherType.NIGHT && WeatherType != WeatherType.PRERAIN; 
+    }
+
+    public bool IsNormal()
+    {
+        return WeatherType == WeatherType.DAY || WeatherType == WeatherType.NIGHT;
     }
 
     private void MissionComplete(bool complete)
     {
-        WeatherType = WeatherType.NONE;
+        WeatherType = WeatherType.DAY;
         WeatherForecastTriggered = false;
     }
 
     private void OnDisable()
     {
         GameClock.Ticked -= TriggerWeatherForecast;
+        GameManager.MissionBegin -= MissionBegin;
         MissionManager.MissionComplete -= MissionComplete;
-        SceneManager.sceneLoaded -= OnLevelLoaded;
     }
 }

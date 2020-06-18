@@ -180,7 +180,7 @@ public class InteractableHouse : InteractableObject
         {
             case MissionDifficulty.EASY: return Random.Range(6, 9);
             case MissionDifficulty.NORMAL: return Random.Range(5, 8);
-            case MissionDifficulty.HARD: return Random.Range(4, 7);
+            case MissionDifficulty.HARD: return Random.Range(5, 8);
         }
 
         return -1;

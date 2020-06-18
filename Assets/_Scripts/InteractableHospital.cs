@@ -6,6 +6,7 @@ public class InteractableHospital : InteractableHouse
     public GameClock EndDelivery;
     private bool DeliveryTimeSet;
     private bool FailedDelivery;
+    private int DeliveryCountdown = 4;
     public int BabyPoints;
     public int FailedDeliveryPoints;
 
@@ -44,6 +45,7 @@ public class InteractableHospital : InteractableHouse
 
     private void CheckBabyDelivery()
     {
+        if (BuildingState != BuildingState.NORMAL) return;
         if ((!DeliveryTimeSet && !DeadlineSet) && Random.Range(0, 1.0f) > 0.95f)
         {
             SetBabyDelivery();
@@ -54,14 +56,15 @@ public class InteractableHospital : InteractableHouse
     {
         GameClock clock = GameManager.Instance.GameClock;
         DeliveryTimeSet = true;
+        DeliveryCountdown = 4;
 
         StartDelivery = new GameClock(clock.Time, clock.Day);
         EndDelivery = new GameClock(clock.Time, clock.Day);
         StartDelivery.AddTime(6);
         EndDelivery.AddTime(9);
         RandomBabyIcon = "Baby" + Random.Range(1, 3);
-        PopMyIcon(RandomBabyIcon, RequiredItems, StartDelivery);
-        UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
+        PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
+    //    UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
     }
 
     private void CheckFailedDelivery()
@@ -69,7 +72,7 @@ public class InteractableHospital : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         if (DeliveryTimeSet)
         {
-            PopMyIcon(RandomBabyIcon, RequiredItems, StartDelivery);
+            PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
             if (clock > EndDelivery)
             {
                 DeliveryTimeSet = false;
@@ -111,24 +114,26 @@ public class InteractableHospital : InteractableHouse
         Player player = GameManager.Instance.Player;
         if (player.EnergyDepleted()) return;
 
-        if (clock >= StartDelivery && clock < EndDelivery)
+        if (clock < EndDelivery)
         {
             player.ConsumeEnergy(EnergyConsumption);
             clock.Tick();
             UI.Instance.DisplayMessage("Delivering a Baby!!");
             UpdateCharityPoints(BabyPoints);
+            DeliveryCountdown--;
         }
 
-        if (clock == EndDelivery)
+        if (DeliveryCountdown <= 0 || clock == EndDelivery)
         {
             UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
             UpdateCharityPoints(BabyPoints*2);
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
             DeliveryTimeSet = false;
+            DeliveryCountdown = 4;
+            EndDelivery.SetClock(clock.Time-1, clock.Day);
         }
-
-        if (StartDelivery == null || EndDelivery == null || clock < StartDelivery || clock > EndDelivery)
+        else if (EndDelivery == null || clock > EndDelivery)
         {
             UI.Instance.DisplayMessage($"NO BABY TO DELIVER!");
         }
