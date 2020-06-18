@@ -41,6 +41,10 @@ public class GameManager : MonoBehaviour
             Player.GameStart(MissionManager.CurrentMission);
             MissionBegin?.Invoke(MissionManager.CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
+
+            //temp
+            //InventoryManager.Instance.AddProvision(Provision.ROSARY);
+            //InventoryManager.Instance.AddProvision(Provision.SHOES);
         }
     }
 

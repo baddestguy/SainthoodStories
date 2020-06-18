@@ -37,6 +37,26 @@ public class InventoryManager : MonoBehaviour
             return;
         }
         Provisions.Add(provision);
+
+        switch (provision)
+        {
+            case Provision.EXTRA_INVENTORY:
+                MaxInventorySlots = 4;
+                break;
+
+            case Provision.ENERGY_DRINK:
+                Player player = GameManager.Instance.Player;
+                player.ConsumeEnergy(-30);
+                break;
+        }
+
+        RefreshInventoryUI?.Invoke();
+    }
+
+    public void ClearProvisions()
+    {
+        Provisions.Clear();
+        MaxInventorySlots = 2;
         RefreshInventoryUI?.Invoke();
     }
 
@@ -49,6 +69,12 @@ public class InventoryManager : MonoBehaviour
         Items.RemoveAt(index);
 
         RefreshInventoryUI?.Invoke();
+
         return item;
+    }
+
+    public bool HasProvision(Provision provision)
+    {
+        return Provisions.Contains(provision);
     }
 }
