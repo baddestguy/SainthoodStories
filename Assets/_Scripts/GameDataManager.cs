@@ -27,8 +27,9 @@ public enum PlayerFacingDirection
 
 public enum WeatherType
 {
-    NONE = 0,
-    PRESTORM,
+    DAY = 0,
+    NIGHT,
+    PRERAIN,
     RAIN,
     SNOW
 }

@@ -68,10 +68,10 @@ public class DayNightCycle : MonoBehaviour
 
     private void OnTick(double time, int day)
     {
-        SetWeather();
+        SetDayNight();
     }
 
-    private void SetWeather()
+    private void SetDayNight()
     {
         GameClock clock = GameManager.Instance.GameClock;
 
@@ -149,9 +149,9 @@ public class DayNightCycle : MonoBehaviour
             Light.color = Color.Lerp(Light.color, TargetColor, Time.deltaTime);
         }
 
-        if (WeatherManager.Instance.WeatherType != WeatherType.NONE)
+        if (!WeatherManager.Instance.IsNormal())
         {
-            Light.shadowStrength = Mathf.Lerp(Light.shadowStrength, 0.2f, Time.deltaTime);
+            Light.shadowStrength = Mathf.Lerp(Light.shadowStrength, 0.6f, Time.deltaTime);
         }
         else
         {
@@ -163,10 +163,10 @@ public class DayNightCycle : MonoBehaviour
         Bloom.intensity.Override(Mathf.Lerp(Bloom.intensity.GetValue<float>(), TargetBloomIntensity, Time.deltaTime * 0.2f));
         if(Mathf.Abs(CurrentSkybox.GetFloat("_Blend") - BlendValue) < 0.01f)
         {
-            if(WeatherManager.Instance.WeatherType == WeatherType.NONE)
+            if(WeatherManager.Instance.IsNormal())
             {
                 LockSkybox = false;
-                SetWeather();
+                SetDayNight();
             }
         }
     }
@@ -175,7 +175,7 @@ public class DayNightCycle : MonoBehaviour
     {
         switch (type)
         {
-            case WeatherType.PRESTORM:
+            case WeatherType.PRERAIN:
             case WeatherType.RAIN:
             case WeatherType.SNOW:
                 LockSkybox = false;
@@ -184,9 +184,10 @@ public class DayNightCycle : MonoBehaviour
                 LockSkybox = true;
                 return;
 
-            case WeatherType.NONE:
+            case WeatherType.DAY:
+            case WeatherType.NIGHT:
                 LockSkybox = false;
-                SetWeather();
+                SetDayNight();
                 TargetBloomIntensity = 5;
                 return;
         }

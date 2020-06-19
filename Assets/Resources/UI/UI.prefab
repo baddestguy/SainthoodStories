@@ -6408,7 +6408,7 @@ MonoBehaviour:
   ClothesBankUI: {fileID: 141429439979157618}
   EndGameUI: {fileID: 141429441140698819}
   KitchenUI: {fileID: 141429439900848928}
-  WeatherIcon: {fileID: 6250643367513755709}
+  WeatherIcon: {fileID: 6069224475564427414}
   SideNotificationScroller: {fileID: 5341538953675484651}
   InventoryUI: {fileID: 1364892591981243661}
 --- !u!1 &141429441371714423
@@ -9863,7 +9863,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &837211717047944244
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9983,7 +9983,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 23:30
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10052,13 +10052,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: -88.053955, w: -60.707275}
   m_textInfo:
     textComponent: {fileID: 3532550021141140888}
-    characterCount: 5
+    characterCount: 0
     spriteCount: 0
     spaceCount: 0
-    wordCount: 2
+    wordCount: 0
     linkCount: 0
-    lineCount: 1
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0

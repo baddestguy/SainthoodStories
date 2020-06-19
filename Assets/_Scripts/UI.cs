@@ -29,7 +29,7 @@ public class UI : MonoBehaviour
     public GameObject ClothesBankUI;
     public GameObject EndGameUI;
     public GameObject KitchenUI;
-    public GameObject WeatherIcon;
+    public Image WeatherIcon;
 
     public static UnityAction<ItemType> BoughtItem;
     public static UnityAction Taught;
@@ -70,7 +70,7 @@ public class UI : MonoBehaviour
     {
         EnergyDisplay.text = $"{energy.Amount}";
         TimeDisplay.text = $"{(int)clock.Time}:{(clock.Time % 1 == 0 ? "00" : "30")}";
-        DayDisplay.text = $"{clock.Day}/{GameManager.Instance.CurrentMission.TotalDays}";
+        DayDisplay.text = DayofTheWeek(clock.Day);
     }
 
     private void OnPlayerMoved(Energy energy, MapTile tile)
@@ -116,7 +116,7 @@ public class UI : MonoBehaviour
         }
 
         TimeDisplay.text = $"{(int)time}:{(time % 1 == 0 ? "00" : "30")}";
-        DayDisplay.text = $"{day}/{GameManager.Instance.CurrentMission.TotalDays}";
+        DayDisplay.text = DayofTheWeek(day);
     }
 
     public void SideNotificationPush(string sprite, int items, GameClock deadline, string owner)
@@ -178,11 +178,11 @@ public class UI : MonoBehaviour
         return InstantiatedSideNotifications.ContainsKey(owner);
     }
 
-    public void WeatherAlert(GameClock start, GameClock end)
+    public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
     {
         GameClock clock = GameManager.Instance.GameClock;
-        WeatherIcon.SetActive(clock < end);
         WeatherDisplay.text = clock >= start ? "" : $"{(int)start.Time}:{(start.Time % 1 == 0 ? "00" : "30")}";
+        WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/{weather}");
     }
 
     public void EnableInventoryUI(bool enable)
@@ -385,6 +385,21 @@ public class UI : MonoBehaviour
     public void HardRun()
     {
         GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD);
+    }
+
+    private string DayofTheWeek(int Day)
+    {
+        switch (Day)
+        {
+            case 1: return "Mon";
+            case 2: return "Tues";
+            case 3: return "Wed";
+            case 4: return "Thurs";
+            case 5: return "Fri";
+            case 6: return "Sat";
+            case 7: return "Sun";
+        }
+        return "";
     }
 
     private void OnDisable()
