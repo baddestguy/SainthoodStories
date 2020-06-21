@@ -30,6 +30,7 @@ public class UI : MonoBehaviour
     public GameObject EndGameUI;
     public GameObject KitchenUI;
     public Image WeatherIcon;
+    public CustomEventPopup CustomEventPopup;
 
     public static UnityAction<ItemType> BoughtItem;
     public static UnityAction Taught;
@@ -183,6 +184,12 @@ public class UI : MonoBehaviour
         GameClock clock = GameManager.Instance.GameClock;
         WeatherDisplay.text = clock >= start ? "" : $"{(int)start.Time}:{(start.Time % 1 == 0 ? "00" : "30")}";
         WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/{weather}");
+    }
+
+    public void EventAlert(CustomEventData customEvent)
+    {
+        CustomEventPopup.gameObject.SetActive(true);
+        CustomEventPopup.Setup(customEvent);
     }
 
     public void EnableInventoryUI(bool enable)

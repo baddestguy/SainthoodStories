@@ -9,6 +9,7 @@ public class GameClock
     public static bool EndofDay;
 
     public static UnityAction<double, int> Ticked;
+    public static UnityAction ExecuteEvents;
 
     public GameClock(double startTime, int day = 1)
     {
@@ -53,6 +54,7 @@ public class GameClock
         }
 
         Ticked?.Invoke(Time, Day);
+        ExecuteEvents?.Invoke();
     }
 
     public void Reset()

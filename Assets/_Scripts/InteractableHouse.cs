@@ -34,7 +34,7 @@ public class InteractableHouse : InteractableObject
     public UnityEvent ButtonCallback;
     private bool CameraLockOnMe;
     private PopUIFX PopUIFX;
-    public static bool HouseUIActive;
+    public bool HouseUIActive;
 
     public BuildingState BuildingState;
     public int BuildPoints = 3;
@@ -48,6 +48,7 @@ public class InteractableHouse : InteractableObject
         UI.Volunteer += VolunteerWork;
         MissionManager.EndOfDay += ReportScores;
         MissionManager.EndOfDay += EndofDay;
+        EventsManager.EventTriggered += OnEventTriggered;
 
         Initialize();
     }
@@ -366,6 +367,19 @@ public class InteractableHouse : InteractableObject
         }
     }
 
+    private void OnEventTriggered(bool started)
+    {
+        if (started && HouseUIActive)
+        {
+            PopUI.gameObject.SetActive(false);
+        }
+        else if (!started && HouseUIActive)
+        {
+            PopUI.gameObject.SetActive(true);
+        }
+    }
+
+
     public override void OnDisable()
     {
         UI.Meditate -= Meditated;
@@ -373,6 +387,7 @@ public class InteractableHouse : InteractableObject
         UI.Volunteer -= VolunteerWork;
         MissionManager.EndOfDay -= EndofDay;
         MissionManager.EndOfDay -= ReportScores;
+        EventsManager.EventTriggered -= OnEventTriggered;
         HouseUIActive = false;
         base.OnDisable();
     }
