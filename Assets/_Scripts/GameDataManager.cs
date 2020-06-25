@@ -1,115 +1,63 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameDataManager : MonoBehaviour
 {
     public static GameDataManager Instance { get; private set; }
 
+    public Dictionary<EventType, List<CustomEventData>> CustomEventData = new Dictionary<EventType, List<CustomEventData>>();
+    public Dictionary<string, List<LocalizationData>> LocalizationData = new Dictionary<string, List<LocalizationData>>();
+
     void Awake()
     {
         Instance = this;
     }
-}
 
-public enum PlayerStatusEffect
-{
-    NONE = 0,
-    FATIGUED
-}
-
-public enum PlayerFacingDirection
-{
-    UP = 0,
-    DOWN,
-    LEFT,
-    RIGHT
-}
-
-public enum WeatherType
-{
-    DAY = 0,
-    NIGHT,
-    PRERAIN,
-    RAIN,
-    SNOW
-}
-
-public enum TileType
-{
-    PLAYER = 0,
-    ROAD,
-    BARRIER,
-    WATER,
-    SNOW,
-    ICE,
-    TREE,
-    SHELTER,
-    CHURCH,
-    MARKET,
-    HOSPITAL,
-    SCHOOL,
-    CLOTHESBANK,
-    ORPHANAGE,
-    KITCHEN,
-    BANDIT,
-    CHILD
-}
-
-public enum ItemType
-{
-    NONE = 0,
-    GROCERIES,
-    CLOTHES,
-    TOYS,
-    STATIONERY,
-    MEDS,
-    MEAL
-}
-
-public enum Provision
-{
-    UMBRELLA,
-    EXTRA_INVENTORY,
-    ENERGY_DRINK,
-    ROSARY,
-    SHOES,
-    COOKING_UTENSILS,
-    DISCOUNT_CARD
-}
-
-public enum BuildingState
-{
-    NORMAL,
-    RUBBLE,
-    FIRE
-}
-
-public class TileData
-{
-    public int Id { get; }
-    public int TileSpriteId { get; }
-    public TileType TileType { get; }
-
-    public TileData(int id, int tileId, TileType tileType)
+    void Start()
     {
-        Id = id;
-        TileSpriteId = tileId;
-        TileType = tileType;
+        LoadData();        
     }
-}
 
-public class MapData
-{
-    public int MapId { get; }
-    public List<TileData> Tiles { get; }
-    public int Rows { get; }
-    public int Columns { get; }
-
-    public MapData(int mapId, int rows, int columns, List<TileData> tiles)
+    public void LoadData()
     {
-        MapId = mapId;
-        Rows = rows;
-        Columns = columns;
-        Tiles = tiles;
+        StartCoroutine(LoadDataAsync());
+    }
+
+    private IEnumerator LoadDataAsync()
+    {
+        //Custom Events
+        TextAsset csvFile = Resources.Load<TextAsset>("GameData/CustomEvents");
+        var customEvents = CSVSerializer.Deserialize<CustomEventData>(csvFile.text);
+        foreach (var ev in customEvents)
+        {
+            if (CustomEventData.ContainsKey(ev.Id))
+            {
+                CustomEventData[ev.Id].Add(ev);
+            }
+            else
+            {
+                CustomEventData.Add(ev.Id, new List<CustomEventData>() { ev });
+            }
+        }
+
+        yield return null;
+
+        //Localization
+        csvFile = Resources.Load<TextAsset>("GameData/Localization");
+        var locData = CSVSerializer.Deserialize<LocalizationData>(csvFile.text);
+        foreach(var loc in locData)
+        {
+            if (LocalizationData.ContainsKey(loc.Key))
+            {
+                LocalizationData[loc.Key].Add(loc);
+            }
+            else
+            {
+                LocalizationData.Add(loc.Key, new List<LocalizationData>() { loc });
+            }
+        }
+        yield return null;
     }
 }

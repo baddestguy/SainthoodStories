@@ -90,6 +90,11 @@ public class PopUI : MonoBehaviour
 
     private void OnDisable()
     {
+        var buttons = gameObject.GetComponentsInChildren<Button>();
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].interactable = true;
+        }
         LockUI = false;
         Player.LockMovement = false;
     }
