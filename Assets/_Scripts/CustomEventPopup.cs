@@ -11,13 +11,40 @@ public class CustomEventPopup : MonoBehaviour
     public CustomEventData EventData;
     public TextMeshProUGUI EventText;
 
+    public GameObject IconsGO;
+    public TextMeshProUGUI TimeDisplay;
+    public TextMeshProUGUI EnergyDisplay;
+    public TextMeshProUGUI FPCPDisplay;
+    public GameObject FPIcon;
+    public GameObject CPIcon;
+
     private int CurrentSequenceNumber;
 
     public void Setup(CustomEventData customEvent)
     {
         EventData = customEvent;
         YesNoGO.SetActive(customEvent.EventGroup == EventGroup.IMMEDIATE);
+        IconsGO.SetActive(customEvent.EventGroup == EventGroup.IMMEDIATE);
         OKGO.SetActive(customEvent.EventGroup == EventGroup.DAILY);
+
+        switch (customEvent.EventGroup)
+        {
+            case EventGroup.IMMEDIATE:
+                GameClock clock = GameManager.Instance.GameClock;
+                Player player = GameManager.Instance.Player;
+
+                GameClock c = new GameClock(clock.Time);
+                c.AddTicks((int)customEvent.Cost);
+                TimeDisplay.text = $"{(int)c.Time}:{(c.Time % 1 == 0 ? "00" : "30")}";
+
+                var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)customEvent.Cost);
+                EnergyDisplay.text = $"-{moddedEnergy}";
+
+                FPIcon.SetActive(GameDataManager.Instance.IsSpritualEvent(customEvent.Id));
+                CPIcon.SetActive(!GameDataManager.Instance.IsSpritualEvent(customEvent.Id));
+                FPCPDisplay.text = $"+{customEvent.Gain}";
+                break;
+        }
 
         if (customEvent.IsOrderedSequence)
         {
@@ -25,6 +52,7 @@ public class CustomEventPopup : MonoBehaviour
             EventText.text = $"{LocalizationManager.Instance.GetText(customEvent.LocalizationKey, CurrentSequenceNumber)}";
             YesNoGO.SetActive(false);
             OKGO.SetActive(false);
+            IconsGO.SetActive(false);
             NextGO.SetActive(true);
         }
         else
@@ -35,6 +63,30 @@ public class CustomEventPopup : MonoBehaviour
 
     public void Yes()
     {
+        GameClock clock = GameManager.Instance.GameClock;
+        Player player = GameManager.Instance.Player;
+
+        switch (EventData.Id)
+        {
+            case EventType.SPIRITUAL_RETREAT:
+            case EventType.PRAYER_REQUEST:
+                for (int i = 0; i < EventData.Cost; i++)
+                {
+                    clock.Tick();
+                    player.ConsumeEnergy(1);
+                }
+                GameManager.Instance.MissionManager.UpdateFaithPoints((int)EventData.Gain);
+                break;
+
+            case EventType.TOWN_HELP:
+                for (int i = 0; i < EventData.Cost; i++)
+                {
+                    clock.Tick();
+                    player.ConsumeEnergy(1);
+                }
+                GameManager.Instance.MissionManager.UpdateCharityPoints((int)EventData.Gain, null);
+                break;
+        }
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
     }
@@ -60,6 +112,7 @@ public class CustomEventPopup : MonoBehaviour
 
         if(sequences - CurrentSequenceNumber == 1)
         {
+            IconsGO.SetActive(EventData.EventGroup == EventGroup.IMMEDIATE);
             YesNoGO.SetActive(EventData.EventGroup == EventGroup.IMMEDIATE);
             OKGO.SetActive(EventData.EventGroup == EventGroup.DAILY);
             NextGO.SetActive(false);

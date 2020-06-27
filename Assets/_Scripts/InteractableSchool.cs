@@ -159,6 +159,16 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
+    protected override void OnEventExecuted(CustomEventData e)
+    {
+        switch (e.Id)
+        {
+            case EventType.SCHOOL_CLOSED:
+                ClosingTime = 0;
+                break;
+        }
+    }
+
     public override void OnDisable()
     {
         UI.Taught -= Teach;

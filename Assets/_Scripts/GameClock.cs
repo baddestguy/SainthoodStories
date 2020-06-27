@@ -39,6 +39,14 @@ public class GameClock
         }
     }
 
+    public void AddTicks(double ticks)
+    {
+        for(int i = 0; i < ticks; i++)
+        {
+            Time += 0.5;
+        }
+    }
+
     public void Tick()
     {
         Time += 0.5;

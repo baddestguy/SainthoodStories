@@ -7,6 +7,7 @@ public class MissionManager : MonoBehaviour
     public Mission CurrentMission;
     public static UnityAction<bool> MissionComplete;
     public static UnityAction EndOfDay;
+    public static UnityAction StartNewDay;
 
     public Dictionary<TileType, int> HouseScores;
     public int CharityPoints { get; private set; }
@@ -37,7 +38,6 @@ public class MissionManager : MonoBehaviour
             UI.Instance.ReportDisplay.text += "DAY REPORT" + "\n\n";
 
             EndOfDay?.Invoke();
-            UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
             InventoryManager.Instance.ClearProvisions();
 
             if (FaithPoints < 30 || CharityPoints < 30)
@@ -58,17 +58,25 @@ public class MissionManager : MonoBehaviour
             {
                 EndMission();
             }
+            else
+            {
+                StartNewDay?.Invoke();
+            }
         }
     }
 
     public void UpdateFaithPoints(int amount)
     {
         FaithPoints = Mathf.Clamp(FaithPoints + amount, 0, 100);
+        UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
     }
 
     public void UpdateCharityPoints(int amount, InteractableHouse house)
     {
         CharityPoints = Mathf.Clamp(CharityPoints + amount, 0, 100);
+        UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
+
+        if (house == null) return;
         HouseScores[house.TileType] = amount;
 
         UI.Instance.DisplayReport(house.TileType + " : " + amount);

@@ -123,10 +123,11 @@ public class InteractableOrphanage : InteractableHouse
 
         if (DuringOpenHours())
         {
+            CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.ORPHANAGE_BONUS);
             player.ConsumeEnergy(EnergyConsumption);
             clock.Tick();
             UI.Instance.DisplayMessage("VOLUNTEERED AT ORPHANAGE!");
-            UpdateCharityPoints(VolunteerPoints);
+            UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0));
         }
         else
         {

@@ -51,6 +51,8 @@ public class InteractableChurch : InteractableHouse
     private void UpdateLiturgyTimes()
     {
         GameClock clock = GameManager.Instance.GameClock;
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.WEEKDAY_MASS);
+
         if (clock.Time > 21.5 || clock.Time <= 6.5)
         {
             LiturgyStartTime = 6;
@@ -63,7 +65,7 @@ public class InteractableChurch : InteractableHouse
         }
         else if(clock.Time > 12.5)
         {
-            if(clock.Day % 7 != 0) //No 6pm liturgy of the hours on Sundays
+            if(clock.Day % 7 != 0 || e != null) //No 6pm liturgy of the hours on Sundays or Weekday Mass
             {
                 LiturgyStartTime = 18;
                 LiturgyEndTime = 19;
@@ -114,7 +116,9 @@ public class InteractableChurch : InteractableHouse
     {
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
-        if (clock.Day % 7 == 0)
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.WEEKDAY_MASS);
+
+        if (clock.Day % 7 == 0 || e != null)
         {
             if (clock.Time == ConfessionTime)
             {
@@ -164,7 +168,7 @@ public class InteractableChurch : InteractableHouse
 
     public override void ReportScores()
     {
-        GameManager.Instance.MissionManager.UpdateFaithPoints(CurrentFaithPoints - NeglectedPoints);
+        GameManager.Instance.MissionManager.UpdateFaithPoints(-NeglectedPoints);
         CurrentFaithPoints = 0;
     }
 

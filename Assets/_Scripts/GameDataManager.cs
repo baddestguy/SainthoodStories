@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameDataManager : MonoBehaviour
 {
@@ -59,5 +61,24 @@ public class GameDataManager : MonoBehaviour
             }
         }
         yield return null;
+    }
+
+    public CustomEventData GetRandomEvent(EventGroup eGroup)
+    {
+        List<CustomEventData> list = new List<CustomEventData>();
+        foreach(var ePair in CustomEventData)
+        {
+            var e = ePair.Value[Random.Range(0,ePair.Value.Count)]; //Based on weight
+            list.Add(e);
+        }
+
+        var groupList = list.Where(e => e.EventGroup == eGroup).ToList();
+        return groupList[Random.Range(0, groupList.Count)];
+    }
+
+    public bool IsSpritualEvent(EventType e)
+    {
+        return e == EventType.SPIRITUAL_RETREAT ||
+            e == EventType.PRAYER_REQUEST;
     }
 }

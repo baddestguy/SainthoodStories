@@ -79,28 +79,34 @@ public class WeatherManager : MonoBehaviour
             case MissionDifficulty.NORMAL:
                 if (Random.Range(0, 100) < 1)
                 {
-                    WeatherForecastTriggered = true;
-                    WeatherStartTime.SetClock(time + Random.Range(4, 7), day);
-                    WeatherEndTime.SetClock(WeatherStartTime.Time + Random.Range(2, 3), WeatherStartTime.Day);
-                    SetStormyWeather();
-                    UI.Instance.DisplayMessage($"INCOMING STORM IN {WeatherStartTime} hours!!");
-                    Debug.LogWarning($"INCOMING STORM AT {WeatherStartTime.Time}!! Ends AT {WeatherEndTime.Time}");
+                    WeatherActivation(Random.Range(4, 7), Random.Range(2, 3));
                 }
-
                 break;
+
             case MissionDifficulty.HARD:
                 if (Random.Range(0, 100) < 20)
                 {
-                    WeatherForecastTriggered = true;
-                    WeatherStartTime.SetClock(time + Random.Range(3, 5), day);
-                    WeatherEndTime.SetClock(WeatherStartTime.Time + Random.Range(4, 5), WeatherStartTime.Day);
-                    SetStormyWeather();
-                    UI.Instance.DisplayMessage($"INCOMING STORM IN {WeatherStartTime} hours!!");
-                    Debug.LogWarning($"INCOMING STORM AT {WeatherStartTime.Time}!! Ends AT {WeatherEndTime.Time}");
+                    WeatherActivation(Random.Range(3, 5), Random.Range(4, 5));
                 }
-
                 break;
         }
+    }
+
+    private void WeatherActivation(int futureStartTime, int futureEndTime)
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+
+        WeatherForecastTriggered = true;
+        WeatherStartTime.SetClock(clock.Time + futureStartTime, clock.Day);
+        WeatherEndTime.SetClock(WeatherStartTime.Time + futureEndTime, WeatherStartTime.Day);
+        SetStormyWeather();
+        UI.Instance.DisplayMessage($"INCOMING STORM IN {WeatherStartTime} hours!!");
+        Debug.LogWarning($"INCOMING STORM AT {WeatherStartTime.Time}!! Ends AT {WeatherEndTime.Time}");
+    }
+
+    public void OverrideWeatherActivation(int futureStartTime, int futureEndTime)
+    {
+        WeatherActivation(futureStartTime, futureEndTime);
     }
 
     private void SetWeather(double time)
