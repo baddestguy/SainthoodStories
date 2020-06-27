@@ -12,11 +12,11 @@ Tutorial_10,Hi there!,Bonjour,Hi there!,Bonjour,Hi there!,Bonjour,Hi there!
 Event_MarketHours_24,Good News! The shop will open for 24 hours!,"shop 1, french man, happy.","shop 1, BrPT","shop 1, Filipino",shop 1 Spanish,shop 1 Italian,shop 1 German
 Event_MarketHours_24,I just heard that the shop will be open for the next 24 hours!,"shop 2, french man, happy.","shop 2, BrPT","shop 2, Filipino",shop 2 Spanish,shop 2 Italian,shop 2 German
 Event_MarketHours_24,"The shopkeeper is in a great mood today, he just informed me that he will keep the shop open for the next 24 hours.","shop 3, french man, happy.","shop 3, BrPT","shop 3, Filipino",shop 3 Spanish,shop 3 Italian,shop 3 German
-Event_MarketHours_18,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_Rain_6,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_Rain_12,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_Rain_24,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_BabyFever,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_MarketHours_18,The shop will open for 18 hours today!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_Rain_6,"The Prioress walks up to you with a grim expression. ""Looks like its going to rain heavily today"" she says.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_Rain_12,"The Prioress walks up to you with a grim expression. ""Looks like its going to rain heavily today"" she says.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_Rain_24,"The Prioress walks up to you with a grim expression. ""Looks like its going to rain heavily today"" she says.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_BabyFever,"A nurse from the hospital comes to you with excitement on her face. ""We have so many women in labour today, we need all the help we can get!"".",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_MarketDiscount_15,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_MarketDiscount_30,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_MarketDiscount_50,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
@@ -24,6 +24,16 @@ Event_MarketDiscount_100,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi th
 Event_MarketMarkup_10,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_MarketMarkup_20,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_MarketMarkup_30,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_WeekdayMass,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_SchoolClosed,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_Sick,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_WeekdayMass,"The Prioress's face is red with excitement. ""I just got news that the Bishop is coming to give a special Mass this evening! I hope you can make it!"".",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_SchoolClosed,"The headmaster from the school pays you a visit. """"School's closed today"" he says, and walks out.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_Sick,"You feel a fever creeping all over your body. ""You don't look so good, perhaps you should take it easy today"" the Prioress says.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_HighSpirit,You wake up today with a high spiritual energy.,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_LowSpirit,You wake up with a gloom feeling of existential dread.,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_HighMorale,"The town leader taps you on the shoulder. ""Everyone seems to be in high spirits today!"".",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_LowMorale,"The town leader walks in looking grim, ""Everyone is in a bad mood today, including myself"".",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_OrphanageBonus,"The Orphage Nun catches up to you. ""We are planning a special event with the kids today, would be lovely if could make it!"".",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_HospitalBonus,"The nurse pays you a visit at the Convent. ""We are going to need some extra helping hands today, it's very busy"".",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_Vandalism,"The Prioress storms into your room. ""We've been robbed!"" she screams in a panic.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_SpiritualRetreat,"One of the novitiates runs up to you. ""We are having a little spiritual retreat and would love for you to join us.""",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_PrayerRequest,"One of the villagers catches up to you. ""Would you please pray for my boy, he's not feeling so well""",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_TownHelp,"While walking through the town, some women call for you to help them with cooking. ""An extra helping hand would be great!"".",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!

@@ -164,8 +164,9 @@ public class Player : MonoBehaviour
     public int ModifyEnergyConsumption(MapTile tile = null, int amount = 1)
     {
         int energyAmount = amount;
-        
-        if (InventoryManager.Instance.HasProvision(Provision.SHOES))
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.SICK);
+
+        if (tile != null && InventoryManager.Instance.HasProvision(Provision.SHOES))
         {
             if (Random.Range(0,100) < 30)
             {
@@ -179,7 +180,11 @@ public class Player : MonoBehaviour
         if(tile != null && WeatherManager.Instance.IsStormy() && !InventoryManager.Instance.HasProvision(Provision.UMBRELLA))
         {
             energyAmount++;
-        }        
+        }     
+        if(e != null)
+        {
+            energyAmount += (int)e.Cost;
+        }
 
         return energyAmount; 
     }

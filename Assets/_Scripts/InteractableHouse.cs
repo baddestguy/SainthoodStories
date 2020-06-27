@@ -34,7 +34,7 @@ public class InteractableHouse : InteractableObject
     public UnityEvent ButtonCallback;
     private bool CameraLockOnMe;
     private PopUIFX PopUIFX;
-    public bool HouseUIActive;
+    public static bool HouseUIActive;
 
     public BuildingState BuildingState;
     public int BuildPoints = 3;
@@ -48,7 +48,8 @@ public class InteractableHouse : InteractableObject
         UI.Volunteer += VolunteerWork;
         MissionManager.EndOfDay += ReportScores;
         MissionManager.EndOfDay += EndofDay;
-        EventsManager.EventTriggered += OnEventTriggered;
+        EventsManager.EventDialogTriggered += OnEventDialogTriggered;
+        EventsManager.EventExecuted += OnEventExecuted;
 
         Initialize();
     }
@@ -283,28 +284,50 @@ public class InteractableHouse : InteractableObject
 
     public virtual void UpdateCharityPoints(int amount)
     {
-        CurrentCharityPoints += amount;
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.HIGH_MORALE || i.Id == EventType.LOW_MORALE);
+        int charityMultiplier = 1;
+        if (e != null)
+        {
+            if (Random.Range(0, 100) < 20)
+            {
+                charityMultiplier += e.Id == EventType.HIGH_MORALE ? (int)e.Gain : -charityMultiplier;
+            }
+        }
+
+        CurrentCharityPoints += amount * charityMultiplier;
         Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
         stack.Push(new Tuple<string, int>("CPHappy", amount));
         if (EnergyConsumption != 0) stack.Push(new Tuple<string, int>("Energy", -EnergyConsumption));
         StartCoroutine(PopUIFXIconsAsync(stack));
+
+        GameManager.Instance.MissionManager.UpdateCharityPoints(amount * charityMultiplier, null);
     }
 
     public virtual void UpdateFaithPoints(int amount)
     {
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.HIGH_SPIRIT || i.Id == EventType.LOW_SPIRIT);
+
         int faithMultiplier = InventoryManager.Instance.HasProvision(Provision.ROSARY) ? 2 : 1;
+        if(e != null)
+        {
+            if(Random.Range(0,100) < 20)
+            {
+                faithMultiplier += e.Id == EventType.HIGH_SPIRIT ? (int)e.Gain : -faithMultiplier;
+            }
+        }
         CurrentFaithPoints += amount * faithMultiplier;
         Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
         stack.Push(new Tuple<string, int>("InteractableChurch", amount * faithMultiplier));
         stack.Push(new Tuple<string, int>("Energy", 1)); //Prayer Energy should be a variable
         StartCoroutine(PopUIFXIconsAsync(stack));
   
+        GameManager.Instance.MissionManager.UpdateFaithPoints(amount * faithMultiplier);
         Debug.LogWarning("FAITH: " + CurrentFaithPoints);
     }
 
     public virtual void ReportScores()
     {
-        GameManager.Instance.MissionManager.UpdateCharityPoints(CurrentCharityPoints > 0 ? CurrentCharityPoints : (NeglectedPoints * NeglectedMultiplier), this);
+        GameManager.Instance.MissionManager.UpdateCharityPoints(CurrentCharityPoints > 0 ? 0 : (NeglectedPoints * NeglectedMultiplier), this);
 
         if (CurrentCharityPoints <= 0)
         {
@@ -367,18 +390,22 @@ public class InteractableHouse : InteractableObject
         }
     }
 
-    private void OnEventTriggered(bool started)
+    private void OnEventDialogTriggered(bool started)
     {
-        if (started && HouseUIActive)
+        if (started && CameraLockOnMe)
         {
             PopUI.gameObject.SetActive(false);
         }
-        else if (!started && HouseUIActive)
+        else if (!started && CameraLockOnMe)
         {
             PopUI.gameObject.SetActive(true);
         }
     }
 
+    protected virtual void OnEventExecuted(CustomEventData e)
+    {
+
+    }
 
     public override void OnDisable()
     {
@@ -387,7 +414,9 @@ public class InteractableHouse : InteractableObject
         UI.Volunteer -= VolunteerWork;
         MissionManager.EndOfDay -= EndofDay;
         MissionManager.EndOfDay -= ReportScores;
-        EventsManager.EventTriggered -= OnEventTriggered;
+        EventsManager.EventDialogTriggered -= OnEventDialogTriggered;
+        EventsManager.EventExecuted -= OnEventExecuted;
+
         HouseUIActive = false;
         base.OnDisable();
     }
