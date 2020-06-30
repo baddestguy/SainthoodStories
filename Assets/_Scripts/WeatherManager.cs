@@ -84,7 +84,7 @@ public class WeatherManager : MonoBehaviour
                 break;
 
             case MissionDifficulty.HARD:
-                if (Random.Range(0, 100) < 20)
+                if (Random.Range(0, 100) < 2)
                 {
                     WeatherActivation(Random.Range(3, 5), Random.Range(4, 5));
                 }

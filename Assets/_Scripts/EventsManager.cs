@@ -38,8 +38,8 @@ public class EventsManager : MonoBehaviour
 
     private IEnumerator ExecuteEventsAsync()
     {
-        Player.LockMovement = true;
         EventDialogTriggered?.Invoke(true);
+        Player.LockMovement = true;
 
         //Execute events one by one
         foreach (var e in EventList)

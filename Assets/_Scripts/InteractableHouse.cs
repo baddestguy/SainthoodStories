@@ -296,7 +296,7 @@ public class InteractableHouse : InteractableObject
 
         CurrentCharityPoints += amount * charityMultiplier;
         Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
-        stack.Push(new Tuple<string, int>("CPHappy", amount));
+        stack.Push(new Tuple<string, int>("CPHappy", amount * charityMultiplier));
         if (EnergyConsumption != 0) stack.Push(new Tuple<string, int>("Energy", -EnergyConsumption));
         StartCoroutine(PopUIFXIconsAsync(stack));
 

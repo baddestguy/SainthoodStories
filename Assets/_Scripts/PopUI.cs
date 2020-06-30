@@ -78,6 +78,8 @@ public class PopUI : MonoBehaviour
         {
             buttons[i].interactable = true;
         }
+
+        yield return new WaitForSeconds(0.1f);
         
         LockUI = false;
         Player.LockMovement = false;

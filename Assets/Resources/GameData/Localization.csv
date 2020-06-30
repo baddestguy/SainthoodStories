@@ -17,15 +17,15 @@ Event_Rain_6,"The Prioress walks up to you with a grim expression. ""Looks like 
 Event_Rain_12,"The Prioress walks up to you with a grim expression. ""Looks like its going to rain heavily today"" she says.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_Rain_24,"The Prioress walks up to you with a grim expression. ""Looks like its going to rain heavily today"" she says.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_BabyFever,"A nurse from the hospital comes to you with excitement on her face. ""We have so many women in labour today, we need all the help we can get!"".",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_MarketDiscount_15,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_MarketDiscount_30,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_MarketDiscount_50,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_MarketDiscount_100,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_MarketMarkup_10,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_MarketMarkup_20,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_MarketMarkup_30,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_MarketDiscount_15,The shopkeeper is discounting all items in the store today at 15%.,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_MarketDiscount_30,The shopkeeper is discounting all items in the store today at 30%.,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_MarketDiscount_50,The shopkeeper is discounting all items in the store today at 50%.,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_MarketDiscount_100,The shopkeeper is discounting all items in the store today at 15%,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_MarketMarkup_10,Unfortunately prices have gone up today. There will be a 10% increase on all items.,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_MarketMarkup_20,Unfortunately prices have gone up today. There will be a 20% increase on all items.,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_MarketMarkup_30,Unfortunately prices have gone up today. There will be a 30% increase on all items.,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_WeekdayMass,"The Prioress's face is red with excitement. ""I just got news that the Bishop is coming to give a special Mass this evening! I hope you can make it!"".",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
-Event_SchoolClosed,"The headmaster from the school pays you a visit. """"School's closed today"" he says, and walks out.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
+Event_SchoolClosed,"The headmaster from the school pays you a visit. ""School's closed today"" he says, and walks out.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_Sick,"You feel a fever creeping all over your body. ""You don't look so good, perhaps you should take it easy today"" the Prioress says.",Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_HighSpirit,You wake up today with a high spiritual energy.,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
 Event_LowSpirit,You wake up with a gloom feeling of existential dread.,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!,Hi there!
