@@ -119,6 +119,14 @@ public enum Language
 }
 
 [System.Serializable]
+public class ProvisionData
+{
+    public Provision Id;
+    public string NameKey;
+    public string DescriptionKey;
+}
+
+[System.Serializable]
 public class CustomEventData
 {
     public EventType Id;

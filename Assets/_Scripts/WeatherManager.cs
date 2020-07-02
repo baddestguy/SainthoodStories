@@ -100,7 +100,6 @@ public class WeatherManager : MonoBehaviour
         WeatherStartTime.SetClock(clock.Time + futureStartTime, clock.Day);
         WeatherEndTime.SetClock(WeatherStartTime.Time + futureEndTime, WeatherStartTime.Day);
         SetStormyWeather();
-        UI.Instance.DisplayMessage($"INCOMING STORM IN {WeatherStartTime} hours!!");
         Debug.LogWarning($"INCOMING STORM AT {WeatherStartTime.Time}!! Ends AT {WeatherEndTime.Time}");
     }
 
@@ -145,8 +144,19 @@ public class WeatherManager : MonoBehaviour
 
     private void MissionComplete(bool complete)
     {
-        WeatherType = WeatherType.DAY;
+        ResetWeather();
+    }
+
+    public void ResetWeather()
+    {
+        if(CurrentWeatherGO != null)
+        {
+            CurrentWeatherGO.GetComponent<StormyWeather>().StopStorm();
+        }
+
         WeatherForecastTriggered = false;
+        SetWeather(GameManager.Instance.GameClock.Time);
+        DayNightCycle.SetFutureSkyBox(WeatherType);
     }
 
     private void OnDisable()

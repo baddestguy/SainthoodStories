@@ -91,6 +91,11 @@ public class EventsManager : MonoBehaviour
         EventExecuted?.Invoke(e);
     }
 
+    public bool HasEventsInQueue()
+    {
+        return EventList.Count > 0;
+    }
+
     private void OnDisable()
     {
         GameClock.ExecuteEvents -= ExecuteEvents;

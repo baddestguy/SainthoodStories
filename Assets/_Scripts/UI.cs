@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -49,7 +50,13 @@ public class UI : MonoBehaviour
     public ScrollRect SideNotificationScroller;
     private Dictionary<string, Tuple<GameClock, GameObject, int>> InstantiatedSideNotifications = new Dictionary<string, Tuple<GameClock, GameObject, int>>();
 
+    private GameObject BuildingAlertResource;
+    public ScrollRect BuildingAlertScroller;
+    private Dictionary<string, GameObject> InstantiatedBuildingAlerts = new Dictionary<string, GameObject>();
+
     public GameObject InventoryUI;
+    public ProvisionsPopup ProvisionPopup;
+    public Image Black;
 
     void Awake()
     {
@@ -65,6 +72,7 @@ public class UI : MonoBehaviour
         WeatherManager.WeatherForecastActive += WeatherAlert;
 
         SideNotificationResource = Resources.Load("UI/SideNotification") as GameObject;
+        BuildingAlertResource = Resources.Load("UI/BuildingIcon") as GameObject;
     }
 
     public void InitTimeEnergy(GameClock clock, Energy energy)
@@ -118,6 +126,43 @@ public class UI : MonoBehaviour
 
         TimeDisplay.text = $"{(int)time}:{(time % 1 == 0 ? "00" : "30")}";
         DayDisplay.text = DayofTheWeek(day);
+    }
+
+    public void EnableProvisionPopup(ProvisionData prov1, ProvisionData prov2)
+    {
+        ProvisionPopup.gameObject.SetActive(true);
+        ProvisionPopup.Init(prov1, prov2);
+    }
+
+    public void BuildingAlertPush(string sprite)
+    {
+        if (IsDuplicateBuildingAlert(sprite)) return;
+
+        GameObject BuildAlertGO = Instantiate(BuildingAlertResource);
+        BuildAlertGO.transform.SetParent(BuildingAlertScroller.content, false);
+        BuildAlertGO.GetComponent<Image>().sprite = Resources.Load<Sprite>($"Icons/{sprite}");
+        BuildAlertGO.GetComponent<Image>().color = Color.red;
+
+        InstantiatedBuildingAlerts.Add(sprite, BuildAlertGO);
+    }
+
+    public void BuildingAlertPop(string sprite)
+    {
+        if (BuildingAlertScroller.content.childCount <= 0 || !InstantiatedBuildingAlerts.ContainsKey(sprite)) return;
+   
+        Destroy(InstantiatedBuildingAlerts[sprite]);
+        InstantiatedBuildingAlerts.Remove(sprite);
+    }
+
+    private bool IsDuplicateBuildingAlert(string owner)
+    {
+        if (InstantiatedBuildingAlerts.ContainsKey(owner))
+        {
+            BuildingAlertPop(owner);
+            return false;
+        }
+
+        return InstantiatedBuildingAlerts.ContainsKey(owner);
     }
 
     public void SideNotificationPush(string sprite, int items, GameClock deadline, string owner)
@@ -407,6 +452,28 @@ public class UI : MonoBehaviour
             case 7: return "Sun";
         }
         return "";
+    }
+
+    public void CrossFade(float fade, float speed = 5f)
+    {
+        StartCoroutine(CrossFadeAsync(fade, speed));
+    }
+
+    private IEnumerator CrossFadeAsync(float fade, float speed)
+    {
+        Black.gameObject.SetActive(true);
+        Color c = Black.color;
+
+        while(Math.Abs(c.a - fade) > 0.01f)
+        {
+            c.a = Mathf.Lerp(c.a, fade, Time.deltaTime * speed);
+            Black.color = c;
+            yield return null;
+        }
+
+        c.a = fade;
+        Black.color = c;
+        Black.gameObject.SetActive(fade != 0);
     }
 
     private void OnDisable()

@@ -250,6 +250,9 @@ public class InteractableHouse : InteractableObject
 
     public virtual void Build()
     {
+        Player player = GameManager.Instance.Player;
+        if (player.EnergyDepleted()) return;
+
         BuildPoints--;
         UI.Instance.DisplayMessage("BUILDING!");
         if(BuildPoints <= 0)
@@ -263,7 +266,6 @@ public class InteractableHouse : InteractableObject
         }
         UpdateCharityPoints(VolunteerPoints);
         GameClock clock = GameManager.Instance.GameClock;
-        Player player = GameManager.Instance.Player;
         player.ConsumeEnergy(EnergyConsumption); //Umm...?
         clock.Tick();
     }
@@ -301,6 +303,7 @@ public class InteractableHouse : InteractableObject
         StartCoroutine(PopUIFXIconsAsync(stack));
 
         GameManager.Instance.MissionManager.UpdateCharityPoints(amount * charityMultiplier, null);
+        UI.Instance.BuildingAlertPop(GetType().Name);
     }
 
     public virtual void UpdateFaithPoints(int amount)

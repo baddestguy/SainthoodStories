@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
@@ -32,7 +33,7 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-        if(scene.name.Contains("Level"))
+        if (scene.name.Contains("Level"))
         {
             Instantiate(Resources.Load("UI/UI") as GameObject);
             Player = FindObjectOfType<Player>();
@@ -41,10 +42,7 @@ public class GameManager : MonoBehaviour
             Player.GameStart(MissionManager.CurrentMission);
             MissionBegin?.Invoke(MissionManager.CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
-
-            //temp
-            //InventoryManager.Instance.AddProvision(Provision.ROSARY);
-            //InventoryManager.Instance.AddProvision(Provision.SHOES);
+            UI.Instance.CrossFade(0f);
         }
     }
 
@@ -71,21 +69,28 @@ public class GameManager : MonoBehaviour
     {
         switch (missionDifficulty)
         {
-            case MissionDifficulty.EASY: 
-                CurrentMission = new Mission(75, 75, 30, 5.5, 1); 
-                SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
-                break;
-            case MissionDifficulty.NORMAL: 
-                CurrentMission = new Mission(50, 50, 20, 5.5, 7); 
-                SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
-                break;
-            case MissionDifficulty.HARD: 
+            //case MissionDifficulty.EASY: 
+            //    CurrentMission = new Mission(75, 75, 30, 5.5, 1); 
+            //    SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
+            //    break;
+            //case MissionDifficulty.NORMAL: 
+            //    CurrentMission = new Mission(50, 50, 20, 5.5, 7); 
+            //    SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
+            //    break;
+            case MissionDifficulty.HARD:
                 CurrentMission = new Mission(30, 30, 20, 5.5, 7);
-                SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
+                StartCoroutine(WaitAndLoadScene());
                 break;
         }
 
         MissionDifficulty = missionDifficulty;
+    }
+
+    private IEnumerator WaitAndLoadScene()
+    {
+        UI.Instance.CrossFade(1f);
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
     }
 
     public void SaveGame()
