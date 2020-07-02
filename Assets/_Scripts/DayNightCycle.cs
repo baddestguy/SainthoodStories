@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -31,6 +32,7 @@ public class DayNightCycle : MonoBehaviour
         CurrentSkybox.SetFloat("_Blend", 0);
         StartingSkybox();
         OnTick(GameManager.Instance.GameClock.Time, GameManager.Instance.GameClock.Day);
+     //   StartCoroutine(RunDayNightCycle());
     }
 
     private void StartingSkybox()
@@ -227,5 +229,16 @@ public class DayNightCycle : MonoBehaviour
         }
 
         BlendValue = BlendValue < 0.5f ? 1f : 0f;
+    }
+
+    private IEnumerator RunDayNightCycle()
+    {
+        yield return new WaitForSeconds(5f);
+        var clock = GameManager.Instance.GameClock;
+        while (true)
+        {
+            clock.Tick();
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 }

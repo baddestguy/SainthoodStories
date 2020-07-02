@@ -62,6 +62,10 @@ public class MissionManager : MonoBehaviour
             {
                 StartNewDay?.Invoke();
             }
+
+            //Randomly add a new provision everyday
+            InventoryManager.Instance.ClearProvisions();
+            InventoryManager.Instance.AddProvision((Provision)Random.Range(0,7));
         }
     }
 
