@@ -65,6 +65,8 @@ public class CustomEventPopup : MonoBehaviour
     {
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
+        var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
+        if (player.EnergyDepleted(moddedEnergy)) return;
 
         switch (EventData.Id)
         {

@@ -11,6 +11,7 @@ public class GameDataManager : MonoBehaviour
 
     public Dictionary<EventType, List<CustomEventData>> CustomEventData = new Dictionary<EventType, List<CustomEventData>>();
     public Dictionary<string, List<LocalizationData>> LocalizationData = new Dictionary<string, List<LocalizationData>>();
+    public Dictionary<Provision, ProvisionData> ProvisionData = new Dictionary<Provision, ProvisionData>();
 
     void Awake()
     {
@@ -49,7 +50,7 @@ public class GameDataManager : MonoBehaviour
         //Localization
         csvFile = Resources.Load<TextAsset>("GameData/Localization");
         var locData = CSVSerializer.Deserialize<LocalizationData>(csvFile.text);
-        foreach(var loc in locData)
+        foreach (var loc in locData)
         {
             if (LocalizationData.ContainsKey(loc.Key))
             {
@@ -59,6 +60,16 @@ public class GameDataManager : MonoBehaviour
             {
                 LocalizationData.Add(loc.Key, new List<LocalizationData>() { loc });
             }
+        }
+
+        yield return null;
+
+        //Provisions
+        csvFile = Resources.Load<TextAsset>("GameData/Provisions");
+        var provData = CSVSerializer.Deserialize<ProvisionData>(csvFile.text);
+        foreach (var prov in provData)
+        {
+            ProvisionData.Add(prov.Id, prov);
         }
         yield return null;
     }

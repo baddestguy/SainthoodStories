@@ -9,12 +9,13 @@ public class Player : MonoBehaviour
     public static event UnityAction<Energy, MapTile> OnMoveSuccessEvent;
     public static event UnityAction OnEnergyDepleted;
     public GameMap Map;
-    
+
     private Energy Energy;
     private int EnergyConsumption;
     [SerializeField]
     private MapTile CurrentTile;
     private MapTile StartTile;
+    private int StartingEnergy;
     private Dictionary<PlayerFacingDirection, MapTile> AdjacentTiles;
     private List<PlayerItem> Inventory = new List<PlayerItem>();
     private Vector3 TargetPosition;
@@ -37,9 +38,9 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if((transform.position - TargetPosition).magnitude > 0.11)
+        if ((transform.position - TargetPosition).magnitude > 0.11)
         {
-            transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime*5);
+            transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime * 5);
         }
         else
         {
@@ -58,6 +59,7 @@ public class Player : MonoBehaviour
     {
         StartTile = CurrentTile;
         Energy = missionDetails.StartingEnergy;
+        StartingEnergy = Energy.Amount;
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
         LockMovement = false;
     }
@@ -69,7 +71,14 @@ public class Player : MonoBehaviour
 
     private void FaceNewDirection(MapTile newTile)
     {
-        var direction = AdjacentTiles.Where(t => t.Value == newTile).First().Key;
+        var tile = AdjacentTiles.Where(t => t.Value == newTile);
+        if (!tile.Any())
+        {
+            transform.eulerAngles = new Vector3(0, 140, 0); //Down
+            return;
+        }
+
+        var direction = tile.First().Key;
         switch (direction)
         {
             case PlayerFacingDirection.UP:
@@ -116,7 +125,12 @@ public class Player : MonoBehaviour
     {
         if (LockMovement) return;
 
-        if (newTile is InteractableObject)
+        EnergyConsumption = ModifyEnergyConsumption(newTile);
+        if (Energy.Depleted(EnergyConsumption) && !(newTile is InteractableHouse) && WeCanMove(newTile)) //Reset if out of energy & not in a building
+        {
+            StartCoroutine(ResetPlayerOnEnergyDepletedAsync());
+        }
+        else if (newTile is InteractableObject)
         {
             var iTile = newTile as InteractableObject;
             if (WeCanMove(iTile.CurrentGroundTile))
@@ -151,14 +165,23 @@ public class Player : MonoBehaviour
         {
             StatusEffect = PlayerStatusEffect.FATIGUED;
         }
+    }
 
-        if (Energy.Depleted() && !(newTile is InteractableHouse)) //Reset if out of energy & not in a building
-        {
-            GameManager.Instance.GameClock.Reset();
-            OnEnergyDepleted?.Invoke();
-            LockMovement = true;
-        }
+    IEnumerator ResetPlayerOnEnergyDepletedAsync()
+    {
+        UI.Instance.CrossFade(1f);
+        yield return new WaitForSeconds(1f);
 
+        transform.localScale = Vector3.one;
+        DissapearInHouse = false;
+        OnMove(StartTile);
+        Energy.Consume(-StartingEnergy);
+        GameManager.Instance.GameClock.Reset();
+        UI.Instance.EnableCurrentUI(false);
+        WeatherManager.Instance.ResetWeather();
+        OnMoveSuccessEvent?.Invoke(Energy, StartTile);
+
+        UI.Instance.CrossFade(0f);
     }
 
     public int ModifyEnergyConsumption(MapTile tile = null, int amount = 1)
@@ -209,9 +232,9 @@ public class Player : MonoBehaviour
         StatusEffect = newStatus;
     }
 
-    public bool EnergyDepleted()
+    public bool EnergyDepleted(int consumption = 0)
     {
-        return Energy.Depleted();
+        return Energy.Depleted(consumption);
     }
 
     private void OnDisable()

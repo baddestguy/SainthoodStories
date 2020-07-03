@@ -35,24 +35,9 @@ public class MissionManager : MonoBehaviour
     {
         if (GameClock.EndofDay)
         {
-            UI.Instance.ReportDisplay.text += "DAY REPORT" + "\n\n";
+         //   UI.Instance.ReportDisplay.text += "DAY REPORT" + "\n\n";
 
             EndOfDay?.Invoke();
-            InventoryManager.Instance.ClearProvisions();
-
-            if (FaithPoints < 30 || CharityPoints < 30)
-            {
-                if (FaithPoints < 30)
-                {
-                    UI.Instance.ReportDisplay.text += "You Suffered Existential Crisis!\n";
-                }
-                if (CharityPoints < 30)
-                {
-                    UI.Instance.ReportDisplay.text += "You fled from Town Riots!";
-                }
-                GameOver();
-                return;
-            }
             
             if(day > CurrentMission.TotalDays)
             {
@@ -61,11 +46,8 @@ public class MissionManager : MonoBehaviour
             else
             {
                 StartNewDay?.Invoke();
+                InventoryManager.Instance.GenerateProvisionsForNewDay();
             }
-
-            //Randomly add a new provision everyday
-            InventoryManager.Instance.ClearProvisions();
-            InventoryManager.Instance.AddProvision((Provision)Random.Range(0,7));
         }
     }
 
@@ -83,16 +65,36 @@ public class MissionManager : MonoBehaviour
         if (house == null) return;
         HouseScores[house.TileType] = amount;
 
-        UI.Instance.DisplayReport(house.TileType + " : " + amount);
-        Debug.Log(house.TileType + " : " + amount);
+        if(amount < 0)
+        {
+            UI.Instance.BuildingAlertPush(house.GetType().Name);
+        }
     }
 
     public void EndMission()
     {
         UI.Instance.EnableEndGame(true);
-        MissionComplete?.Invoke(true);
         Player.LockMovement = true;
-        //Evaluate Mission Success/Failure
+
+        //todo: fade to black
+
+        if (FaithPoints < 30 || CharityPoints < 30)
+        {
+            if (FaithPoints < 30)
+            {
+                UI.Instance.ReportDisplay.text += "You Suffered Existential Crisis!\n";
+            }
+            if (CharityPoints < 30)
+            {
+                UI.Instance.ReportDisplay.text += "You fled from Town Riots!";
+            }
+            GameOver();
+            return;
+        }
+        else
+        {
+            MissionComplete?.Invoke(true);
+        }
     }
 
     public void GameOver()

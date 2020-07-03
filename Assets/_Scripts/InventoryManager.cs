@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +12,7 @@ public class InventoryManager : MonoBehaviour
     public List<Provision> Provisions = new List<Provision>();
 
     public int MaxInventorySlots = 2;
-    public int MaxProvisionsSlots = 2;
+    public int MaxProvisionsSlots = 1;
 
     private void Awake()
     {
@@ -56,7 +57,7 @@ public class InventoryManager : MonoBehaviour
     public void ClearProvisions()
     {
         Provisions.Clear();
-        MaxInventorySlots = 2;
+        MaxInventorySlots = 1;
         RefreshInventoryUI?.Invoke();
     }
 
@@ -71,6 +72,32 @@ public class InventoryManager : MonoBehaviour
         RefreshInventoryUI?.Invoke();
 
         return item;
+    }
+
+    public void GenerateProvisionsForNewDay()
+    {
+        StartCoroutine(WaitAndEnableProvisionPopupAsync());
+    }
+
+    IEnumerator WaitAndEnableProvisionPopupAsync()
+    {
+        while (EventsManager.Instance.HasEventsInQueue())
+        {
+            yield return null;
+        }
+
+        ClearProvisions();
+
+        if (Random.Range(0, 100) < 50) yield break;
+
+        var prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 7)];
+        var prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 7)];
+        while (prov2.Id == prov1.Id)
+        {
+            prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 7)];
+        }
+
+        UI.Instance.EnableProvisionPopup(prov1, prov2);
     }
 
     public bool HasProvision(Provision provision)
