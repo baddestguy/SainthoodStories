@@ -57,7 +57,7 @@ public class InventoryManager : MonoBehaviour
     public void ClearProvisions()
     {
         Provisions.Clear();
-        MaxInventorySlots = 1;
+        MaxInventorySlots = 2;
         RefreshInventoryUI?.Invoke();
     }
 

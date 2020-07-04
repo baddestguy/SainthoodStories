@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
             //    break;
             case MissionDifficulty.HARD:
                 CurrentMission = new Mission(30, 30, 20, 5.5, 7);
+                TreasuryManager.Instance.DonateMoney(2500);
                 StartCoroutine(WaitAndLoadScene());
                 break;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 public class InteractableMarket : InteractableHouse
@@ -26,11 +27,14 @@ public class InteractableMarket : InteractableHouse
             PopUI.gameObject.SetActive(true);
             PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
             PopIcon.UIPopped(true);
+            UI.Instance.EnableTreasuryUI(true);
+            UI.Instance.RefreshTreasuryBalance();
         }
         else
         {
             PopUI.gameObject.SetActive(false);
             PopIcon.UIPopped(false);
+            UI.Instance.EnableTreasuryUI(false);
         }
     }
 
@@ -40,7 +44,18 @@ public class InteractableMarket : InteractableHouse
         if (clock.Time >= OpenTime && clock.Time < ClosingTime)
         {
             UI.Instance.DisplayMessage($"PICKED UP {item}!");
+            var itemData = GameDataManager.Instance.ShopItemData[item];
+            var moddedPrice = ApplyDiscount(itemData.Price);
+
+            if (!TreasuryManager.Instance.CanAfford(moddedPrice))
+            {
+                UI.Instance.DisplayMessage("Not Enough Money!");
+                return;
+            }
+            TreasuryManager.Instance.SpendMoney(moddedPrice);
             InventoryManager.Instance.AddToInventory(item);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+            UI.Instance.RefreshTreasuryBalance();
         }
         else
         {
@@ -62,6 +77,48 @@ public class InteractableMarket : InteractableHouse
         BoughtItem(itemType);
     }
 
+    public static double ApplyDiscount(double price)
+    {
+        double newPrice = price;
+        var e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.MARKET_DISCOUNT || i.Id == EventType.MARKET_MARKUP);
+
+        if(e != null)
+        {
+            if(e.Id == EventType.MARKET_DISCOUNT)
+            {
+                newPrice = newPrice - (e.Cost / 100 * newPrice);
+            }
+            else if(e.Id == EventType.MARKET_MARKUP)
+            {
+                newPrice = newPrice + (e.Cost / 100 * newPrice);
+            }
+        }
+
+        if(InventoryManager.Instance.HasProvision(Provision.DISCOUNT_CARD))
+        {
+            newPrice = newPrice - (20d / 100d * newPrice);
+        }
+
+        return (int)newPrice;
+    }
+
+    protected override void OnEventExecuted(CustomEventData e)
+    {
+        switch (e.Id)
+        {
+            case EventType.MARKET_HOURS:
+                if(e.Cost == 18)
+                {
+                    ClosingTime = 23;
+                }
+                else if(e.Cost == 24)
+                {
+                    OpenTime = 0;
+                    ClosingTime = 23;
+                }
+                break;
+        }
+    }
 
     public override void ReportScores()
     {

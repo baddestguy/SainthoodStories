@@ -20,7 +20,7 @@ public class PopUI : MonoBehaviour
         CamTransform = Camera.main.transform;
     }
 
-    public void Init(Action<string> callback, string sprite, int items, GameClock deadline)
+    public virtual void Init(Action<string> callback, string sprite, int items, GameClock deadline)
     {
         Callback = callback;
 
