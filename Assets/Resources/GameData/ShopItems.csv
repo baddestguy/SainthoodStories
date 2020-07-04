@@ -1,0 +1,7 @@
+Id,Price,NameKey,DescriptionKey
+GROCERIES,50,Item_GroceriesName,Item_GroceriesDescription
+CLOTHES,75,Item_ClothesName,Item_ClothesDescription
+TOYS,175,Item_ToysName,Item_ToysDescription
+STATIONERY,125,Item_StationeryName,Item_StationeryDescription
+MEDS,35,Item_MedsName,Item_MedsDescription
+MEAL,0,Item_MealName,Item_MealDescription

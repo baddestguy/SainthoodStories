@@ -55,6 +55,8 @@ public class UI : MonoBehaviour
     private Dictionary<string, GameObject> InstantiatedBuildingAlerts = new Dictionary<string, GameObject>();
 
     public GameObject InventoryUI;
+    public GameObject TreasuryUI;
+    public TextMeshProUGUI TreasuryAmount;
     public ProvisionsPopup ProvisionPopup;
     public Image Black;
 
@@ -235,6 +237,16 @@ public class UI : MonoBehaviour
     {
         CustomEventPopup.gameObject.SetActive(true);
         CustomEventPopup.Setup(customEvent);
+    }
+
+    public void EnableTreasuryUI(bool enable)
+    {
+        TreasuryUI.SetActive(enable);
+    }
+
+    public void RefreshTreasuryBalance()
+    {
+        TreasuryAmount.text = TreasuryManager.Instance.Money.ToString();
     }
 
     public void EnableInventoryUI(bool enable)

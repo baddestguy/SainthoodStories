@@ -119,6 +119,15 @@ public enum Language
 }
 
 [System.Serializable]
+public class ShopItemData
+{
+    public ItemType Id;
+    public double Price;
+    public string NameKey;
+    public string DescriptionKey;
+}
+
+[System.Serializable]
 public class ProvisionData
 {
     public Provision Id;

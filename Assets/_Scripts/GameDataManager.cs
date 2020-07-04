@@ -12,6 +12,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<EventType, List<CustomEventData>> CustomEventData = new Dictionary<EventType, List<CustomEventData>>();
     public Dictionary<string, List<LocalizationData>> LocalizationData = new Dictionary<string, List<LocalizationData>>();
     public Dictionary<Provision, ProvisionData> ProvisionData = new Dictionary<Provision, ProvisionData>();
+    public Dictionary<ItemType, ShopItemData> ShopItemData = new Dictionary<ItemType, ShopItemData>();
 
     void Awake()
     {
@@ -71,6 +72,17 @@ public class GameDataManager : MonoBehaviour
         {
             ProvisionData.Add(prov.Id, prov);
         }
+
+        yield return null;
+
+        //ShopItems
+        csvFile = Resources.Load<TextAsset>("GameData/ShopItems");
+        var shopData = CSVSerializer.Deserialize<ShopItemData>(csvFile.text);
+        foreach (var item in shopData)
+        {
+            ShopItemData.Add(item.Id, item);
+        }
+
         yield return null;
     }
 
