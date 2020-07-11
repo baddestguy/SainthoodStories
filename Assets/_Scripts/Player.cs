@@ -41,6 +41,11 @@ public class Player : MonoBehaviour
         if ((transform.position - TargetPosition).magnitude > 0.11)
         {
             transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime * 5);
+
+            if (DissapearInHouse)
+            {
+                transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, Time.deltaTime * 5);
+            }
         }
         else
         {
