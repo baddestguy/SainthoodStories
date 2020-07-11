@@ -79,10 +79,13 @@ public class PopUI : MonoBehaviour
             buttons[i].interactable = true;
         }
 
-        yield return new WaitForSeconds(0.1f);
-        
-        LockUI = false;
-        Player.LockMovement = false;
+        yield return new WaitForSeconds(0.5f);
+
+        if (!MissionManager.MissionOver)
+        {
+            LockUI = false;
+            Player.LockMovement = false;
+        }
     }
 
     void Update()

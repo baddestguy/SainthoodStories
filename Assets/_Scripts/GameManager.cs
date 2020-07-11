@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     {
         if (scene.name.Contains("Level"))
         {
+            MissionManager.MissionOver = false;
             Instantiate(Resources.Load("UI/UI") as GameObject);
             Player = FindObjectOfType<Player>();
             MissionManager.LoadAllMissions(CurrentMission);
@@ -42,7 +43,7 @@ public class GameManager : MonoBehaviour
             Player.GameStart(MissionManager.CurrentMission);
             MissionBegin?.Invoke(MissionManager.CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
-            UI.Instance.CrossFade(0f);
+            UI.Instance.ShowWeekBeginText();
         }
     }
 
@@ -78,8 +79,9 @@ public class GameManager : MonoBehaviour
             //    SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
             //    break;
             case MissionDifficulty.HARD:
-                CurrentMission = new Mission(30, 30, 20, 5.5, 7);
-                TreasuryManager.Instance.DonateMoney(2500);
+                CurrentMission = new Mission(30, 30, 20, 5.5, 7, 1);
+              //  CurrentMission = new Mission(90, 90, 20, 22.5, 1, 1); //Test Mission
+                TreasuryManager.Instance.DonateMoney(1000);
                 StartCoroutine(WaitAndLoadScene());
                 break;
         }

@@ -60,6 +60,8 @@ public class UI : MonoBehaviour
     public ProvisionsPopup ProvisionPopup;
     public Image Black;
 
+    public TextMeshProUGUI CurrentWeekDisplay;
+
     void Awake()
     {
         Instance = this;
@@ -104,14 +106,17 @@ public class UI : MonoBehaviour
 
     private void MissionComplete(bool complete)
     {
-        if (complete)
+        StartCoroutine(MissionCompleteAsync(complete));
+    }
+
+    private IEnumerator MissionCompleteAsync(bool complete)
+    {
+        while (EventsManager.Instance.HasEventsInQueue())
         {
-            MessageDisplay.text = "Mission Complete!!";
+            yield return null;
         }
-        else
-        {
-            MessageDisplay.text = "Energy Depleted! Mission Failed!";
-        }
+
+        GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD); //Load Next Mission/Week
     }
 
     private void OnTick(double time, int day)
@@ -464,6 +469,26 @@ public class UI : MonoBehaviour
             case 7: return "Sun";
         }
         return "";
+    }
+
+    public void ShowWeekBeginText()
+    {
+        StartCoroutine(ShowWeekBeginTextAsync());
+    }
+
+    private IEnumerator ShowWeekBeginTextAsync()
+    {
+        yield return StartCoroutine(CrossFadeAsync(1, 10));
+
+        CurrentWeekDisplay.gameObject.SetActive(true);
+        CurrentWeekDisplay.text = "WEEK " + MissionManager.Instance.CurrentMission.CurrentWeek; //TODO: Localize
+
+        yield return new WaitForSeconds(3.5f);
+        CurrentWeekDisplay.text = "";
+        CurrentWeekDisplay.gameObject.SetActive(false);
+        yield return new WaitForSeconds(2f);
+        
+        CrossFade(0);
     }
 
     public void CrossFade(float fade, float speed = 5f)
