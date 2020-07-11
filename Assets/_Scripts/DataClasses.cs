@@ -98,7 +98,11 @@ public enum EventType
     VANDALISM,
     SPIRITUAL_RETREAT,
     PRAYER_REQUEST,
-    TOWN_HELP
+    TOWN_HELP,
+    DONATION,
+    ICON,
+    SPIRITUALCRISIS,
+    RIOTS
 }
 
 public enum EventGroup

@@ -13,13 +13,15 @@ public class Mission
     public int StartingFaithPoints;
     public int StartingCharityPoints;
     public int TotalDays;
+    public int CurrentWeek;
 
-    public Mission(int faithPoints, int charityPoints, int startingEnergy, double startTime, int days)
+    public Mission(int faithPoints, int charityPoints, int startingEnergy, double startTime, int days, int week)
     {
         StartingFaithPoints = faithPoints;
         StartingCharityPoints = charityPoints;
         StartingEnergy = new Energy(startingEnergy);
         StartingClock = startTime;
         TotalDays = days;
+        CurrentWeek = week;
     }
 }

@@ -1,22 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class MissionManager : MonoBehaviour
 {
+    public static MissionManager Instance { get; private set; }
     public Mission CurrentMission;
     public static UnityAction<bool> MissionComplete;
     public static UnityAction EndOfDay;
     public static UnityAction StartNewDay;
+    public static bool MissionOver;
 
     public Dictionary<TileType, int> HouseScores;
     public int CharityPoints { get; private set; }
     public int FaithPoints { get; private set; }
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         GameClock.Ticked += OnTicked;
-        Player.OnEnergyDepleted += GameOver;
 
         HouseScores = new Dictionary<TileType, int>();
     }
@@ -73,39 +80,45 @@ public class MissionManager : MonoBehaviour
 
     public void EndMission()
     {
-        UI.Instance.EnableEndGame(true);
-        Player.LockMovement = true;
+        StartCoroutine(EndMissionAsync());
+    }
 
-        //todo: fade to black
+    private IEnumerator EndMissionAsync()
+    {
+        Player.LockMovement = true;
+        MissionOver = true;
+
+        UI.Instance.CrossFade(1, 1f);
+        yield return new WaitForSeconds(5f);
 
         if (FaithPoints < 30 || CharityPoints < 30)
         {
             if (FaithPoints < 30)
             {
-                UI.Instance.ReportDisplay.text += "You Suffered Existential Crisis!\n";
+                EventsManager.Instance.AddEventToList(EventType.SPIRITUALCRISIS);
             }
             if (CharityPoints < 30)
             {
-                UI.Instance.ReportDisplay.text += "You fled from Town Riots!";
+                EventsManager.Instance.AddEventToList(EventType.RIOTS);
             }
-            GameOver();
-            return;
         }
         else
         {
-            MissionComplete?.Invoke(true);
+            if (FaithPoints > 75)
+            {
+                EventsManager.Instance.AddEventToList(EventType.ICON);
+            }
+            if (CharityPoints > 75)
+            {
+                EventsManager.Instance.AddEventToList(EventType.DONATION);
+            }
         }
-    }
-
-    public void GameOver()
-    {
-        UI.Instance.EnableEndGame(true);
-        MissionComplete?.Invoke(false);
+        EventsManager.Instance.ExecuteEvents();
+        MissionComplete?.Invoke(true);
     }
 
     private void OnDisable()
     {
         GameClock.Ticked -= OnTicked;
-        Player.OnEnergyDepleted -= GameOver;
     }
 }
