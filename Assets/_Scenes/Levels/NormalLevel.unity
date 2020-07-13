@@ -5908,7 +5908,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 5
+  BuildPoints: 4
   RubbleGo: {fileID: 617113537}
   BuildingGo: {fileID: 1894776547}
   AdoptionPoints: 3
@@ -8041,7 +8041,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 5
+  BuildPoints: 4
   RubbleGo: {fileID: 92882662}
   BuildingGo: {fileID: 1010180593}
 --- !u!65 &710143203
@@ -8773,7 +8773,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 0
-  BuildPoints: 5
+  BuildPoints: 0
   RubbleGo: {fileID: 883471756}
   BuildingGo: {fileID: 1900377841}
   SleepEnergy: -3
@@ -11126,7 +11126,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 5
+  BuildPoints: 4
   RubbleGo: {fileID: 996390626}
   BuildingGo: {fileID: 1713372194}
 --- !u!65 &891565151
@@ -13254,7 +13254,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 5
+  BuildPoints: 4
   RubbleGo: {fileID: 1871785462}
   BuildingGo: {fileID: 1521251895}
   BabyPoints: 1
@@ -14693,7 +14693,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 5
+  BuildPoints: 4
   RubbleGo: {fileID: 1536379395}
   BuildingGo: {fileID: 518612352}
 --- !u!1 &1185707817
@@ -19151,7 +19151,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 5
+  BuildPoints: 4
   RubbleGo: {fileID: 995242553}
   BuildingGo: {fileID: 1315125707}
   TeachPoints: 1
@@ -22369,7 +22369,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 0
-  BuildPoints: 5
+  BuildPoints: 0
   RubbleGo: {fileID: 959305145}
   BuildingGo: {fileID: 951983586}
 --- !u!1 &1759875266

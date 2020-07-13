@@ -56,8 +56,13 @@ public class PopUI : MonoBehaviour
 
     public void OnClick(string button)
     {
-        if (LockUI) return;
+        if (LockUI)
+        {
+            //Play disabled sound
+            return;
+        }
 
+        SoundManager.Instance.PlayOneShotSfx("Button");
         StartCoroutine(ActionPauseCycle());
         Callback?.Invoke(button);
     }
@@ -79,7 +84,7 @@ public class PopUI : MonoBehaviour
             buttons[i].interactable = true;
         }
 
-        yield return new WaitForSeconds(0.5f);
+  //      yield return new WaitForSeconds(0.5f);
 
         if (!MissionManager.MissionOver)
         {

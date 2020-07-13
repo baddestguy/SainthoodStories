@@ -76,6 +76,8 @@ public class InteractableChurch : InteractableHouse
             LiturgyStartTime = 12;
             LiturgyEndTime = 13;
         }
+        if (clock.Time == LiturgyStartTime)
+            SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
         PopChurchIcon();
     }
 
@@ -140,6 +142,7 @@ public class InteractableChurch : InteractableHouse
                 clock.Tick();
                 UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
                 UpdateFaithPoints(PrayerPoints * 2);
+                SoundManager.Instance.PlayOneShotSfx("MassBells", 0.3f, 10f);
                 player.ConsumeEnergy(ServiceEnergy);
             }
             else
@@ -154,6 +157,7 @@ public class InteractableChurch : InteractableHouse
         {
             clock.Tick();
             UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
+            SoundManager.Instance.PlayOneShotSfx("MassBells", 0.3f, 10f);
             UpdateFaithPoints(PrayerPoints * 2);
             player.ConsumeEnergy(ServiceEnergy);
         }
