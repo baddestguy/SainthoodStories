@@ -135,6 +135,7 @@ public class InteractableHospital : InteractableHouse
             DeliveryTimeSet = false;
             DeliveryCountdown = 4;
             EndDelivery.SetClock(clock.Time-1, clock.Day);
+            SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
         }
         else if (EndDelivery == null || clock > EndDelivery)
         {

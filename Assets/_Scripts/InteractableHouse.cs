@@ -41,6 +41,8 @@ public class InteractableHouse : InteractableObject
     public GameObject RubbleGo;
     public GameObject BuildingGo;
 
+    public static UnityAction<bool> OnEnterHouse;
+
     protected virtual void Start()
     {
         UI.Meditate += Meditated;
@@ -228,6 +230,7 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
+            SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
         }
     }
 
@@ -263,6 +266,16 @@ public class InteractableHouse : InteractableObject
             Destroy(PopUI.gameObject);
             Initialize();
             PopUI.gameObject.SetActive(true);
+            SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
+            SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
+            if (GameManager.Instance.GameClock.Time >= OpenTime && GameManager.Instance.GameClock.Time <= ClosingTime)
+            {
+                SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
+            }
+        }
+        else
+        {
+            SoundManager.Instance.PlayOneShotSfx("Build", 1f, 5f);
         }
         UpdateCharityPoints(VolunteerPoints);
         GameClock clock = GameManager.Instance.GameClock;
@@ -326,6 +339,7 @@ public class InteractableHouse : InteractableObject
   
         GameManager.Instance.MissionManager.UpdateFaithPoints(amount * faithMultiplier);
         Debug.LogWarning("FAITH: " + CurrentFaithPoints);
+        SoundManager.Instance.PlayOneShotSfx("Pray", 0.5f, 5f);
     }
 
     public virtual void ReportScores()
@@ -382,7 +396,16 @@ public class InteractableHouse : InteractableObject
             HouseUIActive = true;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.EnableInventoryUI(true);
-
+            SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
+            if(GameManager.Instance.GameClock.Time >= OpenTime && GameManager.Instance.GameClock.Time <= ClosingTime)
+            {
+                if (BuildPoints <= 0)
+                    SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
+            }
+            if (BuildPoints > 0)
+                SoundManager.Instance.PlayHouseAmbience("Construction", true, 0.3f);
+            SoundManager.Instance.FadeAmbience(0.1f);
+            OnEnterHouse?.Invoke(true);
         }
         else if(CameraLockOnMe)
         {
@@ -390,6 +413,13 @@ public class InteractableHouse : InteractableObject
             CameraLockOnMe = false;
             HouseUIActive = false;
             UI.Instance.EnableInventoryUI(false);
+            SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
+            if (BuildPoints <= 0)
+                SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
+            else
+                SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
+            SoundManager.Instance.FadeAmbience(0.3f);
+            OnEnterHouse?.Invoke(false);
         }
     }
 

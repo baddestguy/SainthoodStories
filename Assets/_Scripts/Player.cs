@@ -7,7 +7,6 @@ using UnityEngine.Events;
 public class Player : MonoBehaviour
 {
     public static event UnityAction<Energy, MapTile> OnMoveSuccessEvent;
-    public static event UnityAction OnEnergyDepleted;
     public GameMap Map;
 
     private Energy Energy;
@@ -170,6 +169,8 @@ public class Player : MonoBehaviour
         {
             StatusEffect = PlayerStatusEffect.FATIGUED;
         }
+
+        SoundManager.Instance.PlayOneShotSfx("Button", 0.4f);
     }
 
     IEnumerator ResetPlayerOnEnergyDepletedAsync()

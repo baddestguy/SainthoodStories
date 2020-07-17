@@ -9,17 +9,39 @@ public class StormyWeather : MonoBehaviour
     public float StartSizeMin;
     public float StartSizeMax;
 
-    private bool Running;
+    public static bool Running;
 
     public void StartStorm()
     {
+        InteractableHouse.OnEnterHouse += OnEnterHouse;
         Running = true;
         StartCoroutine(RunStormAsync());
+        StartCoroutine(LightningThunder());
+        SoundManager.Instance.FadeAmbience(0.1f);
+
+        if(InteractableHouse.HouseUIActive)
+            SoundManager.Instance.PlayWeatherAmbience("RainInterior", true, 0.3f);
+        else
+            SoundManager.Instance.PlayWeatherAmbience("RainExterior", Running);
     }
 
     public void StopStorm()
     {
         Running = false;
+        SoundManager.Instance.PlayWeatherAmbience("", Running);
+        SoundManager.Instance.FadeAmbience(0.3f);
+        InteractableHouse.OnEnterHouse -= OnEnterHouse;
+    }
+
+    public void OnEnterHouse(bool inHouse)
+    {
+        if (Running)
+        {
+            if(inHouse)
+                SoundManager.Instance.PlayWeatherAmbience("RainInterior", true, 0.3f);
+            else
+                SoundManager.Instance.PlayWeatherAmbience("RainExterior", true);
+        }
     }
 
     private IEnumerator RunStormAsync()
@@ -43,6 +65,15 @@ public class StormyWeather : MonoBehaviour
             yield return null;
         }
 
-        gameObject.SetActive(false);
+        Destroy(gameObject);
+    }
+
+    private IEnumerator LightningThunder()
+    {
+        while (Running)
+        {
+            SoundManager.Instance.PlayOneShotSfx("Thunder", 1f, 30);
+            yield return new WaitForSeconds(30f);
+        }
     }
 }

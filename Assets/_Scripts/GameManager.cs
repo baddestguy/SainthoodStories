@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnLevelLoaded;
         MapTile.OnClickEvent += OnTap;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
+        GameClock.Ticked += PlayAmbience;
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
@@ -44,6 +45,8 @@ public class GameManager : MonoBehaviour
             MissionBegin?.Invoke(MissionManager.CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
             UI.Instance.ShowWeekBeginText();
+            PlayAmbience(GameClock.Time, GameClock.Day);
+            SoundManager.Instance.PlayOST("IntroMusic");
         }
     }
 
@@ -66,6 +69,20 @@ public class GameManager : MonoBehaviour
         GameClock.Tick();
     }
 
+    public void PlayAmbience(double time, int day)
+    {
+        if (WeatherManager.Instance.IsStormy()) return;
+
+        if (GameClock.Time >= 21 || GameClock.Time < 6)
+        {
+            SoundManager.Instance.PlayAmbience("SummerNightAmbience");
+        }
+        else if (GameClock.Time >= 6)
+        {
+            SoundManager.Instance.PlayAmbience("SummerDayAmbience");
+        }
+    }
+
     public void SetMissionParameters(MissionDifficulty missionDifficulty)
     {
         switch (missionDifficulty)
@@ -82,6 +99,7 @@ public class GameManager : MonoBehaviour
                 CurrentMission = new Mission(30, 30, 20, 5.5, 7, 1);
               //  CurrentMission = new Mission(90, 90, 20, 22.5, 1, 1); //Test Mission
                 TreasuryManager.Instance.DonateMoney(1000);
+                SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
                 StartCoroutine(WaitAndLoadScene());
                 break;
         }
@@ -99,5 +117,13 @@ public class GameManager : MonoBehaviour
     public void SaveGame()
     {
 
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnLevelLoaded;
+        MapTile.OnClickEvent -= OnTap;
+        Player.OnMoveSuccessEvent -= OnPlayerMoved;
+        GameClock.Ticked -= PlayAmbience;
     }
 }
