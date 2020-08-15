@@ -77,6 +77,12 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
+    public override bool DuringOpenHours(GameClock newClock = null)
+    {
+        GameClock clock = newClock ?? GameManager.Instance.GameClock;
+        return base.DuringOpenHours() && clock.Day <= 5;
+    }
+
     public override void PopUICallback(string button)
     {
         base.PopUICallback(button);
