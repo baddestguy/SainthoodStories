@@ -23,13 +23,13 @@ public class CustomEventPopup : MonoBehaviour
     public void Setup(CustomEventData customEvent)
     {
         EventData = customEvent;
-        YesNoGO.SetActive(customEvent.EventGroup == EventGroup.IMMEDIATE);
-        IconsGO.SetActive(customEvent.EventGroup == EventGroup.IMMEDIATE);
-        OKGO.SetActive(customEvent.EventGroup == EventGroup.DAILY);
+        YesNoGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
+        IconsGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
+        OKGO.SetActive(customEvent.EventPopupType == EventPopupType.OK);
 
-        switch (customEvent.EventGroup)
+        switch (customEvent.EventPopupType)
         {
-            case EventGroup.IMMEDIATE:
+            case EventPopupType.YESNO:
                 GameClock clock = GameManager.Instance.GameClock;
                 Player player = GameManager.Instance.Player;
 
@@ -114,9 +114,9 @@ public class CustomEventPopup : MonoBehaviour
 
         if(sequences - CurrentSequenceNumber == 1)
         {
-            IconsGO.SetActive(EventData.EventGroup == EventGroup.IMMEDIATE);
-            YesNoGO.SetActive(EventData.EventGroup == EventGroup.IMMEDIATE);
-            OKGO.SetActive(EventData.EventGroup == EventGroup.DAILY);
+            IconsGO.SetActive(EventData.EventPopupType == EventPopupType.YESNO);
+            YesNoGO.SetActive(EventData.EventPopupType == EventPopupType.YESNO);
+            OKGO.SetActive(EventData.EventPopupType == EventPopupType.OK);
             NextGO.SetActive(false);
         }
 

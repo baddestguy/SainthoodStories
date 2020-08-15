@@ -231,7 +231,13 @@ public class InteractableHouse : InteractableObject
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
             SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
+            ItemDeliveryThanks();
         }
+    }
+
+    public virtual void ItemDeliveryThanks()
+    {
+        GameClock.ExecuteEvents?.Invoke();
     }
 
     protected void PopUIFXIcons(string icon, int amount)

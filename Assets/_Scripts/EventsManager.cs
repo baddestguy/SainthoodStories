@@ -66,7 +66,7 @@ public class EventsManager : MonoBehaviour
         {
             if (Random.Range(0, 100) < 2 && CurrentEvents.Count < 3)
             {
-                AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.IMMEDIATE).Id);
+                AddEventToList(GameDataManager.Instance.GetRandomEvent(EventPopupType.YESNO).Id);
             }
         }
     }
@@ -76,7 +76,7 @@ public class EventsManager : MonoBehaviour
         CurrentEvents.Clear();
         if(Random.Range(0, 100) < 50)
         {
-            AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY).Id);
+            AddEventToList(GameDataManager.Instance.GetRandomEvent(EventPopupType.OK).Id);
         }
     }
 
