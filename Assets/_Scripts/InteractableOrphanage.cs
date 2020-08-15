@@ -25,6 +25,21 @@ public class InteractableOrphanage : InteractableHouse
             PopIcon.UIPopped(false);
         }
     }
+    public override void Tick(double time, int day)
+    {
+        base.Tick(time, day);
+
+        if(day > 5)
+        {
+            OpenTime = 9;
+            ClosingTime = 22;
+        }
+        else
+        {
+            OpenTime = 16;
+            ClosingTime = 22;
+        }
+    }
 
     public override void DeliverItem(InteractableHouse house)
     {

@@ -359,7 +359,7 @@ public class InteractableHouse : InteractableObject
         CurrentFaithPoints = 0;
     }
 
-    public bool DuringOpenHours(GameClock newClock = null)
+    public virtual bool DuringOpenHours(GameClock newClock = null)
     {
         GameClock clock = newClock ?? GameManager.Instance.GameClock;
         return clock.Time >= OpenTime && clock.Time < ClosingTime;
