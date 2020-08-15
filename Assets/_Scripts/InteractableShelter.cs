@@ -54,6 +54,12 @@
         UI.Instance.DisplayMessage("YOU HAVE NO FOOD TO GIVE!");
     }
 
+    public override void ItemDeliveryThanks()
+    {
+        EventsManager.Instance.AddEventToList(EventType.THANKYOU_ITEM_FOOD);
+        base.ItemDeliveryThanks();
+    }
+
     private void DeliverDeadlineItem()
     {
         ItemType meal = InventoryManager.Instance.GetItem(ItemType.MEAL);

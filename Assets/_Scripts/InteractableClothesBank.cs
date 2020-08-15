@@ -40,6 +40,12 @@
         }
     }
 
+    public override void ItemDeliveryThanks()
+    {
+        EventsManager.Instance.AddEventToList(EventType.THANKYOU_ITEM_CLOTHES);
+        base.ItemDeliveryThanks();
+    }
+
     public override void PopUICallback(string button)
     {
         base.PopUICallback(button);

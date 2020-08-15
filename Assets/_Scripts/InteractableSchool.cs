@@ -77,6 +77,12 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
+    public override void ItemDeliveryThanks()
+    {
+        EventsManager.Instance.AddEventToList(EventType.THANKYOU_ITEM_SCHOOL);
+        base.ItemDeliveryThanks();
+    }
+
     public override bool DuringOpenHours(GameClock newClock = null)
     {
         GameClock clock = newClock ?? GameManager.Instance.GameClock;

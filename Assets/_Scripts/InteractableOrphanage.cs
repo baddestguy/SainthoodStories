@@ -66,6 +66,12 @@ public class InteractableOrphanage : InteractableHouse
         }
     }
 
+    public override void ItemDeliveryThanks()
+    {
+        EventsManager.Instance.AddEventToList(EventType.THANKYOU_ITEM_ORPHANAGE);
+        base.ItemDeliveryThanks();
+    }
+
     public override void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;

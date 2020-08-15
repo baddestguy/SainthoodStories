@@ -102,13 +102,18 @@ public enum EventType
     DONATION,
     ICON,
     SPIRITUALCRISIS,
-    RIOTS
+    RIOTS,
+    THANKYOU_ITEM_HOSPITAL,
+    THANKYOU_ITEM_SCHOOL,
+    THANKYOU_ITEM_ORPHANAGE,
+    THANKYOU_ITEM_FOOD,
+    THANKYOU_ITEM_CLOTHES
 }
 
-public enum EventGroup
+public enum EventPopupType
 {
-    DAILY = 0,
-    IMMEDIATE
+    OK = 0,
+    YESNO
 }
 
 public enum Language
@@ -143,7 +148,7 @@ public class ProvisionData
 public class CustomEventData
 {
     public EventType Id;
-    public EventGroup EventGroup;
+    public EventPopupType EventPopupType;
     public int Weight;
     public float Cost;
     public float Gain;

@@ -161,6 +161,12 @@ public class InteractableHospital : InteractableHouse
         }
     }
 
+    public override void ItemDeliveryThanks()
+    {
+        EventsManager.Instance.AddEventToList(EventType.THANKYOU_ITEM_HOSPITAL);
+        base.ItemDeliveryThanks();
+    }
+
     public override void SetDeadlineTime(double time, int day)
     {
         if (DeliveryTimeSet) return;
