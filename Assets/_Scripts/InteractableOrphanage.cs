@@ -27,8 +27,6 @@ public class InteractableOrphanage : InteractableHouse
     }
     public override void Tick(double time, int day)
     {
-        base.Tick(time, day);
-
         if(day > 5)
         {
             OpenTime = 9;
@@ -39,6 +37,8 @@ public class InteractableOrphanage : InteractableHouse
             OpenTime = 16;
             ClosingTime = 22;
         }
+
+        base.Tick(time, day);
     }
 
     public override void DeliverItem(InteractableHouse house)
@@ -134,6 +134,23 @@ public class InteractableOrphanage : InteractableHouse
         }
     }
 
+    public override void RelationshipReward(ThankYouType thanks)
+    {
+        if (RelationshipPoints == 100)
+        {
+            //One time special reward!
+        }
+
+        if (RelationshipPoints >= 65)
+        {
+            //Special Item
+        }
+        else
+        {
+            base.RelationshipReward(thanks);
+        }
+    }
+
     public override void VolunteerWork(InteractableHouse house)
     {
         if (house != this) return;
@@ -144,16 +161,23 @@ public class InteractableOrphanage : InteractableHouse
 
         if (DuringOpenHours())
         {
+            BuildingActivityState = BuildingActivityState.VOLUNTEERING;
             CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.ORPHANAGE_BONUS);
             player.ConsumeEnergy(EnergyConsumption);
-            clock.Tick();
             UI.Instance.DisplayMessage("VOLUNTEERED AT ORPHANAGE!");
             UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0));
+            base.VolunteerWork(house);
+            clock.Tick();
         }
         else
         {
             UI.Instance.DisplayMessage("ORPHANAGE CLOSED!");
         }
+    }
+
+    public override void VolunteerThanks()
+    {
+        EventsManager.Instance.AddEventToList(EventType.THANKYOU_VOLUNTEER_ORPHANAGE);
     }
 
     public override void PopUICallback(string button)

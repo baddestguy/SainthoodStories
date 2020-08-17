@@ -40,6 +40,23 @@
         }
     }
 
+    public override void RelationshipReward(ThankYouType thanks)
+    {
+        if (RelationshipPoints == 100)
+        {
+            //One time special reward!
+        }
+
+        if (RelationshipPoints >= 65)
+        {
+            //Special Item
+        }
+        else
+        {
+            base.RelationshipReward(thanks);
+        }
+    }
+
     public override void ItemDeliveryThanks()
     {
         EventsManager.Instance.AddEventToList(EventType.THANKYOU_ITEM_CLOTHES);

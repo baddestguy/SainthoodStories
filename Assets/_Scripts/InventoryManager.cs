@@ -17,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        GameClock.StartNewDay += GenerateProvisionsForNewDay;
     }
 
     public void AddToInventory(ItemType item)
@@ -81,6 +82,8 @@ public class InventoryManager : MonoBehaviour
 
     IEnumerator WaitAndEnableProvisionPopupAsync()
     {
+        yield return null;
+
         while (EventsManager.Instance.HasEventsInQueue())
         {
             yield return null;
@@ -103,5 +106,10 @@ public class InventoryManager : MonoBehaviour
     public bool HasProvision(Provision provision)
     {
         return Provisions.Contains(provision);
+    }
+
+    private void OnDisable()
+    {
+        GameClock.StartNewDay -= GenerateProvisionsForNewDay;
     }
 }

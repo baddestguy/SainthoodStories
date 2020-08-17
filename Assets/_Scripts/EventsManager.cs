@@ -18,7 +18,7 @@ public class EventsManager : MonoBehaviour
         Instance = this;
         GameClock.ExecuteEvents += ExecuteEvents;
         GameClock.Ticked += TryEventTrigger;
-        MissionManager.StartNewDay += StartNewDay;
+        GameClock.StartNewDay += StartNewDay;
     }
 
     public void AddEventToList(EventType newEvent)
@@ -100,6 +100,6 @@ public class EventsManager : MonoBehaviour
     {
         GameClock.ExecuteEvents -= ExecuteEvents;
         GameClock.Ticked -= TryEventTrigger;
-        MissionManager.StartNewDay -= StartNewDay;
+        GameClock.StartNewDay -= StartNewDay;
     }
 }
