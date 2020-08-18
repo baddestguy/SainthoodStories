@@ -3,6 +3,7 @@
 public class InteractableSchool : InteractableHouse
 {
     public int TeachPoints;
+    private int TeachCountdown = 4;
 
     protected override void Start()
     {
@@ -43,14 +44,35 @@ public class InteractableSchool : InteractableHouse
 
         if (DuringOpenHours())
         {
+            BuildingActivityState = BuildingActivityState.TEACHING;
             player.ConsumeEnergy(EnergyConsumption);
-            clock.Tick();
             UI.Instance.DisplayMessage("Taught a Class!!");
             UpdateCharityPoints(TeachPoints);
+            clock.Tick();
         }
         else
         {
             UI.Instance.DisplayMessage("SCHOOL CLOSED!");
+        }
+    }
+
+    public override void Tick(double time, int day)
+    {
+        if(BuildingActivityState == BuildingActivityState.TEACHING)
+        {
+            TeachSubject();
+        }
+
+        base.Tick(time, day);
+    }
+
+    public void TeachSubject()
+    {
+        TeachCountdown--;
+        if (TeachCountdown <= 0)
+        {
+            BuildRelationship(ThankYouType.TEACH);
+            TeachCountdown = 4;
         }
     }
 
@@ -168,6 +190,23 @@ public class InteractableSchool : InteractableHouse
                     }
                 }
                 break;
+        }
+    }
+
+    public override void RelationshipReward(ThankYouType thanks)
+    {
+        if (RelationshipPoints == 100)
+        {
+            //One time special reward!
+        }
+
+        if (RelationshipPoints >= 65)
+        {
+            //Special Item
+        }
+        else
+        {
+            base.RelationshipReward(thanks);
         }
     }
 

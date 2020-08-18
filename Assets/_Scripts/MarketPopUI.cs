@@ -30,5 +30,8 @@ public class MarketPopUI : PopUI
         display.text = moddedPrice.ToString();
 
         if (!TreasuryManager.Instance.CanAfford(moddedPrice)) display.color = Color.red;
+        else if (moddedPrice < originalPrice) display.color = Color.green;
+        else if (moddedPrice > originalPrice) display.color = Color.magenta;
+        else if (moddedPrice == originalPrice) display.color = Color.white;
     }
 }

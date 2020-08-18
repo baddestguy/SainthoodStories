@@ -9,6 +9,7 @@ public class GameDataManager : MonoBehaviour
 {
     public static GameDataManager Instance { get; private set; }
 
+    public Dictionary<string, ConstantsData> Constants = new Dictionary<string, ConstantsData>();
     public Dictionary<EventType, List<CustomEventData>> CustomEventData = new Dictionary<EventType, List<CustomEventData>>();
     public Dictionary<string, List<LocalizationData>> LocalizationData = new Dictionary<string, List<LocalizationData>>();
     public Dictionary<Provision, ProvisionData> ProvisionData = new Dictionary<Provision, ProvisionData>();
@@ -44,6 +45,16 @@ public class GameDataManager : MonoBehaviour
             {
                 CustomEventData.Add(ev.Id, new List<CustomEventData>() { ev });
             }
+        }
+
+        yield return null;
+
+        //Constants
+        csvFile = Resources.Load<TextAsset>("GameData/Constants");
+        var constData = CSVSerializer.Deserialize<ConstantsData>(csvFile.text);
+        foreach (var con in constData)
+        {
+            Constants.Add(con.Id, con);
         }
 
         yield return null;

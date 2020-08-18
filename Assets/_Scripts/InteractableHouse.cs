@@ -41,7 +41,11 @@ public class InteractableHouse : InteractableObject
     public GameObject RubbleGo;
     public GameObject BuildingGo;
 
+    public int RelationshipPoints;
+    private int VolunteerCountdown = 4;
+
     public static UnityAction<bool> OnEnterHouse;
+    public BuildingActivityState BuildingActivityState = BuildingActivityState.NONE;
 
     protected virtual void Start()
     {
@@ -118,6 +122,20 @@ public class InteractableHouse : InteractableObject
             UI.Instance.SideNotificationPop(GetType().Name);
         }
         PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+
+        switch (BuildingActivityState)
+        {
+            case BuildingActivityState.VOLUNTEERING:
+                VolunteerCountdown--;
+                if (VolunteerCountdown <= 0)
+                {
+                    BuildRelationship(ThankYouType.VOLUNTEER);
+                    VolunteerCountdown = 4;
+                }
+                break;
+        }
+
+        BuildingActivityState = BuildingActivityState.NONE;
     }
 
     public virtual void SetDeadlineTime(double time, int day)
@@ -230,14 +248,45 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
-            SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
-            ItemDeliveryThanks();
+
+            BuildRelationship(ThankYouType.ITEM);
+            GameClock.ExecuteEvents?.Invoke();
+        }
+    }
+
+    public void ThankYouMessage(ThankYouType thanks)
+    {
+        switch (thanks)
+        {
+            case ThankYouType.ITEM: 
+                ItemDeliveryThanks(); 
+                break;
+
+            case ThankYouType.BABY:
+                EventsManager.Instance.AddEventToList(EventType.THANKYOU_BABY);
+                break;
+
+            case ThankYouType.TEACH:
+                EventsManager.Instance.AddEventToList(EventType.THANKYOU_TEACH);
+                break;
+
+            case ThankYouType.VOLUNTEER:
+                VolunteerThanks();
+                break;
         }
     }
 
     public virtual void ItemDeliveryThanks()
     {
-        GameClock.ExecuteEvents?.Invoke();
+    }
+
+    public virtual void VolunteerThanks()
+    {
+    }
+
+    public virtual void MoneyThanks()
+    {
+        EventsManager.Instance.AddEventToList(EventType.THANKYOU_MONEY);
     }
 
     protected void PopUIFXIcons(string icon, int amount)
@@ -438,6 +487,52 @@ public class InteractableHouse : InteractableObject
         else if (!started && CameraLockOnMe)
         {
             PopUI.gameObject.SetActive(true);
+        }
+    }
+
+    public void BuildRelationship(ThankYouType thanks, int amount = 1)
+    {
+        RelationshipPoints += Mathf.Clamp(amount, 0, 100);
+        RelationshipReward(thanks);
+        SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
+    }
+
+    public virtual void RelationshipReward(ThankYouType thanks)
+    {
+        if(RelationshipPoints >= 65)
+        {
+            //Special Item
+            ThankYouMessage(thanks);
+
+            if (Random.Range(0, 100) < 50)
+            {
+                MoneyThanks();
+                TreasuryManager.Instance.DonateMoney(40);
+            }
+        }
+        else if (RelationshipPoints >= 30)
+        {
+            ThankYouMessage(thanks);
+
+            if(Random.Range(0,100) < 30)
+            {
+                MoneyThanks();
+                TreasuryManager.Instance.DonateMoney(30);
+            }
+        }
+        else if (RelationshipPoints >= 10)
+        {
+            ThankYouMessage(thanks);
+
+            if(Random.Range(0,100) < 20)
+            {
+                MoneyThanks();
+                TreasuryManager.Instance.DonateMoney(20);
+            }
+        }
+        else if (RelationshipPoints >= 1)
+        {
+            ThankYouMessage(thanks);
         }
     }
 

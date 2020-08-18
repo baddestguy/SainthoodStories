@@ -40,6 +40,25 @@ public class InteractableHospital : InteractableHouse
     {
         CheckBabyDelivery();
         CheckFailedDelivery();
+
+        if (BuildingActivityState == BuildingActivityState.DELIVERING_BABY)
+        {
+            GameClock clock = GameManager.Instance.GameClock;
+            CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.HOSPITAL_BONUS);
+
+            if (DeliveryCountdown <= 0 || clock == EndDelivery)
+            {
+                UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
+                UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) * 2);
+                PopIcon.gameObject.SetActive(false);
+                UI.Instance.SideNotificationPop(GetType().Name);
+                DeliveryTimeSet = false;
+                DeliveryCountdown = 4;
+                EndDelivery.SetClock(clock.Time - 1, clock.Day);
+                BuildRelationship(ThankYouType.BABY);
+            }
+        }
+
         base.Tick(time, day);
     }
 
@@ -119,23 +138,12 @@ public class InteractableHospital : InteractableHouse
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.HOSPITAL_BONUS);
         if (clock < EndDelivery)
         {
+            BuildingActivityState = BuildingActivityState.DELIVERING_BABY;
             player.ConsumeEnergy(EnergyConsumption);
-            clock.Tick();
             UI.Instance.DisplayMessage("Delivering a Baby!!");
             UpdateCharityPoints(BabyPoints + (e != null ? (int)e.Gain : 0));
             DeliveryCountdown--;
-        }
-
-        if (DeliveryCountdown <= 0 || clock == EndDelivery)
-        {
-            UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
-            UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) *2);
-            PopIcon.gameObject.SetActive(false);
-            UI.Instance.SideNotificationPop(GetType().Name);
-            DeliveryTimeSet = false;
-            DeliveryCountdown = 4;
-            EndDelivery.SetClock(clock.Time-1, clock.Day);
-            SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
+            clock.Tick();
         }
         else if (EndDelivery == null || clock > EndDelivery)
         {
@@ -200,10 +208,34 @@ public class InteractableHospital : InteractableHouse
         Player player = GameManager.Instance.Player;
         if (player.EnergyDepleted()) return;
 
+        BuildingActivityState = BuildingActivityState.VOLUNTEERING;
         player.ConsumeEnergy(EnergyConsumption);
-        clock.Tick();
         UI.Instance.DisplayMessage("VOLUNTEERED HOSPITAL!");
         UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0));
+        base.VolunteerWork(house);
+        clock.Tick();
+    }
+
+    public override void VolunteerThanks()
+    {
+        EventsManager.Instance.AddEventToList(EventType.THANKYOU_VOLUNTEER_HOSPITAL);
+    }
+
+    public override void RelationshipReward(ThankYouType thanks)
+    {
+        if (RelationshipPoints == 100)
+        {
+            //One time special reward!
+        }
+
+        if (RelationshipPoints >= 65)
+        {
+            //Special Item
+        }
+        else 
+        {
+            base.RelationshipReward(thanks);
+        }
     }
 
     public override void OnDisable()

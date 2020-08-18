@@ -6,6 +6,22 @@ public class DataClasses : MonoBehaviour
 
 }
 
+public enum BuildingActivityState
+{
+    NONE = 0,
+    VOLUNTEERING,
+    TEACHING,
+    DELIVERING_BABY
+}
+
+public enum ThankYouType
+{
+    ITEM,
+    VOLUNTEER,
+    BABY,
+    TEACH
+}
+
 public enum PlayerStatusEffect
 {
     NONE = 0,
@@ -107,7 +123,12 @@ public enum EventType
     THANKYOU_ITEM_SCHOOL,
     THANKYOU_ITEM_ORPHANAGE,
     THANKYOU_ITEM_FOOD,
-    THANKYOU_ITEM_CLOTHES
+    THANKYOU_ITEM_CLOTHES,
+    THANKYOU_MONEY,
+    THANKYOU_BABY,
+    THANKYOU_TEACH,
+    THANKYOU_VOLUNTEER_HOSPITAL,
+    THANKYOU_VOLUNTEER_ORPHANAGE
 }
 
 public enum EventPopupType
@@ -142,6 +163,14 @@ public class ProvisionData
     public Provision Id;
     public string NameKey;
     public string DescriptionKey;
+}
+
+[System.Serializable]
+public class ConstantsData
+{
+    public string Id;
+    public int IntValue;
+    public float FloatValue;
 }
 
 [System.Serializable]

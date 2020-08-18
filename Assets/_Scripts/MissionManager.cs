@@ -9,7 +9,6 @@ public class MissionManager : MonoBehaviour
     public Mission CurrentMission;
     public static UnityAction<bool> MissionComplete;
     public static UnityAction EndOfDay;
-    public static UnityAction StartNewDay;
     public static bool MissionOver;
 
     public Dictionary<TileType, int> HouseScores;
@@ -42,18 +41,11 @@ public class MissionManager : MonoBehaviour
     {
         if (GameClock.EndofDay)
         {
-         //   UI.Instance.ReportDisplay.text += "DAY REPORT" + "\n\n";
-
             EndOfDay?.Invoke();
             
             if(day > CurrentMission.TotalDays)
             {
                 EndMission();
-            }
-            else
-            {
-                StartNewDay?.Invoke();
-                InventoryManager.Instance.GenerateProvisionsForNewDay();
             }
         }
     }
