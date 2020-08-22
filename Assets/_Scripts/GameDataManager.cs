@@ -97,7 +97,7 @@ public class GameDataManager : MonoBehaviour
         yield return null;
     }
 
-    public CustomEventData GetRandomEvent(EventPopupType eGroup)
+    public CustomEventData GetRandomEvent(EventGroup eGroup)
     {
         List<CustomEventData> list = new List<CustomEventData>();
         foreach(var ePair in CustomEventData)
@@ -106,7 +106,7 @@ public class GameDataManager : MonoBehaviour
             list.Add(e);
         }
 
-        var groupList = list.Where(e => e.EventPopupType == eGroup).ToList();
+        var groupList = list.Where(e => e.EventGroup == eGroup).ToList();
         return groupList[Random.Range(0, groupList.Count)];
     }
 
