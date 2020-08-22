@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CustomEventPopup : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class CustomEventPopup : MonoBehaviour
     public TextMeshProUGUI FPCPDisplay;
     public GameObject FPIcon;
     public GameObject CPIcon;
+
+    public Image Hearts;
+    public TextMeshProUGUI HeartsPlus;
 
     private int CurrentSequenceNumber;
 
@@ -59,6 +63,37 @@ public class CustomEventPopup : MonoBehaviour
         {
             EventText.text = $"{LocalizationManager.Instance.GetText(customEvent.LocalizationKey)}";
         }
+
+        if(customEvent.EventGroup == EventGroup.THANKYOU)
+        {
+            StartCoroutine(HeartsAnimation());
+        }
+    }
+
+    IEnumerator HeartsAnimation()
+    {
+        Color color = Hearts.color;
+        color.a = 1f;
+        Hearts.color = color;
+        HeartsPlus.color = color;
+
+        yield return new WaitForSeconds(1.5f);
+        var originalPosition = Hearts.transform.position;
+        while (color.a - 0 > 0.01f)
+        {
+            color.a = Mathf.Lerp(color.a, 0, Time.deltaTime * 2);
+
+            Hearts.color = color;
+            HeartsPlus.color = color;
+            Hearts.transform.position += new Vector3(0, 0.01f, 0);
+            yield return null;
+        }
+
+        Hearts.transform.position = originalPosition;
+        color.a = 0f;
+
+        Hearts.color = color;
+        HeartsPlus.color = color;
     }
 
     public void Yes()

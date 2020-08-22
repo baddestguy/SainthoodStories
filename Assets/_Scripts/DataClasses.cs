@@ -137,6 +137,14 @@ public enum EventPopupType
     YESNO
 }
 
+public enum EventGroup
+{
+    DAILY = 0,
+    IMMEDIATE,
+    ENDWEEK,
+    THANKYOU
+}
+
 public enum Language
 {
     ENGLISH,
@@ -178,6 +186,7 @@ public class CustomEventData
 {
     public EventType Id;
     public EventPopupType EventPopupType;
+    public EventGroup EventGroup;
     public int Weight;
     public float Cost;
     public float Gain;
