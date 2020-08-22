@@ -136,6 +136,12 @@ public class InteractableHouse : InteractableObject
         }
 
         BuildingActivityState = BuildingActivityState.NONE;
+
+        if (CanBuild() && BuildPoints > 0)
+        {
+            PopIcon.gameObject.SetActive(true);
+            PopIcon.Init("Rubble", 0, new GameClock(-1));
+        }
     }
 
     public virtual void SetDeadlineTime(double time, int day)
@@ -309,7 +315,7 @@ public class InteractableHouse : InteractableObject
     public virtual void Build()
     {
         Player player = GameManager.Instance.Player;
-        if (player.EnergyDepleted()) return;
+        if (player.EnergyDepleted() || !CanBuild()) return;
 
         BuildPoints--;
         UI.Instance.DisplayMessage("BUILDING!");
@@ -534,6 +540,17 @@ public class InteractableHouse : InteractableObject
         {
             ThankYouMessage(thanks);
         }
+    }
+
+    public bool CanBuild()
+    {
+        if (!GameDataManager.Instance.ConstructionAvailability.ContainsKey(GetType().Name)) return true;
+
+        ConstructionAvailability myAvailability = GameDataManager.Instance.ConstructionAvailability[GetType().Name];
+        GameClock myClock = new GameClock(myAvailability.Time, myAvailability.Day);
+        GameClock currentClock = GameManager.Instance.GameClock;
+        int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
+        return CurrentWeek >= myAvailability.Week && currentClock >= myClock;
     }
 
     protected virtual void OnEventExecuted(CustomEventData e)

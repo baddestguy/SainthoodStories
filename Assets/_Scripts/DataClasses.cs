@@ -207,6 +207,15 @@ public class LocalizationData
     public string German;
 }
 
+[System.Serializable]
+public class ConstructionAvailability
+{
+    public string Id;
+    public int Week;
+    public int Day;
+    public double Time;
+}
+
 public class TileData
 {
     public int Id { get; }

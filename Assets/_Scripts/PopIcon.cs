@@ -7,6 +7,7 @@ public class PopIcon : MonoBehaviour
     public Image BuildingIcon;
     public TextMeshProUGUI ItemsRequiredDisplay;
     public TextMeshProUGUI DeadlineDisplay;
+    public GameObject ClockIcon;
 
     private Transform CamTransform;
     private bool PoppedUI;
@@ -28,14 +29,9 @@ public class PopIcon : MonoBehaviour
         ItemsRequiredDisplay.text = $"{items}";
         DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
 
-        if (items <= 0)
-        {
-            ItemsRequiredDisplay.gameObject.SetActive(false);
-        }
-        else
-        {
-            ItemsRequiredDisplay.gameObject.SetActive(true);
-        }
+        ItemsRequiredDisplay.gameObject.SetActive(items > 0);
+        DeadlineDisplay.gameObject.SetActive(deadline.Time >= 0);
+        ClockIcon.SetActive(deadline.Time >= 0);
 
         GameClock clock = GameManager.Instance.GameClock;
         if (clock.TimeDifference(deadline) <= 1.5)
