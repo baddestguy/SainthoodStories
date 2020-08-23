@@ -503,6 +503,7 @@ MonoBehaviour:
   BuildingIcon: {fileID: 7623083959648447406}
   ItemsRequiredDisplay: {fileID: 7623083957824614562}
   DeadlineDisplay: {fileID: 7623083957976643424}
+  ClockIcon: {fileID: 7623083958565432531}
 --- !u!1 &7623083959648447404
 GameObject:
   m_ObjectHideFlags: 0

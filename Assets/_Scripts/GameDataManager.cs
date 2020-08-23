@@ -14,6 +14,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<string, List<LocalizationData>> LocalizationData = new Dictionary<string, List<LocalizationData>>();
     public Dictionary<Provision, ProvisionData> ProvisionData = new Dictionary<Provision, ProvisionData>();
     public Dictionary<ItemType, ShopItemData> ShopItemData = new Dictionary<ItemType, ShopItemData>();
+    public Dictionary<string, ConstructionAvailability> ConstructionAvailability = new Dictionary<string, ConstructionAvailability>();
 
     void Awake()
     {
@@ -92,6 +93,16 @@ public class GameDataManager : MonoBehaviour
         foreach (var item in shopData)
         {
             ShopItemData.Add(item.Id, item);
+        }
+
+        yield return null;
+
+        //Construction Availability
+        csvFile = Resources.Load<TextAsset>("GameData/ConstructionAvailability");
+        var availData = CSVSerializer.Deserialize<ConstructionAvailability>(csvFile.text);
+        foreach (var item in availData)
+        {
+            ConstructionAvailability.Add(item.Id, item);
         }
 
         yield return null;
