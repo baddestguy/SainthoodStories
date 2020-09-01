@@ -1,0 +1,4 @@
+Id,Week,Day,Time,IsOrderedSequence
+Tutorial_1,1,1,6,TRUE
+Tutorial_2,1,1,12,TRUE
+Tutorial_3,1,1,15,TRUE

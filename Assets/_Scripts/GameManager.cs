@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
             UI.Instance.ShowWeekBeginText();
             PlayAmbience(GameClock.Time, GameClock.Day);
-            SoundManager.Instance.PlayOST("IntroMusic");
         }
     }
 

@@ -195,6 +195,16 @@ public class CustomEventData
 }
 
 [System.Serializable]
+public class StoryEventData
+{
+    public string Id;
+    public int Week;
+    public int Day;
+    public double Time;
+    public bool IsOrderedSequence;
+}
+
+[System.Serializable]
 public class LocalizationData
 {
     public string Key;
@@ -208,7 +218,7 @@ public class LocalizationData
 }
 
 [System.Serializable]
-public class ConstructionAvailability
+public class ConstructionAvailabilityData
 {
     public string Id;
     public int Week;

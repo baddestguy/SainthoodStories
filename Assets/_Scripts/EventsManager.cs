@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,6 +11,7 @@ public class EventsManager : MonoBehaviour
     public static UnityAction<CustomEventData> EventExecuted;
 
     private List<CustomEventData> EventList = new List<CustomEventData>();
+    private List<StoryEventData> StoryEvents = new List<StoryEventData>();
     public List<CustomEventData> CurrentEvents = new List<CustomEventData>();
     public bool EventInProgress;
 
@@ -62,6 +64,9 @@ public class EventsManager : MonoBehaviour
 
     public void TryEventTrigger(double time, int day)
     {
+        //Try Trigger Story Events First
+        if (ExecuteStoryEvent()) return;
+
         if(time < 21 && !EventInProgress)
         {
             if (Random.Range(0, 100) < 2 && CurrentEvents.Count < 3)
@@ -89,6 +94,42 @@ public class EventsManager : MonoBehaviour
                 break;
         }
         EventExecuted?.Invoke(e);
+    }
+
+    private bool ExecuteStoryEvent()
+    {
+        int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
+        GameClock currentClock = GameManager.Instance.GameClock;
+        var storyEvent = GameDataManager.Instance.StoryEventData.Where(s => s.Value.Week == CurrentWeek && s.Value.Day == currentClock.Day && s.Value.Time == currentClock.Time).FirstOrDefault().Value;
+        if (storyEvent == null) return false;
+
+        StoryEvents.Add(storyEvent);
+        StartCoroutine(ExecuteStoryEventsAsync());
+
+        return true;
+    }
+
+    private IEnumerator ExecuteStoryEventsAsync()
+    {
+        EventDialogTriggered?.Invoke(true);
+        Player.LockMovement = true;
+
+        //Execute events one by one
+        foreach (var e in StoryEvents)
+        {
+            EventInProgress = true;
+            UI.Instance.EventAlert(new CustomEventData() { LocalizationKey = e.Id, EventPopupType = EventPopupType.OK, IsOrderedSequence = e.IsOrderedSequence });
+            while (EventInProgress)
+            {
+                yield return null;
+            }
+        }
+
+        yield return null;
+
+        StoryEvents.Clear();
+        Player.LockMovement = false;
+        EventDialogTriggered?.Invoke(false);
     }
 
     public bool HasEventsInQueue()
