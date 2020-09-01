@@ -137,7 +137,7 @@ public class InteractableHouse : InteractableObject
 
         BuildingActivityState = BuildingActivityState.NONE;
 
-        if (CanBuild() && BuildPoints > 0)
+        if (CanBuild())
         {
             PopIcon.gameObject.SetActive(true);
             PopIcon.Init("Rubble", 0, new GameClock(-1));
@@ -494,6 +494,14 @@ public class InteractableHouse : InteractableObject
         {
             PopUI.gameObject.SetActive(true);
         }
+
+        if(CanBuild() || DeadlineSet || GetType().Name == "InteractableChurch") //Only reason to have popicons displaying
+        {
+            PopIcon.gameObject.SetActive(true);
+            PopIcon.UIPopped(started);
+            if (CanBuild()) PopIcon.Init("Rubble", 0, new GameClock(-1));
+            else PopMyIcon();
+        }
     }
 
     public void BuildRelationship(ThankYouType thanks, int amount = 1)
@@ -544,9 +552,10 @@ public class InteractableHouse : InteractableObject
 
     public bool CanBuild()
     {
+        if (BuildPoints <= 0) return false;
         if (!GameDataManager.Instance.ConstructionAvailability.ContainsKey(GetType().Name)) return true;
 
-        ConstructionAvailability myAvailability = GameDataManager.Instance.ConstructionAvailability[GetType().Name];
+        ConstructionAvailabilityData myAvailability = GameDataManager.Instance.ConstructionAvailability[GetType().Name];
         GameClock myClock = new GameClock(myAvailability.Time, myAvailability.Day);
         GameClock currentClock = GameManager.Instance.GameClock;
         int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;

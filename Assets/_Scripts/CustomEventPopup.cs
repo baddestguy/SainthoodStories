@@ -50,7 +50,8 @@ public class CustomEventPopup : MonoBehaviour
                 break;
         }
 
-        if (customEvent.IsOrderedSequence)
+        int sequences = LocalizationManager.Instance.GetTotalSequences(EventData.LocalizationKey);
+        if (customEvent.IsOrderedSequence && sequences > 1)
         {
             CurrentSequenceNumber = 0;
             EventText.text = $"{LocalizationManager.Instance.GetText(customEvent.LocalizationKey, CurrentSequenceNumber)}";
