@@ -59,7 +59,7 @@
 
     public override void ItemDeliveryThanks()
     {
-        EventsManager.Instance.AddEventToList(EventType.THANKYOU_ITEM_CLOTHES);
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_CLOTHES);
         base.ItemDeliveryThanks();
     }
 

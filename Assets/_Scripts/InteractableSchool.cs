@@ -101,7 +101,7 @@ public class InteractableSchool : InteractableHouse
 
     public override void ItemDeliveryThanks()
     {
-        EventsManager.Instance.AddEventToList(EventType.THANKYOU_ITEM_SCHOOL);
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_SCHOOL);
         base.ItemDeliveryThanks();
     }
 
@@ -214,7 +214,7 @@ public class InteractableSchool : InteractableHouse
     {
         switch (e.Id)
         {
-            case EventType.SCHOOL_CLOSED:
+            case CustomEventType.SCHOOL_CLOSED:
                 ClosingTime = 0;
                 break;
         }

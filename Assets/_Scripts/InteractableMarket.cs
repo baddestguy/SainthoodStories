@@ -80,15 +80,15 @@ public class InteractableMarket : InteractableHouse
     public static double ApplyDiscount(double price)
     {
         double newPrice = price;
-        var e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.MARKET_DISCOUNT || i.Id == EventType.MARKET_MARKUP);
+        var e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.MARKET_DISCOUNT || i.Id == CustomEventType.MARKET_MARKUP);
 
         if(e != null)
         {
-            if(e.Id == EventType.MARKET_DISCOUNT)
+            if(e.Id == CustomEventType.MARKET_DISCOUNT)
             {
                 newPrice = newPrice - (e.Cost / 100 * newPrice);
             }
-            else if(e.Id == EventType.MARKET_MARKUP)
+            else if(e.Id == CustomEventType.MARKET_MARKUP)
             {
                 newPrice = newPrice + (e.Cost / 100 * newPrice);
             }
@@ -106,7 +106,7 @@ public class InteractableMarket : InteractableHouse
     {
         switch (e.Id)
         {
-            case EventType.MARKET_HOURS:
+            case CustomEventType.MARKET_HOURS:
                 if(e.Cost == 18)
                 {
                     ClosingTime = 23;

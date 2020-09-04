@@ -193,7 +193,7 @@ public class Player : MonoBehaviour
     public int ModifyEnergyConsumption(MapTile tile = null, int amount = 1)
     {
         int energyAmount = amount;
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.SICK);
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.SICK);
 
         if (tile != null && InventoryManager.Instance.HasProvision(Provision.SHOES))
         {

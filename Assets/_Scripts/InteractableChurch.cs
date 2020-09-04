@@ -51,7 +51,7 @@ public class InteractableChurch : InteractableHouse
     private void UpdateLiturgyTimes()
     {
         GameClock clock = GameManager.Instance.GameClock;
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.WEEKDAY_MASS);
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
 
         if (clock.Time > 21.5 || clock.Time <= 6.5)
         {
@@ -119,7 +119,7 @@ public class InteractableChurch : InteractableHouse
     {
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.WEEKDAY_MASS);
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
 
         if (clock.Day % 7 == 0 || e != null)
         {

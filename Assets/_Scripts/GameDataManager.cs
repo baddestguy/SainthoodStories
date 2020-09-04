@@ -10,7 +10,7 @@ public class GameDataManager : MonoBehaviour
     public static GameDataManager Instance { get; private set; }
 
     public Dictionary<string, ConstantsData> Constants = new Dictionary<string, ConstantsData>();
-    public Dictionary<EventType, List<CustomEventData>> CustomEventData = new Dictionary<EventType, List<CustomEventData>>();
+    public Dictionary<CustomEventType, List<CustomEventData>> CustomEventData = new Dictionary<CustomEventType, List<CustomEventData>>();
     public Dictionary<string, List<LocalizationData>> LocalizationData = new Dictionary<string, List<LocalizationData>>();
     public Dictionary<Provision, ProvisionData> ProvisionData = new Dictionary<Provision, ProvisionData>();
     public Dictionary<ItemType, ShopItemData> ShopItemData = new Dictionary<ItemType, ShopItemData>();
@@ -132,9 +132,9 @@ public class GameDataManager : MonoBehaviour
         return groupList[Random.Range(0, groupList.Count)];
     }
 
-    public bool IsSpritualEvent(EventType e)
+    public bool IsSpritualEvent(CustomEventType e)
     {
-        return e == EventType.SPIRITUAL_RETREAT ||
-            e == EventType.PRAYER_REQUEST;
+        return e == CustomEventType.SPIRITUAL_RETREAT ||
+            e == CustomEventType.PRAYER_REQUEST;
     }
 }

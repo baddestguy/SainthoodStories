@@ -95,7 +95,7 @@ public enum BuildingState
     FIRE
 }
 
-public enum EventType
+public enum CustomEventType
 {
     MARKET_HOURS = 0,
     RAIN,
@@ -184,7 +184,7 @@ public class ConstantsData
 [System.Serializable]
 public class CustomEventData
 {
-    public EventType Id;
+    public CustomEventType Id;
     public EventPopupType EventPopupType;
     public EventGroup EventGroup;
     public int Weight;

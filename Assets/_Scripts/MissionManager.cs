@@ -87,22 +87,22 @@ public class MissionManager : MonoBehaviour
         {
             if (FaithPoints < 30)
             {
-                EventsManager.Instance.AddEventToList(EventType.SPIRITUALCRISIS);
+                EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
             }
             if (CharityPoints < 30)
             {
-                EventsManager.Instance.AddEventToList(EventType.RIOTS);
+                EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
             }
         }
         else
         {
             if (FaithPoints > 75)
             {
-                EventsManager.Instance.AddEventToList(EventType.ICON);
+                EventsManager.Instance.AddEventToList(CustomEventType.ICON);
             }
             if (CharityPoints > 75)
             {
-                EventsManager.Instance.AddEventToList(EventType.DONATION);
+                EventsManager.Instance.AddEventToList(CustomEventType.DONATION);
             }
         }
         EventsManager.Instance.ExecuteEvents();

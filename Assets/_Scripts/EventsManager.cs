@@ -23,7 +23,7 @@ public class EventsManager : MonoBehaviour
         GameClock.StartNewDay += StartNewDay;
     }
 
-    public void AddEventToList(EventType newEvent)
+    public void AddEventToList(CustomEventType newEvent)
     {
         var e = GameDataManager.Instance.CustomEventData[newEvent][0]; //Grab based on weight
         EventList.Add(e);
@@ -89,7 +89,7 @@ public class EventsManager : MonoBehaviour
     {
         switch (e.Id)
         {
-            case EventType.RAIN:
+            case CustomEventType.RAIN:
                 WeatherManager.Instance.OverrideWeatherActivation(Random.Range(3, 5), (int)e.Cost);
                 break;
         }
