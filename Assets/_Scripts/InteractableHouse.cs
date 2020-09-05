@@ -137,7 +137,7 @@ public class InteractableHouse : InteractableObject
 
         BuildingActivityState = BuildingActivityState.NONE;
 
-        if (CanBuild())
+        if (CanBuild() && !HouseUIActive)
         {
             PopIcon.gameObject.SetActive(true);
             PopIcon.Init("Rubble", 0, new GameClock(-1));
@@ -269,11 +269,11 @@ public class InteractableHouse : InteractableObject
                 break;
 
             case ThankYouType.BABY:
-                EventsManager.Instance.AddEventToList(EventType.THANKYOU_BABY);
+                EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_BABY);
                 break;
 
             case ThankYouType.TEACH:
-                EventsManager.Instance.AddEventToList(EventType.THANKYOU_TEACH);
+                EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_TEACH);
                 break;
 
             case ThankYouType.VOLUNTEER:
@@ -292,7 +292,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual void MoneyThanks()
     {
-        EventsManager.Instance.AddEventToList(EventType.THANKYOU_MONEY);
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_MONEY);
     }
 
     protected void PopUIFXIcons(string icon, int amount)
@@ -360,13 +360,13 @@ public class InteractableHouse : InteractableObject
 
     public virtual void UpdateCharityPoints(int amount)
     {
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.HIGH_MORALE || i.Id == EventType.LOW_MORALE);
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_MORALE || i.Id == CustomEventType.LOW_MORALE);
         int charityMultiplier = 1;
         if (e != null)
         {
             if (Random.Range(0, 100) < 20)
             {
-                charityMultiplier += e.Id == EventType.HIGH_MORALE ? (int)e.Gain : -charityMultiplier;
+                charityMultiplier += e.Id == CustomEventType.HIGH_MORALE ? (int)e.Gain : -charityMultiplier;
             }
         }
 
@@ -382,14 +382,14 @@ public class InteractableHouse : InteractableObject
 
     public virtual void UpdateFaithPoints(int amount)
     {
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.HIGH_SPIRIT || i.Id == EventType.LOW_SPIRIT);
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_SPIRIT || i.Id == CustomEventType.LOW_SPIRIT);
 
         int faithMultiplier = InventoryManager.Instance.HasProvision(Provision.ROSARY) ? 2 : 1;
         if(e != null)
         {
             if(Random.Range(0,100) < 20)
             {
-                faithMultiplier += e.Id == EventType.HIGH_SPIRIT ? (int)e.Gain : -faithMultiplier;
+                faithMultiplier += e.Id == CustomEventType.HIGH_SPIRIT ? (int)e.Gain : -faithMultiplier;
             }
         }
         CurrentFaithPoints += amount * faithMultiplier;
@@ -497,7 +497,8 @@ public class InteractableHouse : InteractableObject
 
         if(CanBuild() || DeadlineSet || GetType().Name == "InteractableChurch") //Only reason to have popicons displaying
         {
-            PopIcon.gameObject.SetActive(true);
+            if(!started && !HouseUIActive)
+                PopIcon.gameObject.SetActive(true);            
             PopIcon.UIPopped(started);
             if (CanBuild()) PopIcon.Init("Rubble", 0, new GameClock(-1));
             else PopMyIcon();

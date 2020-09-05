@@ -106,8 +106,8 @@ public class CustomEventPopup : MonoBehaviour
 
         switch (EventData.Id)
         {
-            case EventType.SPIRITUAL_RETREAT:
-            case EventType.PRAYER_REQUEST:
+            case CustomEventType.SPIRITUAL_RETREAT:
+            case CustomEventType.PRAYER_REQUEST:
                 for (int i = 0; i < EventData.Cost; i++)
                 {
                     clock.Tick();
@@ -116,7 +116,7 @@ public class CustomEventPopup : MonoBehaviour
                 GameManager.Instance.MissionManager.UpdateFaithPoints((int)EventData.Gain);
                 break;
 
-            case EventType.TOWN_HELP:
+            case CustomEventType.TOWN_HELP:
                 for (int i = 0; i < EventData.Cost; i++)
                 {
                     clock.Tick();

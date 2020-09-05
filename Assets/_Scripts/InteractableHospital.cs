@@ -44,7 +44,7 @@ public class InteractableHospital : InteractableHouse
         if (BuildingActivityState == BuildingActivityState.DELIVERING_BABY)
         {
             GameClock clock = GameManager.Instance.GameClock;
-            CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.HOSPITAL_BONUS);
+            CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
 
             if (DeliveryCountdown <= 0 || clock == EndDelivery)
             {
@@ -66,7 +66,7 @@ public class InteractableHospital : InteractableHouse
     {
         if (BuildingState != BuildingState.NORMAL) return;
 
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.BABY_FEVER);
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.BABY_FEVER);
         if ((!DeliveryTimeSet && !DeadlineSet) && Random.Range(0, 1.0f) > (e != null ? e.Cost : 0.95f))
         {
             SetBabyDelivery();
@@ -135,7 +135,7 @@ public class InteractableHospital : InteractableHouse
         Player player = GameManager.Instance.Player;
         if (player.EnergyDepleted()) return;
 
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.HOSPITAL_BONUS);
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
         if (clock < EndDelivery)
         {
             BuildingActivityState = BuildingActivityState.DELIVERING_BABY;
@@ -171,7 +171,7 @@ public class InteractableHospital : InteractableHouse
 
     public override void ItemDeliveryThanks()
     {
-        EventsManager.Instance.AddEventToList(EventType.THANKYOU_ITEM_HOSPITAL);
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_HOSPITAL);
         base.ItemDeliveryThanks();
     }
 
@@ -203,7 +203,7 @@ public class InteractableHospital : InteractableHouse
     {
         if (house != this) return;
 
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.HOSPITAL_BONUS);
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
         if (player.EnergyDepleted()) return;
@@ -218,7 +218,7 @@ public class InteractableHospital : InteractableHouse
 
     public override void VolunteerThanks()
     {
-        EventsManager.Instance.AddEventToList(EventType.THANKYOU_VOLUNTEER_HOSPITAL);
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_VOLUNTEER_HOSPITAL);
     }
 
     public override void RelationshipReward(ThankYouType thanks)

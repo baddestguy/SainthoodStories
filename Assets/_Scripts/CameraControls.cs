@@ -100,4 +100,8 @@ public class CameraControls : MonoBehaviour
         UICam3D.orthographicSize = Mathf.Lerp(UICam3D.orthographicSize, ZoomTarget, Time.deltaTime * 3); ;
     }
 
+    public void SetZoomTarget(float target)
+    {
+        ZoomTarget = target;
+    }
 }

@@ -68,7 +68,7 @@ public class InteractableOrphanage : InteractableHouse
 
     public override void ItemDeliveryThanks()
     {
-        EventsManager.Instance.AddEventToList(EventType.THANKYOU_ITEM_ORPHANAGE);
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_ORPHANAGE);
         base.ItemDeliveryThanks();
     }
 
@@ -162,7 +162,7 @@ public class InteractableOrphanage : InteractableHouse
         if (DuringOpenHours())
         {
             BuildingActivityState = BuildingActivityState.VOLUNTEERING;
-            CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == EventType.ORPHANAGE_BONUS);
+            CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.ORPHANAGE_BONUS);
             player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("VOLUNTEERED AT ORPHANAGE!");
             UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0));
@@ -177,7 +177,7 @@ public class InteractableOrphanage : InteractableHouse
 
     public override void VolunteerThanks()
     {
-        EventsManager.Instance.AddEventToList(EventType.THANKYOU_VOLUNTEER_ORPHANAGE);
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_VOLUNTEER_ORPHANAGE);
     }
 
     public override void PopUICallback(string button)

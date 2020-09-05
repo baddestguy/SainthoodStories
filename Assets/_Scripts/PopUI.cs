@@ -15,18 +15,27 @@ public class PopUI : MonoBehaviour
     public TextMeshProUGUI ItemsRequiredDisplay;
     public TextMeshProUGUI DeadlineDisplay;
 
+    private bool PointerDown;
+    public float ButtonTimer;
+    private float ButtonTimerTarget;
+    private string ButtonName;
+
+    public GameObject ChargeFx;
+    public GameObject ButtonPressFx;
+
     void Start()
     {
         CamTransform = Camera.main.transform;
     }
 
-    public virtual void Init(Action<string> callback, string sprite, int items, GameClock deadline)
+    public virtual void Init(Action<string> callback, string sprite, int items, GameClock deadline, float timer = 1f)
     {
         Callback = callback;
 
         BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{sprite}");
         ItemsRequiredDisplay.text = $"{items}";
         DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
+        ButtonTimerTarget = timer;
 
         if (items <= 0)
         {
@@ -62,9 +71,29 @@ public class PopUI : MonoBehaviour
             return;
         }
 
+        ChargeFx.SetActive(false);
+        ButtonPressFx.SetActive(true);
+        ButtonPressFx.transform.position = ChargeFx.transform.position;
         SoundManager.Instance.PlayOneShotSfx("Button");
-        StartCoroutine(ActionPauseCycle());
         Callback?.Invoke(button);
+        Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
+    }
+
+    public void OnPointerDown(string button)
+    {
+        PointerDown = true;
+        ButtonName = button;
+        ChargeFx.SetActive(true);
+        Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
+        ChargeFx.transform.position = new Vector3(fxpos.x, ChargeFx.transform.position.y, ChargeFx.transform.position.z);
+        Camera.main.GetComponent<CameraControls>().SetZoomTarget(2.5f);
+    }
+
+    public void OnPointerUp()
+    {
+        PointerDown = false;
+        ChargeFx.SetActive(false);
+        Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
     }
 
     private IEnumerator ActionPauseCycle()
@@ -96,6 +125,26 @@ public class PopUI : MonoBehaviour
     void Update()
     {
         transform.forward = CamTransform.forward;
+
+        if (PointerDown)
+        {
+            //Play VFX
+            ButtonTimer += Time.deltaTime;
+            if(ButtonTimer >= ButtonTimerTarget)
+            {
+                PointerDown = false;
+                ButtonTimer = 0f;
+                OnClick(ButtonName);
+            }
+        }
+        else
+        {
+            ButtonTimer -= Time.deltaTime;
+            if (ButtonTimer <= 0)
+            {
+                ButtonTimer = 0;
+            }
+        }
     }
 
     private void OnDisable()
@@ -107,5 +156,7 @@ public class PopUI : MonoBehaviour
         }
         LockUI = false;
         Player.LockMovement = false;
+        ChargeFx.SetActive(false);
+        ButtonPressFx.SetActive(false);
     }
 }
