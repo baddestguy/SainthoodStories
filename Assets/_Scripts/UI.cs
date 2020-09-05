@@ -433,7 +433,7 @@ public class UI : MonoBehaviour
     public void DisplayMessage(string message)
     {
         ClearDisplay = true;
-        MessageDisplay.text = message;
+    //    MessageDisplay.text = message;
     }
 
     public void ReturnToMainMenu()

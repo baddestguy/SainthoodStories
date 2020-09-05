@@ -1,4 +1,10 @@
 Id,Week,Day,Time,IsOrderedSequence
 Tutorial_1,1,1,6,TRUE
-Tutorial_2,1,1,12,TRUE
-Tutorial_3,1,1,15,TRUE
+Tutorial_2,1,1,7,TRUE
+Tutorial_3,1,1,8.5,TRUE
+Tutorial_4,1,1,10.5,TRUE
+Tutorial_5,1,1,12,TRUE
+Tutorial_6,1,1,13,TRUE
+Tutorial_7,1,1,18,TRUE
+Tutorial_8,1,1,19,TRUE
+Tutorial_9,1,1,21,TRUE
