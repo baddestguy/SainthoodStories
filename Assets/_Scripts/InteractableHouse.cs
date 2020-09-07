@@ -27,6 +27,8 @@ public class InteractableHouse : InteractableObject
     protected int NeglectedMultiplier = 1;
 
     protected PopIcon PopIcon;
+    protected BuildingInformationPopup InfoPopup;
+    protected BuildingInformationPopup RubbleInfoPopup;
     protected PopUI PopUI;
     protected string PopUILocation = "";
     protected string OriginalPopUILocation = "";
@@ -73,12 +75,23 @@ public class InteractableHouse : InteractableObject
             PopUILocation = "UI/ConstructUI";
         }
 
+        InfoPopup = Instantiate(Resources.Load<GameObject>("UI/BuildingInfoPopup")).GetComponent<BuildingInformationPopup>();
+        RubbleInfoPopup = Instantiate(Resources.Load<GameObject>("UI/RubbleInfoPopup")).GetComponent<BuildingInformationPopup>();
+        
         RubbleGo.SetActive(BuildingState == BuildingState.RUBBLE);
         BuildingGo.SetActive(BuildingState == BuildingState.NORMAL);
 
         PopIcon.transform.SetParent(transform);
         PopIcon.transform.localPosition = new Vector3(0, 1, 0);
         PopIcon.gameObject.SetActive(false);
+
+        InfoPopup.transform.SetParent(transform);
+        InfoPopup.transform.localPosition = new Vector3(0, 2, 0);
+        InfoPopup.gameObject.SetActive(false);
+
+        RubbleInfoPopup.transform.SetParent(transform);
+        RubbleInfoPopup.transform.localPosition = new Vector3(0, 2, 0);
+        RubbleInfoPopup.gameObject.SetActive(false);
 
         if (!string.IsNullOrEmpty(PopUILocation))
         {
@@ -482,6 +495,9 @@ public class InteractableHouse : InteractableObject
             SoundManager.Instance.FadeAmbience(0.3f);
             OnEnterHouse?.Invoke(false);
         }
+
+        InfoPopup.gameObject.SetActive(false);
+        RubbleInfoPopup.gameObject.SetActive(false);
     }
 
     private void OnEventDialogTriggered(bool started)
@@ -566,6 +582,33 @@ public class InteractableHouse : InteractableObject
     protected virtual void OnEventExecuted(CustomEventData e)
     {
 
+    }
+
+    public virtual void OnMouseOver()
+    {
+        if (HouseUIActive || EventsManager.Instance.HasEventsInQueue()) return;
+
+        if (BuildingState == BuildingState.RUBBLE)
+        {
+            RubbleInfoPopup.gameObject.SetActive(true);
+        }
+        else
+        {
+            InfoPopup.gameObject.SetActive(true);
+        }
+
+        InfoPopup.Init(GetType().Name, OpenTime, ClosingTime, RelationshipPoints);
+        PopIcon.gameObject.SetActive(false);
+    }
+
+    public virtual void OnMouseExit()
+    {
+        if (HouseUIActive) return;
+
+        RubbleInfoPopup.gameObject.SetActive(false);
+        InfoPopup.gameObject.SetActive(false);
+        var clock = GameManager.Instance.GameClock;
+        Tick(clock.Time, clock.Day);
     }
 
     public override void OnDisable()

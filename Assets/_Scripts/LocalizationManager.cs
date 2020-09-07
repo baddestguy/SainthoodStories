@@ -15,11 +15,13 @@ public class LocalizationManager : MonoBehaviour
 
     public string GetText(string key)
     {
+        if (!GameDataManager.Instance.LocalizationData.ContainsKey(key)) return key;
         return GetText(key, Random.Range(0, GameDataManager.Instance.LocalizationData[key].Count));
     }
 
     public string GetText(string key, int sequenceNumber = 0)
     {
+        if (!GameDataManager.Instance.LocalizationData.ContainsKey(key)) return key;
         var localizationData = GameDataManager.Instance.LocalizationData[key][sequenceNumber];
 
         switch (CurrentLanguage)

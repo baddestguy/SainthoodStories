@@ -134,7 +134,7 @@ public class EventsManager : MonoBehaviour
 
     public bool HasEventsInQueue()
     {
-        return EventList.Count > 0;
+        return EventList.Count > 0 || StoryEvents.Count > 0;
     }
 
     private void OnDisable()
