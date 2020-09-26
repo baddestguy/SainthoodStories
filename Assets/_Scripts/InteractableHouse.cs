@@ -569,7 +569,7 @@ public class InteractableHouse : InteractableObject
 
     public bool CanBuild()
     {
-        if (BuildPoints <= 0) return false;
+        if (BuildPoints <= 0 || BuildingState == BuildingState.NORMAL) return false;
         if (!GameDataManager.Instance.ConstructionAvailability.ContainsKey(GetType().Name)) return true;
 
         ConstructionAvailabilityData myAvailability = GameDataManager.Instance.ConstructionAvailability[GetType().Name];

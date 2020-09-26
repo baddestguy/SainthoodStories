@@ -1,19 +1,181 @@
 Key,English,French,BrPt,Filipino,LatAmSpanish,Italian,German
-Tutorial_1,Hi there!,Salut!,Olá!,Kumusta!,¡Hola!,Ciao!,Hallo!
-Tutorial_1,Hi there again!,Salut là encore!,Oi lá novamente!,Kamusta muli!,¡Hola de nuevo!,Ciao di nuovo!,Hallo wieder!
-Tutorial_1,Hi there again for the third time!,Salut à nouveau pour la troisième fois!,"Oi lá novamente, pela terceira vez!",Kamusta muli para sa ikatlong oras!,Hola de nuevo por tercera vez!,Ciao di nuovo per la terza volta!,Hallo dort wieder zum dritten Mal!
-Tutorial_2,Hi there!,Salut!,Olá!,Kumusta!,¡Hola!,Ciao!,Hallo!
-Tutorial_3,Hi there!,Salut!,Olá!,Kumusta!,¡Hola!,Ciao!,Hallo!
-Tutorial_4,Hi there!,Salut!,Olá!,Kumusta!,¡Hola!,Ciao!,Hallo!
-Tutorial_5,Hi there!,Salut!,Olá!,Kumusta!,¡Hola!,Ciao!,Hallo!
-Tutorial_6,Hi there!,Salut!,Olá!,Kumusta!,¡Hola!,Ciao!,Hallo!
-Tutorial_7,Hi there!,Salut!,Olá!,Kumusta!,¡Hola!,Ciao!,Hallo!
-Tutorial_8,Hi there!,Salut!,Olá!,Kumusta!,¡Hola!,Ciao!,Hallo!
-Tutorial_9,Hi there!,Salut!,Olá!,Kumusta!,¡Hola!,Ciao!,Hallo!
-Tutorial_10,Hi there!,Salut!,Olá!,Kumusta!,¡Hola!,Ciao!,Hallo!
+Tutorial_1,"You knock on the convent doors at the crack of dawn, tired from your long journey, with only the shoes on your feet and the habit on your back. 
+
+The doors swing open to reveal a large woman, dressed in an all black habit, a stern look on her face.","Vous frappez à la porte couvent à l'aube, fatigué de votre long voyage, avec seulement les chaussures sur vos pieds et l'habitude sur votre dos.
+
+Les portes ouvrent pour révéler une grande femme, vêtue d'une habitude tout noir, un regard sévère sur son visage.","Você bater às portas do convento ao romper da aurora, cansado de sua longa jornada, apenas com os sapatos nos pés e o hábito em sua volta.
+
+As portas se abrem para revelar uma grande mulher, vestida com um hábito toda preta, um olhar severo no rosto.","Ikaw kumatok sa kumbento pinto sa crack ng bukang-liwayway, pagod mula sa inyong mahabang paglalakbay, na may lamang ang mga sapatos sa iyong paa at ang ugali sa iyong likod.
+
+Ang mga pinto ugoy bukas sa ibunyag ng isang malaking babae, bihis sa isang all black ugali, mabalasik ang kanyang mukha.","Llamas a las puertas del convento en la hora de la mañana, cansado de su largo viaje, sólo con los zapatos en los pies y el hábito en su espalda.
+
+Las puertas se abren para revelar una gran mujer, vestida con un hábito negro todo, una mirada severa en el rostro.","È bussare alle porte del convento alle prime luci dell'alba, stanco dal lungo viaggio, con solo le scarpe ai piedi e l'abitudine sulla schiena.
+
+Le porte a battente si apre per rivelare una grande donna, vestita in un abito tutto nero, uno sguardo severo sul suo viso.","Sie klopfen an die Klostertüren bei Tagesanbruch, müde von der langen Reise, nur die Schuhe an den Füßen und die Gewohnheit, auf dem Rücken.
+
+Die Türen schwingen offen eine große Frau zu offenbaren, in schwarzer Kutte gekleidet, einen strengen Blick auf ihrem Gesicht."
+Tutorial_1,"""You must be the new girl."" she says, sizing you up. ""You look like you haven't had a meal in a month!""
+
+She wasn't completely wrong, as you had barely had a decent meal in the 60 days you took to travel here.","« Vous devez être la nouvelle fille. » dit-elle, vous jauger. « On dirait que vous n'avez pas eu un repas dans un mois! »
+
+Elle n'a pas été tout à fait tort, que vous aviez eu à peine un repas décent dans les 60 jours que vous avez pris de Voyage ici.","""Você deve ser a nova garota."" ela diz, dimensionamento-lo. ""Parece que você ainda não teve uma refeição em um mês!""
+
+Ela não estava completamente errado, como você mal tinha tido uma refeição decente nos 60 dias que você tomou para viajar aqui.","""Dapat ikaw ang bagong babae."" sabi niya, sizing up sa iyo. ""Tumingin ka tulad ng hindi mo pa nagkaroon ng isang meal sa isang buwan!""
+
+Hindi siya ganap na mali, tulad ng bahagya kang ay isang disenteng pagkain sa ang 60 araw mo kinuha sa travel dito.","""Debe ser la nueva chica."" dice ella, que le clasifica para arriba. ""Parece que no han tenido una comida en un mes!""
+
+Ella no estaba completamente equivocado, ya que apenas hacía la comida decente en los 60 días que tomó para viajar aquí.","""Devi essere la nuova ragazza."" lei dice, si dimensionamento. ""Sembra che tu non hai avuto un pasto in un mese!""
+
+Non era completamente sbagliato, come lei aveva appena avuto un pasto decente nei 60 giorni che avete preso per viaggiare qui.","„Sie müssen das neue Mädchen sein.“ sagt sie, Sizing Ihnen. „Sie sehen aus wie Sie nicht eine Mahlzeit im Monat hatten!“
+
+Sie war nicht ganz falsch, da man kaum eine anständige Mahlzeit in 60 Tagen hatte Sie hier, um die Reise nehmen."
+Tutorial_1,"""No matter, we need all the help we can get. I'm the Prioress, come on in!"" She grabs your hand,  ""You're just in time for Liturgy of the Hours. Come quickly, let us begin.""","« Peu importe, nous avons besoin de toute l'aide que nous pouvons obtenir. Je suis la Prieure, entrez! » Elle saisit la main, « Vous êtes juste à temps pour la Liturgie des Heures. Venez vite, commençons. »","""Não importa, precisamos de toda a ajuda que podemos obter. Eu sou a Prioresa, venha aqui!"" Ela pega sua mão, ""Você é apenas a tempo para Liturgia das Horas. Vem depressa, vamos começar.""","""Hindi mahalaga, kailangan namin ang lahat ng tulong na maibibigay ninyo. Ako ang priyora, come on in!"" Siya grabs ang iyong mga kamay, ""Ikaw lamang sa oras para sa liturhiya ng Oras. Bumalik ka na, ipaalam sa amin magsimula.""","""No importa, necesitamos toda la ayuda que podamos conseguir. Soy la Priora, adelante!"" Ella agarra la mano, ""Eres justo a tiempo para la Liturgia de las Horas. Ven pronto, comencemos.""","""Non importa, abbiamo bisogno di tutto l'aiuto che possiamo ottenere. Sono la Priora, vieni dentro!"" Lei afferra la mano, ""Sei giusto in tempo per Liturgia delle Ore. Vieni presto, cominciamo.""","„Egal, wir brauchen alle Hilfe, die wir bekommen können. Ich bin der Priorin, komm rein!“ Sie packt die Hand: „Du bist gerade rechtzeitig für das Stundengebet. Kommen Sie schnell, lassen Sie uns beginnen.“"
+Tutorial_2,"After prayers, the Prioress shows you to your room. ""As you may have noticed,"" she starts, standing by the doorway, ""everything around here runs according to schedule. You must always be aware of the time, and the activities that require your attention.""","Après la prière, la Prieure vous montre votre chambre. « Comme vous avez pu le remarquer, » elle commence, debout près de la porte, « tout se passe ici selon le calendrier prévu. Vous devez toujours être au courant du temps, et les activités qui requièrent votre attention. »","Depois das orações, a Prioresa mostra para o seu quarto. ""Como você pode ter notado,"" ela começa, de pé junto à porta, ""tudo por aqui é executado de acordo com o cronograma. Você deve sempre estar ciente do tempo, e as atividades que requerem sua atenção.""","Pagkatapos ng panalangin, ang priyora ay nagpapakita sa iyo sa iyong kuwarto. ""Tulad ng maaaring napansin,"" siya ay nagsisimula, nakatayo sa tabi ng pintuan, ""ang lahat ng bagay sa paligid dito ay tumatakbo ayon sa schedule. Dapat palagi kang magkaroon ng kamalayan ng oras, at ang mga gawain na nangangailangan ng iyong pansin.""","Después de las oraciones, la priora le muestra a su habitación. ""Como se habrán dado cuenta,"" ella comienza, de pie junto a la puerta, ""todo por aquí funciona según lo previsto. Siempre hay que tener en cuenta el tiempo, y las actividades que requieren su atención.""","Dopo la preghiera, la Priora si mostra per la vostra camera. ""Come avrete notato,"" comincia, in piedi accanto alla porta, ""tutto qui intorno corre secondo il calendario previsto. Devi sempre essere consapevoli del tempo, e le attività che richiedono la vostra attenzione.""","Nach dem Gebet, zeigt die Priorin Sie zu Ihrem Zimmer. „Wie Sie vielleicht bemerkt haben,“ sie beginnt, von der Tür stand, „alles hier läuft nach Plan. Sie immer über die Zeit sein muss, und die Aktivitäten, die Ihre Aufmerksamkeit erfordern.“"
+Tutorial_2,"""We have Liturgy of the Hours 4 times a day, every day, and we always post the time of the next one above the Convent, so please try to make it as often as you can.""","« Nous avons Liturgie des Heures 4 fois par jour, tous les jours, et nous affichons toujours le temps de la suivante au-dessus du couvent, alors s'il vous plaît essayer de le faire aussi souvent que possible. »","""Temos Liturgia das Horas 4 vezes por dia, todos os dias, e sempre postar o tempo do próximo acima do Convento, por isso, tentar torná-lo tão frequentemente como você pode.""","""Mayroon kaming Liturhiya ng mga Oras 4 na beses sa isang araw, araw-araw, at lagi naming i-post ang panahon ng susunod na isa sa itaas ng Convent, kaya mangyaring subukan upang gawin itong mas madalas hangga't maaari mong.""","""Tenemos Liturgia de las Horas 4 veces al día, todos los días, y siempre nos fijamos la hora de la próxima uno encima del Convento, así que por favor tratamos de hacerlo tan a menudo como sea posible.""","""Abbiamo Liturgia delle ore 4 volte al giorno, tutti i giorni, e abbiamo sempre pubblichiamo il tempo del prossimo sopra il convento, quindi per favore cerchiamo di rendere il più spesso possibile.""","„Wir haben das Stundengebet 4 Mal pro Tag, jeden Tag, und wir die Zeit des nächsten über Kloster immer schreiben, so wenden Sie sich bitte versuchen Sie es zu machen, so oft wie möglich.“"
+Tutorial_2,"You hear a knock on the door. ""Good. Your first task for today, you better get that."" the Prioress commands, and walks off.
+
+You open the door to reveal a tall, dark, heavily built man with a scruffy beard, clad in a tank top and baggy pants, with not a hair on his shiny head.","On entend frapper à la porte. « Bon. Votre première tâche aujourd'hui, il vaut mieux obtenir. » la Prieure commande, et éloigne.
+
+Vous ouvrez la porte pour révéler un grand, sombre, l'homme corpulent à la barbe débraillé, vêtue d'un pantalon et débardeur ample, avec pas un cheveu sur sa tête brillante.","Você ouve uma batida na porta. ""Good. Sua primeira tarefa para hoje, é melhor você conseguir isso."" comanda a Prioresa, e vai embora.
+
+Você abre a porta para revelar um alto, escuro, fortemente homem construído com uma barba mal, vestida com um top e calças largas, com nenhum fio de cabelo na cabeça brilhante.","maririnig mo ang isang kumatok sa pinto. ""Good. Ang iyong unang gawain para sa araw na ito, mas mahusay mong makakuha ng iyon."" ang priyora utos, at nagtuturo sa off.
+
+Buksan mo ang pinto upang ihayag ang isang tall, dark, mabigat na tao na may isang magulo balbas, armas sa isang tangke itaas at nakaumbok pantalon, na may hindi isang buhok sa kanyang makintab na ulo.","Se oye un golpe en la puerta. ""Bien. Su primera tarea para hoy, será mejor que eso."" Comandos de la Priora, y se va.
+
+Se abre la puerta para revelar un alto, oscuro, muy hombre construido con una barba desaliñada, vestido con una camiseta sin mangas y pantalones anchos, sin un pelo en la cabeza brillante.","Si sente bussare alla porta. ""Bene. Il vostro primo compito per oggi, è meglio avere questo"". comanda la Priora, e si allontana.
+
+Si apre la porta per rivelare un uomo alto, scuro, pesantemente uomo costruito con una barba trasandata, rivestito in canottiera e pantaloni larghi, con nemmeno un capello in testa lucida.","Sie hören ein Klopfen an der Tür. „Gut. Ihre erste Aufgabe für heute, erhalten Sie besser das.“ Prioress die Befehle, und geht.
+
+Sie öffnen die Tür einen großen, dunkler zu offenbaren, stark gebauten Mann mit einem struppigen Bart, gekleidet in einem Tank-Top und Baggy Pants, mit nicht einem Haare auf seinem glänzenden Kopf."
+Tutorial_2,"""The name's Trevor."" he says, his voice so hoarse you wonder how he does not squint from throat pain as he speaks. 
+
+""Spoke to your Mother Superior, she said we could borrow some help with construction of the hospital? I suppose that help would be you.""","« Le nom est Trevor. » dit-il, sa voix rauque et vous demander comment il ne strabisme de maux de gorge comme il parle.
+
+« Spoke à votre mère supérieure, elle a dit que nous pourrions emprunter un peu d'aide à la construction de l'hôpital? Je suppose que l'aide serait vous. »","""O nome é Trevor."" ele diz, com a voz tão rouca você quer saber como ele não faz o estrabismo da dor de garganta como ele fala.
+
+""Falou com sua madre superiora, ela disse que poderia emprestar alguma ajuda com a construção do hospital? Suponho que a ajuda seria você.""","""Ang pangalan ay Trevor."" sabi niya, ang kanyang tinig kaya namamaos nagtataka ka kung paano siya ay hindi duling mula sa sakit sa lalamunan bilang siya ay nagsasalita.
+
+""Nagsalita sa iyong Ina Superior, sinabi niya na maaari kaming humiram ng ilang mga tulong sa konstruksiyon ng ospital? Ipagpalagay ko na ang tulong ay magiging iyo.""","""El nombre de Trevor."" él dice, su voz tan ronca uno se pregunta cómo no lo hace estrabismo de dolor de garganta mientras se habla.
+
+""Habló con su madre superiora, ella dijo que podíamos pedir un poco de ayuda con la construcción del hospital? Supongo que ayuda que sería.""","""Il nome di Trevor."" egli dice, la sua voce così rauca ti chiedi come non lo fa strabismo di mal di gola, mentre parla.
+
+""Parlato con tua Madre Superiora, ha detto che potevamo prendere in prestito un aiuto con la costruzione dell'ospedale? Suppongo che aiuto sarebbe te"".","""Der Name ist Trevor."" sagt er, seine Stimme so heiser, Sie fragen sich, wie er es nicht tut Schielen von Halsschmerzen, während er spricht.
+
+„Spoke zu Ihrer Mutter Oberin, sie sagte, dass wir etwas Hilfe mit dem Bau des Krankenhauses leihen könnten? Ich, dass Sie helfen würden annehmen.“"
+Tutorial_2,"Before you can respond, he continues. ""Ma'am, we really don't have time to chit chat. I need to head back. Please come down to the hospital at your earliest convenience, we need all the help we can get.""
+
+And with that, he walks off.","Avant de pouvoir répondre, poursuit-il. « Madame, nous n'avons pas vraiment le temps de chit chat. Je dois la tête en arrière. S'il vous plaît descendre à l'hôpital le plus tôt possible, nous avons besoin de toute l'aide que nous pouvons obtenir. »
+
+Et avec cela, il va.","Antes de poder responder, ele continua. ""Senhora, nós realmente não temos tempo para bate papo. Preciso cabeça para trás. Por favor, venha para baixo para o hospital o mais cedo possível, precisamos de toda a ajuda que podemos obter.""
+
+E com isso, ele vai embora.","Bago ka makakatugon, patuloy niya. ""Ma'am, kami ay talagang hindi magkaroon ng panahon upang chit chat. Kailangan kong head back. Mangyaring bumaba sa ospital sa iyong earliest convenience, kailangan namin ang lahat ng tulong na maibibigay ninyo.""
+
+At sa iyon, siya ay nagtuturo sa off.","Antes de que pueda responder, continúa. ""Señora, que realmente no tienen tiempo para charlar. Tengo que volver la cabeza. Por favor, ven al hospital lo antes posible, necesitamos toda la ayuda que podamos conseguir.""
+
+Y con eso, se va.","Prima di poter rispondere, continua. ""Signora, noi in realtà non hanno il tempo di chiacchiere. Ho bisogno di tornare testa. Si prega di scendere in ospedale al più presto, abbiamo bisogno di tutto l'aiuto che possiamo ottenere.""
+
+E con questo, egli si allontana.","Bevor Sie antworten können, fährt er fort. „Ma'am, wir haben keine Zeit zu Görschwätzchen wirklich. Ich den Kopf zurück müssen. Bitte kommen ins Krankenhaus so bald wie möglich, wir brauchen alle Hilfe, die wir bekommen können.“
+
+Und damit geht er weg."
+Tutorial_3,"On arriving at the construction site, you see a bunch of men and women helping out with all sorts of things.
+
+""Glad you could make it!"" Trevor bellows from behind, ""Couple of hours and we're done here!"" ","En arrivant sur le site de construction, vous voyez un groupe d'hommes et de femmes aider avec toutes sortes de choses.
+
+« Heureux que vous pouvez le faire! » Trevor Soufflet derrière, « quelques heures et nous fait ici! »","Ao chegar no local da construção, você vê um monte de homens e mulheres ajudando com todos os tipos de coisas.
+
+""Que bom que você conseguiu!"" Trevor fole de trás, ""par de horas e estamos a fazer aqui!""","Sa pagdating sa site konstruksiyon, nakikita mo ang isang grupo ng mga kalalakihan at kababaihan sa pagtulong out kasama ang lahat ng uri ng mga bagay-bagay.
+
+""Ikinalulugod maaari mong gawin itong!"" Trevor bubulusan mula sa likod, ""Couple ng mga oras at tapos na kami dito!""","Al llegar al sitio de la construcción, se ve un grupo de hombres y mujeres que ayudan a cabo con todo tipo de cosas.
+
+""Me alegro de que hayas podido venir!"" Trevor fuelle por detrás, ""Un par de horas y ya hemos terminado!""","Al suo arrivo in cantiere, si vede un gruppo di uomini e donne aiutare con ogni sorta di cose.
+
+""Sono contento che tu ce l'abbia fatta!"" Trevor soffietto da dietro, ""Un paio d'ore e abbiamo finito qui!""","auf der Baustelle Bei der Ankunft finden Sie eine Reihe von Männern und Frauen mit allen möglichen Dingen helfen.
+
+""Schön, dass du es geschafft hast!"" Trevor Balgen von hinten, „Ein paar Stunden und wir sind hier fertig!“"
+Tutorial_3,You pull up your sleeves and get to work.,Vous tirez vos manches et se mettre au travail.,Você puxa as mangas e começar a trabalhar.,hilahin mo ang iyong sleeves at makakuha ng upang gumana.,Que tire hacia arriba las mangas y ponerse a trabajar.,Si tira sulle maniche e mettersi al lavoro.,Sie ziehen die Ärmel hoch und an der Arbeit.
+Tutorial_4,"There is a loud cheer as everyone celebrates the completion of the hospital. Trevor catches up with you.
+
+""Not bad eh?"" he says with a smile that exposes gaps in both rows of teeth. ""You did good ma'am. Could use more of your help on the school too, I'll keep you posted on that."" ","Il y a une joie fort que tout le monde célèbre l'achèvement de l'hôpital. Trevor vous rattrape.
+
+« Pas mal hein? » dit-il avec un sourire qui expose des lacunes dans les deux rangées de dents. « Tu as bien madame. On pourrait utiliser plus de votre aide sur l'école aussi, je vous tiendrai au courant à ce sujet. »","Há uma alegria alto que todo mundo comemora a conclusão do hospital. Trevor alcança com você.
+
+""Não é ruim hein?"" ele diz com um sorriso que expõe as lacunas em ambas as fileiras de dentes. ""Você fez boa senhora. Poderia usar mais de sua ajuda na escola também, eu vou mantê-lo informado sobre isso.""","May ay isang malakas na palakpak bilang lahat ng tao ay nagdiriwang sa pagkumpleto ng mga ospital. Trevor catches up sa iyo.
+
+""Hindi masama eh?"" sabi niya na may isang ngiti na inilalantad gaps sa parehong hilera ng mga ngipin. ""Nagawa mo magandang ginang. Puwede gamitin ang higit pa sa iyong tulong sa paaralan masyadong, kukunin ko na panatilihin ang iyong nai-post sa na.""","Hay una ovación como todo el mundo celebra la finalización del hospital. Trevor se pone al día con usted.
+
+""No está mal ¿eh?"" , dice con una sonrisa que expone lagunas en ambas filas de dientes. ""Lo hiciste bien señora. Se podía utilizar más de su ayuda en la escuela también, voy a mantenerlos al tanto de eso.""","C'è un applauso forte come tutti festeggiano il completamento dell'ospedale. Trevor raggiunge con voi.
+
+""Non male eh?"" dice con un sorriso che espone le lacune in entrambe le file di denti. ""Hai fatto bene signora. Potrebbe utilizzare più del vostro aiuto sulla scuola troppo, vi terrò aggiornati su questo.""","Es ist ein laut jubeln, als jeder die Fertigstellung des Krankenhauses feiert. Trevor fängt mit Ihnen.
+
+„Nicht schlecht oder?“ sagt er mit einem Lächeln, das Lücken in den beiden Zahnreihen aussetzt. „Du hast gut Ma'am. Könnte auch mehr von Ihrer Hilfe auf der Schule verwenden, werde ich halten Sie auf, dass dem Laufenden.“"
+Tutorial_4,"As he walks off, a young woman walks up to you. ""Hi there, you must be the novitiate at the convent. Thank you so much for your help!""
+
+She shakes your hand with a heart warming smile. ""My name is Anna, and I'm the head nurse here.""","Comme il en va, une jeune femme se dirige vers vous. « Salut, vous devez être le noviciat au couvent. Je vous remercie beaucoup pour votre aide! »
+
+Elle secoue la main avec un sourire de réchauffement cardiaque. « Mon nom est Anna, et je suis l'infirmière en chef ici. »","Porque anda fora, uma jovem mulher chega a você. ""Olá, você deve ser o noviciado no convento. Muito obrigado pela sua ajuda!""
+
+Ela balança sua mão com um sorriso de aquecimento do coração. ""Meu nome é Anna, e eu sou a enfermeira-chefe aqui.""","Bilang siya ay nagtuturo sa off, ang isang batang babae ay nagtuturo sa iyo. ""Kamusta, ikaw dapat ang pagiging baguhan sa kumbento. Salamat sa iyo kaya magkano ang para sa iyong tulong!""
+
+Siya shakes iyong kamay na may isang puso warming ngiti. ""Ang pangalan ko ay Anna, at ako ang head nurse dito.""","Mientras camina fuera, una joven camina hasta usted. ""Hola, usted debe ser el noviciado en el convento. Muchas gracias por su ayuda!""
+
+Ella te da la mano con una sonrisa reconfortante. ""Mi nombre es Anna, y yo soy el jefe de enfermería aquí.""","Mentre si allontana, una giovane donna si avvicina a te. ""Ciao, è necessario essere il noviziato nel convento. Grazie mille per il vostro aiuto!""
+
+Lei scuote la mano con un sorriso che scalda il cuore. ""Il mio nome è Anna, e io sono la caposala qui.""","Als er geht weg, geht eine junge Frau an Ihnen. „Hallo, müssen Sie das Noviziat im Kloster sein. Vielen Dank für Ihre Hilfe!“
+
+Sie schüttelt die Hand mit einem herzerwärmende Lächeln. „Mein Name ist Anna, und ich bin die Oberschwester hier.“"
+Tutorial_4,"Her smile quickly fades. ""I must ask another favor of you.""
+
+""We are in desperate need of medical supplies. You will save a life if you could hurry and get us supplies from the Shop before time runs out!""","Son sourire rapidement se fane. « Je dois demander une autre faveur. »
+
+« Nous avons désespérément besoin de fournitures médicales. Vous sauver une vie si vous pouviez dépêchez-vous et obtenir nous fournit de la boutique avant le temps imparti! »","Seu sorriso rapidamente se desvanece. ""Devo pedir outro favor de vocês.""
+
+""Nós estamos na necessidade desesperada de suprimentos médicos. Você vai salvar uma vida se você pudesse apressar e entrar nos fornece a partir da Loja de antes do tempo acabar!""","Ang kanyang ngiti nang mabilis fades. ""Kailangan kong tanungin sa isa pang pabor sa iyo.""
+
+""Kami ay nasa gipit na kailangan ng panustos ng medisina. Makikita mo i-save ang isang buhay kung magagawa mong magmadali at makakuha ng sa amin supplies mula sa Shop bago ang oras naubusan!""","Su sonrisa se desvanece rápidamente. ""Debo pedirle otro favor.""
+
+""Estamos en desesperada necesidad de suministros médicos. Va a salvar una vida si pudiera darse prisa y obtener los suministros estadounidenses de la tienda antes de que acabe el tiempo!""","Il suo sorriso svanisce rapidamente. ""Devo chiedere a un altro favore di voi.""
+
+""Siamo in un disperato bisogno di forniture mediche. Potrai salvare una vita se si potesse ottenere in fretta e ci fornisce dal negozio prima che scada il tempo!""","Ihr Lächeln schnell schwindet. „Ich muss einen weiteren Gefallen bitten.“
+
+„Wir sind in einer verzweifelten Notwendigkeit der medizinischen Versorgung. Sie werden ein Leben retten, wenn Sie eilen könnten und uns aus dem Geschäft liefert, bevor die Zeit abläuft!“"
+Tutorial_4,"Looking at the time, you notice you could make Liturgy of the Hours on your way to the Shop. You head out immediately.","En regardant le temps, vous remarquez que vous pouvez faire Liturgie des Heures sur votre chemin à la boutique. Vous dirigez immédiatement.","Olhando para o tempo, você percebe que você poderia fazer Liturgia das Horas no seu caminho para a loja. Você cabeça para fora imediatamente.","Sa pagtingin sa mga oras, mapapansin mo maaari kang gumawa ng liturhiya ng Oras sa iyong paraan sa Shop. magtungo out ka agad.","Mirando el tiempo, se da cuenta que podría hacer Liturgia de las Horas en su camino a la tienda. De salir de inmediato.","Guardando il tempo, si nota si potrebbe fare Liturgia delle Ore sulla strada per il negozio. Di testa fuori immediatamente.","Mit Blick auf die Zeit, beachten Sie, Sie Stundengebet auf dem Weg zum Geschäft machen könnte. Sie fahren sofort aus."
+Tutorial_5,"""Oh great, I'm glad you could join us for this."" the Prioress says, and for a split second you imagine the slightest crack of a smile on the corner of her lips.
+
+""Your services will always be required by the community, and you will do well to serve them. But, you must make time for God.""","« Oh génial, je suis heureux que vous pouvez nous rejoindre pour cela. » le dit prieure, et pour une fraction de seconde vous imaginer la moindre fissure d'un sourire au coin de ses lèvres.
+
+« Vos services seront toujours nécessaires par la communauté, et vous ferez bien de les servir. Mais, il faut prendre le temps pour Dieu. »","""Oh ótimo, eu estou feliz que você poderia se juntar a nós para isso."" a Prioresa diz, e por uma fração de segundo que você imaginar a menor rachadura de um sorriso no canto dos lábios.
+
+""Seus serviços será sempre exigido pela comunidade, e você vai fazer bem para servi-los. Mas, você deve dar tempo para Deus.""","""Oh mahusay, Natutuwa akong maaari kang sumali sa amin para dito."" ang priyora sabi ni, at para sa isang split second isipin mo na ang slightest crack ng isang ngiti sa sulok ng kanyang mga labi.
+
+""Ang iyong serbisyo ay palaging kinakailangan ng komunidad, at ikaw ay gawin na rin upang matugunan ang mga ito. Ngunit, dapat kang gumawa ng oras para sa Diyos.""","""Oh, bien, estoy contenta de que podría unirse a nosotros para esto."" la Priora dice, y por una fracción de segundo que imaginar la más mínima grieta de una sonrisa en la comisura de los labios.
+
+""Sus servicios siempre serán requeridos por la comunidad, y que va a hacer bien a su servicio. Sin embargo, usted debe hacer tiempo para Dios.""","""Oh grande, sono contento che si possa unirsi a noi per questo."" la Priora dice, e per una frazione di secondo si immagina la minima crepa di un sorriso all'angolo delle labbra.
+
+""I vostri servizi saranno sempre tenuti dalla comunità, e si farà bene a servirli. Ma, si deve trovare il tempo per Dio.""","„Na toll, ich bin froh, dass Sie uns für diese kommen könnten.“ die Priorin sagt, und für einen Bruchteil einer Sekunde vorstellen, dass Sie die geringste Riss eines Lächelns an der Ecke ihre Lippen.
+
+„Ihre Dienste werden immer von der Gemeinschaft benötigt werden, und Sie werden gut, sie zu dienen tun. Aber Sie müssen Zeit für Gott machen.“"
+Tutorial_5,"""Keeping this balance between your service to your community, and your prayers to God is the path to Sainthood.""
+
+She ushers you into the chapel to begin the Liturgy.","« Maintenir cet équilibre entre votre service à votre communauté et vos prières à Dieu est le chemin de la sainteté. »
+
+Elle vous ouvre la voie dans la chapelle pour commencer la liturgie.","""Manter esse equilíbrio entre o seu serviço para sua comunidade e suas orações a Deus é o caminho para a santidade.""
+
+Ela inaugura-lo para a capela para começar a Liturgia.","""Pagpapanatiling ito balanse sa pagitan ng iyong serbisyo sa iyong komunidad, at ang inyong mga panalangin sa Diyos ay ang landas sa kabanalan.""
+
+Siya ushers ka sa kapilya upang simulan ang Liturhiya.","""Mantener este equilibrio entre su servicio a su comunidad y sus oraciones a Dios es el camino de la santidad.""
+
+Ella se introduce en la capilla para comenzar la Liturgia.","""Tenendo questo equilibrio tra il vostro servizio alla tua comunità, e le vostre preghiere a Dio è la via verso la santità.""
+
+Lei si introduce nella cappella per iniziare la Liturgia.","„Keeping diese Balance zwischen Ihren Dienst Ihrer Gemeinde, und euer Gebet zu Gott ist der Weg zur Heiligkeit.“
+
+Sie läutet Sie in die Kapelle, die Liturgie zu beginnen."
+Tutorial_6,"""You better get going,"" the Prioress says, ""The hospital needs you.""","« Tu ferais mieux aller, » dit le Prieure, « L'hôpital a besoin de vous. »","""É melhor você ir andando"", a Prioresa diz: ""O hospital precisa de você.""","""Ikaw mas mahusay na makakuha ng pagpunta,"" ang priyora nagsasabing, ""Ang ospital ay nangangailangan ng sa iyo.""","""Será mejor que se va"", la Priora dice: ""El hospital te necesita.""","""È meglio che vada"", la Priora dice: ""L'ospedale ha bisogno di te.""","„Sie besser gehen“, die Priorin sagt: „Das Krankenhaus braucht Sie.“"
+Tutorial_7,"""You seem to have planned out your day perfectly, not bad for a start."" the Prioress says as you walk in. ","« Vous semblez avoir planifié votre journée tout à fait, pas mal pour un début. » la Prieure dit que vous marchez dans.","""Você parece ter planejado o seu dia perfeitamente, não é mau para um começo."" a Prioresa diz como você anda em.","""Tila mayroon kang binalak out ang iyong araw ganap, hindi masama para sa isang panimula."" ang priyora sabi habang naglalakad ka in.","""Parece que han planeado su día perfectamente, no está mal para empezar."" la Priora dice que entras.","""Sembra che tu abbia pianificato la giornata perfetta, non male per un inizio."" la Priora dice come si cammina in.","„Sie scheinen perfekt aus Ihrem Tag geplant zu haben, für den Anfang nicht schlecht.“ die Priorin sagt, wie man das Hotel betritt."
+Tutorial_8,"You feel tired, and decide to take a nap for a couple of hours before the next Liturgy of the Hour.",Vous vous sentez fatigué et décidez de faire une sieste pendant deux ou trois heures avant la prochaine liturgie de l'heure.,"Você se sente cansado, e decide tirar um cochilo por um par de horas antes da próxima Liturgia da Hora.","Sa tingin mo pagod, at nagpasya upang humimlay para sa isang ilang oras bago ang susunod na Liturhiya ng Oras.",Se siente cansado y decide tomar una siesta durante un par de horas antes de la próxima Liturgia de la Horas.,"Ti senti stanco, e decide di prendere un pisolino per un paio d'ore prima del prossimo liturgia dell'Ora.","Sie fühlen sich müde und zu entscheiden, für ein paar Stunden vor der nächsten Liturgie der Stunde ein Nickerchen zu machen."
+Tutorial_9,"One of the novitiates wakes you up. ""We should get going, it's time.""","L'un des noviciats vous réveille. « Nous devrions y aller, il est temps. »","Um dos noviciados você acorda. ""Devemos ir, é hora.""","Isa sa mga novitiates wakes up sa iyo. ""Dapat tayong makalakad, ito ay oras.""","Uno de los noviciados se despierta. ""Deberíamos irnos, es el momento.""","Uno dei noviziati ti sveglia. ""Dobbiamo andare avanti, è il momento.""","Einer der Novizen weckt Sie. „Wir sollten loslegen, es ist an der Zeit.“"
 Event_MarketHours_24,Good News! The shop will open for 24 hours!,Bonnes nouvelles! La boutique ouvrira ses portes pour 24 heures!,Boas notícias! A loja será aberta por 24 horas!,Magandang balita! shop ay magbubukas ng 24 oras!,¡Buenas noticias! La tienda se abrirá durante 24 horas!,Buone notizie! Il negozio sarà aperto per 24 ore!,Gute Nachrichten! Das Geschäft wird für 24 Stunden geöffnet!
 Event_MarketHours_24,I just heard that the shop will be open for the next 24 hours!,Je viens d'entendre que le magasin sera ouvert pour les prochaines 24 heures!,Acabei de ouvir que a loja será aberta para as próximas 24 horas!,Ko lang narinig na ang tindahan ay bukas para sa susunod na 24 oras!,Acabo de escuchar que la tienda estará abierta durante las próximas 24 horas!,Ho appena sentito che il negozio sarà aperto per le prossime 24 ore!,"Ich habe gerade gehört, dass das Geschäft für die nächsten 24 Stunden geöffnet sein!"
-Event_MarketHours_24,"The shopkeeper is in a great mood today, he just informed me that he will keep the shop open for the next 24 hours.","Le commerçant est dans une bonne humeur aujourd'hui, il m'a informé qu'il gardera la boutique ouverte pour les prochaines 24 heures.","O lojista está em um ótimo humor hoje, ele apenas me informou que ele vai manter a loja aberta para as próximas 24 horas.","magtitinda ay sa isang magandang kalooban ngayon, siya lang alam sa akin na siya ay panatilihin ang shop bukas para sa susunod na 24 na oras.","El dueño de la tienda se encuentra en un gran estado de ánimo hoy en día, él me informó que va a mantener la tienda abierta durante las siguientes 24 horas.","Il negoziante è oggi in gran forma oggi, mi ha appena informato che non mancherà di tenere il negozio aperto per le prossime 24 ore.","Der Ladenbesitzer ist in einer großartigen Stimmung heute, er sagt mir nur, dass er den Laden für die nächsten 24 Stunden geöffnet halten."
+Event_MarketHours_24,"The shopkeeper is in a great mood today, he just informed me that he will keep the shop open for the next 24 hours.","Le commerçant est dans une bonne humeur aujourd'hui, il m'a informé qu'il gardera la boutique ouverte pour les prochaines 24 heures.","O lojista está em um ótimo humor hoje, ele apenas me informou que ele vai manter a loja aberta para as próximas 24 horas.","magtitinda ay sa isang magandang kalooban ngayon, siya lang alam sa akin na siya ay panatilihin ang shop bukas para sa susunod na 24 na oras.","El dueño de la tienda se encuentra en un gran estado de ánimo hoy en día, él me informó que va a mantener la tienda abierta durante las siguientes 24 horas.","Il negoziante è oggi in gran forma oggi, mi ha appena informato che non mancherà di tenere il negozio aperto per le prossime 24 ore.","Der Ladenbesitzer ist in einer großartigen Stimmung heute, er teilte mir nur, dass er den Laden für die nächsten 24 Stunden geöffnet halten."
 Event_MarketHours_18,The shop will open for 18 hours today!,La boutique ouvrira ses portes pour 18 heures aujourd'hui!,A loja será aberta por 18 horas de hoje!,shop ay magbubukas sa loob ng 18 na oras sa araw na ito!,La tienda se abrirá durante 18 horas de hoy!,Il negozio sarà aperto per 18 ore di oggi!,Das Geschäft wird für 18 Stunden geöffnet heute!
 Event_Rain_6,"The Prioress walks up to you with a grim expression. ""Looks like its going to rain heavily today"" she says.","Le Prieure se dirige vers vous avec une expression sinistre. « On dirait que son va pleuvoir beaucoup aujourd'hui », dit-elle.","A prioresa chega a você com uma expressão sombria. ""Parece que o seu vai chover forte hoje"", diz ela.","Ang priyora ay nagtuturo sa iyo na may isang mabagsik na expression. ""Mukhang gusto nito Uulan mabigat sa araw na ito"" sabi niya.","La priora se acerca a usted con una expresión sombría. ""Parece que va a llover muy fuerte hoy"", dice.","La Priora si avvicina a voi con un'espressione cupa. ""Sembra che la sua intenzione a piovere forte oggi"", dice.","Die Priorin geht man mit einem grimmigen Ausdruck auf. „Sieht aus wie sein Gehen zu stark heute regnen“, sagt sie."
 Event_Rain_12,"The Prioress walks up to you with a grim expression. ""Looks like its going to rain heavily today"" she says.","Le Prieure se dirige vers vous avec une expression sinistre. « On dirait que son va pleuvoir beaucoup aujourd'hui », dit-elle.","A prioresa chega a você com uma expressão sombria. ""Parece que o seu vai chover forte hoje"", diz ela.","Ang priyora ay nagtuturo sa iyo na may isang mabagsik na expression. ""Mukhang gusto nito Uulan mabigat sa araw na ito"" sabi niya.","La priora se acerca a usted con una expresión sombría. ""Parece que va a llover muy fuerte hoy"", dice.","La Priora si avvicina a voi con un'espressione cupa. ""Sembra che la sua intenzione a piovere forte oggi"", dice.","Die Priorin geht man mit einem grimmigen Ausdruck auf. „Sieht aus wie sein Gehen zu stark heute regnen“, sagt sie."
