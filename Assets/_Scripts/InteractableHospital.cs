@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 public class InteractableHospital : InteractableHouse
 {
-    public GameClock StartDelivery;
     public GameClock EndDelivery;
     private bool DeliveryTimeSet;
     private bool FailedDelivery;
@@ -67,22 +68,21 @@ public class InteractableHospital : InteractableHouse
         if (BuildingState != BuildingState.NORMAL) return;
 
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.BABY_FEVER);
-        if ((!DeliveryTimeSet && !DeadlineSet) && Random.Range(0, 1.0f) > (e != null ? e.Cost : 0.95f))
+        var mission = GetBuildingMission(BuildingEventType.BABY);
+        if (mission != null || (!SameDayAsMission() && !DeliveryTimeSet && !DeadlineSet && Random.Range(0, 1.0f) > (e != null ? e.Cost : 0.95f)))
         {
-            SetBabyDelivery();
+            SetBabyDelivery(mission);
         }
     }
 
-    private void SetBabyDelivery()
+    private void SetBabyDelivery(BuildingMissionData bMission)
     {
         GameClock clock = GameManager.Instance.GameClock;
         DeliveryTimeSet = true;
         DeliveryCountdown = 4;
 
-        StartDelivery = new GameClock(clock.Time, clock.Day);
         EndDelivery = new GameClock(clock.Time, clock.Day);
-        StartDelivery.AddTime(6);
-        EndDelivery.AddTime(9);
+        EndDelivery.AddTime(bMission != null ? bMission.DeadlineHours : 9);
         RandomBabyIcon = "Baby" + Random.Range(1, 3);
         PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
     //    UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -48,6 +49,7 @@ public class InteractableHouse : InteractableObject
 
     public static UnityAction<bool> OnEnterHouse;
     public BuildingActivityState BuildingActivityState = BuildingActivityState.NONE;
+    protected IEnumerable<BuildingMissionData> MyMissions;
 
     protected virtual void Start()
     {
@@ -106,6 +108,8 @@ public class InteractableHouse : InteractableObject
             PopUIFX = Instantiate(Resources.Load("UI/PopUIFX") as GameObject).GetComponent<PopUIFX>();
             PopUIFX.gameObject.SetActive(false);
         }
+
+        MyMissions = GameDataManager.Instance.GetBuildingMissionData(GetType().Name);
     }
 
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)
@@ -120,7 +124,11 @@ public class InteractableHouse : InteractableObject
             PopMyIcon();
             Debug.LogWarning($"{name}: Deadline: {DeadlineTime.Time} : DAY {DeadlineTime.Day} : {RequiredItems} Items!!");
         }
-        SetDeadlineTime(time, day);
+
+        if(GameClock.DeltaTime)
+        {
+            SetDeadlineTime(time, day);
+        }
 
         if ((DeadlineTime.Time != -1) && (time >= DeadlineTime.Time && day >= DeadlineTime.Day))
         {
@@ -157,6 +165,25 @@ public class InteractableHouse : InteractableObject
         }
     }
 
+    protected virtual BuildingMissionData GetBuildingMission(BuildingEventType bEvent)
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        return MyMissions.Where(m => m.Week == GameManager.Instance.CurrentMission.CurrentWeek && m.Day == clock.Day && m.Time == clock.Time && m.Event == bEvent).FirstOrDefault();
+    }
+
+    protected virtual bool SameDayAsMission()
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        foreach(var mission in MyMissions)
+        {
+            if(mission.Week == GameManager.Instance.CurrentMission.CurrentWeek && mission.Day == clock.Day)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public virtual void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;
@@ -168,11 +195,12 @@ public class InteractableHouse : InteractableObject
             case MissionDifficulty.EASY:
                 if (DeadlineCounter < 1)
                 {
-                    if(Random.Range(0, 100) < 1)
+                    var mission = GetBuildingMission(BuildingEventType.DELIVER_ITEM);
+                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 1))
                     {
                         DeadlineCounter++;
-                        DeadlineTime.SetClock(time + RandomFutureTimeByDifficulty(), day);
-                        RequiredItems = 1;
+                        DeadlineTime.SetClock(time + (mission != null ? mission.DeadlineHours : RandomFutureTimeByDifficulty()), day);
+                        RequiredItems = mission != null ? mission.RequiredItems : 1;
                         DeadlineDeliveryBonus = 4;
                         DeadlineSet = true;
                         PopMyIcon();
@@ -184,11 +212,12 @@ public class InteractableHouse : InteractableObject
             case MissionDifficulty.NORMAL:
                 if (DeadlineCounter < 2)
                 {
-                    if (Random.Range(0, 100) < 1)
+                    var mission = GetBuildingMission(BuildingEventType.DELIVER_ITEM);
+                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 1))
                     {
                         DeadlineCounter++;
-                        DeadlineTime.SetClock(time + RandomFutureTimeByDifficulty(), day);
-                        RequiredItems = Random.Range(1,3);
+                        DeadlineTime.SetClock(time + (mission != null ? mission.DeadlineHours : RandomFutureTimeByDifficulty()), day);
+                        RequiredItems = mission != null ? mission.RequiredItems : Random.Range(1,3);
                         DeadlineDeliveryBonus = 3;
                         DeadlineSet = true;
                         PopMyIcon();
@@ -200,11 +229,12 @@ public class InteractableHouse : InteractableObject
             case MissionDifficulty.HARD:
                 if (DeadlineCounter < 3)
                 {
-                    if (Random.Range(0, 100) < 2)
+                    var mission = GetBuildingMission(BuildingEventType.DELIVER_ITEM);
+                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 2))
                     {
                         DeadlineCounter++;
-                        DeadlineTime.SetClock(time + RandomFutureTimeByDifficulty(), day);
-                        RequiredItems = Random.Range(1,4);
+                        DeadlineTime.SetClock(time + (mission != null ? mission.DeadlineHours : RandomFutureTimeByDifficulty()), day);
+                        RequiredItems = mission != null ? mission.RequiredItems : Random.Range(1,4);
                         DeadlineDeliveryBonus = 2;
                         DeadlineSet = true;
                         PopMyIcon();

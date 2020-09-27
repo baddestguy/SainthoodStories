@@ -12,6 +12,8 @@ public class GameClock
     public static UnityAction ExecuteEvents;
     public static UnityAction StartNewDay;
 
+    public static bool DeltaTime { get; private set; }
+
     public GameClock(double startTime, int day = 1)
     {
         Time = startTime;
@@ -30,7 +32,7 @@ public class GameClock
         }
     }
 
-    public void AddTime(int deltaTime)
+    public void AddTime(double deltaTime)
     {
         Time += deltaTime;
         if (Time > 23.5)
@@ -62,12 +64,15 @@ public class GameClock
             EndofDay = false;
         }
 
+        DeltaTime = true;
         Ticked?.Invoke(Time, Day);
         if (EndofDay)
         {
             StartNewDay?.Invoke();
         }
         ExecuteEvents?.Invoke();
+
+        DeltaTime = false;
     }
 
     public void Reset()

@@ -16,6 +16,8 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<ItemType, ShopItemData> ShopItemData = new Dictionary<ItemType, ShopItemData>();
     public Dictionary<string, ConstructionAvailabilityData> ConstructionAvailability = new Dictionary<string, ConstructionAvailabilityData>();
     public Dictionary<string, StoryEventData> StoryEventData = new Dictionary<string, StoryEventData>();
+    public Dictionary<string, List<BuildingMissionData>> BuildingMissionData = new Dictionary<string, List<BuildingMissionData>>();
+    public List<WeatherData> WeatherData = new List<WeatherData>();
 
     void Awake()
     {
@@ -117,6 +119,33 @@ public class GameDataManager : MonoBehaviour
         }
 
         yield return null;
+
+        //Building Missions
+        csvFile = Resources.Load<TextAsset>("GameData/BuildingMissions");
+        var missionData = CSVSerializer.Deserialize<BuildingMissionData>(csvFile.text);
+        foreach (var item in missionData)
+        {
+            if (BuildingMissionData.ContainsKey(item.InteractableHouse))
+            {
+                BuildingMissionData[item.InteractableHouse].Add(item);
+            }
+            else
+            {
+                BuildingMissionData.Add(item.InteractableHouse, new List<BuildingMissionData>() { item });
+            }
+        }
+
+        yield return null;
+
+        //Weather Data
+        csvFile = Resources.Load<TextAsset>("GameData/WeatherData");
+        var weatherData = CSVSerializer.Deserialize<WeatherData>(csvFile.text);
+        foreach (var item in weatherData)
+        {
+            WeatherData.Add(item);
+        }
+
+        yield return null;
     }
 
     public CustomEventData GetRandomEvent(EventGroup eGroup)
@@ -136,5 +165,10 @@ public class GameDataManager : MonoBehaviour
     {
         return e == CustomEventType.SPIRITUAL_RETREAT ||
             e == CustomEventType.PRAYER_REQUEST;
+    }
+
+    public IEnumerable<BuildingMissionData> GetBuildingMissionData(string houseName)
+    {
+        return BuildingMissionData.ContainsKey(houseName) ? BuildingMissionData[houseName] : new List<BuildingMissionData>();
     }
 }

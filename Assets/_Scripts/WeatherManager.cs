@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
@@ -74,25 +75,27 @@ public class WeatherManager : MonoBehaviour
             SetWeather(time);
         }
 
+        var wData = GetWeatherData();
+
         switch (GameManager.MissionDifficulty)
         {
             case MissionDifficulty.NORMAL:
-                if (Random.Range(0, 100) < 1)
+                if (wData != null || !SameDayAsMission() && Random.Range(0, 100) < 1)
                 {
-                    WeatherActivation(Random.Range(4, 7), Random.Range(2, 3));
+                    WeatherActivation(wData != null ? wData.StartTime : Random.Range(4, 7), wData != null ? wData.Duration : Random.Range(2, 3));
                 }
                 break;
 
             case MissionDifficulty.HARD:
-                if (Random.Range(0, 100) < 2)
+                if (wData != null || !SameDayAsMission() && Random.Range(0, 100) < 2)
                 {
-                    WeatherActivation(Random.Range(3, 5), Random.Range(4, 5));
+                    WeatherActivation(wData != null ? wData.StartTime : Random.Range(3, 5), wData != null ? wData.Duration : Random.Range(4, 5));
                 }
                 break;
         }
     }
 
-    private void WeatherActivation(int futureStartTime, int futureEndTime)
+    private void WeatherActivation(double futureStartTime, double futureEndTime)
     {
         GameClock clock = GameManager.Instance.GameClock;
 
@@ -101,6 +104,25 @@ public class WeatherManager : MonoBehaviour
         WeatherEndTime.SetClock(WeatherStartTime.Time + futureEndTime, WeatherStartTime.Day);
         SetStormyWeather();
         Debug.LogWarning($"INCOMING STORM AT {WeatherStartTime.Time}!! Ends AT {WeatherEndTime.Time}");
+    }
+
+    private WeatherData GetWeatherData()
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        return GameDataManager.Instance.WeatherData.Where(m => m.Week == GameManager.Instance.CurrentMission.CurrentWeek && m.Day == clock.Day && m.Time == clock.Time).FirstOrDefault();
+    }
+
+    private bool SameDayAsMission()
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        foreach (var wData in GameDataManager.Instance.WeatherData)
+        {
+            if (wData.Week == GameManager.Instance.CurrentMission.CurrentWeek && wData.Day == clock.Day)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void OverrideWeatherActivation(int futureStartTime, int futureEndTime)
