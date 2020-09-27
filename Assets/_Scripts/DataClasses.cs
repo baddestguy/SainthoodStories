@@ -6,6 +6,14 @@ public class DataClasses : MonoBehaviour
 
 }
 
+public enum BuildingEventType
+{
+    NONE = 0,
+    DELIVER_ITEM,
+    BABY,
+    VOLUNTEER
+}
+
 public enum BuildingActivityState
 {
     NONE = 0,
@@ -154,6 +162,28 @@ public enum Language
     ITALIAN,
     GERMAN,
     FILIPINO
+}
+
+[System.Serializable]
+public class WeatherData
+{
+    public int Week;
+    public int Day;
+    public double Time;
+    public double StartTime;
+    public double Duration;
+}
+
+[System.Serializable]
+public class BuildingMissionData
+{
+    public int Week;
+    public int Day;
+    public double Time;
+    public int RequiredItems;
+    public double DeadlineHours;
+    public BuildingEventType Event;
+    public string InteractableHouse;
 }
 
 [System.Serializable]

@@ -98,6 +98,8 @@ public class EventsManager : MonoBehaviour
 
     private bool ExecuteStoryEvent()
     {
+        if (!GameSettings.Instance.StoryMode) return false;
+
         int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
         GameClock currentClock = GameManager.Instance.GameClock;
         var storyEvent = GameDataManager.Instance.StoryEventData.Where(s => s.Value.Week == CurrentWeek && s.Value.Day == currentClock.Day && s.Value.Time == currentClock.Time).FirstOrDefault().Value;
