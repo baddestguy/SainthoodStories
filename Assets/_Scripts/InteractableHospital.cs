@@ -172,6 +172,11 @@ public class InteractableHospital : InteractableHouse
     public override void ItemDeliveryThanks()
     {
         EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_HOSPITAL);
+        if (GameSettings.Instance.FTUE)
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.Tutorial_61);
+        }
+
         base.ItemDeliveryThanks();
     }
 

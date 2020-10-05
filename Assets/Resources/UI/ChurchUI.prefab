@@ -528,6 +528,7 @@ GameObject:
   - component: {fileID: 2762943224080217314}
   - component: {fileID: 4628187251621717111}
   - component: {fileID: 2862195518786787097}
+  - component: {fileID: 6756749901187548648}
   m_Layer: 5
   m_Name: Sleep
   m_TagString: Untagged
@@ -592,6 +593,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 63.3
+--- !u!114 &6756749901187548648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3565052266973007976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 2862195518786787097}
+  ButtonName: SLEEP
 --- !u!1 &4173549754017053770
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,6 +855,7 @@ GameObject:
   - component: {fileID: 624017207882707955}
   - component: {fileID: 6385121860899768281}
   - component: {fileID: 7009338686307811413}
+  - component: {fileID: 7481431773606423921}
   m_Layer: 5
   m_Name: Pray
   m_TagString: Untagged
@@ -904,6 +920,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 63.3
+--- !u!114 &7481431773606423921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7679601966381801405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 7009338686307811413}
+  ButtonName: PRAY
 --- !u!1 &8003028318867410911
 GameObject:
   m_ObjectHideFlags: 0

@@ -30,7 +30,9 @@ public class UI : MonoBehaviour
     public GameObject ClothesBankUI;
     public GameObject EndGameUI;
     public GameObject KitchenUI;
+    public GameObject WeatherGO;
     public Image WeatherIcon;
+    public Image DayNightIcon;
     public CustomEventPopup CustomEventPopup;
 
     public static UnityAction<ItemType> BoughtItem;
@@ -143,6 +145,9 @@ public class UI : MonoBehaviour
 
     public void BuildingAlertPush(string sprite)
     {
+        GameClock c = GameManager.Instance.GameClock;
+        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 4) return;
+
         if (IsDuplicateBuildingAlert(sprite)) return;
 
         GameObject BuildAlertGO = Instantiate(BuildingAlertResource);
@@ -234,8 +239,17 @@ public class UI : MonoBehaviour
     public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
     {
         GameClock clock = GameManager.Instance.GameClock;
-        WeatherDisplay.text = clock >= start ? "" : $"{(int)start.Time}:{(start.Time % 1 == 0 ? "00" : "30")}";
-        WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/{weather}");
+        if(weather == WeatherType.PRERAIN || weather == WeatherType.RAIN)
+        {
+            WeatherGO.SetActive(true);
+            WeatherDisplay.text = clock >= start ? "" : $"{(int)start.Time}:{(start.Time % 1 == 0 ? "00" : "30")}";
+            WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/{weather}");
+        }
+        else
+        {
+            WeatherGO.SetActive(false);
+            DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{weather}");
+        }
     }
 
     public void EventAlert(CustomEventData customEvent)
@@ -246,6 +260,11 @@ public class UI : MonoBehaviour
 
     public void EnableTreasuryUI(bool enable)
     {
+        if (GameSettings.Instance.FTUE)
+        {
+            GameClock c = GameManager.Instance.GameClock;
+            if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day == 1 && c.Time < 13.5) return;
+        }
         TreasuryUI.SetActive(enable);
     }
 
@@ -256,6 +275,11 @@ public class UI : MonoBehaviour
 
     public void EnableInventoryUI(bool enable)
     {
+        if (GameSettings.Instance.FTUE)
+        {
+            GameClock c = GameManager.Instance.GameClock;
+            if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day == 1 && c.Time < 13.5) return;
+        }
         InventoryUI.SetActive(enable);
     }
 

@@ -136,7 +136,8 @@ public enum CustomEventType
     THANKYOU_BABY,
     THANKYOU_TEACH,
     THANKYOU_VOLUNTEER_HOSPITAL,
-    THANKYOU_VOLUNTEER_ORPHANAGE
+    THANKYOU_VOLUNTEER_ORPHANAGE,
+    Tutorial_61
 }
 
 public enum EventPopupType
@@ -150,7 +151,8 @@ public enum EventGroup
     DAILY = 0,
     IMMEDIATE,
     ENDWEEK,
-    THANKYOU
+    THANKYOU,
+    STORY
 }
 
 public enum Language

@@ -69,6 +69,13 @@ public class CustomEventPopup : MonoBehaviour
         {
             StartCoroutine(HeartsAnimation());
         }
+        else
+        {
+            Color color = Hearts.color;
+            color.a = 0f;
+            Hearts.color = color;
+            HeartsPlus.color = color;
+        }
     }
 
     IEnumerator HeartsAnimation()

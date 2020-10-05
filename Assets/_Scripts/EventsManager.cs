@@ -33,6 +33,12 @@ public class EventsManager : MonoBehaviour
 
     public void ExecuteEvents()
     {
+        if (!GameSettings.Instance.CustomEventsToggle)
+        {
+            EventList.Clear();
+            return;
+        }
+
         if (EventInProgress || EventList.Count == 0) return;
 
         StartCoroutine(ExecuteEventsAsync());
@@ -69,7 +75,7 @@ public class EventsManager : MonoBehaviour
 
         if(time < 21 && !EventInProgress)
         {
-            if (Random.Range(0, 100) < 2 && CurrentEvents.Count < 3)
+            if (!GameSettings.Instance.FTUE && Random.Range(0, 100) < 2 && CurrentEvents.Count < 3)
             {
                 AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.IMMEDIATE).Id);
             }
@@ -79,6 +85,9 @@ public class EventsManager : MonoBehaviour
     public void StartNewDay()
     {
         CurrentEvents.Clear();
+
+        if (GameManager.Instance.GameClock.Day < 6) return;
+
         if(Random.Range(0, 100) < 50)
         {
             AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY).Id);
@@ -98,7 +107,7 @@ public class EventsManager : MonoBehaviour
 
     private bool ExecuteStoryEvent()
     {
-        if (!GameSettings.Instance.StoryMode) return false;
+        if (!GameSettings.Instance.StoryToggle) return false;
 
         int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
         GameClock currentClock = GameManager.Instance.GameClock;
@@ -115,6 +124,8 @@ public class EventsManager : MonoBehaviour
     {
         EventDialogTriggered?.Invoke(true);
         Player.LockMovement = true;
+
+        if (GameSettings.Instance.FTUE && TutorialManager.Instance.CurrentTutorialStep < 1) yield return new WaitForSeconds(8f);
 
         //Execute events one by one
         foreach (var e in StoryEvents)
