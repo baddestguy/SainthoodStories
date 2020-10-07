@@ -1314,6 +1314,7 @@ GameObject:
   - component: {fileID: 4339912533935540199}
   - component: {fileID: 4030499966998648844}
   - component: {fileID: 5816227796470681660}
+  - component: {fileID: 7791433535383037780}
   m_Layer: 5
   m_Name: Pray
   m_TagString: Untagged
@@ -1464,6 +1465,20 @@ MonoBehaviour:
             m_StringArgument: PRAY
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &7791433535383037780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4030499966998648847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 4339912533935540199}
+  ButtonName: SLEEP
 --- !u!1 &4545320081336938490
 GameObject:
   m_ObjectHideFlags: 0
@@ -2511,6 +2526,7 @@ GameObject:
   - component: {fileID: 7610722301347382194}
   - component: {fileID: 7610722301347382189}
   - component: {fileID: 7610722301347382188}
+  - component: {fileID: 1267457204865513729}
   m_Layer: 5
   m_Name: Clothes
   m_TagString: Untagged
@@ -2631,6 +2647,20 @@ MonoBehaviour:
           m_StringArgument: CLOTHES
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1267457204865513729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7610722301347382190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 7610722301347382189}
+  ButtonName: SLEEP
 --- !u!1 &7610722301701059427
 GameObject:
   m_ObjectHideFlags: 0
@@ -2643,6 +2673,7 @@ GameObject:
   - component: {fileID: 7610722301701059431}
   - component: {fileID: 7610722301701059430}
   - component: {fileID: 7610722301701059425}
+  - component: {fileID: 7410187103736375516}
   m_Layer: 5
   m_Name: Stationery
   m_TagString: Untagged
@@ -2763,6 +2794,20 @@ MonoBehaviour:
           m_StringArgument: STATIONERY
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7410187103736375516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7610722301701059427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 7610722301701059430}
+  ButtonName: SLEEP
 --- !u!1 &7610722302181749107
 GameObject:
   m_ObjectHideFlags: 0
@@ -2775,6 +2820,7 @@ GameObject:
   - component: {fileID: 7610722302181749111}
   - component: {fileID: 7610722302181749110}
   - component: {fileID: 7610722302181749105}
+  - component: {fileID: 7140752073523962816}
   m_Layer: 5
   m_Name: Food
   m_TagString: Untagged
@@ -2895,6 +2941,20 @@ MonoBehaviour:
           m_StringArgument: GROCERIES
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7140752073523962816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7610722302181749107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 7610722302181749110}
+  ButtonName: SLEEP
 --- !u!1 &7610722302512356239
 GameObject:
   m_ObjectHideFlags: 0
@@ -2907,6 +2967,7 @@ GameObject:
   - component: {fileID: 7610722302512356243}
   - component: {fileID: 7610722302512356242}
   - component: {fileID: 7610722302512356237}
+  - component: {fileID: 5171680200672320055}
   m_Layer: 5
   m_Name: Meds
   m_TagString: Untagged
@@ -3027,6 +3088,20 @@ MonoBehaviour:
           m_StringArgument: MEDS
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5171680200672320055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7610722302512356239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 7610722302512356242}
+  ButtonName: MEDS
 --- !u!1 &7610722303091651543
 GameObject:
   m_ObjectHideFlags: 0
@@ -3039,6 +3114,7 @@ GameObject:
   - component: {fileID: 7610722303091651547}
   - component: {fileID: 7610722303091651546}
   - component: {fileID: 7610722303091651541}
+  - component: {fileID: 2806888577415795658}
   m_Layer: 5
   m_Name: Toys
   m_TagString: Untagged
@@ -3159,6 +3235,20 @@ MonoBehaviour:
           m_StringArgument: TOYS
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2806888577415795658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7610722303091651543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 7610722303091651546}
+  ButtonName: SLEEP
 --- !u!1 &7928874415979875522
 GameObject:
   m_ObjectHideFlags: 0
@@ -3966,15 +4056,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad31b90ebe2fbe5498dfca3f5488be96, type: 3}
---- !u!1 &3421808015601669205 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100002, guid: ad31b90ebe2fbe5498dfca3f5488be96,
-    type: 3}
-  m_PrefabInstance: {fileID: 3421808015601570551}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3421808015601436789 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: ad31b90ebe2fbe5498dfca3f5488be96,
+    type: 3}
+  m_PrefabInstance: {fileID: 3421808015601570551}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3421808015601669205 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100002, guid: ad31b90ebe2fbe5498dfca3f5488be96,
     type: 3}
   m_PrefabInstance: {fileID: 3421808015601570551}
   m_PrefabAsset: {fileID: 0}

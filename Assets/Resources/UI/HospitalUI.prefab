@@ -243,6 +243,7 @@ GameObject:
   - component: {fileID: 3875256109557728845}
   - component: {fileID: 3875256109557728844}
   - component: {fileID: 589206671102705707}
+  - component: {fileID: 4355786522068931295}
   m_Layer: 5
   m_Name: DeliverBaby
   m_TagString: Untagged
@@ -393,6 +394,20 @@ MonoBehaviour:
             m_StringArgument: PRAY
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &4355786522068931295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875256109557728846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 3875256109557728845}
+  ButtonName: BABY
 --- !u!1 &4511041590597941724
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,6 +421,7 @@ GameObject:
   - component: {fileID: 3841343176032495156}
   - component: {fileID: 4511041590597941727}
   - component: {fileID: 86260581291477817}
+  - component: {fileID: 1526959501061607372}
   m_Layer: 5
   m_Name: Pray
   m_TagString: Untagged
@@ -556,6 +572,20 @@ MonoBehaviour:
             m_StringArgument: PRAY
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &1526959501061607372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4511041590597941724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 3841343176032495156}
+  ButtonName: SLEEP
 --- !u!1 &5054587750842169176
 GameObject:
   m_ObjectHideFlags: 0
@@ -917,7 +947,7 @@ GameObject:
   - component: {fileID: 6983941371086181044}
   - component: {fileID: 6983941371086181045}
   - component: {fileID: 6983941371086181042}
-  - component: {fileID: 1369408218151254132}
+  - component: {fileID: 4132945745455343897}
   m_Layer: 5
   m_Name: DeliverItem
   m_TagString: Untagged
@@ -1024,8 +1054,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6983941371086181045}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &1369408218151254132
+      m_Calls:
+      - m_Target: {fileID: 317696753716342948}
+        m_MethodName: OnClick
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MEDS
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4132945745455343897
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1034,40 +1075,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6983941371086181040}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 317696753716342948}
-          m_MethodName: OnPointerDown
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: MEDS
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 3
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 317696753716342948}
-          m_MethodName: OnPointerUp
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: PRAY
-            m_BoolArgument: 0
-          m_CallState: 2
+  ButtonImage: {fileID: 6983941371086181045}
+  ButtonName: MEDS
 --- !u!1 &6983941372388332036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1081,6 +1093,7 @@ GameObject:
   - component: {fileID: 6983941372388332041}
   - component: {fileID: 6983941372388332038}
   - component: {fileID: 6638145215387543845}
+  - component: {fileID: 8980805630144250746}
   m_Layer: 5
   m_Name: Volunteer
   m_TagString: Untagged
@@ -1231,6 +1244,20 @@ MonoBehaviour:
             m_StringArgument: PRAY
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &8980805630144250746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6983941372388332036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 6983941372388332041}
+  ButtonName: VOLUNTEER
 --- !u!1 &7456909253876264209
 GameObject:
   m_ObjectHideFlags: 0

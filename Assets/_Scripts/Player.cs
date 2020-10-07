@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     private int EnergyConsumption;
     [SerializeField]
     private MapTile CurrentTile;
+    public InteractableHouse CurrentBuilding;
     private MapTile StartTile;
     private int StartingEnergy;
     private Dictionary<PlayerFacingDirection, MapTile> AdjacentTiles;
@@ -70,6 +71,11 @@ public class Player : MonoBehaviour
 
     private bool WeCanMove(MapTile tile)
     {
+        if (GameSettings.Instance.FTUE)
+        {
+            return TutorialManager.Instance.GetTutorialMapTiles().Contains(tile) && CurrentTile != tile && AdjacentTiles.ContainsValue(tile) && tile.TileType != TileType.BARRIER;
+        }
+
         return (CurrentTile != tile && AdjacentTiles.ContainsValue(tile) && tile.TileType != TileType.BARRIER);
     }
 
@@ -123,6 +129,11 @@ public class Player : MonoBehaviour
         Animator.SetBool("Idle", false);
 
         PopUIFXIcons();
+
+        if (GameSettings.Instance.FTUE)
+        {
+            TutorialManager.Instance.RemoveTileFromGroup();
+        }
     }
 
     public void OnInteract(MapTile newTile)
@@ -141,6 +152,7 @@ public class Player : MonoBehaviour
             {
                 transform.localScale = Vector3.one;
                 DissapearInHouse = true;
+                CurrentBuilding = iTile as InteractableHouse;
                 OnMove(iTile.CurrentGroundTile);
                 OnMoveSuccessEvent?.Invoke(Energy, iTile);
                 GameManager.Instance.PassTime();

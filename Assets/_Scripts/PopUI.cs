@@ -71,16 +71,40 @@ public class PopUI : MonoBehaviour
             return;
         }
 
+        if (GameSettings.Instance.FTUE)
+        {
+            if (!TutorialManager.Instance.CheckTutorialButton(button))
+            {
+                return;
+            }
+        }
+
+        Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
+        ChargeFx.transform.position = new Vector3(fxpos.x, ChargeFx.transform.position.y, ChargeFx.transform.position.z);
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(true);
         ButtonPressFx.transform.position = ChargeFx.transform.position;
         SoundManager.Instance.PlayOneShotSfx("Button");
-        Callback?.Invoke(button);
         Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
+
+        if (GameSettings.Instance.FTUE)
+        {
+            TutorialManager.Instance.NextTutorialStep();
+            BroadcastMessage("RefreshTutorialButton", SendMessageOptions.DontRequireReceiver);
+        }
+        Callback?.Invoke(button);
     }
 
     public void OnPointerDown(string button)
     {
+        if (GameSettings.Instance.FTUE)
+        {
+            if (!TutorialManager.Instance.CheckTutorialButton(button))
+            {
+                return;
+            }
+        }
+
         PointerDown = true;
         ButtonName = button;
         ChargeFx.SetActive(true);

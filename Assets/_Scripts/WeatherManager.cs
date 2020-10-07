@@ -75,6 +75,8 @@ public class WeatherManager : MonoBehaviour
             SetWeather(time);
         }
 
+        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && day < 3) return;
+
         var wData = GetWeatherData();
 
         switch (GameManager.MissionDifficulty)
