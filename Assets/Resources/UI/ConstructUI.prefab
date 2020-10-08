@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 3176821308943219241}
   - component: {fileID: 3176821308943219246}
   - component: {fileID: 3122488367109743587}
-  - component: {fileID: 6096450759916305824}
+  - component: {fileID: 6638901883030591025}
   m_Layer: 5
   m_Name: Build
   m_TagString: Untagged
@@ -512,7 +512,7 @@ MonoBehaviour:
             m_StringArgument: PRAY
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &6096450759916305824
+--- !u!114 &6638901883030591025
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -521,11 +521,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3176821308943219244}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cec8b93866010384bbc2fd6a60a9115d, type: 3}
+  m_Script: {fileID: 11500000, guid: 608f4d17822081041bc406511688e9b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ButtonImage: {fileID: 3176821308943219241}
-  ButtonName: 
+  ButtonName: BUILD
+  Enabled: 0
 --- !u!1 &5772540177554221061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,6 +1201,7 @@ GameObject:
   - component: {fileID: 8243795032735666499}
   - component: {fileID: 8141355916952866102}
   - component: {fileID: 1122033459947454567}
+  - component: {fileID: 2757195349519527581}
   m_Layer: 5
   m_Name: Pray
   m_TagString: Untagged
@@ -1364,6 +1366,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ButtonImage: {fileID: 8769237238669446824}
   ButtonName: SLEEP
+--- !u!114 &2757195349519527581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8243795032735666496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608f4d17822081041bc406511688e9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 8769237238669446824}
+  ButtonName: PRAY
+  Enabled: 0
 --- !u!1001 &3502971514400317427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1453,15 +1470,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 757df604761b8ef42831192c70ee1099, type: 3}
---- !u!1 &3502971514400348503 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100004, guid: 757df604761b8ef42831192c70ee1099,
-    type: 3}
-  m_PrefabInstance: {fileID: 3502971514400317427}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3502971514400179575 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400004, guid: 757df604761b8ef42831192c70ee1099,
+    type: 3}
+  m_PrefabInstance: {fileID: 3502971514400317427}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3502971514400348503 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100004, guid: 757df604761b8ef42831192c70ee1099,
     type: 3}
   m_PrefabInstance: {fileID: 3502971514400317427}
   m_PrefabAsset: {fileID: 0}

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,13 +26,16 @@ public class PopUI : MonoBehaviour
     public GameObject ButtonPressFx;
 
     public Slider ProgressBar;
+
+    private List<ActionButton> Buttons;
+
     void Start()
     {
         CamTransform = Camera.main.transform;
         InteractableHouse.OnActionProgress += UpdateProgressBar;
     }
 
-    public virtual void Init(Action<string> callback, string sprite, int items, GameClock deadline, float timer = 1f)
+    public virtual void Init(Action<string> callback, string sprite, int items, GameClock deadline, InteractableHouse house = null, float timer = 1f)
     {
         Callback = callback;
 
@@ -63,6 +68,15 @@ public class PopUI : MonoBehaviour
             DeadlineDisplay.color = Color.white;
             ClockIcon.color = Color.white;
         }
+
+        if (!GameSettings.Instance.FTUE || TutorialManager.Instance.CurrentTutorialStep >= 20)
+        {
+            Buttons = gameObject.GetComponentsInChildren<ActionButton>().ToList();
+            foreach (var b in Buttons)
+            {
+                b.RefreshButton(house?.CanDoAction(b.ButtonName) ?? false);
+            }
+        }
     }
 
     public void OnClick(string button)
@@ -79,6 +93,11 @@ public class PopUI : MonoBehaviour
             {
                 return;
             }
+        }
+        else
+        {
+            var myButton = Buttons.Where(b => b.ButtonName == button).FirstOrDefault();
+            if (!myButton.Enabled) return;
         }
 
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
@@ -106,6 +125,11 @@ public class PopUI : MonoBehaviour
                 return;
             }
         }
+        else
+        {
+            var myButton = Buttons.Where(b => b.ButtonName == button).FirstOrDefault();
+            if (!myButton.Enabled) return;
+        }
 
         PointerDown = true;
         ButtonName = button;
@@ -120,32 +144,6 @@ public class PopUI : MonoBehaviour
         PointerDown = false;
         ChargeFx.SetActive(false);
         Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
-    }
-
-    private IEnumerator ActionPauseCycle()
-    {
-        LockUI = true;
-        Player.LockMovement = true;
-        var buttons = gameObject.GetComponentsInChildren<Button>();
-        for(int i = 0; i < buttons.Length; i++)
-        {
-            buttons[i].interactable = false;
-        }
-
-        yield return new WaitForSeconds(1);
-        
-        for (int i = 0; i < buttons.Length; i++)
-        {
-            buttons[i].interactable = true;
-        }
-
-  //      yield return new WaitForSeconds(0.5f);
-
-        if (!MissionManager.MissionOver)
-        {
-            LockUI = false;
-            Player.LockMovement = false;
-        }
     }
 
     void Update()

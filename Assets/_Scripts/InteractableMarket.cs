@@ -25,7 +25,7 @@ public class InteractableMarket : InteractableHouse
                 UI.Instance.DisplayMessage("SHOP CLOSED!");
             }
             PopUI.gameObject.SetActive(true);
-            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
             PopIcon.UIPopped(true);
             UI.Instance.EnableTreasuryUI(true);
             UI.Instance.RefreshTreasuryBalance();
@@ -54,7 +54,7 @@ public class InteractableMarket : InteractableHouse
             }
             TreasuryManager.Instance.SpendMoney(moddedPrice);
             InventoryManager.Instance.AddToInventory(item);
-            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
             UI.Instance.RefreshTreasuryBalance();
         }
         else
@@ -118,6 +118,21 @@ public class InteractableMarket : InteractableHouse
                 }
                 break;
         }
+    }
+
+    public override bool CanDoAction(string actionName)
+    {
+        switch (actionName)
+        {
+            case "PRAY":
+                return base.CanDoAction(actionName);
+        }
+
+        ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), actionName);
+        var itemData = GameDataManager.Instance.ShopItemData[itemType];
+        var moddedPrice = ApplyDiscount(itemData.Price);
+
+        return DuringOpenHours() && TreasuryManager.Instance.CanAfford(moddedPrice);
     }
 
     public override void ReportScores()
