@@ -198,6 +198,7 @@ MonoBehaviour:
   ButtonTimer: 0
   ChargeFx: {fileID: 2148815114037776164}
   ButtonPressFx: {fileID: 5702331551427463737}
+  ProgressBar: {fileID: 0}
 --- !u!1 &1861205366799230370
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,6 +286,7 @@ GameObject:
   - component: {fileID: 4008721498820257051}
   - component: {fileID: 4008721498820257052}
   - component: {fileID: 425171254018364227}
+  - component: {fileID: 2488035981807496473}
   m_Layer: 5
   m_Name: Deliver
   m_TagString: Untagged
@@ -435,6 +437,21 @@ MonoBehaviour:
             m_StringArgument: PRAY
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &2488035981807496473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4008721498820257054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608f4d17822081041bc406511688e9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 4008721498820257051}
+  ButtonName: CLOTHES
+  Enabled: 0
 --- !u!1 &5203102958481237436
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,6 +696,7 @@ GameObject:
   - component: {fileID: 7063075909994123674}
   - component: {fileID: 7624690064777432689}
   - component: {fileID: 8912155569373479122}
+  - component: {fileID: 5106041414662551165}
   m_Layer: 5
   m_Name: Pray
   m_TagString: Untagged
@@ -829,6 +847,21 @@ MonoBehaviour:
             m_StringArgument: PRAY
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &5106041414662551165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7624690064777432690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608f4d17822081041bc406511688e9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 7063075909994123674}
+  ButtonName: PRAY
+  Enabled: 0
 --- !u!1 &8993474977468119526
 GameObject:
   m_ObjectHideFlags: 0

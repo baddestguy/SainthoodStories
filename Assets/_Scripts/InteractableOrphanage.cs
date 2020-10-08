@@ -16,7 +16,7 @@ public class InteractableOrphanage : InteractableHouse
         if (tile.GetInstanceID() == GetInstanceID())
         {
             PopUI.gameObject.SetActive(true);
-            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
             PopIcon.UIPopped(true);
         }
         else
@@ -200,4 +200,18 @@ public class InteractableOrphanage : InteractableHouse
         }
     }
 
+    public override bool CanDoAction(string actionName)
+    {
+        Player player = GameManager.Instance.Player;
+        switch (actionName)
+        {
+            case "VOLUNTEER":
+                return !player.EnergyDepleted() && DuringOpenHours();
+
+            case "TOYS":
+                return DuringOpenHours() && InventoryManager.Instance.CheckItem(ItemType.TOYS);
+        }
+
+        return base.CanDoAction(actionName);
+    }
 }

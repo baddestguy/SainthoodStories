@@ -75,6 +75,12 @@ public class InventoryManager : MonoBehaviour
         return item;
     }
 
+    public bool CheckItem(ItemType itemType)
+    {
+        int index = Items.FindIndex(i => i == itemType);
+        return index >= 0;
+    }
+
     public void GenerateProvisionsForNewDay()
     {
         if (!GameSettings.Instance.ProvisionsToggle) return;

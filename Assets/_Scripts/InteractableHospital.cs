@@ -27,7 +27,7 @@ public class InteractableHospital : InteractableHouse
         if (tile.GetInstanceID() == GetInstanceID())
         {
             PopUI.gameObject.SetActive(true);
-            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
             PopIcon.UIPopped(true);
         }
         else
@@ -95,7 +95,7 @@ public class InteractableHospital : InteractableHouse
         if (DeliveryTimeSet)
         {
             PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
-            if (clock > EndDelivery)
+            if (clock >= EndDelivery)
             {
                 DeliveryTimeSet = false;
                 FailedDelivery = true;
@@ -243,6 +243,30 @@ public class InteractableHospital : InteractableHouse
         {
             base.RelationshipReward(thanks);
         }
+    }
+
+    public override bool CanDoAction(string actionName)
+    {
+        Player player = GameManager.Instance.Player;
+        switch (actionName)
+        {
+            case "BABY":
+                return !player.EnergyDepleted() && DeliveryTimeSet;
+
+            case "VOLUNTEER":
+                return !player.EnergyDepleted() && DuringOpenHours() && !DeliveryTimeSet;
+
+            case "MEDS":
+                return DuringOpenHours() && InventoryManager.Instance.CheckItem(ItemType.MEDS);
+        }
+
+        return base.CanDoAction(actionName);
+    }
+
+    public override void ResetActionProgress()
+    {
+        DeliveryCountdown = 0;
+        base.ResetActionProgress();
     }
 
     public override void OnDisable()

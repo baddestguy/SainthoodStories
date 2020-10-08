@@ -331,6 +331,7 @@ GameObject:
   - component: {fileID: 4252008249504619345}
   - component: {fileID: 3519400177873126586}
   - component: {fileID: 4681465712094498471}
+  - component: {fileID: 7267727517457607863}
   m_Layer: 5
   m_Name: Pray
   m_TagString: Untagged
@@ -481,6 +482,21 @@ MonoBehaviour:
             m_StringArgument: PRAY
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &7267727517457607863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3519400177873126585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608f4d17822081041bc406511688e9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 4252008249504619345}
+  ButtonName: PRAY
+  Enabled: 0
 --- !u!1 &4653034627632630718
 GameObject:
   m_ObjectHideFlags: 0
@@ -1259,6 +1275,7 @@ GameObject:
   - component: {fileID: 7973317549271445456}
   - component: {fileID: 7973317549271445463}
   - component: {fileID: 6436205087874618501}
+  - component: {fileID: 8824303690948045325}
   m_Layer: 5
   m_Name: Deliver
   m_TagString: Untagged
@@ -1409,6 +1426,21 @@ MonoBehaviour:
             m_StringArgument: PRAY
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &8824303690948045325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7973317549271445461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608f4d17822081041bc406511688e9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 7973317549271445456}
+  ButtonName: TOYS
+  Enabled: 0
 --- !u!1 &7973317550640803681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1422,6 +1454,7 @@ GameObject:
   - component: {fileID: 7973317550640803692}
   - component: {fileID: 7973317550640803683}
   - component: {fileID: 1506793706849479023}
+  - component: {fileID: 8119082014920195833}
   m_Layer: 5
   m_Name: Volunteer
   m_TagString: Untagged
@@ -1572,6 +1605,21 @@ MonoBehaviour:
             m_StringArgument: PRAY
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &8119082014920195833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7973317550640803681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608f4d17822081041bc406511688e9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 7973317550640803692}
+  ButtonName: VOLUNTEER
+  Enabled: 0
 --- !u!1001 &2540363907787788322
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1762,15 +1810,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad31b90ebe2fbe5498dfca3f5488be96, type: 3}
---- !u!4 &9178668852149385542 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400002, guid: ad31b90ebe2fbe5498dfca3f5488be96,
-    type: 3}
-  m_PrefabInstance: {fileID: 9178668852148986820}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &9178668852149085542 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100002, guid: ad31b90ebe2fbe5498dfca3f5488be96,
+    type: 3}
+  m_PrefabInstance: {fileID: 9178668852148986820}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9178668852149385542 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400002, guid: ad31b90ebe2fbe5498dfca3f5488be96,
     type: 3}
   m_PrefabInstance: {fileID: 9178668852148986820}
   m_PrefabAsset: {fileID: 0}

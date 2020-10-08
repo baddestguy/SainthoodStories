@@ -13,7 +13,7 @@
         if (tile.GetInstanceID() == GetInstanceID())
         {
             PopUI.gameObject.SetActive(true);
-            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
             PopIcon.UIPopped(true);
         }
         else
@@ -72,6 +72,18 @@
                 UI.Meditate?.Invoke(this);
                 break;
         }
+    }
+
+    public override bool CanDoAction(string actionName)
+    {
+        Player player = GameManager.Instance.Player;
+        switch (actionName)
+        {
+            case "COOK":
+                return !player.EnergyDepleted() && DuringOpenHours() && InventoryManager.Instance.CheckItem(ItemType.GROCERIES);
+        }
+
+        return base.CanDoAction(actionName);
     }
 
     public override void OnDisable()

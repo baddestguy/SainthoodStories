@@ -442,6 +442,7 @@ MonoBehaviour:
   ButtonTimer: 0
   ChargeFx: {fileID: 4348354766303475754}
   ButtonPressFx: {fileID: 7364127437655529492}
+  ProgressBar: {fileID: 0}
 --- !u!1 &1936143914044274317
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,6 +530,7 @@ GameObject:
   - component: {fileID: 4628187251621717111}
   - component: {fileID: 2862195518786787097}
   - component: {fileID: 6756749901187548648}
+  - component: {fileID: 202894621933409278}
   m_Layer: 5
   m_Name: Sleep
   m_TagString: Untagged
@@ -607,6 +609,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ButtonImage: {fileID: 2862195518786787097}
   ButtonName: SLEEP
+--- !u!114 &202894621933409278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3565052266973007976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608f4d17822081041bc406511688e9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 2862195518786787097}
+  ButtonName: SLEEP
+  Enabled: 0
 --- !u!1 &4173549754017053770
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,6 +873,7 @@ GameObject:
   - component: {fileID: 6385121860899768281}
   - component: {fileID: 7009338686307811413}
   - component: {fileID: 7481431773606423921}
+  - component: {fileID: 7741817812404904113}
   m_Layer: 5
   m_Name: Pray
   m_TagString: Untagged
@@ -934,6 +952,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ButtonImage: {fileID: 7009338686307811413}
   ButtonName: PRAY
+--- !u!114 &7741817812404904113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7679601966381801405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608f4d17822081041bc406511688e9b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonImage: {fileID: 7009338686307811413}
+  ButtonName: PRAY
+  Enabled: 0
 --- !u!1 &8003028318867410911
 GameObject:
   m_ObjectHideFlags: 0

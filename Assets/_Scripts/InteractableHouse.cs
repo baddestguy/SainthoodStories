@@ -144,7 +144,7 @@ public class InteractableHouse : InteractableObject
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
         }
-        PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+        PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
 
         switch (BuildingActivityState)
         {
@@ -290,7 +290,7 @@ public class InteractableHouse : InteractableObject
 
         RequiredItems--;
         PopMyIcon();
-        PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+        PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
         if (RequiredItems <= 0)
         {
             DeadlineCounter = Mathf.Max(0, DeadlineCounter - 1);
@@ -529,10 +529,17 @@ public class InteractableHouse : InteractableObject
                 SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
             SoundManager.Instance.FadeAmbience(0.3f);
             OnEnterHouse?.Invoke(false);
+            ResetActionProgress();
         }
 
         InfoPopup.gameObject.SetActive(false);
         RubbleInfoPopup.gameObject.SetActive(false);
+    }
+
+    public virtual void ResetActionProgress()
+    {
+        VolunteerCountdown = 0;
+        BuildingActivityState = BuildingActivityState.NONE;
     }
 
     private void OnEventDialogTriggered(bool started)
@@ -619,9 +626,18 @@ public class InteractableHouse : InteractableObject
 
     }
 
-    public void UpdateProgressBar()
+    public virtual bool CanDoAction(string actionName)
     {
+        switch (actionName)
+        {
+            case "BUILD":
+                return CanBuild();
 
+            case "PRAY": return true;
+            case "SLEEP": return true;
+        }
+
+        return false;
     }
 
     public override void OnMouseOver()

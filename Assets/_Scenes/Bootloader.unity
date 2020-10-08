@@ -164,10 +164,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f3973671bac4fe40b18b5c8ea0d9b1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StoryToggle: 0
+  StoryToggle: 1
   CustomEventsToggle: 1
   ProvisionsToggle: 1
-  FTUE: 0
+  FTUE: 1
   TutorialToggle: 0
 --- !u!1 &226307152
 GameObject:

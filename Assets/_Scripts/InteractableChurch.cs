@@ -32,7 +32,7 @@ public class InteractableChurch : InteractableHouse
         if (tile.GetInstanceID() == GetInstanceID())
         {
             PopUI.gameObject.SetActive(true);
-            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
             PopIcon.UIPopped(true);
         }
         else

@@ -10,10 +10,10 @@ public class MarketPopUI : PopUI
     public TextMeshProUGUI StationeryDisplayPrice;
     public TextMeshProUGUI MedsDisplayPrice;
 
-    public override void Init(Action<string> callback, string sprite, int items, GameClock deadline, float timer = 1f)
+    public override void Init(Action<string> callback, string sprite, int items, GameClock deadline, InteractableHouse house, float timer = 1f)
     {
         Vector3 BuildingIconPos = BuildingIcon.transform.localPosition;
-        base.Init(callback, sprite, items, deadline);
+        base.Init(callback, sprite, items, deadline, house);
         BuildingIcon.transform.localPosition = BuildingIconPos;
 
         SetDisplayPrice(ItemType.GROCERIES, GroceriesDisplayPrice);

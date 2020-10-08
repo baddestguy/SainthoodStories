@@ -3,7 +3,7 @@
 public class InteractableSchool : InteractableHouse
 {
     public int TeachPoints;
-    private int TeachCountdown = 4;
+    private int TeachCountdown = 0;
 
     protected override void Start()
     {
@@ -26,7 +26,7 @@ public class InteractableSchool : InteractableHouse
                 UI.Instance.DisplayMessage("SCHOOL CLOSED!");
             }
             PopUI.gameObject.SetActive(true);
-            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
             PopIcon.UIPopped(true);
         }
         else
@@ -68,11 +68,13 @@ public class InteractableSchool : InteractableHouse
 
     public void TeachSubject()
     {
-        TeachCountdown--;
-        if (TeachCountdown <= 0)
+        TeachCountdown++;
+        OnActionProgress?.Invoke(TeachCountdown / 4f);
+
+        if (TeachCountdown >= 4)
         {
             BuildRelationship(ThankYouType.TEACH);
-            TeachCountdown = 4;
+            TeachCountdown = 0;
         }
     }
 
@@ -210,6 +212,21 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
+    public override bool CanDoAction(string actionName)
+    {
+        switch (actionName)
+        {
+            case "STATIONERY":
+                return DuringOpenHours() && InventoryManager.Instance.CheckItem(ItemType.STATIONERY);
+
+            case "TEACH":
+                Player player = GameManager.Instance.Player;
+                return !player.EnergyDepleted() && DuringOpenHours();
+        }
+
+        return base.CanDoAction(actionName);
+    }
+
     protected override void OnEventExecuted(CustomEventData e)
     {
         switch (e.Id)
@@ -218,6 +235,12 @@ public class InteractableSchool : InteractableHouse
                 ClosingTime = 0;
                 break;
         }
+    }
+
+    public override void ResetActionProgress()
+    {
+        TeachCountdown = 0;
+        base.ResetActionProgress();
     }
 
     public override void OnDisable()

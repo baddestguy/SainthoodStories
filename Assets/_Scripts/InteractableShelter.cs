@@ -12,7 +12,7 @@
         if (tile.GetInstanceID() == GetInstanceID())
         {
             PopUI.gameObject.SetActive(true);
-            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime);
+            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
             PopIcon.UIPopped(true);
         }
         else
@@ -104,4 +104,14 @@
         }
     }
 
+    public override bool CanDoAction(string actionName)
+    {
+        switch (actionName)
+        {
+            case "FOOD":
+                return DuringOpenHours() && (InventoryManager.Instance.CheckItem(ItemType.GROCERIES) || InventoryManager.Instance.CheckItem(ItemType.MEAL));
+        }
+
+        return base.CanDoAction(actionName);
+    }
 }
