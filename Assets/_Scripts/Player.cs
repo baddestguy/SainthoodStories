@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
         LockMovement = false;
     }
 
-    private bool WeCanMove(MapTile tile)
+    public bool WeCanMove(MapTile tile)
     {
         if (GameSettings.Instance.FTUE)
         {

@@ -614,9 +614,10 @@ public class InteractableHouse : InteractableObject
 
     }
 
-    public virtual void OnMouseOver()
+    public override void OnMouseOver()
     {
         if (HouseUIActive || EventsManager.Instance.HasEventsInQueue()) return;
+        if (!CameraControls.ZoomComplete) return;
 
         if (BuildingState == BuildingState.RUBBLE)
         {
@@ -629,9 +630,10 @@ public class InteractableHouse : InteractableObject
 
         InfoPopup.Init(GetType().Name, OpenTime, ClosingTime, RelationshipPoints);
         PopIcon.gameObject.SetActive(false);
+        base.OnMouseOver();
     }
 
-    public virtual void OnMouseExit()
+    public override void OnMouseExit()
     {
         if (HouseUIActive) return;
 
@@ -639,6 +641,7 @@ public class InteractableHouse : InteractableObject
         InfoPopup.gameObject.SetActive(false);
         var clock = GameManager.Instance.GameClock;
         Tick(clock.Time, clock.Day);
+        base.OnMouseExit();
     }
 
     public override void OnDisable()
