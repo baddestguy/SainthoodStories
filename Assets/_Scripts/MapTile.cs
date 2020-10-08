@@ -3,6 +3,7 @@ using EventCallbacks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class MapTile : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class MapTile : MonoBehaviour
     [NonSerialized]
     public bool active;
     public static event UnityAction<MapTile> OnClickEvent;
+
+    [SerializeField]
+    private Image GridTile;
 
     private void Awake(){
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -84,4 +88,33 @@ public class MapTile : MonoBehaviour
     {
 
     }
+
+    public virtual void OnMouseOver()
+    {
+        if (GridTile == null || !CameraControls.ZoomComplete) return;
+
+        Color c;
+
+        if(GameManager.Instance.Player.WeCanMove(this))
+        {
+            c = Color.green;
+            c.a = 0.1f;
+            GridTile.color = c;
+            GridTile.gameObject.SetActive(true);
+        }
+        else if(!InteractableHouse.HouseUIActive)
+        {
+            c = Color.white;
+            c.a = 0.1f;
+            GridTile.color = c;
+            GridTile.gameObject.SetActive(true);
+        }
+    }
+
+    public virtual void OnMouseExit()
+    {
+        if (GridTile == null) return;
+        GridTile.gameObject.SetActive(false);
+    }
+
 }

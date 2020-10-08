@@ -20,6 +20,8 @@ public class CameraControls : MonoBehaviour
     public Camera UICam3D;
     public PostProcessVolume PostProcessor;
 
+    public static bool ZoomComplete;
+
     void Start()
     {
         OriginalCamTarget = transform.position;
@@ -81,13 +83,13 @@ public class CameraControls : MonoBehaviour
 
         if(newTarget.magnitude == 0)
         {
-            ZoomTarget = 6f;
+            SetZoomTarget(6f);
             DepthOfField.active = false;
             Bloom.active = true;
         }
         else
         {
-            ZoomTarget = 3f;
+            SetZoomTarget(3f);
             DepthOfField.active = true;
             Bloom.active = false;
         }
@@ -97,11 +99,17 @@ public class CameraControls : MonoBehaviour
     {
         //  Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - increment, MinZoom, MaxZoom);
         Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, ZoomTarget, Time.deltaTime*3);
-        UICam3D.orthographicSize = Mathf.Lerp(UICam3D.orthographicSize, ZoomTarget, Time.deltaTime * 3); ;
+        UICam3D.orthographicSize = Mathf.Lerp(UICam3D.orthographicSize, ZoomTarget, Time.deltaTime * 3);
+
+        if(Mathf.Abs(Camera.main.orthographicSize - ZoomTarget) <= 0.1f)
+        {
+            ZoomComplete = true;
+        }
     }
 
     public void SetZoomTarget(float target)
     {
         ZoomTarget = target;
+        ZoomComplete = false;
     }
 }

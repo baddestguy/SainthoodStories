@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
             MissionManager.MissionOver = false;
             Instantiate(Resources.Load("UI/UI") as GameObject);
             Player = FindObjectOfType<Player>();
+            Map = FindObjectOfType<GameMap>();
             MissionManager.LoadAllMissions(CurrentMission);
             GameClock = new GameClock(MissionManager.CurrentMission.StartingClock);
             Player.GameStart(MissionManager.CurrentMission);
