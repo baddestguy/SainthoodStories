@@ -40,16 +40,18 @@ public class InteractableHouse : InteractableObject
     public static bool HouseUIActive;
 
     public BuildingState BuildingState;
-    public int BuildPoints = 3;
+    private int BuildPoints = 0;
     public GameObject RubbleGo;
     public GameObject BuildingGo;
 
     public int RelationshipPoints;
-    private int VolunteerCountdown = 4;
+    private int VolunteerCountdown = 0;
 
     public static UnityAction<bool> OnEnterHouse;
     public BuildingActivityState BuildingActivityState = BuildingActivityState.NONE;
     protected IEnumerable<BuildingMissionData> MyMissions;
+
+    public static UnityAction<float> OnActionProgress;
 
     protected virtual void Start()
     {
@@ -147,11 +149,12 @@ public class InteractableHouse : InteractableObject
         switch (BuildingActivityState)
         {
             case BuildingActivityState.VOLUNTEERING:
-                VolunteerCountdown--;
-                if (VolunteerCountdown <= 0)
+                VolunteerCountdown++;
+                OnActionProgress?.Invoke(VolunteerCountdown / 4f);
+                if (VolunteerCountdown >= 4)
                 {
                     BuildRelationship(ThankYouType.VOLUNTEER);
-                    VolunteerCountdown = 4;
+                    VolunteerCountdown = 0;
                 }
                 break;
         }
@@ -360,9 +363,11 @@ public class InteractableHouse : InteractableObject
         Player player = GameManager.Instance.Player;
         if (player.EnergyDepleted() || !CanBuild()) return;
 
-        BuildPoints--;
+        BuildPoints++;
+        OnActionProgress?.Invoke(BuildPoints / 4f);
+
         UI.Instance.DisplayMessage("BUILDING!");
-        if(BuildPoints <= 0)
+        if(BuildPoints >= 4)
         {
             //Play Cool Construction Vfx and Animation!
             BuildingState = BuildingState.NORMAL;
@@ -503,10 +508,10 @@ public class InteractableHouse : InteractableObject
             SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
             if(GameManager.Instance.GameClock.Time >= OpenTime && GameManager.Instance.GameClock.Time <= ClosingTime)
             {
-                if (BuildPoints <= 0)
+                if (BuildPoints >= 4)
                     SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
             }
-            if (BuildPoints > 0)
+            if (BuildPoints < 4)
                 SoundManager.Instance.PlayHouseAmbience("Construction", true, 0.3f);
             SoundManager.Instance.FadeAmbience(0.1f);
             OnEnterHouse?.Invoke(true);
@@ -518,7 +523,7 @@ public class InteractableHouse : InteractableObject
             HouseUIActive = false;
             UI.Instance.EnableInventoryUI(false);
             SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
-            if (BuildPoints <= 0)
+            if (BuildPoints >= 4)
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
             else
                 SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
@@ -599,7 +604,7 @@ public class InteractableHouse : InteractableObject
 
     public bool CanBuild()
     {
-        if (BuildPoints <= 0 || BuildingState == BuildingState.NORMAL) return false;
+        if (BuildPoints >= 4 || BuildingState == BuildingState.NORMAL) return false;
         if (!GameDataManager.Instance.ConstructionAvailability.ContainsKey(GetType().Name)) return true;
 
         ConstructionAvailabilityData myAvailability = GameDataManager.Instance.ConstructionAvailability[GetType().Name];
@@ -610,6 +615,11 @@ public class InteractableHouse : InteractableObject
     }
 
     protected virtual void OnEventExecuted(CustomEventData e)
+    {
+
+    }
+
+    public void UpdateProgressBar()
     {
 
     }

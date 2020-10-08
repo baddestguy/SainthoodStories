@@ -7,7 +7,7 @@ public class InteractableHospital : InteractableHouse
     public GameClock EndDelivery;
     private bool DeliveryTimeSet;
     private bool FailedDelivery;
-    private int DeliveryCountdown = 4;
+    private int DeliveryCountdown = 0;
     public int BabyPoints;
     public int FailedDeliveryPoints;
 
@@ -47,16 +47,17 @@ public class InteractableHospital : InteractableHouse
             GameClock clock = GameManager.Instance.GameClock;
             CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
 
-            if (DeliveryCountdown <= 0 || clock == EndDelivery)
+            if (DeliveryCountdown >= 4 || clock == EndDelivery)
             {
                 UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
                 UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) * 2);
                 PopIcon.gameObject.SetActive(false);
                 UI.Instance.SideNotificationPop(GetType().Name);
                 DeliveryTimeSet = false;
-                DeliveryCountdown = 4;
+                DeliveryCountdown = 0;
                 EndDelivery.SetClock(clock.Time - 1, clock.Day);
                 BuildRelationship(ThankYouType.BABY);
+                OnActionProgress?.Invoke(1f);
             }
         }
 
@@ -79,7 +80,7 @@ public class InteractableHospital : InteractableHouse
     {
         GameClock clock = GameManager.Instance.GameClock;
         DeliveryTimeSet = true;
-        DeliveryCountdown = 4;
+        DeliveryCountdown = 0;
 
         EndDelivery = new GameClock(clock.Time, clock.Day);
         EndDelivery.AddTime(bMission != null ? bMission.DeadlineHours : 9);
@@ -142,7 +143,8 @@ public class InteractableHospital : InteractableHouse
             player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("Delivering a Baby!!");
             UpdateCharityPoints(BabyPoints + (e != null ? (int)e.Gain : 0));
-            DeliveryCountdown--;
+            DeliveryCountdown++;
+            OnActionProgress?.Invoke(DeliveryCountdown/4f);   
             clock.Tick();
         }
         else if (EndDelivery == null || clock > EndDelivery)
