@@ -23,9 +23,11 @@ public class PopUI : MonoBehaviour
     public GameObject ChargeFx;
     public GameObject ButtonPressFx;
 
+    public Slider ProgressBar;
     void Start()
     {
         CamTransform = Camera.main.transform;
+        InteractableHouse.OnActionProgress += UpdateProgressBar;
     }
 
     public virtual void Init(Action<string> callback, string sprite, int items, GameClock deadline, float timer = 1f)
@@ -171,6 +173,20 @@ public class PopUI : MonoBehaviour
         }
     }
 
+    private void UpdateProgressBar(float progress)
+    {
+        if (ProgressBar == null) return;
+
+        ProgressBar.gameObject.SetActive(true);
+        ProgressBar.value = progress;
+
+        if(progress > 0.75f)
+        {
+            ProgressBar.gameObject.SetActive(false);
+        }
+    }
+
+
     private void OnDisable()
     {
         var buttons = gameObject.GetComponentsInChildren<Button>();
@@ -182,5 +198,8 @@ public class PopUI : MonoBehaviour
         Player.LockMovement = false;
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(false);
+        
+        if (ProgressBar == null) return;
+        ProgressBar.gameObject.SetActive(false);
     }
 }
