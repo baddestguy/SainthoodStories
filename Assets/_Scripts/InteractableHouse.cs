@@ -46,6 +46,7 @@ public class InteractableHouse : InteractableObject
 
     public int RelationshipPoints;
     private int VolunteerCountdown = 0;
+    public int EventsTriggered;
 
     public static UnityAction<bool> OnEnterHouse;
     public BuildingActivityState BuildingActivityState = BuildingActivityState.NONE;
@@ -261,7 +262,8 @@ public class InteractableHouse : InteractableObject
     }
 
     public virtual void EndofDay()
-    {        
+    {
+        EventsTriggered = 0;
     }
 
     public override void MissionBegin(Mission mission)
@@ -281,7 +283,7 @@ public class InteractableHouse : InteractableObject
         player.ConsumeEnergy(-1);
         clock.Tick();
         UI.Instance.DisplayMessage("MEDITATED!!");
-        UpdateFaithPoints(MeditationPoints);
+        UpdateFaithPoints(MeditationPoints, 1);
     }
 
     public virtual void DeliverItem(InteractableHouse house)
@@ -386,9 +388,10 @@ public class InteractableHouse : InteractableObject
         {
             SoundManager.Instance.PlayOneShotSfx("Build", 1f, 5f);
         }
-        UpdateCharityPoints(VolunteerPoints);
+        var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+        player.ConsumeEnergy(moddedEnergy);
+        UpdateCharityPoints(VolunteerPoints, moddedEnergy);
         GameClock clock = GameManager.Instance.GameClock;
-        player.ConsumeEnergy(EnergyConsumption); //Umm...?
         clock.Tick();
     }
 
@@ -406,7 +409,7 @@ public class InteractableHouse : InteractableObject
     {
     }
 
-    public virtual void UpdateCharityPoints(int amount)
+    public virtual void UpdateCharityPoints(int amount, int energy)
     {
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_MORALE || i.Id == CustomEventType.LOW_MORALE);
         int charityMultiplier = 1;
@@ -421,14 +424,14 @@ public class InteractableHouse : InteractableObject
         CurrentCharityPoints += amount * charityMultiplier;
         Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
         stack.Push(new Tuple<string, int>("CPHappy", amount * charityMultiplier));
-        if (EnergyConsumption != 0) stack.Push(new Tuple<string, int>("Energy", -EnergyConsumption));
+        if (energy != 0) stack.Push(new Tuple<string, int>("Energy", -energy));
         StartCoroutine(PopUIFXIconsAsync(stack));
 
         GameManager.Instance.MissionManager.UpdateCharityPoints(amount * charityMultiplier, null);
         UI.Instance.BuildingAlertPop(GetType().Name);
     }
 
-    public virtual void UpdateFaithPoints(int amount)
+    public virtual void UpdateFaithPoints(int amount, int energy)
     {
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_SPIRIT || i.Id == CustomEventType.LOW_SPIRIT);
 
@@ -443,7 +446,7 @@ public class InteractableHouse : InteractableObject
         CurrentFaithPoints += amount * faithMultiplier;
         Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
         stack.Push(new Tuple<string, int>("InteractableChurch", amount * faithMultiplier));
-        stack.Push(new Tuple<string, int>("Energy", 1)); //Prayer Energy should be a variable
+        if (energy != 0) stack.Push(new Tuple<string, int>("Energy", energy));
         StartCoroutine(PopUIFXIconsAsync(stack));
   
         GameManager.Instance.MissionManager.UpdateFaithPoints(amount * faithMultiplier);
@@ -515,6 +518,7 @@ public class InteractableHouse : InteractableObject
                 SoundManager.Instance.PlayHouseAmbience("Construction", true, 0.3f);
             SoundManager.Instance.FadeAmbience(0.1f);
             OnEnterHouse?.Invoke(true);
+            TriggerCustomEvent();
         }
         else if(CameraLockOnMe)
         {
@@ -534,6 +538,41 @@ public class InteractableHouse : InteractableObject
 
         InfoPopup.gameObject.SetActive(false);
         RubbleInfoPopup.gameObject.SetActive(false);
+    }
+
+    public virtual void TriggerCustomEvent()
+    {
+        if (GameSettings.Instance.FTUE) return;
+        if (EventsTriggered > 0) return;
+        if (EventsManager.Instance.EventInProgress) return;
+        if (BuildingState != BuildingState.NORMAL) return;
+        if (!DuringOpenHours()) return;
+
+        if (Random.Range(0, 100) < 50)
+        {
+            switch (GetType().Name)
+            {
+                case "InteractableChurch":
+                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.CHURCH).Id);
+                    break;
+                case "InteractableHospital":
+                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.HOSPITAL).Id);
+                    break;
+                case "InteractableKitchen":
+                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.KITCHEN).Id);
+                    break;
+                case "InteractableOrphanage":
+                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.ORPHANAGE).Id);
+                    break;
+                case "InteractableShelter":
+                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.SHELTER).Id);
+                    break;
+                case "InteractableSchool":
+                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.SCHOOL).Id);
+                    break;
+            }
+            EventsTriggered++;
+        }
     }
 
     public virtual void ResetActionProgress()

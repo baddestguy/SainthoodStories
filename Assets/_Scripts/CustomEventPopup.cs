@@ -6,6 +6,12 @@ using UnityEngine.UI;
 
 public class CustomEventPopup : MonoBehaviour
 {
+    private bool PointerDown;
+    public float ButtonTimer;
+    private float ButtonTimerTarget;
+    public GameObject ChargeFx;
+    public GameObject ButtonPressFx;
+
     public GameObject YesNoGO;
     public GameObject OKGO;
     public GameObject NextGO;
@@ -18,11 +24,13 @@ public class CustomEventPopup : MonoBehaviour
     public TextMeshProUGUI FPCPDisplay;
     public GameObject FPIcon;
     public GameObject CPIcon;
+    public GameObject CoinIcon;
 
     public Image Hearts;
     public TextMeshProUGUI HeartsPlus;
 
     private int CurrentSequenceNumber;
+
 
     public void Setup(CustomEventData customEvent)
     {
@@ -44,8 +52,9 @@ public class CustomEventPopup : MonoBehaviour
                 var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)customEvent.Cost);
                 EnergyDisplay.text = $"-{moddedEnergy}";
 
-                FPIcon.SetActive(GameDataManager.Instance.IsSpritualEvent(customEvent.Id));
-                CPIcon.SetActive(!GameDataManager.Instance.IsSpritualEvent(customEvent.Id));
+                FPIcon.SetActive(customEvent.RewardType == CustomEventRewardType.FP);
+                CPIcon.SetActive(customEvent.RewardType == CustomEventRewardType.CP);
+                CoinIcon.SetActive(customEvent.RewardType == CustomEventRewardType.COIN);
                 FPCPDisplay.text = $"+{customEvent.Gain}";
                 break;
         }
@@ -76,6 +85,8 @@ public class CustomEventPopup : MonoBehaviour
             Hearts.color = color;
             HeartsPlus.color = color;
         }
+        
+        ButtonTimerTarget = 1f;
     }
 
     IEnumerator HeartsAnimation()
@@ -111,33 +122,38 @@ public class CustomEventPopup : MonoBehaviour
         var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
         if (player.EnergyDepleted(moddedEnergy)) return;
 
-        switch (EventData.Id)
-        {
-            case CustomEventType.SPIRITUAL_RETREAT:
-            case CustomEventType.PRAYER_REQUEST:
-                for (int i = 0; i < EventData.Cost; i++)
-                {
-                    clock.Tick();
-                    player.ConsumeEnergy(1);
-                }
-                GameManager.Instance.MissionManager.UpdateFaithPoints((int)EventData.Gain);
+        ChargeFx.SetActive(false);
+        ButtonPressFx.SetActive(true);
+
+        player.ConsumeEnergy(moddedEnergy);
+        switch (EventData.RewardType) {
+            case CustomEventRewardType.FP:
+                player.CurrentBuilding.UpdateFaithPoints((int)EventData.Gain, -moddedEnergy);
                 break;
 
-            case CustomEventType.TOWN_HELP:
-                for (int i = 0; i < EventData.Cost; i++)
-                {
-                    clock.Tick();
-                    player.ConsumeEnergy(1);
-                }
-                GameManager.Instance.MissionManager.UpdateCharityPoints((int)EventData.Gain, null);
+            case CustomEventRewardType.CP:
+                player.CurrentBuilding.UpdateCharityPoints((int)EventData.Gain, moddedEnergy);
+                break;
+
+            case CustomEventRewardType.COIN:
+                TreasuryManager.Instance.DonateMoney((int)EventData.Gain);
                 break;
         }
+
+        for (int i = 0; i < EventData.Cost; i++)
+        {
+            clock.Tick();
+        }
+
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
     }
 
     public void No()
     {
+        Player player = GameManager.Instance.Player;
+        player.CurrentBuilding.UpdateCharityPoints(-(int)EventData.RejectionCost, 0);
+
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
     }
@@ -165,4 +181,47 @@ public class CustomEventPopup : MonoBehaviour
 
         EventText.text = $"{LocalizationManager.Instance.GetText(EventData.LocalizationKey, CurrentSequenceNumber)}";
     }
+
+    public void OnPointerDown()
+    {
+        Player player = GameManager.Instance.Player;
+        var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
+        if (player.EnergyDepleted(moddedEnergy)) return;
+
+        PointerDown = true;
+        ChargeFx.SetActive(true);
+        Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
+        ChargeFx.transform.position = new Vector3(fxpos.x, ChargeFx.transform.position.y, ChargeFx.transform.position.z);
+        Camera.main.GetComponent<CameraControls>().SetZoomTarget(2.5f);
+    }
+
+    public void OnPointerUp()
+    {
+        PointerDown = false;
+        ChargeFx.SetActive(false);
+        Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
+    }
+
+    void Update()
+    {
+        if (PointerDown)
+        {
+            ButtonTimer += Time.deltaTime;
+            if (ButtonTimer >= ButtonTimerTarget)
+            {
+                PointerDown = false;
+                ButtonTimer = 0f;
+                Yes();
+            }
+        }
+        else
+        {
+            ButtonTimer -= Time.deltaTime;
+            if (ButtonTimer <= 0)
+            {
+                ButtonTimer = 0;
+            }
+        }
+    }
+
 }

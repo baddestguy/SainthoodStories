@@ -37,7 +37,7 @@
         if (groceries != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED GROCERIES!");
-            UpdateCharityPoints(ItemDeliveryPoints);
+            UpdateCharityPoints(ItemDeliveryPoints, 0);
             base.DeliverItem(house);
             return;
         }
@@ -46,7 +46,7 @@
         if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateCharityPoints(ItemDeliveryPoints*2);
+            UpdateCharityPoints(ItemDeliveryPoints*2, 0);
             base.DeliverItem(house);
             return;
         }
@@ -66,7 +66,7 @@
         if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateCharityPoints(ItemDeliveryPoints * 2 * DeadlineDeliveryBonus);
+            UpdateCharityPoints(ItemDeliveryPoints * 2 * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this);
         }
     }

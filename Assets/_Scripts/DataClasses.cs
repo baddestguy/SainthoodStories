@@ -6,6 +6,14 @@ public class DataClasses : MonoBehaviour
 
 }
 
+public enum CustomEventRewardType
+{
+    NONE = 0,
+    COIN,
+    FP,
+    CP
+}
+
 public enum BuildingEventType
 {
     NONE = 0,
@@ -137,7 +145,29 @@ public enum CustomEventType
     THANKYOU_TEACH,
     THANKYOU_VOLUNTEER_HOSPITAL,
     THANKYOU_VOLUNTEER_ORPHANAGE,
-    Tutorial_61
+    Tutorial_61,
+    BIBLE_STUDY
+    ,QUIET_TIME
+    ,BLESSEDSACRAMENT_ROSARY
+    ,SOCIALIZE_OLDFOLK
+    ,LAUNDRY
+    ,FLOORS
+    ,PLAYTIME
+    ,ARTS_CRAFT
+    ,SPORTS
+    ,AFTERSCHOOL_LESSON
+    ,SUB_TEACHER
+    ,DETENTION
+    ,SUPERVISE_RECESS
+    ,LIBRARY_ORGANIZATION
+    ,WEDDING
+    ,SHELTER_SURPLUS
+    ,ORPHANAGE_PICNIC
+    ,DISHWASHING
+    ,SHELTER_SERVE
+    ,SHELTER_BUILDEXTRA
+    ,STOCK_SHELVES
+    ,REGISTRATION
 }
 
 public enum EventPopupType
@@ -152,7 +182,14 @@ public enum EventGroup
     IMMEDIATE,
     ENDWEEK,
     THANKYOU,
-    STORY
+    STORY,
+    CHURCH,
+    HOSPITAL,
+    ORPHANAGE,
+    SCHOOL,
+    KITCHEN,
+    SHELTER,
+    CLOTHES
 }
 
 public enum Language
@@ -222,6 +259,8 @@ public class CustomEventData
     public int Weight;
     public float Cost;
     public float Gain;
+    public CustomEventRewardType RewardType;
+    public float RejectionCost;
     public bool IsOrderedSequence;
     public string LocalizationKey;
 }

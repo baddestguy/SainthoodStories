@@ -128,21 +128,21 @@ public class InteractableChurch : InteractableHouse
                 player.ConsumeEnergy(ServiceEnergy);
                 clock.Tick();
                 UI.Instance.DisplayMessage("ATTENDED CONFESSION!!");
-                UpdateFaithPoints(PrayerPoints * 4);
+                UpdateFaithPoints(PrayerPoints * 4, 1);
             }
             else if (clock.Time >= MassStartTime && clock.Time < MassEndTime)
             {
                 player.ConsumeEnergy(ServiceEnergy);
                 clock.Tick();
                 UI.Instance.DisplayMessage("ATTENDED MASS!!");
-                UpdateFaithPoints(PrayerPoints * 4);
+                UpdateFaithPoints(PrayerPoints * 4, 1);
             }
             else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
             {
                 player.ConsumeEnergy(ServiceEnergy);
                 clock.Tick();
                 UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
-                UpdateFaithPoints(PrayerPoints * 2);
+                UpdateFaithPoints(PrayerPoints * 2, 1);
                 SoundManager.Instance.PlayOneShotSfx("MassBells", 0.3f, 10f);
                 player.ConsumeEnergy(ServiceEnergy);
             }
@@ -151,7 +151,7 @@ public class InteractableChurch : InteractableHouse
                 player.ConsumeEnergy(PrayEnergy);
                 clock.Tick();
                 UI.Instance.DisplayMessage("PRAYED");
-                UpdateFaithPoints(PrayerPoints);
+                UpdateFaithPoints(PrayerPoints, 1);
             }
         }
         else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
@@ -159,7 +159,7 @@ public class InteractableChurch : InteractableHouse
             clock.Tick();
             UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
             SoundManager.Instance.PlayOneShotSfx("MassBells", 0.3f, 10f);
-            UpdateFaithPoints(PrayerPoints * 2);
+            UpdateFaithPoints(PrayerPoints * 2, 1);
             player.ConsumeEnergy(ServiceEnergy);
         }
         else
@@ -167,7 +167,7 @@ public class InteractableChurch : InteractableHouse
             player.ConsumeEnergy(PrayEnergy);
             clock.Tick();
             UI.Instance.DisplayMessage("PRAYED");
-            UpdateFaithPoints(PrayerPoints);
+            UpdateFaithPoints(PrayerPoints, 1);
         }
     }
 

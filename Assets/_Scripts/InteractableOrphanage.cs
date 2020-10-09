@@ -52,7 +52,7 @@ public class InteractableOrphanage : InteractableHouse
             if (item != ItemType.NONE)
             {
                 UI.Instance.DisplayMessage("GAVE TOYS TO THE KIDS!");
-                UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);
+                UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
                 base.DeliverItem(house);
             }
             else
@@ -163,9 +163,10 @@ public class InteractableOrphanage : InteractableHouse
         {
             BuildingActivityState = BuildingActivityState.VOLUNTEERING;
             CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.ORPHANAGE_BONUS);
-            player.ConsumeEnergy(EnergyConsumption);
+            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+            player.ConsumeEnergy(moddedEnergy);
             UI.Instance.DisplayMessage("VOLUNTEERED AT ORPHANAGE!");
-            UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0));
+            UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0), moddedEnergy);
             base.VolunteerWork(house);
             clock.Tick();
         }
