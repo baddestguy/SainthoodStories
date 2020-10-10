@@ -25,6 +25,8 @@ public class EventsManager : MonoBehaviour
 
     public void AddEventToList(CustomEventType newEvent)
     {
+        if (CurrentEvents.Count > 3) return;
+
         var e = GameDataManager.Instance.CustomEventData[newEvent][0]; //Grab based on weight
         EventList.Add(e);
         CurrentEvents.Add(e);
@@ -73,13 +75,6 @@ public class EventsManager : MonoBehaviour
         //Try Trigger Story Events First
         if (ExecuteStoryEvent()) return;
 
-        if(time < 21 && !EventInProgress)
-        {
-            if (!GameSettings.Instance.FTUE && Random.Range(0, 100) < 2 && CurrentEvents.Count < 3)
-            {
-                AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.IMMEDIATE).Id);
-            }
-        }
     }
 
     public void StartNewDay()

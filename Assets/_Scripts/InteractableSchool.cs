@@ -45,9 +45,10 @@ public class InteractableSchool : InteractableHouse
         if (DuringOpenHours())
         {
             BuildingActivityState = BuildingActivityState.TEACHING;
-            player.ConsumeEnergy(EnergyConsumption);
+            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+            player.ConsumeEnergy(moddedEnergy);
             UI.Instance.DisplayMessage("Taught a Class!!");
-            UpdateCharityPoints(TeachPoints);
+            UpdateCharityPoints(TeachPoints, moddedEnergy);
             clock.Tick();
         }
         else
@@ -92,7 +93,7 @@ public class InteractableSchool : InteractableHouse
         if (item != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED STATIONERY!");
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);
+            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(house);
         }
         else

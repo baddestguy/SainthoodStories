@@ -50,7 +50,7 @@ public class InteractableHospital : InteractableHouse
             if (DeliveryCountdown >= 4 || clock == EndDelivery)
             {
                 UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
-                UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) * 2);
+                UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) * 2, GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
                 PopIcon.gameObject.SetActive(false);
                 UI.Instance.SideNotificationPop(GetType().Name);
                 DeliveryTimeSet = false;
@@ -140,9 +140,10 @@ public class InteractableHospital : InteractableHouse
         if (clock < EndDelivery)
         {
             BuildingActivityState = BuildingActivityState.DELIVERING_BABY;
-            player.ConsumeEnergy(EnergyConsumption);
+            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+            player.ConsumeEnergy(moddedEnergy);
             UI.Instance.DisplayMessage("Delivering a Baby!!");
-            UpdateCharityPoints(BabyPoints + (e != null ? (int)e.Gain : 0));
+            UpdateCharityPoints(BabyPoints + (e != null ? (int)e.Gain : 0), moddedEnergy);
             DeliveryCountdown++;
             OnActionProgress?.Invoke(DeliveryCountdown/4f);   
             clock.Tick();
@@ -162,7 +163,7 @@ public class InteractableHospital : InteractableHouse
         if (item != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED MEDS!");
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus);
+            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(house);
         }
         else
@@ -216,9 +217,10 @@ public class InteractableHospital : InteractableHouse
         if (player.EnergyDepleted()) return;
 
         BuildingActivityState = BuildingActivityState.VOLUNTEERING;
-        player.ConsumeEnergy(EnergyConsumption);
+        var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+        player.ConsumeEnergy(moddedEnergy);
         UI.Instance.DisplayMessage("VOLUNTEERED HOSPITAL!");
-        UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0));
+        UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0), moddedEnergy);
         base.VolunteerWork(house);
         clock.Tick();
     }
