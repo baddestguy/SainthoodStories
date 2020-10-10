@@ -25,8 +25,6 @@ public class EventsManager : MonoBehaviour
 
     public void AddEventToList(CustomEventType newEvent)
     {
-        if (CurrentEvents.Count > 3) return;
-
         var e = GameDataManager.Instance.CustomEventData[newEvent][0]; //Grab based on weight
         EventList.Add(e);
         CurrentEvents.Add(e);

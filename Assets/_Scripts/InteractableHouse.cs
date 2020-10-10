@@ -547,6 +547,7 @@ public class InteractableHouse : InteractableObject
         if (EventsManager.Instance.EventInProgress) return;
         if (BuildingState != BuildingState.NORMAL) return;
         if (!DuringOpenHours()) return;
+        if (EventsManager.Instance.CurrentEvents.Count > 3) return;
 
         if (Random.Range(0, 100) < 50)
         {
@@ -619,32 +620,43 @@ public class InteractableHouse : InteractableObject
             if (Random.Range(0, 100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(40);
+                TreasuryManager.Instance.DonateMoney(Random.Range(45, 55));
             }
         }
         else if (RelationshipPoints >= 30)
         {
             ThankYouMessage(thanks);
 
-            if(Random.Range(0,100) < 30)
+            if(Random.Range(0,100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(30);
+                TreasuryManager.Instance.DonateMoney(Random.Range(30, 40));
             }
         }
         else if (RelationshipPoints >= 10)
         {
             ThankYouMessage(thanks);
 
-            if(Random.Range(0,100) < 20)
+            if(Random.Range(0,100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(20);
+                TreasuryManager.Instance.DonateMoney(Random.Range(15, 25));
             }
         }
-        else if (RelationshipPoints >= 1)
+        else if (RelationshipPoints > 1)
         {
             ThankYouMessage(thanks);
+            if (Random.Range(0, 100) < 50)
+            {
+                MoneyThanks();
+                TreasuryManager.Instance.DonateMoney(Random.Range(15, 25));
+            }
+        }
+        else if (RelationshipPoints == 1)
+        {
+            ThankYouMessage(thanks);
+            MoneyThanks();
+            TreasuryManager.Instance.DonateMoney(Random.Range(15, 25));
         }
     }
 
