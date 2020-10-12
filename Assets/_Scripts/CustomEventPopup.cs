@@ -122,6 +122,7 @@ public class CustomEventPopup : MonoBehaviour
         var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
         if (player.EnergyDepleted(moddedEnergy)) return;
 
+        Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(true);
 
