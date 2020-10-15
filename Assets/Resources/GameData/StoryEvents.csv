@@ -11,5 +11,9 @@ Tutorial_8,1,1,19,TRUE
 Tutorial_9,1,1,21,TRUE
 Tutorial_10,1,1,22,TRUE
 WeatherIntro,1,3,8,TRUE
-OrphanageIntro,1,4,5.5,TRUE
 ProvisionsIntro,1,5,0,TRUE
+OrphanageIntro,1,2,5.5,TRUE
+SchoolIntro,1,3,5.5,TRUE
+ShelterIntro,1,4,5.5,TRUE
+KitchenIntro,1,5,5.5,TRUE
+ClothesBankIntro,1,6,5.5,TRUE

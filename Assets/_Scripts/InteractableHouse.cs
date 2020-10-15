@@ -40,7 +40,7 @@ public class InteractableHouse : InteractableObject
     public static bool HouseUIActive;
 
     public BuildingState BuildingState;
-    private int BuildPoints = 0;
+    protected int BuildPoints = 0;
     public GameObject RubbleGo;
     public GameObject BuildingGo;
 
@@ -383,6 +383,8 @@ public class InteractableHouse : InteractableObject
             {
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
             }
+
+            BuildingCompleteDialog();
         }
         else
         {
@@ -393,6 +395,28 @@ public class InteractableHouse : InteractableObject
         UpdateCharityPoints(VolunteerPoints, moddedEnergy);
         GameClock clock = GameManager.Instance.GameClock;
         clock.Tick();
+    }
+
+    public virtual void BuildingCompleteDialog()
+    {
+        switch (GetType().Name)
+        {
+            case "InteractableOrphanage":
+                EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_COMPLETE);
+                break;
+            case "InteractableKitchen":
+                EventsManager.Instance.AddEventToList(CustomEventType.KITCHEN_COMPLETE);
+                break;
+            case "InteractableShelter":
+                EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_COMPLETE);
+                break;
+            case "InteractableSchool":
+                EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_COMPLETE);
+                break;
+            case "InteractableClothesBank":
+                EventsManager.Instance.AddEventToList(CustomEventType.CLOTHES_COMPLETE);
+                break;
+        }
     }
 
     public virtual void PopUICallback(string button)
