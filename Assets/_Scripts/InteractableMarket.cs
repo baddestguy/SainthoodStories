@@ -9,6 +9,7 @@ public class InteractableMarket : InteractableHouse
         UI.BoughtItem += BoughtItem;
         PopUILocation = "UI/MarketUI";
         base.Start();
+        BuildPoints = 4;
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
