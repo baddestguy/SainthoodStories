@@ -1617,7 +1617,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 92882662}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 686631112}
@@ -7185,10 +7185,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 4
   RubbleGo: {fileID: 617113537}
   BuildingGo: {fileID: 1894776547}
   RelationshipPoints: 0
+  EventsTriggered: 0
   BuildingActivityState: 0
   AdoptionPoints: 3
 --- !u!65 &498165099
@@ -8585,7 +8585,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617113537}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.38, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1833022867}
@@ -9738,10 +9738,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 4
   RubbleGo: {fileID: 92882662}
   BuildingGo: {fileID: 1010180593}
   RelationshipPoints: 0
+  EventsTriggered: 0
   BuildingActivityState: 0
 --- !u!65 &710143203
 BoxCollider:
@@ -10550,10 +10550,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 0
-  BuildPoints: 0
   RubbleGo: {fileID: 883471756}
   BuildingGo: {fileID: 1900377841}
   RelationshipPoints: 0
+  EventsTriggered: 0
   BuildingActivityState: 0
   SleepEnergy: -3
   PrayEnergy: -1
@@ -13517,10 +13517,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 4
   RubbleGo: {fileID: 996390626}
   BuildingGo: {fileID: 1713372194}
   RelationshipPoints: 0
+  EventsTriggered: 0
   BuildingActivityState: 0
 --- !u!65 &891565151
 BoxCollider:
@@ -14907,7 +14907,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &995242554
 Transform:
   m_ObjectHideFlags: 0
@@ -14952,7 +14952,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996390626}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.28, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 129119195}
@@ -15917,10 +15917,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 4
   RubbleGo: {fileID: 1871785462}
   BuildingGo: {fileID: 1521251895}
   RelationshipPoints: 0
+  EventsTriggered: 0
   BuildingActivityState: 0
   BabyPoints: 1
   FailedDeliveryPoints: -1
@@ -17433,10 +17433,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 4
   RubbleGo: {fileID: 1536379395}
   BuildingGo: {fileID: 518612352}
   RelationshipPoints: 0
+  EventsTriggered: 0
   BuildingActivityState: 0
 --- !u!1 &1185707817
 GameObject:
@@ -22389,10 +22389,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 1
-  BuildPoints: 4
   RubbleGo: {fileID: 995242553}
   BuildingGo: {fileID: 1315125707}
   RelationshipPoints: 0
+  EventsTriggered: 0
   BuildingActivityState: 0
   TeachPoints: 1
 --- !u!65 &1454008471
@@ -30938,10 +30938,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   BuildingState: 0
-  BuildPoints: 0
   RubbleGo: {fileID: 959305145}
   BuildingGo: {fileID: 951983586}
   RelationshipPoints: 0
+  EventsTriggered: 0
   BuildingActivityState: 0
 --- !u!1 &1746676487
 GameObject:
@@ -32456,7 +32456,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871785462}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 877759591}

@@ -12,6 +12,7 @@ public class SoundManager : MonoBehaviour
     private AudioSource AmbientAudioSource;
     private AudioSource HouseAmbience;
     private AudioSource WeatherAmbientAudioSource;
+    private AudioSource OneShotSource;
     private string AmbientTrackName;
     private AudioSource gameplayTrack;
     private AudioLowPassFilter lowPassFilter;
@@ -126,16 +127,24 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlayOneShotSfx(string name, float volume = 1f, float timeToDie = 1f)
+    public void PlayOneShotSfx(string name, float volume = 1f, float timeToDie = 1f, bool modifyPitch = false)
     {
-        AudioSource track = gameObject.AddComponent<AudioSource>();
+        OneShotSource = gameObject.AddComponent<AudioSource>();
 
-        track.clip = Resources.Load("Audio/" + name, typeof(AudioClip)) as AudioClip;
-        track.Play();
-        track.loop = false;
-        track.volume = volume;
+        OneShotSource.clip = Resources.Load("Audio/" + name, typeof(AudioClip)) as AudioClip;
+        OneShotSource.Play();
+        OneShotSource.loop = false;
+        OneShotSource.volume = volume;
 
-        Destroy(track, timeToDie);
+        Destroy(OneShotSource, timeToDie);
+    }
+
+    public void StopOneShotSfx(string name)
+    {
+        if (OneShotSource != null && OneShotSource.clip.name == name)
+        {
+            Destroy(OneShotSource);
+        }
     }
 
     public void PlayHouseAmbience(string name, bool start, float volume = 1f)
@@ -154,6 +163,14 @@ public class SoundManager : MonoBehaviour
             Destroy(HouseAmbience, 5f);
             StartCoroutine(FadeAudioAsync(0f, false, HouseAmbience));
         }
+    }
+
+    public void EndAllTracks()
+    {
+        PlayHouseAmbience("", false, 0f);
+        PlayWeatherAmbience("", false, 0f);
+        Destroy(AmbientAudioSource, 5);
+        FadeAmbience(0.3f);
     }
 
     public void CrossFadeMusic(string newTrack, float endTime, bool shouldLoop, float maxVolume)

@@ -101,7 +101,7 @@ public class CameraControls : MonoBehaviour
         Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, ZoomTarget, Time.deltaTime*3);
         UICam3D.orthographicSize = Mathf.Lerp(UICam3D.orthographicSize, ZoomTarget, Time.deltaTime * 3);
 
-        if(Mathf.Abs(Camera.main.orthographicSize - ZoomTarget) <= 0.1f)
+        if(Mathf.Abs(Camera.main.orthographicSize - ZoomTarget) <= 0.3f)
         {
             ZoomComplete = true;
         }

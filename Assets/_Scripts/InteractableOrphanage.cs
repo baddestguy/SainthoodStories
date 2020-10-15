@@ -124,7 +124,7 @@ public class InteractableOrphanage : InteractableHouse
                         DeadlineCounter++;
                         DeadlineTime.SetClock(futureTime, day);
                         DeadlineDeliveryBonus = 2;
-                        RequiredItems = Random.Range(1,4);
+                        RequiredItems = Random.Range(1,3);
                         DeadlineSet = true;
                         PopMyIcon();
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
@@ -163,9 +163,9 @@ public class InteractableOrphanage : InteractableHouse
         {
             BuildingActivityState = BuildingActivityState.VOLUNTEERING;
             CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.ORPHANAGE_BONUS);
-            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            player.ConsumeEnergy(moddedEnergy);
+            player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("VOLUNTEERED AT ORPHANAGE!");
+            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0), moddedEnergy);
             base.VolunteerWork(house);
             clock.Tick();

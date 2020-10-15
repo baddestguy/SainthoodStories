@@ -45,9 +45,9 @@ public class InteractableSchool : InteractableHouse
         if (DuringOpenHours())
         {
             BuildingActivityState = BuildingActivityState.TEACHING;
-            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            player.ConsumeEnergy(moddedEnergy);
+            player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("Taught a Class!!");
+            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             UpdateCharityPoints(TeachPoints, moddedEnergy);
             clock.Tick();
         }
@@ -186,7 +186,7 @@ public class InteractableSchool : InteractableHouse
                         DeadlineCounter++;
                         DeadlineTime.SetClock(futureTime, day);
                         DeadlineDeliveryBonus = 2;
-                        RequiredItems = Random.Range(1,4);
+                        RequiredItems = Random.Range(1,3);
                         DeadlineSet = true;
                         PopMyIcon();
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
