@@ -28,6 +28,8 @@ public class CustomEventPopup : MonoBehaviour
 
     public Image Hearts;
     public TextMeshProUGUI HeartsPlus;
+    public Image Coins;
+    public TextMeshProUGUI CoinsPlus;
 
     private int CurrentSequenceNumber;
 
@@ -76,7 +78,14 @@ public class CustomEventPopup : MonoBehaviour
 
         if(customEvent.EventGroup == EventGroup.THANKYOU)
         {
-            StartCoroutine(HeartsAnimation());
+            if(customEvent.RewardType == CustomEventRewardType.CP)
+            {
+                StartCoroutine(RewardAnimation(Hearts, HeartsPlus));
+            }
+            else if(customEvent.RewardType == CustomEventRewardType.COIN)
+            {
+                StartCoroutine(RewardAnimation(Coins, CoinsPlus));
+            }
         }
         else
         {
@@ -84,35 +93,44 @@ public class CustomEventPopup : MonoBehaviour
             color.a = 0f;
             Hearts.color = color;
             HeartsPlus.color = color;
+            color = Coins.color;
+            color.a = 0f;
+            Coins.color = color;
+            CoinsPlus.color = color;
         }
         
         ButtonTimerTarget = 1f;
+        SoundManager.Instance.PlayOneShotSfx("DialogOpen");
     }
 
-    IEnumerator HeartsAnimation()
+    IEnumerator RewardAnimation(Image icon, TextMeshProUGUI iconPlus)
     {
-        Color color = Hearts.color;
+        Color color = icon.color;
+        Color colorPlus = iconPlus.color;
         color.a = 1f;
-        Hearts.color = color;
-        HeartsPlus.color = color;
+        colorPlus.a = 1f;
+        icon.color = color;
+        iconPlus.color = colorPlus;
 
         yield return new WaitForSeconds(1.5f);
-        var originalPosition = Hearts.transform.position;
+        var originalPosition = icon.transform.position;
         while (color.a - 0 > 0.01f)
         {
             color.a = Mathf.Lerp(color.a, 0, Time.deltaTime * 2);
+            colorPlus.a = Mathf.Lerp(colorPlus.a, 0, Time.deltaTime * 2);
 
-            Hearts.color = color;
-            HeartsPlus.color = color;
-            Hearts.transform.position += new Vector3(0, 0.01f, 0);
+            icon.color = color;
+            iconPlus.color = colorPlus;
+            icon.transform.position += new Vector3(0, 0.5f, 0);
             yield return null;
         }
 
-        Hearts.transform.position = originalPosition;
+        icon.transform.position = originalPosition;
         color.a = 0f;
+        colorPlus.a = 0f;
 
-        Hearts.color = color;
-        HeartsPlus.color = color;
+        icon.color = color;
+        iconPlus.color = colorPlus;
     }
 
     public void Yes()
@@ -126,7 +144,7 @@ public class CustomEventPopup : MonoBehaviour
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(true);
 
-        player.ConsumeEnergy(moddedEnergy);
+        player.ConsumeEnergy((int)EventData.Cost);
         switch (EventData.RewardType) {
             case CustomEventRewardType.FP:
                 player.CurrentBuilding.UpdateFaithPoints((int)EventData.Gain, -moddedEnergy);
@@ -148,6 +166,7 @@ public class CustomEventPopup : MonoBehaviour
 
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
+        SoundManager.Instance.PlayOneShotSfx("ActionButton", 0.5f, 5f);
     }
 
     public void No()
@@ -157,12 +176,14 @@ public class CustomEventPopup : MonoBehaviour
 
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
+        SoundManager.Instance.PlayOneShotSfx("Button");
     }
 
     public void OK()
     {
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
+        SoundManager.Instance.PlayOneShotSfx("Button");
     }
 
     public void Continue()
@@ -181,6 +202,7 @@ public class CustomEventPopup : MonoBehaviour
         }
 
         EventText.text = $"{LocalizationManager.Instance.GetText(EventData.LocalizationKey, CurrentSequenceNumber)}";
+        SoundManager.Instance.PlayOneShotSfx("Button");
     }
 
     public void OnPointerDown()
@@ -194,6 +216,7 @@ public class CustomEventPopup : MonoBehaviour
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
         ChargeFx.transform.position = new Vector3(fxpos.x, ChargeFx.transform.position.y, ChargeFx.transform.position.z);
         Camera.main.GetComponent<CameraControls>().SetZoomTarget(2.5f);
+        SoundManager.Instance.PlayOneShotSfx("Charge");
     }
 
     public void OnPointerUp()
@@ -201,6 +224,7 @@ public class CustomEventPopup : MonoBehaviour
         PointerDown = false;
         ChargeFx.SetActive(false);
         Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
+        SoundManager.Instance.StopOneShotSfx("Charge");
     }
 
     void Update()

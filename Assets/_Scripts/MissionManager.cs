@@ -64,7 +64,7 @@ public class MissionManager : MonoBehaviour
         if (house == null) return;
         HouseScores[house.TileType] = amount;
 
-        if(amount < 0)
+        if(amount < 0 && house.BuildingState != BuildingState.RUBBLE)
         {
             UI.Instance.BuildingAlertPush(house.GetType().Name);
         }
@@ -81,6 +81,7 @@ public class MissionManager : MonoBehaviour
         MissionOver = true;
 
         UI.Instance.CrossFade(1, 1f);
+        SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
 
         if (FaithPoints < 30 || CharityPoints < 30)

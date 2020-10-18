@@ -26,14 +26,18 @@ public class Player : MonoBehaviour
     private bool DissapearInHouse;
     private PlayerStatusEffect StatusEffect = PlayerStatusEffect.NONE; //Likely going to be a List of status effects that Stack.
 
+    private GameObject GroundTapFX;
+    private GameObject GroundMoveFX;
     void Start()
     {
         GameManager.MissionBegin += GameStart;
         TargetPosition = transform.position;
-        Animator.SetBool("Idle", true);
 
         PopUIFX = Instantiate(Resources.Load("UI/PopUIFX") as GameObject).GetComponent<PopUIFX>();
         PopUIFX.gameObject.SetActive(false);
+
+        GroundTapFX = Instantiate(Resources.Load("Environment/GroundLeavesFx") as GameObject);
+        GroundMoveFX = Instantiate(Resources.Load("Environment/GroundMoveFx") as GameObject);
     }
 
     void Update()
@@ -49,7 +53,6 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Animator.SetBool("Idle", true);
             Animator.SetBool("Run", false);
 
             if (DissapearInHouse)
@@ -126,7 +129,6 @@ public class Player : MonoBehaviour
         TargetPosition = CurrentTile.transform.position;
 
         Animator.SetBool("Run", true);
-        Animator.SetBool("Idle", false);
 
         PopUIFXIcons();
 
@@ -170,6 +172,10 @@ public class Player : MonoBehaviour
                 OnMove(newTile);
                 OnMoveSuccessEvent?.Invoke(Energy, newTile);
                 GameManager.Instance.PassTime();
+                GroundMoveFX.transform.position = newTile.transform.position + new Vector3(0,0.1f);
+                GroundMoveFX.SetActive(false);
+                GroundMoveFX.SetActive(true);
+                SoundManager.Instance.PlayOneShotSfx("Walk", 0.25f);
             }
             else
             {
@@ -181,8 +187,6 @@ public class Player : MonoBehaviour
         {
             StatusEffect = PlayerStatusEffect.FATIGUED;
         }
-
-        SoundManager.Instance.PlayOneShotSfx("Button", 0.4f);
     }
 
     IEnumerator ResetPlayerOnEnergyDepletedAsync()
@@ -232,8 +236,29 @@ public class Player : MonoBehaviour
 
     public void TileDance(MapTile tile)
     {
-        //Trigger cute tile animation
-        Debug.Log("Tile bubbly animation!");
+        if(tile is InteractableHouse)
+        {
+            (tile as InteractableHouse).HouseJump();
+        }
+        else if(tile == CurrentTile)
+        {
+            transform.eulerAngles = new Vector3(0, 180f, 0);
+            Animator.SetTrigger("Dance");
+            var soundByte = Random.Range(0, 3);
+            switch (soundByte)
+            {
+                case 0: SoundManager.Instance.PlayOneShotSfx("Hi"); break;
+                case 1: SoundManager.Instance.PlayOneShotSfx("Hey"); break;
+                case 2: SoundManager.Instance.PlayOneShotSfx("Hello"); break;
+            }
+        }
+        else
+        {
+            GroundTapFX.transform.position = tile.transform.position;
+            GroundTapFX.SetActive(false);
+            GroundTapFX.SetActive(true);
+            SoundManager.Instance.PlayOneShotSfx("GrassTouch");
+        }
     }
 
     public void ConsumeEnergy(int amount)

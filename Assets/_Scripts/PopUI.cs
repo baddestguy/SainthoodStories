@@ -83,7 +83,7 @@ public class PopUI : MonoBehaviour
     {
         if (LockUI)
         {
-            //Play disabled sound
+            SoundManager.Instance.PlayOneShotSfx("Button");
             return;
         }
 
@@ -91,13 +91,18 @@ public class PopUI : MonoBehaviour
         {
             if (!TutorialManager.Instance.CheckTutorialButton(button))
             {
+                SoundManager.Instance.PlayOneShotSfx("Button");
                 return;
             }
         }
         else
         {
             var myButton = Buttons.Where(b => b.ButtonName == button).FirstOrDefault();
-            if (!myButton.Enabled) return;
+            if (!myButton.Enabled)
+            {
+                SoundManager.Instance.PlayOneShotSfx("Button");
+                return;
+            }
         }
 
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
@@ -105,7 +110,7 @@ public class PopUI : MonoBehaviour
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(true);
         ButtonPressFx.transform.position = ChargeFx.transform.position;
-        SoundManager.Instance.PlayOneShotSfx("Button");
+        SoundManager.Instance.PlayOneShotSfx("ActionButton", 0.5f, 5f);
         Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
 
         if (GameSettings.Instance.FTUE)
@@ -122,13 +127,18 @@ public class PopUI : MonoBehaviour
         {
             if (!TutorialManager.Instance.CheckTutorialButton(button))
             {
+                SoundManager.Instance.PlayOneShotSfx("Button");
                 return;
             }
         }
         else
         {
             var myButton = Buttons.Where(b => b.ButtonName == button).FirstOrDefault();
-            if (!myButton.Enabled) return;
+            if (!myButton.Enabled)
+            {
+               SoundManager.Instance.PlayOneShotSfx("Button");
+                return;
+            }
         }
 
         PointerDown = true;
@@ -137,6 +147,8 @@ public class PopUI : MonoBehaviour
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
         ChargeFx.transform.position = new Vector3(fxpos.x, ChargeFx.transform.position.y, ChargeFx.transform.position.z);
         Camera.main.GetComponent<CameraControls>().SetZoomTarget(2.5f);
+
+        SoundManager.Instance.PlayOneShotSfx("Charge");
     }
 
     public void OnPointerUp()
@@ -144,6 +156,7 @@ public class PopUI : MonoBehaviour
         PointerDown = false;
         ChargeFx.SetActive(false);
         Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
+        SoundManager.Instance.StopOneShotSfx("Charge");
     }
 
     void Update()

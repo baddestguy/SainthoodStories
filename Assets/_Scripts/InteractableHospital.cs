@@ -141,7 +141,7 @@ public class InteractableHospital : InteractableHouse
         {
             BuildingActivityState = BuildingActivityState.DELIVERING_BABY;
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            player.ConsumeEnergy(moddedEnergy);
+            player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("Delivering a Baby!!");
             UpdateCharityPoints(BabyPoints + (e != null ? (int)e.Gain : 0), moddedEnergy);
             DeliveryCountdown++;
@@ -218,7 +218,7 @@ public class InteractableHospital : InteractableHouse
 
         BuildingActivityState = BuildingActivityState.VOLUNTEERING;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-        player.ConsumeEnergy(moddedEnergy);
+        player.ConsumeEnergy(EnergyConsumption);
         UI.Instance.DisplayMessage("VOLUNTEERED HOSPITAL!");
         UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0), moddedEnergy);
         base.VolunteerWork(house);

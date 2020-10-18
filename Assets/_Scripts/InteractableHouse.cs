@@ -238,7 +238,7 @@ public class InteractableHouse : InteractableObject
                     {
                         DeadlineCounter++;
                         DeadlineTime.SetClock(time + (mission != null ? mission.DeadlineHours : RandomFutureTimeByDifficulty()), day);
-                        RequiredItems = mission != null ? mission.RequiredItems : Random.Range(1,4);
+                        RequiredItems = mission != null ? mission.RequiredItems : Random.Range(1,3);
                         DeadlineDeliveryBonus = 2;
                         DeadlineSet = true;
                         PopMyIcon();
@@ -379,7 +379,8 @@ public class InteractableHouse : InteractableObject
             PopUI.gameObject.SetActive(true);
             SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
             SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
-            if (GameManager.Instance.GameClock.Time >= OpenTime && GameManager.Instance.GameClock.Time <= ClosingTime)
+            SoundManager.Instance.PlayOneShotSfx("Cheer",1f,5f);
+            if (DuringOpenHours())
             {
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
             }
@@ -390,8 +391,8 @@ public class InteractableHouse : InteractableObject
         {
             SoundManager.Instance.PlayOneShotSfx("Build", 1f, 5f);
         }
+        player.ConsumeEnergy(EnergyConsumption);
         var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-        player.ConsumeEnergy(moddedEnergy);
         UpdateCharityPoints(VolunteerPoints, moddedEnergy);
         GameClock clock = GameManager.Instance.GameClock;
         clock.Tick();
@@ -475,7 +476,6 @@ public class InteractableHouse : InteractableObject
   
         GameManager.Instance.MissionManager.UpdateFaithPoints(amount * faithMultiplier);
         Debug.LogWarning("FAITH: " + CurrentFaithPoints);
-        SoundManager.Instance.PlayOneShotSfx("Pray", 0.5f, 5f);
     }
 
     public virtual void ReportScores()
@@ -527,13 +527,13 @@ public class InteractableHouse : InteractableObject
         base.OnPlayerMoved(energy, tile);
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            Camera.main.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.53f, 11.6f, -5.78f));
+            Camera.main.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
             CameraLockOnMe = true;
             HouseUIActive = true;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.EnableInventoryUI(true);
             SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
-            if(GameManager.Instance.GameClock.Time >= OpenTime && GameManager.Instance.GameClock.Time <= ClosingTime)
+            if(DuringOpenHours())
             {
                 if (BuildPoints >= 4)
                     SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
@@ -732,6 +732,36 @@ public class InteractableHouse : InteractableObject
         InfoPopup.Init(GetType().Name, OpenTime, ClosingTime, RelationshipPoints);
         PopIcon.gameObject.SetActive(false);
         base.OnMouseOver();
+    }
+
+    private bool HouseJumping = false;
+    public virtual void HouseJump()
+    {
+        if (HouseJumping) return;
+
+        SoundManager.Instance.PlayOneShotSfx("HouseJump");
+        HouseJumping = true;
+        StartCoroutine(HouseJumpAsync());
+    }
+
+    private IEnumerator HouseJumpAsync()
+    {
+        var tilePos = transform.position;
+        var newPos = new Vector3(tilePos.x, tilePos.y + 0.5f, tilePos.z);
+        while (Mathf.Abs(transform.position.y - newPos.y) > 0.05f)
+        {
+            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 15);
+            yield return null;
+        }
+
+        while (Mathf.Abs(transform.position.y - tilePos.y) > 0.05f)
+        {
+            transform.position = Vector3.Lerp(transform.position, tilePos, Time.deltaTime * 15);
+            yield return null;
+        }
+
+        transform.position = tilePos;
+        HouseJumping = false;
     }
 
     public override void OnMouseExit()
