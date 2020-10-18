@@ -96,6 +96,8 @@ public class CustomEventPopup : MonoBehaviour
             color = Coins.color;
             color.a = 0f;
             Coins.color = color;
+            color = CoinsPlus.color;
+            color.a = 0f;
             CoinsPlus.color = color;
         }
         

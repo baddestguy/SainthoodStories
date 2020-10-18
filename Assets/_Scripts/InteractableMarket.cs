@@ -132,8 +132,28 @@ public class InteractableMarket : InteractableHouse
         ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), actionName);
         var itemData = GameDataManager.Instance.ShopItemData[itemType];
         var moddedPrice = ApplyDiscount(itemData.Price);
+        bool isHouseAvailable = false;
 
-        return DuringOpenHours() && TreasuryManager.Instance.CanAfford(moddedPrice);
+        switch (itemType)
+        {
+            case ItemType.CLOTHES:
+                isHouseAvailable = FindObjectOfType<InteractableClothesBank>()?.BuildingState != BuildingState.RUBBLE;
+                break;
+            case ItemType.GROCERIES:
+                isHouseAvailable = FindObjectOfType<InteractableShelter>()?.BuildingState != BuildingState.RUBBLE;
+                break;
+            case ItemType.MEDS:
+                isHouseAvailable = FindObjectOfType<InteractableHospital>()?.BuildingState != BuildingState.RUBBLE;
+                break;
+            case ItemType.STATIONERY:
+                isHouseAvailable = FindObjectOfType<InteractableSchool>()?.BuildingState != BuildingState.RUBBLE;
+                break;
+            case ItemType.TOYS:
+                isHouseAvailable = FindObjectOfType<InteractableOrphanage>()?.BuildingState != BuildingState.RUBBLE;
+                break;
+        }
+
+        return DuringOpenHours() && TreasuryManager.Instance.CanAfford(moddedPrice) && isHouseAvailable;
     }
 
     public override void ReportScores()
