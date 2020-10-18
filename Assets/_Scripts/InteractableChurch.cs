@@ -172,7 +172,6 @@ public class InteractableChurch : InteractableHouse
 
     public override void ReportScores()
     {
-        GameManager.Instance.MissionManager.UpdateFaithPoints(-NeglectedPoints);
         CurrentFaithPoints = 0;
     }
 

@@ -47,8 +47,6 @@ public class InteractableSchool : InteractableHouse
             BuildingActivityState = BuildingActivityState.TEACHING;
             player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("Taught a Class!!");
-            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            UpdateCharityPoints(TeachPoints, moddedEnergy);
             clock.Tick();
         }
         else
@@ -74,6 +72,9 @@ public class InteractableSchool : InteractableHouse
 
         if (TeachCountdown >= 4)
         {
+            Player player = GameManager.Instance.Player;
+            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+            UpdateCharityPoints(TeachPoints, moddedEnergy);
             BuildRelationship(ThankYouType.TEACH);
             TeachCountdown = 0;
         }

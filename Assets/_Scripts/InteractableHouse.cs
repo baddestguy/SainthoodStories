@@ -155,6 +155,9 @@ public class InteractableHouse : InteractableObject
                 if (VolunteerCountdown >= 4)
                 {
                     BuildRelationship(ThankYouType.VOLUNTEER);
+                    Player player = GameManager.Instance.Player;
+                    var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+                    UpdateCharityPoints(VolunteerPoints, moddedEnergy);
                     VolunteerCountdown = 0;
                 }
                 break;
@@ -386,14 +389,14 @@ public class InteractableHouse : InteractableObject
             }
 
             BuildingCompleteDialog();
+            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+            UpdateCharityPoints(VolunteerPoints*2, moddedEnergy);
         }
         else
         {
             SoundManager.Instance.PlayOneShotSfx("Build", 1f, 5f);
         }
         player.ConsumeEnergy(EnergyConsumption);
-        var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-        UpdateCharityPoints(VolunteerPoints, moddedEnergy);
         GameClock clock = GameManager.Instance.GameClock;
         clock.Tick();
     }
@@ -480,7 +483,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual void ReportScores()
     {
-        GameManager.Instance.MissionManager.UpdateCharityPoints(CurrentCharityPoints > 0 ? 0 : (NeglectedPoints * NeglectedMultiplier), this);
+        GameManager.Instance.MissionManager.UpdateCharityPoints(0, this);
 
         if (CurrentCharityPoints <= 0)
         {
