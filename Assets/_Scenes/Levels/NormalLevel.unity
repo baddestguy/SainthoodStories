@@ -7175,7 +7175,7 @@ MonoBehaviour:
   OpenTime: 16
   ClosingTime: 22
   ItemDeliveryPoints: 1
-  VolunteerPoints: 1
+  VolunteerPoints: 4
   DeadlineDeliveryBonus: 0
   DeadlineSet: 0
   RequiredItems: 0
@@ -15907,7 +15907,7 @@ MonoBehaviour:
   OpenTime: 0
   ClosingTime: 23
   ItemDeliveryPoints: 1
-  VolunteerPoints: 1
+  VolunteerPoints: 3
   DeadlineDeliveryBonus: 0
   DeadlineSet: 0
   RequiredItems: 0
@@ -22379,7 +22379,7 @@ MonoBehaviour:
   OpenTime: 9
   ClosingTime: 15
   ItemDeliveryPoints: 1
-  VolunteerPoints: 1
+  VolunteerPoints: 3
   DeadlineDeliveryBonus: 0
   DeadlineSet: 0
   RequiredItems: 0
@@ -22394,7 +22394,7 @@ MonoBehaviour:
   RelationshipPoints: 0
   EventsTriggered: 0
   BuildingActivityState: 0
-  TeachPoints: 1
+  TeachPoints: 2
 --- !u!65 &1454008471
 BoxCollider:
   m_ObjectHideFlags: 0

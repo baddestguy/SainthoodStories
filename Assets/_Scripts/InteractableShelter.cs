@@ -66,8 +66,18 @@
         if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateCharityPoints(ItemDeliveryPoints * 2 * DeadlineDeliveryBonus, 0);
+            UpdateCharityPoints(ItemDeliveryPoints * 4 * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this);
+        }
+        else
+        {
+            ItemType grocery = InventoryManager.Instance.GetItem(ItemType.GROCERIES);
+            if (grocery != ItemType.NONE)
+            {
+                UI.Instance.DisplayMessage("FED THE HUNGRY!");
+                UpdateCharityPoints(ItemDeliveryPoints * 2 * DeadlineDeliveryBonus, 0);
+                base.DeliverItem(this);
+            }
         }
     }
 

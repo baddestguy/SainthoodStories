@@ -165,8 +165,6 @@ public class InteractableOrphanage : InteractableHouse
             CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.ORPHANAGE_BONUS);
             player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("VOLUNTEERED AT ORPHANAGE!");
-            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            UpdateCharityPoints(VolunteerPoints + (e != null ? (int)e.Gain : 0), moddedEnergy);
             base.VolunteerWork(house);
             clock.Tick();
         }
