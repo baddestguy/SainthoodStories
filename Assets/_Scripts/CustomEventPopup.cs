@@ -33,6 +33,8 @@ public class CustomEventPopup : MonoBehaviour
 
     private int CurrentSequenceNumber;
 
+    private Vector3 IconOriginalPosition;
+    private GameObject AnimatedIcon;
 
     public void Setup(CustomEventData customEvent)
     {
@@ -107,6 +109,7 @@ public class CustomEventPopup : MonoBehaviour
 
     IEnumerator RewardAnimation(Image icon, TextMeshProUGUI iconPlus)
     {
+        AnimatedIcon = icon.gameObject;
         Color color = icon.color;
         Color colorPlus = iconPlus.color;
         color.a = 1f;
@@ -115,7 +118,7 @@ public class CustomEventPopup : MonoBehaviour
         iconPlus.color = colorPlus;
 
         yield return new WaitForSeconds(1.5f);
-        var originalPosition = icon.transform.position;
+        IconOriginalPosition = icon.transform.position;
         while (color.a - 0 > 0.01f)
         {
             color.a = Mathf.Lerp(color.a, 0, Time.deltaTime * 2);
@@ -127,7 +130,7 @@ public class CustomEventPopup : MonoBehaviour
             yield return null;
         }
 
-        icon.transform.position = originalPosition;
+        icon.transform.position = IconOriginalPosition;
         color.a = 0f;
         colorPlus.a = 0f;
 
@@ -251,4 +254,14 @@ public class CustomEventPopup : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        if (AnimatedIcon)
+        {
+            AnimatedIcon.transform.position = IconOriginalPosition;
+            Color color = AnimatedIcon.GetComponent<Image>().color;
+            color.a = 0f;
+            AnimatedIcon.GetComponent<Image>().color = color;
+        }
+    }
 }

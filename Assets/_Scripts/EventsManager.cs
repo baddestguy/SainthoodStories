@@ -26,9 +26,19 @@ public class EventsManager : MonoBehaviour
     public void AddEventToList(CustomEventType newEvent)
     {
         var e = GameDataManager.Instance.CustomEventData[newEvent][0]; //Grab based on weight
-        EventList.Add(e);
-        CurrentEvents.Add(e);
-        //Sort Events?
+
+        StartCoroutine(AddEventToListAsync(e));
+    }
+
+    private IEnumerator AddEventToListAsync(CustomEventData newEvent)
+    {
+        while (EventInProgress)
+        {
+            yield return null;
+        }
+
+        EventList.Add(newEvent);
+        CurrentEvents.Add(newEvent);
     }
 
     public void ExecuteEvents()
@@ -37,6 +47,12 @@ public class EventsManager : MonoBehaviour
         {
             EventList.Clear();
             return;
+        }
+
+        GameClock c = GameManager.Instance.GameClock;
+        if (c.EndofWeek())
+        {
+            EventList.RemoveAll(e => e.EventGroup != EventGroup.ENDWEEK);
         }
 
         if (EventInProgress || EventList.Count == 0) return;
@@ -64,6 +80,9 @@ public class EventsManager : MonoBehaviour
         yield return null;
 
         EventList.Clear();
+
+        if (EventInProgress) yield break; //If something else has started an event, break out early.
+
         Player.LockMovement = false;
         EventDialogTriggered?.Invoke(false);
     }
@@ -78,8 +97,9 @@ public class EventsManager : MonoBehaviour
     public void StartNewDay()
     {
         CurrentEvents.Clear();
+        GameClock c = GameManager.Instance.GameClock;
 
-        if (GameManager.Instance.GameClock.Day < 6) return;
+        if (c.Day < 6 || c.EndofWeek()) return;
 
         if(Random.Range(0, 100) < 50)
         {
@@ -115,6 +135,11 @@ public class EventsManager : MonoBehaviour
 
     private IEnumerator ExecuteStoryEventsAsync()
     {
+        while (EventInProgress)
+        {
+            yield return null;
+        }
+
         EventDialogTriggered?.Invoke(true);
         Player.LockMovement = true;
 
