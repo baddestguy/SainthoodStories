@@ -75,6 +75,11 @@ public class GameClock
         DeltaTime = false;
     }
 
+    public bool EndofWeek()
+    {
+        return Day > 7;
+    }
+
     public void Reset()
     {
         double timeDiff = 23.5 - Time;

@@ -73,8 +73,6 @@ public class InteractableChurch : InteractableHouse
             LiturgyStartTime = 12;
             LiturgyEndTime = 13;
         }
-        if (clock.Time == LiturgyStartTime)
-            SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
 
         PopMyIcon();
     }
@@ -96,7 +94,11 @@ public class InteractableChurch : InteractableHouse
 
     public override void PopMyIcon(string name = "", int items = -1, GameClock time = null)
     {
-        base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, GameManager.Instance.GameClock.Day));
+        GameClock c = GameManager.Instance.GameClock;
+        if (c.Time > 21.5)
+            base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, c.Day + 1));
+        else
+            base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, c.Day));
 
         GameClock clock = GameManager.Instance.GameClock;
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
@@ -109,7 +111,19 @@ public class InteractableChurch : InteractableHouse
             else if (clock.Time > 12.5 && clock.Time <= ConfessionTime)
             {
                 base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(ConfessionTime, GameManager.Instance.GameClock.Day));
+                if (clock.Time == ConfessionTime)
+                    SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
             }
+            else
+            {
+                if (clock.Time == LiturgyStartTime)
+                    SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
+            }
+        }
+        else
+        {
+            if (clock.Time == LiturgyStartTime)
+                SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
         }
     }
 
