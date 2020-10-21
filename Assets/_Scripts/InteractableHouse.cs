@@ -546,6 +546,8 @@ public class InteractableHouse : InteractableObject
             SoundManager.Instance.FadeAmbience(0.1f);
             OnEnterHouse?.Invoke(true);
             TriggerCustomEvent();
+            UI.Instance.EnableTreasuryUI(true);
+            UI.Instance.RefreshTreasuryBalance(0);
         }
         else if(CameraLockOnMe)
         {
@@ -561,6 +563,7 @@ public class InteractableHouse : InteractableObject
             SoundManager.Instance.FadeAmbience(0.3f);
             OnEnterHouse?.Invoke(false);
             ResetActionProgress();
+            UI.Instance.EnableTreasuryUI(false);
         }
 
         InfoPopup.gameObject.SetActive(false);
@@ -732,7 +735,7 @@ public class InteractableHouse : InteractableObject
             InfoPopup.gameObject.SetActive(true);
         }
 
-        InfoPopup.Init(GetType().Name, OpenTime, ClosingTime, RelationshipPoints);
+        InfoPopup.Init(GetType().Name, OpenTime, ClosingTime, RelationshipPoints, DuringOpenHours());
         PopIcon.gameObject.SetActive(false);
         base.OnMouseOver();
     }

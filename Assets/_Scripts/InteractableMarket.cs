@@ -28,14 +28,11 @@ public class InteractableMarket : InteractableHouse
             PopUI.gameObject.SetActive(true);
             PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
             PopIcon.UIPopped(true);
-            UI.Instance.EnableTreasuryUI(true);
-            UI.Instance.RefreshTreasuryBalance();
         }
         else
         {
             PopUI.gameObject.SetActive(false);
             PopIcon.UIPopped(false);
-            UI.Instance.EnableTreasuryUI(false);
         }
     }
 
@@ -56,7 +53,6 @@ public class InteractableMarket : InteractableHouse
             TreasuryManager.Instance.SpendMoney(moddedPrice);
             InventoryManager.Instance.AddToInventory(item);
             PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
-            UI.Instance.RefreshTreasuryBalance();
         }
         else
         {

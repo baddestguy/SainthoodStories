@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -20,6 +21,12 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI CPDisplay;
     public TextMeshProUGUI FPDisplay;
     public TextMeshProUGUI WeatherDisplay;
+    public Image CPDisplayGlow;
+    public Image FPDisplayGlow;
+    public Image EnergyDisplayGlow;
+    public TextMeshProUGUI FPAdditionDisplay;
+    public TextMeshProUGUI CPAdditionDisplay;
+    public TextMeshProUGUI EnergyAdditionDisplay;
 
     public GameObject ShopUI;
     public GameObject SchoolUI;
@@ -59,6 +66,8 @@ public class UI : MonoBehaviour
     public GameObject InventoryUI;
     public GameObject TreasuryUI;
     public TextMeshProUGUI TreasuryAmount;
+    public Image TreasuryDisplayGlow;
+    public TextMeshProUGUI TreasuryAdditionDisplay;
     public ProvisionsPopup ProvisionPopup;
     public Image Black;
 
@@ -76,6 +85,7 @@ public class UI : MonoBehaviour
         MissionManager.MissionComplete += MissionComplete;
         GameClock.Ticked += OnTick;
         WeatherManager.WeatherForecastActive += WeatherAlert;
+        TreasuryManager.DonatedMoney += RefreshTreasuryBalance;
 
         SideNotificationResource = Resources.Load("UI/SideNotification") as GameObject;
         BuildingAlertResource = Resources.Load("UI/BuildingIcon") as GameObject;
@@ -95,7 +105,13 @@ public class UI : MonoBehaviour
 
     private void OnEnergyConsumed(Energy energy)
     {
-        EnergyDisplay.text = $"{energy.Amount}";
+        if (DOTween.IsTweening(EnergyDisplay, true))
+        {
+            ResetAdditionPoints();
+        }
+
+        int oldEnergy = int.Parse(EnergyDisplay.text);
+        EnergyDisplay.DOCounter(oldEnergy, energy.Amount, 0.5f).SetDelay(2f);
         if (energy.Amount <= 5)
         {
             EnergyDisplay.color = Color.red;
@@ -104,6 +120,8 @@ public class UI : MonoBehaviour
         {
             EnergyDisplay.color = Color.white;
         }
+
+        StartCoroutine(AdditionPointsAsync(EnergyAdditionDisplay, EnergyDisplayGlow, energy.Amount - oldEnergy, 2f));
     }
 
     private void MissionComplete(bool complete)
@@ -268,9 +286,19 @@ public class UI : MonoBehaviour
         TreasuryUI.SetActive(enable);
     }
 
-    public void RefreshTreasuryBalance()
+    public void RefreshTreasuryBalance(double delta)
     {
-        TreasuryAmount.text = TreasuryManager.Instance.Money.ToString();
+        if (DOTween.IsTweening(TreasuryAmount, true))
+        {
+            TreasuryAmount.DOComplete();
+            StopAllCoroutines();
+            TreasuryAdditionDisplay.text = "";
+        }
+
+        int oldAmount = int.Parse(TreasuryAmount.text);
+        TreasuryAmount.DOCounter(oldAmount, (int)TreasuryManager.Instance.Money, 0.5f).SetDelay(2f);
+
+        StartCoroutine(AdditionPointsAsync(TreasuryAdditionDisplay, TreasuryDisplayGlow, (int)delta, 2f));
     }
 
     public void EnableInventoryUI(bool enable)
@@ -419,8 +447,18 @@ public class UI : MonoBehaviour
 
     public void RefreshPoints(int cp, int fp)
     {
-        CPDisplay.text = $"{cp}";
-        FPDisplay.text = $"{fp}";
+        if (DOTween.IsTweening(CPDisplay, true) || DOTween.IsTweening(FPDisplay, true))
+        {
+            ResetAdditionPoints();
+        }
+
+        int oldFP = int.Parse(FPDisplay.text);
+        int oldCP = int.Parse(CPDisplay.text);
+        CPDisplay.DOCounter(oldCP, cp, 0.5f).SetDelay(2f);
+        FPDisplay.DOCounter(oldFP, fp, 0.5f).SetDelay(2f);
+        
+        StartCoroutine(AdditionPointsAsync(CPAdditionDisplay, CPDisplayGlow, cp-oldCP, 2f));
+        StartCoroutine(AdditionPointsAsync(FPAdditionDisplay, FPDisplayGlow, fp-oldFP, 2f));
 
         if (cp < 50)
         {
@@ -447,6 +485,33 @@ public class UI : MonoBehaviour
         {
             FPDisplay.color = Color.green;
         }
+    }
+
+    public IEnumerator AdditionPointsAsync(TextMeshProUGUI display, Image glow, int amount, float delay)
+    {
+        if (amount == 0) yield break;
+
+        glow.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+        glow.color = Color.white;
+        glow.transform.DOScale(Vector3.one, 0.5f);
+        glow.DOFade(0, 1f);
+
+        display.text = amount > 0 ? $"+{amount}" : $"{amount}";
+        display.color = amount > 0 ? Color.green : Color.red;
+        display.DOFade(1, 0.5f);
+        yield return new WaitForSeconds(delay);
+        display.DOFade(0, 0.5f);
+    }
+
+    public void ResetAdditionPoints()
+    {
+        CPDisplay.DOComplete();
+        FPDisplay.DOComplete();
+        EnergyDisplay.DOComplete();
+        StopAllCoroutines();
+        FPAdditionDisplay.text = "";
+        CPAdditionDisplay.text = "";
+        EnergyAdditionDisplay.text = "";
     }
 
     public void DisplayReport(string report)
@@ -544,5 +609,6 @@ public class UI : MonoBehaviour
         MissionManager.MissionComplete -= MissionComplete;
         WeatherManager.WeatherForecastActive -= WeatherAlert;
         GameClock.Ticked -= OnTick;
+        TreasuryManager.DonatedMoney -= RefreshTreasuryBalance;
     }
 }

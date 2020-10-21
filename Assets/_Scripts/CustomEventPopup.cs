@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,17 +26,15 @@ public class CustomEventPopup : MonoBehaviour
     public GameObject CoinIcon;
 
     public Image Hearts;
-    public TextMeshProUGUI HeartsPlus;
     public Image Coins;
-    public TextMeshProUGUI CoinsPlus;
 
     private int CurrentSequenceNumber;
 
-    private Vector3 IconOriginalPosition;
-    private GameObject AnimatedIcon;
+    public DOTween Dotween;
 
     public void Setup(CustomEventData customEvent)
     {
+        transform.DOJump(transform.position, 30f, 1, 1f);
         EventData = customEvent;
         YesNoGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         IconsGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
@@ -67,7 +64,9 @@ public class CustomEventPopup : MonoBehaviour
         if (customEvent.IsOrderedSequence && sequences > 1)
         {
             CurrentSequenceNumber = 0;
-            EventText.text = $"{LocalizationManager.Instance.GetText(customEvent.LocalizationKey, CurrentSequenceNumber)}";
+            var text = LocalizationManager.Instance.GetText(customEvent.LocalizationKey, CurrentSequenceNumber);
+            EventText.text = "";
+            EventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
             YesNoGO.SetActive(false);
             OKGO.SetActive(false);
             IconsGO.SetActive(false);
@@ -75,71 +74,34 @@ public class CustomEventPopup : MonoBehaviour
         }
         else
         {
-            EventText.text = $"{LocalizationManager.Instance.GetText(customEvent.LocalizationKey)}";
+            var text = LocalizationManager.Instance.GetText(customEvent.LocalizationKey);
+            EventText.text = "";
+            EventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
         }
 
         if(customEvent.EventGroup == EventGroup.THANKYOU)
         {
             if(customEvent.RewardType == CustomEventRewardType.CP)
             {
-                StartCoroutine(RewardAnimation(Hearts, HeartsPlus));
+                Hearts.gameObject.SetActive(true);
             }
             else if(customEvent.RewardType == CustomEventRewardType.COIN)
             {
-                StartCoroutine(RewardAnimation(Coins, CoinsPlus));
+                Coins.gameObject.SetActive(true);
             }
-        }
-        else
-        {
-            Color color = Hearts.color;
-            color.a = 0f;
-            Hearts.color = color;
-            HeartsPlus.color = color;
-            color = Coins.color;
-            color.a = 0f;
-            Coins.color = color;
-            color = CoinsPlus.color;
-            color.a = 0f;
-            CoinsPlus.color = color;
         }
         
         ButtonTimerTarget = 1f;
         SoundManager.Instance.PlayOneShotSfx("DialogOpen");
-    }
-
-    IEnumerator RewardAnimation(Image icon, TextMeshProUGUI iconPlus)
-    {
-        AnimatedIcon = icon.gameObject;
-        Color color = icon.color;
-        Color colorPlus = iconPlus.color;
-        color.a = 1f;
-        colorPlus.a = 1f;
-        icon.color = color;
-        iconPlus.color = colorPlus;
-
-        yield return new WaitForSeconds(1.5f);
-        IconOriginalPosition = icon.transform.position;
-        while (color.a - 0 > 0.01f)
-        {
-            color.a = Mathf.Lerp(color.a, 0, Time.deltaTime * 2);
-            colorPlus.a = Mathf.Lerp(colorPlus.a, 0, Time.deltaTime * 2);
-
-            icon.color = color;
-            iconPlus.color = colorPlus;
-            icon.transform.position += new Vector3(0, 0.5f, 0);
-            yield return null;
-        }
-
-        icon.transform.position = IconOriginalPosition;
-        color.a = 0f;
-        colorPlus.a = 0f;
-
-        icon.color = color;
-        iconPlus.color = colorPlus;
-    }
+    }   
 
     public void Yes()
     {
+        if (DOTween.IsTweening(EventText, true))
+        {
+            DOTween.Complete(EventText);
+            return;
+        }
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
@@ -176,6 +138,11 @@ public class CustomEventPopup : MonoBehaviour
 
     public void No()
     {
+        if (DOTween.IsTweening(EventText, true))
+        {
+            DOTween.Complete(EventText);
+            return;
+        }
         Player player = GameManager.Instance.Player;
         player.CurrentBuilding.UpdateCharityPoints(-(int)EventData.RejectionCost, 0);
 
@@ -186,6 +153,11 @@ public class CustomEventPopup : MonoBehaviour
 
     public void OK()
     {
+        if (DOTween.IsTweening(EventText, true))
+        {
+            DOTween.Complete(EventText);
+            return;
+        }
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("Button");
@@ -193,6 +165,12 @@ public class CustomEventPopup : MonoBehaviour
 
     public void Continue()
     {
+        if (DOTween.IsTweening(EventText, true))
+        {
+            DOTween.Complete(EventText);
+            return;
+        }
+
         int sequences = LocalizationManager.Instance.GetTotalSequences(EventData.LocalizationKey);
         CurrentSequenceNumber++;
 
@@ -206,12 +184,19 @@ public class CustomEventPopup : MonoBehaviour
             NextGO.SetActive(false);
         }
 
-        EventText.text = $"{LocalizationManager.Instance.GetText(EventData.LocalizationKey, CurrentSequenceNumber)}";
+        var text = LocalizationManager.Instance.GetText(EventData.LocalizationKey, CurrentSequenceNumber);
+        EventText.text = "";
+        EventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
         SoundManager.Instance.PlayOneShotSfx("Button");
     }
 
     public void OnPointerDown()
     {
+        if (DOTween.IsTweening(EventText, true))
+        {
+            DOTween.Complete(EventText);
+            return;
+        }
         Player player = GameManager.Instance.Player;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
         if (player.EnergyDepleted(moddedEnergy)) return;
@@ -256,12 +241,7 @@ public class CustomEventPopup : MonoBehaviour
 
     private void OnDisable()
     {
-        if (AnimatedIcon)
-        {
-            AnimatedIcon.transform.position = IconOriginalPosition;
-            Color color = AnimatedIcon.GetComponent<Image>().color;
-            color.a = 0f;
-            AnimatedIcon.GetComponent<Image>().color = color;
-        }
+        Hearts.gameObject.SetActive(false);
+        Coins.gameObject.SetActive(false);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,13 +9,14 @@ public class BuildingInformationPopup : MonoBehaviour
     public TextMeshProUGUI OpenHours;
     public TextMeshProUGUI Hearts;
     public GameObject HeartsGO;
+    public TextMeshProUGUI IsCurrentlyOpen;
 
     void Start()
     {
         CamTransform = Camera.main.transform;
     }
 
-    public void Init(string iconName, int openTime, int closingTime, int hearts)
+    public void Init(string iconName, int openTime, int closingTime, int hearts, bool isOpen)
     {
         BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{iconName}");
         OpenHours.text = $"{openTime}:{(openTime % 1 == 0 ? "00" : "30")} - {closingTime}:{(closingTime % 1 == 0 ? "00" : "30")}";
@@ -42,6 +41,8 @@ public class BuildingInformationPopup : MonoBehaviour
         {
             OpenHours.text = LocalizationManager.Instance.GetText("Open 24 hrs");
         }
+
+        IsCurrentlyOpen.text = isOpen ? "(Open)" : "(Closed)";
     }
 
     void Update()

@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
             UI.Instance.ShowWeekBeginText();
             PlayAmbience(GameClock.Time, GameClock.Day);
+            TreasuryManager.Instance.DonateMoney(100);
 
             StartCoroutine(WaitAndMovePlayer());
         }
@@ -107,7 +108,6 @@ public class GameManager : MonoBehaviour
             case MissionDifficulty.HARD:
                 CurrentMission = new Mission(15, 15, 21, 5.5, 7, 1);
               //  CurrentMission = new Mission(90, 90, 20, 22.5, 1, 1); //Test Mission
-                TreasuryManager.Instance.DonateMoney(100);
                 SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
                 StartCoroutine(WaitAndLoadScene());
                 break;

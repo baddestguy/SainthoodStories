@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class TreasuryManager : MonoBehaviour
 {
     public static TreasuryManager Instance { get; private set; }
 
     public double Money { get; private set; }
+    public static UnityAction<double> DonatedMoney;
 
     private void Awake()
     {
@@ -21,10 +21,12 @@ public class TreasuryManager : MonoBehaviour
     public void DonateMoney(double donation)
     {
         Money += donation;
+        DonatedMoney?.Invoke(donation);
     }
 
     public void SpendMoney(double amount)
     {
         Money -= amount;
+        DonatedMoney?.Invoke(-amount);
     }
 }
