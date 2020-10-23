@@ -17,3 +17,4 @@ SchoolIntro,1,3,5.5,TRUE
 ShelterIntro,1,4,5.5,TRUE
 KitchenIntro,1,5,5.5,TRUE
 ClothesBankIntro,1,6,5.5,TRUE
+Event_SundayMass,1,7,0,TRUE
