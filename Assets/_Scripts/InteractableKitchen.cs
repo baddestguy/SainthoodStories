@@ -1,5 +1,9 @@
-﻿public class InteractableKitchen : InteractableHouse
+﻿using UnityEngine;
+
+public class InteractableKitchen : InteractableHouse
 {
+    public ParticleSystem CookFX;
+
     protected override void Start()
     {
         UI.Cooked += Cook;
@@ -40,6 +44,7 @@
                 clock.Tick();
             }
             InventoryManager.Instance.AddToInventory(ItemType.MEAL);
+            CookFX.Play();
             UI.Instance.DisplayMessage("COOKED MEAL!");
         }
         else

@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SecurityLights : MonoBehaviour
 {
-    public Light Light;
+    public GameObject Light;
 
     private void OnEnable()
     {
@@ -15,11 +13,11 @@ public class SecurityLights : MonoBehaviour
     {
         if(time >= 21 || time < 6)
         {
-            Light.enabled = true;
+            Light.SetActive(true);
         }
         else
         {
-            Light.enabled = false;
+            Light.SetActive(false);
         }
     }
 
