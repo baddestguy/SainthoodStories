@@ -69,9 +69,9 @@ public class PopUI : MonoBehaviour
             ClockIcon.color = Color.white;
         }
 
+        Buttons = gameObject.GetComponentsInChildren<ActionButton>().ToList();
         if (!GameSettings.Instance.FTUE || TutorialManager.Instance.CurrentTutorialStep >= 20)
         {
-            Buttons = gameObject.GetComponentsInChildren<ActionButton>().ToList();
             foreach (var b in Buttons)
             {
                 b.RefreshButton(house?.CanDoAction(b.ButtonName) ?? false);
@@ -87,6 +87,7 @@ public class PopUI : MonoBehaviour
             return;
         }
 
+        var myButton = Buttons.Where(b => b.ButtonName == button).FirstOrDefault();
         if (GameSettings.Instance.FTUE)
         {
             if (!TutorialManager.Instance.CheckTutorialButton(button))
@@ -97,7 +98,6 @@ public class PopUI : MonoBehaviour
         }
         else
         {
-            var myButton = Buttons.Where(b => b.ButtonName == button).FirstOrDefault();
             if (!myButton.Enabled)
             {
                 SoundManager.Instance.PlayOneShotSfx("Button");
@@ -106,7 +106,7 @@ public class PopUI : MonoBehaviour
         }
 
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
-        ChargeFx.transform.position = new Vector3(fxpos.x, ChargeFx.transform.position.y, ChargeFx.transform.position.z);
+        ChargeFx.transform.position = myButton.transform.position - new Vector3(0, -0.1f, 0.1f);
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(true);
         ButtonPressFx.transform.position = ChargeFx.transform.position;
@@ -123,6 +123,8 @@ public class PopUI : MonoBehaviour
 
     public void OnPointerDown(string button)
     {
+        var myButton = Buttons.Where(b => b.ButtonName == button).FirstOrDefault();
+
         if (GameSettings.Instance.FTUE)
         {
             if (!TutorialManager.Instance.CheckTutorialButton(button))
@@ -133,7 +135,6 @@ public class PopUI : MonoBehaviour
         }
         else
         {
-            var myButton = Buttons.Where(b => b.ButtonName == button).FirstOrDefault();
             if (!myButton.Enabled)
             {
                SoundManager.Instance.PlayOneShotSfx("Button");
@@ -145,7 +146,7 @@ public class PopUI : MonoBehaviour
         ButtonName = button;
         ChargeFx.SetActive(true);
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
-        ChargeFx.transform.position = new Vector3(fxpos.x, ChargeFx.transform.position.y, ChargeFx.transform.position.z);
+        ChargeFx.transform.position = myButton.transform.position - new Vector3(0, -0.1f, 0.1f);
         Camera.main.GetComponent<CameraControls>().SetZoomTarget(2.5f);
 
         SoundManager.Instance.PlayOneShotSfx("Charge");
