@@ -16,6 +16,7 @@ public class PopUI : MonoBehaviour
     public Image ClockIcon;
     public TextMeshProUGUI ItemsRequiredDisplay;
     public TextMeshProUGUI DeadlineDisplay;
+    public TextMeshProUGUI IsCurrentlyOpen;
 
     private bool PointerDown;
     public float ButtonTimer;
@@ -48,13 +49,22 @@ public class PopUI : MonoBehaviour
         {
             ItemsRequiredDisplay.gameObject.SetActive(false);
             ClockIcon.gameObject.SetActive(false);
-            BuildingIcon.transform.localPosition = new Vector3(0, 1, 0);
+            BuildingIcon.transform.localPosition = new Vector3(0, 1.5f, 0);
+            if (house != null)
+            {
+                IsCurrentlyOpen.text = house.BuildingState == BuildingState.RUBBLE ? LocalizationManager.Instance.GetText("UI_ConstructionSite") : house.DuringOpenHours() ? LocalizationManager.Instance.GetText("UI_Open") : LocalizationManager.Instance.GetText("UI_Closed");
+            }
+            else
+            {
+                IsCurrentlyOpen.text = "";
+            }
         }
         else
         {
             ItemsRequiredDisplay.gameObject.SetActive(true);
             ClockIcon.gameObject.SetActive(true);
             BuildingIcon.transform.localPosition = new Vector3(0, 2, 0);
+            IsCurrentlyOpen.text = "";
         }
 
         GameClock clock = GameManager.Instance.GameClock;

@@ -47,11 +47,11 @@ public class CustomEventPopup : MonoBehaviour
                 Player player = GameManager.Instance.Player;
 
                 GameClock c = new GameClock(clock.Time);
-                c.AddTicks((int)customEvent.Cost);
+                c.AddTicks(Mathf.Abs((int)customEvent.Cost));
                 TimeDisplay.text = $"{(int)c.Time}:{(c.Time % 1 == 0 ? "00" : "30")}";
 
                 var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)customEvent.Cost);
-                EnergyDisplay.text = $"-{moddedEnergy}";
+                EnergyDisplay.text = moddedEnergy == 0 ? "0" : moddedEnergy > 0 ? $"-{moddedEnergy}" : $"+{-moddedEnergy}";
 
                 FPIcon.SetActive(customEvent.RewardType == CustomEventRewardType.FP);
                 CPIcon.SetActive(customEvent.RewardType == CustomEventRewardType.CP);
