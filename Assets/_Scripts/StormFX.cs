@@ -16,8 +16,7 @@ public class StormFX : MonoBehaviour
 
         if (weather == WeatherType.RAIN || weather == WeatherType.SNOW)
         {
-            var emission = FX.emission;
-            emission.enabled = true;
+            FX.Play();
             foreach (var rend in renderers)
             {
                 if (!rend.name.ToLower().Contains("tree")) continue;
@@ -29,8 +28,7 @@ public class StormFX : MonoBehaviour
         }
         else
         {
-            var emission = FX.emission;
-            emission.enabled = false;
+            FX.Stop();
             foreach (var rend in renderers)
             {
                 if (!rend.name.ToLower().Contains("tree")) continue;

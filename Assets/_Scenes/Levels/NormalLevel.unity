@@ -24161,7 +24161,7 @@ MonoBehaviour:
   CurrentGroundTile: {fileID: 1613480955}
   EnergyConsumption: 1
   OpenTime: 0
-  ClosingTime: 23
+  ClosingTime: 24
   ItemDeliveryPoints: 1
   VolunteerPoints: 1
   DeadlineDeliveryBonus: 0
@@ -25143,7 +25143,7 @@ MonoBehaviour:
   CurrentGroundTile: {fileID: 414956708}
   EnergyConsumption: -3
   OpenTime: 0
-  ClosingTime: 23
+  ClosingTime: 24
   ItemDeliveryPoints: 0
   VolunteerPoints: 1
   DeadlineDeliveryBonus: 0
@@ -28371,7 +28371,7 @@ MonoBehaviour:
   CurrentGroundTile: {fileID: 1293577686}
   EnergyConsumption: 1
   OpenTime: 0
-  ClosingTime: 23
+  ClosingTime: 24
   ItemDeliveryPoints: 0
   VolunteerPoints: 1
   DeadlineDeliveryBonus: 0
@@ -30985,7 +30985,7 @@ MonoBehaviour:
   CurrentGroundTile: {fileID: 61612241}
   EnergyConsumption: 1
   OpenTime: 0
-  ClosingTime: 23
+  ClosingTime: 24
   ItemDeliveryPoints: 1
   VolunteerPoints: 3
   DeadlineDeliveryBonus: 0
@@ -32383,7 +32383,7 @@ MonoBehaviour:
   CurrentGroundTile: {fileID: 591043095}
   EnergyConsumption: 1
   OpenTime: 0
-  ClosingTime: 23
+  ClosingTime: 24
   ItemDeliveryPoints: 1
   VolunteerPoints: 1
   DeadlineDeliveryBonus: 0
