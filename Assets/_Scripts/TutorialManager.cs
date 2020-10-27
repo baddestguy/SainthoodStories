@@ -58,16 +58,16 @@ public class TutorialManager : MonoBehaviour
     public void NextTutorialStep()
     {
         CurrentTutorialStep++;
-
     }
 
     private void FinishedTalking(bool started)
     {
         if (!started)
         {
-            if (CurrentTutorialStep >= 20)
+            if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 20)
             {
                 GameSettings.Instance.FTUE = false;
+                SaveDataManager.Instance.SaveGame();
             }
         }
     }

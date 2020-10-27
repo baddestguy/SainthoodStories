@@ -45,6 +45,8 @@ public class WeatherManager : MonoBehaviour
 
     private void TriggerWeatherForecast(double time, int day)
     {
+        if (!GameClock.DeltaTime) return;
+
         if (WeatherForecastTriggered)
         {
             if (CurrentWeatherGO.activeSelf)

@@ -47,6 +47,11 @@ public class GameClock
         for(int i = 0; i < ticks; i++)
         {
             Time += 0.5;
+            if (Time > 23.5)
+            {
+                Day++;
+                Time = Time - 24;
+            }
         }
     }
 
@@ -73,6 +78,16 @@ public class GameClock
         ExecuteEvents?.Invoke();
 
         DeltaTime = false;
+    }
+
+    public void Ping()
+    {
+        Ticked?.Invoke(Time, Day);
+        if (EndofDay)
+        {
+            StartNewDay?.Invoke();
+        }
+        ExecuteEvents?.Invoke();
     }
 
     public bool EndofWeek()

@@ -64,6 +64,7 @@ public class InteractableHouse : InteractableObject
         EventsManager.EventDialogTriggered += OnEventDialogTriggered;
         EventsManager.EventExecuted += OnEventExecuted;
 
+        LoadData();
         Initialize();
     }
 
@@ -272,6 +273,7 @@ public class InteractableHouse : InteractableObject
     public override void MissionBegin(Mission mission)
     {
         MissionDifficulty = GameManager.MissionDifficulty;
+        //Load data?
         DeadlineTime = new GameClock(-1);
         DeadlineDeliveryBonus = 1;
     }
@@ -638,6 +640,8 @@ public class InteractableHouse : InteractableObject
         RelationshipPoints += Mathf.Clamp(amount, 0, 100);
         RelationshipReward(thanks);
         SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
+        if(!GameSettings.Instance.FTUE)
+            SaveDataManager.Instance.SaveGame();
     }
 
     public virtual void RelationshipReward(ThankYouType thanks)
@@ -777,8 +781,45 @@ public class InteractableHouse : InteractableObject
         RubbleInfoPopup.gameObject.SetActive(false);
         InfoPopup.gameObject.SetActive(false);
         var clock = GameManager.Instance.GameClock;
-        Tick(clock.Time, clock.Day);
+        clock.Ping();
         base.OnMouseExit();
+    }
+
+    public void LoadData()
+    {
+        var data = GameManager.Instance.SaveData;
+        switch (GetType().Name)
+        {
+            case "InteractableOrphanage":
+                RelationshipPoints = data.OrphanageRelationshipPoints;
+                BuildingState = data.OrphanageBuildingState;
+                break;
+            case "InteractableHospital":
+                RelationshipPoints = data.HospitalRelationshipPoints;
+                BuildingState = data.HospitalBuildingState;
+                break;
+            case "InteractableShelter":
+                RelationshipPoints = data.OrphanageRelationshipPoints;
+                BuildingState = data.ShelterBuildingState;
+                break;
+            case "InteractableSchool":
+                RelationshipPoints = data.SchoolRelationshipPoints;
+                BuildingState = data.SchoolBuildingState;
+                break;
+            case "InteractableClothesBank":
+                RelationshipPoints = data.ClothesRelationshipPoints;
+                BuildingState = data.ClothesBuildingState;
+                break;
+            case "InteractableKitchen":
+                BuildingState = data.KitchenBuildingState;
+                break;
+            case "InteractableChurch":
+                BuildingState = BuildingState.NORMAL;
+                break;
+            case "InteractableMarket":
+                BuildingState = BuildingState.NORMAL;
+                break;
+        }
     }
 
     public override void OnDisable()

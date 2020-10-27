@@ -30,7 +30,6 @@ public class Player : MonoBehaviour
     private GameObject GroundMoveFX;
     void Start()
     {
-        GameManager.MissionBegin += GameStart;
         TargetPosition = transform.position;
 
         PopUIFX = Instantiate(Resources.Load("UI/PopUIFX") as GameObject).GetComponent<PopUIFX>();
@@ -70,6 +69,14 @@ public class Player : MonoBehaviour
         StartingEnergy = Energy.Amount;
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
         LockMovement = false;
+        StartCoroutine(WaitThenEnterChurch());
+    }
+
+    IEnumerator WaitThenEnterChurch()
+    {
+        yield return new WaitForSeconds(1f);
+        OnMoveSuccessEvent?.Invoke(Energy, CurrentBuilding);
+        GameManager.Instance.GameClock.Ping();
     }
 
     public bool WeCanMove(MapTile tile)
@@ -194,7 +201,7 @@ public class Player : MonoBehaviour
         UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
 
-        transform.localScale = Vector3.one;
+        transform.localScale = Vector3.zero;
         DissapearInHouse = false;
         OnMove(StartTile);
         Energy.Consume(-StartingEnergy);
@@ -280,8 +287,18 @@ public class Player : MonoBehaviour
         return Energy.Depleted(consumption);
     }
 
+    public void ResetEnergy()
+    {
+        Energy.Consume(10000);
+        Energy.Consume(-StartingEnergy);
+    }
+
+    public int GetEnergyAmount()
+    {
+        return Energy.Amount;
+    }
+
     private void OnDisable()
     {
-        GameManager.MissionBegin -= GameStart;
     }
 }

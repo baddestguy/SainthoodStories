@@ -540,9 +540,9 @@ public class UI : MonoBehaviour
         GameManager.Instance.SetMissionParameters(MissionDifficulty.NORMAL);
     }
 
-    public void HardRun()
+    public void HardRun(bool newGame)
     {
-        GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD);
+        GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, newGame);
     }
 
     private string DayofTheWeek(int Day)

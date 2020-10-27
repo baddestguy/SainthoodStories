@@ -126,7 +126,8 @@ public class CustomEventPopup : MonoBehaviour
                 break;
         }
 
-        for (int i = 0; i < EventData.Cost; i++)
+        var timeCost = Mathf.Abs(EventData.Cost);
+        for (int i = 0; i < timeCost; i++)
         {
             clock.Tick();
         }
@@ -134,6 +135,7 @@ public class CustomEventPopup : MonoBehaviour
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("ActionButton", 0.5f, 5f);
+        SaveDataManager.Instance.SaveGame();
     }
 
     public void No()
@@ -149,6 +151,7 @@ public class CustomEventPopup : MonoBehaviour
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("Button");
+        SaveDataManager.Instance.SaveGame();
     }
 
     public void OK()

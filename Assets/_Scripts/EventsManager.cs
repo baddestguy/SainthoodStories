@@ -89,6 +89,8 @@ public class EventsManager : MonoBehaviour
 
     public void TryEventTrigger(double time, int day)
     {
+        if (!GameSettings.Instance.FTUE && !GameClock.DeltaTime) return;
+
         //Try Trigger Story Events First
         if (ExecuteStoryEvent()) return;
 

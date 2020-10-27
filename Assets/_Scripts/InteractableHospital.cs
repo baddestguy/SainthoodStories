@@ -39,25 +39,28 @@ public class InteractableHospital : InteractableHouse
 
     public override void Tick(double time, int day)
     {
-        CheckBabyDelivery();
-        CheckFailedDelivery();
-
-        if (BuildingActivityState == BuildingActivityState.DELIVERING_BABY)
+        if (GameClock.DeltaTime)
         {
-            GameClock clock = GameManager.Instance.GameClock;
-            CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
+            CheckBabyDelivery();
+            CheckFailedDelivery();
 
-            if (DeliveryCountdown >= 4 || clock == EndDelivery)
+            if (BuildingActivityState == BuildingActivityState.DELIVERING_BABY)
             {
-                UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
-                UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) * 2, GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
-                PopIcon.gameObject.SetActive(false);
-                UI.Instance.SideNotificationPop(GetType().Name);
-                DeliveryTimeSet = false;
-                DeliveryCountdown = 0;
-                EndDelivery.SetClock(clock.Time - 1, clock.Day);
-                BuildRelationship(ThankYouType.BABY);
-                OnActionProgress?.Invoke(1f);
+                GameClock clock = GameManager.Instance.GameClock;
+                CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
+
+                if (DeliveryCountdown >= 4 || clock == EndDelivery)
+                {
+                    UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
+                    UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) * 2, GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
+                    PopIcon.gameObject.SetActive(false);
+                    UI.Instance.SideNotificationPop(GetType().Name);
+                    DeliveryTimeSet = false;
+                    DeliveryCountdown = 0;
+                    EndDelivery.SetClock(clock.Time - 1, clock.Day);
+                    BuildRelationship(ThankYouType.BABY);
+                    OnActionProgress?.Invoke(1f);
+                }
             }
         }
 

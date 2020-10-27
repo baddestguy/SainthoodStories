@@ -111,18 +111,18 @@ public class InteractableChurch : InteractableHouse
             else if (clock.Time > 12.5 && clock.Time <= ConfessionTime)
             {
                 base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(ConfessionTime, GameManager.Instance.GameClock.Day));
-                if (clock.Time == ConfessionTime)
+                if (clock.Time == ConfessionTime && GameClock.DeltaTime)
                     SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
             }
             else
             {
-                if (clock.Time == LiturgyStartTime)
+                if (clock.Time == LiturgyStartTime && GameClock.DeltaTime)
                     SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
             }
         }
         else
         {
-            if (clock.Time == LiturgyStartTime)
+            if (clock.Time == LiturgyStartTime && GameClock.DeltaTime)
                 SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
         }
     }
