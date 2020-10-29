@@ -17,6 +17,5 @@ public class GameSettings : MonoBehaviour
 
     private void Start()
     {
-        if (TutorialManager.Instance.CurrentTutorialStep >= 20) FTUE = false;
     }
 }

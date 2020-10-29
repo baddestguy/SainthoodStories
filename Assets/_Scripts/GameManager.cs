@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public Player Player;
     public GameClock GameClock;
     public static MissionDifficulty MissionDifficulty;
+    public SaveObject SaveData;
 
     public Mission CurrentMission;
     private void Awake()
@@ -41,27 +42,20 @@ public class GameManager : MonoBehaviour
             Player = FindObjectOfType<Player>();
             Map = FindObjectOfType<GameMap>();
             MissionManager.LoadAllMissions(CurrentMission);
-            GameClock = new GameClock(MissionManager.CurrentMission.StartingClock);
-            Player.GameStart(MissionManager.CurrentMission);
-            MissionBegin?.Invoke(MissionManager.CurrentMission);
+            GameClock = new GameClock(SaveData.Time, SaveData.Day);
+            Player.GameStart(CurrentMission);
+            MissionBegin?.Invoke(CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
             UI.Instance.ShowWeekBeginText();
             PlayAmbience(GameClock.Time, GameClock.Day);
-            TreasuryManager.Instance.DonateMoney(100);
-
-            StartCoroutine(WaitAndMovePlayer());
+            TreasuryManager.Instance.DonateMoney(SaveData.Money);
         }
-    }
-
-    private IEnumerator WaitAndMovePlayer()
-    {
-        yield return new WaitForSeconds(1f);
-
-        OnTap(FindObjectOfType<InteractableChurch>());
-    }
-
-    private void OnMapGenerated()
-    {
+        else if (scene.name.Contains("MainMenu"))
+        {
+            SaveData = SaveDataManager.Instance.LoadGame();
+            TutorialManager.Instance.CurrentTutorialStep = SaveData.TutorialSteps;
+            if (SaveData.TutorialSteps >= 20) GameSettings.Instance.FTUE = false;
+        }
     }
 
     private void OnTap(MapTile tile)
@@ -93,7 +87,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetMissionParameters(MissionDifficulty missionDifficulty)
+    public void SetMissionParameters(MissionDifficulty missionDifficulty, bool newGame = false)
     {
         switch (missionDifficulty)
         {
@@ -106,8 +100,14 @@ public class GameManager : MonoBehaviour
             //    SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
             //    break;
             case MissionDifficulty.HARD:
-                CurrentMission = new Mission(15, 15, 21, 5.5, 7, 1);
-              //  CurrentMission = new Mission(90, 90, 20, 22.5, 1, 1); //Test Mission
+                if (newGame)
+                {
+                    SaveDataManager.Instance.DeleteSave();
+                    TutorialManager.Instance.CurrentTutorialStep = 0;
+                    GameSettings.Instance.FTUE = true;
+                }
+                SaveData = SaveDataManager.Instance.LoadGame();
+                CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, 7, SaveData.Week);
                 SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
                 StartCoroutine(WaitAndLoadScene());
                 break;
@@ -121,11 +121,6 @@ public class GameManager : MonoBehaviour
         UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
-    }
-
-    public void SaveGame()
-    {
-
     }
 
     private void OnDisable()

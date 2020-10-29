@@ -106,8 +106,8 @@ public enum Provision
 
 public enum BuildingState
 {
+    RUBBLE = 0,
     NORMAL,
-    RUBBLE,
     FIRE
 }
 
@@ -332,3 +332,29 @@ public class MapData
         Tiles = tiles;
     }
 }
+
+
+[System.Serializable]
+public class SaveObject
+{
+    public int FP;
+    public int CP;
+    public int Energy;
+    public int Week;
+    public int Day;
+    public double Time;
+    public int TutorialSteps;
+    public double Money;
+    public int HospitalRelationshipPoints;
+    public int SchoolRelationshipPoints;
+    public int OrphanageRelationshipPoints;
+    public int ShelterRelationshipPoints;
+    public int ClothesRelationshipPoints;
+    public BuildingState HospitalBuildingState;
+    public BuildingState SchoolBuildingState;
+    public BuildingState OrphanageBuildingState;
+    public BuildingState ShelterBuildingState;
+    public BuildingState ClothesBuildingState;
+    public BuildingState KitchenBuildingState;
+}
+

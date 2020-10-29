@@ -39,6 +39,8 @@ public class MissionManager : MonoBehaviour
 
     private void OnTicked(double time, int day)
     {
+        if (!GameClock.DeltaTime) return;
+
         if (GameClock.EndofDay)
         {
             EndOfDay?.Invoke();
@@ -97,16 +99,23 @@ public class MissionManager : MonoBehaviour
         }
         else
         {
-            if (FaithPoints > 75)
+            if (FaithPoints >= 75)
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.ICON);
             }
-            if (CharityPoints > 75)
+            if (CharityPoints >= 75)
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.DONATION);
             }
         }
+        //TODO: UNLOCK SAINTS
         EventsManager.Instance.ExecuteEvents();
+        FaithPoints = 15;
+        CharityPoints = 15;
+        GameManager.Instance.Player.ResetEnergy();
+        CurrentMission.CurrentWeek++;
+        GameManager.Instance.GameClock.SetClock(6, 1);
+        SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(true);
     }
 

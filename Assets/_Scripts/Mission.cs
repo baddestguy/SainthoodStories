@@ -7,7 +7,6 @@
 
 public class Mission
 {
-    public int TargetNumber;
     public Energy StartingEnergy;
     public double StartingClock;
     public int StartingFaithPoints;
