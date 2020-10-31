@@ -27,18 +27,8 @@ public class EventsManager : MonoBehaviour
     {
         var e = GameDataManager.Instance.CustomEventData[newEvent][0]; //Grab based on weight
 
-        StartCoroutine(AddEventToListAsync(e));
-    }
-
-    private IEnumerator AddEventToListAsync(CustomEventData newEvent)
-    {
-        while (EventInProgress)
-        {
-            yield return null;
-        }
-
-        EventList.Add(newEvent);
-        CurrentEvents.Add(newEvent);
+        EventList.Add(e);
+        CurrentEvents.Add(e);
     }
 
     public void ExecuteEvents()
@@ -55,7 +45,7 @@ public class EventsManager : MonoBehaviour
             EventList.RemoveAll(e => e.EventGroup != EventGroup.ENDWEEK);
         }
 
-        if (EventInProgress || EventList.Count == 0) return;
+        if (EventInProgress || (EventList.Count == 0 && StoryEvents.Count == 0)) return;
 
         StartCoroutine(ExecuteEventsAsync());
     }
@@ -69,6 +59,7 @@ public class EventsManager : MonoBehaviour
         foreach (var e in EventList)
         {
             EventInProgress = true;
+            while (UI.Instance.CrossFading) yield return null;
             UI.Instance.EventAlert(e);
             ExecuteEvent(e);
             while (EventInProgress)
@@ -77,23 +68,25 @@ public class EventsManager : MonoBehaviour
             }
         }
 
-        yield return null;
-
         EventList.Clear();
 
         if (EventInProgress) yield break; //If something else has started an event, break out early.
 
-        Player.LockMovement = false;
-        EventDialogTriggered?.Invoke(false);
+        StartCoroutine(ExecuteStoryEventsAsync());
     }
 
     public void TryEventTrigger(double time, int day)
     {
-        if (!GameSettings.Instance.FTUE && !GameClock.DeltaTime) return;
+        if (!UI.Instance.CrossFading && !GameSettings.Instance.FTUE && !GameClock.DeltaTime) return;
 
-        //Try Trigger Story Events First
-        if (ExecuteStoryEvent()) return;
+        if (!GameSettings.Instance.StoryToggle) return;
 
+        int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
+        GameClock currentClock = GameManager.Instance.GameClock;
+        var storyEvent = GameDataManager.Instance.StoryEventData.Where(s => s.Value.Week == CurrentWeek && s.Value.Day == currentClock.Day && s.Value.Time == currentClock.Time).FirstOrDefault().Value;
+        if (storyEvent == null) return;
+
+        StoryEvents.Add(storyEvent);
     }
 
     public void StartNewDay()
@@ -120,21 +113,6 @@ public class EventsManager : MonoBehaviour
         EventExecuted?.Invoke(e);
     }
 
-    private bool ExecuteStoryEvent()
-    {
-        if (!GameSettings.Instance.StoryToggle) return false;
-
-        int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
-        GameClock currentClock = GameManager.Instance.GameClock;
-        var storyEvent = GameDataManager.Instance.StoryEventData.Where(s => s.Value.Week == CurrentWeek && s.Value.Day == currentClock.Day && s.Value.Time == currentClock.Time).FirstOrDefault().Value;
-        if (storyEvent == null) return false;
-
-        StoryEvents.Add(storyEvent);
-        StartCoroutine(ExecuteStoryEventsAsync());
-
-        return true;
-    }
-
     private IEnumerator ExecuteStoryEventsAsync()
     {
         while (EventInProgress)
@@ -142,15 +120,13 @@ public class EventsManager : MonoBehaviour
             yield return null;
         }
 
-        EventDialogTriggered?.Invoke(true);
-        Player.LockMovement = true;
-
         if (GameSettings.Instance.FTUE && TutorialManager.Instance.CurrentTutorialStep < 1) yield return new WaitForSeconds(8f);
 
         //Execute events one by one
         foreach (var e in StoryEvents)
         {
             EventInProgress = true;
+            while (UI.Instance.CrossFading) yield return null;
             UI.Instance.EventAlert(new CustomEventData() { LocalizationKey = e.Id, EventPopupType = EventPopupType.OK, IsOrderedSequence = e.IsOrderedSequence });
             while (EventInProgress)
             {
