@@ -145,6 +145,7 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
+            UpdateCharityPoints(-2, 0);
         }
         PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
 
@@ -238,7 +239,7 @@ public class InteractableHouse : InteractableObject
                 if (DeadlineCounter < 3)
                 {
                     var mission = GetBuildingMission(BuildingEventType.DELIVER_ITEM);
-                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 2))
+                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 3))
                     {
                         DeadlineCounter++;
                         DeadlineTime.SetClock(time + (mission != null ? mission.DeadlineHours : RandomFutureTimeByDifficulty()), day);

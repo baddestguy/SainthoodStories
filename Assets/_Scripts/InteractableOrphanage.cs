@@ -76,7 +76,7 @@ public class InteractableOrphanage : InteractableHouse
     {
         if (BuildingState != BuildingState.NORMAL) return;
 
-        if (time < OpenTime || time >= ClosingTime) return;
+        if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;
 
         double futureTime = time + RandomFutureTimeByDifficulty();
@@ -119,7 +119,7 @@ public class InteractableOrphanage : InteractableHouse
             case MissionDifficulty.HARD:
                 if (DeadlineCounter < 3)
                 {
-                    if (Random.Range(0, 100) < 5)
+                    if (Random.Range(0, 100) < 10)
                     {
                         DeadlineCounter++;
                         DeadlineTime.SetClock(futureTime, day);

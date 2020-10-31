@@ -83,7 +83,7 @@ public class InteractableHospital : InteractableHouse
 
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.BABY_FEVER);
         var mission = GetBuildingMission(BuildingEventType.BABY);
-        if (mission != null || (!SameDayAsMission() && !DeliveryTimeSet && !DeadlineSet && Random.Range(0, 1.0f) > (e != null ? e.Cost : 0.95f)))
+        if (mission != null || (!SameDayAsMission() && !DeliveryTimeSet && !DeadlineSet && Random.Range(0, 1.0f) > (e != null ? e.Cost : 0.98f)))
         {
             SetBabyDelivery(mission);
         }
@@ -114,6 +114,7 @@ public class InteractableHospital : InteractableHouse
                 FailedDelivery = true;
                 PopIcon.gameObject.SetActive(false);
                 UI.Instance.SideNotificationPop(GetType().Name);
+                UpdateCharityPoints(-FailedDeliveryPoints, 0);
                 UI.Instance.DisplayMessage($"FAILED TO DELIVER BABY!");
             }
         }

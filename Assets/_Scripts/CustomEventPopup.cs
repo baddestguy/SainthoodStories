@@ -146,7 +146,11 @@ public class CustomEventPopup : MonoBehaviour
             return;
         }
         Player player = GameManager.Instance.Player;
-        player.CurrentBuilding.UpdateCharityPoints(-(int)EventData.RejectionCost, 0);
+
+        if(EventData.RewardType == CustomEventRewardType.FP)
+            player.CurrentBuilding.UpdateFaithPoints(-(int)EventData.RejectionCost, 0);
+        else
+            player.CurrentBuilding.UpdateCharityPoints(-(int)EventData.RejectionCost, 0);
 
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);

@@ -74,6 +74,7 @@ public class GameClock
         if (EndofDay)
         {
             StartNewDay?.Invoke();
+            SaveDataManager.Instance.SaveGame();
         }
         ExecuteEvents?.Invoke();
 
@@ -83,10 +84,6 @@ public class GameClock
     public void Ping()
     {
         Ticked?.Invoke(Time, Day);
-        if (EndofDay)
-        {
-            StartNewDay?.Invoke();
-        }
         ExecuteEvents?.Invoke();
     }
 
