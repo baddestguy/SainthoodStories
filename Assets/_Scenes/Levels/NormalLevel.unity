@@ -31003,7 +31003,7 @@ MonoBehaviour:
   EventsTriggered: 0
   BuildingActivityState: 0
   BabyPoints: 1
-  FailedDeliveryPoints: -1
+  FailedDeliveryPoints: 4
 --- !u!65 &1067463406
 BoxCollider:
   m_ObjectHideFlags: 0
