@@ -284,6 +284,7 @@ public class UI : MonoBehaviour
             if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day == 1 && c.Time < 13.5) return;
         }
         TreasuryUI.SetActive(enable);
+        TreasuryAdditionDisplay.text = "";
     }
 
     public void RefreshTreasuryBalance(double delta)
@@ -569,6 +570,7 @@ public class UI : MonoBehaviour
     {
         yield return StartCoroutine(CrossFadeAsync(1, 10));
 
+        CrossFading = true;
         CurrentWeekDisplay.gameObject.SetActive(true);
         CurrentWeekDisplay.text = "WEEK " + MissionManager.Instance.CurrentMission.CurrentWeek; //TODO: Localize
 
@@ -585,6 +587,7 @@ public class UI : MonoBehaviour
         StartCoroutine(CrossFadeAsync(fade, speed));
     }
 
+    public bool CrossFading;
     private IEnumerator CrossFadeAsync(float fade, float speed)
     {
         Black.gameObject.SetActive(true);
@@ -600,6 +603,7 @@ public class UI : MonoBehaviour
         c.a = fade;
         Black.color = c;
         Black.gameObject.SetActive(fade != 0);
+        CrossFading = false;
     }
 
     private void OnDisable()

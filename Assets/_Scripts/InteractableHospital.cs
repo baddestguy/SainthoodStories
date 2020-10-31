@@ -64,6 +64,16 @@ public class InteractableHospital : InteractableHouse
             }
         }
 
+        var mission = GetBuildingMission(BuildingEventType.BABY);
+        if (mission != null && !DeliveryTimeSet)
+        {
+            SetBabyDelivery(mission);
+        }
+        if (DeliveryTimeSet)
+        {
+            PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
+        }
+
         base.Tick(time, day);
     }
 
