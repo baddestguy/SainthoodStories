@@ -248,6 +248,7 @@ public class CustomEventPopup : MonoBehaviour
 
     private void OnDisable()
     {
+        ToolTipManager.Instance.ShowToolTip("");
         Hearts.gameObject.SetActive(false);
         Coins.gameObject.SetActive(false);
     }

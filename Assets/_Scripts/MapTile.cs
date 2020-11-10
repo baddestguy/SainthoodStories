@@ -101,6 +101,7 @@ public class MapTile : MonoBehaviour
             c.a = 0.1f;
             GridTile.color = c;
             GridTile.gameObject.SetActive(true);
+            ToolTipManager.Instance.ShowToolTip("Tooltip_MoveHere", new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(this) });
         }
         else if(!InteractableHouse.HouseUIActive)
         {
@@ -115,6 +116,7 @@ public class MapTile : MonoBehaviour
     {
         if (GridTile == null) return;
         GridTile.gameObject.SetActive(false);
+        ToolTipManager.Instance.ShowToolTip("");
     }
 
 }

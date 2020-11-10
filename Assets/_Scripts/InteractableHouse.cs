@@ -726,6 +726,21 @@ public class InteractableHouse : InteractableObject
         return false;
     }
 
+    public virtual TooltipStats GetTooltipStatsForButton(string button)
+    {
+        switch (button)
+        {
+            case "PRAY":
+                return new TooltipStats() { Ticks = 1, FP = 1, CP = 0, Energy = 1 };
+            case "SLEEP":
+                return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = 3 };
+            case "VOLUNTEER":
+                return new TooltipStats() { Ticks = 4-VolunteerCountdown, FP = 0, CP = VolunteerPoints, Energy = -(GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption)*4) + VolunteerCountdown };
+        }
+
+        return new TooltipStats() { Ticks = 0, FP = 0, CP = 0, Energy = 0 };
+    }
+
     public override void OnMouseOver()
     {
         if (HouseUIActive || EventsManager.Instance.HasEventsInQueue()) return;
@@ -733,11 +748,13 @@ public class InteractableHouse : InteractableObject
 
         if (BuildingState == BuildingState.RUBBLE)
         {
-            RubbleInfoPopup.gameObject.SetActive(true);
+            RubbleInfoPopup.gameObject.SetActive(true); 
+            ToolTipManager.Instance.ShowToolTip("Tooltip_ConstructionSite");
         }
         else
         {
             InfoPopup.gameObject.SetActive(true);
+            ToolTipManager.Instance.ShowToolTip("Tooltip_"+GetType().Name);
         }
 
         InfoPopup.Init(GetType().Name, OpenTime, ClosingTime, RelationshipPoints, DuringOpenHours());
@@ -781,6 +798,7 @@ public class InteractableHouse : InteractableObject
 
         RubbleInfoPopup.gameObject.SetActive(false);
         InfoPopup.gameObject.SetActive(false);
+        ToolTipManager.Instance.ShowToolTip("");
         var clock = GameManager.Instance.GameClock;
         clock.Ping();
         base.OnMouseExit();

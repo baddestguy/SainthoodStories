@@ -235,6 +235,18 @@ public class InteractableHospital : InteractableHouse
         base.VolunteerWork(house);
         clock.Tick();
     }
+    public override TooltipStats GetTooltipStatsForButton(string button)
+    {
+        switch (button)
+        {
+            case "BABY":
+                CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
+                return new TooltipStats() { Ticks = 4-DeliveryCountdown, FP = 0, CP = (BabyPoints + (e != null ? (int)e.Gain : 0)) * 2, Energy = -(GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption)*4)+DeliveryCountdown };
+        }
+
+        return base.GetTooltipStatsForButton(button);
+    }
+
 
     public override void VolunteerThanks()
     {

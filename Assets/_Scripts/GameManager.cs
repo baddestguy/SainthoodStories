@@ -60,6 +60,9 @@ public class GameManager : MonoBehaviour
 
     private void OnTap(MapTile tile)
     {
+        if (Player == null) return;
+
+        ToolTipManager.Instance.ShowToolTip("");
         Player.OnInteract(tile);
     }
 
