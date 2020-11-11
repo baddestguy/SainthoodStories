@@ -364,6 +364,8 @@ GameObject:
   - component: {fileID: 3176821308943219246}
   - component: {fileID: 3122488367109743587}
   - component: {fileID: 6638901883030591025}
+  - component: {fileID: 6908778621034128941}
+  - component: {fileID: 175725809537359346}
   m_Layer: 5
   m_Name: Build
   m_TagString: Untagged
@@ -529,6 +531,62 @@ MonoBehaviour:
   ButtonImage: {fileID: 3176821308943219241}
   ButtonName: BUILD
   Enabled: 0
+--- !u!114 &6908778621034128941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3176821308943219244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc8bf5677924e44b91cae91648c1dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Loc_Key: Tooltip_Build
+--- !u!114 &175725809537359346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3176821308943219244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6908778621034128941}
+          m_MethodName: ShowToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6908778621034128941}
+          m_MethodName: HideToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &5772540177554221061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,6 +1418,8 @@ GameObject:
   - component: {fileID: 8141355916952866102}
   - component: {fileID: 1122033459947454567}
   - component: {fileID: 2757195349519527581}
+  - component: {fileID: 2470647791845700473}
+  - component: {fileID: 2266091171667997052}
   m_Layer: 5
   m_Name: Pray
   m_TagString: Untagged
@@ -1539,6 +1599,62 @@ MonoBehaviour:
   ButtonImage: {fileID: 8769237238669446824}
   ButtonName: PRAY
   Enabled: 0
+--- !u!114 &2470647791845700473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8243795032735666496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc8bf5677924e44b91cae91648c1dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Loc_Key: Tooltip_PrayShed
+--- !u!114 &2266091171667997052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8243795032735666496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2470647791845700473}
+          m_MethodName: ShowToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2470647791845700473}
+          m_MethodName: HideToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &3502971514400317427
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1729,15 +1845,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad31b90ebe2fbe5498dfca3f5488be96, type: 3}
---- !u!1 &8686653059285145950 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100002, guid: ad31b90ebe2fbe5498dfca3f5488be96,
-    type: 3}
-  m_PrefabInstance: {fileID: 8686653059285245948}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8686653059285632382 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: ad31b90ebe2fbe5498dfca3f5488be96,
+    type: 3}
+  m_PrefabInstance: {fileID: 8686653059285245948}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8686653059285145950 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100002, guid: ad31b90ebe2fbe5498dfca3f5488be96,
     type: 3}
   m_PrefabInstance: {fileID: 8686653059285245948}
   m_PrefabAsset: {fileID: 0}

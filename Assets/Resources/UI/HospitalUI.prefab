@@ -245,6 +245,8 @@ GameObject:
   - component: {fileID: 589206671102705707}
   - component: {fileID: 4355786522068931295}
   - component: {fileID: 8251814151742678826}
+  - component: {fileID: 139391667755094460}
+  - component: {fileID: 552969958660700079}
   m_Layer: 5
   m_Name: DeliverBaby
   m_TagString: Untagged
@@ -424,6 +426,64 @@ MonoBehaviour:
   ButtonImage: {fileID: 3875256109557728845}
   ButtonName: BABY
   Enabled: 0
+--- !u!114 &139391667755094460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875256109557728846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc8bf5677924e44b91cae91648c1dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Loc_Key: Tooltip_Baby
+  ButtonName: VOLUNTEER
+  HouseName: Hospital
+--- !u!114 &552969958660700079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3875256109557728846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 139391667755094460}
+          m_MethodName: ShowToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 139391667755094460}
+          m_MethodName: HideToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &4511041590597941724
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,6 +499,8 @@ GameObject:
   - component: {fileID: 86260581291477817}
   - component: {fileID: 1526959501061607372}
   - component: {fileID: 2843780304840202388}
+  - component: {fileID: 4759469463494157445}
+  - component: {fileID: 8914113699719903665}
   m_Layer: 5
   m_Name: Pray
   m_TagString: Untagged
@@ -618,6 +680,64 @@ MonoBehaviour:
   ButtonImage: {fileID: 3841343176032495156}
   ButtonName: PRAY
   Enabled: 0
+--- !u!114 &4759469463494157445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4511041590597941724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8914113699719903665}
+          m_MethodName: ShowToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8914113699719903665}
+          m_MethodName: HideToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &8914113699719903665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4511041590597941724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc8bf5677924e44b91cae91648c1dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Loc_Key: Tooltip_Pray
+  ButtonName: PRAY
+  HouseName: Hospital
 --- !u!1 &5054587750842169176
 GameObject:
   m_ObjectHideFlags: 0
@@ -1183,6 +1303,8 @@ GameObject:
   - component: {fileID: 6983941371086181042}
   - component: {fileID: 4132945745455343897}
   - component: {fileID: 1244160917850261030}
+  - component: {fileID: 1340688803158504971}
+  - component: {fileID: 8280799936679490816}
   m_Layer: 5
   m_Name: DeliverItem
   m_TagString: Untagged
@@ -1330,6 +1452,64 @@ MonoBehaviour:
   ButtonImage: {fileID: 6983941371086181045}
   ButtonName: MEDS
   Enabled: 0
+--- !u!114 &1340688803158504971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6983941371086181040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc8bf5677924e44b91cae91648c1dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Loc_Key: Tooltip_DeliverMeds
+  ButtonName: DELIVER
+  HouseName: Hospital
+--- !u!114 &8280799936679490816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6983941371086181040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1340688803158504971}
+          m_MethodName: ShowToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1340688803158504971}
+          m_MethodName: HideToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &6983941372388332036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,6 +1525,8 @@ GameObject:
   - component: {fileID: 6638145215387543845}
   - component: {fileID: 8980805630144250746}
   - component: {fileID: 2843471369122871664}
+  - component: {fileID: 2331909821061801082}
+  - component: {fileID: 6391668480305609197}
   m_Layer: 5
   m_Name: Volunteer
   m_TagString: Untagged
@@ -1524,6 +1706,64 @@ MonoBehaviour:
   ButtonImage: {fileID: 6983941372388332041}
   ButtonName: VOLUNTEER
   Enabled: 0
+--- !u!114 &2331909821061801082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6983941372388332036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc8bf5677924e44b91cae91648c1dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Loc_Key: Tooltip_VolunteerHospital
+  ButtonName: VOLUNTEER
+  HouseName: Hospital
+--- !u!114 &6391668480305609197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6983941372388332036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2331909821061801082}
+          m_MethodName: ShowToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2331909821061801082}
+          m_MethodName: HideToolTip
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7456909253876264209
 GameObject:
   m_ObjectHideFlags: 0
@@ -2249,15 +2489,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 757df604761b8ef42831192c70ee1099, type: 3}
---- !u!4 &5617605923328830235 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400004, guid: 757df604761b8ef42831192c70ee1099,
-    type: 3}
-  m_PrefabInstance: {fileID: 5617605923328700831}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5617605923328669499 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100004, guid: 757df604761b8ef42831192c70ee1099,
+    type: 3}
+  m_PrefabInstance: {fileID: 5617605923328700831}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5617605923328830235 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400004, guid: 757df604761b8ef42831192c70ee1099,
     type: 3}
   m_PrefabInstance: {fileID: 5617605923328700831}
   m_PrefabAsset: {fileID: 0}

@@ -209,6 +209,14 @@ public enum Language
     FILIPINO
 }
 
+public class TooltipStats
+{
+    public double Ticks;
+    public int FP;
+    public int CP;
+    public int Energy;
+}
+
 [System.Serializable]
 public class WeatherData
 {

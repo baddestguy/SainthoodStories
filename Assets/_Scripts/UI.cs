@@ -72,6 +72,8 @@ public class UI : MonoBehaviour
     public Image Black;
 
     public TextMeshProUGUI CurrentWeekDisplay;
+    public TextMeshProUGUI TooltipDisplay;
+    public TextSizer TooltipSizer;
 
     void Awake()
     {
@@ -559,6 +561,23 @@ public class UI : MonoBehaviour
             case 7: return "Sun";
         }
         return "";
+    }
+
+    public void DisplayToolTip(string text)
+    {
+        if (TooltipDisplay == null) return;
+
+        TooltipDisplay.text = text;
+        TooltipSizer.Refresh();
+
+        if(text == "")
+        {
+            TooltipDisplay.transform.parent.gameObject.SetActive(false);
+        }
+        else
+        {
+            TooltipDisplay.transform.parent.gameObject.SetActive(true);
+        }
     }
 
     public void ShowWeekBeginText()

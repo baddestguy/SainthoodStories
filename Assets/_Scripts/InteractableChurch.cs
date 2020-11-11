@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class InteractableChurch : InteractableHouse
 {
@@ -94,6 +95,8 @@ public class InteractableChurch : InteractableHouse
 
     public override void PopMyIcon(string name = "", int items = -1, GameClock time = null)
     {
+        TooltipMouseOver mouseOverBtn = gameObject.GetComponentsInChildren<TooltipMouseOver>(true).Where(b => b.name == "Pray").FirstOrDefault();
+
         GameClock c = GameManager.Instance.GameClock;
         if (c.Time > 21.5)
             base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, c.Day + 1));
@@ -107,21 +110,34 @@ public class InteractableChurch : InteractableHouse
             if (clock.Time > ConfessionTime && clock.Time < MassEndTime)
             {
                 base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(MassStartTime, GameManager.Instance.GameClock.Day));
+                mouseOverBtn.Loc_Key = "Tooltip_Mass";
             }
             else if (clock.Time > 12.5 && clock.Time <= ConfessionTime)
             {
                 base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(ConfessionTime, GameManager.Instance.GameClock.Day));
+                mouseOverBtn.Loc_Key = "Tooltip_Confession";
+
                 if (clock.Time == ConfessionTime && GameClock.DeltaTime)
                     SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
             }
             else
             {
+                if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
+                    mouseOverBtn.Loc_Key = "Tooltip_Liturgy";
+                else
+                    mouseOverBtn.Loc_Key = "Tooltip_Pray";
+
                 if (clock.Time == LiturgyStartTime && GameClock.DeltaTime)
                     SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
             }
         }
         else
         {
+            if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
+                mouseOverBtn.Loc_Key = "Tooltip_Liturgy";
+            else
+                mouseOverBtn.Loc_Key = "Tooltip_Pray";
+
             if (clock.Time == LiturgyStartTime && GameClock.DeltaTime)
                 SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
         }
@@ -199,6 +215,49 @@ public class InteractableChurch : InteractableHouse
         PopUIFXIcons("Energy", -SleepEnergy);
         clock.Tick();
         UI.Instance.DisplayMessage("SLEPT!");
+    }
+
+    public override TooltipStats GetTooltipStatsForButton(string button)
+    {
+        switch (button)
+        {
+            case "PRAY":
+                var fp = 0;
+                GameClock clock = GameManager.Instance.GameClock;
+                CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
+
+                if (clock.Day % 7 == 0 || e != null)
+                {
+                    if (clock.Time == ConfessionTime)
+                    {
+                       fp = PrayerPoints * 4;
+                    }
+                    else if (clock.Time >= MassStartTime && clock.Time < MassEndTime)
+                    {
+                        fp = PrayerPoints * 4;
+                    }
+                    else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
+                    {
+                        fp = PrayerPoints * 2;
+                    }
+                    else
+                    {
+                        fp = PrayerPoints;
+                    }
+                }
+                else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
+                {
+                    fp = PrayerPoints * 2;
+                }
+                else
+                {
+                    fp = PrayerPoints;
+                }
+
+                return new TooltipStats() { Ticks = 1, FP = fp, CP = 0, Energy = 1 };
+        }
+
+        return base.GetTooltipStatsForButton(button);
     }
 
     public override void SetDeadlineTime(double time, int day)
