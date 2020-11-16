@@ -19,6 +19,9 @@ public class TooltipMouseOver : MonoBehaviour
         TooltipStats customToolStats = null;
         switch (HouseName) 
         {
+            case "House":
+                House = transform.GetComponentInParent<InteractableHouse>();
+                break;
             case "Church":
                 House = FindObjectOfType<InteractableChurch>();
                 break;

@@ -545,7 +545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Loc_Key: Tooltip_Build
   ButtonName: CONSTRUCT
-  HouseName: Orphanage
+  HouseName: House
 --- !u!114 &175725809537359346
 MonoBehaviour:
   m_ObjectHideFlags: 0
