@@ -34,6 +34,7 @@ public class CustomEventPopup : MonoBehaviour
 
     public void Setup(CustomEventData customEvent)
     {
+        ToolTipManager.Instance.ShowToolTip("");
         transform.DOJump(transform.position, 30f, 1, 1f);
         EventData = customEvent;
         YesNoGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
@@ -93,7 +94,7 @@ public class CustomEventPopup : MonoBehaviour
         
         ButtonTimerTarget = 1f;
         SoundManager.Instance.PlayOneShotSfx("DialogOpen");
-    }   
+    }
 
     public void Yes()
     {

@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
 
     private PopUIFX PopUIFX;
     private bool DissapearInHouse;
-    private PlayerStatusEffect StatusEffect = PlayerStatusEffect.NONE; //Likely going to be a List of status effects that Stack.
+    public PlayerStatusEffect StatusEffect = PlayerStatusEffect.NONE; //Likely going to be a List of status effects that Stack.
 
     private GameObject GroundTapFX;
     private GameObject GroundMoveFX;
@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
 
     public void GameStart(Mission missionDetails)
     {
-        StartTile = CurrentTile;
+        StartTile = CurrentBuilding;
         Energy = missionDetails.StartingEnergy;
         StartingEnergy = Energy.Amount;
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
@@ -145,7 +145,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void OnInteract(MapTile newTile)
+    public void OnInteract(MapTile newTile, bool passTime = true)
     {
         if (LockMovement) return;
 
@@ -157,14 +157,15 @@ public class Player : MonoBehaviour
         else if (newTile is InteractableObject)
         {
             var iTile = newTile as InteractableObject;
-            if (WeCanMove(iTile.CurrentGroundTile))
+            if (!passTime || WeCanMove(iTile.CurrentGroundTile))
             {
                 transform.localScale = Vector3.one;
                 DissapearInHouse = true;
                 CurrentBuilding = iTile as InteractableHouse;
                 OnMove(iTile.CurrentGroundTile);
                 OnMoveSuccessEvent?.Invoke(Energy, iTile);
-                GameManager.Instance.PassTime();
+                if(passTime)
+                    GameManager.Instance.PassTime();
             }
             else
             {
@@ -178,7 +179,8 @@ public class Player : MonoBehaviour
                 transform.localScale = Vector3.one;
                 OnMove(newTile);
                 OnMoveSuccessEvent?.Invoke(Energy, newTile);
-                GameManager.Instance.PassTime();
+                if(passTime)
+                    GameManager.Instance.PassTime();
                 GroundMoveFX.transform.position = newTile.transform.position + new Vector3(0,0.1f);
                 GroundMoveFX.SetActive(false);
                 GroundMoveFX.SetActive(true);
@@ -198,20 +200,19 @@ public class Player : MonoBehaviour
 
     IEnumerator ResetPlayerOnEnergyDepletedAsync()
     {
+        StatusEffect = PlayerStatusEffect.FATIGUED;
+        EventsManager.Instance.AddEventToList(CustomEventType.ENERGY_DEPLETED);
         UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
 
-        transform.localScale = Vector3.zero;
-        DissapearInHouse = false;
-        OnMove(StartTile);
-        Energy.Consume(-StartingEnergy);
-        GameManager.Instance.GameClock.Reset();
         UI.Instance.EnableCurrentUI(false);
+        Energy.Consume(-20);
+        OnInteract(StartTile, false);
+        GameManager.Instance.GameClock.Reset();
         WeatherManager.Instance.ResetWeather();
-        OnMoveSuccessEvent?.Invoke(Energy, StartTile);
 
+        yield return new WaitForSeconds(1f);
         UI.Instance.CrossFade(0f);
-        EventsManager.Instance.AddEventToList(CustomEventType.ENERGY_DEPLETED);
     }
 
     public int ModifyEnergyConsumption(MapTile tile = null, int amount = 1)

@@ -588,7 +588,8 @@ public class InteractableHouse : InteractableObject
             switch (GetType().Name)
             {
                 case "InteractableChurch":
-                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.CHURCH).Id);
+                    if(GameManager.Instance.Player.StatusEffect != PlayerStatusEffect.FATIGUED)
+                        EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.CHURCH).Id);
                     break;
                 case "InteractableHospital":
                     EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.HOSPITAL).Id);
