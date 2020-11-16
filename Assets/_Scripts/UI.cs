@@ -75,6 +75,7 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI TooltipDisplay;
     public TextSizer TooltipSizer;
 
+    public TutorialPopup TutorialPopup;
     void Awake()
     {
         Instance = this;
@@ -526,6 +527,24 @@ public class UI : MonoBehaviour
     {
         ClearDisplay = true;
     //    MessageDisplay.text = message;
+    }
+
+    public void TutorialPopupOn(string locKey)
+    {
+        Black.gameObject.SetActive(true);
+        Color c = Black.color;
+        c.a = 0.5f;
+        Black.color = c;
+        TutorialPopup.gameObject.SetActive(true);
+        TutorialPopup.Display(locKey);
+    }
+
+    public void TutorialPopupOff()
+    {
+        Color c = Black.color;
+        c.a = 0f;
+        Black.color = c;
+        Black.gameObject.SetActive(false);
     }
 
     public void ReturnToMainMenu()

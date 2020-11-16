@@ -34,7 +34,7 @@ public class InteractableOrphanage : InteractableHouse
         }
         else
         {
-            OpenTime = 16;
+            OpenTime = 15;
             ClosingTime = 22;
         }
 

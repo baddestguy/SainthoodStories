@@ -174,6 +174,7 @@ public enum CustomEventType
     ,SHELTER_COMPLETE
     ,CLOTHES_COMPLETE
     ,BABY_FAILED
+    ,ENERGY_DEPLETED
 }
 
 public enum EventPopupType

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class TooltipMouseOver : MonoBehaviour
 {
@@ -7,8 +8,14 @@ public class TooltipMouseOver : MonoBehaviour
     public string HouseName;
     private InteractableHouse House;
 
+    public static UnityAction OnHover;
+    public static bool IsHovering;
+
     public void ShowToolTip()
     {
+        OnHover?.Invoke();
+        IsHovering = true;
+
         TooltipStats customToolStats = null;
         switch (HouseName) 
         {
@@ -59,5 +66,6 @@ public class TooltipMouseOver : MonoBehaviour
     public void HideToolTip()
     {
         ToolTipManager.Instance.ShowToolTip("");
+        IsHovering = false;
     }
 }
