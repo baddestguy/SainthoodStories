@@ -249,6 +249,7 @@ public class CustomEventPopup : MonoBehaviour
     private void OnDisable()
     {
         ToolTipManager.Instance.ShowToolTip("");
+        TooltipMouseOver.IsHovering = false;
         Hearts.gameObject.SetActive(false);
         Coins.gameObject.SetActive(false);
     }

@@ -544,6 +544,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Loc_Key: Tooltip_Build
+  ButtonName: CONSTRUCT
+  HouseName: Orphanage
 --- !u!114 &175725809537359346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1612,6 +1614,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Loc_Key: Tooltip_PrayShed
+  ButtonName: 
+  HouseName: 
 --- !u!114 &2266091171667997052
 MonoBehaviour:
   m_ObjectHideFlags: 0

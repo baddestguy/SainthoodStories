@@ -128,8 +128,8 @@ public class PopUI : MonoBehaviour
             TutorialManager.Instance.NextTutorialStep();
             BroadcastMessage("RefreshTutorialButton", SendMessageOptions.DontRequireReceiver);
         }
-        ToolTipManager.Instance.ShowToolTip("");
         Callback?.Invoke(button);
+        myButton.SendMessage("ShowToolTip", SendMessageOptions.DontRequireReceiver);
     }
 
     public void OnPointerDown(string button)

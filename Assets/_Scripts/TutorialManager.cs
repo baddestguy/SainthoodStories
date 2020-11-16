@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
@@ -7,6 +6,7 @@ public class TutorialManager : MonoBehaviour
     public static TutorialManager Instance { get; private set; }
     
     public int CurrentTutorialStep = 0;
+    public List<string> TutorialStrings = new List<string>();
 
     private void Awake()
     {
@@ -55,15 +55,117 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    public void ShowTutorialPopup(string dialogKey = "")
+    {
+        if (GameSettings.Instance.FTUE)
+        {
+            switch (CurrentTutorialStep)
+            {
+                case 1:
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_1"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_1");
+                        TutorialStrings.Add("Tutorial_Instruction_1");
+                    }
+                    break;
+                case 2:
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_2"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_2");
+                        TutorialStrings.Add("Tutorial_Instruction_2");
+                    }
+                    break;
+                case 6:
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_3"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_3");
+                        TutorialStrings.Add("Tutorial_Instruction_3");
+                    }
+                    break;
+                case 8:
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_4"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_4");
+                        TutorialStrings.Add("Tutorial_Instruction_4");
+                    }
+                    else if (!TutorialStrings.Contains("Tutorial_Instruction_5"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_5");
+                        TutorialStrings.Add("Tutorial_Instruction_5");
+                    }
+                    break;
+                case 12:
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_6"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_6");
+                        TutorialStrings.Add("Tutorial_Instruction_6");
+                    }
+                    break;
+                case 20:
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_7"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_7");
+                        TutorialStrings.Add("Tutorial_Instruction_7");
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            switch (dialogKey)
+            {
+                case "WeatherIntro":
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_9"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_9");
+                        TutorialStrings.Add("Tutorial_Instruction_9");
+                    }
+                    break;
+
+                case "ProvisionsIntro":
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_10"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_10");
+                        TutorialStrings.Add("Tutorial_Instruction_10");
+                    }
+                    break;
+
+                case "OrphanageIntro":
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_8"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_8");
+                        TutorialStrings.Add("Tutorial_Instruction_8");
+                    }
+                    break;
+
+                case "EnergyDepleted":
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_11"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_11");
+                        TutorialStrings.Add("Tutorial_Instruction_11");
+                    }
+                    break;
+            }
+        }
+    }
+
     public void NextTutorialStep()
     {
         CurrentTutorialStep++;
+
+        if (!TutorialStrings.Contains("Tutorial_Instruction_1"))
+        {
+            UI.Instance.TutorialPopupOn("Tutorial_Instruction_1");
+            TutorialStrings.Add("Tutorial_Instruction_1");
+        }
     }
 
     private void FinishedTalking(bool started)
     {
         if (!started)
         {
+            ShowTutorialPopup(Resources.FindObjectsOfTypeAll<CustomEventPopup>()[0].EventData.LocalizationKey);
+
             if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 20)
             {
                 GameSettings.Instance.FTUE = false;

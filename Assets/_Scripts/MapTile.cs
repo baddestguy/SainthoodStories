@@ -26,12 +26,14 @@ public class MapTile : MonoBehaviour
         GameClock.Ticked += Tick;
         GameManager.MissionBegin += MissionBegin;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
+        TooltipMouseOver.OnHover += OnMouseExit;
     }
 
     public virtual void OnDisable(){
         GameClock.Ticked -= Tick;
         GameManager.MissionBegin -= MissionBegin;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
+        TooltipMouseOver.OnHover -= OnMouseExit;
     }
 
     public void Init(TileData tileData, Sprite [] sprites, int sortingOrder = 0) {
@@ -86,11 +88,12 @@ public class MapTile : MonoBehaviour
 
     public virtual void OnPlayerMoved(Energy energy, MapTile tile)
     {
-
     }
 
     public virtual void OnMouseOver()
     {
+        if (TooltipMouseOver.IsHovering) return;
+        if (EventsManager.Instance.EventInProgress) return;
         if (GridTile == null || !CameraControls.ZoomComplete) return;
 
         Color c;
@@ -114,9 +117,9 @@ public class MapTile : MonoBehaviour
 
     public virtual void OnMouseExit()
     {
+        if (TooltipMouseOver.IsHovering) return;
         if (GridTile == null) return;
         GridTile.gameObject.SetActive(false);
         ToolTipManager.Instance.ShowToolTip("");
     }
-
 }

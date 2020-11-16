@@ -211,6 +211,7 @@ public class Player : MonoBehaviour
         OnMoveSuccessEvent?.Invoke(Energy, StartTile);
 
         UI.Instance.CrossFade(0f);
+        EventsManager.Instance.AddEventToList(CustomEventType.ENERGY_DEPLETED);
     }
 
     public int ModifyEnergyConsumption(MapTile tile = null, int amount = 1)

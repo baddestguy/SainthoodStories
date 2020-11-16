@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Loc_Key: Tooltip_Baby
-  ButtonName: VOLUNTEER
+  ButtonName: BABY
   HouseName: Hospital
 --- !u!114 &552969958660700079
 MonoBehaviour:
