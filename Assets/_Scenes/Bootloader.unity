@@ -404,6 +404,7 @@ GameObject:
   - component: {fileID: 1152669276}
   - component: {fileID: 1152669277}
   - component: {fileID: 1152669278}
+  - component: {fileID: 1152669279}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -461,6 +462,7 @@ MonoBehaviour:
     ShelterBuildingState: 0
     ClothesBuildingState: 0
     KitchenBuildingState: 0
+    Saints: 
 --- !u!114 &1152669276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,6 +500,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a48434dc0dfc1884692b86717c4028df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1152669279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152669273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5afc3eb294454e4cb4162b77177308f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UnlockedSaints: []
+  NewSaint:
+    Id: 0
+    Name: 
+    Birthday: 
+    Death: 
+    FeastDay: 
+    PatronKey: 
+    BioKey: 
+    IconPath: 
 --- !u!1 &1239578625
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,6 +612,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentTutorialStep: 0
+  TutorialStrings: []
 --- !u!1 &1575261438
 GameObject:
   m_ObjectHideFlags: 0

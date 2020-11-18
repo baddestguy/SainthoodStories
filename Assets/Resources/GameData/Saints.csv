@@ -1,0 +1,4 @@
+Id,Name,Birthday,Death,FeastDay,PatronKey,BioKey,IconPath
+BAKHITA,Saint Josephine Bakhita,1869,"February 8, 1947",February 8,Bakhita_Patron,Bakhita_Bio,Icons/Saints/Bakhita
+TERESA,Saint Teresa of Calcutta,"August 26, 1910","September 5, 1997",September 5,Teresa_Patron,Teresa_Bio,Icons/Saints/Teresa
+SANMARTIN,Saint Martin de Porres,"December 9, 1579","November 3, 1639",November 3,SanMartin_Patron,SanMartin_Bio,Icons/Saints/SanMartin

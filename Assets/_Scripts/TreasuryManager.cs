@@ -5,7 +5,7 @@ public class TreasuryManager : MonoBehaviour
 {
     public static TreasuryManager Instance { get; private set; }
 
-    public double Money { get; private set; }
+    public double Money { get; set; }
     public static UnityAction<double> DonatedMoney;
 
     private void Awake()

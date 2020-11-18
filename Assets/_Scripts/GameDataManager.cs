@@ -15,6 +15,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<Provision, ProvisionData> ProvisionData = new Dictionary<Provision, ProvisionData>();
     public Dictionary<ItemType, ShopItemData> ShopItemData = new Dictionary<ItemType, ShopItemData>();
     public Dictionary<string, ConstructionAvailabilityData> ConstructionAvailability = new Dictionary<string, ConstructionAvailabilityData>();
+    public Dictionary<SaintID, SaintData> Saints = new Dictionary<SaintID, SaintData>();
     public Dictionary<string, StoryEventData> StoryEventData = new Dictionary<string, StoryEventData>();
     public Dictionary<string, List<BuildingMissionData>> BuildingMissionData = new Dictionary<string, List<BuildingMissionData>>();
     public List<WeatherData> WeatherData = new List<WeatherData>();
@@ -143,6 +144,16 @@ public class GameDataManager : MonoBehaviour
         foreach (var item in weatherData)
         {
             WeatherData.Add(item);
+        }
+
+        yield return null;
+
+        //Saints
+        csvFile = Resources.Load<TextAsset>("GameData/Saints");
+        var saintData = CSVSerializer.Deserialize<SaintData>(csvFile.text);
+        foreach (var item in saintData)
+        {
+            Saints.Add(item.Id, item);
         }
 
         yield return null;

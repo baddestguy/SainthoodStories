@@ -80,7 +80,7 @@ public class CustomEventPopup : MonoBehaviour
             EventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
         }
 
-        if(customEvent.EventGroup == EventGroup.THANKYOU)
+        if(customEvent.EventGroup == EventGroup.THANKYOU || customEvent.EventGroup == EventGroup.ENDWEEK)
         {
             if(customEvent.RewardType == CustomEventRewardType.CP)
             {
@@ -211,8 +211,6 @@ public class CustomEventPopup : MonoBehaviour
 
         PointerDown = true;
         ChargeFx.SetActive(true);
-        Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
-        ChargeFx.transform.position = new Vector3(fxpos.x, ChargeFx.transform.position.y, ChargeFx.transform.position.z);
         Camera.main.GetComponent<CameraControls>().SetZoomTarget(2.5f);
         SoundManager.Instance.PlayOneShotSfx("Charge");
     }

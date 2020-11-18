@@ -76,6 +76,9 @@ public class UI : MonoBehaviour
     public TextSizer TooltipSizer;
 
     public TutorialPopup TutorialPopup;
+
+    public GameObject SaintCard;
+
     void Awake()
     {
         Instance = this;
@@ -127,6 +130,15 @@ public class UI : MonoBehaviour
         StartCoroutine(AdditionPointsAsync(EnergyAdditionDisplay, EnergyDisplayGlow, energy.Amount - oldEnergy, 2f));
     }
 
+    private IEnumerator UnlockSaintSequence()
+    {
+        SoundManager.Instance.PlayOneShotSfx("SaintUnlock", timeToDie: 10f);
+        SaintCard.SetActive(true);
+        SaintCard.GetComponent<SaintCard>().Init(SaintsManager.Instance.NewSaint);
+        yield return new WaitForSeconds(10);
+        SaintCard.SetActive(false);
+    }
+
     private void MissionComplete(bool complete)
     {
         StartCoroutine(MissionCompleteAsync(complete));
@@ -137,6 +149,11 @@ public class UI : MonoBehaviour
         while (EventsManager.Instance.HasEventsInQueue())
         {
             yield return null;
+        }
+
+        if(SaintsManager.Instance.NewSaint != null)
+        {
+            yield return StartCoroutine(UnlockSaintSequence());
         }
 
         GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD); //Load Next Mission/Week
