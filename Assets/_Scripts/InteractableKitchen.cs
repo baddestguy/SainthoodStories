@@ -6,7 +6,6 @@ public class InteractableKitchen : InteractableHouse
 
     protected override void Start()
     {
-        UI.Cooked += Cook;
         PopUILocation = "UI/KitchenUI";
         base.Start();
     }
@@ -93,7 +92,6 @@ public class InteractableKitchen : InteractableHouse
 
     public override void OnDisable()
     {
-        UI.Cooked -= Cook;
         base.OnDisable();
     }
 }

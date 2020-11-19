@@ -6,7 +6,6 @@ public class InteractableMarket : InteractableHouse
 {
     protected override void Start()
     {
-        UI.BoughtItem += BoughtItem;
         PopUILocation = "UI/MarketUI";
         base.Start();
         BuildPoints = 4;
@@ -164,7 +163,6 @@ public class InteractableMarket : InteractableHouse
 
     public override void OnDisable()
     {
-        UI.BoughtItem -= BoughtItem;
         base.OnDisable();
     }
 }

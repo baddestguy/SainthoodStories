@@ -57,8 +57,6 @@ public class InteractableHouse : InteractableObject
     protected virtual void Start()
     {
         UI.Meditate += Meditated;
-        UI.DeliverItem += DeliverItem;
-        UI.Volunteer += VolunteerWork;
         MissionManager.EndOfDay += ReportScores;
         MissionManager.EndOfDay += EndofDay;
         EventsManager.EventDialogTriggered += OnEventDialogTriggered;
@@ -862,8 +860,6 @@ public class InteractableHouse : InteractableObject
     public override void OnDisable()
     {
         UI.Meditate -= Meditated;
-        UI.DeliverItem -= DeliverItem;
-        UI.Volunteer -= VolunteerWork;
         MissionManager.EndOfDay -= EndofDay;
         MissionManager.EndOfDay -= ReportScores;
         EventsManager.EventDialogTriggered -= OnEventDialogTriggered;

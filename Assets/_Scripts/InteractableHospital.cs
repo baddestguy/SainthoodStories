@@ -15,7 +15,6 @@ public class InteractableHospital : InteractableHouse
 
     protected override void Start()
     {
-        UI.DeliverBaby += DeliveredBaby;
         PopUILocation = "UI/HospitalUI";
         base.Start();
     }
@@ -299,7 +298,6 @@ public class InteractableHospital : InteractableHouse
 
     public override void OnDisable()
     {
-        UI.DeliverBaby -= DeliveredBaby;
         base.OnDisable();
     }
 }
