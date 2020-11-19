@@ -292,7 +292,7 @@ public class Player : MonoBehaviour
     public void ResetEnergy()
     {
         Energy.Consume(10000);
-        Energy.Consume(-StartingEnergy);
+        Energy.Consume(-20);
     }
 
     public int GetEnergyAmount()

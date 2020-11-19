@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -38,7 +39,8 @@ public class SaveDataManager : MonoBehaviour
             OrphanageBuildingState = FindObjectOfType<InteractableOrphanage>().BuildingState,
             ShelterBuildingState = FindObjectOfType<InteractableShelter>().BuildingState,
             ClothesBuildingState = FindObjectOfType<InteractableClothesBank>().BuildingState,
-            KitchenBuildingState = FindObjectOfType<InteractableKitchen>().BuildingState
+            KitchenBuildingState = FindObjectOfType<InteractableKitchen>().BuildingState,
+            Saints = SaintsManager.Instance.UnlockedSaints.Select(s => s.Id).ToArray()
         };
 
         BinaryFormatter bf = new BinaryFormatter();

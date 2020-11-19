@@ -6,6 +6,13 @@ public class DataClasses : MonoBehaviour
 
 }
 
+public enum SaintID
+{
+    BAKHITA
+    ,TERESA
+    ,SANMARTIN
+}   
+
 public enum CustomEventRewardType
 {
     NONE = 0,
@@ -175,6 +182,8 @@ public enum CustomEventType
     ,CLOTHES_COMPLETE
     ,BABY_FAILED
     ,ENERGY_DEPLETED
+    ,TRYHARDER_FAITH
+    ,TRYHARDER_CHARITY
 }
 
 public enum EventPopupType
@@ -312,6 +321,19 @@ public class ConstructionAvailabilityData
     public double Time;
 }
 
+[System.Serializable]
+public class SaintData
+{
+    public SaintID Id;
+    public string Name;
+    public string Birthday;
+    public string Death;
+    public string FeastDay;
+    public string PatronKey;
+    public string BioKey;
+    public string IconPath;
+}
+
 public class TileData
 {
     public int Id { get; }
@@ -365,5 +387,6 @@ public class SaveObject
     public BuildingState ShelterBuildingState;
     public BuildingState ClothesBuildingState;
     public BuildingState KitchenBuildingState;
+    public SaintID[] Saints;
 }
 

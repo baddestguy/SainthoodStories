@@ -96,24 +96,38 @@ public class MissionManager : MonoBehaviour
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
             }
+
+            //Game Over, Restart Week!
         }
         else
         {
             if (FaithPoints >= 75)
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.ICON);
+                SaintsManager.Instance.UnlockSaint();
+            }
+            else
+            {
+                EventsManager.Instance.AddEventToList(CustomEventType.TRYHARDER_FAITH);
             }
             if (CharityPoints >= 75)
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.DONATION);
+                TreasuryManager.Instance.DonateMoney(Random.Range(100, 130));
             }
+            else
+            {
+                EventsManager.Instance.AddEventToList(CustomEventType.TRYHARDER_CHARITY);
+                EventsManager.Instance.AddEventToList(CustomEventType.DONATION);
+                TreasuryManager.Instance.DonateMoney(Random.Range(50, 75));
+            }
+            CurrentMission.CurrentWeek++;
         }
-        //TODO: UNLOCK SAINTS
+
         EventsManager.Instance.ExecuteEvents();
         FaithPoints = 15;
         CharityPoints = 15;
         GameManager.Instance.Player.ResetEnergy();
-        CurrentMission.CurrentWeek++;
         GameManager.Instance.GameClock.SetClock(6, 1);
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(true);

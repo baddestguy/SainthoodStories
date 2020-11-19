@@ -915,30 +915,45 @@ Wir wissen nicht, wann stürmisches Wetter endet, so entsprechend planen."
 Tutorial_Instruction_10,Provisions may appear at midnight. Their effects typically last no more than 24 hours.,Les dispositions peuvent apparaître à minuit. Leurs effets durent généralement pas plus de 24 heures.,Disposições podem aparecer à meia-noite. Seus efeitos duram não mais do que 24 horas.,Probisyon ay maaaring lumitaw sa hatinggabi. Ang kanilang mga epekto ay karaniwang huling hindi hihigit sa 24 na oras.,Disposiciones pueden aparecer a medianoche. Sus efectos suelen durar no más de 24 horas.,Disposizioni possono apparire a mezzanotte. I loro effetti durano non più di 24 ore.,Entsprechende Bestimmungen können um Mitternacht erscheinen. Ihre Auswirkungen dauern in der Regel nicht mehr als 24 Stunden.
 Tutorial_Instruction_11,"Depleting your Energy while in the field will cause you to lose all progress for the current day, and skip to the next day.
 
-You are safe if you run out while in a building.
+You are safe if it depletes while in a building.
 
 Depleting your Energy also leads to Fatigue, and you will consume more energy for all actions until you Sleep.","Votre énergie tout en appauvrissant la couche dans le domaine vous fera perdre tous les progrès pour la journée en cours, et passez au jour suivant.
 
-Vous êtes en sécurité si vous manquez tout dans un bâtiment.
+Vous êtes en sécurité si elle appauvrit tout dans un bâtiment.
 
 Appauvrissant votre énergie aussi conduit à la fatigue, et vous allez consommer plus d'énergie pour toutes les actions jusqu'à ce que vous dormez.","Esgotando a sua energia, enquanto no campo vai fazer você perder todo o progresso para o dia atual, e pular para o dia seguinte.
 
-Você está seguro se você correr para fora, enquanto em um edifício.
+Você está seguro se esgota enquanto em um edifício.
 
 Esgotar seus também leva energia à fadiga, e você vai consumir mais energia para todas as ações até que você dorme.","Depleting iyong Enerhiya habang sa patlang ay magiging sanhi sa iyo upang mawala ang lahat ng pag-unlad para sa kasalukuyang araw, at lumaktaw sa susunod na araw.
 
-ikaw ay ligtas kung naubusan ka habang nasa isang gusali.
+ikaw ay ligtas kung ito depletes habang nasa isang gusali.
 
 Depleting iyong Enerhiya ring lead sa Pagkapagod, at ikaw ay ubusin mas maraming enerhiya para sa lahat ng mga pagkilos hanggang matulog ka.","Agotan su energía, mientras que en el campo provocará que se pierda todo el progreso para el día actual y saltar al día siguiente.
 
-Estás a salvo si se han agotado, mientras que en un edificio.
+Estás a salvo si se agota mientras que en un edificio.
 
 Agotan sus energía también conduce a la fatiga, y se consumen más energía para todas las acciones hasta que el sueño.","L'esaurimento vostra energia mentre in campo ti farà perdere tutti i progressi per il giorno corrente, e saltare al giorno successivo.
 
-Sei al sicuro se si esegue fuori mentre in un edificio.
+Sei al sicuro se si consuma mentre in un edificio.
 
 L'esaurimento vostra energia anche porta a fatica, e si consuma più energia di tutte le azioni fino a quando si dorme.","Erschöpfen Ihre Energie, während im Bereich führt, dass Sie alle Fortschritt für den aktuellen Tag verlieren, und auf den nächsten Tag überspringen.
 
-Sie sind sicher, wenn Sie in einem Gebäude laufen, während.
+Sie sind sicher, wenn es während in einem Gebäude verbraucht.
 
 Erschöpfen Ihre Energie auch führt zu Müdigkeit, und Sie werden mehr Energie für alle Aktionen verbrauchen, bis Sie schlafen."
+Bakhita_Patron,of Sudan.,du Soudan.,do Sudão.,ng Sudan.,de Sudán.,del Sudan.,von Sudan.
+Teresa_Patron,of World Youth Day.,de la Journée Mondiale de la Jeunesse.,do Dia Mundial da Juventude.,ng World Youth Day.,de la JMJ.,della Giornata Mondiale della Gioventù.,des Weltjugendtages.
+SanMartin_Patron,"of Mixed Race, Barbers, Public Health Workers, Innkeepers.","métissés, Barbiers, travailleurs de la santé publique, aubergistes.","de raça mista, barbeiros, trabalhadores de saúde pública, Innkeepers.","ng Mixed Race, Mga barbero, Public Health Workers, Innkeepers.","de la raza mezclada, peluqueros, trabajadores de salud pública, posaderos.","di sangue misto, Barbieri, la salute pubblica lavoratori, Innkeepers.","von gemischter Abstammung, Barbiere, Public Health Workers, Innkeepers."
+PioPatron,"of Pietrelcina, Civil defense volunteers, Adolescents, Stress relief, & January blues.","de Pietrelcina, les volontaires de la défense civile, les adolescents, le soulagement du stress, & blues janvier.","de Pietrelcina, voluntários da Defesa Civil, adolescentes alívio do estresse, e janeiro azul.","of Pietrelcina, Civil pagtatanggol boluntaryo, Kabataan, Stress lunas, at Enero blues.","de Pietrelcina, los voluntarios de defensa civil, adolescentes, alivio de tensión, y tristeza de enero.","da Pietrelcina, volontari della protezione civile, adolescenti, stress & blues di gennaio.","von Pietrelcina, Zivilschutz Freiwilligen, Jugendliche, Stressabbau, und Januar Blues."
+Bakhita_Bio,Bakhita is a Saint.,Bakhita est un Saint.,Bakhita é um santo.,Bakhita ay isang Saint.,Bakhita es un Santo.,Bakhita è un santo.,Bakhita ist ein Heiliger.
+Teresa_Bio,Teresa is a Saint.,Teresa est un Saint.,Teresa é um santo.,Teresa ay isang Saint.,Teresa es una santa.,Teresa è un santo.,Teresa ist ein Heiliger.
+SanMartin_Bio,San Martin is a Saint.,San Martin est un Saint.,San Martin é um santo.,San Martin ay isang Saint.,San Martín es un Santo.,San Martin è un santo.,San Martin ist ein Heiliger.
+Pio_Bio,Padre Pio is a Saint.,Padre Pio est un Saint.,Padre Pio é um santo.,Padre Pio ay isang Saint.,Padre Pío es un santo.,Padre Pio è un santo.,Padre Pio ist ein Heiliger.
+Born,Born,Née,Nascermos,ipinanganak,Nacido,Nato,Geboren
+Died,Died,Décédés,Morreu,namatay,Murió,Morto,Ist gestorben
+Patron,Patron,mécène,Patrono,tagapag-adya,Patrón,Patrono,Patron
+FeastDay,Feast Day,Jour de fête,Dia de banquete,Piyesta,Día festivo,Giorno di festa,Gedenktag
+Bio,Bio,Bio,Bio,Bio,Bio,Bio,Bio
+TryHarder_Faith,"The Prioress is not pleased with your spiritual growth, and charges you to do much better.","Le Prieure est pas satisfait de votre croissance spirituelle, et les frais que vous de faire beaucoup mieux.",A prioresa não está satisfeito com o seu crescimento espiritual e encargos que você faça muito melhor.,"Ang priyora ay hindi nakalugod sa iyong espirituwal na paglago, at mga singil sa iyo na gawin magkano ang mas mahusay.","La priora no está satisfecho con su crecimiento espiritual, y los cargos que usted pueda hacer mucho mejor.","La Priora non si compiace con la vostra crescita spirituale, e gli oneri di fare molto meglio.","Die Priorin ist nicht mit Ihrem geistigen Wachstum erfreut, und Gebühren, die Sie viel besser zu machen."
+TryHarder_Charity,"The townfolk are not pleased with your charitable work, and ask that you try to do better.","Le townfolk ne sont pas satisfait de votre travail de bienfaisance, et demandez que vous essayez de faire mieux.","O townfolk não estão satisfeitos com o seu trabalho de caridade, e pedir que você tentar fazer melhor.","townfolk Ang ay hindi nasisiyahan sa iyong trabaho sa kawanggawa, at hilingin na subukan mo na gawin ng mas mahusay.","La gente del pueblo no está satisfecho con su trabajo de caridad, y pedir que se intenta hacerlo mejor.","Il townfolk non soddisfatto con il vostro lavoro di beneficenza, e chiedere che si tenta di fare meglio.","Die townfolk sind nicht mit Ihrer gemeinnützigen Arbeit, und darum bitten, dass Sie es besser zu machen versuchen."

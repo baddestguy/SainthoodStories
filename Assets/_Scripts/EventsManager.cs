@@ -137,6 +137,7 @@ public class EventsManager : MonoBehaviour
         yield return null;
 
         StoryEvents.Clear();
+        if (MissionManager.MissionOver) yield break;
         Player.LockMovement = false;
         EventDialogTriggered?.Invoke(false);
     }

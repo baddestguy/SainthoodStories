@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
         if (scene.name.Contains("Level"))
         {
             MissionManager.MissionOver = false;
-            Instantiate(Resources.Load("UI/UI") as GameObject);
             Player = FindObjectOfType<Player>();
             Map = FindObjectOfType<GameMap>();
             MissionManager.LoadAllMissions(CurrentMission);
@@ -48,7 +47,8 @@ public class GameManager : MonoBehaviour
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
             UI.Instance.ShowWeekBeginText();
             PlayAmbience(GameClock.Time, GameClock.Day);
-            TreasuryManager.Instance.DonateMoney(SaveData.Money);
+            TreasuryManager.Instance.Money = SaveData.Money;
+            SaintsManager.Instance.LoadSaints(SaveData.Saints);
         }
         else if (scene.name.Contains("MainMenu"))
         {
@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayAmbience(double time, int day)
     {
+        if (MissionManager.MissionOver) return;
         if (WeatherManager.Instance.IsStormy()) return;
 
         if (GameClock.Time >= 21 || GameClock.Time < 6)
