@@ -19,8 +19,6 @@ public class InteractableChurch : InteractableHouse
     {
         PopUILocation = "UI/ChurchUI";
         base.Start();
-        UI.Prayed += Pray;
-        UI.Slept += Sleep;
         UpdateLiturgyTimes();
         PopIcon.transform.localPosition += new Vector3 (0, 0.5f, 0);
         PopUI.transform.localPosition += new Vector3(0, 1, 0);
@@ -267,8 +265,6 @@ public class InteractableChurch : InteractableHouse
 
     public override void OnDisable()
     {
-        UI.Prayed -= Pray;
-        UI.Slept -= Sleep;
         base.OnDisable();
     }
 }

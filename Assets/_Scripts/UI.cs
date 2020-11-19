@@ -28,29 +28,12 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI CPAdditionDisplay;
     public TextMeshProUGUI EnergyAdditionDisplay;
 
-    public GameObject ShopUI;
-    public GameObject SchoolUI;
-    public GameObject HospitalUI;
-    public GameObject ChurchUI;
-    public GameObject OrphanageUI;
-    public GameObject FoodShelterUI;
-    public GameObject ClothesBankUI;
-    public GameObject EndGameUI;
-    public GameObject KitchenUI;
     public GameObject WeatherGO;
     public Image WeatherIcon;
     public Image DayNightIcon;
     public CustomEventPopup CustomEventPopup;
 
-    public static UnityAction<ItemType> BoughtItem;
-    public static UnityAction Taught;
-    public static UnityAction DeliverBaby;
-    public static UnityAction Prayed;
-    public static UnityAction Slept;
-    public static UnityAction Cooked;
     public static UnityAction<InteractableHouse> Meditate;
-    public static UnityAction<InteractableHouse> DeliverItem;
-    public static UnityAction<InteractableHouse> Volunteer;
 
     private bool ClearDisplay;
     private InteractableHouse CurrentHouse;
@@ -338,132 +321,9 @@ public class UI : MonoBehaviour
         CurrentActiveUIGameObject.SetActive(enable);
     }
 
-    public void EnableShop(bool enable, InteractableHouse house)
-    {
-        ShopUI.SetActive(enable);
-        if (ShopUI.activeSelf)
-        {
-            CurrentActiveUIGameObject = ShopUI;
-            CurrentHouse = house;
-        }
-    }
-
-    public void EnableSchool(bool enable, InteractableHouse house)
-    {
-        SchoolUI.SetActive(enable);
-        if (SchoolUI.activeSelf)
-        {
-            CurrentHouse = house;
-            CurrentActiveUIGameObject = SchoolUI;
-        }
-    }
-
-    public void EnableHospital(bool enable, InteractableHouse house)
-    {
-        HospitalUI.SetActive(enable);
-        if (HospitalUI.activeSelf)
-        {
-            CurrentHouse = house;
-            CurrentActiveUIGameObject = HospitalUI;
-        }
-    }
-
-    public void EnableChurch(bool enable)
-    {
-        ChurchUI.SetActive(enable);
-        if(ChurchUI.activeSelf) CurrentActiveUIGameObject = ChurchUI;
-    }
-
-    public void EnableFood(bool enable, InteractableHouse house)
-    {
-        FoodShelterUI.SetActive(enable);
-        if (FoodShelterUI.activeSelf)
-        {
-            CurrentActiveUIGameObject = FoodShelterUI;
-            CurrentHouse = house;
-        }    
-    }
-
-    public void EnableClothes(bool enable, InteractableHouse house)
-    {
-        ClothesBankUI.SetActive(enable);
-        if (ClothesBankUI.activeSelf)
-        {
-            CurrentActiveUIGameObject = ClothesBankUI;
-            CurrentHouse = house;
-        }
-    }
-
-    public void EnableOrphanage(bool enable, InteractableHouse house)
-    {
-        OrphanageUI.SetActive(enable);
-        if (OrphanageUI.activeSelf)
-        {
-            CurrentActiveUIGameObject = OrphanageUI;
-            CurrentHouse = house;
-        }
-    }
-
-    public void EnableKitchen(bool enable, InteractableHouse house)
-    {
-        KitchenUI.SetActive(enable);
-        if (KitchenUI.activeSelf)
-        {
-            CurrentActiveUIGameObject = KitchenUI;
-            CurrentHouse = house;
-        }        
-    }
-
-    public void EnableEndGame(bool enable)
-    {
-        EnableCurrentUI(false);
-        EndGameUI.SetActive(enable);
-    }
-
-    public void Teach()
-    {
-        Taught?.Invoke();
-    }
-
-    public void Deliver()
-    {
-        DeliverBaby?.Invoke();
-    }
-
-    public void Pray()
-    {
-        Prayed?.Invoke();
-    }
-
-    public void Sleep()
-    {
-        Slept?.Invoke();
-    }
-
-    public void Cook()
-    {
-        Cooked?.Invoke();
-    }
-
     public void Meditated()
     {
         Meditate?.Invoke(CurrentHouse);
-    }
-
-    public void BuyItem(string item)
-    {
-        ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), item);
-        BoughtItem?.Invoke(itemType);
-    }
-
-    public void DeliverItems()
-    {
-        DeliverItem?.Invoke(CurrentHouse);
-    }
-
-    public void VolunteerWork()
-    {
-        Volunteer?.Invoke(CurrentHouse);
     }
 
     public void RefreshPoints(int cp, int fp)

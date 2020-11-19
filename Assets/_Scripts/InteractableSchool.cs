@@ -7,7 +7,6 @@ public class InteractableSchool : InteractableHouse
 
     protected override void Start()
     {
-        UI.Taught += Teach;
         PopUILocation = "UI/SchoolUI";
         base.Start();
     }
@@ -247,7 +246,6 @@ public class InteractableSchool : InteractableHouse
 
     public override void OnDisable()
     {
-        UI.Taught -= Teach;
         base.OnDisable();
     }
 }
