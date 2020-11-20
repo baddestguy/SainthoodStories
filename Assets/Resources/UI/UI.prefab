@@ -6318,7 +6318,7 @@ GameObject:
   - component: {fileID: 2853977513472819010}
   - component: {fileID: 1389381551657977688}
   - component: {fileID: 649464480812902156}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CFX3 Rays
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13263,7 +13263,7 @@ GameObject:
   - component: {fileID: 6724145316059583592}
   - component: {fileID: 1918289942227942878}
   - component: {fileID: 3210285053971635474}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CFX3 Stars Burst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24182,7 +24182,7 @@ GameObject:
   - component: {fileID: 1975365946356509529}
   - component: {fileID: 3447255421109425463}
   - component: {fileID: 6755227690640255558}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TutorialGroundMoveFx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24196,15 +24196,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9143684968182219788}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1110.2473, y: -296.1846, z: -13.745108}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 61.4, y: -90.20975, z: 15.4}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
   - {fileID: 2853977513472819010}
   - {fileID: 6724145316059583592}
   m_Father: {fileID: 4440112350200865521}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &1975365946356509529
 ParticleSystem:
   m_ObjectHideFlags: 0

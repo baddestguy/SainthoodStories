@@ -68,5 +68,6 @@ public class TutorialPopup : MonoBehaviour
         gameObject.SetActive(false);
         Player.LockMovement = false;
         UI.Instance.TutorialPopupOff();
+        TutorialManager.Instance.ShowTutorialArrow();
     }
 }

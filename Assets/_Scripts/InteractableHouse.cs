@@ -752,6 +752,8 @@ public class InteractableHouse : InteractableObject
 
     public override void OnMouseOver()
     {
+        if (UI.Instance.CrossFading) return;
+        if (EventsManager.Instance.EventInProgress) return;
         if (HouseUIActive || EventsManager.Instance.HasEventsInQueue()) return;
         if (!CameraControls.ZoomComplete) return;
 
@@ -810,6 +812,8 @@ public class InteractableHouse : InteractableObject
 
     public override void OnMouseExit()
     {
+        if (UI.Instance.CrossFading) return;
+        if (EventsManager.Instance.EventInProgress) return;
         if (HouseUIActive) return;
 
         RubbleInfoPopup.gameObject.SetActive(false);
