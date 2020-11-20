@@ -129,6 +129,7 @@ public class MissionManager : MonoBehaviour
         CharityPoints = 15;
         GameManager.Instance.Player.ResetEnergy();
         GameManager.Instance.GameClock.SetClock(6, 1);
+        InventoryManager.Instance.ClearProvisions();
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(true);
     }

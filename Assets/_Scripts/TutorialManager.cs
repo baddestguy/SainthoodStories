@@ -55,6 +55,32 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    public void ShowTutorialArrow()
+    {
+        var tutArrows = FindObjectOfType<TutorialMapArrows>();
+        tutArrows.SetActive(false);
+
+        switch (CurrentTutorialStep)
+        {
+            case 2:
+                tutArrows.Group1.SetActive(true);
+                break;
+            case 6:
+                tutArrows.Group2.SetActive(true);
+                break;
+            case 8:
+                if(GameManager.Instance.Player.CurrentBuilding.GetType() == typeof(InteractableChurch))
+                    tutArrows.Group3.SetActive(true);
+                break;
+            case 10:
+                tutArrows.Group4.SetActive(true);
+                break;
+            case 12:
+                tutArrows.Group5.SetActive(true);
+                break;
+        }
+    }
+
     public void ShowTutorialPopup(string dialogKey = "")
     {
         if (GameSettings.Instance.FTUE)
@@ -67,21 +93,21 @@ public class TutorialManager : MonoBehaviour
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_1");
                         TutorialStrings.Add("Tutorial_Instruction_1");
                     }
-                    break;
+                    return;
                 case 2:
                     if (!TutorialStrings.Contains("Tutorial_Instruction_2"))
                     {
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_2");
                         TutorialStrings.Add("Tutorial_Instruction_2");
                     }
-                    break;
+                    return;
                 case 6:
                     if (!TutorialStrings.Contains("Tutorial_Instruction_3"))
                     {
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_3");
                         TutorialStrings.Add("Tutorial_Instruction_3");
                     }
-                    break;
+                    return;
                 case 8:
                     if (!TutorialStrings.Contains("Tutorial_Instruction_4"))
                     {
@@ -93,21 +119,21 @@ public class TutorialManager : MonoBehaviour
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_5");
                         TutorialStrings.Add("Tutorial_Instruction_5");
                     }
-                    break;
+                    return;
                 case 12:
                     if (!TutorialStrings.Contains("Tutorial_Instruction_6"))
                     {
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_6");
                         TutorialStrings.Add("Tutorial_Instruction_6");
                     }
-                    break;
+                    return;
                 case 20:
                     if (!TutorialStrings.Contains("Tutorial_Instruction_7"))
                     {
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_7");
                         TutorialStrings.Add("Tutorial_Instruction_7");
                     }
-                    break;
+                    return;
             }
         }
         else
@@ -120,7 +146,7 @@ public class TutorialManager : MonoBehaviour
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_9");
                         TutorialStrings.Add("Tutorial_Instruction_9");
                     }
-                    break;
+                    return;
 
                 case "ProvisionsIntro":
                     if (!TutorialStrings.Contains("Tutorial_Instruction_10"))
@@ -128,7 +154,7 @@ public class TutorialManager : MonoBehaviour
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_10");
                         TutorialStrings.Add("Tutorial_Instruction_10");
                     }
-                    break;
+                    return;
 
                 case "OrphanageIntro":
                     if (!TutorialStrings.Contains("Tutorial_Instruction_8"))
@@ -136,7 +162,7 @@ public class TutorialManager : MonoBehaviour
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_8");
                         TutorialStrings.Add("Tutorial_Instruction_8");
                     }
-                    break;
+                    return;
 
                 case "EnergyDepleted":
                     if (!TutorialStrings.Contains("Tutorial_Instruction_11"))
@@ -144,9 +170,11 @@ public class TutorialManager : MonoBehaviour
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_11");
                         TutorialStrings.Add("Tutorial_Instruction_11");
                     }
-                    break;
+                    return;
             }
         }
+
+        ShowTutorialArrow();
     }
 
     public void NextTutorialStep()
@@ -158,10 +186,15 @@ public class TutorialManager : MonoBehaviour
             UI.Instance.TutorialPopupOn("Tutorial_Instruction_1");
             TutorialStrings.Add("Tutorial_Instruction_1");
         }
+
+        if(CurrentTutorialStep == 10)
+            ShowTutorialArrow();
     }
 
     private void FinishedTalking(bool started)
     {
+        FindObjectOfType<TutorialMapArrows>().SetActive(false);
+
         if (!started)
         {
             ShowTutorialPopup(Resources.FindObjectsOfTypeAll<CustomEventPopup>()[0].EventData.LocalizationKey);
