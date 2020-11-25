@@ -215,14 +215,14 @@ public class Player : MonoBehaviour
         UI.Instance.CrossFade(0f);
     }
 
-    public int ModifyEnergyConsumption(MapTile tile = null, int amount = 1)
+    public int ModifyEnergyConsumption(MapTile tile = null, bool tooltip = false, int amount = 1)
     {
         int energyAmount = amount;
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.SICK);
 
         if (tile != null && InventoryManager.Instance.HasProvision(Provision.SHOES))
         {
-            if (Random.Range(0,100) < 30)
+            if (!tooltip && Random.Range(0,100) < 30)
             {
                 energyAmount--;
             }

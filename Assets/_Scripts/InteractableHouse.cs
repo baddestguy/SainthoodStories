@@ -761,7 +761,7 @@ public class InteractableHouse : InteractableObject
         {
             RubbleInfoPopup.gameObject.SetActive(true); 
             if(GameManager.Instance.Player.WeCanMove(CurrentGroundTile))
-                ToolTipManager.Instance.ShowToolTip("Tooltip_ConstructionSite", new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile) });
+                ToolTipManager.Instance.ShowToolTip("Tooltip_ConstructionSite", new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true) });
             else
                 ToolTipManager.Instance.ShowToolTip("Tooltip_ConstructionSite");
         }
@@ -770,7 +770,7 @@ public class InteractableHouse : InteractableObject
             InfoPopup.gameObject.SetActive(true);
 
             if (GameManager.Instance.Player.WeCanMove(CurrentGroundTile))
-                ToolTipManager.Instance.ShowToolTip("Tooltip_"+GetType().Name, new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile) });
+                ToolTipManager.Instance.ShowToolTip("Tooltip_"+GetType().Name, new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true) });
             else
                 ToolTipManager.Instance.ShowToolTip("Tooltip_" + GetType().Name);
         }
