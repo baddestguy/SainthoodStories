@@ -14,6 +14,7 @@ public class SaintsManager : MonoBehaviour
 
     public void UnlockSaint()
     {
+        if (UnlockedSaints.Count >= 3) return;
         SaintData saint;
         do
         {

@@ -20,7 +20,7 @@ public class BuildingInformationPopup : MonoBehaviour
     {
         BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{iconName}");
         OpenHours.text = $"{openTime}:{(openTime % 1 == 0 ? "00" : "30")} - {closingTime}:{(closingTime % 1 == 0 ? "00" : "30")}";
-        Hearts.text = $"+{hearts}";
+        Hearts.text = $"{hearts}";
 
         if(hearts <= 0)
         {

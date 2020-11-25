@@ -540,10 +540,10 @@ public class InteractableHouse : InteractableObject
             SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
             if(DuringOpenHours())
             {
-                if (BuildPoints >= 4)
+                if (BuildingState == BuildingState.NORMAL)
                     SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
             }
-            if (BuildPoints < 4)
+            if (BuildingState == BuildingState.RUBBLE)
                 SoundManager.Instance.PlayHouseAmbience("Construction", true, 0.3f);
             SoundManager.Instance.FadeAmbience(0.1f);
             OnEnterHouse?.Invoke(true);

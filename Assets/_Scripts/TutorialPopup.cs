@@ -69,5 +69,6 @@ public class TutorialPopup : MonoBehaviour
         Player.LockMovement = false;
         UI.Instance.TutorialPopupOff();
         TutorialManager.Instance.ShowTutorialArrow();
+        Text.pageToDisplay = 1;
     }
 }
