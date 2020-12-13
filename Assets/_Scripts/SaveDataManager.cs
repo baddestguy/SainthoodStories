@@ -14,7 +14,7 @@ public class SaveDataManager : MonoBehaviour
 
     void Start()
     {
-        
+        Debug.Log("SAVE PATH: " + Application.persistentDataPath);
     }
 
     public void SaveGame()
