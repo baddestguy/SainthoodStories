@@ -285,9 +285,9 @@ public class InteractableHouse : InteractableObject
         Player player = GameManager.Instance.Player;
 
         player.ConsumeEnergy(-1);
-        clock.Tick();
         UI.Instance.DisplayMessage("MEDITATED!!");
         UpdateFaithPoints(MeditationPoints, 1);
+        clock.Tick();
     }
 
     public virtual void DeliverItem(InteractableHouse house)
