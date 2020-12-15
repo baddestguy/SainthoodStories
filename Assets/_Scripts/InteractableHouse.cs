@@ -726,6 +726,11 @@ public class InteractableHouse : InteractableObject
         return false;
     }
 
+    public virtual float SetButtonTimer(string actionName)
+    {
+        return 1f;
+    }
+
     public virtual TooltipStats GetTooltipStatsForButton(string button)
     {
         switch (button)
