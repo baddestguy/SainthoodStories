@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,6 +21,12 @@ public class InventoryManager : MonoBehaviour
         GameClock.StartNewDay += GenerateProvisionsForNewDay;
     }
 
+    public void LoadInventory(SaveObject save)
+    {
+        Items = save.InventoryItems.ToList();
+        Provisions = save.Provisions.ToList();
+    }
+
     public void AddToInventory(ItemType item)
     {
         if (Items.Count == MaxInventorySlots)
@@ -29,6 +36,7 @@ public class InventoryManager : MonoBehaviour
         }
         Items.Add(item);
         RefreshInventoryUI?.Invoke();
+        SaveDataManager.Instance.SaveGame();
     }
 
     public void AddProvision(Provision provision)
@@ -53,6 +61,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         RefreshInventoryUI?.Invoke();
+        SaveDataManager.Instance.SaveGame();
     }
 
     public void ClearProvisions()

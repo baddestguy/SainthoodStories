@@ -388,5 +388,7 @@ public class SaveObject
     public BuildingState ClothesBuildingState;
     public BuildingState KitchenBuildingState;
     public SaintID[] Saints;
+    public ItemType[] InventoryItems;
+    public Provision[] Provisions;
 }
 
