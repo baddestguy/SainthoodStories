@@ -213,6 +213,20 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
+    public override TooltipStats GetTooltipStatsForButton(string button)
+    {
+        switch (button)
+        {
+            case "VOLUNTEER":
+                if (4 - TeachCountdown == 1)
+                    return new TooltipStats() { Ticks = 1, FP = 0, CP = TeachPoints, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
+                else
+                    return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
+        }
+
+        return base.GetTooltipStatsForButton(button);
+    }
+
     public override bool CanDoAction(string actionName)
     {
         switch (actionName)
