@@ -42,7 +42,9 @@ public class SaveDataManager : MonoBehaviour
             ShelterBuildingState = FindObjectOfType<InteractableShelter>().BuildingState,
             ClothesBuildingState = FindObjectOfType<InteractableClothesBank>().BuildingState,
             KitchenBuildingState = FindObjectOfType<InteractableKitchen>().BuildingState,
-            Saints = SaintsManager.Instance.UnlockedSaints.Select(s => s.Id).ToArray()
+            Saints = SaintsManager.Instance.UnlockedSaints.Select(s => s.Id).ToArray(),
+            InventoryItems = InventoryManager.Instance.Items.ToArray(),
+            Provisions = InventoryManager.Instance.Provisions.ToArray()
         };
 
         BinaryFormatter bf = new BinaryFormatter();

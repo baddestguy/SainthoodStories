@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
             PlayAmbience(GameClock.Time, GameClock.Day);
             TreasuryManager.Instance.Money = SaveData.Money;
             SaintsManager.Instance.LoadSaints(SaveData.Saints);
+            InventoryManager.Instance.LoadInventory(SaveData);
         }
         else if (scene.name.Contains("MainMenu"))
         {
