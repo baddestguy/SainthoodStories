@@ -43,7 +43,6 @@ public class PopUI : MonoBehaviour
         BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{sprite}");
         ItemsRequiredDisplay.text = $"{items}";
         DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
-        ButtonTimerTarget = timer;
 
         if (items <= 0)
         {
@@ -85,6 +84,7 @@ public class PopUI : MonoBehaviour
             foreach (var b in Buttons)
             {
                 b.RefreshButton(house?.CanDoAction(b.ButtonName) ?? false);
+                b.SetTimer(house?.SetButtonTimer(b.ButtonName) ?? 1f);
             }
         }
     }
@@ -155,12 +155,13 @@ public class PopUI : MonoBehaviour
 
         PointerDown = true;
         ButtonName = button;
+        ButtonTimerTarget = myButton.Timer;
         ChargeFx.SetActive(true);
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
         ChargeFx.transform.position = myButton.transform.position - new Vector3(0, -0.1f, 0.1f);
         Camera.main.GetComponent<CameraControls>().SetZoomTarget(2.5f);
 
-        SoundManager.Instance.PlayOneShotSfx("Charge");
+        SoundManager.Instance.PlayOneShotSfx("Charge", timeToDie: myButton.Timer);
     }
 
     public void OnPointerUp()
@@ -209,6 +210,11 @@ public class PopUI : MonoBehaviour
         }
     }
 
+    public void PlayVFX(string vfxName)
+    {
+        transform.Find(vfxName)?.gameObject.SetActive(false);
+        transform.Find(vfxName)?.gameObject.SetActive(true);
+    }
 
     private void OnDisable()
     {

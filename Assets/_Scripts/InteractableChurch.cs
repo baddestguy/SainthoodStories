@@ -154,6 +154,7 @@ public class InteractableChurch : InteractableHouse
                 player.ConsumeEnergy(ServiceEnergy);
                 UI.Instance.DisplayMessage("ATTENDED CONFESSION!!");
                 UpdateFaithPoints(PrayerPoints * 4, 1);
+                PopUI.PlayVFX("Halo");
                 clock.Tick();
             }
             else if (clock.Time >= MassStartTime && clock.Time < MassEndTime)
@@ -162,6 +163,15 @@ public class InteractableChurch : InteractableHouse
                 UI.Instance.DisplayMessage("ATTENDED MASS!!");
                 SoundManager.Instance.PlayOneShotSfx("MassBells", 0.3f, 10f);
                 UpdateFaithPoints(PrayerPoints * 4, 1);
+                PopUI.PlayVFX("Halo2");
+                if(clock.Time == MassStartTime)
+                {
+                    SoundManager.Instance.PlayOneShotSfx("MassBegin", timeToDie: 4);
+                }
+                else
+                {
+                    SoundManager.Instance.PlayOneShotSfx("MassEnd", timeToDie: 6);
+                }
                 clock.Tick();
             }
             else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
@@ -171,6 +181,7 @@ public class InteractableChurch : InteractableHouse
                 UpdateFaithPoints(PrayerPoints * 2, 1);
                 SoundManager.Instance.PlayOneShotSfx("MassBells", 0.3f, 10f);
                 player.ConsumeEnergy(ServiceEnergy);
+                PopUI.PlayVFX("Halo");
                 clock.Tick();
             }
             else
@@ -187,6 +198,7 @@ public class InteractableChurch : InteractableHouse
             SoundManager.Instance.PlayOneShotSfx("MassBells", 0.3f, 10f);
             UpdateFaithPoints(PrayerPoints * 2, 1);
             player.ConsumeEnergy(ServiceEnergy);
+            PopUI.PlayVFX("Halo");
             clock.Tick();
         }
         else
@@ -256,6 +268,39 @@ public class InteractableChurch : InteractableHouse
         }
 
         return base.GetTooltipStatsForButton(button);
+    }
+
+    public override float SetButtonTimer(string actionName)
+    {
+        switch (actionName)
+        {
+            case "PRAY":
+                GameClock clock = GameManager.Instance.GameClock;
+                CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
+
+                if (clock.Day % 7 == 0 || e != null)
+                {
+                    if (clock.Time == ConfessionTime)
+                    {
+                        return 2f;
+                    }
+                    else if (clock.Time >= MassStartTime && clock.Time < MassEndTime)
+                    {
+                        return 4f;
+                    }
+                    else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
+                    {
+                        return 2f;
+                    }
+                }
+                else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
+                {
+                    return 2f;
+                }
+                break;
+        }
+
+        return base.SetButtonTimer(actionName);
     }
 
     public override void SetDeadlineTime(double time, int day)
