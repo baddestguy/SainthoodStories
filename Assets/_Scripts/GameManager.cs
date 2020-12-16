@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     public SaveObject SaveData;
 
     public Mission CurrentMission;
+    public InteractableHouse CurrentHouse;
+
     private void Awake()
     {
         Instance = this;

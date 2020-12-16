@@ -29,21 +29,22 @@ public class PopUI : MonoBehaviour
     public Slider ProgressBar;
 
     private List<ActionButton> Buttons;
+    public CameraControls CameraControls;
 
     void Start()
     {
-        CamTransform = Camera.main.transform;
+        CamTransform = ExteriorCamera.Instance.Camera.transform; 
         InteractableHouse.OnActionProgress += UpdateProgressBar;
     }
 
-    public virtual void Init(Action<string> callback, string sprite, int items, GameClock deadline, InteractableHouse house = null, float timer = 1f)
+    public virtual void Init(Action<string> callback, string sprite, int items, GameClock deadline, InteractableHouse house = null, CameraControls cameraControls = null) 
     {
         Callback = callback;
 
         BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{sprite}");
         ItemsRequiredDisplay.text = $"{items}";
         DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
-
+        CameraControls = cameraControls;
         if (items <= 0)
         {
             ItemsRequiredDisplay.gameObject.SetActive(false);
@@ -87,6 +88,13 @@ public class PopUI : MonoBehaviour
                 b.SetTimer(house?.SetButtonTimer(b.ButtonName) ?? 1f);
             }
         }
+        else
+        {
+            foreach (var b in Buttons)
+            {
+                b.SetTimer(house?.SetButtonTimer(b.ButtonName) ?? 1f);
+            }
+        }
     }
 
     public void OnClick(string button)
@@ -120,16 +128,30 @@ public class PopUI : MonoBehaviour
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(true);
         ButtonPressFx.transform.position = ChargeFx.transform.position;
-        SoundManager.Instance.PlayOneShotSfx("ActionButton", 0.5f, 5f);
-        Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
+        if (myButton.ButtonName == "EXIT" || myButton.ButtonName == "ENTER")
+            SoundManager.Instance.PlayOneShotSfx("Button");
+        else
+            SoundManager.Instance.PlayOneShotSfx("ActionButton", 0.5f, 5f);
+
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+        CameraControls?.SetZoomTarget(6f);
 
         if (GameSettings.Instance.FTUE)
         {
-            TutorialManager.Instance.NextTutorialStep();
+            if (myButton.ButtonName != "EXIT" && myButton.ButtonName != "ENTER")
+                TutorialManager.Instance.NextTutorialStep();
+            else
+                TutorialManager.Instance.EnterExitHouse(myButton.ButtonName);
             BroadcastMessage("RefreshTutorialButton", SendMessageOptions.DontRequireReceiver);
         }
+
+        if (myButton.ButtonName == "EXIT" || myButton.ButtonName == "ENTER")
+            myButton.SendMessage("HideToolTip", SendMessageOptions.DontRequireReceiver);
+        
         Callback?.Invoke(button);
-        myButton.SendMessage("ShowToolTip", SendMessageOptions.DontRequireReceiver);
+        
+        if (myButton.ButtonName != "EXIT")
+            myButton.SendMessage("ShowToolTip", SendMessageOptions.DontRequireReceiver);
     }
 
     public void OnPointerDown(string button)
@@ -159,7 +181,8 @@ public class PopUI : MonoBehaviour
         ChargeFx.SetActive(true);
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
         ChargeFx.transform.position = myButton.transform.position - new Vector3(0, -0.1f, 0.1f);
-        Camera.main.GetComponent<CameraControls>().SetZoomTarget(2.5f);
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
+        CameraControls?.SetZoomTarget(5.5f);
 
         SoundManager.Instance.PlayOneShotSfx("Charge", timeToDie: myButton.Timer);
     }
@@ -168,7 +191,8 @@ public class PopUI : MonoBehaviour
     {
         PointerDown = false;
         ChargeFx.SetActive(false);
-        Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+        CameraControls?.SetZoomTarget(6f);
         SoundManager.Instance.StopOneShotSfx("Charge");
     }
 

@@ -13,7 +13,7 @@ public class PopUIFX : MonoBehaviour
 
     private void Start()
     {
-        CamTransform = Camera.main.transform;
+        CamTransform = ExteriorCamera.Instance.Camera.transform;
     }
 
     public void Init(string sprite, int value, float speed = 0.5f)

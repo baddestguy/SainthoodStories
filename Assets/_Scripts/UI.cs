@@ -380,6 +380,7 @@ public class UI : MonoBehaviour
         display.text = amount > 0 ? $"+{amount}" : $"{amount}";
         display.color = amount > 0 ? Color.green : Color.red;
         display.DOFade(1, 0.5f);
+        display.transform.GetChild(0).gameObject.SetActive(true);
         yield return new WaitForSeconds(delay);
         display.DOFade(0, 0.5f);
     }
@@ -485,7 +486,7 @@ public class UI : MonoBehaviour
     {
         yield return StartCoroutine(CrossFadeAsync(1, 10));
 
-        CrossFading = true;
+        WeekBeginCrossFade = true;
         CurrentWeekDisplay.gameObject.SetActive(true);
         CurrentWeekDisplay.text = "WEEK " + MissionManager.Instance.CurrentMission.CurrentWeek; //TODO: Localize
 
@@ -494,7 +495,8 @@ public class UI : MonoBehaviour
         CurrentWeekDisplay.gameObject.SetActive(false);
         yield return new WaitForSeconds(2f);
         
-        CrossFade(0);
+        yield return StartCoroutine(CrossFadeAsync(0, 5f));
+        WeekBeginCrossFade = false;
     }
 
     public void CrossFade(float fade, float speed = 5f)
@@ -502,9 +504,11 @@ public class UI : MonoBehaviour
         StartCoroutine(CrossFadeAsync(fade, speed));
     }
 
+    public bool WeekBeginCrossFade;
     public bool CrossFading;
     private IEnumerator CrossFadeAsync(float fade, float speed)
     {
+        CrossFading = true;
         Black.gameObject.SetActive(true);
         Color c = Black.color;
 

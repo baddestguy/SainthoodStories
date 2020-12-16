@@ -8,6 +8,7 @@ public class TutorialPointer : MonoBehaviour
 
     public GameObject GroundFX;
     public Transform Pointer;
+    public static bool Ready;
 
     void Start()
     {
@@ -17,7 +18,7 @@ public class TutorialPointer : MonoBehaviour
 
     void Update()
     {
-        if (TutorialManager.Instance.CurrentTutorialStep != 2) return;
+        if (!Ready) return;
         if (EventsManager.Instance.EventInProgress) return;
         if (GameManager.Instance.GameClock.Time > 7 || TutorialManager.Instance.CurrentTutorialStep > 2)
         {

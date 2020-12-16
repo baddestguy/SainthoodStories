@@ -13,7 +13,7 @@ public class BuildingInformationPopup : MonoBehaviour
 
     void Start()
     {
-        CamTransform = Camera.main.transform;
+        CamTransform = ExteriorCamera.Instance.Camera.transform;
     }
 
     public void Init(string iconName, int openTime, int closingTime, int hearts, bool isOpen)

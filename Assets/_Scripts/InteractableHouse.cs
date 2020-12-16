@@ -30,7 +30,8 @@ public class InteractableHouse : InteractableObject
     protected PopIcon PopIcon;
     protected BuildingInformationPopup InfoPopup;
     protected BuildingInformationPopup RubbleInfoPopup;
-    protected PopUI PopUI;
+    public PopUI ExteriorPopUI;
+    public PopUI InteriorPopUI;
     protected string PopUILocation = "";
     protected string OriginalPopUILocation = "";
 
@@ -38,6 +39,7 @@ public class InteractableHouse : InteractableObject
     private bool CameraLockOnMe;
     private PopUIFX PopUIFX;
     public static bool HouseUIActive;
+    public static bool InsideHouse;
 
     public BuildingState BuildingState;
     protected int BuildPoints = 0;
@@ -53,6 +55,9 @@ public class InteractableHouse : InteractableObject
     protected IEnumerable<BuildingMissionData> MyMissions;
 
     public static UnityAction<float> OnActionProgress;
+
+    public Camera MyCamera;
+    public Camera MyUICamera;
 
     protected virtual void Start()
     {
@@ -99,13 +104,17 @@ public class InteractableHouse : InteractableObject
 
         if (!string.IsNullOrEmpty(PopUILocation))
         {
-            PopUI = Instantiate(Resources.Load<GameObject>(PopUILocation)).GetComponent<PopUI>();
-            PopUI.transform.SetParent(transform);
-            PopUI.transform.localPosition = new Vector3(0, 1, 0);
-            PopUI.gameObject.SetActive(false);
+            ExteriorPopUI = Instantiate(Resources.Load<GameObject>(PopUILocation)).GetComponent<PopUI>();
+            ExteriorPopUI.transform.SetParent(transform);
+            ExteriorPopUI.transform.localPosition = new Vector3(0, 1, 0);
+            ExteriorPopUI.gameObject.SetActive(false);
+        }
+        if (InteriorPopUI)
+        {
+            InteriorPopUI.transform.SetParent(transform);
         }
 
-        if(PopUIFX == null)
+        if (PopUIFX == null)
         {
             PopUIFX = Instantiate(Resources.Load("UI/PopUIFX") as GameObject).GetComponent<PopUIFX>();
             PopUIFX.gameObject.SetActive(false);
@@ -145,7 +154,14 @@ public class InteractableHouse : InteractableObject
             UI.Instance.SideNotificationPop(GetType().Name);
             UpdateCharityPoints(-2, 0);
         }
-        PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
+        if(InteriorPopUI) //TEMP
+            InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera.GetComponent<CameraControls>());
+        ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
+
+        if(BuildingState == BuildingState.NORMAL && GameManager.Instance.CurrentHouse == this && DuringOpenHours())
+        {
+            SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
+        }
 
         switch (BuildingActivityState)
         {
@@ -296,7 +312,10 @@ public class InteractableHouse : InteractableObject
 
         RequiredItems--;
         PopMyIcon();
-        PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
+        if(InteriorPopUI)
+            InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera.GetComponent<CameraControls>());
+        ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
+
         if (RequiredItems <= 0)
         {
             DeadlineCounter = Mathf.Max(0, DeadlineCounter - 1);
@@ -378,9 +397,9 @@ public class InteractableHouse : InteractableObject
             //Play Cool Construction Vfx and Animation!
             BuildingState = BuildingState.NORMAL;
             PopUILocation = OriginalPopUILocation;
-            Destroy(PopUI.gameObject);
+            Destroy(ExteriorPopUI.gameObject);
             Initialize();
-            PopUI.gameObject.SetActive(true);
+            ExteriorPopUI.gameObject.SetActive(true);
             SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
             SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
             SoundManager.Instance.PlayOneShotSfx("Cheer",1f,5f);
@@ -432,7 +451,45 @@ public class InteractableHouse : InteractableObject
             case "BUILD":
                 Build();
                 break;
+
+            case "EXIT":
+                SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
+                InsideHouse = false;
+                OnEnterHouse?.Invoke(InsideHouse);
+                StartCoroutine(FadeAndSwitchCamerasAsync(LightsOn));
+                break;
+
+            case "ENTER":
+                OnPlayerMoved(GameManager.Instance.Player.Energy, this);
+                break;
         }
+    }
+
+    public void LightsOn()
+    {
+        ExteriorPopUI.gameObject.SetActive(true);
+        ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera.GetComponent<CameraControls>());
+
+        InteriorPopUI.gameObject.SetActive(false);
+        MyCamera.enabled = false;
+        MyUICamera.enabled = false;
+        ExteriorCamera.Instance.Camera.enabled = true;
+        ExteriorCamera.Instance.UICamera.enabled = true;
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+        MyCamera.GetComponent<CameraControls>().SetZoomTarget(7f);
+    }
+
+    public void LightsOff()
+    {
+        ExteriorPopUI.gameObject.SetActive(false);
+        if(!EventsManager.Instance.EventInProgress)
+            InteriorPopUI.gameObject.SetActive(true);
+        InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera == null ? null : MyCamera?.GetComponent<CameraControls>());
+        PopIcon.UIPopped(true);
+        MyCamera.enabled = true;
+        MyUICamera.enabled = true;
+        ExteriorCamera.Instance.Camera.enabled = false;
+        ExteriorCamera.Instance.UICamera.enabled = false;
     }
 
     public virtual void VolunteerWork(InteractableHouse house)
@@ -527,14 +584,39 @@ public class InteractableHouse : InteractableObject
         PopIcon.Init(name, items, time);
     }
 
+    public IEnumerator FadeAndSwitchCamerasAsync(Action callback)
+    {
+        if (UI.Instance.WeekBeginCrossFade)
+        {
+            callback();
+            yield break;
+        }
+
+        UI.Instance.CrossFade(1f, 15f);
+        while (UI.Instance.CrossFading) yield return null;
+
+        callback();
+
+        UI.Instance.CrossFade(0f, 15f);
+    }
+
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         base.OnPlayerMoved(energy, tile);
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            Camera.main.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
+            GameManager.Instance.CurrentHouse = this;
+            ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
+            ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+            if (MyCamera)
+            {
+                ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
+                MyCamera.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-35.45f, 13.38f, 27.57f), false);
+                MyCamera.GetComponent<CameraControls>().SetZoomTarget(6f);
+            }
             CameraLockOnMe = true;
             HouseUIActive = true;
+            InsideHouse = true;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.EnableInventoryUI(true);
             SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
@@ -546,16 +628,22 @@ public class InteractableHouse : InteractableObject
             if (BuildingState == BuildingState.RUBBLE)
                 SoundManager.Instance.PlayHouseAmbience("Construction", true, 0.3f);
             SoundManager.Instance.FadeAmbience(0.1f);
-            OnEnterHouse?.Invoke(true);
+            OnEnterHouse?.Invoke(InsideHouse);
             TriggerCustomEvent();
             UI.Instance.EnableTreasuryUI(true);
             UI.Instance.RefreshTreasuryBalance(0);
         }
         else if(CameraLockOnMe)
         {
-            Camera.main.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
+            ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
+            if (MyCamera)
+            {
+                MyCamera.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero, false);
+                MyCamera.GetComponent<CameraControls>().SetZoomTarget(12f);
+            }
             CameraLockOnMe = false;
             HouseUIActive = false;
+            InsideHouse = false;
             UI.Instance.EnableInventoryUI(false);
             SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
             if (BuildPoints >= 4)
@@ -563,9 +651,10 @@ public class InteractableHouse : InteractableObject
             else
                 SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
             SoundManager.Instance.FadeAmbience(0.3f);
-            OnEnterHouse?.Invoke(false);
+            OnEnterHouse?.Invoke(InsideHouse);
             ResetActionProgress();
             UI.Instance.EnableTreasuryUI(false);
+            GameManager.Instance.CurrentHouse = null;
         }
 
         InfoPopup.gameObject.SetActive(false);
@@ -619,11 +708,15 @@ public class InteractableHouse : InteractableObject
     {
         if (started && CameraLockOnMe)
         {
-            PopUI.gameObject.SetActive(false);
+            ExteriorPopUI.gameObject.SetActive(false);
+            if(InteriorPopUI)
+            InteriorPopUI.gameObject.SetActive(false);
         }
         else if (!started && CameraLockOnMe)
         {
-            PopUI.gameObject.SetActive(true);
+            ExteriorPopUI.gameObject.SetActive(true);
+            if(InteriorPopUI)
+            InteriorPopUI.gameObject.SetActive(true);
         }
 
         if(CanBuild() || DeadlineSet || GetType().Name == "InteractableChurch") //Only reason to have popicons displaying
@@ -721,6 +814,8 @@ public class InteractableHouse : InteractableObject
 
             case "PRAY": return true;
             case "SLEEP": return true;
+            case "EXIT": return true;
+            case "ENTER": return true;
         }
 
         return false;
@@ -757,7 +852,7 @@ public class InteractableHouse : InteractableObject
 
     public override void OnMouseOver()
     {
-        if (UI.Instance.CrossFading) return;
+        if (UI.Instance.WeekBeginCrossFade) return;
         if (EventsManager.Instance.EventInProgress) return;
         if (HouseUIActive || EventsManager.Instance.HasEventsInQueue()) return;
         if (!CameraControls.ZoomComplete) return;
@@ -817,7 +912,7 @@ public class InteractableHouse : InteractableObject
 
     public override void OnMouseExit()
     {
-        if (UI.Instance.CrossFading) return;
+        if (UI.Instance.WeekBeginCrossFade) return;
         if (EventsManager.Instance.EventInProgress) return;
         if (HouseUIActive) return;
 

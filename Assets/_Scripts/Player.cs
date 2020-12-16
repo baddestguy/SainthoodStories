@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     public static event UnityAction<Energy, MapTile> OnMoveSuccessEvent;
     public GameMap Map;
 
-    private Energy Energy;
+    public Energy Energy;
     private int EnergyConsumption;
     [SerializeField]
     private MapTile CurrentTile;

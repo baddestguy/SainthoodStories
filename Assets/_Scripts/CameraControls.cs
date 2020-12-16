@@ -18,6 +18,7 @@ public class CameraControls : MonoBehaviour
     private Bloom Bloom;
 
     public Camera UICam3D;
+    public Camera MyCamera;
     public PostProcessVolume PostProcessor;
 
     public static bool ZoomComplete;
@@ -26,7 +27,7 @@ public class CameraControls : MonoBehaviour
     {
         OriginalCamTarget = transform.position;
         CamTarget = OriginalCamTarget;
-        ZoomTarget = Camera.main.orthographicSize;
+        ZoomTarget = MyCamera.orthographicSize;
         PostProcessor.profile.TryGetSettings(out DepthOfField);
         PostProcessor.profile.TryGetSettings(out Bloom);
         DepthOfField.active = false;
@@ -77,31 +78,36 @@ public class CameraControls : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, CamTarget, Time.deltaTime*3);
     }
 
-    public void SetCameraTarget(Vector3 newTarget)
+    public void SetCameraTarget(Vector3 newTarget, bool modifyPostProcess = true)
     {
         CamTarget = newTarget.magnitude != 0 ? newTarget : OriginalCamTarget;
 
         if(newTarget.magnitude == 0)
         {
             SetZoomTarget(6f);
-            DepthOfField.active = false;
-            Bloom.active = true;
+            if (modifyPostProcess)
+            {
+                DepthOfField.active = false;
+                Bloom.active = true;
+            }
         }
         else
         {
             SetZoomTarget(3f);
-            DepthOfField.active = true;
-            Bloom.active = false;
+            if (modifyPostProcess)
+            {
+                DepthOfField.active = true;
+                Bloom.active = false;
+            }
         }
     }
 
     private void Zoom(float increment)
     {
-        //  Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - increment, MinZoom, MaxZoom);
-        Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, ZoomTarget, Time.deltaTime*3);
+        MyCamera.orthographicSize = Mathf.Lerp(MyCamera.orthographicSize, ZoomTarget, Time.deltaTime*3);
         UICam3D.orthographicSize = Mathf.Lerp(UICam3D.orthographicSize, ZoomTarget, Time.deltaTime * 3);
 
-        if(Mathf.Abs(Camera.main.orthographicSize - ZoomTarget) <= 0.3f)
+        if(Mathf.Abs(MyCamera.orthographicSize - ZoomTarget) <= 0.3f)
         {
             ZoomComplete = true;
         }
