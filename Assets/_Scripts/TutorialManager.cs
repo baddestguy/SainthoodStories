@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
@@ -64,6 +65,7 @@ public class TutorialManager : MonoBehaviour
         {
             case 2:
                 tutArrows.Group1.SetActive(true);
+                if (TutorialStrings.Contains("Tutorial_Instruction_2")) TutorialPointer.Ready = true;
                 break;
             case 6:
                 tutArrows.Group2.SetActive(true);
@@ -92,13 +94,6 @@ public class TutorialManager : MonoBehaviour
                     {
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_1");
                         TutorialStrings.Add("Tutorial_Instruction_1");
-                    }
-                    return;
-                case 2:
-                    if (!TutorialStrings.Contains("Tutorial_Instruction_2"))
-                    {
-                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_2");
-                        TutorialStrings.Add("Tutorial_Instruction_2");
                     }
                     return;
                 case 6:
@@ -191,6 +186,28 @@ public class TutorialManager : MonoBehaviour
             ShowTutorialArrow();
     }
 
+    public void EnterExitHouse(string buttonName)
+    {
+        StartCoroutine(EnterExitHouseAsync(buttonName));
+    }
+
+    private IEnumerator EnterExitHouseAsync(string buttonName)
+    {
+        yield return new WaitForSeconds(1f);
+        if (buttonName == "EXIT")
+        {
+            if (CurrentTutorialStep == 2)
+            {
+                Player.LockMovement = true;
+                if (!TutorialStrings.Contains("Tutorial_Instruction_2"))
+                {
+                    UI.Instance.TutorialPopupOn("Tutorial_Instruction_2");
+                    TutorialStrings.Add("Tutorial_Instruction_2");
+                }
+            }
+        }
+    }
+
     private void FinishedTalking(bool started)
     {
         FindObjectOfType<TutorialMapArrows>().SetActive(false);
@@ -209,6 +226,8 @@ public class TutorialManager : MonoBehaviour
 
     public bool CheckTutorialButton(string button)
     {
+        if (GameManager.Instance.Player == null) return true;
+
         switch (button)
         {
             case "PRAY": 
@@ -226,10 +245,14 @@ public class TutorialManager : MonoBehaviour
             case "CLOTHES":
             case "TOYS":
             case "STATIONERY":
+            case "ENTER":
                 return false;
             case "MEDS":
                 return GameManager.Instance.Player.CurrentBuilding != null && ((GameManager.Instance.Player.CurrentBuilding.GetType() == typeof(InteractableMarket) && CurrentTutorialStep >= 8 && CurrentTutorialStep <= 9) ||
                     (GameManager.Instance.Player.CurrentBuilding.GetType() == typeof(InteractableHospital) && CurrentTutorialStep >= 10 && CurrentTutorialStep <= 11));
+            case "EXIT": 
+                return (CurrentTutorialStep >= 2 && CurrentTutorialStep < 6) ||
+                        (CurrentTutorialStep >= 8 && CurrentTutorialStep < 12);
         }
 
         return true;

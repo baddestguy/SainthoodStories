@@ -59,7 +59,7 @@ public class EventsManager : MonoBehaviour
         foreach (var e in EventList)
         {
             EventInProgress = true;
-            while (UI.Instance.CrossFading) yield return null;
+            while (UI.Instance.WeekBeginCrossFade) yield return null;
             UI.Instance.EventAlert(e);
             ExecuteEvent(e);
             while (EventInProgress)
@@ -77,7 +77,7 @@ public class EventsManager : MonoBehaviour
 
     public void TryEventTrigger(double time, int day)
     {
-        if (!UI.Instance.CrossFading && !GameSettings.Instance.FTUE && !GameClock.DeltaTime) return;
+        if (!UI.Instance.WeekBeginCrossFade && !GameSettings.Instance.FTUE && !GameClock.DeltaTime) return;
 
         if (!GameSettings.Instance.StoryToggle) return;
 
@@ -126,7 +126,7 @@ public class EventsManager : MonoBehaviour
         foreach (var e in StoryEvents)
         {
             EventInProgress = true;
-            while (UI.Instance.CrossFading) yield return null;
+            while (UI.Instance.WeekBeginCrossFade) yield return null;
             UI.Instance.EventAlert(new CustomEventData() { LocalizationKey = e.Id, EventPopupType = EventPopupType.OK, IsOrderedSequence = e.IsOrderedSequence });
             while (EventInProgress)
             {

@@ -147,8 +147,11 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    bool DestroyHouseAmbience;
     public void PlayHouseAmbience(string name, bool start, float volume = 1f)
     {
+        if (HouseAmbience != null && HouseAmbience.clip != null && name == HouseAmbience.clip.name && !DestroyHouseAmbience && start) return;
+        
         if(start)
         {
             HouseAmbience = gameObject.AddComponent<AudioSource>();
@@ -157,9 +160,11 @@ public class SoundManager : MonoBehaviour
             HouseAmbience.Play();
             HouseAmbience.loop = true;
             HouseAmbience.volume = volume;
+            DestroyHouseAmbience = false;
         }
         else
         {
+            DestroyHouseAmbience = true;
             Destroy(HouseAmbience, 5f);
             StartCoroutine(FadeAudioAsync(0f, false, HouseAmbience));
         }

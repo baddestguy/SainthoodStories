@@ -23,8 +23,8 @@ public class InventoryManager : MonoBehaviour
 
     public void LoadInventory(SaveObject save)
     {
-        Items = save.InventoryItems.ToList();
-        Provisions = save.Provisions.ToList();
+        Items = save.InventoryItems?.ToList() ?? new List<ItemType>();
+        Provisions = save.Provisions?.ToList() ?? new List<Provision>();
     }
 
     public void AddToInventory(ItemType item)

@@ -19,7 +19,7 @@ public class StormyWeather : MonoBehaviour
         StartCoroutine(LightningThunder());
         SoundManager.Instance.FadeAmbience(0.1f);
 
-        if(InteractableHouse.HouseUIActive)
+        if(InteractableHouse.InsideHouse)
             SoundManager.Instance.PlayWeatherAmbience("RainInterior", true, 0.3f);
         else
             SoundManager.Instance.PlayWeatherAmbience("RainExterior", Running);

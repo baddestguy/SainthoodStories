@@ -14,7 +14,7 @@ public class PopIcon : MonoBehaviour
 
     private void Start()
     {
-        CamTransform = Camera.main.transform;
+        CamTransform = ExteriorCamera.Instance.Camera.transform;
     }
 
     public void Init(string sprite, int items, GameClock deadline)

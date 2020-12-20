@@ -31,6 +31,7 @@ public class CustomEventPopup : MonoBehaviour
     private int CurrentSequenceNumber;
 
     public DOTween Dotween;
+    public CameraControls CameraControls;
 
     public void Setup(CustomEventData customEvent)
     {
@@ -40,6 +41,7 @@ public class CustomEventPopup : MonoBehaviour
         YesNoGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         IconsGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         OKGO.SetActive(customEvent.EventPopupType == EventPopupType.OK);
+        CameraControls = GetCameraControl();
 
         switch (customEvent.EventPopupType)
         {
@@ -108,7 +110,8 @@ public class CustomEventPopup : MonoBehaviour
         var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
         if (player.EnergyDepleted(moddedEnergy)) return;
 
-        Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+        CameraControls?.SetZoomTarget(6f);
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(true);
 
@@ -211,7 +214,8 @@ public class CustomEventPopup : MonoBehaviour
 
         PointerDown = true;
         ChargeFx.SetActive(true);
-        Camera.main.GetComponent<CameraControls>().SetZoomTarget(2.5f);
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
+        CameraControls?.SetZoomTarget(5.5f);
         SoundManager.Instance.PlayOneShotSfx("Charge");
     }
 
@@ -219,7 +223,8 @@ public class CustomEventPopup : MonoBehaviour
     {
         PointerDown = false;
         ChargeFx.SetActive(false);
-        Camera.main.GetComponent<CameraControls>().SetZoomTarget(3f);
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+        CameraControls?.SetZoomTarget(6f);
         SoundManager.Instance.StopOneShotSfx("Charge");
     }
 
@@ -243,6 +248,39 @@ public class CustomEventPopup : MonoBehaviour
                 ButtonTimer = 0;
             }
         }
+    }
+
+    public CameraControls GetCameraControl()
+    {
+        InteractableHouse house = null;
+        if (GameManager.Instance.CurrentHouse == null) return null;
+
+        switch (GameManager.Instance.CurrentHouse.GetType().Name)
+        {
+            case "InteractableChurch":
+                house = FindObjectOfType<InteractableChurch>();
+                break;
+            case "InteractableHospital":
+                house = FindObjectOfType<InteractableHospital>();
+                break;
+            case "InteractableKitchen":
+                house = FindObjectOfType<InteractableKitchen>();
+                break;
+            case "InteractableOrphanage":
+                house = FindObjectOfType<InteractableOrphanage>();
+                break;
+            case "InteractableShelter":
+                house = FindObjectOfType<InteractableShelter>();
+                break;
+            case "InteractableSchool":
+                house = FindObjectOfType<InteractableSchool>();
+                break;
+            case "InteractableClothesBank":
+                house = FindObjectOfType<InteractableClothesBank>();
+                break;
+        }
+
+        return house ==  null || house.MyCamera == null ? null : house.MyCamera.GetComponent<CameraControls>();
     }
 
     private void OnDisable()

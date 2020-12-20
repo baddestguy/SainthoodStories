@@ -11,13 +11,13 @@
         base.OnPlayerMoved(energy, tile);
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            PopUI.gameObject.SetActive(true);
-            PopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
+            ExteriorPopUI.gameObject.SetActive(true);
+            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera == null ? null : MyCamera?.GetComponent<CameraControls>());
             PopIcon.UIPopped(true);
         }
         else
         {
-            PopUI.gameObject.SetActive(false);
+            ExteriorPopUI.gameObject.SetActive(false);
             PopIcon.UIPopped(false);
         }
     }
