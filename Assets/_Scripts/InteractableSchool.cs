@@ -142,7 +142,7 @@ public class InteractableSchool : InteractableHouse
         if ((DeadlineTime.Time != -1)) return;
 
         double futureTime = time + RandomFutureTimeByDifficulty();
-        if (futureTime > ClosingTime) return;
+   //     if (futureTime > ClosingTime) return;
 
         switch (MissionDifficulty)
         {
@@ -189,6 +189,7 @@ public class InteractableSchool : InteractableHouse
                         RequiredItems = Random.Range(1,3);
                         DeadlineSet = true;
                         PopMyIcon();
+                        SoundManager.Instance.PlayOneShotSfx("Notification");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
                 }

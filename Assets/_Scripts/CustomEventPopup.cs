@@ -159,6 +159,7 @@ public class CustomEventPopup : MonoBehaviour
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("Button");
+        SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
         SaveDataManager.Instance.SaveGame();
     }
 

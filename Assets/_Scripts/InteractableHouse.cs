@@ -153,6 +153,7 @@ public class InteractableHouse : InteractableObject
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
             UpdateCharityPoints(-2, 0);
+            SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
         }
         if(InteriorPopUI) //TEMP
             InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera.GetComponent<CameraControls>());
@@ -261,6 +262,7 @@ public class InteractableHouse : InteractableObject
                         DeadlineDeliveryBonus = 2;
                         DeadlineSet = true;
                         PopMyIcon();
+                        SoundManager.Instance.PlayOneShotSfx("Notification");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
                     }
                 }
@@ -605,6 +607,9 @@ public class InteractableHouse : InteractableObject
         base.OnPlayerMoved(energy, tile);
         if (tile.GetInstanceID() == GetInstanceID())
         {
+            if(GameManager.Instance.CurrentHouse != this)
+                TriggerCustomEvent();
+
             GameManager.Instance.CurrentHouse = this;
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
@@ -629,7 +634,6 @@ public class InteractableHouse : InteractableObject
                 SoundManager.Instance.PlayHouseAmbience("Construction", true, 0.3f);
             SoundManager.Instance.FadeAmbience(0.1f);
             OnEnterHouse?.Invoke(InsideHouse);
-            TriggerCustomEvent();
             UI.Instance.EnableTreasuryUI(true);
             UI.Instance.RefreshTreasuryBalance(0);
         }

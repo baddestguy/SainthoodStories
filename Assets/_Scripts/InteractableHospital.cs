@@ -98,7 +98,8 @@ public class InteractableHospital : InteractableHouse
         EndDelivery.AddTime(bMission != null ? bMission.DeadlineHours : 9);
         RandomBabyIcon = "Baby" + Random.Range(1, 3);
         PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
-    //    UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
+        SoundManager.Instance.PlayOneShotSfx("Notification");
+        //    UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
     }
 
     private void CheckFailedDelivery()
@@ -115,6 +116,7 @@ public class InteractableHospital : InteractableHouse
                 UI.Instance.SideNotificationPop(GetType().Name);
                 UpdateCharityPoints(-FailedDeliveryPoints, 0);
                 UI.Instance.DisplayMessage($"FAILED TO DELIVER BABY!");
+                SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
             }
         }
     }

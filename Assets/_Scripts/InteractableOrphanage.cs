@@ -80,7 +80,7 @@ public class InteractableOrphanage : InteractableHouse
         if ((DeadlineTime.Time != -1)) return;
 
         double futureTime = time + RandomFutureTimeByDifficulty();
-        if (futureTime > ClosingTime) return;
+    //    if (futureTime > ClosingTime) return;
 
         switch (MissionDifficulty)
         {
@@ -127,6 +127,7 @@ public class InteractableOrphanage : InteractableHouse
                         RequiredItems = Random.Range(1,3);
                         DeadlineSet = true;
                         PopMyIcon();
+                        SoundManager.Instance.PlayOneShotSfx("Notification");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
                 }
