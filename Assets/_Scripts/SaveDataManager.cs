@@ -7,6 +7,10 @@ public class SaveDataManager : MonoBehaviour
 {
     public static SaveDataManager Instance { get; private set; }
 
+    public bool OverrideClock;
+    public int DayOverride;
+    public double TimeOverride;
+
     private void Awake()
     {
         Instance = this;
@@ -63,6 +67,8 @@ public class SaveDataManager : MonoBehaviour
             FileStream file = File.Open(Application.persistentDataPath + "/Sainthood.save", FileMode.Open);
 
             save = (SaveObject)bf.Deserialize(file);
+            save.Day = OverrideClock ? DayOverride : save.Day;
+            save.Time = OverrideClock ? TimeOverride : save.Time;
             file.Close();
             Debug.Log("LOADED!");
         }

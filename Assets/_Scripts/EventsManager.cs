@@ -94,9 +94,13 @@ public class EventsManager : MonoBehaviour
         CurrentEvents.Clear();
         GameClock c = GameManager.Instance.GameClock;
 
-        if (c.Day < 6 || c.EndofWeek()) return;
+        if (MissionManager.Instance.CurrentMission.CurrentWeek == 1 || c.EndofWeek()) return;
 
-        if(Random.Range(0, 100) < 50)
+        if(c.Day % 7 == 0)
+        {
+            AddEventToList(CustomEventType.SUNDAY_MASS);
+        }
+        else if(Random.Range(0, 100) < 50)
         {
             AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY).Id);
         }

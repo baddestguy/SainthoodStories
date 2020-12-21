@@ -126,6 +126,7 @@ public enum CustomEventType
     MARKET_DISCOUNT,
     MARKET_MARKUP,
     WEEKDAY_MASS,
+    SUNDAY_MASS,
     SCHOOL_CLOSED,
     SICK,
     HIGH_SPIRIT,
