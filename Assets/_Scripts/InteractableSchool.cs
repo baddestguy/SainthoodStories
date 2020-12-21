@@ -181,12 +181,16 @@ public class InteractableSchool : InteractableHouse
             case MissionDifficulty.HARD:
                 if (DeadlineCounter < 3)
                 {
-                    if (Random.Range(0, 100) < 10)
+                    var mission = GetBuildingMission(BuildingEventType.DELIVER_ITEM);
+                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 10))
                     {
                         DeadlineCounter++;
-                        DeadlineTime.SetClock(futureTime, day);
+                        DeadlineTime.SetClock(mission != null ? mission.DeadlineHours : futureTime, day);
+                        if (MissionManager.Instance.CurrentMission.CurrentWeek > 2)
+                            RequiredItems = mission != null ? mission.RequiredItems : Random.Range(1, 3); //Depending on Season
+                        else
+                            RequiredItems = mission != null ? mission.RequiredItems : 1; //Depending on Season
                         DeadlineDeliveryBonus = 2;
-                        RequiredItems = Random.Range(1,3);
                         DeadlineSet = true;
                         PopMyIcon();
                         SoundManager.Instance.PlayOneShotSfx("Notification");
@@ -233,7 +237,7 @@ public class InteractableSchool : InteractableHouse
         switch (actionName)
         {
             case "STATIONERY":
-                return DuringOpenHours() && InventoryManager.Instance.CheckItem(ItemType.STATIONERY);
+                return InventoryManager.Instance.CheckItem(ItemType.STATIONERY);
 
             case "TEACH":
                 Player player = GameManager.Instance.Player;

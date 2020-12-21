@@ -28,7 +28,7 @@ public class SaintsManager : MonoBehaviour
 
     public void LoadSaints(SaintID[] saintIDs)
     {
-        NewSaint = null;
+        NewSaint = new SaintData() { Id = SaintID.NONE };
         if (saintIDs == null) return;
         UnlockedSaints.Clear();
         foreach(var saintID in saintIDs)

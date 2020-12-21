@@ -8,7 +8,8 @@ public class DataClasses : MonoBehaviour
 
 public enum SaintID
 {
-    BAKHITA
+     NONE
+    ,BAKHITA
     ,TERESA
     ,SANMARTIN
 }   

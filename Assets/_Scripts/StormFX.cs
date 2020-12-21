@@ -16,6 +16,10 @@ public class StormFX : MonoBehaviour
 
         if (weather == WeatherType.RAIN || weather == WeatherType.SNOW)
         {
+            foreach(Transform child in transform)
+            {
+                child.gameObject.SetActive(true);
+            }
             FX.Play();
             foreach (var rend in renderers)
             {
@@ -28,6 +32,10 @@ public class StormFX : MonoBehaviour
         }
         else
         {
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(true);
+            }
             FX.Stop();
             foreach (var rend in renderers)
             {

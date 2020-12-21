@@ -66,8 +66,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 23:30
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 257
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -426,6 +426,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 3875256109557728845}
   ButtonName: BABY
   Enabled: 0
+  Timer: 0
 --- !u!114 &139391667755094460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -680,6 +681,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 3841343176032495156}
   ButtonName: PRAY
   Enabled: 0
+  Timer: 0
 --- !u!114 &4759469463494157445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -868,6 +870,7 @@ MonoBehaviour:
   ChargeFx: {fileID: 332974311678759536}
   ButtonPressFx: {fileID: 5617605923328669499}
   ProgressBar: {fileID: 2869322512964992550}
+  CameraControls: {fileID: 0}
 --- !u!1 &5531742135830665374
 GameObject:
   m_ObjectHideFlags: 0
@@ -1452,6 +1455,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 6983941371086181045}
   ButtonName: MEDS
   Enabled: 0
+  Timer: 0
 --- !u!114 &1340688803158504971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1706,6 +1710,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 6983941372388332041}
   ButtonName: VOLUNTEER
   Enabled: 0
+  Timer: 0
 --- !u!114 &2331909821061801082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2029,7 +2034,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.028, y: 0.856}
-  m_SizeDelta: {x: 1.54, y: 0.36}
+  m_SizeDelta: {x: 5, y: 0.36}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3649829705655749128
 CanvasRenderer:
@@ -2060,8 +2065,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: (Open)
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2092,7 +2097,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 258
   m_characterSpacing: 0
   m_wordSpacing: 0

@@ -159,9 +159,13 @@ public class InteractableHouse : InteractableObject
             InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera.GetComponent<CameraControls>());
         ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
 
-        if(BuildingState == BuildingState.NORMAL && GameManager.Instance.CurrentHouse == this && DuringOpenHours())
+        if (BuildingState == BuildingState.NORMAL && GameManager.Instance.CurrentHouse == this && DuringOpenHours())
         {
             SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
+        }
+        if (BuildingState == BuildingState.NORMAL && GameManager.Instance.CurrentHouse == this && !DuringOpenHours())
+        {
+            SoundManager.Instance.PlayHouseAmbience(GetType().Name, false);
         }
 
         switch (BuildingActivityState)
@@ -211,7 +215,7 @@ public class InteractableHouse : InteractableObject
     public virtual void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;
-        if (time < 6 || time >= 18) return;
+        if (time >= 19) return;
         if ((DeadlineTime.Time != -1)) return;
 
         switch (MissionDifficulty)
@@ -257,8 +261,16 @@ public class InteractableHouse : InteractableObject
                     if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 3))
                     {
                         DeadlineCounter++;
-                        DeadlineTime.SetClock(time + (mission != null ? mission.DeadlineHours : RandomFutureTimeByDifficulty()), day);
-                        RequiredItems = mission != null ? mission.RequiredItems : Random.Range(1,3);
+                        if(time < 6)
+                            DeadlineTime.SetClock(time + (mission != null ? mission.DeadlineHours : (6-time) + RandomFutureTimeByDifficulty()), day);
+                        else
+                            DeadlineTime.SetClock(time + (mission != null ? mission.DeadlineHours : RandomFutureTimeByDifficulty()), day);
+
+                        if(MissionManager.Instance.CurrentMission.CurrentWeek > 2)
+                            RequiredItems = mission != null ? mission.RequiredItems : Random.Range(1, 3); //Depending on Season
+                        else
+                            RequiredItems = mission != null ? mission.RequiredItems : 1; //Depending on Season
+
                         DeadlineDeliveryBonus = 2;
                         DeadlineSet = true;
                         PopMyIcon();
@@ -597,6 +609,8 @@ public class InteractableHouse : InteractableObject
         UI.Instance.CrossFade(1f, 15f);
         while (UI.Instance.CrossFading) yield return null;
 
+        if (GameManager.Instance.GameClock.EndofWeek()) yield break;
+
         callback();
 
         UI.Instance.CrossFade(0f, 15f);
@@ -744,6 +758,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual void RelationshipReward(ThankYouType thanks)
     {
+        //Add (or subtract) a Season Bonus
         if(RelationshipPoints >= 65)
         {
             //Special Item
@@ -752,7 +767,7 @@ public class InteractableHouse : InteractableObject
             if (Random.Range(0, 100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(Random.Range(45, 55));
+                TreasuryManager.Instance.DonateMoney(Random.Range(100, 120));
             }
         }
         else if (RelationshipPoints >= 30)
@@ -762,7 +777,7 @@ public class InteractableHouse : InteractableObject
             if(Random.Range(0,100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(Random.Range(30, 40));
+                TreasuryManager.Instance.DonateMoney(Random.Range(70, 90));
             }
         }
         else if (RelationshipPoints >= 10)
@@ -772,7 +787,7 @@ public class InteractableHouse : InteractableObject
             if(Random.Range(0,100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(Random.Range(15, 25));
+                TreasuryManager.Instance.DonateMoney(Random.Range(45, 65));
             }
         }
         else if (RelationshipPoints > 1)
@@ -781,14 +796,14 @@ public class InteractableHouse : InteractableObject
             if (Random.Range(0, 100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(Random.Range(15, 25));
+                TreasuryManager.Instance.DonateMoney(Random.Range(30, 40));
             }
         }
         else if (RelationshipPoints == 1)
         {
             ThankYouMessage(thanks);
             MoneyThanks();
-            TreasuryManager.Instance.DonateMoney(Random.Range(15, 25));
+            TreasuryManager.Instance.DonateMoney(Random.Range(30, 40));
         }
     }
 
@@ -863,7 +878,8 @@ public class InteractableHouse : InteractableObject
 
         if (BuildingState == BuildingState.RUBBLE)
         {
-            RubbleInfoPopup.gameObject.SetActive(true); 
+            RubbleInfoPopup.gameObject.SetActive(true);
+            if (CanBuild()) RubbleInfoPopup.UpdateReadyForConstruction();
             if(GameManager.Instance.Player.WeCanMove(CurrentGroundTile))
                 ToolTipManager.Instance.ShowToolTip("Tooltip_ConstructionSite", new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true) });
             else

@@ -119,7 +119,7 @@
         switch (actionName)
         {
             case "FOOD":
-                return DuringOpenHours() && (InventoryManager.Instance.CheckItem(ItemType.GROCERIES) || InventoryManager.Instance.CheckItem(ItemType.MEAL));
+                return (InventoryManager.Instance.CheckItem(ItemType.GROCERIES) || InventoryManager.Instance.CheckItem(ItemType.MEAL));
         }
 
         return base.CanDoAction(actionName);
