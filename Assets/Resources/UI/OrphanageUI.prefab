@@ -109,7 +109,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.028, y: 0.738}
-  m_SizeDelta: {x: 1.54, y: 0.36}
+  m_SizeDelta: {x: 5, y: 0.36}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3963080725349571959
 CanvasRenderer:
@@ -140,8 +140,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: (Open)
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 258
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -384,8 +384,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 23:30
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -416,7 +416,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 257
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -655,6 +655,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 4252008249504619345}
   ButtonName: PRAY
   Enabled: 0
+  Timer: 0
 --- !u!114 &1674963337715870095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1147,6 +1148,7 @@ MonoBehaviour:
   ChargeFx: {fileID: 9178668852149085542}
   ButtonPressFx: {fileID: 2540363907787888262}
   ProgressBar: {fileID: 5577416014596766869}
+  CameraControls: {fileID: 0}
 --- !u!1 &5481421619898110587
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,6 +1630,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 7973317549271445456}
   ButtonName: TOYS
   Enabled: 0
+  Timer: 0
 --- !u!114 &1886675668634240710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1867,6 +1870,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 7973317550640803692}
   ButtonName: VOLUNTEER
   Enabled: 0
+  Timer: 0
 --- !u!114 &616469681736810179
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -52,7 +52,18 @@ public class PopUI : MonoBehaviour
             BuildingIcon.transform.localPosition = new Vector3(0, 1.5f, 0);
             if (house != null)
             {
-                IsCurrentlyOpen.text = house.BuildingState == BuildingState.RUBBLE ? LocalizationManager.Instance.GetText("UI_ConstructionSite") : house.DuringOpenHours() ? LocalizationManager.Instance.GetText("UI_Open") : LocalizationManager.Instance.GetText("UI_Closed");
+                var hoursToClose = house.ClosingTime - GameManager.Instance.GameClock.Time;
+                if (house.ClosingTime < 24 && hoursToClose < 2 && hoursToClose > 0)
+                {
+                    IsCurrentlyOpen.text = house.BuildingState == BuildingState.RUBBLE ? LocalizationManager.Instance.GetText("UI_ConstructionSite") : $"(Closing in {hoursToClose} hour(s))";
+                    IsCurrentlyOpen.color = Color.black;
+                }
+                else
+                {
+                    IsCurrentlyOpen.text = house.BuildingState == BuildingState.RUBBLE ? LocalizationManager.Instance.GetText("UI_ConstructionSite") : house.DuringOpenHours() ? LocalizationManager.Instance.GetText("UI_Open") : LocalizationManager.Instance.GetText("UI_Closed");
+                    IsCurrentlyOpen.color = Color.white;
+                }
+
             }
             else
             {

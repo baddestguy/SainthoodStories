@@ -45,6 +45,11 @@ public class BuildingInformationPopup : MonoBehaviour
         IsCurrentlyOpen.text = isOpen ? LocalizationManager.Instance.GetText("UI_Open") : LocalizationManager.Instance.GetText("UI_Closed"); ;
     }
 
+    public void UpdateReadyForConstruction()
+    {
+        IsCurrentlyOpen.text = "(Ready for Construction)";
+    }
+
     void Update()
     {
         transform.forward = CamTransform.forward;

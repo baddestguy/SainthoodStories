@@ -84,7 +84,7 @@
         switch (actionName)
         {
             case "CLOTHES":
-                return DuringOpenHours() && InventoryManager.Instance.CheckItem(ItemType.CLOTHES);
+                return InventoryManager.Instance.CheckItem(ItemType.CLOTHES);
         }
 
         return base.CanDoAction(actionName);

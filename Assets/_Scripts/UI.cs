@@ -134,7 +134,7 @@ public class UI : MonoBehaviour
             yield return null;
         }
 
-        if(SaintsManager.Instance.NewSaint != null)
+        if(SaintsManager.Instance.NewSaint.Id != SaintID.NONE)
         {
             yield return StartCoroutine(UnlockSaintSequence());
         }

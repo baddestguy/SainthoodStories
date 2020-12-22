@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.028, y: 0.732}
-  m_SizeDelta: {x: 1.54, y: 0.36}
+  m_SizeDelta: {x: 5, y: 0.36}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1855623917249939730
 CanvasRenderer:
@@ -66,8 +66,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: (Open)
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 258
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -222,8 +222,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 23:30
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_textAlignment: 257
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -493,6 +493,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 3302118996221836591}
   ButtonName: PRAY
   Enabled: 0
+  Timer: 0
 --- !u!114 &7863545110786355704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,6 +902,7 @@ MonoBehaviour:
   ChargeFx: {fileID: 443313847230584916}
   ButtonPressFx: {fileID: 4658912130874790921}
   ProgressBar: {fileID: 0}
+  CameraControls: {fileID: 0}
 --- !u!1 &7045590345167594741
 GameObject:
   m_ObjectHideFlags: 0
@@ -1280,6 +1282,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 8680612775420594606}
   ButtonName: FOOD
   Enabled: 0
+  Timer: 0
 --- !u!114 &5028572045382862225
 MonoBehaviour:
   m_ObjectHideFlags: 0

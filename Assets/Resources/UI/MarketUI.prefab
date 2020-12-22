@@ -1179,8 +1179,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.319, y: 1.814}
-  m_SizeDelta: {x: 1.21, y: 0.37}
+  m_AnchoredPosition: {x: 1, y: 1.814}
+  m_SizeDelta: {x: 1.92, y: 0.37}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2965007964093049777
 CanvasRenderer:
@@ -1209,10 +1209,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: (Closed)
+  m_text: (Closing in 1.5 hours)
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1237,14 +1237,14 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 0.3
+  m_fontSize: 0.15
   m_fontSizeBase: 0.3
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_textAlignment: 257
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 0.1
+  m_fontSizeMax: 0.3
+  m_fontStyle: 1
+  m_textAlignment: 260
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -1278,10 +1278,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0.012673855, w: -0.0046651363}
   m_textInfo:
     textComponent: {fileID: 8089780670192453349}
-    characterCount: 8
+    characterCount: 22
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 1
+    spaceCount: 3
+    wordCount: 5
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -1653,6 +1653,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 4339912533935540199}
   ButtonName: PRAY
   Enabled: 0
+  Timer: 0
 --- !u!114 &6513174682638057931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1666,6 +1667,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Loc_Key: Tooltip_PrayLobby
+  ButtonName: 
+  HouseName: 
 --- !u!114 &2145722063820672139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1994,6 +1997,7 @@ MonoBehaviour:
   ChargeFx: {fileID: 3421808015601669205}
   ButtonPressFx: {fileID: 312757765128265897}
   ProgressBar: {fileID: 0}
+  CameraControls: {fileID: 0}
   GroceriesDisplayPrice: {fileID: 2597130268427292034}
   ClothesDisplayPrice: {fileID: 978266871554790145}
   ToysDisplayPrice: {fileID: 170851611290735453}
@@ -2912,6 +2916,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 7610722301347382189}
   ButtonName: CLOTHES
   Enabled: 0
+  Timer: 0
 --- !u!114 &2121474749856165001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2925,6 +2930,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Loc_Key: Tooltip_ShopClothes
+  ButtonName: 
+  HouseName: 
 --- !u!114 &21558804094652587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3133,6 +3140,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 7610722301701059430}
   ButtonName: STATIONERY
   Enabled: 0
+  Timer: 0
 --- !u!114 &7492346910283951569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3146,6 +3154,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Loc_Key: Tooltip_ShopStationery
+  ButtonName: 
+  HouseName: 
 --- !u!114 &4225181703056066165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3354,6 +3364,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 7610722302181749110}
   ButtonName: GROCERIES
   Enabled: 0
+  Timer: 0
 --- !u!114 &8779798638046347982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3367,6 +3378,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Loc_Key: Tooltip_ShopGroceries
+  ButtonName: 
+  HouseName: 
 --- !u!114 &7878042014558849865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3575,6 +3588,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 7610722302512356242}
   ButtonName: MEDS
   Enabled: 0
+  Timer: 0
 --- !u!114 &7524299425084276502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3588,6 +3602,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Loc_Key: Tooltip_ShopMeds
+  ButtonName: 
+  HouseName: 
 --- !u!114 &7964907345965772951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3796,6 +3812,7 @@ MonoBehaviour:
   ButtonImage: {fileID: 7610722303091651546}
   ButtonName: TOYS
   Enabled: 0
+  Timer: 0
 --- !u!114 &7209847060434933985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3809,6 +3826,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Loc_Key: Tooltip_ShopToys
+  ButtonName: 
+  HouseName: 
 --- !u!114 &7719342864271611580
 MonoBehaviour:
   m_ObjectHideFlags: 0

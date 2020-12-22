@@ -286,7 +286,7 @@ public class InteractableHospital : InteractableHouse
                 return !player.EnergyDepleted() && DuringOpenHours() && !DeliveryTimeSet;
 
             case "MEDS":
-                return DuringOpenHours() && InventoryManager.Instance.CheckItem(ItemType.MEDS);
+                return InventoryManager.Instance.CheckItem(ItemType.MEDS);
         }
 
         return base.CanDoAction(actionName);

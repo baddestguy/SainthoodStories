@@ -22,7 +22,7 @@ public class MissionManager : MonoBehaviour
 
     private void Start()
     {
-        GameClock.Ticked += OnTicked;
+        GameClock.StartNewDay += NewDay;
 
         HouseScores = new Dictionary<TileType, int>();
     }
@@ -37,18 +37,15 @@ public class MissionManager : MonoBehaviour
         UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
     }
 
-    private void OnTicked(double time, int day)
+    private void NewDay()
     {
         if (!GameClock.DeltaTime) return;
 
-        if (GameClock.EndofDay)
-        {
-            EndOfDay?.Invoke();
+        EndOfDay?.Invoke();
             
-            if(day > CurrentMission.TotalDays)
-            {
-                EndMission();
-            }
+        if(GameManager.Instance.GameClock.EndofWeek())
+        {
+            EndMission();
         }
     }
 
@@ -113,13 +110,13 @@ public class MissionManager : MonoBehaviour
             if (CharityPoints >= 75)
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.DONATION);
-                TreasuryManager.Instance.DonateMoney(Random.Range(100, 130));
+                TreasuryManager.Instance.DonateMoney(Random.Range(200, 250));
             }
             else
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.TRYHARDER_CHARITY);
                 EventsManager.Instance.AddEventToList(CustomEventType.DONATION);
-                TreasuryManager.Instance.DonateMoney(Random.Range(50, 75));
+                TreasuryManager.Instance.DonateMoney(Random.Range(75, 100));
             }
             CurrentMission.CurrentWeek++;
         }
@@ -136,6 +133,6 @@ public class MissionManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameClock.Ticked -= OnTicked;
+        GameClock.StartNewDay -= NewDay;
     }
 }
