@@ -687,6 +687,7 @@ public class InteractableHouse : InteractableObject
         if (BuildingState != BuildingState.NORMAL) return;
         if (!DuringOpenHours()) return;
         if (EventsManager.Instance.CurrentEvents.Count > 3) return;
+        if (!GameClock.DeltaTime) return;
 
         if (Random.Range(0, 100) < 50)
         {

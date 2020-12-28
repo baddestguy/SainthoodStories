@@ -477,18 +477,18 @@ public class UI : MonoBehaviour
         }
     }
 
-    public void ShowWeekBeginText()
+    public void ShowWeekBeginText(string text)
     {
-        StartCoroutine(ShowWeekBeginTextAsync());
+        StartCoroutine(ShowWeekBeginTextAsync(text));
     }
 
-    private IEnumerator ShowWeekBeginTextAsync()
+    private IEnumerator ShowWeekBeginTextAsync(string text)
     {
         yield return StartCoroutine(CrossFadeAsync(1, 10));
 
         WeekBeginCrossFade = true;
         CurrentWeekDisplay.gameObject.SetActive(true);
-        CurrentWeekDisplay.text = "WEEK " + MissionManager.Instance.CurrentMission.CurrentWeek; //TODO: Localize
+        CurrentWeekDisplay.text = text;
 
         yield return new WaitForSeconds(3.5f);
         CurrentWeekDisplay.text = "";
