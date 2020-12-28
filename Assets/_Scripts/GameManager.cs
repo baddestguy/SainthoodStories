@@ -44,10 +44,15 @@ public class GameManager : MonoBehaviour
             Map = FindObjectOfType<GameMap>();
             MissionManager.LoadAllMissions(CurrentMission);
             GameClock = new GameClock(SaveData.Time, SaveData.Day);
+
+            if(Player.OnEnergyDepleted)
+                UI.Instance.ShowWeekBeginText(LocalizationManager.Instance.GetText("WeekIntroEnergyDepleted"));
+            else
+                UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText("WeekIntro")} {MissionManager.Instance.CurrentMission.CurrentWeek}");
+
             Player.GameStart(CurrentMission);
             MissionBegin?.Invoke(CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
-            UI.Instance.ShowWeekBeginText();
             PlayAmbience(GameClock.Time, GameClock.Day);
             TreasuryManager.Instance.Money = SaveData.Money;
             SaintsManager.Instance.LoadSaints(SaveData.Saints);
@@ -121,6 +126,11 @@ public class GameManager : MonoBehaviour
         }
 
         MissionDifficulty = missionDifficulty;
+    }
+
+    public void ReloadLevel()
+    {
+        StartCoroutine(WaitAndLoadScene());
     }
 
     private IEnumerator WaitAndLoadScene()

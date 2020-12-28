@@ -28,6 +28,9 @@ public class Player : MonoBehaviour
 
     private GameObject GroundTapFX;
     private GameObject GroundMoveFX;
+
+    public static bool OnEnergyDepleted;
+
     void Start()
     {
         TargetPosition = transform.position;
@@ -67,6 +70,7 @@ public class Player : MonoBehaviour
         StartTile = CurrentBuilding;
         Energy = missionDetails.StartingEnergy;
         StartingEnergy = Energy.Amount;
+        OnEnergyDepleted = false;
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
         LockMovement = false;
         StartCoroutine(WaitThenEnterChurch());
@@ -201,8 +205,19 @@ public class Player : MonoBehaviour
     IEnumerator ResetPlayerOnEnergyDepletedAsync()
     {
         StatusEffect = PlayerStatusEffect.FATIGUED;
-        EventsManager.Instance.AddEventToList(CustomEventType.ENERGY_DEPLETED);
         UI.Instance.CrossFade(1f);
+
+        //Reload previous checkpoint if still in tutorial week
+        if(MissionManager.Instance.CurrentMission.CurrentWeek == 1)
+        {
+            SoundManager.Instance.EndAllTracks();
+            OnEnergyDepleted = true;
+            GameManager.Instance.ReloadLevel();
+            Energy.Consume(-20);
+            yield break;
+        }
+
+        EventsManager.Instance.AddEventToList(CustomEventType.ENERGY_DEPLETED);
         yield return new WaitForSeconds(1f);
 
         UI.Instance.EnableCurrentUI(false);
