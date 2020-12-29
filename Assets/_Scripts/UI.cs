@@ -445,6 +445,46 @@ public class UI : MonoBehaviour
         GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, newGame);
     }
 
+    public GameObject SettingsMenuGO;
+    public void SettingsMenu()
+    {
+        SoundManager.Instance.PlayOneShotSfx("DialogOpen");
+        SettingsMenuGO.SetActive(true);
+        PopulateLanguageDropdown();
+    }
+    public void CloseSettingsMenu()
+    {
+        SettingsMenuGO.SetActive(false);
+        SoundManager.Instance.PlayOneShotSfx("Button");
+    }
+
+    public TMP_Dropdown Dropdown;
+    public void PopulateLanguageDropdown()
+    {
+        Dropdown.AddOptions(new List<string>() { "English", "Français", "Português do Brasil", "Tagalog", "Español latinoamericano", "Italiano", "Deutsche" });
+        Dropdown.value = PlayerPrefs.GetInt("Language");
+        Dropdown.onValueChanged.AddListener(delegate {
+            ChooseLanguage(Dropdown);
+        });
+    }
+
+    public void ChooseLanguage(TMP_Dropdown dropdown)
+    {
+        Language language = Language.ENGLISH;
+        switch (dropdown.value)
+        {
+            case 0: language = Language.ENGLISH; break;
+            case 1: language = Language.FRENCH; break;
+            case 2: language = Language.BRPT; break;
+            case 3: language = Language.FILIPINO; break;
+            case 4: language = Language.LATAMSPANISH; break;
+            case 5: language = Language.ITALIAN; break;
+            case 6: language = Language.GERMAN; break;
+
+        }
+        LocalizationManager.Instance.ChangeLanguage(language);
+    }
+
     private string DayofTheWeek(int Day)
     {
         switch (Day)
