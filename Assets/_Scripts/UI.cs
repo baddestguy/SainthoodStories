@@ -485,6 +485,16 @@ public class UI : MonoBehaviour
         LocalizationManager.Instance.ChangeLanguage(language);
     }
 
+    public void CreditsScene()
+    {
+        SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+    }
+
+    public void ExitCredits()
+    {
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+    }
+
     private string DayofTheWeek(int Day)
     {
         switch (Day)
