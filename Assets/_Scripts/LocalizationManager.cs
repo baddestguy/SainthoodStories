@@ -11,6 +11,7 @@ public class LocalizationManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        CurrentLanguage = (Language)PlayerPrefs.GetInt("Language");
     }
 
     public string GetText(string key)
@@ -48,6 +49,7 @@ public class LocalizationManager : MonoBehaviour
         CurrentLanguage = newLanguage;
 
         //Fire event to update all text on all UIs in the game
+        PlayerPrefs.SetInt("Language", (int)newLanguage);
         LanguageChanged?.Invoke(CurrentLanguage);
     }
 }
