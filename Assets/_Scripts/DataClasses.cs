@@ -394,3 +394,9 @@ public class SaveObject
     public Provision[] Provisions;
 }
 
+[System.Serializable]
+public class KSBackers
+{
+    public string Name;
+}
+
