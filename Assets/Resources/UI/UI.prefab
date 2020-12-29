@@ -634,6 +634,8 @@ MonoBehaviour:
   TooltipSizer: {fileID: 3307061180157922198}
   TutorialPopup: {fileID: 3693736276194249024}
   SaintCard: {fileID: 153213974241281857}
+  SettingsMenuGO: {fileID: 0}
+  Dropdown: {fileID: 0}
   WeekBeginCrossFade: 0
   CrossFading: 0
 --- !u!1 &141429441570519300
@@ -12199,6 +12201,7 @@ GameObject:
   - component: {fileID: 760547611367832967}
   - component: {fileID: 8669539813403009846}
   - component: {fileID: 3307061180157922198}
+  - component: {fileID: 1390417049125338416}
   m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
@@ -12281,6 +12284,18 @@ MonoBehaviour:
   MaxSize: {x: 1000, y: Infinity}
   MinSize: {x: 0, y: 0}
   ControlAxes: -1
+--- !u!225 &1390417049125338416
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3999878111867392274}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &4232530937652288763
 GameObject:
   m_ObjectHideFlags: 0
