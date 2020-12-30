@@ -513,15 +513,12 @@ public class UI : MonoBehaviour
     public void DisplayToolTip(string text)
     {
         if (TooltipDisplay == null) return;
+        if (text == TooltipDisplay.text) return;
 
         TooltipDisplay.text = text;
-        TooltipSizer.Refresh();
+        TooltipDisplay.transform.parent.gameObject.SetActive(false);
 
-        if(text == "")
-        {
-            TooltipDisplay.transform.parent.gameObject.SetActive(false);
-        }
-        else
+        if (text != "")
         {
             TooltipDisplay.transform.parent.gameObject.SetActive(true);
         }

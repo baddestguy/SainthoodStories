@@ -39,7 +39,7 @@ public class BuildingInformationPopup : MonoBehaviour
 
         if(closingTime - openTime >= 23)
         {
-            OpenHours.text = LocalizationManager.Instance.GetText("Open 24 hrs");
+            OpenHours.text = LocalizationManager.Instance.GetText("UI_OpenPopup");
         }
 
         IsCurrentlyOpen.text = isOpen ? LocalizationManager.Instance.GetText("UI_Open") : LocalizationManager.Instance.GetText("UI_Closed"); ;
@@ -47,7 +47,7 @@ public class BuildingInformationPopup : MonoBehaviour
 
     public void UpdateReadyForConstruction()
     {
-        IsCurrentlyOpen.text = "(Ready for Construction)";
+        IsCurrentlyOpen.text = LocalizationManager.Instance.GetText("UI_ConstructionReady");
     }
 
     void Update()
