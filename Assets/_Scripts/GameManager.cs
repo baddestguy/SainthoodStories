@@ -130,6 +130,9 @@ public class GameManager : MonoBehaviour
 
     public void ReloadLevel()
     {
+        SaveDataManager.Instance.SaveGame();
+        SaveData = SaveDataManager.Instance.LoadGame();
+        CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, 7, SaveData.Week);
         StartCoroutine(WaitAndLoadScene());
     }
 
