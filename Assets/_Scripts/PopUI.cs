@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class PopUI : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class PopUI : MonoBehaviour
     private List<ActionButton> Buttons;
     public CameraControls CameraControls;
 
+    private InteractableHouse MyHouse;
+
     void Start()
     {
         CamTransform = ExteriorCamera.Instance.Camera.transform; 
@@ -41,6 +44,7 @@ public class PopUI : MonoBehaviour
     {
         Callback = callback;
 
+        MyHouse = house;
         BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{sprite}");
         ItemsRequiredDisplay.text = $"{items}";
         DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
@@ -232,23 +236,47 @@ public class PopUI : MonoBehaviour
         }
     }
 
-    private void UpdateProgressBar(float progress)
+    private void UpdateProgressBar(float progress, InteractableHouse house)
     {
-        if (ProgressBar == null) return;
+        if (ProgressBar == null || MyHouse != house) return;
 
         ProgressBar.gameObject.SetActive(true);
-        ProgressBar.value = progress;
+        ProgressBar.DOValue(progress, 0.5f);
 
         if(progress > 0.75f)
         {
+            StartCoroutine(DisableProgressBar());
+        }
+        else if(progress == 0)
+        {
             ProgressBar.gameObject.SetActive(false);
         }
+    }
+
+    private IEnumerator DisableProgressBar()
+    {
+        yield return new WaitForSeconds(1.5f);
+        ProgressBar.gameObject.SetActive(false);
     }
 
     public void PlayVFX(string vfxName)
     {
         transform.Find(vfxName)?.gameObject.SetActive(false);
         transform.Find(vfxName)?.gameObject.SetActive(true);
+    }
+
+    private void OnEnable()
+    {
+        if (ProgressBar)
+        {
+            if (ProgressBar.value < 1)
+                UpdateProgressBar(ProgressBar.value, MyHouse);
+
+            if(MyHouse != null && MyHouse.HasResetActionProgress())
+            {
+                UpdateProgressBar(0, MyHouse);
+            }
+        }
     }
 
     private void OnDisable()

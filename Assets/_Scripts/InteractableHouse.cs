@@ -47,14 +47,14 @@ public class InteractableHouse : InteractableObject
     public GameObject BuildingGo;
 
     public int RelationshipPoints;
-    private int VolunteerCountdown = 0;
+    protected int VolunteerCountdown = 0;
     public int EventsTriggered;
 
     public static UnityAction<bool> OnEnterHouse;
     public BuildingActivityState BuildingActivityState = BuildingActivityState.NONE;
     protected IEnumerable<BuildingMissionData> MyMissions;
 
-    public static UnityAction<float> OnActionProgress;
+    public static UnityAction<float, InteractableHouse> OnActionProgress;
 
     public Camera MyCamera;
     public Camera MyUICamera;
@@ -172,7 +172,7 @@ public class InteractableHouse : InteractableObject
         {
             case BuildingActivityState.VOLUNTEERING:
                 VolunteerCountdown++;
-                OnActionProgress?.Invoke(VolunteerCountdown / 4f);
+                OnActionProgress?.Invoke(VolunteerCountdown / 4f, this);
                 if (VolunteerCountdown >= 4)
                 {
                     BuildRelationship(ThankYouType.VOLUNTEER);
@@ -403,7 +403,7 @@ public class InteractableHouse : InteractableObject
         if (player.EnergyDepleted() || !CanBuild()) return;
 
         BuildPoints++;
-        OnActionProgress?.Invoke(BuildPoints / 4f);
+        OnActionProgress?.Invoke(BuildPoints / 4f, this);
 
         UI.Instance.DisplayMessage("BUILDING!");
         if(BuildPoints >= 4)
@@ -723,6 +723,11 @@ public class InteractableHouse : InteractableObject
         BuildingActivityState = BuildingActivityState.NONE;
     }
 
+    public virtual bool HasResetActionProgress()
+    {
+        return VolunteerCountdown == 0;
+    }
+
     private void OnEventDialogTriggered(bool started)
     {
         if (started && CameraLockOnMe)
@@ -830,7 +835,7 @@ public class InteractableHouse : InteractableObject
         switch (actionName)
         {
             case "BUILD":
-                return CanBuild();
+                return !GameManager.Instance.Player.EnergyDepleted() && CanBuild();
 
             case "PRAY": return true;
             case "SLEEP": return true;

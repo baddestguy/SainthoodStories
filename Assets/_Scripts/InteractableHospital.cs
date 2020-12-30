@@ -58,7 +58,7 @@ public class InteractableHospital : InteractableHouse
                     DeliveryCountdown = 0;
                     EndDelivery.SetClock(clock.Time - 1, clock.Day);
                     BuildRelationship(ThankYouType.BABY);
-                    OnActionProgress?.Invoke(1f);
+                    OnActionProgress?.Invoke(1f, this);
                 }
             }
         }
@@ -90,6 +90,8 @@ public class InteractableHospital : InteractableHouse
 
     private void SetBabyDelivery(BuildingMissionData bMission)
     {
+        if (VolunteerCountdown > 0) return;
+
         GameClock clock = GameManager.Instance.GameClock;
         DeliveryTimeSet = true;
         DeliveryCountdown = 0;
@@ -158,7 +160,7 @@ public class InteractableHospital : InteractableHouse
             player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("Delivering a Baby!!");
             DeliveryCountdown++;
-            OnActionProgress?.Invoke(DeliveryCountdown/4f);   
+            OnActionProgress?.Invoke(DeliveryCountdown/4f, this);   
             clock.Tick();
         }
         else if (EndDelivery == null || clock > EndDelivery)
@@ -251,6 +253,10 @@ public class InteractableHospital : InteractableHouse
         return base.GetTooltipStatsForButton(button);
     }
 
+    public override bool HasResetActionProgress()
+    {
+        return DeliveryCountdown == 0 && base.HasResetActionProgress();
+    }
 
     public override void VolunteerThanks()
     {

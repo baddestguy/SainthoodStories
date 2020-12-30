@@ -81,6 +81,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(1f);
         OnMoveSuccessEvent?.Invoke(Energy, CurrentBuilding);
         GameManager.Instance.GameClock.Ping();
+        ToolTipManager.Instance.ShowToolTip("");
     }
 
     public bool WeCanMove(MapTile tile)
@@ -212,8 +213,8 @@ public class Player : MonoBehaviour
         {
             SoundManager.Instance.EndAllTracks();
             OnEnergyDepleted = true;
-            GameManager.Instance.ReloadLevel();
             Energy.Consume(-20);
+            GameManager.Instance.ReloadLevel();
             yield break;
         }
 
