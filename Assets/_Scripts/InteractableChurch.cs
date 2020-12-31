@@ -91,6 +91,7 @@ public class InteractableChurch : InteractableHouse
             {
                 if(ConfessionProgress == 0) //Did not participate at all
                 {
+                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
                     UpdateFaithPoints(-4, 0);
                 }
                 StartCoroutine(ResetActionProgressAsync());
@@ -99,6 +100,7 @@ public class InteractableChurch : InteractableHouse
             {
                 if (MassProgress == 0) 
                 {
+                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
                     UpdateFaithPoints(-6, 0);
                 }
                 StartCoroutine(ResetActionProgressAsync());
@@ -107,6 +109,7 @@ public class InteractableChurch : InteractableHouse
             {
                 if (LotHProgress == 0) 
                 {
+                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
                     UpdateFaithPoints(-2, 0);
                 }
                 StartCoroutine(ResetActionProgressAsync());
@@ -118,6 +121,7 @@ public class InteractableChurch : InteractableHouse
             {
                 if (LotHProgress == 0) //Did not participate at all
                 {
+                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
                     UpdateFaithPoints(-2, 0);
                 }
                 StartCoroutine(ResetActionProgressAsync());

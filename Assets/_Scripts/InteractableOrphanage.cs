@@ -45,24 +45,17 @@ public class InteractableOrphanage : InteractableHouse
     {
         if (house != this) return;
 
-        if (DuringOpenHours())
-        {
-            ItemType item = InventoryManager.Instance.GetItem(ItemType.TOYS);
+        ItemType item = InventoryManager.Instance.GetItem(ItemType.TOYS);
 
-            if (item != ItemType.NONE)
-            {
-                UI.Instance.DisplayMessage("GAVE TOYS TO THE KIDS!");
-                UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-                base.DeliverItem(house);
-            }
-            else
-            {
-                UI.Instance.DisplayMessage("YOU HAVE NO TOYS TO GIVE!");
-            }
+        if (item != ItemType.NONE)
+        {
+            UI.Instance.DisplayMessage("GAVE TOYS TO THE KIDS!");
+            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
+            base.DeliverItem(house);
         }
         else
         {
-            UI.Instance.DisplayMessage("ORPHANAGE CLOSED!");
+            UI.Instance.DisplayMessage("YOU HAVE NO TOYS TO GIVE!");
         }
     }
 

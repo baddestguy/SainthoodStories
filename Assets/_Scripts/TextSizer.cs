@@ -100,7 +100,7 @@ public class TextSizer : MonoBehaviour
         if (Text) _textRectTransform = Text.GetComponent<RectTransform>();
         _selfRectTransform = GetComponent<RectTransform>();
     }
-    private void OnValidate()
+    private void Start()
     {
         Refresh();
     }
