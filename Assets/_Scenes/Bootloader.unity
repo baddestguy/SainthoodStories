@@ -492,8 +492,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OverrideClock: 0
-  DayOverride: 1
-  TimeOverride: 13
+  DayOverride: 7
+  TimeOverride: 22
 --- !u!114 &1152669278
 MonoBehaviour:
   m_ObjectHideFlags: 0

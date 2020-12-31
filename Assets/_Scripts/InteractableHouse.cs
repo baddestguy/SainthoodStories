@@ -152,7 +152,7 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
-            UpdateCharityPoints(-2, 0);
+            UpdateCharityPoints(-1, 0);
             SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
         }
         if(InteriorPopUI) //TEMP
@@ -424,7 +424,7 @@ public class InteractableHouse : InteractableObject
 
             BuildingCompleteDialog();
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            UpdateCharityPoints(VolunteerPoints*2, moddedEnergy);
+            UpdateCharityPoints(8, moddedEnergy);
             SaveDataManager.Instance.SaveGame();
         }
         else
@@ -544,7 +544,7 @@ public class InteractableHouse : InteractableObject
                 faithMultiplier += e.Id == CustomEventType.HIGH_SPIRIT ? (int)e.Gain : -faithMultiplier;
             }
         }
-        CurrentFaithPoints += amount * faithMultiplier;
+        CurrentFaithPoints += amount * (amount < 0 ? 1 : faithMultiplier);
         Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
         stack.Push(new Tuple<string, int>("InteractableChurch", amount * faithMultiplier));
         if (energy != 0) stack.Push(new Tuple<string, int>("Energy", energy));
@@ -687,7 +687,7 @@ public class InteractableHouse : InteractableObject
         if (BuildingState != BuildingState.NORMAL) return;
         if (!DuringOpenHours()) return;
         if (EventsManager.Instance.CurrentEvents.Count > 3) return;
-        if (!GameClock.DeltaTime) return;
+        if (UI.Instance.WeekBeginCrossFade) return;
 
         if (Random.Range(0, 100) < 50)
         {
@@ -822,7 +822,11 @@ public class InteractableHouse : InteractableObject
         GameClock myClock = new GameClock(myAvailability.Time, myAvailability.Day);
         GameClock currentClock = GameManager.Instance.GameClock;
         int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
-        return CurrentWeek >= myAvailability.Week && currentClock >= myClock;
+
+        if (CurrentWeek > myAvailability.Week) return true;
+        if (CurrentWeek < myAvailability.Week) return false;
+
+        return currentClock >= myClock;
     }
 
     protected virtual void OnEventExecuted(CustomEventData e)
@@ -867,7 +871,7 @@ public class InteractableHouse : InteractableObject
 
             case "CONSTRUCT":
                 if(4-BuildPoints == 1)
-                    return new TooltipStats() { Ticks = 1, FP = 0, CP = VolunteerPoints * 2, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
+                    return new TooltipStats() { Ticks = 1, FP = 0, CP = 8, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
                 else
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
         }

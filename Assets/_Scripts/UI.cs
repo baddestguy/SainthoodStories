@@ -495,6 +495,11 @@ public class UI : MonoBehaviour
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
+    public void Discord()
+    {
+        Application.OpenURL("https://discord.com/invite/3NZdTqDVda");
+    }
+
     private string DayofTheWeek(int Day)
     {
         switch (Day)

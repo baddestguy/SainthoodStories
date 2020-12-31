@@ -82,11 +82,6 @@ public class InteractableSchool : InteractableHouse
     public override void DeliverItem(InteractableHouse house)
     {
         if (house != this) return;
-        if (!DuringOpenHours())
-        {
-            UI.Instance.DisplayMessage("SCHOOL CLOSED!");
-            return;
-        }
 
         ItemType item = InventoryManager.Instance.GetItem(ItemType.STATIONERY);
 

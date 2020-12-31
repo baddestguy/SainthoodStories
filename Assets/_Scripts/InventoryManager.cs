@@ -25,6 +25,10 @@ public class InventoryManager : MonoBehaviour
     {
         Items = save.InventoryItems?.ToList() ?? new List<ItemType>();
         Provisions = save.Provisions?.ToList() ?? new List<Provision>();
+        if (Provisions.Contains(Provision.EXTRA_INVENTORY)){
+            MaxInventorySlots = 4;
+            RefreshInventoryUI?.Invoke();
+        }
     }
 
     public void AddToInventory(ItemType item)
