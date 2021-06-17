@@ -11,11 +11,15 @@ public class TutorialUI : MonoBehaviour
     public bool SlideRight;
     private bool Animated;
     public bool ShouldAnimate;
+
+    
+    private Vector3 startPoint;
     private Vector3 oldScale;
 
     public void Start()
     {
         oldScale = MyUI.transform.localScale;
+        startPoint = MyUI.transform.localPosition;
         if (GameSettings.Instance.FTUE)
         {
             EventsManager.EventDialogTriggered += RefreshUI;
@@ -29,6 +33,7 @@ public class TutorialUI : MonoBehaviour
 
         if (GameSettings.Instance.FTUE)
         {
+            print("Here");
             if(Threshold > -1)
             {
                 if(TutorialManager.Instance.CurrentTutorialStep >= Threshold)
@@ -39,12 +44,12 @@ public class TutorialUI : MonoBehaviour
                         if (SlideRight)
                         {
                             MyUI.transform.position -= new Vector3(300, 0, 0);
-                            MyUI.transform.DOLocalMoveX(-810f, 1f).SetEase(Ease.InBack);
+                            MyUI.transform.DOLocalMoveX(startPoint.x, 1f).SetEase(Ease.InBack);
                         }
                         else
                         {
                             MyUI.transform.position += new Vector3(300, 0, 0);
-                            MyUI.transform.DOLocalMoveX(788.6f, 1f).SetEase(Ease.InBack);
+                            MyUI.transform.DOLocalMoveX(startPoint.x, 1f).SetEase(Ease.InBack);
                         }
                     }
                     Animated = true;
@@ -65,12 +70,14 @@ public class TutorialUI : MonoBehaviour
                         if (SlideRight)
                         {
                             MyUI.transform.position -= new Vector3(300, 0, 0);
-                            MyUI.transform.DOLocalMoveX(-810f, 1f).SetEase(Ease.InBack);
+                            //MyUI.transform.DOLocalMoveX(-810f, 1f).SetEase(Ease.InBack);
+                            MyUI.transform.DOLocalMoveX(startPoint.x, 1f).SetEase(Ease.InBack);
                         }
                         else
                         {
                             MyUI.transform.position += new Vector3(300, 0, 0);
-                            MyUI.transform.DOLocalMoveX(788.6f, 1f).SetEase(Ease.InBack);
+                            //MyUI.transform.DOLocalMoveX(788.6f, 1f).SetEase(Ease.InBack);
+                            MyUI.transform.DOLocalMoveX(startPoint.x, 1f).SetEase(Ease.InBack);
                         }
                     }
                     Animated = true;
@@ -95,12 +102,12 @@ public class TutorialUI : MonoBehaviour
                         if (SlideRight)
                         {
                             MyUI.transform.position -= new Vector3(300, 0, 0);
-                            MyUI.transform.DOLocalMoveX(-810f, 1f).SetEase(Ease.InBack);
+                            MyUI.transform.DOLocalMoveX(startPoint.x, 1f).SetEase(Ease.InBack);
                         }
                         else
                         {
                             MyUI.transform.position += new Vector3(300, 0, 0);
-                            MyUI.transform.DOLocalMoveX(788.6f, 1f).SetEase(Ease.InBack);
+                            MyUI.transform.DOLocalMoveX(startPoint.x, 1f).SetEase(Ease.InBack);
                         }
                     }
                     Animated = true;
@@ -118,12 +125,12 @@ public class TutorialUI : MonoBehaviour
                     if (SlideRight)
                     {
                         MyUI.transform.position -= new Vector3(300, 0, 0);
-                        MyUI.transform.DOLocalMoveX(-810f, 1f).SetEase(Ease.InBack);
+                        MyUI.transform.DOLocalMoveX(startPoint.x, 1f).SetEase(Ease.InBack);
                     }
                     else
                     {
                         MyUI.transform.position += new Vector3(300, 0, 0);
-                        MyUI.transform.DOLocalMoveX(788.6f, 1f).SetEase(Ease.InBack);
+                        MyUI.transform.DOLocalMoveX(startPoint.x, 1f).SetEase(Ease.InBack);
                     }
                 }
                 Animated = true;

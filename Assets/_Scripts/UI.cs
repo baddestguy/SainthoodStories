@@ -577,6 +577,11 @@ public class UI : MonoBehaviour
         CrossFading = false;
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
     private void OnDisable()
     {
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
@@ -586,4 +591,8 @@ public class UI : MonoBehaviour
         GameClock.Ticked -= OnTick;
         TreasuryManager.DonatedMoney -= RefreshTreasuryBalance;
     }
+
+
+
+   
 }

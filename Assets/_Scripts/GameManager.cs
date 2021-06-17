@@ -140,7 +140,8 @@ public class GameManager : MonoBehaviour
     {
         UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
+        //SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
+        SceneManager.LoadScene("NormalLevelAjust", LoadSceneMode.Single);
     }
 
     private void OnDisable()
