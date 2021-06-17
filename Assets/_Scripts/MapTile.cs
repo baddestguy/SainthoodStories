@@ -50,6 +50,10 @@ public class MapTile : MonoBehaviour
     }
 
     public void OnMouseUpAsButton(){
+
+        //Make a check if a ui was click..
+        if (UI.Instance.WasUiHit) return;
+
         if (EventSystem.current.currentSelectedGameObject != null) return;
         if(!CameraControls.CameraMove && !CameraControls.CameraZoom)
             OnClickEvent?.Invoke(this);

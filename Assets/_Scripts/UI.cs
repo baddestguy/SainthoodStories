@@ -6,6 +6,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -62,10 +63,47 @@ public class UI : MonoBehaviour
 
     public GameObject SaintCard;
 
+    [Header("Ui Clicked Reporters")]
+    public GraphicRaycaster[] graphicRaycaster;
+    public EventSystem m_EventSystem;
+    private PointerEventData m_PointerEventData;
+
+
+
+    public bool WasUiHit
+    {
+        get
+        {
+            m_PointerEventData = new PointerEventData(m_EventSystem);
+            m_PointerEventData.position = Input.mousePosition;
+            List<RaycastResult> results = new List<RaycastResult>();
+            if (graphicRaycaster != null)
+            {
+                for (int i = 0; i < graphicRaycaster.Length; i++)
+                {
+                    graphicRaycaster[i].Raycast(m_PointerEventData, results);
+                }
+                foreach (RaycastResult result in results)
+                {
+                    if (result.gameObject.layer == LayerMask.NameToLayer("UI") || result.gameObject.CompareTag("UI"))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+    }
+
+
     void Awake()
     {
         Instance = this;
     }
+
+
+
 
     void Start()
     {
