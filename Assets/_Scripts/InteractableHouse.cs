@@ -66,7 +66,7 @@ public class InteractableHouse : InteractableObject
         MissionManager.EndOfDay += EndofDay;
         EventsManager.EventDialogTriggered += OnEventDialogTriggered;
         EventsManager.EventExecuted += OnEventExecuted;
-
+        GameControlsManager.TryZoom += TryZoom;
         LoadData();
         Initialize();
     }
@@ -190,6 +190,31 @@ public class InteractableHouse : InteractableObject
         {
             PopIcon.gameObject.SetActive(true);
             PopIcon.Init("Rubble", 0, new GameClock(-1));
+        }
+    }
+
+    protected virtual void TryZoom(float zoom)
+    {
+        if (!CameraLockOnMe) return;
+        SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
+
+        if (zoom > 0) //Zoom in
+        {
+            ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
+            ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+            ExteriorPopUI.gameObject.SetActive(true);
+        }
+        else
+        {
+            if (MyCamera && InsideHouse)
+            {
+                PopUICallback("EXIT");
+            }
+            else
+            {
+                ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
+                ExteriorPopUI.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -470,7 +495,7 @@ public class InteractableHouse : InteractableObject
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
                 InsideHouse = false;
                 OnEnterHouse?.Invoke(InsideHouse);
-                StartCoroutine(FadeAndSwitchCamerasAsync(LightsOn));
+                StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
                 break;
 
             case "ENTER":
@@ -479,7 +504,7 @@ public class InteractableHouse : InteractableObject
         }
     }
 
-    public void LightsOn()
+    public void InteriorLightsOff()
     {
         ExteriorPopUI.gameObject.SetActive(true);
         ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera.GetComponent<CameraControls>());
@@ -493,7 +518,7 @@ public class InteractableHouse : InteractableObject
         MyCamera.GetComponent<CameraControls>().SetZoomTarget(7f);
     }
 
-    public void LightsOff()
+    public void InteriorLightsOn()
     {
         ExteriorPopUI.gameObject.SetActive(false);
         if(!EventsManager.Instance.EventInProgress)
@@ -998,6 +1023,7 @@ public class InteractableHouse : InteractableObject
         MissionManager.EndOfDay -= ReportScores;
         EventsManager.EventDialogTriggered -= OnEventDialogTriggered;
         EventsManager.EventExecuted -= OnEventExecuted;
+        GameControlsManager.TryZoom -= TryZoom;
 
         HouseUIActive = false;
         base.OnDisable();
