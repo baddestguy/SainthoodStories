@@ -21,6 +21,13 @@ public class CameraControls : MonoBehaviour
     public Camera MyCamera;
     public PostProcessVolume PostProcessor;
 
+    [Header("Mouse Zoom Control (Not Impleamented)")]
+    public bool canMouseZoom;
+    public float mouseScrollSpeed = 2;
+    public float minCamaraHeight;
+    public float maxCamaraHeight;
+    public float zoomSpeed;
+
     public static bool ZoomComplete;
 
     void Start()
@@ -113,9 +120,23 @@ public class CameraControls : MonoBehaviour
         }
     }
 
+
     public void SetZoomTarget(float target)
     {
         ZoomTarget = target;
         ZoomComplete = false;
+    }
+
+    /// <summary>
+    /// Note : This zoom controls the camera position
+    /// </summary>
+    /// <param name="oldDistance"></param>
+    /// <param name="newDistance"></param>
+    private void OnMouseZoom(float oldDistance, float newDistance)
+    {
+        float camHeightValue = transform.localPosition.y;
+        camHeightValue = Mathf.Clamp(camHeightValue * (oldDistance / newDistance), minCamaraHeight, maxCamaraHeight);
+        Vector3 newHeight = new Vector3(0, 1, -1) * camHeightValue;
+        transform.localPosition = Vector3.Lerp(transform.localPosition, newHeight, Time.deltaTime * zoomSpeed);
     }
 }
