@@ -37,7 +37,7 @@ public class InteractableChurch : InteractableHouse
         base.OnPlayerMoved(energy, tile);
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            StartCoroutine(FadeAndSwitchCamerasAsync(LightsOff));
+            StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
         }
         else
         {
