@@ -281,7 +281,7 @@ public class CustomEventPopup : MonoBehaviour
                 break;
         }
 
-        return house ==  null || house.MyCamera == null ? null : house.MyCamera.GetComponent<CameraControls>();
+        return house ==  null || house.InteriorCam == null ? null : house.InteriorCam.GetComponent<CameraControls>();
     }
 
     private void OnDisable()

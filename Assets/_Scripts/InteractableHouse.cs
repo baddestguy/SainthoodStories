@@ -56,8 +56,9 @@ public class InteractableHouse : InteractableObject
 
     public static UnityAction<float, InteractableHouse> OnActionProgress;
 
-    public Camera MyCamera;
-    public Camera MyUICamera;
+    public Camera InteriorCam;
+    public Camera InteriorUICamera;
+    public GameObject InteriorSpace;
 
     protected virtual void Start()
     {
@@ -156,7 +157,7 @@ public class InteractableHouse : InteractableObject
             SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
         }
         if(InteriorPopUI) //TEMP
-            InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera.GetComponent<CameraControls>());
+            InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
         ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
 
         if (BuildingState == BuildingState.NORMAL && GameManager.Instance.CurrentHouse == this && DuringOpenHours())
@@ -206,7 +207,7 @@ public class InteractableHouse : InteractableObject
         }
         else
         {
-            if (MyCamera && InsideHouse)
+            if (InteriorCam && InsideHouse)
             {
                 PopUICallback("EXIT");
             }
@@ -352,7 +353,7 @@ public class InteractableHouse : InteractableObject
         RequiredItems--;
         PopMyIcon();
         if(InteriorPopUI)
-            InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera.GetComponent<CameraControls>());
+            InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
         ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
 
         if (RequiredItems <= 0)
@@ -507,15 +508,16 @@ public class InteractableHouse : InteractableObject
     public void InteriorLightsOff()
     {
         ExteriorPopUI.gameObject.SetActive(true);
-        ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera.GetComponent<CameraControls>());
+        ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
 
         InteriorPopUI.gameObject.SetActive(false);
-        MyCamera.enabled = false;
-        MyUICamera.enabled = false;
+        InteriorCam.enabled = false;
+        InteriorUICamera.enabled = false;
         ExteriorCamera.Instance.Camera.enabled = true;
         ExteriorCamera.Instance.UICamera.enabled = true;
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
-        MyCamera.GetComponent<CameraControls>().SetZoomTarget(7f);
+        InteriorCam.GetComponent<CameraControls>().SetZoomTarget(7f);
+        InteriorSpace.SetActive(false);
     }
 
     public void InteriorLightsOn()
@@ -523,12 +525,13 @@ public class InteractableHouse : InteractableObject
         ExteriorPopUI.gameObject.SetActive(false);
         if(!EventsManager.Instance.EventInProgress)
             InteriorPopUI.gameObject.SetActive(true);
-        InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera == null ? null : MyCamera?.GetComponent<CameraControls>());
+        InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
         PopIcon.UIPopped(true);
-        MyCamera.enabled = true;
-        MyUICamera.enabled = true;
+        InteriorCam.enabled = true;
+        InteriorUICamera.enabled = true;
         ExteriorCamera.Instance.Camera.enabled = false;
         ExteriorCamera.Instance.UICamera.enabled = false;
+        InteriorSpace.SetActive(true);
     }
 
     public virtual void VolunteerWork(InteractableHouse house)
@@ -652,11 +655,11 @@ public class InteractableHouse : InteractableObject
             GameManager.Instance.CurrentHouse = this;
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
-            if (MyCamera)
+            if (InteriorCam)
             {
                 ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
-                MyCamera.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-35.45f, 13.38f, 27.57f), false);
-                MyCamera.GetComponent<CameraControls>().SetZoomTarget(6f);
+                InteriorCam.GetComponent<CameraControls>().SetCameraTarget(InteriorSpace.transform.TransformPoint(3.68f, 7.44f, -1.12f), false);
+                InteriorCam.GetComponent<CameraControls>().SetZoomTarget(6f);
             }
             CameraLockOnMe = true;
             HouseUIActive = true;
@@ -679,10 +682,10 @@ public class InteractableHouse : InteractableObject
         else if(CameraLockOnMe)
         {
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
-            if (MyCamera)
+            if (InteriorCam)
             {
-                MyCamera.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero, false);
-                MyCamera.GetComponent<CameraControls>().SetZoomTarget(12f);
+                InteriorCam.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero, false);
+                InteriorCam.GetComponent<CameraControls>().SetZoomTarget(12f);
             }
             CameraLockOnMe = false;
             HouseUIActive = false;

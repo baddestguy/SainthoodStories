@@ -15,7 +15,7 @@ public class InteractableHospital : InteractableHouse
 
     protected override void Start()
     {
-        PopUILocation = "UI/HospitalUI";
+        PopUILocation = "UI/ExternalUI";
         base.Start();
     }
 
@@ -25,9 +25,7 @@ public class InteractableHospital : InteractableHouse
 
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            ExteriorPopUI.gameObject.SetActive(true);
-            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera == null ? null : MyCamera?.GetComponent<CameraControls>());
-            PopIcon.UIPopped(true);
+            StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
         }
         else
         {

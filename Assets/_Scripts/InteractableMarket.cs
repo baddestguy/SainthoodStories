@@ -25,7 +25,7 @@ public class InteractableMarket : InteractableHouse
                 UI.Instance.DisplayMessage("SHOP CLOSED!");
             }
             ExteriorPopUI.gameObject.SetActive(true);
-            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera == null ? null : MyCamera?.GetComponent<CameraControls>());
+            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
             PopIcon.UIPopped(true);
         }
         else
@@ -51,7 +51,7 @@ public class InteractableMarket : InteractableHouse
             }
             TreasuryManager.Instance.SpendMoney(moddedPrice);
             InventoryManager.Instance.AddToInventory(item);
-            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera == null ? null : MyCamera?.GetComponent<CameraControls>());
+            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
         }
         else
         {

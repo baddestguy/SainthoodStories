@@ -23,7 +23,7 @@ public class InteractableChurch : InteractableHouse
 
     protected override void Start()
     {
-        PopUILocation = "UI/ChurchUI";
+        PopUILocation = "UI/ExternalUI";
         base.Start();
         UpdateLiturgyTimes();
         PopIcon.transform.localPosition += new Vector3 (0, 0.5f, 0);

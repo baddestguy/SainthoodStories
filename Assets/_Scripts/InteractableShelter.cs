@@ -12,7 +12,7 @@
         if (tile.GetInstanceID() == GetInstanceID())
         {
             ExteriorPopUI.gameObject.SetActive(true);
-            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, MyCamera == null ? null : MyCamera?.GetComponent<CameraControls>());
+            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
             PopIcon.UIPopped(true);
         }
         else
