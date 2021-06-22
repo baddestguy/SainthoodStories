@@ -196,7 +196,17 @@ public class InteractableHouse : InteractableObject
 
     protected virtual void TryZoom(float zoom)
     {
-        if (!CameraLockOnMe) return;
+        StartCoroutine("TryZoomAsync", zoom);
+    }
+
+    public static bool Zooming;
+    IEnumerator TryZoomAsync(float zoom) 
+    {
+        if (!CameraLockOnMe || Zooming)
+        {
+            yield break;
+        }
+        Zooming = true;
         SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
 
         if (zoom > 0) //Zoom in
@@ -217,6 +227,9 @@ public class InteractableHouse : InteractableObject
                 ExteriorPopUI.gameObject.SetActive(false);
             }
         }
+
+        yield return new WaitForSeconds(0.5f);
+        Zooming = false;
     }
 
     protected virtual BuildingMissionData GetBuildingMission(BuildingEventType bEvent)
