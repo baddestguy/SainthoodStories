@@ -196,6 +196,7 @@ public class InteractableHouse : InteractableObject
 
     protected virtual void TryZoom(float zoom)
     {
+        if (CustomEventPopup.IsDisplaying) return;
         StartCoroutine("TryZoomAsync", zoom);
     }
 
@@ -699,6 +700,7 @@ public class InteractableHouse : InteractableObject
             {
                 InteriorCam.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero, false);
                 InteriorCam.GetComponent<CameraControls>().SetZoomTarget(12f);
+                InteriorPopUI.gameObject.SetActive(false);
             }
             CameraLockOnMe = false;
             HouseUIActive = false;

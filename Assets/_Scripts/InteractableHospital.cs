@@ -25,7 +25,16 @@ public class InteractableHospital : InteractableHouse
 
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
+            if(BuildingState != BuildingState.RUBBLE)
+            {
+                StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
+            }
+            else
+            {
+                ExteriorPopUI.gameObject.SetActive(true);
+                ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
+                PopIcon.UIPopped(true);
+            }
         }
         else
         {

@@ -198,9 +198,9 @@ public class TutorialManager : MonoBehaviour
         {
             if (CurrentTutorialStep == 2)
             {
-                Player.LockMovement = true;
                 if (!TutorialStrings.Contains("Tutorial_Instruction_2"))
                 {
+                    Player.LockMovement = true;
                     UI.Instance.TutorialPopupOn("Tutorial_Instruction_2");
                     TutorialStrings.Add("Tutorial_Instruction_2");
                 }
@@ -240,19 +240,19 @@ public class TutorialManager : MonoBehaviour
                 return CurrentTutorialStep >= 14 && CurrentTutorialStep <= 17;
             case "BABY":
                 return false;
-            case "VOLUNTEER":
+            case "VOLUNTEER": 
+                return false;
             case "GROCERIES":
             case "CLOTHES":
             case "TOYS":
             case "STATIONERY":
             case "ENTER":
-                return false;
+                return true;
             case "MEDS":
                 return GameManager.Instance.Player.CurrentBuilding != null && ((GameManager.Instance.Player.CurrentBuilding.GetType() == typeof(InteractableMarket) && CurrentTutorialStep >= 8 && CurrentTutorialStep <= 9) ||
                     (GameManager.Instance.Player.CurrentBuilding.GetType() == typeof(InteractableHospital) && CurrentTutorialStep >= 10 && CurrentTutorialStep <= 11));
-            case "EXIT": 
-                return (CurrentTutorialStep >= 2 && CurrentTutorialStep < 6) ||
-                        (CurrentTutorialStep >= 8 && CurrentTutorialStep < 12);
+            case "EXIT":
+                return true;
         }
 
         return true;
