@@ -19704,7 +19704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cc8bf5677924e44b91cae91648c1dee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Loc_Key: Tooltip_EnterChurch
+  Loc_Key: Tooltip_EnterBuilding
   ButtonName: ENTER
   HouseName: Church
 --- !u!114 &4388680928915249406

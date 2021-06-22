@@ -16,6 +16,7 @@ public class ProvisionsPopup : MonoBehaviour
 
     public void Init(ProvisionData prov1, ProvisionData prov2)
     {
+        CustomEventPopup.IsDisplaying = true;
         Provision1 = prov1.Id;
         ProvisionName1.text = LocalizationManager.Instance.GetText(prov1.NameKey);
         ProvisionDescription1.text = LocalizationManager.Instance.GetText(prov1.DescriptionKey);
@@ -39,7 +40,7 @@ public class ProvisionsPopup : MonoBehaviour
                 InventoryManager.Instance.AddProvision(Provision2);
                 break;
         }
-
+        CustomEventPopup.IsDisplaying = false;
         gameObject.SetActive(false);
     }
 }

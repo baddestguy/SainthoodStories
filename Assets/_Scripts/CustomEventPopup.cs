@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CustomEventPopup : MonoBehaviour
 {
+    public static bool IsDisplaying;
+
     private bool PointerDown;
     public float ButtonTimer;
     private float ButtonTimerTarget;
@@ -35,6 +37,7 @@ public class CustomEventPopup : MonoBehaviour
 
     public void Setup(CustomEventData customEvent)
     {
+        IsDisplaying = true;
         ToolTipManager.Instance.ShowToolTip("");
         transform.DOJump(transform.position, 30f, 1, 1f);
         EventData = customEvent;
@@ -286,6 +289,7 @@ public class CustomEventPopup : MonoBehaviour
 
     private void OnDisable()
     {
+        IsDisplaying = false;
         ToolTipManager.Instance.ShowToolTip("");
         TooltipMouseOver.IsHovering = false;
         Hearts.gameObject.SetActive(false);

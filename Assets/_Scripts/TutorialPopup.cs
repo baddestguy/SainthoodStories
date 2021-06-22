@@ -11,7 +11,7 @@ public class TutorialPopup : MonoBehaviour
     {
         Player.LockMovement = true;
         Text.text = LocalizationManager.Instance.GetText(locKey);
-
+        CustomEventPopup.IsDisplaying = true;
         switch (locKey) 
         {
             case "Tutorial_Instruction_1":
@@ -65,6 +65,7 @@ public class TutorialPopup : MonoBehaviour
             return;
         }
 
+        CustomEventPopup.IsDisplaying = false;
         gameObject.SetActive(false);
         Player.LockMovement = false;
         UI.Instance.TutorialPopupOff();
