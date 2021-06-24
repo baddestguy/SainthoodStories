@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class CreditSequence : MonoBehaviour
 {
 
-    public TextMeshProUGUI Title;
+    public Image Title;
     public TextMeshProUGUI Creator;
     public TextMeshProUGUI Creator2;
     public TextMeshProUGUI Artist;
