@@ -60,9 +60,12 @@ public class GameManager : MonoBehaviour
         }
         else if (scene.name.Contains("MainMenu"))
         {
-            SaveData = SaveDataManager.Instance.LoadGame();
-            TutorialManager.Instance.CurrentTutorialStep = SaveData.TutorialSteps;
-            if (SaveData.TutorialSteps >= 20) GameSettings.Instance.FTUE = false;
+            SaveDataManager.Instance.LoadGame((data) => {
+                TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
+                if (data.TutorialSteps >= 20) GameSettings.Instance.FTUE = false;
+            }, true);
+            
+            
         }
     }
 
@@ -118,10 +121,13 @@ public class GameManager : MonoBehaviour
                     TutorialManager.Instance.CurrentTutorialStep = 0;
                     GameSettings.Instance.FTUE = true;
                 }
-                SaveData = SaveDataManager.Instance.LoadGame();
-                CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, 7, SaveData.Week);
-                SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
-                StartCoroutine(WaitAndLoadScene());
+                SaveDataManager.Instance.LoadGame((data) => {
+                    SaveData = data;
+                    CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, 7, SaveData.Week);
+                    SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
+                    StartCoroutine(WaitAndLoadScene());
+                });
+
                 break;
         }
 
@@ -131,9 +137,11 @@ public class GameManager : MonoBehaviour
     public void ReloadLevel()
     {
         SaveDataManager.Instance.SaveGame();
-        SaveData = SaveDataManager.Instance.LoadGame();
-        CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, 7, SaveData.Week);
-        StartCoroutine(WaitAndLoadScene());
+        SaveDataManager.Instance.LoadGame((data) => {
+            CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, 7, SaveData.Week);
+            StartCoroutine(WaitAndLoadScene());
+        }, true);
+        
     }
 
     private IEnumerator WaitAndLoadScene()
