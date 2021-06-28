@@ -465,7 +465,6 @@ public class InteractableHouse : InteractableObject
             BuildingCompleteDialog();
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             UpdateCharityPoints(8, moddedEnergy);
-            SaveDataManager.Instance.SaveGame();
         }
         else
         {
@@ -801,8 +800,6 @@ public class InteractableHouse : InteractableObject
         RelationshipPoints += Mathf.Clamp(amount, 0, 100);
         RelationshipReward(thanks);
         SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
-        if(!GameSettings.Instance.FTUE)
-            SaveDataManager.Instance.SaveGame();
     }
 
     public virtual void RelationshipReward(ThankYouType thanks)

@@ -125,9 +125,10 @@ public class GameManager : MonoBehaviour
                     SaveData = data;
                     CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, 7, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
+                    if(newGame) SaveDataManager.Instance.SaveGame();
                     StartCoroutine(WaitAndLoadScene());
                 });
-
+                
                 break;
         }
 
@@ -136,9 +137,8 @@ public class GameManager : MonoBehaviour
 
     public void ReloadLevel()
     {
-        SaveDataManager.Instance.SaveGame();
         SaveDataManager.Instance.LoadGame((data) => {
-            CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, 7, SaveData.Week);
+            CurrentMission = new Mission(data.FP, data.CP, data.Energy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene());
         }, true);
         
