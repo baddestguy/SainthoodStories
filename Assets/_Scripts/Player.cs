@@ -157,7 +157,7 @@ public class Player : MonoBehaviour
         EnergyConsumption = ModifyEnergyConsumption(newTile);
         if (Energy.Depleted(EnergyConsumption) && !(newTile is InteractableHouse) && WeCanMove(newTile)) //Reset if out of energy & not in a building
         {
-            StartCoroutine(ResetPlayerOnEnergyDepletedAsync());
+            ResetPlayerOnEnergyDepletedAsync();
         }
         else if (newTile is InteractableObject)
         {
@@ -203,32 +203,16 @@ public class Player : MonoBehaviour
         }
     }
 
-    IEnumerator ResetPlayerOnEnergyDepletedAsync()
+    private void ResetPlayerOnEnergyDepletedAsync()
     {
-        StatusEffect = PlayerStatusEffect.FATIGUED;
+      //  StatusEffect = PlayerStatusEffect.FATIGUED;
         UI.Instance.CrossFade(1f);
 
-        //Reload previous checkpoint if still in tutorial week
-        if(MissionManager.Instance.CurrentMission.CurrentWeek == 1)
-        {
-            SoundManager.Instance.EndAllTracks();
-            OnEnergyDepleted = true;
-            Energy.Consume(-20);
-            GameManager.Instance.ReloadLevel();
-            yield break;
-        }
-
-        EventsManager.Instance.AddEventToList(CustomEventType.ENERGY_DEPLETED);
-        yield return new WaitForSeconds(1f);
-
-        UI.Instance.EnableCurrentUI(false);
-        Energy.Consume(-20);
-        OnInteract(StartTile, false);
-        GameManager.Instance.GameClock.Reset();
+        SoundManager.Instance.EndAllTracks();
+        OnEnergyDepleted = true;
         WeatherManager.Instance.ResetWeather();
-
-        yield return new WaitForSeconds(1f);
-        UI.Instance.CrossFade(0f);
+        EventsManager.Instance.AddEventToList(CustomEventType.ENERGY_DEPLETED);
+        GameManager.Instance.ReloadLevel();
     }
 
     public int ModifyEnergyConsumption(MapTile tile = null, bool tooltip = false, int amount = 1)

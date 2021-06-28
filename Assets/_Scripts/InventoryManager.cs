@@ -40,7 +40,6 @@ public class InventoryManager : MonoBehaviour
         }
         Items.Add(item);
         RefreshInventoryUI?.Invoke();
-        SaveDataManager.Instance.SaveGame();
     }
 
     public void AddProvision(Provision provision)
@@ -65,7 +64,6 @@ public class InventoryManager : MonoBehaviour
         }
 
         RefreshInventoryUI?.Invoke();
-        SaveDataManager.Instance.SaveGame();
     }
 
     public void ClearProvisions()

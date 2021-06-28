@@ -49,8 +49,6 @@ public class SaveDataManager : MonoBehaviour
 
     public void SaveGame()
     {
-        if (GameSettings.Instance.FTUE) return;
-
         if (!FileExixst(FILENAME))
         {
            //Beter just do a direct save than looking for what do not exist...
@@ -149,7 +147,7 @@ public class SaveDataManager : MonoBehaviour
     public void FirstSave()
     {
         //InitialDataSaving
-        SaveObject save = CurrentSaveData();
+        SaveObject save = NewGameData();
         SaveObject[] saveObjects = new SaveObject[1] { save };
 
         Save(saveObjects);
@@ -182,7 +180,10 @@ public class SaveDataManager : MonoBehaviour
         
         if (IsNewWeek(keyVal.Values.ToArray(), saveObject))
         {
-            FirstSave();
+            SaveObject save = CurrentSaveData();
+            SaveObject[] saves = new SaveObject[1] { save };
+
+            Save(saves);
             return;
         }
 

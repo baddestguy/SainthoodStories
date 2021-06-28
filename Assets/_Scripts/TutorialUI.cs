@@ -33,7 +33,6 @@ public class TutorialUI : MonoBehaviour
 
         if (GameSettings.Instance.FTUE)
         {
-            print("Here");
             if(Threshold > -1)
             {
                 if(TutorialManager.Instance.CurrentTutorialStep >= Threshold)

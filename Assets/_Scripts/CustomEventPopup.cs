@@ -142,7 +142,6 @@ public class CustomEventPopup : MonoBehaviour
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("ActionButton", 0.5f, 5f);
-        SaveDataManager.Instance.SaveGame();
     }
 
     public void No()
@@ -163,7 +162,6 @@ public class CustomEventPopup : MonoBehaviour
         gameObject.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("Button");
         SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
-        SaveDataManager.Instance.SaveGame();
     }
 
     public void OK()

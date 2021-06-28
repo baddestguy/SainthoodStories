@@ -219,7 +219,6 @@ public class TutorialManager : MonoBehaviour
             if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 20)
             {
                 GameSettings.Instance.FTUE = false;
-                SaveDataManager.Instance.SaveGame();
             }
         }
     }
