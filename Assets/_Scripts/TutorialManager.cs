@@ -19,6 +19,12 @@ public class TutorialManager : MonoBehaviour
         EventsManager.EventDialogTriggered += FinishedTalking;
     }
 
+    public void OnOveride()
+    {
+        CurrentTutorialStep = int.MaxValue;
+        GameSettings.Instance.FTUE = false;
+    }
+
     public List<MapTile> GetTutorialMapTiles()
     {
         switch (CurrentTutorialStep)

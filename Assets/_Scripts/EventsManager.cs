@@ -15,6 +15,8 @@ public class EventsManager : MonoBehaviour
     public List<CustomEventData> CurrentEvents = new List<CustomEventData>();
     public bool EventInProgress;
 
+    private Coroutine eventRoutine;
+
     private void Awake()
     {
         Instance = this;
@@ -72,7 +74,7 @@ public class EventsManager : MonoBehaviour
 
         if (EventInProgress) yield break; //If something else has started an event, break out early.
 
-        StartCoroutine(ExecuteStoryEventsAsync());
+        eventRoutine = StartCoroutine(ExecuteStoryEventsAsync());
     }
 
     public void TryEventTrigger(double time, int day)
@@ -149,6 +151,15 @@ public class EventsManager : MonoBehaviour
     public bool HasEventsInQueue()
     {
         return EventList.Count > 0 || StoryEvents.Count > 0;
+    }
+
+    public void OnOveride()
+    {
+        StopAllCoroutines();
+        StoryEvents.Clear();
+        EventInProgress = false;
+        Player.LockMovement = false;
+        EventDialogTriggered?.Invoke(false);
     }
 
     private void OnDisable()

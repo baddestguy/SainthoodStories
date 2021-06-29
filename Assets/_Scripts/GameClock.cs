@@ -180,6 +180,13 @@ public class GameClock
         return Day == gameClock2.Day && Time == gameClock2.Time;
     }
 
+    public void OnOveride(int DayOverride, double TimeOverride)
+    {
+        SetClock(TimeOverride, DayOverride);
+        Ping();
+        StartNewDay?.Invoke();
+    }
+
     public override int GetHashCode()
     {
         unchecked

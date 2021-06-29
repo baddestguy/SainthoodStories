@@ -22,4 +22,10 @@ public class Energy
     {
         return (Amount-consumption) <= 0;
     }
+
+    public void OnOveride(int amount)
+    {
+        Amount = amount;
+        EnergyConsumed?.Invoke(this);
+    }
 }

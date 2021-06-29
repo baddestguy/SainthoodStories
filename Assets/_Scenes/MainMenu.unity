@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4174072, g: 0.032133386, b: 0.0014398163, a: 1}
+  m_IndirectSpecularColor: {r: 0.0074550174, g: 0.00501515, b: 0.0027011826, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -8612,7 +8612,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -0.000078586, y: -0}
-  m_SizeDelta: {x: 390.86987, y: 16}
+  m_SizeDelta: {x: 519.47266, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &180109552
 MonoBehaviour:
@@ -17284,9 +17284,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Back
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 0}
-  m_sharedMaterial: {fileID: 3214646044777335136, guid: df49fcd2ae7655144ba07f397d78bc58,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -17352,7 +17351,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 8.0100565}
   m_textInfo:
     textComponent: {fileID: 373391992}
-    characterCount: 6
+    characterCount: 4
     spriteCount: 0
     spaceCount: 0
     wordCount: 1
@@ -86106,7 +86105,7 @@ PrefabInstance:
     - target: {fileID: 6587978024871717985, guid: b7eec8345ec337b4dba1fa7dac88ddcb,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 390.86972
+      value: 478.717
       objectReference: {fileID: 0}
     - target: {fileID: 6587978024871717985, guid: b7eec8345ec337b4dba1fa7dac88ddcb,
         type: 3}
@@ -86151,7 +86150,7 @@ PrefabInstance:
     - target: {fileID: 6587978024871717985, guid: b7eec8345ec337b4dba1fa7dac88ddcb,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 195.43494
+      value: 259.73633
       objectReference: {fileID: 0}
     - target: {fileID: 6587978024871717985, guid: b7eec8345ec337b4dba1fa7dac88ddcb,
         type: 3}

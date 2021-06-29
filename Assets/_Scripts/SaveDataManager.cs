@@ -59,42 +59,6 @@ public class SaveDataManager : MonoBehaviour
             DoSequentialSave();
         }
 
-        /*
-        SaveObject save = new SaveObject()
-        {
-            FP = MissionManager.Instance.FaithPoints,
-            CP = MissionManager.Instance.CharityPoints,
-            Energy = GameManager.Instance.Player.GetEnergyAmount(),
-            Week = MissionManager.Instance.CurrentMission.CurrentWeek,
-            Day = GameManager.Instance.GameClock.Day,
-            Time = GameManager.Instance.GameClock.Time,
-            TutorialSteps = TutorialManager.Instance.CurrentTutorialStep,
-            Money = TreasuryManager.Instance.Money,
-            HospitalRelationshipPoints = FindObjectOfType<InteractableHospital>().RelationshipPoints,
-            SchoolRelationshipPoints = FindObjectOfType<InteractableSchool>().RelationshipPoints,
-            OrphanageRelationshipPoints = FindObjectOfType<InteractableOrphanage>().RelationshipPoints,
-            ShelterRelationshipPoints = FindObjectOfType<InteractableShelter>().RelationshipPoints,
-            ClothesRelationshipPoints = FindObjectOfType<InteractableClothesBank>().RelationshipPoints,
-            HospitalBuildingState = FindObjectOfType<InteractableHospital>().BuildingState,
-            SchoolBuildingState = FindObjectOfType<InteractableSchool>().BuildingState,
-            OrphanageBuildingState = FindObjectOfType<InteractableOrphanage>().BuildingState,
-            ShelterBuildingState = FindObjectOfType<InteractableShelter>().BuildingState,
-            ClothesBuildingState = FindObjectOfType<InteractableClothesBank>().BuildingState,
-            KitchenBuildingState = FindObjectOfType<InteractableKitchen>().BuildingState,
-            Saints = SaintsManager.Instance.UnlockedSaints.Select(s => s.Id).ToArray(),
-            InventoryItems = InventoryManager.Instance.Items.ToArray(),
-            Provisions = InventoryManager.Instance.Provisions.ToArray()
-        };
-
-        
-
-
-        BinaryFormatter bf = new BinaryFormatter();
-        //File.Open("", FileMode.OpenOrCreate);
-        FileStream file = File.Create(Application.persistentDataPath + $"/Sainthood.save");
-        bf.Serialize(file, save);
-        file.Close();
-        */
         Debug.Log("SAVED!");
     }
 
@@ -229,7 +193,7 @@ public class SaveDataManager : MonoBehaviour
         }
         catch(Exception e)
         {
-            Debug.LogError("Error " + e.Message);
+            //Debug.LogError("Error " + e.Message);
             return null;
 
         }
@@ -323,7 +287,14 @@ public class SaveDataManager : MonoBehaviour
         }
     }
 
-
+    private void CheckOveride(ref SaveObject saveObject)
+    {
+        if (OverrideClock)
+        {
+            saveObject.Day = DayOverride;
+            saveObject.Time = TimeOverride;
+        }
+    }
 
 
     public void DeleteSave()

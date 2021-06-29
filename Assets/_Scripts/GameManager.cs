@@ -57,6 +57,10 @@ public class GameManager : MonoBehaviour
             TreasuryManager.Instance.Money = SaveData.Money;
             SaintsManager.Instance.LoadSaints(SaveData.Saints);
             InventoryManager.Instance.LoadInventory(SaveData);
+            //if (PersistentObjects.instance.developerMode)
+            //{
+            //    SceneManager.LoadScene("DeveloperScene", LoadSceneMode.Additive);
+            //}
         }
         else if (scene.name.Contains("MainMenu"))
         {
@@ -128,7 +132,6 @@ public class GameManager : MonoBehaviour
                     if(newGame) SaveDataManager.Instance.SaveGame();
                     StartCoroutine(WaitAndLoadScene());
                 });
-                
                 break;
         }
 
@@ -137,6 +140,7 @@ public class GameManager : MonoBehaviour
 
     public void ReloadLevel()
     {
+
         SaveDataManager.Instance.LoadGame((data) => {
             CurrentMission = new Mission(data.FP, data.CP, data.Energy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene());

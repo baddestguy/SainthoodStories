@@ -26,15 +26,17 @@ public class SavedDataUiHandler : MonoBehaviour
         UIs = new List<GameObject>();
         for (int i = 0; i < data.Length; i++)
         {
-            GameObject ui = Instantiate(laodDataUiitemPrefab, contentHolder);
+            LoadDataUiItem ui = Instantiate(laodDataUiitemPrefab, contentHolder).GetComponent<LoadDataUiItem>();
             SaveObject saveObject = data[i];
-            ui.GetComponentInChildren<Button>().onClick.AddListener(
-                delegate {
-                    callback?.Invoke(saveObject); 
-                    print((Days)saveObject.Day);
-            });
-            GetTextObject(ui.transform).text = ((Days)saveObject.Day).ToString();
-            UIs.Add(ui);
+            print(saveObject == null);
+            ui.SetUp(saveObject, callback);
+            //ui.GetComponentInChildren<Button>().onClick.AddListener(
+            //    delegate {
+            //        callback?.Invoke(saveObject); 
+            //        print((Days)saveObject.Day);
+            //});
+            //GetTextObject(ui.transform).text = ((Days)saveObject.Day).ToString();
+            UIs.Add(ui.gameObject);
         }
         
     }

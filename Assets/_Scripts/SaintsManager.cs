@@ -14,13 +14,18 @@ public class SaintsManager : MonoBehaviour
 
     public void UnlockSaint()
     {
+
+        
         if (UnlockedSaints.Count >= 3) return;
+        //NOTE: posibility of a bug here, can crash game.. 
+        //===============>>>>>>
         SaintData saint;
         do
         {
             saint = GameDataManager.Instance.Saints[(SaintID)Random.Range(0, GameDataManager.Instance.Saints.Count)];
         }
         while (UnlockedSaints.Contains(saint));
+        //===============>>>>>>
 
         UnlockedSaints.Add(saint);
         NewSaint = saint;
@@ -34,6 +39,16 @@ public class SaintsManager : MonoBehaviour
         foreach(var saintID in saintIDs)
         {
             UnlockedSaints.Add(GameDataManager.Instance.Saints[saintID]);
+        }
+    }
+
+    public void OnOverride(SaintID newSaints)
+    {
+        SaintData saint = GameDataManager.Instance.Saints[(SaintID)Random.Range(0, GameDataManager.Instance.Saints.Count)];
+        if (!UnlockedSaints.Contains(saint))
+        {
+            UnlockedSaints.Add(saint);
+            NewSaint = saint;
         }
     }
 }
