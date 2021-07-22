@@ -132,6 +132,21 @@ public class InventoryManager : MonoBehaviour
         return Provisions.Contains(provision);
     }
 
+    public void OnInventoryOverride(bool add, ItemType itemType)
+    {
+        if (itemType == ItemType.NONE) return;
+        if (add)
+            AddToInventory(itemType);
+        else
+            GetItem(itemType);
+        
+    }
+
+    public void OnProvisionsOverride(Provision provision)
+    {
+        AddProvision(provision);
+    }
+
     private void OnDisable()
     {
         GameClock.StartNewDay -= GenerateProvisionsForNewDay;

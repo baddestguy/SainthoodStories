@@ -135,4 +135,14 @@ public class MissionManager : MonoBehaviour
     {
         GameClock.StartNewDay -= NewDay;
     }
+
+    public void OverideCP(int cp)
+    {
+        CharityPoints = cp;
+    }
+
+    public void OverideFP(int fp)
+    {
+        FaithPoints = fp;
+    }
 }

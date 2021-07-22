@@ -178,6 +178,7 @@ public class CustomEventPopup : MonoBehaviour
 
     public void Continue()
     {
+        
         if (DOTween.IsTweening(EventText, true))
         {
             DOTween.Complete(EventText);
@@ -283,6 +284,12 @@ public class CustomEventPopup : MonoBehaviour
         }
 
         return house ==  null || house.InteriorCam == null ? null : house.InteriorCam.GetComponent<CameraControls>();
+    }
+
+    public void OnOveride()
+    {
+        EventsManager.Instance.EventInProgress = false;
+        gameObject.SetActive(false);
     }
 
     private void OnDisable()

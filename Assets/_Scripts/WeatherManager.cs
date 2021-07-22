@@ -134,6 +134,11 @@ public class WeatherManager : MonoBehaviour
         WeatherActivation(futureStartTime, futureEndTime);
     }
 
+    public void OnOverride(WeatherType weatherType, int futureStartTime, int futureEndTime)
+    {
+        WeatherActivation(futureStartTime, futureEndTime);
+    }
+
     private void SetWeather(double time)
     {
         if (time >= 21 || time < 6)

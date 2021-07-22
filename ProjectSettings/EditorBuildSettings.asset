@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Levels/NormalLevelAjust.unity
     guid: 76769121d2cdec945ab1a8c8d7b3bf4c
+  - enabled: 1
+    path: Assets/_Scenes/DeveloperScene.unity
+    guid: 752eb805ac0e0584198a13b46f033784
   m_configObjects: {}
