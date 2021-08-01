@@ -2,7 +2,7 @@
 {
     protected override void Start()
     {
-        PopUILocation = "UI/ClothesBankUI";
+        PopUILocation = "UI/ExternalUI";
         base.Start();
     }
 
@@ -11,9 +11,16 @@
         base.OnPlayerMoved(energy, tile);
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            ExteriorPopUI.gameObject.SetActive(true);
-            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
-            PopIcon.UIPopped(true);
+            if (BuildingState != BuildingState.RUBBLE)
+            {
+                StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
+            }
+            else
+            {
+                ExteriorPopUI.gameObject.SetActive(true);
+                ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
+                PopIcon.UIPopped(true);
+            }
         }
         else
         {

@@ -6,7 +6,7 @@ public class InteractableMarket : InteractableHouse
 {
     protected override void Start()
     {
-        PopUILocation = "UI/MarketUI";
+        PopUILocation = "UI/ExternalUI";
         base.Start();
         BuildPoints = 4;
     }
@@ -17,16 +17,16 @@ public class InteractableMarket : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            if (clock.Time >= OpenTime && clock.Time < ClosingTime)
+            if (BuildingState != BuildingState.RUBBLE)
             {
+                StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
             }
             else
             {
-                UI.Instance.DisplayMessage("SHOP CLOSED!");
+                ExteriorPopUI.gameObject.SetActive(true);
+                ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
+                PopIcon.UIPopped(true);
             }
-            ExteriorPopUI.gameObject.SetActive(true);
-            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
-            PopIcon.UIPopped(true);
         }
         else
         {
@@ -66,6 +66,10 @@ public class InteractableMarket : InteractableHouse
         if (button == "PRAY")
         {
             UI.Meditate?.Invoke(this);
+            return;
+        }
+        if (button == "EXIT" || button == "ENTER")
+        {
             return;
         }
 
@@ -121,6 +125,10 @@ public class InteractableMarket : InteractableHouse
         switch (actionName)
         {
             case "PRAY":
+                return base.CanDoAction(actionName);
+            case "EXIT":
+                return base.CanDoAction(actionName);
+            case "ENTER":
                 return base.CanDoAction(actionName);
         }
 
