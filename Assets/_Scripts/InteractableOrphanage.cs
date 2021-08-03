@@ -6,7 +6,7 @@ public class InteractableOrphanage : InteractableHouse
 
     protected override void Start()
     {
-        PopUILocation = "UI/OrphanageUI";
+        PopUILocation = "UI/ExternalUI";
         base.Start();
     }
 
@@ -15,9 +15,16 @@ public class InteractableOrphanage : InteractableHouse
         base.OnPlayerMoved(energy, tile);
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            ExteriorPopUI.gameObject.SetActive(true);
-            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
-            PopIcon.UIPopped(true);
+            if (BuildingState != BuildingState.RUBBLE)
+            {
+                StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
+            }
+            else
+            {
+                ExteriorPopUI.gameObject.SetActive(true);
+                ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
+                PopIcon.UIPopped(true);
+            }
         }
         else
         {

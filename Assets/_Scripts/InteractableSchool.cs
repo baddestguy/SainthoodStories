@@ -7,7 +7,7 @@ public class InteractableSchool : InteractableHouse
 
     protected override void Start()
     {
-        PopUILocation = "UI/SchoolUI";
+        PopUILocation = "UI/ExternalUI";
         base.Start();
     }
 
@@ -17,16 +17,16 @@ public class InteractableSchool : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            if (clock.Time >= OpenTime && clock.Time < ClosingTime)
+            if (BuildingState != BuildingState.RUBBLE)
             {
+                StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
             }
             else
             {
-                UI.Instance.DisplayMessage("SCHOOL CLOSED!");
+                ExteriorPopUI.gameObject.SetActive(true);
+                ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
+                PopIcon.UIPopped(true);
             }
-            ExteriorPopUI.gameObject.SetActive(true);
-            ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
-            PopIcon.UIPopped(true);
         }
         else
         {
