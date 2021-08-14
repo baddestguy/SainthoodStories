@@ -7,23 +7,51 @@ using UnityEngine.UI;
 
 public class SavedDataUiHandler : MonoBehaviour
 {
-    public GameObject MainMenuPanel;
+
+    public static SavedDataUiHandler instance;
+
+    //public GameObject MainMenuPanel;
     public GameObject loadUiItemPanel;
     public Transform contentHolder;
     public GameObject laodDataUiitemPrefab;
+    public Button backButton;
+    public TextMeshProUGUI backBtnText;
 
     private List<GameObject> UIs = new List<GameObject>();
 
-    private void Start()
+    public Action<bool> OnUiOpen;
+
+
+    private void Awake()
     {
-        SaveDataManager.Instance.savedDataUiHandler = this;
+        instance = this;
     }
 
-    public void Pupulate(SaveObject[] data, Action<SaveObject> callback)
+    public void Pupulate(SaveObject[] data, Action<SaveObject> callback, bool ingameLoading)
     {
-        MainMenuPanel.SetActive(false);
+        //MainMenuPanel.SetActive(false);
+        OnUiOpen?.Invoke(true);
+        try
+        {
+            UI.Instance.PanelToActivateOnLoadUiEvent.SetActive(false);
+        }
+        catch { }
         loadUiItemPanel.SetActive(true);
         UIs = new List<GameObject>();
+        if (ingameLoading)
+        {
+            backButton.onClick.RemoveAllListeners();
+            backButton.onClick.AddListener(() => callback?.Invoke(null));
+            backBtnText.text = "New Game";
+        }
+        else
+        {
+            backButton.onClick.RemoveAllListeners();
+            backButton.onClick.AddListener(Back);
+            backBtnText.text = "Back";
+        }
+
+
         for (int i = 0; i < data.Length; i++)
         {
             LoadDataUiItem ui = Instantiate(laodDataUiitemPrefab, contentHolder).GetComponent<LoadDataUiItem>();
@@ -38,7 +66,7 @@ public class SavedDataUiHandler : MonoBehaviour
             //GetTextObject(ui.transform).text = ((Days)saveObject.Day).ToString();
             UIs.Add(ui.gameObject);
         }
-        
+
     }
 
 
@@ -61,14 +89,20 @@ public class SavedDataUiHandler : MonoBehaviour
         {
             Destroy(UIs[i]);
         }
-        MainMenuPanel.SetActive(true);
+        //MainMenuPanel.SetActive(true);
+        try
+        {
+            UI.Instance.PanelToActivateOnLoadUiEvent.SetActive(true);
+        }
+        catch { }
+        Close();
+    }
+
+    public void Close()
+    {
+        OnUiOpen?.Invoke(false);
         loadUiItemPanel.SetActive(false);
     }
 
-    private void Close()
-    {
 
-    }
-
-    
 }

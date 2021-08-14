@@ -63,6 +63,8 @@ public class UI : MonoBehaviour
 
     public GameObject SaintCard;
 
+    public GameObject PanelToActivateOnLoadUiEvent;
+
     [Header("Ui Clicked Reporters")]
     public GraphicRaycaster[] graphicRaycaster;
     public EventSystem m_EventSystem;

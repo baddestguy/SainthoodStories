@@ -169,7 +169,7 @@ public class SaveDataManager : MonoBehaviour
         
     }
 
-    private void Save(SaveObject[] data)
+    private void Save(params SaveObject[] data)
     {
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(GetPath(FILENAME));
@@ -246,44 +246,56 @@ public class SaveDataManager : MonoBehaviour
     /// Load the game data 
     /// </summary>
     /// <param name="callback"></param>
-    public void LoadGame(Action<SaveObject> callback , bool lastDay = false)
+    public void LoadGame(Action<SaveObject, bool> callback , bool lastDay = false, bool ingameLoading = false)
     {
         if (Directory.Exists(Application.persistentDataPath))
         {
             Dictionary<Days, SaveObject> keyVal = GetSavedDataSet();
 
-            if(keyVal == null)
+            if (keyVal == null)
             {
-                callback?.Invoke(NewGameData());
+
+                callback?.Invoke(NewGameData(), true);
                 return;
             }
 
             SaveObject[] saveObjects = keyVal.Values.ToArray();
-            if(saveObjects == null || saveObjects.Length <= 0)
+            if (saveObjects == null || saveObjects.Length <= 0)
             {
-                callback?.Invoke(NewGameData());
+                callback?.Invoke(NewGameData(), true);
                 return;
             }
 
             if (lastDay)
             {
                 SaveObject data = saveObjects.OrderBy(x => x.Day).LastOrDefault();
-                callback?.Invoke(data);
+                callback?.Invoke(data, false);
                 return;
             }
 
-            savedDataUiHandler.Pupulate(saveObjects, (data) => {
-
-                Dictionary<Days, SaveObject> set = GetSavedDataSet();
-                SaveObject[] newData = set.Where(x => ((int)x.Key) <= data.Day).Select(x => x.Value).ToArray();
-                Save(newData);
-
-                callback?.Invoke(data);
-            });
+            SavedDataUiHandler.instance.Pupulate(saveObjects, (data) => {
+                bool newGame = false;
+                if (data == null)
+                {
+                    data = NewGameData();
+                    Save(data);
+                    newGame = true;
+                }
+                else
+                {
+                    Dictionary<Days, SaveObject> set = GetSavedDataSet();
+                    SaveObject[] newData = set.Where(x => ((int)x.Key) <= data.Day).Select(x => x.Value).ToArray();
+                    Save(newData);
+                }
+                //callback return
+                //CheckOveride(ref data);
+                callback?.Invoke(data, newGame);
+                SavedDataUiHandler.instance.Close();
+            }, ingameLoading);
         }
         else
         {
-            callback?.Invoke(NewGameData());
+            callback?.Invoke(NewGameData(), true);
         }
     }
 

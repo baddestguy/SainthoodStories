@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     public Mission CurrentMission;
     public InteractableHouse CurrentHouse;
+    private Scene activeScene;
 
     private void Awake()
     {
@@ -35,8 +36,23 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
+    private void LoadSavedDataHandlerScene()
+    {
+
+        Scene scene = SceneManager.GetSceneByName("WeekDaysUI");
+        if (!scene.isLoaded)
+        {
+            SceneManager.LoadScene("WeekDaysUI", LoadSceneMode.Additive);
+        }
+    }
+
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
+
+        LoadSavedDataHandlerScene();
+        if (loadSceneMode == LoadSceneMode.Single)
+            activeScene = scene;
+
         if (scene.name.Contains("Level"))
         {
             MissionManager.MissionOver = false;
@@ -64,12 +80,12 @@ public class GameManager : MonoBehaviour
         }
         else if (scene.name.Contains("MainMenu"))
         {
-            SaveDataManager.Instance.LoadGame((data) => {
+            SaveDataManager.Instance.LoadGame((data, newGame) => {
                 TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                 if (data.TutorialSteps >= 20) GameSettings.Instance.FTUE = false;
             }, true);
-            
-            
+
+
         }
     }
 
@@ -119,19 +135,21 @@ public class GameManager : MonoBehaviour
             //    SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
             //    break;
             case MissionDifficulty.HARD:
-                if (newGame)
-                {
-                    SaveDataManager.Instance.DeleteSave();
-                    TutorialManager.Instance.CurrentTutorialStep = 0;
-                    GameSettings.Instance.FTUE = true;
-                }
-                SaveDataManager.Instance.LoadGame((data) => {
+                SaveDataManager.Instance.LoadGame((data, aNewGame) => {
+
+                    if (newGame || aNewGame)
+                    {
+                        SaveDataManager.Instance.DeleteSave();
+                        TutorialManager.Instance.CurrentTutorialStep = 0;
+                        GameSettings.Instance.FTUE = true;
+                    }
+
                     SaveData = data;
-                    CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, 7, SaveData.Week);
+                    CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
-                    if(newGame) SaveDataManager.Instance.SaveGame();
+                    //if(newGame) SaveDataManager.Instance.SaveGame();
                     StartCoroutine(WaitAndLoadScene());
-                });
+                }, false, !activeScene.name.Contains("MainMenu"));
                 break;
         }
 
@@ -141,11 +159,11 @@ public class GameManager : MonoBehaviour
     public void ReloadLevel()
     {
 
-        SaveDataManager.Instance.LoadGame((data) => {
+        SaveDataManager.Instance.LoadGame((data, newGame) => {
             CurrentMission = new Mission(data.FP, data.CP, data.Energy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene());
         }, true);
-        
+
     }
 
     private IEnumerator WaitAndLoadScene()
