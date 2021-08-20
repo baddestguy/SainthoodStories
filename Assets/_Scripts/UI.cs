@@ -482,6 +482,7 @@ public class UI : MonoBehaviour
 
     public void HardRun(bool newGame)
     {
+        
         GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, newGame);
     }
 

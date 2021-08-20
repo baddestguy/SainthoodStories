@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
             SaveDataManager.Instance.LoadGame((data, newGame) => {
                 TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                 if (data.TutorialSteps >= 20) GameSettings.Instance.FTUE = false;
-            }, true);
+            },false, true);
 
 
         }
@@ -135,9 +135,10 @@ public class GameManager : MonoBehaviour
             //    SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
             //    break;
             case MissionDifficulty.HARD:
+                
                 SaveDataManager.Instance.LoadGame((data, aNewGame) => {
-
-                    if (newGame || aNewGame)
+                    
+                    if (aNewGame)
                     {
                         SaveDataManager.Instance.DeleteSave();
                         TutorialManager.Instance.CurrentTutorialStep = 0;
@@ -149,7 +150,7 @@ public class GameManager : MonoBehaviour
                     SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
                     //if(newGame) SaveDataManager.Instance.SaveGame();
                     StartCoroutine(WaitAndLoadScene());
-                }, false, !activeScene.name.Contains("MainMenu"));
+                }, newGame, false, !activeScene.name.Contains("MainMenu"));
                 break;
         }
 
@@ -162,7 +163,7 @@ public class GameManager : MonoBehaviour
         SaveDataManager.Instance.LoadGame((data, newGame) => {
             CurrentMission = new Mission(data.FP, data.CP, data.Energy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene());
-        }, true);
+        },false, true);
 
     }
 

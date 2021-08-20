@@ -56,7 +56,7 @@ public class SavedDataUiHandler : MonoBehaviour
         {
             LoadDataUiItem ui = Instantiate(laodDataUiitemPrefab, contentHolder).GetComponent<LoadDataUiItem>();
             SaveObject saveObject = data[i];
-            print(saveObject == null);
+            //print(saveObject == null);
             ui.SetUp(saveObject, callback);
             //ui.GetComponentInChildren<Button>().onClick.AddListener(
             //    delegate {

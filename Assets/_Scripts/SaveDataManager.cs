@@ -246,13 +246,13 @@ public class SaveDataManager : MonoBehaviour
     /// Load the game data 
     /// </summary>
     /// <param name="callback"></param>
-    public void LoadGame(Action<SaveObject, bool> callback , bool lastDay = false, bool ingameLoading = false)
+    public void LoadGame(Action<SaveObject, bool> callback , bool newGame ,bool lastDay = false, bool ingameLoading = false)
     {
         if (Directory.Exists(Application.persistentDataPath))
         {
             Dictionary<Days, SaveObject> keyVal = GetSavedDataSet();
 
-            if (keyVal == null)
+            if (keyVal == null || newGame)
             {
 
                 callback?.Invoke(NewGameData(), true);
@@ -274,7 +274,7 @@ public class SaveDataManager : MonoBehaviour
             }
 
             SavedDataUiHandler.instance.Pupulate(saveObjects, (data) => {
-                bool newGame = false;
+                
                 if (data == null)
                 {
                     data = NewGameData();
@@ -311,8 +311,10 @@ public class SaveDataManager : MonoBehaviour
 
     public void DeleteSave()
     {
+        Debug.Log("Hit");
         if (File.Exists(Application.persistentDataPath + "/Sainthood.save"))
         {
+            Debug.Log("Remove");
             File.Delete(Application.persistentDataPath + "/Sainthood.save");
         }
     }
