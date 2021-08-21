@@ -44,6 +44,7 @@ public class CustomEventPopup : MonoBehaviour
         YesNoGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         IconsGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         OKGO.SetActive(customEvent.EventPopupType == EventPopupType.OK);
+        NextGO.SetActive(!OKGO.activeSelf);
         CameraControls = GetCameraControl();
 
         switch (customEvent.EventPopupType)
