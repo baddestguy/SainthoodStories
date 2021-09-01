@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/WeekDaysUI.unity
     guid: c22b46c7f5e5909469d304371c467235
+  - enabled: 1
+    path: Assets/_Scenes/PauseMenu.unity
+    guid: 4cbe09fffdd709b4f84bafc5be7ee98e
   m_configObjects: {}
