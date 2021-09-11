@@ -60,6 +60,7 @@ public class GameClock
         Time += 0.5;
         if(Time > 23.5)
         {
+            SaveDataManager.Instance.SaveGame();
             Day++;
             Time = 0;
             EndofDay = true;
