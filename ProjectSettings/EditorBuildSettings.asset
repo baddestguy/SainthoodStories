@@ -35,4 +35,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/PauseMenu.unity
     guid: 4cbe09fffdd709b4f84bafc5be7ee98e
+  - enabled: 1
+    path: Assets/_Scenes/SaintsShowcase_Day.unity
+    guid: c536db3534ec8394ea5714f10c34b2d3
   m_configObjects: {}

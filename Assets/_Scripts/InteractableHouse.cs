@@ -730,6 +730,7 @@ public class InteractableHouse : InteractableObject
         if (!DuringOpenHours()) return;
         if (EventsManager.Instance.CurrentEvents.Count > 3) return;
         if (UI.Instance.WeekBeginCrossFade) return;
+        if (GameManager.Instance.PreviousSceneID == SceneID.SaintsShowcase_Day) return;
 
         if (Random.Range(0, 100) < 50)
         {
@@ -885,6 +886,7 @@ public class InteractableHouse : InteractableObject
             case "SLEEP": return true;
             case "EXIT": return true;
             case "ENTER": return true;
+            case "SAINTS": return true;
         }
 
         return false;

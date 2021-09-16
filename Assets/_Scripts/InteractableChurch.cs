@@ -141,6 +141,10 @@ public class InteractableChurch : InteractableHouse
             case "SLEEP":
                 Sleep();
                 break;
+
+            case "SAINTS":
+                OpenUnlockedSaints();
+                break;
         }
     }
 
@@ -287,6 +291,11 @@ public class InteractableChurch : InteractableHouse
         PopUIFXIcons("Energy", -SleepEnergy);
         clock.Tick();
         UI.Instance.DisplayMessage("SLEPT!");
+    }
+
+    public void OpenUnlockedSaints()
+    {
+        GameManager.Instance.FadeAndLoadScene("SaintsShowcase_Day");
     }
 
     private IEnumerator ResetActionProgressAsync()

@@ -2,6 +2,22 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+
+
+public enum SceneID
+{
+    BootLoader,
+    MainMenu,
+    Credits,
+    EasyLevel,
+    HardLevel,
+    NormalLevelAjust,
+    WeekDaysUI,
+    PauseMenu,
+    SaintsShowcase_Day
+
+}
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +37,9 @@ public class GameManager : MonoBehaviour
     public Mission CurrentMission;
     public InteractableHouse CurrentHouse;
     private Scene activeScene;
+    public SceneID CurrentSceneID;
+    public SceneID PreviousSceneID;
+    private bool canPauseGame;
 
     private void Awake()
     {
@@ -36,35 +55,81 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
-    private void LoadSavedDataHandlerScene()
-    {
 
-        Scene scene = SceneManager.GetSceneByName("WeekDaysUI");
+    private void Update()
+    {
+        if (canPauseGame)
+        {
+           
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                //print(PauseMenu.Instance == null);
+                PauseMenu.Instance.Activate(!PauseMenu.Instance.gameObject.activeSelf);
+            }
+        }
+    }
+
+    
+
+    public void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Additive)
+    {
+        Scene scene = SceneManager.GetSceneByName(sceneName);
         if (!scene.isLoaded)
         {
-            SceneManager.LoadScene("WeekDaysUI", LoadSceneMode.Additive);
+            SceneManager.LoadScene(sceneName, mode);
+        }
+    }
+
+    public void FadeAndLoadScene(string sceneName)
+    {
+        StartCoroutine(WaitAndLoadScene(sceneName));
+    }
+
+    public void UnloadScene(string sceneName)
+    {
+        Scene scene = SceneManager.GetSceneByName(sceneName);
+        if (scene.isLoaded)
+        {
+            SceneManager.UnloadSceneAsync(scene);
         }
     }
 
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-
-        LoadSavedDataHandlerScene();
+        
+        
+        bool loadWeekDaysScene = true;
         if (loadSceneMode == LoadSceneMode.Single)
+        {
             activeScene = scene;
+
+        }
+            
 
         if (scene.name.Contains("Level"))
         {
+            PreviousSceneID = CurrentSceneID;
+            CurrentSceneID = SceneID.NormalLevelAjust;
+
+            canPauseGame = true;
+
             MissionManager.MissionOver = false;
             Player = FindObjectOfType<Player>();
             Map = FindObjectOfType<GameMap>();
             MissionManager.LoadAllMissions(CurrentMission);
             GameClock = new GameClock(SaveData.Time, SaveData.Day);
 
-            if(Player.OnEnergyDepleted)
-                UI.Instance.ShowWeekBeginText(LocalizationManager.Instance.GetText("WeekIntroEnergyDepleted"));
+            if(PreviousSceneID == SceneID.SaintsShowcase_Day)
+            {
+                UI.Instance.ShowWeekBeginText("");
+            }
             else
-                UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText("WeekIntro")} {MissionManager.Instance.CurrentMission.CurrentWeek}");
+            {
+                if (Player.OnEnergyDepleted)
+                    UI.Instance.ShowWeekBeginText(LocalizationManager.Instance.GetText("WeekIntroEnergyDepleted"));
+                else
+                    UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText("WeekIntro")} {MissionManager.Instance.CurrentMission.CurrentWeek}");
+            }
 
             Player.GameStart(CurrentMission);
             MissionBegin?.Invoke(CurrentMission);
@@ -73,6 +138,9 @@ public class GameManager : MonoBehaviour
             TreasuryManager.Instance.Money = SaveData.Money;
             SaintsManager.Instance.LoadSaints(SaveData.Saints);
             InventoryManager.Instance.LoadInventory(SaveData);
+
+            LoadScene("PauseMenu");
+            
             //if (PersistentObjects.instance.developerMode)
             //{
             //    SceneManager.LoadScene("DeveloperScene", LoadSceneMode.Additive);
@@ -80,12 +148,24 @@ public class GameManager : MonoBehaviour
         }
         else if (scene.name.Contains("MainMenu"))
         {
+            PreviousSceneID = CurrentSceneID;
+            CurrentSceneID = SceneID.MainMenu;
             SaveDataManager.Instance.LoadGame((data, newGame) => {
                 TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                 if (data.TutorialSteps >= 20) GameSettings.Instance.FTUE = false;
             },false, true);
+            canPauseGame = false;
 
+        }else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))
+        {
+            loadWeekDaysScene = false;
+            PreviousSceneID = CurrentSceneID;
+            CurrentSceneID = SceneID.SaintsShowcase_Day;
+        }
 
+        if (loadWeekDaysScene)
+        {
+            LoadScene("WeekDaysUI");
         }
     }
 
@@ -149,7 +229,7 @@ public class GameManager : MonoBehaviour
                     CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
                     //if(newGame) SaveDataManager.Instance.SaveGame();
-                    StartCoroutine(WaitAndLoadScene());
+                    StartCoroutine(WaitAndLoadScene("NormalLevelAjust"));
                 }, newGame, false, !activeScene.name.Contains("MainMenu"));
                 break;
         }
@@ -157,22 +237,23 @@ public class GameManager : MonoBehaviour
         MissionDifficulty = missionDifficulty;
     }
 
+
+
     public void ReloadLevel()
     {
 
         SaveDataManager.Instance.LoadGame((data, newGame) => {
             CurrentMission = new Mission(data.FP, data.CP, data.Energy, data.Time, 7, data.Week);
-            StartCoroutine(WaitAndLoadScene());
+            StartCoroutine(WaitAndLoadScene("NormalLevelAjust"));
         },false, true);
 
     }
 
-    private IEnumerator WaitAndLoadScene()
+    private IEnumerator WaitAndLoadScene(string sceneName)
     {
         UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
-        //SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
-        SceneManager.LoadScene("NormalLevelAjust", LoadSceneMode.Single);
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 
     private void OnDisable()

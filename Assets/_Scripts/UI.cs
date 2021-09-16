@@ -583,7 +583,8 @@ public class UI : MonoBehaviour
         CurrentWeekDisplay.gameObject.SetActive(true);
         CurrentWeekDisplay.text = text;
 
-        yield return new WaitForSeconds(3.5f);
+        if(!string.IsNullOrEmpty(text)) yield return new WaitForSeconds(3.5f);
+
         CurrentWeekDisplay.text = "";
         CurrentWeekDisplay.gameObject.SetActive(false);
         yield return new WaitForSeconds(2f);

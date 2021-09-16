@@ -14,6 +14,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject codexPanel;
     public GameObject settingsPannel;
     public GameObject saintsPanel;
+    public GameObject mainPanel;
 
     public static PauseMenu Instance
     {
@@ -44,7 +45,12 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
-        
+        Activate(false);
+    }
+
+    public void Activate(bool vlaue)
+    {
+        mainPanel.SetActive(vlaue);
     }
 
     public void SetHeaderText(string value)
@@ -64,7 +70,8 @@ public class PauseMenu : MonoBehaviour
     {
         SetHeaderText("Saints");
         CloseAll();
-        saintsPanel.SetActive(true);
+        //SceneManager.LoadScene("SaintsShowcase_Day");
+        //saintsPanel.SetActive(true);
     }
 
     public void OnSettingsBtnClicked()
