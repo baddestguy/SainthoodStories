@@ -258,6 +258,8 @@ public class TutorialManager : MonoBehaviour
                     (GameManager.Instance.Player.CurrentBuilding.GetType() == typeof(InteractableHospital) && CurrentTutorialStep >= 10 && CurrentTutorialStep <= 11));
             case "EXIT":
                 return true;
+            case "SAINTS":
+                return false;
         }
 
         return true;
