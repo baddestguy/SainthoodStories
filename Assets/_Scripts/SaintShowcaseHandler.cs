@@ -77,7 +77,7 @@ public class SaintShowcaseHandler : MonoBehaviour
 
     public void OnExit()
     {
-        GameManager.Instance.LoadScene("NormalLevelAjust", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        GameManager.Instance.LoadScene(MissionManager.Instance.CurrentMission.SeasonLevel, UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
     [System.Serializable]
