@@ -2,21 +2,21 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
 
 
 public enum SceneID
 {
+    Spring,
+    Summer,
+    Fall,
+    Winter,
     BootLoader,
     MainMenu,
     Credits,
-    EasyLevel,
-    HardLevel,
     NormalLevelAjust,
     WeekDaysUI,
     PauseMenu,
     SaintsShowcase_Day
-
 }
 
 public class GameManager : MonoBehaviour
@@ -96,20 +96,16 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-        
-        
         bool loadWeekDaysScene = true;
         if (loadSceneMode == LoadSceneMode.Single)
         {
             activeScene = scene;
-
         }
-            
 
         if (scene.name.Contains("Level"))
         {
             PreviousSceneID = CurrentSceneID;
-            CurrentSceneID = SceneID.NormalLevelAjust;
+            CurrentSceneID = CurrentMission.SeasonSceneId;
 
             canPauseGame = true;
 
@@ -128,7 +124,7 @@ public class GameManager : MonoBehaviour
                 if (Player.OnEnergyDepleted)
                     UI.Instance.ShowWeekBeginText(LocalizationManager.Instance.GetText("WeekIntroEnergyDepleted"));
                 else
-                    UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText("WeekIntro")} {MissionManager.Instance.CurrentMission.CurrentWeek}");
+                    UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText(CurrentMission.SeasonLevel.Replace("Level", "_Splash"))}");
             }
 
             Player.GameStart(CurrentMission);
@@ -228,8 +224,8 @@ public class GameManager : MonoBehaviour
                     SaveData = data;
                     CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
-                    //if(newGame) SaveDataManager.Instance.SaveGame();
-                    StartCoroutine(WaitAndLoadScene("NormalLevelAjust"));
+
+                    StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
                 }, newGame, false, !activeScene.name.Contains("MainMenu"));
                 break;
         }
@@ -244,7 +240,7 @@ public class GameManager : MonoBehaviour
 
         SaveDataManager.Instance.LoadGame((data, newGame) => {
             CurrentMission = new Mission(data.FP, data.CP, data.Energy, data.Time, 7, data.Week);
-            StartCoroutine(WaitAndLoadScene("NormalLevelAjust"));
+            StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
         },false, true);
 
     }
