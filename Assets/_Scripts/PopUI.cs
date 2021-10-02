@@ -116,7 +116,7 @@ public class PopUI : MonoBehaviour
     {
         if (LockUI)
         {
-            SoundManager.Instance.PlayOneShotSfx("Button");
+            SoundManager.Instance.PlayOneShotSfx("Button_SFX");
             return;
         }
 
@@ -125,7 +125,7 @@ public class PopUI : MonoBehaviour
         {
             if (!TutorialManager.Instance.CheckTutorialButton(button))
             {
-                SoundManager.Instance.PlayOneShotSfx("Button");
+                SoundManager.Instance.PlayOneShotSfx("Button_SFX");
                 return;
             }
         }
@@ -133,7 +133,7 @@ public class PopUI : MonoBehaviour
         {
             if (!myButton.Enabled)
             {
-                SoundManager.Instance.PlayOneShotSfx("Button");
+                SoundManager.Instance.PlayOneShotSfx("Button_SFX");
                 return;
             }
         }
@@ -144,9 +144,9 @@ public class PopUI : MonoBehaviour
         ButtonPressFx.SetActive(true);
         ButtonPressFx.transform.position = ChargeFx.transform.position;
         if (myButton.ButtonName == "EXIT" || myButton.ButtonName == "ENTER")
-            SoundManager.Instance.PlayOneShotSfx("Button");
+            SoundManager.Instance.PlayOneShotSfx("Button_SFX");
         else
-            SoundManager.Instance.PlayOneShotSfx("ActionButton", 0.5f, 5f);
+            SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
 
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
         CameraControls?.SetZoomTarget(6f);
@@ -177,7 +177,7 @@ public class PopUI : MonoBehaviour
         {
             if (!TutorialManager.Instance.CheckTutorialButton(button))
             {
-                SoundManager.Instance.PlayOneShotSfx("Button");
+                SoundManager.Instance.PlayOneShotSfx("Button_SFX");
                 return;
             }
         }
@@ -185,7 +185,7 @@ public class PopUI : MonoBehaviour
         {
             if (!myButton.Enabled)
             {
-               SoundManager.Instance.PlayOneShotSfx("Button");
+               SoundManager.Instance.PlayOneShotSfx("Button_SFX");
                 return;
             }
         }
@@ -199,7 +199,7 @@ public class PopUI : MonoBehaviour
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
         CameraControls?.SetZoomTarget(5.5f);
 
-        SoundManager.Instance.PlayOneShotSfx("Charge", timeToDie: myButton.Timer);
+        SoundManager.Instance.PlayOneShotSfx("Charge_SFX", timeToDie: myButton.Timer);
     }
 
     public void OnPointerUp()

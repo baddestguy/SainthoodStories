@@ -91,7 +91,7 @@ public class InteractableChurch : InteractableHouse
             {
                 if(ConfessionProgress == 0) //Did not participate at all
                 {
-                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
+                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
                     UpdateFaithPoints(-4, 0);
                 }
                 StartCoroutine(ResetActionProgressAsync());
@@ -100,7 +100,7 @@ public class InteractableChurch : InteractableHouse
             {
                 if (MassProgress == 0) 
                 {
-                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
+                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
                     UpdateFaithPoints(-6, 0);
                 }
                 StartCoroutine(ResetActionProgressAsync());
@@ -109,7 +109,7 @@ public class InteractableChurch : InteractableHouse
             {
                 if (LotHProgress == 0) 
                 {
-                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
+                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
                     UpdateFaithPoints(-2, 0);
                 }
                 StartCoroutine(ResetActionProgressAsync());
@@ -121,7 +121,7 @@ public class InteractableChurch : InteractableHouse
             {
                 if (LotHProgress == 0) //Did not participate at all
                 {
-                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
+                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
                     UpdateFaithPoints(-2, 0);
                 }
                 StartCoroutine(ResetActionProgressAsync());
@@ -175,7 +175,7 @@ public class InteractableChurch : InteractableHouse
                     mouseOverBtn.Loc_Key = "Tooltip_Confession";
 
                 if (clock.Time == ConfessionTime && GameClock.DeltaTime)
-                    SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
+                    SoundManager.Instance.PlayOneShotSfx("ChurchBells_SFX", timeToDie: 10f);
             }
             else
             {
@@ -185,7 +185,7 @@ public class InteractableChurch : InteractableHouse
                     mouseOverBtn.Loc_Key = "Tooltip_Pray";
 
                 if (clock.Time == LiturgyStartTime && GameClock.DeltaTime)
-                    SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
+                    SoundManager.Instance.PlayOneShotSfx("ChurchBells_SFX", timeToDie: 10f);
             }
         }
         else
@@ -196,7 +196,7 @@ public class InteractableChurch : InteractableHouse
                 mouseOverBtn.Loc_Key = "Tooltip_Pray";
 
             if (clock.Time == LiturgyStartTime && GameClock.DeltaTime)
-                SoundManager.Instance.PlayOneShotSfx("ChurchBells", 0.3f, 10f);
+                SoundManager.Instance.PlayOneShotSfx("ChurchBells_SFX", timeToDie: 10f);
         }
     }
 
@@ -224,16 +224,16 @@ public class InteractableChurch : InteractableHouse
                 OnActionProgress?.Invoke(MassProgress/2f, this);
                 player.ConsumeEnergy(ServiceEnergy);
                 UI.Instance.DisplayMessage("ATTENDED MASS!!");
-                SoundManager.Instance.PlayOneShotSfx("MassBells", 0.3f, 10f);
+                SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 10f);
                 UpdateFaithPoints(PrayerPoints * 4, 1);
                 InteriorPopUI.PlayVFX("Halo2");
                 if(clock.Time == MassStartTime)
                 {
-                    SoundManager.Instance.PlayOneShotSfx("MassBegin", timeToDie: 4);
+                    SoundManager.Instance.PlayOneShotSfx("MassBegin_SFX", timeToDie: 4);
                 }
                 else
                 {
-                    SoundManager.Instance.PlayOneShotSfx("MassEnd", timeToDie: 6);
+                    SoundManager.Instance.PlayOneShotSfx("MassEnd_SFX", timeToDie: 6);
                 }
                 clock.Tick();
             }
@@ -244,7 +244,7 @@ public class InteractableChurch : InteractableHouse
                 player.ConsumeEnergy(ServiceEnergy);
                 UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
                 UpdateFaithPoints(PrayerPoints * 2, 1);
-                SoundManager.Instance.PlayOneShotSfx("MassBells", 0.3f, 10f);
+                SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 10f);
                 InteriorPopUI.PlayVFX("Halo");
                 clock.Tick();
             }
@@ -261,7 +261,7 @@ public class InteractableChurch : InteractableHouse
             LotHProgress++;
             OnActionProgress?.Invoke(LotHProgress/2f, this);
             UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
-            SoundManager.Instance.PlayOneShotSfx("MassBells", 0.3f, 10f);
+            SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 10f);
             UpdateFaithPoints(PrayerPoints * 2, 1);
             player.ConsumeEnergy(ServiceEnergy);
             InteriorPopUI.PlayVFX("Halo");
@@ -295,6 +295,8 @@ public class InteractableChurch : InteractableHouse
 
     public void OpenUnlockedSaints()
     {
+        SaveDataManager.Instance.SaveGame();
+
         GameManager.Instance.FadeAndLoadScene("SaintsShowcase_Day");
     }
 

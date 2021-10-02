@@ -189,7 +189,7 @@ public class Player : MonoBehaviour
                 GroundMoveFX.transform.position = newTile.transform.position + new Vector3(0,0.1f);
                 GroundMoveFX.SetActive(false);
                 GroundMoveFX.SetActive(true);
-                SoundManager.Instance.PlayOneShotSfx("Walk", 0.25f);
+                SoundManager.Instance.PlayOneShotSfx("Walk_SFX");
             }
             else
             {
@@ -256,9 +256,9 @@ public class Player : MonoBehaviour
             var soundByte = Random.Range(0, 3);
             switch (soundByte)
             {
-                case 0: SoundManager.Instance.PlayOneShotSfx("Hi"); break;
-                case 1: SoundManager.Instance.PlayOneShotSfx("Hey"); break;
-                case 2: SoundManager.Instance.PlayOneShotSfx("Hello"); break;
+                case 0: SoundManager.Instance.PlayOneShotSfx("Hi_SFX"); break;
+                case 1: SoundManager.Instance.PlayOneShotSfx("Hey_SFX"); break;
+                case 2: SoundManager.Instance.PlayOneShotSfx("Hello_SFX"); break;
             }
         }
         else
@@ -266,7 +266,7 @@ public class Player : MonoBehaviour
             GroundTapFX.transform.position = tile.transform.position;
             GroundTapFX.SetActive(false);
             GroundTapFX.SetActive(true);
-            SoundManager.Instance.PlayOneShotSfx("GrassTouch");
+            SoundManager.Instance.PlayOneShotSfx("GrassTouch_SFX");
         }
     }
 

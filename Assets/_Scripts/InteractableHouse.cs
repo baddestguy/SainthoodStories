@@ -154,7 +154,7 @@ public class InteractableHouse : InteractableObject
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
             UpdateCharityPoints(-1, 0);
-            SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
+            SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
         }
         if(InteriorPopUI) //TEMP
             InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
@@ -208,7 +208,7 @@ public class InteractableHouse : InteractableObject
             yield break;
         }
         Zooming = true;
-        SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
+        SoundManager.Instance.PlayOneShotSfx("Zoom_SFX");
 
         if (zoom > 0) //Zoom in
         {
@@ -314,7 +314,7 @@ public class InteractableHouse : InteractableObject
                         DeadlineDeliveryBonus = 2;
                         DeadlineSet = true;
                         PopMyIcon();
-                        SoundManager.Instance.PlayOneShotSfx("Notification");
+                        SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
                     }
                 }
@@ -454,9 +454,9 @@ public class InteractableHouse : InteractableObject
             Destroy(ExteriorPopUI.gameObject);
             Initialize();
             ExteriorPopUI.gameObject.SetActive(true);
-            SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
+            SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
             SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
-            SoundManager.Instance.PlayOneShotSfx("Cheer",1f,5f);
+            SoundManager.Instance.PlayOneShotSfx("Cheer_SFX", 1f,5f);
             if (DuringOpenHours())
             {
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
@@ -468,7 +468,7 @@ public class InteractableHouse : InteractableObject
         }
         else
         {
-            SoundManager.Instance.PlayOneShotSfx("Build", 1f, 5f);
+            SoundManager.Instance.PlayOneShotSfx("Build_SFX", 1f, 5f);
         }
         player.ConsumeEnergy(EnergyConsumption);
         GameClock clock = GameManager.Instance.GameClock;
@@ -679,7 +679,7 @@ public class InteractableHouse : InteractableObject
             InsideHouse = true;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.EnableInventoryUI(true);
-            SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
+            SoundManager.Instance.PlayOneShotSfx("Zoom_SFX");
             if(DuringOpenHours())
             {
                 if (BuildingState == BuildingState.NORMAL)
@@ -705,7 +705,7 @@ public class InteractableHouse : InteractableObject
             HouseUIActive = false;
             InsideHouse = false;
             UI.Instance.EnableInventoryUI(false);
-            SoundManager.Instance.PlayOneShotSfx("Zoom", 0.25f);
+            SoundManager.Instance.PlayOneShotSfx("Zoom_SFX");
             if (BuildPoints >= 4)
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
             else
@@ -800,7 +800,7 @@ public class InteractableHouse : InteractableObject
     {
         RelationshipPoints += Mathf.Clamp(amount, 0, 100);
         RelationshipReward(thanks);
-        SoundManager.Instance.PlayOneShotSfx("Success", 1f, 5f);
+        SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
     }
 
     public virtual void RelationshipReward(ThankYouType thanks)
@@ -957,7 +957,7 @@ public class InteractableHouse : InteractableObject
     {
         if (HouseJumping) return;
 
-        SoundManager.Instance.PlayOneShotSfx("HouseJump");
+        SoundManager.Instance.PlayOneShotSfx("HouseJump_SFX");
         HouseJumping = true;
         StartCoroutine(HouseJumpAsync());
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,49 +9,35 @@ public class PauseMenu : MonoBehaviour
 {
 
     private static PauseMenu instance;
-
     public TextMeshProUGUI headerText;
-
     public GameObject codexPanel;
     public GameObject settingsPannel;
     public GameObject saintsPanel;
     public GameObject mainPanel;
-
+    public Camera testCam;
+    [HideInInspector] public bool active;
     public static PauseMenu Instance
     {
         get
         {
-            if(instance == null)
-            {
-                Scene scene = SceneManager.GetSceneByName("PauseMenu");
-                if (scene.isLoaded)
-                {
-                    instance = FindObjectOfType<PauseMenu>();
-                    return instance;
-                }
-                else
-                {
-                    SceneManager.LoadScene(scene.name, LoadSceneMode.Additive);
-                    instance = FindObjectOfType<PauseMenu>();
-                    return instance;
-                }
-            }
-            else
-            {
-                return instance;
-            }
+            return instance;
         }
     }
 
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
-        Activate(false);
+       // Activate(false);
     }
 
-    public void Activate(bool vlaue)
+    public void Activate()
     {
-        mainPanel.SetActive(vlaue);
+        active = !active;
+        mainPanel.SetActive(active);
     }
 
     public void SetHeaderText(string value)
@@ -91,12 +78,30 @@ public class PauseMenu : MonoBehaviour
 
     public void OnExitToMenuBtnClicked()
     {
-       
+        SaveDataManager.Instance.SaveGame();
+        //maybe do check before quit
+        StartCoroutine(ScheduleCallback(() => {
+            GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+        }, 1));
     }
 
     public void OnExitToDesktopClicked()
     {
-
+        SaveDataManager.Instance.SaveGame();
+        //maybe do check before quit
+        StartCoroutine(ScheduleCallback(() => {
+            Application.Quit();
+        }, 1));
     }
 
+    private void OnDisable()
+    {
+        GameSettings.Instance.Save();
+    }
+
+    private IEnumerator ScheduleCallback(Action callback, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        callback?.Invoke();
+    }
 }

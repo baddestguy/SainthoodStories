@@ -221,6 +221,18 @@ public enum Language
     FILIPINO
 }
 
+public enum QualityLevel
+{
+    QUALITY_SETTING_VERY_LOW = 0,
+    QUALITY_SETTING_LOW,
+    QUALITY_SETTING_MEDIUM,
+    QUALITY_SETTING_HIGH,
+    QUALITY_SETTING_VERY_HIGH,
+    QUALITY_SETTING_ULTRA
+}
+
+
+
 public class TooltipStats
 {
     public double Ticks;
@@ -392,6 +404,27 @@ public class SaveObject
     public SaintID[] Saints;
     public ItemType[] InventoryItems;
     public Provision[] Provisions;
+}
+
+[System.Serializable]
+public class SaveSettingsData
+{
+    public bool fullscreen;
+    public QualityLevel qualityLevel;
+    public int resolutionWidth;
+    public int resolutionHeight;
+    public float brightnessPercent;
+    public float gammaPercent;
+
+    public bool sfxEnabled;
+    public bool musicEnabled;
+    public bool ambianceEnabled;
+    public float globalVolume;
+    public float sfxVolume;
+    public float musicVolume;
+    public float ambianceVolume;
+
+    public Language language;
 }
 
 [System.Serializable]

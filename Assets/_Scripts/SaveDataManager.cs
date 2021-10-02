@@ -177,6 +177,13 @@ public class SaveDataManager : MonoBehaviour
         file.Close();
     }
 
+    private void Save(object data)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(GetPath(FILENAME));
+        bf.Serialize(file, data);
+        file.Close();
+    }
 
     private Dictionary<Days, SaveObject> GetSavedDataSet()
     {

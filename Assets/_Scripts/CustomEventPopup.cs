@@ -99,7 +99,7 @@ public class CustomEventPopup : MonoBehaviour
         }
         
         ButtonTimerTarget = 1f;
-        SoundManager.Instance.PlayOneShotSfx("DialogOpen");
+        SoundManager.Instance.PlayOneShotSfx("DialogOpen_SFX");
     }
 
     public void Yes()
@@ -142,7 +142,7 @@ public class CustomEventPopup : MonoBehaviour
 
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
-        SoundManager.Instance.PlayOneShotSfx("ActionButton", 0.5f, 5f);
+        SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
     }
 
     public void No()
@@ -161,8 +161,8 @@ public class CustomEventPopup : MonoBehaviour
 
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
-        SoundManager.Instance.PlayOneShotSfx("Button");
-        SoundManager.Instance.PlayOneShotSfx("FailedDeadline");
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+        SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
     }
 
     public void OK()
@@ -174,7 +174,7 @@ public class CustomEventPopup : MonoBehaviour
         }
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
-        SoundManager.Instance.PlayOneShotSfx("Button");
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 
     public void Continue()
@@ -202,7 +202,7 @@ public class CustomEventPopup : MonoBehaviour
         var text = LocalizationManager.Instance.GetText(EventData.LocalizationKey, CurrentSequenceNumber);
         EventText.text = "";
         EventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
-        SoundManager.Instance.PlayOneShotSfx("Button");
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 
     public void OnPointerDown()
@@ -220,7 +220,7 @@ public class CustomEventPopup : MonoBehaviour
         ChargeFx.SetActive(true);
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
         CameraControls?.SetZoomTarget(5.5f);
-        SoundManager.Instance.PlayOneShotSfx("Charge");
+        SoundManager.Instance.PlayOneShotSfx("Charge_SFX");
     }
 
     public void OnPointerUp()
@@ -229,7 +229,7 @@ public class CustomEventPopup : MonoBehaviour
         ChargeFx.SetActive(false);
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
         CameraControls?.SetZoomTarget(6f);
-        SoundManager.Instance.StopOneShotSfx("Charge");
+        SoundManager.Instance.StopOneShotSfx("Charge_SFX");
     }
 
     void Update()
