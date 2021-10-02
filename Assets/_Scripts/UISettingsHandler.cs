@@ -75,6 +75,7 @@ public class UISettingsHandler : MonoBehaviour
         gamma.onValueChanged.RemoveAllListeners();
 
         //Than Add
+        fullscreenToggle.isOn = GameSettings.Instance.fullScreenMode;
         fullscreenToggle.onValueChanged.AddListener((value) => {
             //print(value);
             GameSettings.Instance.SetFullScreen(value);
@@ -98,22 +99,31 @@ public class UISettingsHandler : MonoBehaviour
         Music.onValueChanged.RemoveAllListeners();
         Ambiance.onValueChanged.RemoveAllListeners();
 
+        soundEnable.isOn = GameSettings.Instance.ambianceEnabled || GameSettings.Instance.musicEnabled || GameSettings.Instance.sfxEnebled;
         soundEnable.onValueChanged.AddListener((value) =>
         {
             print(value);
             GameSettings.Instance.EnableSound("Global",value);
         });
+
+        global.value = GameSettings.Instance.globalVolume;
         global.onValueChanged.AddListener((value) =>
         {
             GameSettings.Instance.SetVolume("Global", value);
         });
+
+        SFX.value = GameSettings.Instance.sfxVolume;
         SFX.onValueChanged.AddListener((value) =>
         {
             GameSettings.Instance.SetVolume("SFX", value);
         });
+
+        Music.value = GameSettings.Instance.musicVolume;
         Music.onValueChanged.AddListener((value) => {
             GameSettings.Instance.SetVolume("Music", value);
         });
+
+        Ambiance.value = GameSettings.Instance.ambianceVolume;
         Ambiance.onValueChanged.AddListener((value) => {
             GameSettings.Instance.SetVolume("Ambiance", value);
         });
@@ -142,7 +152,7 @@ public class UISettingsHandler : MonoBehaviour
 
     public int GetCurrentUIGraphicsQualityIndex(QualityLevel graphicsType)
     {
-        return quality.options.FindIndex(x => x.text == graphicsType.ToString());
+        return quality.options.FindIndex(x => x.text == LocalizationManager.Instance.GetText($"{graphicsType}"));
     }
     public int GetCurrentUIResolutionIndex(Resolution res)
     {
