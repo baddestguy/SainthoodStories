@@ -55,6 +55,7 @@ public class UI : MonoBehaviour
     public ProvisionsPopup ProvisionPopup;
     public Image Black;
 
+    public Image CurrentWeekIntroGraphic;
     public TextMeshProUGUI CurrentWeekDisplay;
     public TextMeshProUGUI TooltipDisplay;
     public TextSizer TooltipSizer;
@@ -580,13 +581,12 @@ public class UI : MonoBehaviour
         yield return StartCoroutine(CrossFadeAsync(1, 10));
 
         WeekBeginCrossFade = true;
-        CurrentWeekDisplay.gameObject.SetActive(true);
-        CurrentWeekDisplay.text = text;
+        CurrentWeekIntroGraphic.gameObject.SetActive(true);
+        CurrentWeekIntroGraphic.sprite = Resources.Load<Sprite>($"Icons/{MissionManager.Instance.CurrentMission.Season}");
 
         if(!string.IsNullOrEmpty(text)) yield return new WaitForSeconds(3.5f);
 
-        CurrentWeekDisplay.text = "";
-        CurrentWeekDisplay.gameObject.SetActive(false);
+        CurrentWeekIntroGraphic.gameObject.SetActive(false);
         yield return new WaitForSeconds(2f);
         
         yield return StartCoroutine(CrossFadeAsync(0, 5f));
