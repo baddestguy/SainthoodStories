@@ -155,7 +155,7 @@ public class UI : MonoBehaviour
 
     private IEnumerator UnlockSaintSequence()
     {
-        SoundManager.Instance.PlayOneShotSfx("SaintUnlock", timeToDie: 10f);
+        SoundManager.Instance.PlayOneShotSfx("SaintUnlock_SFX", timeToDie: 10f);
         SaintCard.SetActive(true);
         SaintCard.GetComponent<SaintCard>().Init(SaintsManager.Instance.NewSaint);
         yield return new WaitForSeconds(10);
@@ -489,14 +489,14 @@ public class UI : MonoBehaviour
     public GameObject SettingsMenuGO;
     public void SettingsMenu()
     {
-        SoundManager.Instance.PlayOneShotSfx("DialogOpen");
+        SoundManager.Instance.PlayOneShotSfx("DialogOpen_SFX");
         SettingsMenuGO.SetActive(true);
         PopulateLanguageDropdown();
     }
     public void CloseSettingsMenu()
     {
         SettingsMenuGO.SetActive(false);
-        SoundManager.Instance.PlayOneShotSfx("Button");
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 
     public TMP_Dropdown Dropdown;

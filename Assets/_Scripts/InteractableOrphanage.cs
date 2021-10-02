@@ -131,7 +131,7 @@ public class InteractableOrphanage : InteractableHouse
                         DeadlineDeliveryBonus = 2;
                         DeadlineSet = true;
                         PopMyIcon();
-                        SoundManager.Instance.PlayOneShotSfx("Notification");
+                        SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
                 }

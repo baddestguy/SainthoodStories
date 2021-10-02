@@ -161,7 +161,7 @@ public class WeatherManager : MonoBehaviour
         WeatherType = WeatherType.PRERAIN;
         DayNightCycle.SetFutureSkyBox(WeatherType);
         WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
-        SoundManager.Instance.PlayOneShotSfx("Thunder", 1f, 30);
+        SoundManager.Instance.PlayOneShotSfx("Thunder_SFX", 1f, 30);
     }
 
     public bool IsStormy()

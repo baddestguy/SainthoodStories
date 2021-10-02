@@ -169,6 +169,16 @@ MonoBehaviour:
   ProvisionsToggle: 1
   FTUE: 1
   TutorialToggle: 0
+  fullScreenMode: 0
+  currentGraphics: 0
+  brightnessPercent: 0
+  soundEnebled: 0
+  musicEnabled: 0
+  globalVolume: 0
+  sfxVolume: 0
+  musicVolume: 0
+  ambiance: 0
+  language: 0
 --- !u!1 &226307152
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,6 +477,8 @@ MonoBehaviour:
     InventoryItems: 
     Provisions: 
   CurrentHouse: {fileID: 0}
+  CurrentSceneID: 0
+  PreviousSceneID: 0
 --- !u!114 &1152669276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,6 +598,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tracks: []
+  MusicAudioSource: {fileID: 0}
+  AmbientAudioSource: {fileID: 0}
+  HouseAmbience: {fileID: 0}
+  WeatherAmbientAudioSource: {fileID: 0}
+  OneShotSource: {fileID: 0}
+  gameplayTrack: {fileID: 0}
+  lowPassFilter: {fileID: 0}
+  audioMixer: {fileID: 24100000, guid: 681e8750a0e6c3e49bc2c312b70d657e, type: 2}
   soundEnabled: 0
   musicEnabled: 0
 --- !u!1 &1452105483
@@ -683,6 +703,7 @@ MonoBehaviour:
   energy: 0
   FutureStartTime: 2
   FutureEndTime: 21
+  Money: 0
   Inventory: 0
   provisions: 0
   weatherType: 0

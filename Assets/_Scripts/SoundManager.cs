@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 {
@@ -8,30 +10,39 @@ public class SoundManager : MonoBehaviour
 
     public Dictionary<string, AudioClip> cachedAudioClips = new Dictionary<string, AudioClip>();
     public List<string> tracks;
-    private AudioSource MusicAudioSource;
-    private AudioSource AmbientAudioSource;
-    private AudioSource HouseAmbience;
-    private AudioSource WeatherAmbientAudioSource;
-    private AudioSource OneShotSource;
+    [HideInInspector]public AudioSource MusicAudioSource;
+    [HideInInspector]public AudioSource AmbientAudioSource;
+    [HideInInspector]public AudioSource HouseAmbience;
+    [HideInInspector]public AudioSource WeatherAmbientAudioSource;
+    [HideInInspector]public AudioSource OneShotSource;
     private string AmbientTrackName;
-    private AudioSource gameplayTrack;
-    private AudioLowPassFilter lowPassFilter;
+    [HideInInspector]public AudioSource gameplayTrack;
+    [HideInInspector]public AudioLowPassFilter lowPassFilter;
 
-    public bool soundEnabled;
-    public bool musicEnabled;
+    public AudioMixer audioMixer;
+
+    //public bool soundEnabled;
+    //public bool musicEnabled;
 
     Dictionary<string, AudioClip> cachedVoices = new Dictionary<string, AudioClip>();
+    public Dictionary<string, AudioMixerGroup> audioMixerGroup = new Dictionary<string, AudioMixerGroup>();
 
     void Awake()
     {
+        
         Instance = this;
+        audioMixerGroup = audioMixer.FindMatchingGroups("Master").ToDictionary(key => key.name, value => value);
     }
 
     // Use this for initialization
     void Start()
     {
-        soundEnabled = PlayerPrefs.HasKey("soundEnabled") ? bool.Parse(PlayerPrefs.GetString("soundEnabled")) : true;
-        musicEnabled = PlayerPrefs.HasKey("musicEnabled") ? bool.Parse(PlayerPrefs.GetString("musicEnabled")) : true;
+        
+
+        //soundEnabled = PlayerPrefs.HasKey("soundEnabled") ? bool.Parse(PlayerPrefs.GetString("soundEnabled")) : true;
+        //musicEnabled = PlayerPrefs.HasKey("musicEnabled") ? bool.Parse(PlayerPrefs.GetString("musicEnabled")) : true;
+
+
  //       lowPassFilter = GetComponent<AudioLowPassFilter>();
   //      lowPassFilter.enabled = false;
     }
@@ -44,23 +55,25 @@ public class SoundManager : MonoBehaviour
     public void PlayOST(string songName = "", bool shouldLoop = false, float volume = 0.4f, float startTime = 0f)
     {
         MusicAudioSource = gameObject.AddComponent<AudioSource>();
+        MusicAudioSource.outputAudioMixerGroup = audioMixerGroup["Music"];
         //		if(TutorialManager.Instance && string.IsNullOrEmpty(songName))
         //			baseTrack.clip = Resources.Load("_Sound/Music/Track1", typeof(AudioClip)) as AudioClip;
         MusicAudioSource.clip = Resources.Load("Audio/" + songName, typeof(AudioClip)) as AudioClip;
         MusicAudioSource.Play();
         MusicAudioSource.loop = shouldLoop;
-        if (musicEnabled)
-        {
-            MusicAudioSource.volume = string.IsNullOrEmpty(songName) ? 0.7f : volume;
-        }
-        else
-            MusicAudioSource.volume = 0f;
+        //if (musicEnabled)
+        //{
+        //    MusicAudioSource.volume = string.IsNullOrEmpty(songName) ? 0.7f : volume;
+        //}
+        //else
+        //    MusicAudioSource.volume = 0f;
         MusicAudioSource.time = startTime;
     }
 
     public void loadOST()
     {
         gameplayTrack = gameObject.AddComponent<AudioSource>();
+        gameplayTrack.outputAudioMixerGroup = audioMixerGroup["Music"];
         gameplayTrack.clip = Resources.Load("_Sound/Music/" + tracks[Random.Range(0, tracks.Count)], typeof(AudioClip)) as AudioClip;
     }
 
@@ -69,7 +82,10 @@ public class SoundManager : MonoBehaviour
         if (start)
         {
             if(WeatherAmbientAudioSource == null)
+            {
                 WeatherAmbientAudioSource = gameObject.AddComponent<AudioSource>();
+                WeatherAmbientAudioSource.outputAudioMixerGroup = audioMixerGroup["Ambience"];
+            }
 
             WeatherAmbientAudioSource.clip = Resources.Load("Audio/" + weather, typeof(AudioClip)) as AudioClip;
             WeatherAmbientAudioSource.Play();
@@ -92,6 +108,8 @@ public class SoundManager : MonoBehaviour
         AudioSource oldTrack = AmbientAudioSource;
 
         AmbientAudioSource = gameObject.AddComponent<AudioSource>();
+        AmbientAudioSource.outputAudioMixerGroup = audioMixerGroup["Ambience"];
+        print(gameObject.name);
 
         AmbientTrackName = ambience;
         AmbientAudioSource.clip = Resources.Load("Audio/" + ambience, typeof(AudioClip)) as AudioClip;
@@ -130,6 +148,7 @@ public class SoundManager : MonoBehaviour
     public void PlayOneShotSfx(string name, float volume = 1f, float timeToDie = 1f, bool modifyPitch = false)
     {
         OneShotSource = gameObject.AddComponent<AudioSource>();
+        OneShotSource.outputAudioMixerGroup = audioMixerGroup["SFX"];
 
         OneShotSource.clip = Resources.Load("Audio/" + name, typeof(AudioClip)) as AudioClip;
         OneShotSource.Play();
@@ -150,13 +169,15 @@ public class SoundManager : MonoBehaviour
     bool DestroyHouseAmbience;
     public void PlayHouseAmbience(string name, bool start, float volume = 1f)
     {
-        if (HouseAmbience != null && HouseAmbience.clip != null && name == HouseAmbience.clip.name && !DestroyHouseAmbience && start) return;
+        var trackName = name + "_Ambience";
+        if (HouseAmbience != null && HouseAmbience.clip != null && trackName == HouseAmbience.clip.name && !DestroyHouseAmbience && start) return;
         
         if(start)
         {
             HouseAmbience = gameObject.AddComponent<AudioSource>();
+            HouseAmbience.outputAudioMixerGroup = audioMixerGroup["Ambience"];
 
-            HouseAmbience.clip = Resources.Load("Audio/" + name, typeof(AudioClip)) as AudioClip;
+            HouseAmbience.clip = Resources.Load("Audio/" + trackName, typeof(AudioClip)) as AudioClip;
             HouseAmbience.Play();
             HouseAmbience.loop = true;
             HouseAmbience.volume = volume;
@@ -180,7 +201,7 @@ public class SoundManager : MonoBehaviour
 
     public void CrossFadeMusic(string newTrack, float endTime, bool shouldLoop, float maxVolume)
     {
-        if (!musicEnabled) return;
+        //if (!musicEnabled) return;
         AudioSource oldTrack = MusicAudioSource;
         Destroy(oldTrack, endTime);
 
@@ -200,7 +221,7 @@ public class SoundManager : MonoBehaviour
         //	Debug.Log("HOL UP!");
         yield return new WaitForSeconds(0.1f);
         //	Debug.Log("DONE WAITING! SETTING MAX VOLUME!!");
-        maxVolume();
+        //maxVolume();
     }
 
     public void NormalizeSoundFX()
@@ -217,49 +238,44 @@ public class SoundManager : MonoBehaviour
         lowPassFilter.cutoffFrequency = 1000;
     }
 
-    public void HighFilterFX()
-    {
+    //public void HighFilterFX()
+    //{
 
-    }
+    //}
 
-    public void maxVolume()
+    //public void maxVolume()
+    //{
+    //    if (MusicAudioSource && musicEnabled)
+    //        MusicAudioSource.volume = 0.7f;
+    //}
+    public void EnableSFX(bool value, float volumePercent = 0)
     {
-        if (MusicAudioSource && musicEnabled)
-            MusicAudioSource.volume = 0.7f;
+        
+        float val = (volumePercent * 20.0f) - 10f;
+        if (volumePercent == 0) val = -80;
+        audioMixer.SetFloat("SFXVolume", (value) ? val : -80.0f);
+        
     }
-    public void enableSound()
+    public void EnableMusic(bool value, float volumePercent = 0)
     {
-        //TODO: SAVE THE SETTINGS!
-        soundEnabled = true;
-        if (AmbientAudioSource)
-            AmbientAudioSource.volume = 0.3f;
-        PlayerPrefs.SetString("soundEnabled", soundEnabled.ToString());
-    }
-    public void disableSound()
-    {
-        soundEnabled = !soundEnabled;
-        if (AmbientAudioSource && soundEnabled)
-            AmbientAudioSource.volume = 0.3f;
-        else
-            AmbientAudioSource.volume = 0f;
-
-        PlayerPrefs.SetString("soundEnabled", soundEnabled.ToString());
-    }
-    public void enableMusic()
-    {
-        if (MusicAudioSource)
-            MusicAudioSource.volume = 1;// GameDataManager.Instance.floatConstants["MUSIC_VOLUME"];
-        musicEnabled = true;
-        PlayerPrefs.SetString("musicEnabled", musicEnabled.ToString());
-    }
-    public void disableMusic()
-    {
-        musicEnabled = !musicEnabled;
-
-        if (MusicAudioSource && musicEnabled)
-            MusicAudioSource.volume = 1; // GameDataManager.Instance.floatConstants["MUSIC_VOLUME"];
-        else if (MusicAudioSource && !musicEnabled) MusicAudioSource.volume = 0f;
-        PlayerPrefs.SetString("musicEnabled", musicEnabled.ToString());
+        float val = (volumePercent * 20.0f) - 10f;
+        if (volumePercent == 0) val = -80;
+        audioMixer.SetFloat("MusicVolume", (value) ? val : -80.0f);
     }
 
+    public void EnableAmbiance(bool value, float volumePercent = 0)
+    {
+        float val = (volumePercent * 20.0f) - 10f;
+        if (volumePercent == 0) val = -80;
+        audioMixer.SetFloat("AmbianceVolume", (value) ? val : -80.0f);
+    }
+
+    public void SetGlobalAudio(bool value, float volumePercent = 0)
+    {
+        
+        float val = (volumePercent * 20.0f) - 10f;
+        if (volumePercent == 0) val = -80;
+
+         audioMixer.SetFloat("GlobalVolume", (value) ? val : -80.0f);
+    }
 }

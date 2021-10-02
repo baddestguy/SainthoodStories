@@ -52,7 +52,8 @@ public class GameManager : MonoBehaviour
         MapTile.OnClickEvent += OnTap;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
         GameClock.Ticked += PlayAmbience;
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        //SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
 
@@ -64,7 +65,15 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 //print(PauseMenu.Instance == null);
-                PauseMenu.Instance.Activate(!PauseMenu.Instance.gameObject.activeSelf);
+                if(PauseMenu.Instance == null)
+                {
+                    LoadScene("PauseMenu", LoadSceneMode.Additive);
+                }
+                else
+                {
+                    PauseMenu.Instance.Activate();
+                }
+                
             }
         }
     }
@@ -135,7 +144,7 @@ public class GameManager : MonoBehaviour
             SaintsManager.Instance.LoadSaints(SaveData.Saints);
             InventoryManager.Instance.LoadInventory(SaveData);
 
-            LoadScene("PauseMenu");
+            //LoadScene("PauseMenu");
             
             //if (PersistentObjects.instance.developerMode)
             //{
@@ -151,12 +160,29 @@ public class GameManager : MonoBehaviour
                 if (data.TutorialSteps >= 20) GameSettings.Instance.FTUE = false;
             },false, true);
             canPauseGame = false;
+            SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
 
-        }else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))
+        }
+        else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))
         {
+            //Load game data after saits scene is exited.. Modify to what is expected
+            SaveDataManager.Instance.LoadGame((data, newgame) => {
+
+                TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
+                GameSettings.Instance.FTUE = false;
+
+            }, false, true);
+
             loadWeekDaysScene = false;
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.SaintsShowcase_Day;
+        }else if (scene.name.Contains(SceneID.PauseMenu.ToString()))
+        {
+            PauseMenu.Instance.Activate();
+            if(PauseMenu.Instance.testCam != null)
+            {
+                Destroy(PauseMenu.Instance.testCam.gameObject);
+            }
         }
 
         if (loadWeekDaysScene)
@@ -190,16 +216,17 @@ public class GameManager : MonoBehaviour
 
         if (GameClock.Time >= 21 || GameClock.Time < 6)
         {
-            SoundManager.Instance.PlayAmbience("SummerNightAmbience");
+            SoundManager.Instance.PlayAmbience("SummerNight_Ambience");
         }
         else if (GameClock.Time >= 6)
         {
-            SoundManager.Instance.PlayAmbience("SummerDayAmbience");
+            SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
         }
     }
 
     public void SetMissionParameters(MissionDifficulty missionDifficulty, bool newGame = false)
     {
+
         switch (missionDifficulty)
         {
             //case MissionDifficulty.EASY: 
@@ -223,7 +250,7 @@ public class GameManager : MonoBehaviour
 
                     SaveData = data;
                     CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
-                    SoundManager.Instance.PlayOneShotSfx("StartGame", 1f, 10);
+                    SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 
                     StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
                 }, newGame, false, !activeScene.name.Contains("MainMenu"));

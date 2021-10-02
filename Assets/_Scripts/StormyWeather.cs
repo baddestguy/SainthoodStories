@@ -20,9 +20,9 @@ public class StormyWeather : MonoBehaviour
         SoundManager.Instance.FadeAmbience(0.1f);
 
         if(InteractableHouse.InsideHouse)
-            SoundManager.Instance.PlayWeatherAmbience("RainInterior", true, 0.3f);
+            SoundManager.Instance.PlayWeatherAmbience("RainInterior_Ambience", true, 0.3f);
         else
-            SoundManager.Instance.PlayWeatherAmbience("RainExterior", Running);
+            SoundManager.Instance.PlayWeatherAmbience("RainExterior_Ambience", Running);
     }
 
     public void StopStorm()
@@ -38,9 +38,9 @@ public class StormyWeather : MonoBehaviour
         if (Running)
         {
             if(inHouse)
-                SoundManager.Instance.PlayWeatherAmbience("RainInterior", true, 0.3f);
+                SoundManager.Instance.PlayWeatherAmbience("RainInterior_Ambience", true, 0.3f);
             else
-                SoundManager.Instance.PlayWeatherAmbience("RainExterior", true);
+                SoundManager.Instance.PlayWeatherAmbience("RainExterior_Ambience", true);
         }
     }
 
@@ -72,7 +72,7 @@ public class StormyWeather : MonoBehaviour
     {
         while (Running)
         {
-            SoundManager.Instance.PlayOneShotSfx("Thunder", 1f, 30);
+            SoundManager.Instance.PlayOneShotSfx("Thunder_SFX", 1f, 30);
             yield return new WaitForSeconds(30f);
         }
     }
