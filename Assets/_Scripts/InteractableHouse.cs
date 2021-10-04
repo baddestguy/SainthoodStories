@@ -88,7 +88,8 @@ public class InteractableHouse : InteractableObject
         InfoPopup = Instantiate(Resources.Load<GameObject>("UI/BuildingInfoPopup")).GetComponent<BuildingInformationPopup>();
         RubbleInfoPopup = Instantiate(Resources.Load<GameObject>("UI/RubbleInfoPopup")).GetComponent<BuildingInformationPopup>();
         
-        RubbleGo.SetActive(BuildingState == BuildingState.RUBBLE);
+        RubbleGo.SetActive(BuildingState == BuildingState.RUBBLE && CanBuild());
+        GetComponent<BoxCollider>().enabled = BuildingState == BuildingState.NORMAL || (BuildingState == BuildingState.RUBBLE && CanBuild());
         BuildingGo.SetActive(BuildingState == BuildingState.NORMAL);
 
         PopIcon.transform.SetParent(transform);
@@ -191,6 +192,10 @@ public class InteractableHouse : InteractableObject
         {
             PopIcon.gameObject.SetActive(true);
             PopIcon.Init("Rubble", 0, new GameClock(-1));
+            RubbleGo.SetActive(true);
+            GetComponent<BoxCollider>().enabled = true;
+
+            if(GameClock.DeltaTime) UpdateCharityPoints(-1, 0); //Subtract charity points every clock tick
         }
     }
 

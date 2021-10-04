@@ -51,14 +51,28 @@ public class MissionManager : MonoBehaviour
 
     public void UpdateFaithPoints(int amount)
     {
+        if (MissionOver) return;
         FaithPoints = Mathf.Clamp(FaithPoints + amount, 0, 100);
         UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
+
+        if (FaithPoints <= 0)
+        {
+            EndMission();
+            return;
+        }
     }
 
     public void UpdateCharityPoints(int amount, InteractableHouse house)
     {
+        if (MissionOver) return;
         CharityPoints = Mathf.Clamp(CharityPoints + amount, 0, 100);
         UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
+
+        if(CharityPoints <= 0)
+        {
+            EndMission();
+            return;
+        }
 
         if (house == null) return;
         HouseScores[house.TileType] = amount;
@@ -83,15 +97,26 @@ public class MissionManager : MonoBehaviour
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
 
-        if (FaithPoints < 30 || CharityPoints < 30)
-        {
-            if (FaithPoints < 30)
+        if (FaithPoints < 75 || CharityPoints < 75)
+        {   //instant game over
+            if (CharityPoints <= 0)
+            {
+                EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
+            }
+            else if (FaithPoints <= 0)
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
             }
-            if (CharityPoints < 30)
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
+            else
+            {   //end of week game over
+                if (CharityPoints < 75)
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
+                }
+                if (FaithPoints < 75)
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
+                }
             }
 
             //Game Over, Restart Week!
@@ -122,6 +147,7 @@ public class MissionManager : MonoBehaviour
         }
 
         EventsManager.Instance.ExecuteEvents();
+        EventsManager.Instance.CurrentEvents.Clear();
         FaithPoints = 15;
         CharityPoints = 15;
         GameManager.Instance.Player.ResetEnergy();
