@@ -49,27 +49,20 @@ public class WeatherManager : MonoBehaviour
 
         if (WeatherForecastTriggered)
         {
-            if (CurrentWeatherGO.activeSelf)
+            if (GameManager.Instance.GameClock == WeatherEndTime)
             {
-                if (GameManager.Instance.GameClock == WeatherEndTime)
-                {
-                    CurrentWeatherGO.GetComponent<StormyWeather>().StopStorm();
-                    WeatherForecastTriggered = false;
-                    SetWeather(time);
-                    DayNightCycle.SetFutureSkyBox(WeatherType);
-                }
+                CurrentWeatherGO?.GetComponent<StormyWeather>()?.StopStorm();
+                WeatherForecastTriggered = false;
+                SetWeather(time);
+                DayNightCycle.SetFutureSkyBox(WeatherType);
             }
-            else
+            else if (GameManager.Instance.GameClock == WeatherStartTime)
             {
-                if (GameManager.Instance.GameClock == WeatherStartTime)
-                {
-                    CurrentWeatherGO.SetActive(true);
-                    CurrentWeatherGO.GetComponent<StormyWeather>().StartStorm();
-                    WeatherType = WeatherType.RAIN;
-                    WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
-                }
+                CurrentWeatherGO?.SetActive(true);
+                CurrentWeatherGO?.GetComponent<StormyWeather>()?.StartStorm();
+                WeatherType = WeatherType.RAIN;
+                WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
             }
-
             return;
         }
         else
@@ -91,7 +84,7 @@ public class WeatherManager : MonoBehaviour
                 break;
 
             case MissionDifficulty.HARD:
-                if (wData != null || !SameDayAsMission() && Random.Range(0, 100) < 2)
+                if (wData != null || !SameDayAsMission() && Random.Range(0, 100) < 200)
                 {
                     WeatherActivation(wData != null ? wData.StartTime : Random.Range(3, 5), wData != null ? wData.Duration : Random.Range(4, 5));
                 }
@@ -156,8 +149,11 @@ public class WeatherManager : MonoBehaviour
     private void SetStormyWeather()
     {
         //pick weather type depending on current environment
-        CurrentWeatherGO = Instantiate(RainResource) as GameObject;
-        CurrentWeatherGO.SetActive(false);
+        if(MissionManager.Instance.CurrentMission.Season == Season.FALL)
+        {
+            CurrentWeatherGO = Instantiate(RainResource) as GameObject;
+        }
+        CurrentWeatherGO?.SetActive(false);
         WeatherType = WeatherType.PRERAIN;
         DayNightCycle.SetFutureSkyBox(WeatherType);
         WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
