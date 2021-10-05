@@ -696,11 +696,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 520e2d19ed1f2f34dbc662a182668d27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DayOverride: 1
+  DayOverride: 7
   TimeOverride: 23
-  FP: 0
-  CP: 0
-  energy: 0
+  FP: 100
+  CP: 100
+  energy: 100
   FutureStartTime: 2
   FutureEndTime: 21
   Money: 0
@@ -710,7 +710,7 @@ MonoBehaviour:
   NewSaint: 0
   UnlockedSaints: 0
   showDayTimeUI: 1
-  showCpFpEnUI: 0
+  showCpFpEnUI: 1
   showInvProUI: 0
 --- !u!1 &1575261438
 GameObject:
