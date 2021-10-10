@@ -165,13 +165,7 @@ public class GameManager : MonoBehaviour
         }
         else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))
         {
-            //Load game data after saits scene is exited.. Modify to what is expected
-            SaveDataManager.Instance.LoadGame((data, newgame) => {
-
-                TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
-                GameSettings.Instance.FTUE = false;
-
-            }, false, true);
+            
 
             loadWeekDaysScene = false;
             PreviousSceneID = CurrentSceneID;
