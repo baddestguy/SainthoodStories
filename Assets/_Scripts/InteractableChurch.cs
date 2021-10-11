@@ -276,6 +276,14 @@ public class InteractableChurch : InteractableHouse
         }
     }
 
+    public override void TriggerCustomEvent()
+    {
+        GameClock clock = GameManager.Instance.GameClock;
+        if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime) return;
+        if (clock.Day % 7 == 0 && (clock.Time == ConfessionTime || (clock.Time >= MassStartTime && clock.Time < MassEndTime))) return;
+        base.TriggerCustomEvent();
+    }
+
     public override void ReportScores()
     {
         CurrentFaithPoints = 0;
@@ -287,7 +295,7 @@ public class InteractableChurch : InteractableHouse
         Player player = GameManager.Instance.Player;
 
         player.ConsumeEnergy(SleepEnergy);
-        player.ModifyStatusEffect(PlayerStatusEffect.NONE);
+        player.ClearStatusEffects();
         PopUIFXIcons("Energy", -SleepEnergy);
         clock.Tick();
         UI.Instance.DisplayMessage("SLEPT!");

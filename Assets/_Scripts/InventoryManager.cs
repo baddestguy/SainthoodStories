@@ -117,14 +117,46 @@ public class InventoryManager : MonoBehaviour
         GameClock c = GameManager.Instance.GameClock;
         if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day > 5 && Random.Range(0, 100) < 50) yield break;
 
-        var prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 7)];
-        var prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 7)];
+        var prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 8)];
+        prov1 = SwapProvisionBySeason(prov1);
+        var prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 8)];
+        prov2 = SwapProvisionBySeason(prov2);
+
         while (prov2.Id == prov1.Id)
         {
-            prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 7)];
+            prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 8)];
+            prov2 = SwapProvisionBySeason(prov2);
         }
 
         UI.Instance.EnableProvisionPopup(prov1, prov2);
+    }
+
+    private ProvisionData SwapProvisionBySeason(ProvisionData prov)
+    {
+        switch (MissionManager.Instance.CurrentMission.Season)
+        {
+            case Season.SUMMER:
+                if (prov.Id == Provision.WINTER_CLOAK || prov.Id == Provision.UMBRELLA)
+                {
+                    return GameDataManager.Instance.ProvisionData[Provision.ENERGY_DRINK];
+                }
+                break;
+
+            case Season.FALL:
+                if(prov.Id == Provision.WINTER_CLOAK)
+                {
+                    return GameDataManager.Instance.ProvisionData[Provision.UMBRELLA];
+                }
+                break;
+
+            case Season.WINTER:
+                if (prov.Id == Provision.UMBRELLA)
+                {
+                    return GameDataManager.Instance.ProvisionData[Provision.WINTER_CLOAK];
+                }
+                break;
+        }
+        return prov;
     }
 
     public bool HasProvision(Provision provision)

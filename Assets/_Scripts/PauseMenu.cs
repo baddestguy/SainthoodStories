@@ -78,7 +78,6 @@ public class PauseMenu : MonoBehaviour
 
     public void OnExitToMenuBtnClicked()
     {
-        SaveDataManager.Instance.SaveGame();
         //maybe do check before quit
         StartCoroutine(ScheduleCallback(() => {
             GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
@@ -87,7 +86,6 @@ public class PauseMenu : MonoBehaviour
 
     public void OnExitToDesktopClicked()
     {
-        SaveDataManager.Instance.SaveGame();
         //maybe do check before quit
         StartCoroutine(ScheduleCallback(() => {
             Application.Quit();

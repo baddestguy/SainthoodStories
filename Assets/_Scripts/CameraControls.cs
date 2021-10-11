@@ -85,7 +85,7 @@ public class CameraControls : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, CamTarget, Time.deltaTime*3);
     }
 
-    public void SetCameraTarget(Vector3 newTarget, bool modifyPostProcess = true)
+    public void SetCameraTarget(Vector3 newTarget, bool modifyPostProcess = false)
     {
         CamTarget = newTarget.magnitude != 0 ? newTarget : OriginalCamTarget;
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,12 +25,19 @@ public class Player : MonoBehaviour
 
     private PopUIFX PopUIFX;
     private bool DissapearInHouse;
-    public PlayerStatusEffect StatusEffect = PlayerStatusEffect.NONE; //Likely going to be a List of status effects that Stack.
+    public List<PlayerStatusEffect> StatusEffects = new List<PlayerStatusEffect>();
 
     private GameObject GroundTapFX;
     private GameObject GroundMoveFX;
 
     public static bool OnEnergyDepleted;
+    private int WeatherStatusCounter;
+    private int FrozenCounter = 3;
+
+    public GameObject FatigueFx;
+    public GameObject FrozenFx;
+    public ParticleSystem SnowSplash;
+    public GameObject CharacterGO;
 
     void Start()
     {
@@ -62,6 +70,26 @@ public class Player : MonoBehaviour
                 transform.localScale = Vector3.zero;
                 DissapearInHouse = false;
             }
+        }
+
+        if (StatusEffects.Contains(PlayerStatusEffect.FATIGUED))
+        {
+            FatigueFx.SetActive(true);
+        }
+        else
+        {
+            FatigueFx.SetActive(false);
+        }
+
+        if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
+        {
+            FrozenFx.SetActive(true);
+            CharacterGO.SetActive(false);
+        }
+        else
+        {
+            FrozenFx.SetActive(false);
+            CharacterGO.SetActive(true);
         }
     }
 
@@ -128,8 +156,45 @@ public class Player : MonoBehaviour
         PopUIFX.Init("Energy", -EnergyConsumption);
     }
 
+    private void StormyWeatherEffect()
+    {
+        if (!WeatherManager.Instance.IsStormy()) return;
+        if (InventoryManager.Instance.HasProvision(Provision.UMBRELLA) || InventoryManager.Instance.HasProvision(Provision.WINTER_CLOAK)) return;
+
+        switch (MissionManager.Instance.CurrentMission.Season)
+        {
+            case Season.FALL:
+                WeatherStatusCounter++;
+                if (WeatherStatusCounter >= 3)
+                {
+                    if (Random.Range(0, 100) < 50)
+                    {
+                        WeatherStatusCounter = 0;
+                        StatusEffects.Add(PlayerStatusEffect.FATIGUED);
+                        Debug.LogWarning("SICK FROM RAIN!");
+                    }
+                }
+                break;
+
+            case Season.WINTER:
+                WeatherStatusCounter++;
+                if (WeatherStatusCounter >= 3)
+                {
+                    if (Random.Range(0, 100) < 50)
+                    {
+                        WeatherStatusCounter = 0;
+                        StatusEffects.Add(PlayerStatusEffect.FROZEN);
+                        Debug.LogWarning("FROZEN!");
+                    }
+                }
+                break;
+        }
+    }
+
     private void OnMove(MapTile newTile)
     {
+        StormyWeatherEffect();
+
         CurrentTile = newTile;
 
         EnergyConsumption = ModifyEnergyConsumption(CurrentTile);
@@ -162,7 +227,7 @@ public class Player : MonoBehaviour
         else if (newTile is InteractableObject)
         {
             var iTile = newTile as InteractableObject;
-            if (!passTime || WeCanMove(iTile.CurrentGroundTile))
+            if ((!passTime || WeCanMove(iTile.CurrentGroundTile)) && !StatusEffects.Contains(PlayerStatusEffect.FROZEN))
             {
                 transform.localScale = Vector3.one;
                 DissapearInHouse = true;
@@ -179,7 +244,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (WeCanMove(newTile))
+            if (WeCanMove(newTile) && !StatusEffects.Contains(PlayerStatusEffect.FROZEN))
             {
                 transform.localScale = Vector3.one;
                 OnMove(newTile);
@@ -199,7 +264,7 @@ public class Player : MonoBehaviour
 
         if (Energy.Depleted())
         {
-            StatusEffect = PlayerStatusEffect.FATIGUED;
+            StatusEffects.Add(PlayerStatusEffect.FATIGUED);
         }
     }
 
@@ -227,11 +292,12 @@ public class Player : MonoBehaviour
                 energyAmount--;
             }
         }
-        if(StatusEffect == PlayerStatusEffect.FATIGUED)
+        if(StatusEffects.Contains(PlayerStatusEffect.FATIGUED))
         {
             energyAmount++;
         }
-        if(tile != null && WeatherManager.Instance.IsStormy() && !InventoryManager.Instance.HasProvision(Provision.UMBRELLA))
+
+        if(tile != null && WeatherManager.Instance.IsStormy())
         {
             energyAmount++;
         }     
@@ -251,6 +317,24 @@ public class Player : MonoBehaviour
         }
         else if(tile == CurrentTile)
         {
+            if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
+            {
+                FrozenCounter--;
+                Energy.Consume(ModifyEnergyConsumption(tile));
+                Debug.LogWarning("FROZEN!");
+                if (FrozenCounter <= 0)
+                {
+                    FrozenCounter = 3;
+                    StatusEffects.Remove(PlayerStatusEffect.FROZEN);
+                    StatusEffects.Add(PlayerStatusEffect.FATIGUED);
+                    SnowSplash.Play();
+                    Debug.LogWarning("SICK FROM ICE!");
+                }
+                FrozenFx.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.3f);
+                GameManager.Instance.PassTime();
+                return;
+            }
+
             transform.eulerAngles = new Vector3(0, 180f, 0);
             Animator.SetTrigger("Dance");
             var soundByte = Random.Range(0, 3);
@@ -281,7 +365,12 @@ public class Player : MonoBehaviour
 
     public void ModifyStatusEffect(PlayerStatusEffect newStatus)
     {
-        StatusEffect = newStatus;
+        StatusEffects.Add(newStatus);
+    }
+
+    public void ClearStatusEffects()
+    {
+        StatusEffects.Clear();
     }
 
     public bool EnergyDepleted(int consumption = 0)

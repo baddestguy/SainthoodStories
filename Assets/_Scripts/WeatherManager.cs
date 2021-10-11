@@ -29,17 +29,17 @@ public class WeatherManager : MonoBehaviour
     {
         GameClock.Ticked += TriggerWeatherForecast;
         GameManager.MissionBegin += MissionBegin;
-        RainResource = Resources.Load("Weather/Rain");
         WeatherStartTime = new GameClock(0);
         WeatherEndTime = new GameClock(0);
     }
 
     private void MissionBegin(Mission mission)
     {
+        RainResource = Resources.Load("Weather/Rain");
         WeatherStartTime = new GameClock(0);
         WeatherEndTime = new GameClock(0);
         DayNightCycle = FindObjectOfType<DayNightCycle>();
-        SetWeather(GameManager.Instance.GameClock.Time);
+        BroadcastWeather();
         UI.Instance.WeatherAlert(WeatherType, WeatherStartTime, WeatherEndTime);
     }
 
@@ -53,21 +53,25 @@ public class WeatherManager : MonoBehaviour
             {
                 CurrentWeatherGO?.GetComponent<StormyWeather>()?.StopStorm();
                 WeatherForecastTriggered = false;
-                SetWeather(time);
+                WeatherType = WeatherType.NONE;
+                BroadcastWeather();
                 DayNightCycle.SetFutureSkyBox(WeatherType);
             }
             else if (GameManager.Instance.GameClock == WeatherStartTime)
             {
-                CurrentWeatherGO?.SetActive(true);
-                CurrentWeatherGO?.GetComponent<StormyWeather>()?.StartStorm();
-                WeatherType = WeatherType.RAIN;
+                SetWeatherType();
+                if(CurrentWeatherGO != null)
+                {
+                    CurrentWeatherGO?.SetActive(true);
+                    CurrentWeatherGO?.GetComponent<StormyWeather>()?.StartStorm();
+                }
                 WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
             }
             return;
         }
         else
         {
-            SetWeather(time);
+            BroadcastWeather();
         }
 
         if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && day < 3) return;
@@ -84,8 +88,10 @@ public class WeatherManager : MonoBehaviour
                 break;
 
             case MissionDifficulty.HARD:
-                if (wData != null || !SameDayAsMission() && Random.Range(0, 100) < 200)
+                if (wData != null || !SameDayAsMission() && Random.Range(0, 100) < 2)
                 {
+                    if (MissionManager.Instance.CurrentMission.Season == Season.SUMMER && !GameManager.Instance.GameClock.DuringTheDay()) break;
+                    
                     WeatherActivation(wData != null ? wData.StartTime : Random.Range(3, 5), wData != null ? wData.Duration : Random.Range(4, 5));
                 }
                 break;
@@ -132,42 +138,63 @@ public class WeatherManager : MonoBehaviour
         WeatherActivation(futureStartTime, futureEndTime);
     }
 
-    private void SetWeather(double time)
+    private void BroadcastWeather()
     {
-        if (time >= 21 || time < 6)
-        {
-            WeatherType = WeatherType.NIGHT;
-        }
-        else if (time >= 6)
-        {
-            WeatherType = WeatherType.DAY;
-        }
-
         WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
     }
 
     private void SetStormyWeather()
     {
-        //pick weather type depending on current environment
-        if(MissionManager.Instance.CurrentMission.Season == Season.FALL)
-        {
-            CurrentWeatherGO = Instantiate(RainResource) as GameObject;
-        }
-        CurrentWeatherGO?.SetActive(false);
-        WeatherType = WeatherType.PRERAIN;
-        DayNightCycle.SetFutureSkyBox(WeatherType);
+        SetPreStormWeather();
         WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
-        SoundManager.Instance.PlayOneShotSfx("Thunder_SFX", 1f, 30);
+    }
+
+    private void SetPreStormWeather()
+    {
+        switch (MissionManager.Instance.CurrentMission.Season)
+        {
+            case Season.SPRING:
+            case Season.FALL:
+            case Season.WINTER:
+                SoundManager.Instance.PlayOneShotSfx("Thunder_SFX", 1f, 30);
+                WeatherType = WeatherType.PRESTORM;
+                break;
+            case Season.SUMMER:
+                WeatherType = WeatherType.PREHEAT;
+                break;
+        }
+        DayNightCycle.SetFutureSkyBox(WeatherType);
+    }
+
+    private void SetWeatherType()
+    {
+        switch (MissionManager.Instance.CurrentMission.Season)
+        {
+            case Season.SPRING:
+                WeatherType = WeatherType.HAIL;
+                break;
+            case Season.SUMMER:
+                WeatherType = WeatherType.HEATWAVE;
+                break;
+            case Season.FALL:
+                CurrentWeatherGO = Instantiate(RainResource) as GameObject;
+                WeatherType = WeatherType.RAIN;
+                break;
+            case Season.WINTER:
+                WeatherType = WeatherType.SNOW;
+                break;
+        }
+        DayNightCycle.SetFutureSkyBox(WeatherType);
     }
 
     public bool IsStormy()
     {
-        return WeatherType != WeatherType.DAY && WeatherType != WeatherType.NIGHT && WeatherType != WeatherType.PRERAIN; 
+        return WeatherType != WeatherType.NONE && WeatherType != WeatherType.PRESTORM && WeatherType != WeatherType.PREHEAT; 
     }
 
     public bool IsNormal()
     {
-        return WeatherType == WeatherType.DAY || WeatherType == WeatherType.NIGHT;
+        return WeatherType == WeatherType.NONE;
     }
 
     private void MissionComplete(bool complete)
@@ -180,10 +207,12 @@ public class WeatherManager : MonoBehaviour
         if(CurrentWeatherGO != null)
         {
             CurrentWeatherGO.GetComponent<StormyWeather>().StopStorm();
+            Destroy(CurrentWeatherGO);
+            CurrentWeatherGO = null;
         }
-
+        WeatherType = WeatherType.NONE;
         WeatherForecastTriggered = false;
-        SetWeather(GameManager.Instance.GameClock.Time);
+        BroadcastWeather();
         DayNightCycle.SetFutureSkyBox(WeatherType);
     }
 

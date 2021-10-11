@@ -75,7 +75,6 @@ public class GameClock
         if (EndofDay)
         {
             StartNewDay?.Invoke();
-            SaveDataManager.Instance.SaveGame();
         }
         ExecuteEvents?.Invoke();
 
@@ -98,6 +97,11 @@ public class GameClock
         double timeDiff = 23.5 - Time;
         Time += timeDiff;
         Tick();
+    }
+
+    public bool DuringTheDay()
+    {
+        return Time >= 6 && Time < 21;
     }
 
     public static bool operator >(GameClock gameClock1, GameClock gameClock2)

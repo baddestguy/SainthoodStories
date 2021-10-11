@@ -736,13 +736,14 @@ public class InteractableHouse : InteractableObject
         if (EventsManager.Instance.CurrentEvents.Count > 3) return;
         if (UI.Instance.WeekBeginCrossFade) return;
         if (GameManager.Instance.PreviousSceneID == SceneID.SaintsShowcase_Day) return;
+        if (DeadlineSet) return;
 
         if (Random.Range(0, 100) < 50)
         {
             switch (GetType().Name)
             {
                 case "InteractableChurch":
-                    if(GameManager.Instance.Player.StatusEffect != PlayerStatusEffect.FATIGUED)
+                    if(!GameManager.Instance.Player.StatusEffects.Contains(PlayerStatusEffect.FATIGUED))
                         EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.CHURCH).Id);
                     break;
                 case "InteractableHospital":

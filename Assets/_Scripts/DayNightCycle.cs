@@ -26,6 +26,15 @@ public class DayNightCycle : MonoBehaviour
 
     private float BlendValue = 0f;
     private bool LockSkybox;
+
+    public DayNight DayNight
+    {
+        get { 
+            if (GameManager.Instance.GameClock.Time >= 6 && GameManager.Instance.GameClock.Time < 21) return DayNight.DAY;
+            else return DayNight.NIGHT; 
+        }
+    }
+
     void Start()
     {
         GameClock.Ticked += OnTick;
@@ -131,7 +140,7 @@ public class DayNightCycle : MonoBehaviour
             case 23: TargetRotation = new Vector3(160, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 23.5: TargetRotation = new Vector3(162, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
         }
-
+        UI.Instance.UpdateDayNightIcon(DayNight);
         LockSkybox = true;
     }
 
@@ -182,20 +191,28 @@ public class DayNightCycle : MonoBehaviour
     {
         switch (type)
         {
-            case WeatherType.PRERAIN:
+            case WeatherType.PRESTORM:
             case WeatherType.RAIN:
             case WeatherType.SNOW:
+            case WeatherType.HAIL:
                 LockSkybox = false;
                 SetFutureSkybox(RainSkyboxTextures);
                 TargetBloomIntensity = 1;
                 LockSkybox = true;
                 return;
 
-            case WeatherType.DAY:
-            case WeatherType.NIGHT:
+            case WeatherType.PREHEAT:
+                Bloom.threshold.Override(0.6f);
+                break;
+            case WeatherType.HEATWAVE:
+                Bloom.threshold.Override(0f);
+                break;
+
+            case WeatherType.NONE:
                 LockSkybox = false;
                 SetDayNight();
                 TargetBloomIntensity = 5;
+                Bloom.threshold.Override(1f);
                 return;
         }
     }

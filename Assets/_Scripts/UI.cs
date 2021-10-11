@@ -301,17 +301,35 @@ public class UI : MonoBehaviour
     public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
     {
         GameClock clock = GameManager.Instance.GameClock;
-        if(weather == WeatherType.PRERAIN || weather == WeatherType.RAIN)
+        if(weather != WeatherType.NONE)
         {
             WeatherGO.SetActive(true);
             WeatherDisplay.text = clock >= start ? "" : $"{(int)start.Time}:{(start.Time % 1 == 0 ? "00" : "30")}";
-            WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/{weather}");
+            
+            switch (MissionManager.Instance.CurrentMission.Season) {
+                case Season.SPRING:
+                    WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Hail");
+                    break;
+                case Season.SUMMER:
+                    WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Heatwave");
+                    break;
+                case Season.FALL:
+                    WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Rain");
+                    break;
+                case Season.WINTER:
+                    WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Snow");
+                    break;
+            }
         }
         else
         {
             WeatherGO.SetActive(false);
-            DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{weather}");
         }
+    }
+
+    public void UpdateDayNightIcon(DayNight dayNight)
+    {
+        DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{dayNight}");
     }
 
     public void EventAlert(CustomEventData customEvent)
@@ -340,7 +358,7 @@ public class UI : MonoBehaviour
             TreasuryAdditionDisplay.text = "";
         }
 
-        int oldAmount = int.Parse(TreasuryAmount.text);
+        int oldAmount = int.Parse(TreasuryAmount.text, System.Globalization.NumberStyles.AllowThousands);
         TreasuryAmount.DOCounter(oldAmount, (int)TreasuryManager.Instance.Money, 0.5f).SetDelay(2f);
 
         StartCoroutine(AdditionPointsAsync(TreasuryAdditionDisplay, TreasuryDisplayGlow, (int)delta, 2f));

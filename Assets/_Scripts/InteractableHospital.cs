@@ -130,6 +130,12 @@ public class InteractableHospital : InteractableHouse
         }
     }
 
+    public override void TriggerCustomEvent()
+    {
+        if (DeliveryTimeSet) return;
+        base.TriggerCustomEvent();
+    }
+
     public override void PopUICallback(string button)
     {
         base.PopUICallback(button);
