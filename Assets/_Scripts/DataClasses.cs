@@ -49,7 +49,8 @@ public enum ThankYouType
 public enum PlayerStatusEffect
 {
     NONE = 0,
-    FATIGUED
+    FATIGUED,
+    FROZEN
 }
 
 public enum PlayerFacingDirection
@@ -62,11 +63,19 @@ public enum PlayerFacingDirection
 
 public enum WeatherType
 {
-    DAY = 0,
-    NIGHT,
-    PRERAIN,
+    NONE = 0,
+    PRESTORM,
+    PREHEAT,
     RAIN,
-    SNOW
+    SNOW,
+    HAIL,
+    HEATWAVE
+}
+
+public enum DayNight
+{
+    DAY = 0,
+    NIGHT
 }
 
 public enum TileType
@@ -109,7 +118,8 @@ public enum Provision
     ROSARY,
     SHOES,
     COOKING_UTENSILS,
-    DISCOUNT_CARD
+    DISCOUNT_CARD,
+    WINTER_CLOAK
 }
 
 public enum BuildingState
