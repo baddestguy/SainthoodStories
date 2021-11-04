@@ -17,26 +17,7 @@ public class SaintsManager : MonoBehaviour
 
     public void UnlockSaint()
     {
-
-        
-        if (UnlockedSaints.Count >= 3) return;
-        //NOTE: posibility of a bug here, can crash game.. 
-
-        //Fix: Get all the saints aand store in a collection filter the unlocked saints away and do a random run on the locked collection.
-
-        //===============>>>>>>
         SaintData saint;
-        /*
-        do
-        {
-            saint = GameDataManager.Instance.Saints[(SaintID)Random.Range(0, GameDataManager.Instance.Saints.Count)];
-        }
-        while (UnlockedSaints.Contains(saint));
-        UnlockedSaints.Add(saint);
-        NewSaint = saint;
-        */
-        //===============>>>>>>
-        //fix impleamentation
         List<SaintID> saintIDs = GameDataManager.Instance.Saints.Keys.ToList();
         saintIDs = saintIDs.Where(x => !UnlockedSaints.Any(s => s.Id == x)).ToList(); //here we have al the saints not unlocked
         if(saintIDs.Count > 0)
@@ -46,11 +27,6 @@ public class SaintsManager : MonoBehaviour
             UnlockedSaints.Add(saint);
             NewSaint = saint;
         }
-        
-        //===============>>>>>>
-
-
-        
     }
 
     public void LoadSaints(SaintID[] saintIDs)
@@ -64,15 +40,17 @@ public class SaintsManager : MonoBehaviour
         }
     }
 
-
-
     public void OnOverride(SaintID newSaints)
     {
-        SaintData saint = GameDataManager.Instance.Saints[(SaintID)Random.Range(0, GameDataManager.Instance.Saints.Count)];
-        if (!UnlockedSaints.Contains(saint))
-        {
-            UnlockedSaints.Add(saint);
-            NewSaint = saint;
-        }
+        SaintData saint = GameDataManager.Instance.Saints[newSaints];
+        if (UnlockedSaints.Contains(saint)) return;
+
+        UnlockedSaints.Add(saint);
+        NewSaint = saint;
+    }
+
+    public void OnOverrideRandom()
+    {
+        UnlockSaint();
     }
 }
