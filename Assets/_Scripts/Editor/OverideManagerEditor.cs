@@ -166,6 +166,7 @@ public class OverideManagerEditor : Editor
         SerializedProperty Inventory = serializedObject.FindProperty(nameof(overideManager.Inventory));
         SerializedProperty Provision = serializedObject.FindProperty(nameof(overideManager.provisions));
         SerializedProperty Saint = serializedObject.FindProperty(nameof(overideManager.NewSaint));
+        SerializedProperty RandomSaint = serializedObject.FindProperty(nameof(overideManager.NewSaint));
         SerializedProperty money = serializedObject.FindProperty("Money");
 
 
@@ -204,15 +205,26 @@ public class OverideManagerEditor : Editor
             GUILayout.BeginHorizontal();
             EditorGUILayout.PropertyField(Saint, new GUIContent(nameof(overideManager.NewSaint)));
             SetColor(canClick);
-            if (GUILayout.Button("Unlock") && canClick)
+            if (GUILayout.Button("Unlock Saint") && canClick)
             {
                 overideManager.OverideSaint();
             }
+
+            GUILayout.EndHorizontal();
+
+            SetColor(true); 
             
+            GUILayout.BeginHorizontal();
+            SetColor(canClick);
+            if (GUILayout.Button("Unlock Random Saint") && canClick)
+            {
+                overideManager.OverideRandomSaint();
+            }
+
             GUILayout.EndHorizontal();
 
             SetColor(true);
-            
+
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PropertyField(money, new GUIContent("Money"));
             SetColor(canClick);

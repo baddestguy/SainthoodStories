@@ -74,6 +74,11 @@ public class OverideManager : MonoBehaviour
         SaintsManager.Instance.OnOverride(NewSaint);
     }
 
+    public void OverideRandomSaint()
+    {
+        SaintsManager.Instance.OnOverrideRandom();
+    }
+
     public void AddMoney()
     {
         TreasuryManager.Instance.DonateMoney(Money);

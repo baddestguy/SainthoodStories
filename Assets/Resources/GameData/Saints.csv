@@ -1,4 +1,27 @@
 Id,Name,Birthday,Death,FeastDay,PatronKey,BioKey,IconPath
-BAKHITA,Saint Josephine Bakhita,1869,"February 8, 1947",February 8,Bakhita_Patron,Bakhita_Bio,Icons/Saints/Bakhita
-TERESA,Saint Teresa of Calcutta,"August 26, 1910","September 5, 1997",September 5,Teresa_Patron,Teresa_Bio,Icons/Saints/Teresa
-SANMARTIN,Saint Martin de Porres,"December 9, 1579","November 3, 1639",November 3,SanMartin_Patron,SanMartin_Bio,Icons/Saints/SanMartin
+ANDREW,Saint Andrew Kim Taegon,"August 21, 1821","September 16, 1846",September 16,ANDREW_Patron,ANDREW_Bio,Icons/Saints/ANDREW
+ANN,Saint Elizabeth Ann Seton,"August 28, 1774","January 4, 1821",January 4,ANN_Patron,ANN_Bio,Icons/Saints/ANN
+BAKHITA,Saint Josephine Bakhita,1869,"February 8, 1947",February 8,BAKHITA_Patron,BAKHITA_Bio,Icons/Saints/BAKHITA
+CANUTE,Saint Canute IV,1042 AD,"July 10, 1086",July 10,CANUTE_Patron,CANUTE_Bio,Icons/Saints/CANUTE
+ELIZABETH,Saint Elizabeth of Hungary,"July 7, 1207","November 17, 1231",November 17,ELIZABETH_Patron,ELIZABETH_Bio,Icons/Saints/ELIZABETH
+FRANCOIS,Saint Francois de Laval,"April 30, 1623","May 6, 1708",May 6,FRANCOIS_Patron,FRANCOIS_Bio,Icons/Saints/FRANCOIS
+FREDERICK,Saint Frederick of Hallum,1113 AD,"March 3, 1175",March 3,FREDERICK_Patron,FREDERICK_Bio,Icons/Saints/FREDERICK
+FREI,Saint Frei Galvao,"May 13, 1739","December 23, 1822",May 11,FREI_Patron,FREI_Bio,Icons/Saints/FREI
+IRMA,Saint Irma Dulce Pontes,"May 26, 1914","March 13, 1992",August 13,IRMA_Patron,IRMA_Bio,Icons/Saints/IRMA
+JADWIGA,Saint Jadwiga of Poland,1373 AD,"July 17, 1399",June 8,JADWIGA_Patron,JADWIGA_Bio,Icons/Saints/JADWIGA
+JOHN,Saint John Roberts,1577,"December 10, 1610",October 25,JOHN_Patron,JOHN_Bio,Icons/Saints/JOHN
+JOSE,Saint Jose Gabriel del Rosario Brochero,"March 16, 1840","January 26, 1914",March 16,JOSE_Patron,JOSE_Bio,Icons/Saints/JOSE
+JOSEPH,Saint Joseph Mukasa Balikuddembe,1860,"November 15, 1885",June 3,JOSEPH_Patron,JOSEPH_Bio,Icons/Saints/JOSEPH
+KATERI,Saint Kateri Tekakwitha,1656,"April 17, 1680",July 14,KATERI_Patron,KATERI_Bio,Icons/Saints/KATERI
+KATHARINE,Saint Katharine Drexel,"November 26, 1858","March 3, 1955",March 3,KATHARINE_Patron,KATHARINE_Bio,Icons/Saints/KATHARINE
+LORENZO,Saint Lorenzo Ruiz,"November 28, 1594","September 29, 1637",September 28,LORENZO_Patron,LORENZO_Bio,Icons/Saints/LORENZO
+MAGDALENE,Saint Magdalene of Nagasaki,1611,"October 15, 1634",October 20,MAGDALENE_Patron,MAGDALENE_Bio,Icons/Saints/MAGDALENE
+MARIAM,Saint Mariam Thresia Mankidiyan,"April 28, 1876","June 8, 1926",June 8,MARIAM_Patron,MARIAM_Bio,Icons/Saints/MARIAM
+MARIE,Saint Marie-Marguerite d’Youville,"October 15, 1701","December 23, 1771",October 16,MARIE_Patron,MARIE_Bio,Icons/Saints/MARIE
+MONICA,Saint Monica of Hippo,332 AD,387 AD,August 27,MONICA_Patron,MONICA_Bio,Icons/Saints/MONICA
+MOSES,Saint Moses the Black,330 AD,405 AD,July 1,MOSES_Patron,MOSES_Bio,Icons/Saints/MOSES
+PEDRO,Saint Pedro Calunsgod,"July 21, 1654","April 2, 1672",March 27,PEDRO_Patron,PEDRO_Bio,Icons/Saints/PEDRO
+ROQUE,Saint Roque Gonzalez de Santa Cruz,"November 17, 1576","November 15, 1628",November 16,ROQUE_Patron,ROQUE_Bio,Icons/Saints/ROQUE
+SANMARTIN,Saint Martin de Porres,"December 9, 1579","November 3, 1639",November 3,SANMARTIN_Patron,SANMARTIN_Bio,Icons/Saints/SANMARTIN
+TERESA,Saint Teresa of Calcutta,"August 26, 1910","September 5, 1997",September 5,TERESA_Patron,TERESA_Bio,Icons/Saints/TERESA
+VICTOR,Saint Victor Maurus of Milan,3rd Century,303 AD,May 8,VICTOR_Patron,VICTOR_Bio,Icons/Saints/VICTOR

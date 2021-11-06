@@ -2366,10 +2366,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ebf174909a87f4459790af0582c6fac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SaintPotrait: {fileID: 0}
-  Bio: {fileID: 0}
-  Title: {fileID: 0}
-  SaintsProps: []
+  SaintPotrait: {fileID: 1165036050}
+  Bio: {fileID: 1076136817}
+  Title: {fileID: 1574400278}
 --- !u!114 &1066641119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2957,7 +2956,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -337.01, y: -18.7}
+  m_AnchoredPosition: {x: -335, y: 4.16}
   m_SizeDelta: {x: 402.3, y: 3462.4678}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1165036050

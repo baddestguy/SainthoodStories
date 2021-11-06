@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,8 +11,6 @@ public class SaintShowcaseHandler : MonoBehaviour
     public TextMeshProUGUI Title;    
 
     private int CurrentSaintIndex = 0;
-
-    public SaintsProp[] SaintsProps;
 
     private void Start()
     {
@@ -60,17 +56,15 @@ public class SaintShowcaseHandler : MonoBehaviour
         UpdateSaint();
     }
 
-
     private void UpdateSaint()
     {
         if (!SaintsManager.Instance.UnlockedSaints.Any()) return;
         
         SaintData saintData = SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex];
-        SaintsProp prop = SaintsProps.Where(x => x.ID == saintData.Id).FirstOrDefault();
 
         //populate the saint data
         SaintPotrait.enabled = true;
-        SaintPotrait.sprite = prop.image;
+        SaintPotrait.sprite = Resources.Load<Sprite>(saintData.IconPath);
         Bio.text = LocalizationManager.Instance.GetText(saintData.BioKey);
         Title.text = saintData.Name;
     }

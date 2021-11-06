@@ -8,10 +8,33 @@ public class DataClasses : MonoBehaviour
 
 public enum SaintID
 {
-     NONE
+     NONE = 0
+    ,ANDREW
+    ,ANN
     ,BAKHITA
-    ,TERESA
+    ,CANUTE
+    ,ELIZABETH
+    ,FRANCOIS
+    ,FREDERICK
+    ,FREI
+    ,IRMA
+    ,JADWIGA
+    ,JOHN
+    ,JOSE
+    ,JOSEPH
+    ,KATERI
+    ,KATHARINE
+    ,LORENZO
+    ,MAGDALENE
+    ,MARIAM
+    ,MARIE
+    ,MONICA
+    ,MOSES
+    ,PEDRO
+    ,ROQUE
     ,SANMARTIN
+    ,TERESA
+    ,VICTOR
 }   
 
 public enum CustomEventRewardType
