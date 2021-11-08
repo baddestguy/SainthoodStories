@@ -123,26 +123,8 @@ public class MissionManager : MonoBehaviour
         }
         else
         {
-            if (FaithPoints >= 75)
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.ICON);
-                SaintsManager.Instance.UnlockSaint();
-            }
-            else
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.TRYHARDER_FAITH);
-            }
-            if (CharityPoints >= 75)
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.DONATION);
-                TreasuryManager.Instance.DonateMoney(Random.Range(200, 250));
-            }
-            else
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.TRYHARDER_CHARITY);
-                EventsManager.Instance.AddEventToList(CustomEventType.DONATION);
-                TreasuryManager.Instance.DonateMoney(Random.Range(75, 100));
-            }
+            EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
+            yield return seq.RunSequenceAsync();
             CurrentMission.CurrentWeek++;
         }
 
@@ -155,6 +137,26 @@ public class MissionManager : MonoBehaviour
         InventoryManager.Instance.ClearProvisions();
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(true);
+    }
+
+    public IEnumerable<SaintData> UnlockSaints()
+    {
+        var saintsUnlocked = new List<SaintData>();
+
+        if (FaithPoints >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue)
+        {
+            saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
+        }
+        if (FaithPoints >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_2"].IntValue)
+        {
+            saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
+        }
+        if (FaithPoints >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_3"].IntValue)
+        {
+            saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
+        }
+
+        return saintsUnlocked;
     }
 
     private void OnDisable()

@@ -13,9 +13,7 @@ public class SaintsManager : MonoBehaviour
         Instance = this;
     }
 
-
-
-    public void UnlockSaint()
+    public SaintData UnlockSaint()
     {
         SaintData saint;
         List<SaintID> saintIDs = GameDataManager.Instance.Saints.Keys.ToList();
@@ -26,7 +24,10 @@ public class SaintsManager : MonoBehaviour
             saint = GameDataManager.Instance.Saints[randomPick];
             UnlockedSaints.Add(saint);
             NewSaint = saint;
+            return saint;
         }
+
+        return null;
     }
 
     public void LoadSaints(SaintID[] saintIDs)
