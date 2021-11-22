@@ -65,6 +65,7 @@ public class GameSettings : MonoBehaviour
 
             SetVolume("Global", data.globalVolume);
             SetVolume("Music", data.musicVolume);
+            SetVolume("Music2", data.musicVolume);
             SetVolume("SFX", data.sfxVolume);
             SetVolume("Ambiance", data.ambianceVolume);
             //language

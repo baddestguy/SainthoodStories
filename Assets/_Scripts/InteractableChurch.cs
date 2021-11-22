@@ -38,11 +38,13 @@ public class InteractableChurch : InteractableHouse
         if (tile.GetInstanceID() == GetInstanceID())
         {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
+            SoundManager.Instance.SwitchMusicChannel(true);
         }
         else
         {
             ExteriorPopUI.gameObject.SetActive(false);
             PopIcon.UIPopped(false);
+            SoundManager.Instance.SwitchMusicChannel(false);
         }
     }
 

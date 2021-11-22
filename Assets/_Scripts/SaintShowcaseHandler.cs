@@ -71,6 +71,7 @@ public class SaintShowcaseHandler : MonoBehaviour
 
     public void OnExit()
     {
+        SoundManager.Instance.EndAllTracks();
         //Load game data after saits scene is exited.. Modify to what is expected
         SaveDataManager.Instance.LoadGame((data, newgame) => {
             GameManager.Instance.SaveData = data;
