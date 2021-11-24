@@ -80,6 +80,7 @@ public class PauseMenu : MonoBehaviour
     {
         //maybe do check before quit
         StartCoroutine(ScheduleCallback(() => {
+            SoundManager.Instance.EndAllTracks();
             GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
         }, 1));
     }

@@ -144,12 +144,7 @@ public class GameManager : MonoBehaviour
             SaintsManager.Instance.LoadSaints(SaveData.Saints);
             InventoryManager.Instance.LoadInventory(SaveData);
 
-            //LoadScene("PauseMenu");
-            
-            //if (PersistentObjects.instance.developerMode)
-            //{
-            //    SceneManager.LoadScene("DeveloperScene", LoadSceneMode.Additive);
-            //}
+            SoundManager.Instance.PlayMusic("Convent_Music", "Field_Music");
         }
         else if (scene.name.Contains("MainMenu"))
         {
@@ -161,6 +156,7 @@ public class GameManager : MonoBehaviour
             },false, true);
             canPauseGame = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
+            SoundManager.Instance.PlayMusic("MainMenu_Music");
 
         }
         else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))

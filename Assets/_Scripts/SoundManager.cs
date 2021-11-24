@@ -10,7 +10,8 @@ public class SoundManager : MonoBehaviour
 
     public Dictionary<string, AudioClip> cachedAudioClips = new Dictionary<string, AudioClip>();
     public List<string> tracks;
-    [HideInInspector]public AudioSource MusicAudioSource;
+    [HideInInspector]public AudioSource MusicAudioSourceChannel1;
+    [HideInInspector]public AudioSource MusicAudioSourceChannel2;
     [HideInInspector]public AudioSource AmbientAudioSource;
     [HideInInspector]public AudioSource HouseAmbience;
     [HideInInspector]public AudioSource WeatherAmbientAudioSource;
@@ -21,15 +22,12 @@ public class SoundManager : MonoBehaviour
 
     public AudioMixer audioMixer;
 
-    //public bool soundEnabled;
-    //public bool musicEnabled;
-
     Dictionary<string, AudioClip> cachedVoices = new Dictionary<string, AudioClip>();
     public Dictionary<string, AudioMixerGroup> audioMixerGroup = new Dictionary<string, AudioMixerGroup>();
 
+
     void Awake()
     {
-        
         Instance = this;
         audioMixerGroup = audioMixer.FindMatchingGroups("Master").ToDictionary(key => key.name, value => value);
     }
@@ -38,65 +36,47 @@ public class SoundManager : MonoBehaviour
     void Start()
     {
         
-
-        //soundEnabled = PlayerPrefs.HasKey("soundEnabled") ? bool.Parse(PlayerPrefs.GetString("soundEnabled")) : true;
-        //musicEnabled = PlayerPrefs.HasKey("musicEnabled") ? bool.Parse(PlayerPrefs.GetString("musicEnabled")) : true;
-
-
- //       lowPassFilter = GetComponent<AudioLowPassFilter>();
-  //      lowPassFilter.enabled = false;
     }
 
-    public float GetBaseTrackSeconds()
+    public void PlayMusic(string songName = "", string songName2 = "", bool shouldLoop = true, float startTime = 0f)
     {
-        return MusicAudioSource.time;
-    }
+        if (string.IsNullOrEmpty(songName))
+            return;
 
-    public void PlayOST(string songName = "", bool shouldLoop = false, float volume = 0.4f, float startTime = 0f)
-    {
-        MusicAudioSource = gameObject.AddComponent<AudioSource>();
-        MusicAudioSource.outputAudioMixerGroup = audioMixerGroup["Music"];
-        //		if(TutorialManager.Instance && string.IsNullOrEmpty(songName))
-        //			baseTrack.clip = Resources.Load("_Sound/Music/Track1", typeof(AudioClip)) as AudioClip;
-        MusicAudioSource.clip = Resources.Load("Audio/" + songName, typeof(AudioClip)) as AudioClip;
-        MusicAudioSource.Play();
-        MusicAudioSource.loop = shouldLoop;
-        //if (musicEnabled)
-        //{
-        //    MusicAudioSource.volume = string.IsNullOrEmpty(songName) ? 0.7f : volume;
-        //}
-        //else
-        //    MusicAudioSource.volume = 0f;
-        MusicAudioSource.time = startTime;
-    }
+        AudioSource oldTrack = MusicAudioSourceChannel1;
+     
+        MusicAudioSourceChannel1 = gameObject.AddComponent<AudioSource>();
+        MusicAudioSourceChannel1.outputAudioMixerGroup = audioMixerGroup["Music"];
+        MusicAudioSourceChannel1.clip = Resources.Load("Audio/Music/" + songName, typeof(AudioClip)) as AudioClip;
+        MusicAudioSourceChannel1.Play();
+        MusicAudioSourceChannel1.loop = shouldLoop;
+        MusicAudioSourceChannel1.time = startTime;
 
-    public void loadOST()
-    {
-        gameplayTrack = gameObject.AddComponent<AudioSource>();
-        gameplayTrack.outputAudioMixerGroup = audioMixerGroup["Music"];
-        gameplayTrack.clip = Resources.Load("_Sound/Music/" + tracks[Random.Range(0, tracks.Count)], typeof(AudioClip)) as AudioClip;
-    }
-
-    public void PlayWeatherAmbience(string weather, bool start, float volume = 1f)
-    {
-        if (start)
+        if (!string.IsNullOrEmpty(songName2))
         {
-            if(WeatherAmbientAudioSource == null)
-            {
-                WeatherAmbientAudioSource = gameObject.AddComponent<AudioSource>();
-                WeatherAmbientAudioSource.outputAudioMixerGroup = audioMixerGroup["Ambience"];
-            }
+            MusicAudioSourceChannel2 = gameObject.AddComponent<AudioSource>();
+            MusicAudioSourceChannel2.outputAudioMixerGroup = audioMixerGroup["Music2"];
+            MusicAudioSourceChannel2.clip = Resources.Load("Audio/Music/" + songName2, typeof(AudioClip)) as AudioClip;
+            MusicAudioSourceChannel2.Play();
+            MusicAudioSourceChannel2.loop = shouldLoop;
+            MusicAudioSourceChannel2.time = startTime;
+        }
+        Destroy(oldTrack, 5);
+        FadeMusic(1f);
+        StartCoroutine(FadeAudioAsync(0f, oldTrack));
+    }
 
-            WeatherAmbientAudioSource.clip = Resources.Load("Audio/" + weather, typeof(AudioClip)) as AudioClip;
-            WeatherAmbientAudioSource.Play();
-            WeatherAmbientAudioSource.loop = true;
-            WeatherAmbientAudioSource.volume = 0f;
-            StartCoroutine(FadeAudioAsync(volume, false, WeatherAmbientAudioSource));
+    public void SwitchMusicChannel(bool inConvent)
+    {
+        if (inConvent)
+        {
+            FadeMusic(1f, MusicAudioSourceChannel1);
+            FadeMusic(0f, MusicAudioSourceChannel2);
         }
         else
         {
-            Destroy(WeatherAmbientAudioSource, 5f);
-            StartCoroutine(FadeAudioAsync(0f, false, WeatherAmbientAudioSource));
+            FadeMusic(1f, MusicAudioSourceChannel2);
+            FadeMusic(0f, MusicAudioSourceChannel1);
         }
     }
 
@@ -119,20 +99,43 @@ public class SoundManager : MonoBehaviour
 
         Destroy(oldTrack, 5);
         FadeAmbience(0.3f);
-        StartCoroutine(FadeAudioAsync(0f, false, oldTrack));
+        StartCoroutine(FadeAudioAsync(0f, oldTrack));
     }
 
-    public void FadeAmbience(float volume, bool stopMusic = false)
+    public void PlayWeatherAmbience(string weather, bool start, float volume = 1f)
     {
-        StartCoroutine(FadeAudioAsync(volume, stopMusic, AmbientAudioSource));
+        if (start)
+        {
+            if(WeatherAmbientAudioSource == null)
+            {
+                WeatherAmbientAudioSource = gameObject.AddComponent<AudioSource>();
+                WeatherAmbientAudioSource.outputAudioMixerGroup = audioMixerGroup["Ambience"];
+            }
+
+            WeatherAmbientAudioSource.clip = Resources.Load("Audio/" + weather, typeof(AudioClip)) as AudioClip;
+            WeatherAmbientAudioSource.Play();
+            WeatherAmbientAudioSource.loop = true;
+            WeatherAmbientAudioSource.volume = 0f;
+            StartCoroutine(FadeAudioAsync(volume, WeatherAmbientAudioSource));
+        }
+        else
+        {
+            Destroy(WeatherAmbientAudioSource, 5f);
+            StartCoroutine(FadeAudioAsync(0f, WeatherAmbientAudioSource));
+        }
     }
 
-    public void FadeMusic(float volume, bool stopMusic = false)
+    public void FadeAmbience(float volume)
     {
-        StartCoroutine(FadeAudioAsync(volume, stopMusic, MusicAudioSource));
+        StartCoroutine(FadeAudioAsync(volume, AmbientAudioSource));
     }
 
-    IEnumerator FadeAudioAsync(float volume, bool stopMusic, AudioSource newSource = null)
+    public void FadeMusic(float volume, AudioSource newSource = null)
+    {
+        StartCoroutine(FadeAudioAsync(volume, newSource));
+    }
+
+    IEnumerator FadeAudioAsync(float volume, AudioSource newSource = null)
     {
         AudioSource src = newSource;
         if (src)
@@ -174,10 +177,12 @@ public class SoundManager : MonoBehaviour
         
         if(start)
         {
+            AudioClip clip = Resources.Load("Audio/" + trackName, typeof(AudioClip)) as AudioClip;
+            if (clip == null) return;
+
             HouseAmbience = gameObject.AddComponent<AudioSource>();
             HouseAmbience.outputAudioMixerGroup = audioMixerGroup["Ambience"];
-
-            HouseAmbience.clip = Resources.Load("Audio/" + trackName, typeof(AudioClip)) as AudioClip;
+            HouseAmbience.clip = clip;
             HouseAmbience.Play();
             HouseAmbience.loop = true;
             HouseAmbience.volume = volume;
@@ -187,7 +192,7 @@ public class SoundManager : MonoBehaviour
         {
             DestroyHouseAmbience = true;
             Destroy(HouseAmbience, 5f);
-            StartCoroutine(FadeAudioAsync(0f, false, HouseAmbience));
+            StartCoroutine(FadeAudioAsync(0f, HouseAmbience));
         }
     }
 
@@ -195,59 +200,15 @@ public class SoundManager : MonoBehaviour
     {
         PlayHouseAmbience("", false, 0f);
         PlayWeatherAmbience("", false, 0f);
+        FadeMusic(1f);
+        StartCoroutine(FadeAudioAsync(0f, MusicAudioSourceChannel1));
+        StartCoroutine(FadeAudioAsync(0f, MusicAudioSourceChannel2));
+        Destroy(MusicAudioSourceChannel1, 5);
+        Destroy(MusicAudioSourceChannel2, 5);
         Destroy(AmbientAudioSource, 5);
         FadeAmbience(0.3f);
     }
 
-    public void CrossFadeMusic(string newTrack, float endTime, bool shouldLoop, float maxVolume)
-    {
-        //if (!musicEnabled) return;
-        AudioSource oldTrack = MusicAudioSource;
-        Destroy(oldTrack, endTime);
-
-        PlayOST(newTrack, shouldLoop, 0f);
-        FadeMusic(maxVolume);
-        StartCoroutine(FadeAudioAsync(endTime, false, oldTrack));
-    }
-
-    public void StopFadeoutAndMaxVolume()
-    {
-        StopAllCoroutines();
-        StartCoroutine(_StopFadeoutAndMaxVolume());
-    }
-
-    IEnumerator _StopFadeoutAndMaxVolume()
-    {
-        //	Debug.Log("HOL UP!");
-        yield return new WaitForSeconds(0.1f);
-        //	Debug.Log("DONE WAITING! SETTING MAX VOLUME!!");
-        //maxVolume();
-    }
-
-    public void NormalizeSoundFX()
-    {
-        //	AudioLowPassFilter low = FindObjectOfType<AudioLowPassFilter> ();
-        lowPassFilter.cutoffFrequency = 5000;
-        lowPassFilter.enabled = false;
-    }
-
-    public void LowFilterFX()
-    {
-        //	AudioLowPassFilter low = FindObjectOfType<AudioLowPassFilter> ();
-        lowPassFilter.enabled = true;
-        lowPassFilter.cutoffFrequency = 1000;
-    }
-
-    //public void HighFilterFX()
-    //{
-
-    //}
-
-    //public void maxVolume()
-    //{
-    //    if (MusicAudioSource && musicEnabled)
-    //        MusicAudioSource.volume = 0.7f;
-    //}
     public void EnableSFX(bool value, float volumePercent = 0)
     {
         
@@ -261,6 +222,7 @@ public class SoundManager : MonoBehaviour
         float val = (volumePercent * 20.0f) - 10f;
         if (volumePercent == 0) val = -80;
         audioMixer.SetFloat("MusicVolume", (value) ? val : -80.0f);
+        audioMixer.SetFloat("Music2Volume", (value) ? val : -80.0f);
     }
 
     public void EnableAmbiance(bool value, float volumePercent = 0)
