@@ -51,6 +51,7 @@ public class SoundManager : MonoBehaviour
         MusicAudioSourceChannel1.Play();
         MusicAudioSourceChannel1.loop = shouldLoop;
         MusicAudioSourceChannel1.time = startTime;
+        MusicAudioSourceChannel1.pitch = 0.9f;
 
         if (!string.IsNullOrEmpty(songName2))
         {
@@ -60,6 +61,7 @@ public class SoundManager : MonoBehaviour
             MusicAudioSourceChannel2.Play();
             MusicAudioSourceChannel2.loop = shouldLoop;
             MusicAudioSourceChannel2.time = startTime;
+            MusicAudioSourceChannel2.pitch = 0.9f;
         }
         Destroy(oldTrack, 5);
         FadeMusic(1f);
