@@ -145,10 +145,13 @@ public class UI : MonoBehaviour
         if (energy.Amount <= 5)
         {
             EnergyDisplay.color = Color.red;
+            EnergyDisplayGlow.color = Color.red;
+            SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
         }
         else
         {
             EnergyDisplay.color = Color.white;
+            EnergyDisplayGlow.color = Color.white;
         }
 
         StartCoroutine(AdditionPointsAsync(EnergyAdditionDisplay, EnergyDisplayGlow, energy.Amount - oldEnergy, 2f));
@@ -391,7 +394,26 @@ public class UI : MonoBehaviour
         int oldCP = int.Parse(CPDisplay.text);
         CPDisplay.DOCounter(oldCP, cp, 0.5f).SetDelay(2f);
         FPDisplay.DOCounter(oldFP, fp, 0.5f).SetDelay(2f);
-        
+
+        if (cp <= 10)
+        {
+            CPDisplayGlow.color = Color.red;
+            SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
+        }
+        else
+        {
+            CPDisplayGlow.color = Color.white;
+        }
+        if (fp <= 10)
+        {
+            FPDisplayGlow.color = Color.red;
+            SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
+        }
+        else
+        {
+            FPDisplayGlow.color = Color.white;
+        }
+
         StartCoroutine(AdditionPointsAsync(CPAdditionDisplay, CPDisplayGlow, cp-oldCP, 2f));
         StartCoroutine(AdditionPointsAsync(FPAdditionDisplay, FPDisplayGlow, fp-oldFP, 2f));
 
@@ -426,9 +448,8 @@ public class UI : MonoBehaviour
     {
         if (amount == 0) yield break;
 
-        glow.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-        glow.color = Color.white;
-        glow.transform.DOScale(Vector3.one, 0.5f);
+        glow.transform.localScale = Vector3.one;
+        glow.transform.DOScale(new Vector3(1.4f, 1.4f, 1.4f), 0.5f);
         glow.DOFade(0, 1f);
 
         display.text = amount > 0 ? $"+{amount}" : $"{amount}";
@@ -448,6 +469,9 @@ public class UI : MonoBehaviour
         FPAdditionDisplay.text = "";
         CPAdditionDisplay.text = "";
         EnergyAdditionDisplay.text = "";
+        CPDisplayGlow.transform.localScale = Vector3.one;
+        FPDisplayGlow.transform.localScale = Vector3.one;
+        EnergyDisplayGlow.transform.localScale = Vector3.one;
     }
 
     public void DisplayReport(string report)
