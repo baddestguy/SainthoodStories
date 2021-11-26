@@ -34,7 +34,8 @@ public class MissionManager : MonoBehaviour
         CurrentMission = mission;
         CharityPoints = CurrentMission.StartingCharityPoints;
         FaithPoints = CurrentMission.StartingFaithPoints;
-        UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
+        UI.Instance.RefreshFP(FaithPoints);
+        UI.Instance.RefreshCP(0, CharityPoints);
     }
 
     private void NewDay()
@@ -53,7 +54,7 @@ public class MissionManager : MonoBehaviour
     {
         if (MissionOver) return;
         FaithPoints = Mathf.Clamp(FaithPoints + amount, 0, 100);
-        UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
+        UI.Instance.RefreshFP(FaithPoints);
 
         if (FaithPoints <= 0)
         {
@@ -66,9 +67,9 @@ public class MissionManager : MonoBehaviour
     {
         if (MissionOver) return;
         CharityPoints = Mathf.Clamp(CharityPoints + amount, 0, 100);
-        UI.Instance.RefreshPoints(CharityPoints, FaithPoints);
+        UI.Instance.RefreshCP(amount, CharityPoints);
 
-        if(CharityPoints <= 0)
+        if (CharityPoints <= 0)
         {
             EndMission();
             return;
@@ -166,11 +167,11 @@ public class MissionManager : MonoBehaviour
 
     public void OverideCP(int cp)
     {
-        CharityPoints = cp;
+        UpdateCharityPoints(cp, null);
     }
 
     public void OverideFP(int fp)
     {
-        FaithPoints = fp;
+        UpdateFaithPoints(fp);
     }
 }

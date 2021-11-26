@@ -33,7 +33,6 @@ public enum SaintID
     ,PEDRO
     ,ROQUE
     ,SANMARTIN
-    ,TERESA
     ,VICTOR
 }   
 

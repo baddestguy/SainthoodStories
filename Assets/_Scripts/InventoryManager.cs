@@ -31,6 +31,11 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public bool IsInventoryFull()
+    {
+        return Items.Count >= MaxInventorySlots;
+    }
+
     public void AddToInventory(ItemType item)
     {
         if (Items.Count == MaxInventorySlots)

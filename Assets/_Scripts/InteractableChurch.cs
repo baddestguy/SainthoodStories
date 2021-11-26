@@ -152,7 +152,7 @@ public class InteractableChurch : InteractableHouse
 
     public override void PopMyIcon(string name = "", int items = -1, GameClock time = null)
     {
-        TooltipMouseOver mouseOverBtn = gameObject.GetComponentsInChildren<TooltipMouseOver>(true).Where(b => b.name == "Pray").FirstOrDefault();
+        TooltipMouseOver mouseOverBtn = InteriorPopUI.GetComponentsInChildren<TooltipMouseOver>(true).Where(b => b.name == "Pray").FirstOrDefault();
 
         GameClock c = GameManager.Instance.GameClock;
         if (c.Time > 21.5)
@@ -213,7 +213,7 @@ public class InteractableChurch : InteractableHouse
             if (clock.Time == ConfessionTime)
             {
                 ConfessionProgress++;
-                OnActionProgress?.Invoke(ConfessionProgress/1f, this);
+                OnActionProgress?.Invoke(ConfessionProgress/1f, this, 0);
                 player.ConsumeEnergy(ServiceEnergy);
                 UI.Instance.DisplayMessage("ATTENDED CONFESSION!!");
                 UpdateFaithPoints(PrayerPoints * 4, 1);
@@ -223,7 +223,7 @@ public class InteractableChurch : InteractableHouse
             else if (clock.Time >= MassStartTime && clock.Time < MassEndTime)
             {
                 MassProgress++;
-                OnActionProgress?.Invoke(MassProgress/2f, this);
+                OnActionProgress?.Invoke(MassProgress/2f, this, 0);
                 player.ConsumeEnergy(ServiceEnergy);
                 UI.Instance.DisplayMessage("ATTENDED MASS!!");
                 SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 10f);
@@ -242,7 +242,7 @@ public class InteractableChurch : InteractableHouse
             else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
             {
                 LotHProgress++;
-                OnActionProgress?.Invoke(LotHProgress/2f, this);
+                OnActionProgress?.Invoke(LotHProgress/2f, this, 0);
                 player.ConsumeEnergy(ServiceEnergy);
                 UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
                 UpdateFaithPoints(PrayerPoints * 2, 1);
@@ -261,7 +261,7 @@ public class InteractableChurch : InteractableHouse
         else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
         {
             LotHProgress++;
-            OnActionProgress?.Invoke(LotHProgress/2f, this);
+            OnActionProgress?.Invoke(LotHProgress/2f, this, 0);
             UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
             SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 10f);
             UpdateFaithPoints(PrayerPoints * 2, 1);
@@ -314,7 +314,7 @@ public class InteractableChurch : InteractableHouse
     {
         yield return new WaitForSeconds(1.5f);
         ResetActionProgress();
-        OnActionProgress?.Invoke(0, this);
+        OnActionProgress?.Invoke(0, this, 0);
     }
 
     public override void ResetActionProgress()

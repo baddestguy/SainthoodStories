@@ -54,7 +54,7 @@ public class InteractableHouse : InteractableObject
     public BuildingActivityState BuildingActivityState = BuildingActivityState.NONE;
     protected IEnumerable<BuildingMissionData> MyMissions;
 
-    public static UnityAction<float, InteractableHouse> OnActionProgress;
+    public static UnityAction<float, InteractableHouse, int> OnActionProgress;
 
     public Camera InteriorCam;
     public Camera InteriorUICamera;
@@ -110,10 +110,6 @@ public class InteractableHouse : InteractableObject
             ExteriorPopUI.transform.SetParent(transform);
             ExteriorPopUI.transform.localPosition = new Vector3(0, 1, 0);
             ExteriorPopUI.gameObject.SetActive(false);
-        }
-        if (InteriorPopUI)
-        {
-            InteriorPopUI.transform.SetParent(transform);
         }
 
         if (PopUIFX == null)
@@ -174,7 +170,7 @@ public class InteractableHouse : InteractableObject
         {
             case BuildingActivityState.VOLUNTEERING:
                 VolunteerCountdown++;
-                OnActionProgress?.Invoke(VolunteerCountdown / 4f, this);
+                OnActionProgress?.Invoke(VolunteerCountdown / 4f, this, 0);
                 if (VolunteerCountdown >= 4)
                 {
                     BuildRelationship(ThankYouType.VOLUNTEER);
@@ -448,7 +444,7 @@ public class InteractableHouse : InteractableObject
         if (player.EnergyDepleted() || !CanBuild()) return;
 
         BuildPoints++;
-        OnActionProgress?.Invoke(BuildPoints / 4f, this);
+        OnActionProgress?.Invoke(BuildPoints / 4f, this, 0);
 
         UI.Instance.DisplayMessage("BUILDING!");
         if(BuildPoints >= 4)
@@ -458,7 +454,8 @@ public class InteractableHouse : InteractableObject
             PopUILocation = OriginalPopUILocation;
             Destroy(ExteriorPopUI.gameObject);
             Initialize();
-            ExteriorPopUI.gameObject.SetActive(true);
+            StartCoroutine(ClearToolTipAfterBuildingAsync());
+            StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
             SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
             SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
             SoundManager.Instance.PlayOneShotSfx("Cheer_SFX", 1f,5f);
@@ -478,6 +475,12 @@ public class InteractableHouse : InteractableObject
         player.ConsumeEnergy(EnergyConsumption);
         GameClock clock = GameManager.Instance.GameClock;
         clock.Tick();
+    }
+
+    private IEnumerator ClearToolTipAfterBuildingAsync()
+    {
+        yield return null;
+        ToolTipManager.Instance.ShowToolTip("");
     }
 
     public virtual void BuildingCompleteDialog()
@@ -683,7 +686,6 @@ public class InteractableHouse : InteractableObject
             HouseUIActive = true;
             InsideHouse = true;
             PopIcon.gameObject.SetActive(false);
-            UI.Instance.EnableInventoryUI(true);
             SoundManager.Instance.PlayOneShotSfx("Zoom_SFX");
             if(DuringOpenHours())
             {
@@ -694,7 +696,6 @@ public class InteractableHouse : InteractableObject
                 SoundManager.Instance.PlayHouseAmbience("Construction", true, 0.3f);
             SoundManager.Instance.FadeAmbience(0.1f);
             OnEnterHouse?.Invoke(InsideHouse);
-            UI.Instance.EnableTreasuryUI(true);
             UI.Instance.RefreshTreasuryBalance(0);
         }
         else if(CameraLockOnMe)
@@ -709,7 +710,6 @@ public class InteractableHouse : InteractableObject
             CameraLockOnMe = false;
             HouseUIActive = false;
             InsideHouse = false;
-            UI.Instance.EnableInventoryUI(false);
             SoundManager.Instance.PlayOneShotSfx("Zoom_SFX");
             if (BuildPoints >= 4)
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
@@ -718,7 +718,6 @@ public class InteractableHouse : InteractableObject
             SoundManager.Instance.FadeAmbience(0.3f);
             OnEnterHouse?.Invoke(InsideHouse);
             ResetActionProgress();
-            UI.Instance.EnableTreasuryUI(false);
             GameManager.Instance.CurrentHouse = null;
         }
 
@@ -733,12 +732,12 @@ public class InteractableHouse : InteractableObject
         if (EventsManager.Instance.EventInProgress) return;
         if (BuildingState != BuildingState.NORMAL) return;
         if (!DuringOpenHours()) return;
-        if (EventsManager.Instance.CurrentEvents.Count > 3) return;
+     //   if (EventsManager.Instance.CurrentEvents.Count > 3) return;
         if (UI.Instance.WeekBeginCrossFade) return;
         if (GameManager.Instance.PreviousSceneID == SceneID.SaintsShowcase_Day) return;
         if (DeadlineSet) return;
 
-        if (Random.Range(0, 100) < 50)
+        if (Random.Range(0, 100) < 100)
         {
             switch (GetType().Name)
             {
@@ -788,7 +787,7 @@ public class InteractableHouse : InteractableObject
         else if (!started && CameraLockOnMe)
         {
             ExteriorPopUI.gameObject.SetActive(true);
-            if(InteriorPopUI)
+            if(InteriorPopUI && InteriorSpace.activeSelf)
             InteriorPopUI.gameObject.SetActive(true);
         }
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class TutorialButton : MonoBehaviour
@@ -9,6 +10,7 @@ public class TutorialButton : MonoBehaviour
     private void OnEnable()
     {
         RefreshTutorialButton();
+        Wiggle();
     }
 
     public void RefreshTutorialButton()
@@ -27,6 +29,15 @@ public class TutorialButton : MonoBehaviour
                 c.a = 1f;
                 ButtonImage.color = c;
             }
+        }
+    }
+
+    private void Wiggle()
+    {
+        if (!GameSettings.Instance.FTUE) return;
+        if (TutorialManager.Instance.CheckTutorialButton(ButtonName))
+        {
+            transform.DOPunchScale(transform.localScale * 0.5f, 0.5f, elasticity: 0f);
         }
     }
 }
