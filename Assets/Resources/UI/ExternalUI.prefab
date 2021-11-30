@@ -345,7 +345,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1309595205761143097}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
@@ -361,7 +361,7 @@ RectTransform:
   - {fileID: 7872548299516634748}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -447,6 +447,7 @@ MonoBehaviour:
   ButtonTimer: 0
   ChargeFx: {fileID: 4348354766303475754}
   ButtonPressFx: {fileID: 7364127437655529492}
+  ProgressBars: []
   ProgressBar: {fileID: 0}
   CameraControls: {fileID: 0}
 --- !u!1 &1936143914044274317
@@ -646,6 +647,8 @@ MonoBehaviour:
   ButtonName: SLEEP
   Enabled: 0
   Timer: 0
+  ShouldWiggle: 1
+  WiggleDelay: 1
 --- !u!114 &1652509259317319150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5440,7 +5443,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5bf91ad953f78d54baebb31d5f5ae4a5, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10009,7 +10011,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 6b22999712355474795091cef25021b4, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14655,7 +14656,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 7cd73ef8e5a31a244a672ae32c0f6ddb, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19364,7 +19364,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5bf91ad953f78d54baebb31d5f5ae4a5, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19692,6 +19691,8 @@ MonoBehaviour:
   ButtonName: ENTER
   Enabled: 0
   Timer: 0
+  ShouldWiggle: 1
+  WiggleDelay: 0
 --- !u!114 &729860461180505819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19859,6 +19860,8 @@ MonoBehaviour:
   ButtonName: PRAY
   Enabled: 0
   Timer: 0
+  ShouldWiggle: 1
+  WiggleDelay: 1
 --- !u!114 &4020503583183455663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20473,6 +20476,18 @@ PrefabInstance:
       propertyPath: lengthInSec
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 19900000, guid: 1be4ba41efa75e94bb174025525dd7dd, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900002, guid: 1be4ba41efa75e94bb174025525dd7dd, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900004, guid: 1be4ba41efa75e94bb174025525dd7dd, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1be4ba41efa75e94bb174025525dd7dd, type: 3}
 --- !u!4 &3424553635087536061 stripped
@@ -20662,6 +20677,10 @@ PrefabInstance:
     - target: {fileID: 19800000, guid: d1912b480b82d6441a8d97bc2836a977, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
       value: -0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 19900000, guid: d1912b480b82d6441a8d97bc2836a977, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1912b480b82d6441a8d97bc2836a977, type: 3}

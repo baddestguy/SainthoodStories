@@ -52,6 +52,7 @@ public class InteractableMarket : InteractableHouse
             TreasuryManager.Instance.SpendMoney(moddedPrice);
             InventoryManager.Instance.AddToInventory(item);
             ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
+            InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
         }
         else
         {
@@ -156,7 +157,7 @@ public class InteractableMarket : InteractableHouse
                 break;
         }
 
-        return DuringOpenHours() && TreasuryManager.Instance.CanAfford(moddedPrice) && isHouseAvailable;
+        return DuringOpenHours() && TreasuryManager.Instance.CanAfford(moddedPrice) && isHouseAvailable && !InventoryManager.Instance.IsInventoryFull();
     }
 
     public override void ReportScores()

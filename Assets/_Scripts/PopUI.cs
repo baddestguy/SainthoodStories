@@ -27,6 +27,7 @@ public class PopUI : MonoBehaviour
     public GameObject ChargeFx;
     public GameObject ButtonPressFx;
 
+    public Slider[] ProgressBars;
     public Slider ProgressBar;
 
     private List<ActionButton> Buttons;
@@ -53,7 +54,7 @@ public class PopUI : MonoBehaviour
         {
             ItemsRequiredDisplay.gameObject.SetActive(false);
             ClockIcon.gameObject.SetActive(false);
-            BuildingIcon.transform.localPosition = new Vector3(0, 1.5f, 0);
+        //    BuildingIcon.transform.localPosition = new Vector3(0, 1.5f, 0);
             if (house != null)
             {
                 var hoursToClose = house.ClosingTime - GameManager.Instance.GameClock.Time;
@@ -78,7 +79,7 @@ public class PopUI : MonoBehaviour
         {
             ItemsRequiredDisplay.gameObject.SetActive(true);
             ClockIcon.gameObject.SetActive(true);
-            BuildingIcon.transform.localPosition = new Vector3(0, 2, 0);
+        //    BuildingIcon.transform.localPosition = new Vector3(0, 2, 0);
             IsCurrentlyOpen.text = "";
         }
 
@@ -138,6 +139,7 @@ public class PopUI : MonoBehaviour
             }
         }
 
+        myButton.Wiggle();
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
         ChargeFx.transform.position = myButton.transform.position - new Vector3(0, -0.1f, 0.1f);
         ChargeFx.SetActive(false);
@@ -213,8 +215,6 @@ public class PopUI : MonoBehaviour
 
     void Update()
     {
-        transform.forward = CamTransform.forward;
-
         if (PointerDown)
         {
             //Play VFX
@@ -236,8 +236,10 @@ public class PopUI : MonoBehaviour
         }
     }
 
-    private void UpdateProgressBar(float progress, InteractableHouse house)
+    private void UpdateProgressBar(float progress, InteractableHouse house, int progressBar = 0)
     {
+        if (ProgressBars.Length < progressBar+1) return;
+        ProgressBar = ProgressBars[progressBar];
         if (ProgressBar == null || MyHouse != house) return;
 
         ProgressBar.gameObject.SetActive(true);
@@ -256,7 +258,10 @@ public class PopUI : MonoBehaviour
     private IEnumerator DisableProgressBar()
     {
         yield return new WaitForSeconds(1.5f);
-        ProgressBar.gameObject.SetActive(false);
+        foreach(var p in ProgressBars)
+        {
+            p.gameObject.SetActive(false);
+        }
     }
 
     public void PlayVFX(string vfxName)
@@ -267,14 +272,17 @@ public class PopUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (ProgressBar)
+        for (int i = 0; i < ProgressBars.Length; i++)
         {
-            if (ProgressBar.value < 1)
-                UpdateProgressBar(ProgressBar.value, MyHouse);
-
-            if(MyHouse != null && MyHouse.HasResetActionProgress())
+            if (ProgressBars[i])
             {
-                UpdateProgressBar(0, MyHouse);
+                if (ProgressBars[i].value < 1)
+                    UpdateProgressBar(ProgressBars[i].value, MyHouse, i);
+
+                if (MyHouse != null && MyHouse.HasResetActionProgress())
+                {
+                    UpdateProgressBar(0, MyHouse, i);
+                }
             }
         }
     }

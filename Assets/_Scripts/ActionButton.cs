@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using DG.Tweening;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ActionButton : MonoBehaviour
@@ -7,6 +9,26 @@ public class ActionButton : MonoBehaviour
     public string ButtonName;
     public bool Enabled;
     public float Timer;
+
+    public bool ShouldWiggle = true;
+    public float WiggleDelay = 1f;
+
+    private void OnEnable()
+    {
+        StartCoroutine(WaitThenWiggleAsync());
+    }
+
+    IEnumerator WaitThenWiggleAsync()
+    {
+        yield return null;
+        if (!ShouldWiggle || !Enabled || GameSettings.Instance.FTUE) yield break;
+        transform.DOPunchScale(transform.localScale*0.5f, 0.5f, elasticity: 0f).SetDelay(WiggleDelay);
+    }
+
+    public void Wiggle(float delay = 0f)
+    {
+        transform.DOPunchScale(transform.localScale * 0.5f, 0.5f, elasticity: 0f).SetDelay(delay);
+    }
 
     public void RefreshButton(bool enabled)
     {

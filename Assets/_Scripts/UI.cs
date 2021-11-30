@@ -154,7 +154,7 @@ public class UI : MonoBehaviour
             EnergyDisplayGlow.color = Color.white;
         }
 
-        StartCoroutine(AdditionPointsAsync(EnergyAdditionDisplay, EnergyDisplayGlow, energy.Amount - oldEnergy, 2f));
+        AdditionPoints(EnergyAdditionDisplay, EnergyDisplayGlow, energy.Amount - oldEnergy, 2f);
     }
 
     private IEnumerator UnlockSaintSequence()
@@ -359,7 +359,7 @@ public class UI : MonoBehaviour
         int oldAmount = int.Parse(TreasuryAmount.text, System.Globalization.NumberStyles.AllowThousands);
         TreasuryAmount.DOCounter(oldAmount, (int)TreasuryManager.Instance.Money, 0.5f).SetDelay(2f);
 
-        StartCoroutine(AdditionPointsAsync(TreasuryAdditionDisplay, TreasuryDisplayGlow, (int)delta, 2f));
+        AdditionPoints(TreasuryAdditionDisplay, TreasuryDisplayGlow, (int)delta, 2f);
     }
 
     public void EnableInventoryUI(bool enable)
@@ -383,45 +383,39 @@ public class UI : MonoBehaviour
         Meditate?.Invoke(CurrentHouse);
     }
 
-    public void RefreshPoints(int cp, int fp)
+    int CachedCpAddition = 0;
+    public void RefreshCP(int delta, int newCp)
     {
-        if (DOTween.IsTweening(CPDisplay, true) || DOTween.IsTweening(FPDisplay, true))
+        int oldCP = int.Parse(CPDisplay.text);
+        CachedCpAddition += delta;
+        if (DOTween.IsTweening(CPDisplay, true))
         {
             ResetAdditionPoints();
         }
 
-        int oldFP = int.Parse(FPDisplay.text);
-        int oldCP = int.Parse(CPDisplay.text);
-        CPDisplay.DOCounter(oldCP, cp, 0.5f).SetDelay(2f);
-        FPDisplay.DOCounter(oldFP, fp, 0.5f).SetDelay(2f);
+        CPDisplay.DOCounter(oldCP, newCp, 0.5f).SetDelay(2f);
 
-        if (cp <= 10)
+        if (Mathf.Abs(newCp - oldCP) > 0)
         {
-            CPDisplayGlow.color = Color.red;
-            SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
-        }
-        else
-        {
-            CPDisplayGlow.color = Color.white;
-        }
-        if (fp <= 10)
-        {
-            FPDisplayGlow.color = Color.red;
-            SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
-        }
-        else
-        {
-            FPDisplayGlow.color = Color.white;
-        }
+            if (newCp <= 10)
 
-        StartCoroutine(AdditionPointsAsync(CPAdditionDisplay, CPDisplayGlow, cp-oldCP, 2f));
-        StartCoroutine(AdditionPointsAsync(FPAdditionDisplay, FPDisplayGlow, fp-oldFP, 2f));
-
-        if (cp < 50)
+            {
+                CPDisplayGlow.color = Color.red;
+                SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
+            }
+            else
+            {
+                CPDisplayGlow.color = Color.white;
+            }
+        }
+        
+        if (Mathf.Abs(newCp - oldCP) > 0) AdditionPoints(CPAdditionDisplay, CPDisplayGlow, CachedCpAddition, 2f);
+        
+        if (newCp < 50)
         {
             CPDisplay.color = Color.red;
         }
-        else if (cp < 75)
+        else if (newCp < 75)
         {
             CPDisplay.color = Color.yellow;
         }
@@ -429,6 +423,43 @@ public class UI : MonoBehaviour
         {
             CPDisplay.color = Color.green;
         }
+
+        StartCoroutine(ResetCachedCP());
+    }
+
+    IEnumerator ResetCachedCP()
+    {
+        yield return new WaitForSeconds(2f);
+        CachedCpAddition = 0;
+    }
+
+    public void RefreshFP(int fp)
+    {
+        int oldFP = int.Parse(FPDisplay.text);
+        int fpAmount = fp - oldFP;
+
+        if (DOTween.IsTweening(FPDisplay, true))
+        {
+            fpAmount = int.Parse(FPAdditionDisplay.text);
+            ResetAdditionPoints();
+        }
+
+        FPDisplay.DOCounter(oldFP, fp, 0.5f).SetDelay(2f);
+
+        if (Mathf.Abs(fp - oldFP) > 0)
+        {
+            if (fp <= 10)
+            {
+                FPDisplayGlow.color = Color.red;
+                SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
+            }
+            else
+            {
+                FPDisplayGlow.color = Color.white;
+            }
+        }
+
+        if (Mathf.Abs(fp - oldFP) > 0) AdditionPoints(FPAdditionDisplay, FPDisplayGlow, fpAmount, 2f);
 
         if (fp < 50)
         {
@@ -444,9 +475,9 @@ public class UI : MonoBehaviour
         }
     }
 
-    public IEnumerator AdditionPointsAsync(TextMeshProUGUI display, Image glow, int amount, float delay)
+    public void AdditionPoints(TextMeshProUGUI display, Image glow, int amount, float delay)
     {
-        if (amount == 0) yield break;
+        if (amount == 0) return;
 
         glow.transform.localScale = Vector3.one;
         glow.transform.DOScale(new Vector3(1.4f, 1.4f, 1.4f), 0.5f);
@@ -456,8 +487,7 @@ public class UI : MonoBehaviour
         display.color = amount > 0 ? Color.green : Color.red;
         display.DOFade(1, 0.5f);
         display.transform.GetChild(0).gameObject.SetActive(true);
-        yield return new WaitForSeconds(delay);
-        display.DOFade(0, 0.5f);
+        display.DOFade(0, 0.5f).SetDelay(delay);
     }
 
     public void ResetAdditionPoints()
@@ -465,10 +495,6 @@ public class UI : MonoBehaviour
         CPDisplay.DOComplete();
         FPDisplay.DOComplete();
         EnergyDisplay.DOComplete();
-        StopAllCoroutines();
-        FPAdditionDisplay.text = "";
-        CPAdditionDisplay.text = "";
-        EnergyAdditionDisplay.text = "";
         CPDisplayGlow.transform.localScale = Vector3.one;
         FPDisplayGlow.transform.localScale = Vector3.one;
         EnergyDisplayGlow.transform.localScale = Vector3.one;

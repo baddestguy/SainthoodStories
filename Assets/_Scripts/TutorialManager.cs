@@ -246,11 +246,11 @@ public class TutorialManager : MonoBehaviour
             case "BABY":
                 return false;
             case "VOLUNTEER": 
-                return false;
             case "GROCERIES":
             case "CLOTHES":
             case "TOYS":
             case "STATIONERY":
+                return false;
             case "ENTER":
                 return true;
             case "MEDS":

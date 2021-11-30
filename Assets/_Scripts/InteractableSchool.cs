@@ -67,7 +67,7 @@ public class InteractableSchool : InteractableHouse
     public void TeachSubject()
     {
         TeachCountdown++;
-        OnActionProgress?.Invoke(TeachCountdown / 4f, this);
+        OnActionProgress?.Invoke(TeachCountdown / 4f, this, 0);
 
         if (TeachCountdown >= 4)
         {
