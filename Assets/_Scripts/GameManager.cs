@@ -214,7 +214,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetMissionParameters(MissionDifficulty missionDifficulty, bool newGame = false)
+    public void SetMissionParameters(MissionDifficulty missionDifficulty, bool newGame = false, bool showUI = true)
     {
 
         switch (missionDifficulty)
@@ -243,7 +243,7 @@ public class GameManager : MonoBehaviour
                     SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 
                     StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
-                }, newGame, false, !activeScene.name.Contains("MainMenu"));
+                }, newGame, false, !activeScene.name.Contains("MainMenu"), showUI: showUI);
                 break;
         }
 
