@@ -60,7 +60,6 @@ public class GameClock
         Time += 0.5;
         if(Time > 23.5)
         {
-            SaveDataManager.Instance.SaveGame();
             Day++;
             Time = 0;
             EndofDay = true;
@@ -74,6 +73,7 @@ public class GameClock
         Ticked?.Invoke(Time, Day);
         if (EndofDay)
         {
+            SaveDataManager.Instance.SaveGame();
             StartNewDay?.Invoke();
         }
         ExecuteEvents?.Invoke();

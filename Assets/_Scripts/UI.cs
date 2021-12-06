@@ -56,6 +56,7 @@ public class UI : MonoBehaviour
     public Image Black;
 
     public Image CurrentWeekIntroGraphic;
+    public Image WeekIntroBGGraphic;
     public TextMeshProUGUI CurrentWeekDisplay;
     public TextMeshProUGUI TooltipDisplay;
     public TextSizer TooltipSizer;
@@ -178,7 +179,7 @@ public class UI : MonoBehaviour
             yield return null;
         }
 
-        GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD); //Load Next Mission/Week
+        GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, showUI: false);
     }
 
     private void OnTick(double time, int day)
@@ -536,12 +537,10 @@ public class UI : MonoBehaviour
 
     public void EasyRun()
     {
-        GameManager.Instance.SetMissionParameters(MissionDifficulty.EASY);
     }
 
     public void NormalRun()
     {
-        GameManager.Instance.SetMissionParameters(MissionDifficulty.NORMAL);
     }
 
     public void HardRun(bool newGame)
@@ -644,15 +643,21 @@ public class UI : MonoBehaviour
         yield return StartCoroutine(CrossFadeAsync(1, 10));
 
         WeekBeginCrossFade = true;
-        CurrentWeekIntroGraphic.gameObject.SetActive(true);
+        WeekIntroBGGraphic.gameObject.SetActive(true);
+        WeekIntroBGGraphic.DOFade(1, 4f);
+
+        yield return new WaitForSeconds(4f);
         CurrentWeekIntroGraphic.sprite = Resources.Load<Sprite>($"Icons/{MissionManager.Instance.CurrentMission.Season}");
+        CurrentWeekIntroGraphic.DOFade(1f, 3f); 
 
-        if(!string.IsNullOrEmpty(text)) yield return new WaitForSeconds(3.5f);
+        if(!string.IsNullOrEmpty(text)) yield return new WaitForSeconds(5.5f);
 
-        CurrentWeekIntroGraphic.gameObject.SetActive(false);
-        yield return new WaitForSeconds(2f);
-        
+        WeekIntroBGGraphic.DOFade(0, 3f);
+        CurrentWeekIntroGraphic.DOFade(0f, 3f);
         yield return StartCoroutine(CrossFadeAsync(0, 5f));
+        yield return new WaitForSeconds(3f);
+        
+        WeekIntroBGGraphic.gameObject.SetActive(false);
         WeekBeginCrossFade = false;
     }
 

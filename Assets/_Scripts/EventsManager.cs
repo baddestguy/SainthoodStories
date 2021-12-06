@@ -126,7 +126,7 @@ public class EventsManager : MonoBehaviour
             yield return null;
         }
 
-        if (GameSettings.Instance.FTUE && TutorialManager.Instance.CurrentTutorialStep < 1) yield return new WaitForSeconds(8f);
+        if (GameSettings.Instance.FTUE && TutorialManager.Instance.CurrentTutorialStep < 1) yield return new WaitForSeconds(10f);
 
         //Execute events one by one
         foreach (var e in StoryEvents)

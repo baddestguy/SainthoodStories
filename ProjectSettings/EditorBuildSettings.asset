@@ -15,20 +15,14 @@ EditorBuildSettings:
     path: Assets/_Scenes/Credits.unity
     guid: 2c6be4309888e034fb1dc7e7b54322fa
   - enabled: 1
-    path: Assets/_Scenes/Levels/NormalLevelAjust.unity
-    guid: 76769121d2cdec945ab1a8c8d7b3bf4c
-  - enabled: 1
     path: Assets/_Scenes/Levels/SummerLevel.unity
     guid: 02ba5bff9b8000a4fb4b1f4433dd5d59
   - enabled: 1
-    path: Assets/_Scenes/Levels/WinterLevel.unity
-    guid: 083e44b3d7916e14da3a921a83170207
-  - enabled: 1
     path: Assets/_Scenes/Levels/FallLevel.unity
-    guid: 182a1aa10e82a1b4b962da8929716766
+    guid: 1b78220b5ad37f0458b3027ea91a63d6
   - enabled: 1
-    path: Assets/_Scenes/DeveloperScene.unity
-    guid: 752eb805ac0e0584198a13b46f033784
+    path: Assets/_Scenes/Levels/WinterLevel.unity
+    guid: 49af4553bd67f224090a793131b9d138
   - enabled: 1
     path: Assets/_Scenes/WeekDaysUI.unity
     guid: c22b46c7f5e5909469d304371c467235

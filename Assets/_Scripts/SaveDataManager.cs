@@ -253,7 +253,7 @@ public class SaveDataManager : MonoBehaviour
     /// Load the game data 
     /// </summary>
     /// <param name="callback"></param>
-    public void LoadGame(Action<SaveObject, bool> callback , bool newGame ,bool lastDay = false, bool ingameLoading = false)
+    public void LoadGame(Action<SaveObject, bool> callback , bool newGame ,bool lastDay = false, bool ingameLoading = false, bool showUI = true)
     {
         if (Directory.Exists(Application.persistentDataPath))
         {
@@ -273,15 +273,16 @@ public class SaveDataManager : MonoBehaviour
                 return;
             }
 
-            if (lastDay)
+            if (lastDay || !showUI)
             {
                 SaveObject data = saveObjects.OrderBy(x => x.Day).LastOrDefault();
                 callback?.Invoke(data, false);
                 return;
             }
 
-            SavedDataUiHandler.instance.Pupulate(saveObjects, (data) => {
-                
+            SavedDataUiHandler.instance.Pupulate(saveObjects, (data) =>
+            {
+
                 if (data == null)
                 {
                     data = NewGameData();
