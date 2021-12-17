@@ -13,7 +13,7 @@ public class GameSettings : MonoBehaviour
     public bool ProvisionsToggle;
     public bool FTUE; //First Time User Experience!
     public bool TutorialToggle;
-
+    public bool SkipSplashScreens;
 
 
     [HideInInspector] public bool fullScreenMode;

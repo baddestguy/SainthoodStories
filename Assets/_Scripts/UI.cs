@@ -641,7 +641,7 @@ public class UI : MonoBehaviour
     private IEnumerator ShowWeekBeginTextAsync(string text)
     {
         yield return StartCoroutine(CrossFadeAsync(1, 10));
-
+        if (GameSettings.Instance.SkipSplashScreens) yield break;
         WeekBeginCrossFade = true;
         WeekIntroBGGraphic.gameObject.SetActive(true);
         WeekIntroBGGraphic.DOFade(1, 4f);
