@@ -169,6 +169,7 @@ MonoBehaviour:
   ProvisionsToggle: 1
   FTUE: 1
   TutorialToggle: 0
+  SkipSplashScreens: 0
   fullScreenMode: 0
   currentQualityLevel: 0
   brightnessPercent: 0
@@ -600,7 +601,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tracks: []
-  MusicAudioSource: {fileID: 0}
+  MusicAudioSourceChannel1: {fileID: 0}
+  MusicAudioSourceChannel2: {fileID: 0}
   AmbientAudioSource: {fileID: 0}
   HouseAmbience: {fileID: 0}
   WeatherAmbientAudioSource: {fileID: 0}
