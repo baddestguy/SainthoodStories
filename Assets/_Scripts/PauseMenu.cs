@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,7 +13,10 @@ public class PauseMenu : MonoBehaviour
     public GameObject settingsPannel;
     public GameObject saintsPanel;
     public GameObject mainPanel;
-    public Camera testCam;
+
+    public GameObject PauseSettings;
+    public GameObject GraphicsSettings;
+    public GameObject SoundSettings;
     [HideInInspector] public bool active;
     public static PauseMenu Instance
     {
@@ -31,13 +33,33 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
-       // Activate(false);
     }
 
     public void Activate()
     {
         active = !active;
         mainPanel.SetActive(active);
+    }
+
+    public void TogglePause()
+    {
+        CloseAll();
+        PauseSettings.SetActive(true);
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+    }
+
+    public void ToggleGraphics()
+    {
+        CloseAll();
+        GraphicsSettings.SetActive(true);
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+    }
+
+    public void ToggleSound()
+    {
+        CloseAll();
+        SoundSettings.SetActive(true);
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 
     public void SetHeaderText(string value)
@@ -53,12 +75,16 @@ public class PauseMenu : MonoBehaviour
 
     }
 
+    public void OnResume()
+    {
+        Activate();
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+    }
+
     public void OnSaintBtnClicked()
     {
         SetHeaderText("Saints");
         CloseAll();
-        //SceneManager.LoadScene("SaintsShowcase_Day");
-        //saintsPanel.SetActive(true);
     }
 
     public void OnSettingsBtnClicked()
@@ -74,11 +100,15 @@ public class PauseMenu : MonoBehaviour
         codexPanel.SetActive(false);
         settingsPannel.SetActive(false);
         saintsPanel.SetActive(false);
+        PauseSettings.SetActive(false);
+        GraphicsSettings.SetActive(false);
+        SoundSettings.SetActive(false);
     }
 
     public void OnExitToMenuBtnClicked()
     {
         //maybe do check before quit
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
         StartCoroutine(ScheduleCallback(() => {
             SoundManager.Instance.EndAllTracks();
             GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
@@ -88,6 +118,7 @@ public class PauseMenu : MonoBehaviour
     public void OnExitToDesktopClicked()
     {
         //maybe do check before quit
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
         StartCoroutine(ScheduleCallback(() => {
             Application.Quit();
         }, 1));
