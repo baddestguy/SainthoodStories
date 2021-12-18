@@ -22,11 +22,13 @@ public class ActionButton : MonoBehaviour
     {
         yield return null;
         if (!ShouldWiggle || !Enabled || GameSettings.Instance.FTUE) yield break;
+        transform.DOComplete();
         transform.DOPunchScale(transform.localScale*0.5f, 0.5f, elasticity: 0f).SetDelay(WiggleDelay);
     }
 
     public void Wiggle(float delay = 0f)
     {
+        transform.DOComplete();
         transform.DOPunchScale(transform.localScale * 0.5f, 0.5f, elasticity: 0f).SetDelay(delay);
     }
 

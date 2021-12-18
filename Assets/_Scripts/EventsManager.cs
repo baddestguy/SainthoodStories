@@ -57,6 +57,7 @@ public class EventsManager : MonoBehaviour
         EventDialogTriggered?.Invoke(true);
         Player.LockMovement = true;
 
+        UI.Instance.EnableAllUIElements(false);
         //Execute events one by one
         foreach (var e in EventList)
         {
@@ -71,6 +72,7 @@ public class EventsManager : MonoBehaviour
         }
 
         EventList.Clear();
+        UI.Instance.EnableAllUIElements(true);
 
         if (EventInProgress) yield break; //If something else has started an event, break out early.
 
@@ -126,8 +128,8 @@ public class EventsManager : MonoBehaviour
             yield return null;
         }
 
+        UI.Instance.EnableAllUIElements(false);
         if (GameSettings.Instance.FTUE && TutorialManager.Instance.CurrentTutorialStep < 1) yield return new WaitForSeconds(10f);
-
         //Execute events one by one
         foreach (var e in StoryEvents)
         {
@@ -143,6 +145,7 @@ public class EventsManager : MonoBehaviour
         yield return null;
 
         StoryEvents.Clear();
+        UI.Instance.EnableAllUIElements(true);
         if (MissionManager.MissionOver) yield break;
         Player.LockMovement = false;
         EventDialogTriggered?.Invoke(false);

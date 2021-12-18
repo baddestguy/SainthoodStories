@@ -58,7 +58,11 @@ public class SaintShowcaseHandler : MonoBehaviour
 
     private void UpdateSaint()
     {
-        if (!SaintsManager.Instance.UnlockedSaints.Any()) return;
+        if (!SaintsManager.Instance.UnlockedSaints.Any())
+        {
+            Bio.text = LocalizationManager.Instance.GetText("No_Saints_Text");
+            return;
+        }
         
         SaintData saintData = SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex];
 
