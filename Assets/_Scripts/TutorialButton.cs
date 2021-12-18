@@ -37,6 +37,7 @@ public class TutorialButton : MonoBehaviour
         if (!GameSettings.Instance.FTUE) return;
         if (TutorialManager.Instance.CheckTutorialButton(ButtonName))
         {
+            transform.DOComplete();
             transform.DOPunchScale(transform.localScale * 0.5f, 0.5f, elasticity: 0f);
         }
     }

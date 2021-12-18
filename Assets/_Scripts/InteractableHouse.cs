@@ -65,7 +65,7 @@ public class InteractableHouse : InteractableObject
         UI.Meditate += Meditated;
         MissionManager.EndOfDay += ReportScores;
         MissionManager.EndOfDay += EndofDay;
-        EventsManager.EventDialogTriggered += OnEventDialogTriggered;
+        UI.UIHidden += OnUIEnabled;
         EventsManager.EventExecuted += OnEventExecuted;
         GameControlsManager.TryZoom += TryZoom;
         LoadData();
@@ -776,26 +776,20 @@ public class InteractableHouse : InteractableObject
         return VolunteerCountdown == 0;
     }
 
-    private void OnEventDialogTriggered(bool started)
+    private void OnUIEnabled(bool enabled)
     {
-        if (started && CameraLockOnMe)
+        if (CameraLockOnMe)
         {
-            ExteriorPopUI.gameObject.SetActive(false);
-            if(InteriorPopUI)
-            InteriorPopUI.gameObject.SetActive(false);
-        }
-        else if (!started && CameraLockOnMe)
-        {
-            ExteriorPopUI.gameObject.SetActive(true);
+            ExteriorPopUI.gameObject.SetActive(enabled);
             if(InteriorPopUI && InteriorSpace.activeSelf)
-            InteriorPopUI.gameObject.SetActive(true);
+            InteriorPopUI.gameObject.SetActive(enabled);
         }
 
         if(CanBuild() || DeadlineSet || GetType().Name == "InteractableChurch") //Only reason to have popicons displaying
         {
-            if(!started && !HouseUIActive)
+            if(enabled && !HouseUIActive)
                 PopIcon.gameObject.SetActive(true);            
-            PopIcon.UIPopped(started);
+            PopIcon.UIPopped(!enabled);
             if (CanBuild()) PopIcon.Init("Rubble", 0, new GameClock(-1));
             else PopMyIcon();
         }
@@ -1043,7 +1037,7 @@ public class InteractableHouse : InteractableObject
         UI.Meditate -= Meditated;
         MissionManager.EndOfDay -= EndofDay;
         MissionManager.EndOfDay -= ReportScores;
-        EventsManager.EventDialogTriggered -= OnEventDialogTriggered;
+        UI.UIHidden -= OnUIEnabled;
         EventsManager.EventExecuted -= OnEventExecuted;
         GameControlsManager.TryZoom -= TryZoom;
 

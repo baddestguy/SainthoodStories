@@ -1,4 +1,6 @@
-﻿using DG.Tweening;
+﻿using System.Collections;
+using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class TutorialUI : MonoBehaviour
@@ -22,15 +24,18 @@ public class TutorialUI : MonoBehaviour
         startPoint = MyUI.transform.localPosition;
         if (GameSettings.Instance.FTUE)
         {
-            EventsManager.EventDialogTriggered += RefreshUI;
             MyUI.transform.localScale = Vector3.zero;
         }
     }
 
-    public void RefreshUI(bool started)
+    public void OnEnable()
     {
-        if (started) return;
+        StartCoroutine(Refresh());
+    }
 
+    private IEnumerator Refresh()
+    {
+        yield return null;
         if (GameSettings.Instance.FTUE)
         {
             if(Threshold > -1)
@@ -139,6 +144,5 @@ public class TutorialUI : MonoBehaviour
 
     private void OnDisable()
     {
-        EventsManager.EventDialogTriggered -= RefreshUI;
     }
 }

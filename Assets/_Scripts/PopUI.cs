@@ -34,6 +34,7 @@ public class PopUI : MonoBehaviour
     public CameraControls CameraControls;
 
     private InteractableHouse MyHouse;
+    private GameObject CurrentVfx;
 
     void Start()
     {
@@ -266,8 +267,11 @@ public class PopUI : MonoBehaviour
 
     public void PlayVFX(string vfxName)
     {
-        transform.Find(vfxName)?.gameObject.SetActive(false);
-        transform.Find(vfxName)?.gameObject.SetActive(true);
+        CurrentVfx = transform.Find(vfxName)?.gameObject;
+        if (CurrentVfx == null) return;
+
+        CurrentVfx.SetActive(false);
+        CurrentVfx.SetActive(true);
     }
 
     private void OnEnable()
@@ -298,7 +302,8 @@ public class PopUI : MonoBehaviour
         Player.LockMovement = false;
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(false);
-        
+        if (CurrentVfx != null) CurrentVfx.SetActive(false);
+
         if (ProgressBar == null) return;
         ProgressBar.gameObject.SetActive(false);
     }

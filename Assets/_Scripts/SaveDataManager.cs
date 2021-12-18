@@ -111,7 +111,7 @@ public class SaveDataManager : MonoBehaviour
     public void FirstSave()
     {
         //InitialDataSaving
-        SaveObject save = NewGameData();
+        SaveObject save = CurrentSaveData();
         SaveObject[] saveObjects = new SaveObject[1] { save };
 
         Save(saveObjects);

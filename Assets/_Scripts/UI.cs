@@ -66,12 +66,18 @@ public class UI : MonoBehaviour
     public GameObject SaintCard;
 
     public GameObject PanelToActivateOnLoadUiEvent;
+    public static UnityAction<bool> UIHidden;
+
+    [Header("UI Elements")]
+    public GameObject LeftItems;
+    public GameObject RightItems;
+    public GameObject CenterItems;
+    public GameObject SideNotifItems;
 
     [Header("Ui Clicked Reporters")]
     public GraphicRaycaster[] graphicRaycaster;
     public EventSystem m_EventSystem;
     private PointerEventData m_PointerEventData;
-
 
 
     public bool WasUiHit
@@ -514,6 +520,7 @@ public class UI : MonoBehaviour
 
     public void TutorialPopupOn(string locKey)
     {
+        UI.Instance.EnableAllUIElements(false);
         Black.gameObject.SetActive(true);
         Color c = Black.color;
         c.a = 0.5f;
@@ -524,6 +531,7 @@ public class UI : MonoBehaviour
 
     public void TutorialPopupOff()
     {
+        UI.Instance.EnableAllUIElements(true);
         Color c = Black.color;
         c.a = 0f;
         Black.color = c;
@@ -689,6 +697,20 @@ public class UI : MonoBehaviour
         CrossFading = false;
     }
 
+    public void EnableAllUIElements(bool enable)
+    {
+        LeftItems.SetActive(enable);
+        RightItems.SetActive(enable);
+        CenterItems.SetActive(enable);
+        SideNotifItems.SetActive(enable);
+        UIHidden?.Invoke(enable);
+
+        EnergyAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
+        TreasuryAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
+        CPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
+        FPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
     public void QuitGame()
     {
         Application.Quit();
@@ -703,8 +725,4 @@ public class UI : MonoBehaviour
         GameClock.Ticked -= OnTick;
         TreasuryManager.DonatedMoney -= RefreshTreasuryBalance;
     }
-
-
-
-   
 }
