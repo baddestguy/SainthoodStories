@@ -14,6 +14,7 @@ public class SavedDataUiHandler : MonoBehaviour
     public GameObject loadUiItemPanel;
     public Transform contentHolder;
     public GameObject laodDataUiitemPrefab;
+    public GameObject BackButtonTab;
     public Button backButton;
     public TextMeshProUGUI backBtnText;
 
@@ -40,15 +41,17 @@ public class SavedDataUiHandler : MonoBehaviour
         UIs = new List<GameObject>();
         if (ingameLoading)
         {
+            BackButtonTab.SetActive(false);
             backButton.onClick.RemoveAllListeners();
             backButton.onClick.AddListener(() => callback?.Invoke(null));
-            backBtnText.text = "New Game";
+            //backBtnText.text = "New Game";
         }
         else
         {
+            BackButtonTab.SetActive(true);
             backButton.onClick.RemoveAllListeners();
             backButton.onClick.AddListener(Back);
-            backBtnText.text = "Back";
+            //backBtnText.text = "Back";
         }
 
 

@@ -73,7 +73,8 @@ public class GameClock
         Ticked?.Invoke(Time, Day);
         if (EndofDay)
         {
-            SaveDataManager.Instance.SaveGame();
+            if(!EndofWeek())
+                SaveDataManager.Instance.SaveGame();
             StartNewDay?.Invoke();
         }
         ExecuteEvents?.Invoke();

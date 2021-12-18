@@ -91,15 +91,17 @@ public class MissionManager : MonoBehaviour
 
     private IEnumerator EndMissionAsync()
     {
+        bool missionFailed = false;
         Player.LockMovement = true;
         MissionOver = true;
-
         UI.Instance.CrossFade(1, 1f);
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
 
         if (FaithPoints < 75 || CharityPoints < 75)
-        {   //instant game over
+        {
+            missionFailed = true;
+            //instant game over
             if (CharityPoints <= 0)
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
@@ -137,7 +139,7 @@ public class MissionManager : MonoBehaviour
         GameManager.Instance.GameClock.SetClock(6, 1);
         InventoryManager.Instance.ClearProvisions();
         SaveDataManager.Instance.SaveGame();
-        MissionComplete?.Invoke(true);
+        MissionComplete?.Invoke(missionFailed);
     }
 
     public IEnumerable<SaintData> UnlockSaints()

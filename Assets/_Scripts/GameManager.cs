@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     private Scene activeScene;
     public SceneID CurrentSceneID;
     public SceneID PreviousSceneID;
-    private bool canPauseGame;
+    public bool InGameSession;
 
     private void Awake()
     {
@@ -52,33 +52,20 @@ public class GameManager : MonoBehaviour
         MapTile.OnClickEvent += OnTap;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
         GameClock.Ticked += PlayAmbience;
-        //SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
         LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
 
     private void Update()
     {
-        if (canPauseGame)
+        if (InGameSession)
         {
-           
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                //print(PauseMenu.Instance == null);
-                if(PauseMenu.Instance == null)
-                {
-                    LoadScene("PauseMenu", LoadSceneMode.Additive);
-                }
-                else
-                {
-                    PauseMenu.Instance.Activate();
-                }
-                
+                PauseMenu.Instance.Activate();
             }
         }
     }
-
-    
 
     public void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Additive)
     {
@@ -116,8 +103,6 @@ public class GameManager : MonoBehaviour
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = CurrentMission.SeasonSceneId;
 
-            canPauseGame = true;
-
             MissionManager.MissionOver = false;
             Player = FindObjectOfType<Player>();
             Map = FindObjectOfType<GameMap>();
@@ -143,7 +128,7 @@ public class GameManager : MonoBehaviour
             TreasuryManager.Instance.Money = SaveData.Money;
             SaintsManager.Instance.LoadSaints(SaveData.Saints);
             InventoryManager.Instance.LoadInventory(SaveData);
-
+            LoadScene("PauseMenu", LoadSceneMode.Additive);
             SoundManager.Instance.PlayMusic("Convent_Music", "Field_Music");
         }
         else if (scene.name.Contains("MainMenu"))
@@ -154,25 +139,20 @@ public class GameManager : MonoBehaviour
                 TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                 if (data.TutorialSteps >= 20) GameSettings.Instance.FTUE = false;
             },false, true);
-            canPauseGame = false;
+            InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
             SoundManager.Instance.PlayMusic("MainMenu_Music");
 
         }
         else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))
         {
-            
-
+            LoadScene("PauseMenu", LoadSceneMode.Additive);
             loadWeekDaysScene = false;
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.SaintsShowcase_Day;
         }else if (scene.name.Contains(SceneID.PauseMenu.ToString()))
         {
-            PauseMenu.Instance.Activate();
-            if(PauseMenu.Instance.testCam != null)
-            {
-                Destroy(PauseMenu.Instance.testCam.gameObject);
-            }
+            loadWeekDaysScene = false;
         }
 
         if (loadWeekDaysScene)

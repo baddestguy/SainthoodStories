@@ -179,7 +179,7 @@ public class UI : MonoBehaviour
             yield return null;
         }
 
-        GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, showUI: false);
+        GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, showUI: complete);
     }
 
     private void OnTick(double time, int day)
@@ -552,7 +552,7 @@ public class UI : MonoBehaviour
     public GameObject SettingsMenuGO;
     public void SettingsMenu()
     {
-        SoundManager.Instance.PlayOneShotSfx("DialogOpen_SFX");
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
         SettingsMenuGO.SetActive(true);
         PopulateLanguageDropdown();
     }
@@ -642,6 +642,7 @@ public class UI : MonoBehaviour
     {
         yield return StartCoroutine(CrossFadeAsync(1, 10));
         if (GameSettings.Instance.SkipSplashScreens) yield break;
+        GameManager.Instance.InGameSession = false;
         WeekBeginCrossFade = true;
         WeekIntroBGGraphic.gameObject.SetActive(true);
         WeekIntroBGGraphic.DOFade(1, 4f);
@@ -659,6 +660,7 @@ public class UI : MonoBehaviour
         
         WeekIntroBGGraphic.gameObject.SetActive(false);
         WeekBeginCrossFade = false;
+        GameManager.Instance.InGameSession = true;
     }
 
     public void CrossFade(float fade, float speed = 5f)

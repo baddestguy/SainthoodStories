@@ -217,7 +217,7 @@ public class Player : MonoBehaviour
 
     public void OnInteract(MapTile newTile, bool passTime = true)
     {
-        if (LockMovement) return;
+        if (LockMovement || PauseMenu.Instance.active) return;
 
         EnergyConsumption = ModifyEnergyConsumption(newTile);
         if (Energy.Depleted(EnergyConsumption) && !(newTile is InteractableHouse) && WeCanMove(newTile)) //Reset if out of energy & not in a building
