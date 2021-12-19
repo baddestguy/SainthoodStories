@@ -103,10 +103,13 @@ public class EventsManager : MonoBehaviour
         if(c.Day % 7 == 0)
         {
             AddEventToList(CustomEventType.SUNDAY_MASS);
+            GameDataManager.Instance.TriggeredDailyEvents.Clear();
         }
-        else if(Random.Range(0, 100) < 50)
+        else
         {
-            AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY).Id);
+            var randomEvent = GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY);
+            randomEvent = GameDataManager.Instance.RemixEventBySeason(randomEvent);
+            AddEventToList(randomEvent.Id);
         }
     }
 

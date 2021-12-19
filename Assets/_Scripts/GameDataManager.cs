@@ -20,6 +20,9 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<string, List<BuildingMissionData>> BuildingMissionData = new Dictionary<string, List<BuildingMissionData>>();
     public List<WeatherData> WeatherData = new List<WeatherData>();
 
+    public int MidnightEventChosenIndex;
+    public List<CustomEventType> TriggeredDailyEvents;
+
     void Awake()
     {
         Instance = this;
@@ -164,12 +167,63 @@ public class GameDataManager : MonoBehaviour
         List<CustomEventData> list = new List<CustomEventData>();
         foreach(var ePair in CustomEventData)
         {
-            var e = ePair.Value[Random.Range(0,ePair.Value.Count)]; //Based on weight
+            MidnightEventChosenIndex = Random.Range(0, ePair.Value.Count);
+            var e = ePair.Value[MidnightEventChosenIndex]; //Based on weight
             list.Add(e);
         }
 
         var groupList = list.Where(e => e.EventGroup == eGroup).ToList();
-        return groupList[Random.Range(0, groupList.Count)];
+        CustomEventData returnData = groupList[Random.Range(0, groupList.Count)];
+
+        if(eGroup == EventGroup.DAILY)
+        {
+            while (TriggeredDailyEvents.Contains(returnData.Id))
+            {
+                returnData = groupList[Random.Range(0, groupList.Count)];
+            }
+            TriggeredDailyEvents.Add(returnData.Id);
+        }
+
+        return returnData;
+    }
+
+    public CustomEventData RemixEventBySeason(CustomEventData data)
+    {
+        switch (data.Id)
+        {
+            case CustomEventType.RAIN:
+                if (MissionManager.Instance.CurrentMission.Season == Season.SUMMER)
+                {
+                    return CustomEventData[CustomEventType.HEATWAVE][MidnightEventChosenIndex];
+                }
+                else if (MissionManager.Instance.CurrentMission.Season == Season.WINTER)
+                {
+                    return CustomEventData[CustomEventType.BLIZZARD][MidnightEventChosenIndex];
+                }
+                break;
+            case CustomEventType.HEATWAVE:
+                if (MissionManager.Instance.CurrentMission.Season == Season.FALL)
+                {
+                    return CustomEventData[CustomEventType.RAIN][MidnightEventChosenIndex];
+                }
+                else if (MissionManager.Instance.CurrentMission.Season == Season.WINTER)
+                {
+                    return CustomEventData[CustomEventType.BLIZZARD][MidnightEventChosenIndex];
+                }
+                break;
+            case CustomEventType.BLIZZARD:
+                if (MissionManager.Instance.CurrentMission.Season == Season.SUMMER)
+                {
+                    return CustomEventData[CustomEventType.HEATWAVE][MidnightEventChosenIndex];
+                }
+                else if (MissionManager.Instance.CurrentMission.Season == Season.FALL)
+                {
+                    return CustomEventData[CustomEventType.RAIN][MidnightEventChosenIndex];
+                }
+                break;
+        }
+
+        return data;
     }
 
     public bool IsSpritualEvent(CustomEventType e)
