@@ -155,6 +155,8 @@ public enum CustomEventType
 {
     MARKET_HOURS = 0,
     RAIN,
+    HEATWAVE,
+    BLIZZARD,
     BABY_FEVER,
     MARKET_DISCOUNT,
     MARKET_MARKUP,
