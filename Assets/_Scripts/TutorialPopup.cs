@@ -45,7 +45,13 @@ public class TutorialPopup : MonoBehaviour
                 Image.sprite = Resources.Load<Sprite>("Icons/Tut_8");
                 break;
             case "Tutorial_Instruction_9":
+                Image.sprite = Resources.Load<Sprite>("Icons/Tut_Heatwave");
+                break;
+            case "Tutorial_Instruction_Rainfall":
                 Image.sprite = Resources.Load<Sprite>("Icons/Tut_9");
+                break;
+            case "Tutorial_Instruction_Blizzard":
+                Image.sprite = Resources.Load<Sprite>("Icons/Tut_Blizzard");
                 break;
             case "Tutorial_Instruction_10":
                 Image.sprite = Resources.Load<Sprite>("Icons/Tut_10");

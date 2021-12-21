@@ -342,6 +342,7 @@ public class UI : MonoBehaviour
         CustomEventPopup.gameObject.SetActive(true);
         CustomEventPopup.Setup(customEvent);
 
+        //Hide/Show relevant UI
         switch (customEvent.EventGroup)
         {
             case EventGroup.THANKYOU:
@@ -697,6 +698,7 @@ public class UI : MonoBehaviour
 
     public void DisplayToolTip(string text)
     {
+        if (Black.color.a > 0) return;
         if (TooltipDisplay == null) return;
         if (text == TooltipDisplay.text) return;
 
