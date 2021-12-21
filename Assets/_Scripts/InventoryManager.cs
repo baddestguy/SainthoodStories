@@ -27,8 +27,8 @@ public class InventoryManager : MonoBehaviour
         Provisions = save.Provisions?.ToList() ?? new List<Provision>();
         if (Provisions.Contains(Provision.EXTRA_INVENTORY)){
             MaxInventorySlots = 4;
-            RefreshInventoryUI?.Invoke();
         }
+        RefreshInventoryUI?.Invoke();
     }
 
     public bool IsInventoryFull()

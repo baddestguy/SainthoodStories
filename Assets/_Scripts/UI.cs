@@ -341,6 +341,74 @@ public class UI : MonoBehaviour
     {
         CustomEventPopup.gameObject.SetActive(true);
         CustomEventPopup.Setup(customEvent);
+
+        switch (customEvent.EventGroup)
+        {
+            case EventGroup.THANKYOU:
+                RightItems.SetActive(true);
+                foreach(Transform t in RightItems.transform)
+                {
+                    if(customEvent.RewardType == CustomEventRewardType.COIN && t.name == "TreasuryBalance")
+                    {
+                        t.gameObject.SetActive(true);
+                        TreasuryManager.DonatedMoney?.Invoke(TreasuryManager.Instance.TemporaryMoneyToDonate);
+                    }
+                    if(t.name == "CP")
+                    {
+                        t.gameObject.SetActive(true);
+                    }
+                }
+                break;
+
+            case EventGroup.CHURCH:
+                CenterItems.SetActive(true);
+                RightItems.SetActive(true);
+                foreach (Transform t in RightItems.transform)
+                {
+                    if (t.name == "FP")
+                    {
+                        t.gameObject.SetActive(true);
+                    }
+                }
+                LeftItems.SetActive(true);
+                foreach (Transform t in LeftItems.transform)
+                {
+                    if (t.name == "Time")
+                    {
+                        t.gameObject.SetActive(true);
+                    }
+                }
+                break;
+
+            case EventGroup.KITCHEN:
+            case EventGroup.SHELTER:
+            case EventGroup.HOSPITAL:
+            case EventGroup.ORPHANAGE:
+            case EventGroup.SCHOOL:
+            case EventGroup.CLOTHES:
+                CenterItems.SetActive(true);
+                RightItems.SetActive(true);
+                foreach (Transform t in RightItems.GetComponentsInChildren<Transform>(true))
+                {
+                    if (customEvent.RewardType == CustomEventRewardType.COIN && t.name == "TreasuryBalance")
+                    {
+                        t.gameObject.SetActive(true);
+                    }
+                    else if (customEvent.RewardType != CustomEventRewardType.COIN && t.name == "CP")
+                    {
+                        t.gameObject.SetActive(true);
+                    }
+                }
+                LeftItems.SetActive(true);
+                foreach (Transform t in LeftItems.transform)
+                {
+                    if (t.name == "Time")
+                    {
+                        t.gameObject.SetActive(true);
+                    }
+                }
+                break;
+        }
     }
 
     public void EnableTreasuryUI(bool enable)
@@ -700,11 +768,19 @@ public class UI : MonoBehaviour
     public void EnableAllUIElements(bool enable)
     {
         LeftItems.SetActive(enable);
+        foreach (Transform g in LeftItems.transform)
+        {
+            g.gameObject.SetActive(enable);
+        }
         RightItems.SetActive(enable);
+        foreach (Transform g in RightItems.transform)
+        {
+            g.gameObject.SetActive(enable);
+        }
         CenterItems.SetActive(enable);
         SideNotifItems.SetActive(enable);
         UIHidden?.Invoke(enable);
-
+        WeatherManager.Instance.BroadcastWeather();
         EnergyAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         TreasuryAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         CPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);

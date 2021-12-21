@@ -118,7 +118,7 @@ public class TutorialUI : MonoBehaviour
                 }
                 else
                 {
-                    MyUI.transform.localScale = Vector3.zero;
+                //    MyUI.transform.localScale = Vector3.zero;
                 }
             }
             else
