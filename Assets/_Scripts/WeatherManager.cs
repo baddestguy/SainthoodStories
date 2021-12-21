@@ -138,7 +138,7 @@ public class WeatherManager : MonoBehaviour
         WeatherActivation(futureStartTime, futureEndTime);
     }
 
-    private void BroadcastWeather()
+    public void BroadcastWeather()
     {
         WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
     }

@@ -6,6 +6,7 @@ public class TreasuryManager : MonoBehaviour
     public static TreasuryManager Instance { get; private set; }
 
     public double Money { get; set; }
+    public double TemporaryMoneyToDonate;
     public static UnityAction<double> DonatedMoney;
 
     private void Awake()
@@ -20,6 +21,7 @@ public class TreasuryManager : MonoBehaviour
 
     public void DonateMoney(double donation)
     {
+        TemporaryMoneyToDonate = donation;
         Money += donation;
         DonatedMoney?.Invoke(donation);
     }
