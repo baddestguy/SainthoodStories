@@ -141,11 +141,27 @@ public class TutorialManager : MonoBehaviour
         {
             switch (dialogKey)
             {
-                case "WeatherIntro":
+                case "HeatwaveIntro":
                     if (!TutorialStrings.Contains("Tutorial_Instruction_9"))
                     {
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_9");
                         TutorialStrings.Add("Tutorial_Instruction_9");
+                    }
+                    return;
+
+                case "RainIntro":
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_Rainfall"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_Rainfall");
+                        TutorialStrings.Add("Tutorial_Instruction_Rainfall");
+                    }
+                    return;
+
+                case "BlizzardIntro":
+                    if (!TutorialStrings.Contains("Tutorial_Instruction_Blizzard"))
+                    {
+                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_Blizzard");
+                        TutorialStrings.Add("Tutorial_Instruction_Blizzard");
                     }
                     return;
 

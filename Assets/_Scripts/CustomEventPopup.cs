@@ -19,6 +19,11 @@ public class CustomEventPopup : MonoBehaviour
     public CustomEventData EventData;
     public TextMeshProUGUI EventText;
 
+    public GameObject StoryBG;
+    public GameObject EventBG;
+    public Text StoryEventText;
+    public Image StoryImage;
+
     public GameObject IconsGO;
     public TextMeshProUGUI TimeDisplay;
     public TextMeshProUGUI EnergyDisplay;
@@ -45,6 +50,7 @@ public class CustomEventPopup : MonoBehaviour
         IconsGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         OKGO.SetActive(customEvent.EventPopupType == EventPopupType.OK);
         CameraControls = GetCameraControl();
+        StoryImage.sprite = Resources.Load<Sprite>(customEvent.ImagePath);
 
         switch (customEvent.EventPopupType)
         {
@@ -71,8 +77,8 @@ public class CustomEventPopup : MonoBehaviour
         {
             CurrentSequenceNumber = 0;
             var text = LocalizationManager.Instance.GetText(customEvent.LocalizationKey, CurrentSequenceNumber);
-            EventText.text = "";
-            EventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
+            StoryEventText.text = "";
+            StoryEventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
             YesNoGO.SetActive(false);
             OKGO.SetActive(false);
             IconsGO.SetActive(false);
@@ -81,8 +87,8 @@ public class CustomEventPopup : MonoBehaviour
         else
         {
             var text = LocalizationManager.Instance.GetText(customEvent.LocalizationKey);
-            EventText.text = "";
-            EventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
+            StoryEventText.text = "";
+            StoryEventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
         }
 
         if(customEvent.EventGroup == EventGroup.THANKYOU || customEvent.EventGroup == EventGroup.ENDWEEK)
@@ -103,9 +109,9 @@ public class CustomEventPopup : MonoBehaviour
 
     public void Yes()
     {
-        if (DOTween.IsTweening(EventText, true))
+        if (DOTween.IsTweening(StoryEventText, true))
         {
-            DOTween.Complete(EventText);
+            DOTween.Complete(StoryEventText);
             return;
         }
         GameClock clock = GameManager.Instance.GameClock;
@@ -146,9 +152,9 @@ public class CustomEventPopup : MonoBehaviour
 
     public void No()
     {
-        if (DOTween.IsTweening(EventText, true))
+        if (DOTween.IsTweening(StoryEventText, true))
         {
-            DOTween.Complete(EventText);
+            DOTween.Complete(StoryEventText);
             return;
         }
         Player player = GameManager.Instance.Player;
@@ -166,9 +172,9 @@ public class CustomEventPopup : MonoBehaviour
 
     public void OK()
     {
-        if (DOTween.IsTweening(EventText, true))
+        if (DOTween.IsTweening(StoryEventText, true))
         {
-            DOTween.Complete(EventText);
+            DOTween.Complete(StoryEventText);
             return;
         }
         EventsManager.Instance.EventInProgress = false;
@@ -179,9 +185,9 @@ public class CustomEventPopup : MonoBehaviour
     public void Continue()
     {
         
-        if (DOTween.IsTweening(EventText, true))
+        if (DOTween.IsTweening(StoryEventText, true))
         {
-            DOTween.Complete(EventText);
+            DOTween.Complete(StoryEventText);
             return;
         }
 
@@ -199,16 +205,16 @@ public class CustomEventPopup : MonoBehaviour
         }
 
         var text = LocalizationManager.Instance.GetText(EventData.LocalizationKey, CurrentSequenceNumber);
-        EventText.text = "";
-        EventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
+        StoryEventText.text = "";
+        StoryEventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 
     public void OnPointerDown()
     {
-        if (DOTween.IsTweening(EventText, true))
+        if (DOTween.IsTweening(StoryEventText, true))
         {
-            DOTween.Complete(EventText);
+            DOTween.Complete(StoryEventText);
             return;
         }
         Player player = GameManager.Instance.Player;

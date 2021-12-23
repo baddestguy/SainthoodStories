@@ -334,6 +334,7 @@ public class CustomEventData
     public CustomEventRewardType RewardType;
     public float RejectionCost;
     public bool IsOrderedSequence;
+    public string ImagePath;
     public string LocalizationKey;
 }
 
@@ -344,6 +345,7 @@ public class StoryEventData
     public int Week;
     public int Day;
     public double Time;
+    public string ImagePath;
     public bool IsOrderedSequence;
 }
 
