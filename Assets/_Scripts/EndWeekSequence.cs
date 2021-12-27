@@ -22,16 +22,17 @@ public class EndWeekSequence : MonoBehaviour
 
     public IEnumerator RunSequenceAsync()
     {
-        int cashAmount = Random.Range(200, 250);
+        int cashAmount = Random.Range(100, 200);
         TreasuryManager.Instance.DonateMoney(cashAmount);
         var saintsUnlocked = MissionManager.Instance.UnlockSaints();
 
         BG.SetActive(true);
         CPFPObj.SetActive(true);
-        Title.text = LocalizationManager.Instance.GetText("CHARITY POINTS"); //CP_ENDGAME_TITLE
-        Score.DOCounter(0, MissionManager.Instance.CharityPoints, 1f);
+        Title.text = LocalizationManager.Instance.GetText("CP_ENDGAME_TITLE");
+        Score.DOCounter(0, MissionManager.Instance.CharityPoints, 3f);
+        SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie:5f);
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(4f);
 
         Score.text = "";
         Title.text = "";
@@ -40,6 +41,7 @@ public class EndWeekSequence : MonoBehaviour
         CashUnlockObj.transform.DOLocalMoveX(localPosition, 0.5f);
         CashUnlockObj.SetActive(true);
         CashAmount.text = "+" + cashAmount.ToString();
+        SoundManager.Instance.PlayOneShotSfx("Cheer_SFX", timeToDie:5f);
 
         //Wait for User input
         ContinueObj.SetActive(true);
@@ -51,14 +53,16 @@ public class EndWeekSequence : MonoBehaviour
         Continue = false;
 
         CashUnlockObj.SetActive(false);
-        Title.text = LocalizationManager.Instance.GetText("FAITH POINTS"); //FP_ENDGAME_TITLE
-        Score.DOCounter(0, MissionManager.Instance.FaithPoints, 1f);
+        Title.text = LocalizationManager.Instance.GetText("FP_ENDGAME_TITLE");
+        Score.DOCounter(0, MissionManager.Instance.FaithPoints, 3f);
+        SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie: 5f);
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(4f);
 
         Title.text = "";
         Score.text = "";
         SaintsUnlockObj.SetActive(true);
+        SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
 
         for (int i = 0; i < saintsUnlocked.Count(); i++)
         {

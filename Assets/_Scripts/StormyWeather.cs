@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
@@ -13,35 +12,16 @@ public class StormyWeather : MonoBehaviour
 
     public void StartStorm()
     {
-        InteractableHouse.OnEnterHouse += OnEnterHouse;
         Running = true;
         StartCoroutine(RunStormAsync());
         StartCoroutine(LightningThunder());
         SoundManager.Instance.FadeAmbience(0.1f);
-
-        if(InteractableHouse.InsideHouse)
-            SoundManager.Instance.PlayWeatherAmbience("RainInterior_Ambience", true, 0.3f);
-        else
-            SoundManager.Instance.PlayWeatherAmbience("RainExterior_Ambience", Running);
     }
 
     public void StopStorm()
     {
         Running = false;
-        SoundManager.Instance.PlayWeatherAmbience("", Running);
         SoundManager.Instance.FadeAmbience(0.3f);
-        InteractableHouse.OnEnterHouse -= OnEnterHouse;
-    }
-
-    public void OnEnterHouse(bool inHouse)
-    {
-        if (Running)
-        {
-            if(inHouse)
-                SoundManager.Instance.PlayWeatherAmbience("RainInterior_Ambience", true, 0.3f);
-            else
-                SoundManager.Instance.PlayWeatherAmbience("RainExterior_Ambience", true);
-        }
     }
 
     private IEnumerator RunStormAsync()
