@@ -80,8 +80,36 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlayAmbience(string ambience)
+    public void PlayAmbience()
     {
+        string ambience = "";
+        GameClock clock = GameManager.Instance.GameClock;
+        switch (MissionManager.Instance.CurrentMission.Season)
+        {
+            case Season.SUMMER:
+                if (clock.Time >= 21 || clock.Time < 6)
+                {
+                    ambience = "SummerNight_Ambience";
+                }
+                else if (clock.Time >= 6)
+                {
+                    ambience = "SummerDay_Ambience";
+                }
+                break;
+
+            case Season.FALL:
+                ambience = "Fall_Ambience";
+                break;
+
+            case Season.WINTER:
+                ambience = "Winter_Ambience";
+                break;
+
+            case Season.SPRING:
+                ambience = "Spring_Ambience";
+                break;
+        }
+
         if (string.IsNullOrEmpty(ambience) || AmbientTrackName == ambience)
             return;
 
@@ -102,8 +130,37 @@ public class SoundManager : MonoBehaviour
         StartCoroutine(FadeAudioAsync(0f, oldTrack));
     }
 
-    public void PlayWeatherAmbience(string weather, bool start, float volume = 1f)
+    public void PlayWeatherAmbience(bool start)
     {
+        string weather = "";
+
+        switch (MissionManager.Instance.CurrentMission.Season)
+        {
+            case Season.SUMMER:
+                weather = "Heatwave_Ambience";
+                if (InteractableHouse.InsideHouse)
+                {
+                    WeatherAmbientAudioSource.volume = 0.2f;
+                    return;
+                }
+                break;
+
+            case Season.FALL:
+                if (InteractableHouse.InsideHouse)
+                    weather = "RainInterior_Ambience";
+                else
+                    weather = "RainExterior_Ambience";
+                break;
+
+            case Season.WINTER:
+                weather = "Blizzard_Ambience";
+                break;
+
+            case Season.SPRING:
+                weather = "Hail_Ambience";
+                break;
+        }
+
         if (start)
         {
             if(WeatherAmbientAudioSource == null)
@@ -116,7 +173,7 @@ public class SoundManager : MonoBehaviour
             WeatherAmbientAudioSource.Play();
             WeatherAmbientAudioSource.loop = true;
             WeatherAmbientAudioSource.volume = 0f;
-            StartCoroutine(FadeAudioAsync(volume, WeatherAmbientAudioSource));
+            StartCoroutine(FadeAudioAsync(1f, WeatherAmbientAudioSource));
         }
         else
         {
@@ -199,7 +256,7 @@ public class SoundManager : MonoBehaviour
     public void EndAllTracks()
     {
         PlayHouseAmbience("", false, 0f);
-        PlayWeatherAmbience("", false, 0f);
+        PlayWeatherAmbience(false);
         FadeMusic(1f);
         StartCoroutine(FadeAudioAsync(0f, MusicAudioSourceChannel1));
         StartCoroutine(FadeAudioAsync(0f, MusicAudioSourceChannel2));

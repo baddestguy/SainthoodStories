@@ -42,6 +42,7 @@ public class MissionManager : MonoBehaviour
     {
         if (!GameClock.DeltaTime) return;
 
+        SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
         EndOfDay?.Invoke();
             
         if(GameManager.Instance.GameClock.EndofWeek())

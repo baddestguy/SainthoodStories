@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 public class WeatherManager : MonoBehaviour
 {
@@ -29,6 +28,7 @@ public class WeatherManager : MonoBehaviour
     {
         GameClock.Ticked += TriggerWeatherForecast;
         GameManager.MissionBegin += MissionBegin;
+        InteractableHouse.OnEnterHouse += OnEnterHouse;
         WeatherStartTime = new GameClock(0);
         WeatherEndTime = new GameClock(0);
     }
@@ -56,6 +56,7 @@ public class WeatherManager : MonoBehaviour
                 WeatherType = WeatherType.NONE;
                 BroadcastWeather();
                 DayNightCycle.SetFutureSkyBox(WeatherType);
+                SoundManager.Instance.PlayWeatherAmbience(false);
             }
             else if (GameManager.Instance.GameClock == WeatherStartTime)
             {
@@ -65,6 +66,7 @@ public class WeatherManager : MonoBehaviour
                     CurrentWeatherGO?.SetActive(true);
                     CurrentWeatherGO?.GetComponent<StormyWeather>()?.StartStorm();
                 }
+                SoundManager.Instance.PlayWeatherAmbience(true);
                 WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
             }
             return;
@@ -202,6 +204,14 @@ public class WeatherManager : MonoBehaviour
         ResetWeather();
     }
 
+    public void OnEnterHouse(bool inHouse)
+    {
+        if (WeatherType != WeatherType.NONE)
+        {
+            SoundManager.Instance.PlayWeatherAmbience(true);
+        }
+    }
+
     public void ResetWeather()
     {
         if(CurrentWeatherGO != null)
@@ -218,6 +228,7 @@ public class WeatherManager : MonoBehaviour
 
     private void OnDisable()
     {
+        InteractableHouse.OnEnterHouse -= OnEnterHouse;
         GameClock.Ticked -= TriggerWeatherForecast;
         GameManager.MissionBegin -= MissionBegin;
         MissionManager.MissionComplete -= MissionComplete;

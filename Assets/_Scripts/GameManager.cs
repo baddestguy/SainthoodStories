@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour
                 if (data.TutorialSteps >= 20) GameSettings.Instance.FTUE = false;
             },false, true);
             InGameSession = false;
-            SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
+        //    SoundManager.Instance.PlayAmbience();
             SoundManager.Instance.PlayMusic("MainMenu_Music");
 
         }
@@ -186,11 +186,11 @@ public class GameManager : MonoBehaviour
 
         if (GameClock.Time >= 21 || GameClock.Time < 6)
         {
-            SoundManager.Instance.PlayAmbience("SummerNight_Ambience");
+            SoundManager.Instance.PlayAmbience();
         }
         else if (GameClock.Time >= 6)
         {
-            SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
+            SoundManager.Instance.PlayAmbience();
         }
     }
 
