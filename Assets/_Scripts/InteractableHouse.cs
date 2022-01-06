@@ -480,7 +480,7 @@ public class InteractableHouse : InteractableObject
     private IEnumerator ClearToolTipAfterBuildingAsync()
     {
         yield return null;
-        ToolTipManager.Instance.ShowToolTip("");
+        UI.Instance.TooltipDisplay.transform.parent.gameObject.SetActive(false);
     }
 
     public virtual void BuildingCompleteDialog()
