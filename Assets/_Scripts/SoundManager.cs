@@ -138,7 +138,7 @@ public class SoundManager : MonoBehaviour
         {
             case Season.SUMMER:
                 weather = "Heatwave_Ambience";
-                if (InteractableHouse.InsideHouse)
+                if (InteractableHouse.InsideHouse && WeatherAmbientAudioSource != null)
                 {
                     WeatherAmbientAudioSource.volume = 0.2f;
                     return;

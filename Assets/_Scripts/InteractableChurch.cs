@@ -281,8 +281,8 @@ public class InteractableChurch : InteractableHouse
     public override void TriggerCustomEvent()
     {
         GameClock clock = GameManager.Instance.GameClock;
-        if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime) return;
-        if (clock.Day % 7 == 0 && (clock.Time == ConfessionTime || (clock.Time >= MassStartTime && clock.Time < MassEndTime))) return;
+        if ((clock.Time+1) >= LiturgyStartTime && clock.Time < LiturgyEndTime) return;
+        if (clock.Day % 7 == 0 && (clock.Time+0.5 == ConfessionTime || (clock.Time+0.5 >= MassStartTime && clock.Time < MassEndTime))) return;
         base.TriggerCustomEvent();
     }
 
