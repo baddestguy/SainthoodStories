@@ -8,7 +8,9 @@ public class LightColors : MonoBehaviour
 
     void OnEnable()
     {
+        if (GameManager.Instance == null || GameManager.Instance.GameClock == null) return;
         GameClock.Ticked += OnTick;
+        OnTick(GameManager.Instance.GameClock.Time, GameManager.Instance.GameClock.Day);
     }
 
     private void OnTick(double time, int day)

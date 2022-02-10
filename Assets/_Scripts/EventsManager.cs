@@ -87,10 +87,10 @@ public class EventsManager : MonoBehaviour
 
         int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
         GameClock currentClock = GameManager.Instance.GameClock;
-        var storyEvent = GameDataManager.Instance.StoryEventData.Where(s => s.Value.Week == CurrentWeek && s.Value.Day == currentClock.Day && s.Value.Time == currentClock.Time).FirstOrDefault().Value;
+        var storyEvent = GameDataManager.Instance.StoryEventData.Select(y => y.Value).Where(s => s.Week == CurrentWeek && s.Day == currentClock.Day && s.Time == currentClock.Time).OrderBy(x => x.OrderBy);
         if (storyEvent == null) return;
 
-        StoryEvents.Add(storyEvent);
+        StoryEvents.AddRange(storyEvent);
     }
 
     public void StartNewDay()

@@ -188,9 +188,9 @@ public class GameClock
 
     public void OnOveride(int DayOverride, double TimeOverride)
     {
+     //   DeltaTime = false;
         SetClock(TimeOverride, DayOverride);
         Ping();
-        StartNewDay?.Invoke();
     }
 
     public override int GetHashCode()

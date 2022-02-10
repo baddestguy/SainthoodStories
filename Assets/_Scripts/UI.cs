@@ -409,6 +409,10 @@ public class UI : MonoBehaviour
                     }
                 }
                 break;
+
+            case EventGroup.DAILY:
+                SoundManager.Instance.PlayOneShotSfx("TownCrier_SFX", timeToDie: 5f);
+                break;
         }
     }
 
@@ -698,6 +702,12 @@ public class UI : MonoBehaviour
 
     public void DisplayToolTip(string text)
     {
+        if (MissionManager.MissionOver)
+        {
+            TooltipDisplay.transform.parent.gameObject.SetActive(false);
+            return;
+        }
+
         if (Black.color.a > 0) return;
         if (TooltipDisplay == null) return;
         if (text == TooltipDisplay.text) return;

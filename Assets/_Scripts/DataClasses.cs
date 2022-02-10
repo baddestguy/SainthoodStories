@@ -211,10 +211,15 @@ public enum CustomEventType
     ,SHELTER_BUILDEXTRA
     ,STOCK_SHELVES
     ,REGISTRATION
+    ,ORPHANAGE_PRECOMPLETE
     ,ORPHANAGE_COMPLETE
+    ,SCHOOL_PRECOMPLETE
     ,SCHOOL_COMPLETE
+    ,KITCHEN_PRECOMPLETE
     ,KITCHEN_COMPLETE
+    ,SHELTER_PRECOMPLETE
     ,SHELTER_COMPLETE
+    ,CLOTHES_PRECOMPLETE
     ,CLOTHES_COMPLETE
     ,BABY_FAILED
     ,ENERGY_DEPLETED
@@ -347,6 +352,7 @@ public class StoryEventData
     public double Time;
     public string ImagePath;
     public bool IsOrderedSequence;
+    public int OrderBy;
 }
 
 [System.Serializable]

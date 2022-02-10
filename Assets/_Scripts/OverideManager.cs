@@ -29,8 +29,19 @@ public class OverideManager : MonoBehaviour
     {
         TutorialManager.Instance.OnOveride();
         EventsManager.Instance.OnOveride();
+        //StartCoroutine(RunDayNight());
         GameManager.Instance.GameClock.OnOveride(DayOverride, TimeOverride);
         TryOveride();
+    }
+
+    IEnumerator RunDayNight()
+    {
+        while (true)
+        {
+            TimeOverride++;
+            GameManager.Instance.GameClock.OnOveride(DayOverride, TimeOverride);
+            yield return new WaitForSeconds(1);
+        }
     }
 
     public void OverrideWeather()
