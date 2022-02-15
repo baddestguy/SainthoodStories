@@ -139,7 +139,7 @@ public class InteractableHouse : InteractableObject
             SetDeadlineTime(time, day);
         }
 
-        if ((DeadlineTime.Time != -1) && (time >= DeadlineTime.Time && day >= DeadlineTime.Day))
+        if ((DeadlineTime.Time != -1) && (time > DeadlineTime.Time && day >= DeadlineTime.Day))
         {
             Debug.LogError($"{name}: TIME UP!");
             NeglectedMultiplier++;
@@ -488,18 +488,23 @@ public class InteractableHouse : InteractableObject
         switch (GetType().Name)
         {
             case "InteractableOrphanage":
+                EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_PRECOMPLETE);
                 EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_COMPLETE);
                 break;
             case "InteractableKitchen":
+                EventsManager.Instance.AddEventToList(CustomEventType.KITCHEN_PRECOMPLETE);
                 EventsManager.Instance.AddEventToList(CustomEventType.KITCHEN_COMPLETE);
                 break;
             case "InteractableShelter":
+                EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_PRECOMPLETE);
                 EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_COMPLETE);
                 break;
             case "InteractableSchool":
+                EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_PRECOMPLETE);
                 EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_COMPLETE);
                 break;
             case "InteractableClothesBank":
+                EventsManager.Instance.AddEventToList(CustomEventType.CLOTHES_PRECOMPLETE);
                 EventsManager.Instance.AddEventToList(CustomEventType.CLOTHES_COMPLETE);
                 break;
         }

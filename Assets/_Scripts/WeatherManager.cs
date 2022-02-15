@@ -51,7 +51,10 @@ public class WeatherManager : MonoBehaviour
         {
             if (GameManager.Instance.GameClock == WeatherEndTime)
             {
-                CurrentWeatherGO?.GetComponent<StormyWeather>()?.StopStorm();
+                if(CurrentWeatherGO != null && CurrentWeatherGO.GetComponent<StormyWeather>() != null)
+                {
+                    CurrentWeatherGO.GetComponent<StormyWeather>().StopStorm();
+                }
                 WeatherForecastTriggered = false;
                 WeatherType = WeatherType.NONE;
                 BroadcastWeather();
@@ -76,7 +79,10 @@ public class WeatherManager : MonoBehaviour
             BroadcastWeather();
         }
 
+        //HACK: Don't trigger weather before tutorials
         if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && day < 3) return;
+        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 2 && day < 2) return;
+        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 3 && day < 2) return;
 
         var wData = GetWeatherData();
 
@@ -206,7 +212,7 @@ public class WeatherManager : MonoBehaviour
 
     public void OnEnterHouse(bool inHouse)
     {
-        if (WeatherType != WeatherType.NONE)
+        if (IsStormy())
         {
             SoundManager.Instance.PlayWeatherAmbience(true);
         }

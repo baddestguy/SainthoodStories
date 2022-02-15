@@ -117,7 +117,7 @@ public class InteractableHospital : InteractableHouse
         if (DeliveryTimeSet)
         {
             PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
-            if (clock >= EndDelivery)
+            if (clock > EndDelivery)
             {
                 DeliveryTimeSet = false;
                 FailedDelivery = true;

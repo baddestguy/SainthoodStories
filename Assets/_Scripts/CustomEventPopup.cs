@@ -50,7 +50,10 @@ public class CustomEventPopup : MonoBehaviour
         IconsGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         OKGO.SetActive(customEvent.EventPopupType == EventPopupType.OK);
         CameraControls = GetCameraControl();
+
+        StoryImage.gameObject.SetActive(true);
         StoryImage.sprite = Resources.Load<Sprite>(customEvent.ImagePath);
+        if (StoryImage.sprite == null) StoryImage.gameObject.SetActive(false);
 
         switch (customEvent.EventPopupType)
         {
