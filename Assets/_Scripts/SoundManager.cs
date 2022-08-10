@@ -25,6 +25,7 @@ public class SoundManager : MonoBehaviour
     Dictionary<string, AudioClip> cachedVoices = new Dictionary<string, AudioClip>();
     public Dictionary<string, AudioMixerGroup> audioMixerGroup = new Dictionary<string, AudioMixerGroup>();
 
+    Coroutine WeatherCoroutine;
 
     void Awake()
     {
@@ -138,8 +139,9 @@ public class SoundManager : MonoBehaviour
         {
             case Season.SUMMER:
                 weather = "Heatwave_Ambience";
-                if (InteractableHouse.InsideHouse && WeatherAmbientAudioSource != null)
+                if (start && InteractableHouse.InsideHouse && WeatherAmbientAudioSource != null)
                 {
+                    if (WeatherCoroutine != null) StopCoroutine(WeatherCoroutine);
                     WeatherAmbientAudioSource.volume = 0.2f;
                     return;
                 }
@@ -173,12 +175,13 @@ public class SoundManager : MonoBehaviour
             WeatherAmbientAudioSource.Play();
             WeatherAmbientAudioSource.loop = true;
             WeatherAmbientAudioSource.volume = 0f;
-            StartCoroutine(FadeAudioAsync(1f, WeatherAmbientAudioSource));
+            if (WeatherCoroutine != null) StopCoroutine(WeatherCoroutine);
+            WeatherCoroutine = StartCoroutine(FadeWeatherAudioAsync(1f, WeatherAmbientAudioSource));
         }
         else
         {
             Destroy(WeatherAmbientAudioSource, 5f);
-            StartCoroutine(FadeAudioAsync(0f, WeatherAmbientAudioSource));
+            WeatherCoroutine = StartCoroutine(FadeWeatherAudioAsync(0f, WeatherAmbientAudioSource));
         }
     }
 
@@ -204,6 +207,20 @@ public class SoundManager : MonoBehaviour
             }
         }
     }
+
+    IEnumerator FadeWeatherAudioAsync(float volume, AudioSource newSource = null)
+    {
+        AudioSource src = newSource;
+        if (src)
+        {
+            while (src != null && Mathf.Abs(src.volume - volume) > 0.01f)
+            {
+                src.volume = Mathf.Lerp(src.volume, volume, Time.deltaTime);
+                yield return null;
+            }
+        }
+    }
+
 
     public void PlayOneShotSfx(string name, float volume = 1f, float timeToDie = 1f, bool modifyPitch = false)
     {
