@@ -12,7 +12,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<string, ConstantsData> Constants = new Dictionary<string, ConstantsData>();
     public Dictionary<CustomEventType, List<CustomEventData>> CustomEventData = new Dictionary<CustomEventType, List<CustomEventData>>();
     public Dictionary<string, List<LocalizationData>> LocalizationData = new Dictionary<string, List<LocalizationData>>();
-    public Dictionary<Provision, ProvisionData> ProvisionData = new Dictionary<Provision, ProvisionData>();
+    public Dictionary<Provision, List<ProvisionData>> ProvisionData = new Dictionary<Provision, List<ProvisionData>>();
     public Dictionary<ItemType, ShopItemData> ShopItemData = new Dictionary<ItemType, ShopItemData>();
     public Dictionary<string, ConstructionAvailabilityData> ConstructionAvailability = new Dictionary<string, ConstructionAvailabilityData>();
     public Dictionary<SaintID, SaintData> Saints = new Dictionary<SaintID, SaintData>();
@@ -89,7 +89,14 @@ public class GameDataManager : MonoBehaviour
         var provData = CSVSerializer.Deserialize<ProvisionData>(csvFile.text);
         foreach (var prov in provData)
         {
-            ProvisionData.Add(prov.Id, prov);
+            if (ProvisionData.ContainsKey(prov.Id))
+            {
+                ProvisionData[prov.Id].Add(prov);
+            }
+            else
+            {
+                ProvisionData.Add(prov.Id, new List<ProvisionData>() { prov });
+            }
         }
 
         yield return null;
@@ -160,6 +167,11 @@ public class GameDataManager : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    public ProvisionData GetProvision(Provision provision, int level = 1)
+    {
+        return ProvisionData[provision].Where(p => p.Level == level).FirstOrDefault();
     }
 
     public CustomEventData GetRandomEvent(EventGroup eGroup)

@@ -590,7 +590,8 @@ public class InteractableHouse : InteractableObject
     {
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_SPIRIT || i.Id == CustomEventType.LOW_SPIRIT);
 
-        int faithMultiplier = InventoryManager.Instance.HasProvision(Provision.ROSARY) ? 2 : 1;
+        var provData = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+        int faithMultiplier = provData != null ? provData.Value : 1;
         if(e != null)
         {
             if(Random.Range(0,100) < 20)

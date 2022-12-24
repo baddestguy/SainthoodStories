@@ -289,7 +289,9 @@ public class Player : MonoBehaviour
         {
             if (!tooltip && Random.Range(0,100) < 30)
             {
-                energyAmount--;
+                var prov = InventoryManager.Instance.GetProvision(Provision.SHOES);
+                if(prov != null)
+                    energyAmount -= prov.Value;
             }
         }
         if(StatusEffects.Contains(PlayerStatusEffect.FATIGUED))
