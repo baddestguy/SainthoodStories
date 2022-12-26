@@ -97,7 +97,8 @@ public class InteractableMarket : InteractableHouse
 
         if(InventoryManager.Instance.HasProvision(Provision.DISCOUNT_CARD))
         {
-            newPrice = newPrice - (20d / 100d * newPrice);
+            var prov = InventoryManager.Instance.GetProvision(Provision.DISCOUNT_CARD);
+            newPrice = newPrice - (prov.Value / 100d * newPrice);
         }
 
         return (int)newPrice;

@@ -141,7 +141,21 @@ public enum Provision
     SHOES,
     COOKING_UTENSILS,
     DISCOUNT_CARD,
-    WINTER_CLOAK
+    WINTER_CLOAK,
+    ALLOWANCE,
+    REVIVE,
+    REVIVE_ENERGY_BONUS,
+    SLEEP_ENERGY_MULTIPLIER,
+    CONSTRUCTION_TOOLS,
+    ORPHANAGE_STORYBOOK,
+    SCHOOL_TEACHING_MATERIALS,
+    HOSPITAL_TOOLS,
+    HOSPITAL_RELATIONSHIP_BUILDER,
+    SCHOOL_RELATIONSHIP_BUILDER,
+    ORPHANAGE_RELATIONSHIP_BUILDER,
+    KITCHEN_RELATIONSHIP_BUILDER,
+    SHELTER_RELATIONSHIP_BUILDER,
+    MAX_COUNT
 }
 
 public enum BuildingState
@@ -315,6 +329,8 @@ public class ShopItemData
 public class ProvisionData
 {
     public Provision Id;
+    public int Level;
+    public int Value;
     public string NameKey;
     public string DescriptionKey;
 }
@@ -445,7 +461,7 @@ public class SaveObject
     public BuildingState KitchenBuildingState;
     public SaintID[] Saints;
     public ItemType[] InventoryItems;
-    public Provision[] Provisions;
+    public ProvisionData[] Provisions;
 }
 
 [System.Serializable]

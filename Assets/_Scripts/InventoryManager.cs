@@ -10,10 +10,10 @@ public class InventoryManager : MonoBehaviour
     public static UnityAction RefreshInventoryUI;
 
     public List<ItemType> Items = new List<ItemType>();
-    public List<Provision> Provisions = new List<Provision>();
+    public List<ProvisionData> Provisions = new List<ProvisionData>();
 
     public int MaxInventorySlots = 2;
-    public int MaxProvisionsSlots = 1;
+    public int MaxProvisionsSlots = 3;
 
     private void Awake()
     {
@@ -24,9 +24,9 @@ public class InventoryManager : MonoBehaviour
     public void LoadInventory(SaveObject save)
     {
         Items = save.InventoryItems?.ToList() ?? new List<ItemType>();
-        Provisions = save.Provisions?.ToList() ?? new List<Provision>();
-        if (Provisions.Contains(Provision.EXTRA_INVENTORY)){
-            MaxInventorySlots = 4;
+        Provisions = save.Provisions?.ToList() ?? new List<ProvisionData>();
+        if (HasProvision(Provision.EXTRA_INVENTORY)){
+            MaxInventorySlots = GetProvision(Provision.EXTRA_INVENTORY).Value;
         }
         RefreshInventoryUI?.Invoke();
     }
@@ -47,7 +47,13 @@ public class InventoryManager : MonoBehaviour
         RefreshInventoryUI?.Invoke();
     }
 
-    public void AddProvision(Provision provision)
+    public void SwapProvision(ProvisionData provisionFrom, ProvisionData provisionTo)
+    {
+
+        
+    }
+
+    public void AddProvision(ProvisionData provision)
     {
         if (Provisions.Count == MaxProvisionsSlots)
         {
@@ -56,21 +62,39 @@ public class InventoryManager : MonoBehaviour
         }
         Provisions.Add(provision);
 
-        switch (provision)
+        switch (provision.Id)
         {
             case Provision.EXTRA_INVENTORY:
-                MaxInventorySlots = 4;
+                MaxInventorySlots = provision.Value;
                 break;
 
             case Provision.ENERGY_DRINK:
                 Player player = GameManager.Instance.Player;
-                player.ConsumeEnergy(-30);
+                player.ConsumeEnergy(-provision.Value);
                 break;
         }
 
         RefreshInventoryUI?.Invoke();
     }
 
+    public void UpgradeProvision(ProvisionData currProvision)
+    {
+        if (HasProvision(currProvision.Id))
+        {
+            var prov = Provisions.SingleOrDefault(p => p.Id == currProvision.Id);
+            if (prov != null)
+                Provisions.Remove(prov);
+
+            var upgradedProv = GameDataManager.Instance.GetProvision(prov.Id, prov.Level + 1);
+            if(upgradedProv != null)
+            {
+                Provisions.Add(upgradedProv);
+            }
+        }
+        RefreshInventoryUI?.Invoke();
+    }
+
+    //We will never call this during a run as Provisions are now permanent
     public void ClearProvisions()
     {
         Provisions.Clear();
@@ -117,19 +141,20 @@ public class InventoryManager : MonoBehaviour
             yield return null;
         }
 
-        ClearProvisions();
+        //ClearProvisions();
 
         GameClock c = GameManager.Instance.GameClock;
         if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day > 5 && Random.Range(0, 100) < 50) yield break;
 
-        var prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 8)];
+        //Check to make sure that we dont already have the Provision in our Inventory
+        var prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
         prov1 = SwapProvisionBySeason(prov1);
-        var prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 8)];
+        var prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
         prov2 = SwapProvisionBySeason(prov2);
 
         while (prov2.Id == prov1.Id)
         {
-            prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, 8)];
+            prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
             prov2 = SwapProvisionBySeason(prov2);
         }
 
@@ -143,21 +168,21 @@ public class InventoryManager : MonoBehaviour
             case Season.SUMMER:
                 if (prov.Id == Provision.WINTER_CLOAK || prov.Id == Provision.UMBRELLA)
                 {
-                    return GameDataManager.Instance.ProvisionData[Provision.ENERGY_DRINK];
+                    return GameDataManager.Instance.ProvisionData[Provision.ENERGY_DRINK][0];
                 }
                 break;
 
             case Season.FALL:
                 if(prov.Id == Provision.WINTER_CLOAK)
                 {
-                    return GameDataManager.Instance.ProvisionData[Provision.UMBRELLA];
+                    return GameDataManager.Instance.ProvisionData[Provision.UMBRELLA][0];
                 }
                 break;
 
             case Season.WINTER:
                 if (prov.Id == Provision.UMBRELLA)
                 {
-                    return GameDataManager.Instance.ProvisionData[Provision.WINTER_CLOAK];
+                    return GameDataManager.Instance.ProvisionData[Provision.WINTER_CLOAK][0];
                 }
                 break;
         }
@@ -166,7 +191,7 @@ public class InventoryManager : MonoBehaviour
 
     public bool HasProvision(Provision provision)
     {
-        return Provisions.Contains(provision);
+        return Provisions.Any(p => p.Id == provision);
     }
 
     public void OnInventoryOverride(bool add, ItemType itemType)
@@ -179,9 +204,14 @@ public class InventoryManager : MonoBehaviour
         
     }
 
+    public ProvisionData GetProvision(Provision provId)
+    {
+        return Provisions.Where(p => p.Id == provId).FirstOrDefault();
+    }
+
     public void OnProvisionsOverride(Provision provision)
     {
-        AddProvision(provision);
+        AddProvision(GameDataManager.Instance.GetProvision(provision, 1));
     }
 
     private void OnDisable()
