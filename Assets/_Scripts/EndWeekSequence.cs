@@ -22,7 +22,7 @@ public class EndWeekSequence : MonoBehaviour
 
     public IEnumerator RunSequenceAsync()
     {
-        int cashAmount = Random.Range(100, 200);
+        int cashAmount = Random.Range(5, 10);
         TreasuryManager.Instance.DonateMoney(cashAmount);
         var saintsUnlocked = MissionManager.Instance.UnlockSaints();
 

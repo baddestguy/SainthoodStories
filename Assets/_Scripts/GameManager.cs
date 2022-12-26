@@ -130,6 +130,10 @@ public class GameManager : MonoBehaviour
             InventoryManager.Instance.LoadInventory(SaveData);
             LoadScene("PauseMenu", LoadSceneMode.Additive);
             SoundManager.Instance.PlayMusic("Convent_Music", "Field_Music");
+            if(GameClock.Time == 6)
+            {
+                GameClock.StartNewDay?.Invoke();
+            }
         }
         else if (scene.name.Contains("MainMenu"))
         {

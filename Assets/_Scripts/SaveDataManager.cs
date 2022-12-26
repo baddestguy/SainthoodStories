@@ -96,8 +96,8 @@ public class SaveDataManager : MonoBehaviour
     {
         return new SaveObject()
         {
-            FP = 15,
-            CP = 15,
+            FP = 5,
+            CP = 5,
             Energy = 20,
             Week = 1,
             Day = 1,
