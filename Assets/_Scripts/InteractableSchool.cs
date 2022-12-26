@@ -44,7 +44,6 @@ public class InteractableSchool : InteractableHouse
         if (DuringOpenHours())
         {
             BuildingActivityState = BuildingActivityState.TEACHING;
-            player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("Taught a Class!!");
             clock.Tick();
         }
@@ -73,6 +72,7 @@ public class InteractableSchool : InteractableHouse
         {
             Player player = GameManager.Instance.Player;
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+            player.ConsumeEnergy(EnergyConsumption);
             UpdateCharityPoints(TeachPoints, moddedEnergy);
             BuildRelationship(ThankYouType.TEACH);
             TeachCountdown = 0;
@@ -133,7 +133,7 @@ public class InteractableSchool : InteractableHouse
     {
         if (BuildingState != BuildingState.NORMAL) return;
 
-        if (!DuringOpenHours()) return;
+    //    if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;
 
         double futureTime = time + RandomFutureTimeByDifficulty();
@@ -185,7 +185,7 @@ public class InteractableSchool : InteractableHouse
                             RequiredItems = mission != null ? mission.RequiredItems : Random.Range(1, 3); //Depending on Season
                         else
                             RequiredItems = mission != null ? mission.RequiredItems : 1; //Depending on Season
-                        DeadlineDeliveryBonus = 2;
+                        DeadlineDeliveryBonus = 1;
                         DeadlineSet = true;
                         PopMyIcon();
                         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");

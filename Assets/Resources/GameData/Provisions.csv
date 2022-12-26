@@ -1,7 +1,7 @@
 Id,Level,Value,NameKey,DescriptionKey
 UMBRELLA,1,1,Provision_UmbrellaName,Provision_UmbrellaDescription
 EXTRA_INVENTORY,1,4,Provision_ExtraInventoryName,Provision_ExtraInventoryDescription
-ENERGY_DRINK,1,30,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription
+ENERGY_DRINK,1,1,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription
 ROSARY,1,2,Provision_RosaryName,Provision_RosaryDescription
 SHOES,1,1,Provision_ShoesName,Provision_ShoesDescription
 COOKING_UTENSILS,1,1,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription

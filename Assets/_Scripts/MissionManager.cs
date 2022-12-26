@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class MissionManager : MonoBehaviour
 {
@@ -99,33 +100,25 @@ public class MissionManager : MonoBehaviour
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
 
-        //if (FaithPoints < 75 || CharityPoints < 75)
-        //{
-        //    missionFailed = true;
-        //    //instant game over
-        //    if (CharityPoints <= 0)
-        //    {
-        //        EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
-        //    }
-        //    else if (FaithPoints <= 0)
-        //    {
-        //        EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
-        //    }
-        //    else
-        //    {   //end of week game over
-        //        if (CharityPoints < 75)
-        //        {
-        //            EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
-        //        }
-        //        if (FaithPoints < 75)
-        //        {
-        //            EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
-        //        }
-        //    }
-
-        //    //Game Over, Restart Week!
-        //}
-        //else
+        if (FaithPoints <= 0 || CharityPoints <= 0)
+        {
+            missionFailed = true;
+            //instant game over
+            if (CharityPoints <= 0)
+            {
+                EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
+            }
+            if (FaithPoints <= 0)
+            {
+                EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
+            }
+            SaveDataManager.Instance.DeleteSave();
+            SoundManager.Instance.EndAllTracks();
+            GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+            yield break;
+            //Game Over, Restart Week!
+        }
+        else
         {
             EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
             yield return seq.RunSequenceAsync();
@@ -135,10 +128,9 @@ public class MissionManager : MonoBehaviour
 
         EventsManager.Instance.ExecuteEvents();
         EventsManager.Instance.CurrentEvents.Clear();
-        FaithPoints = 5;
-        CharityPoints = 5;
+     //   FaithPoints = 5;
+     //   CharityPoints = 5;
         GameManager.Instance.Player.ResetEnergy();
-        GameManager.Instance.GameClock.SetClock(6, 1);
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);
     }

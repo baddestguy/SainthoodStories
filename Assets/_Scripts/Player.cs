@@ -198,7 +198,7 @@ public class Player : MonoBehaviour
         CurrentTile = newTile;
 
         EnergyConsumption = ModifyEnergyConsumption(CurrentTile);
-        Energy.Consume(EnergyConsumption);
+    //    Energy.Consume(EnergyConsumption);
 
         FaceNewDirection(CurrentTile);
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
@@ -220,11 +220,7 @@ public class Player : MonoBehaviour
         if (LockMovement || PauseMenu.Instance.active) return;
 
         EnergyConsumption = ModifyEnergyConsumption(newTile);
-        if (Energy.Depleted(EnergyConsumption) && !(newTile is InteractableHouse) && WeCanMove(newTile)) //Reset if out of energy & not in a building
-        {
-            ResetPlayerOnEnergyDepletedAsync();
-        }
-        else if (newTile is InteractableObject)
+        if (newTile is InteractableObject)
         {
             var iTile = newTile as InteractableObject;
             if ((!passTime || WeCanMove(iTile.CurrentGroundTile)) && !StatusEffects.Contains(PlayerStatusEffect.FROZEN))
@@ -383,7 +379,7 @@ public class Player : MonoBehaviour
     public void ResetEnergy()
     {
         Energy.Consume(10000);
-        Energy.Consume(-20);
+        Energy.Consume(-3);
     }
 
     public int GetEnergyAmount()

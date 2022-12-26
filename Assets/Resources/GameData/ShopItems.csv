@@ -1,7 +1,7 @@
 Id,Price,NameKey,DescriptionKey
-GROCERIES,40,Item_GroceriesName,Item_GroceriesDescription
-CLOTHES,25,Item_ClothesName,Item_ClothesDescription
-TOYS,45,Item_ToysName,Item_ToysDescription
-STATIONERY,50,Item_StationeryName,Item_StationeryDescription
-MEDS,35,Item_MedsName,Item_MedsDescription
+GROCERIES,4,Item_GroceriesName,Item_GroceriesDescription
+CLOTHES,2,Item_ClothesName,Item_ClothesDescription
+TOYS,4,Item_ToysName,Item_ToysDescription
+STATIONERY,5,Item_StationeryName,Item_StationeryDescription
+MEDS,3,Item_MedsName,Item_MedsDescription
 MEAL,0,Item_MealName,Item_MealDescription

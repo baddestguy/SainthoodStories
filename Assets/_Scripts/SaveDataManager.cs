@@ -96,14 +96,14 @@ public class SaveDataManager : MonoBehaviour
     {
         return new SaveObject()
         {
-            FP = 5,
-            CP = 5,
-            Energy = 20,
+            FP = 1,
+            CP = 3,
+            Energy = 3,
             Week = 1,
             Day = 1,
             Time = 6,
             TutorialSteps = 0,
-            Money = 100
+            Money = 10
         };
     }
 

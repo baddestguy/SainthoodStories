@@ -1,8 +1,2 @@
 InteractableHouse,Week,Day,Time,RequiredItems,DeadlineHours,Event
 InteractableHospital,1,1,10.5,2,7,DELIVER_ITEM
-InteractableHospital,1,1,22,0,6,BABY
-InteractableSchool,2,1,23.5,1,7,DELIVER_ITEM
-InteractableClothesBank,2,1,23.5,1,7,DELIVER_ITEM
-InteractableOrphanage,2,1,23.5,1,7,DELIVER_ITEM
-InteractableShelter,2,1,23.5,1,7,DELIVER_ITEM
-InteractableKitchen,2,1,23.5,1,7,DELIVER_ITEM

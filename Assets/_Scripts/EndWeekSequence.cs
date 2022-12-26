@@ -22,7 +22,7 @@ public class EndWeekSequence : MonoBehaviour
 
     public IEnumerator RunSequenceAsync()
     {
-        int cashAmount = Random.Range(5, 10);
+        int cashAmount = Random.Range(2, 4);
         TreasuryManager.Instance.DonateMoney(cashAmount);
         var saintsUnlocked = MissionManager.Instance.UnlockSaints();
 
@@ -41,7 +41,7 @@ public class EndWeekSequence : MonoBehaviour
         CashUnlockObj.transform.DOLocalMoveX(localPosition, 0.5f);
         CashUnlockObj.SetActive(true);
         CashAmount.text = "+" + cashAmount.ToString();
-        SoundManager.Instance.PlayOneShotSfx("Cheer_SFX", timeToDie:5f);
+        SoundManager.Instance.PlayOneShotSfx("Cheer_SFX", timeToDie: 5f);
 
         //Wait for User input
         ContinueObj.SetActive(true);
@@ -58,6 +58,8 @@ public class EndWeekSequence : MonoBehaviour
         SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie: 5f);
 
         yield return new WaitForSeconds(4f);
+
+        //Show Counter to a single Saint unlock at the End of the Week
 
         Title.text = "";
         Score.text = "";
@@ -77,7 +79,7 @@ public class EndWeekSequence : MonoBehaviour
             localPosition = sp.transform.localPosition.x;
             sp.gameObject.SetActive(true);
             sp.BG.gameObject.SetActive(true);
-            sp.transform.localPosition = new Vector3(sp.transform.localPosition.x-50, sp.transform.localPosition.y, sp.transform.localPosition.z);
+            sp.transform.localPosition = new Vector3(sp.transform.localPosition.x - 50, sp.transform.localPosition.y, sp.transform.localPosition.z);
             sp.transform.DOLocalMoveX(localPosition, 0.5f);
             yield return new WaitForSeconds(0.25f);
         }
