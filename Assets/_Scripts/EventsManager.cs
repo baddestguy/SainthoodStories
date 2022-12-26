@@ -98,9 +98,10 @@ public class EventsManager : MonoBehaviour
         CurrentEvents.Clear();
         GameClock c = GameManager.Instance.GameClock;
 
-        if (MissionManager.Instance.CurrentMission.CurrentWeek == 1 || c.EndofWeek()) return;
+        if (c.EndofWeek()) return;
+        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
 
-        if(c.Day % 7 == 0)
+        if (c.Day % 5 == 0)
         {
             AddEventToList(CustomEventType.SUNDAY_MASS);
             GameDataManager.Instance.TriggeredDailyEvents.Clear();

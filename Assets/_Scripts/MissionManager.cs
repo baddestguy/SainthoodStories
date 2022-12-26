@@ -22,7 +22,7 @@ public class MissionManager : MonoBehaviour
 
     private void Start()
     {
-        GameClock.StartNewDay += NewDay;
+        GameClock.EndDay += NewDay;
 
         HouseScores = new Dictionary<TileType, int>();
     }
@@ -45,7 +45,7 @@ public class MissionManager : MonoBehaviour
         SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
         EndOfDay?.Invoke();
             
-        if(GameManager.Instance.GameClock.EndofWeek())
+      //  if(GameManager.Instance.GameClock.EndofWeek())
         {
             EndMission();
         }
@@ -54,7 +54,7 @@ public class MissionManager : MonoBehaviour
     public void UpdateFaithPoints(int amount)
     {
         if (MissionOver) return;
-        FaithPoints = Mathf.Clamp(FaithPoints + amount, 0, 100);
+        FaithPoints = Mathf.Clamp(FaithPoints + amount, 0, 5);
         UI.Instance.RefreshFP(FaithPoints);
 
         if (FaithPoints <= 0)
@@ -67,7 +67,7 @@ public class MissionManager : MonoBehaviour
     public void UpdateCharityPoints(int amount, InteractableHouse house)
     {
         if (MissionOver) return;
-        CharityPoints = Mathf.Clamp(CharityPoints + amount, 0, 100);
+        CharityPoints = Mathf.Clamp(CharityPoints + amount, 0, 5);
         UI.Instance.RefreshCP(amount, CharityPoints);
 
         if (CharityPoints <= 0)
@@ -99,46 +99,46 @@ public class MissionManager : MonoBehaviour
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
 
-        if (FaithPoints < 75 || CharityPoints < 75)
-        {
-            missionFailed = true;
-            //instant game over
-            if (CharityPoints <= 0)
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
-            }
-            else if (FaithPoints <= 0)
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
-            }
-            else
-            {   //end of week game over
-                if (CharityPoints < 75)
-                {
-                    EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
-                }
-                if (FaithPoints < 75)
-                {
-                    EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
-                }
-            }
+        //if (FaithPoints < 75 || CharityPoints < 75)
+        //{
+        //    missionFailed = true;
+        //    //instant game over
+        //    if (CharityPoints <= 0)
+        //    {
+        //        EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
+        //    }
+        //    else if (FaithPoints <= 0)
+        //    {
+        //        EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
+        //    }
+        //    else
+        //    {   //end of week game over
+        //        if (CharityPoints < 75)
+        //        {
+        //            EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
+        //        }
+        //        if (FaithPoints < 75)
+        //        {
+        //            EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
+        //        }
+        //    }
 
-            //Game Over, Restart Week!
-        }
-        else
+        //    //Game Over, Restart Week!
+        //}
+        //else
         {
             EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
             yield return seq.RunSequenceAsync();
-            CurrentMission.CurrentWeek++;
+            if(GameManager.Instance.GameClock.EndofWeek())
+                CurrentMission.CurrentWeek++;
         }
 
         EventsManager.Instance.ExecuteEvents();
         EventsManager.Instance.CurrentEvents.Clear();
-        FaithPoints = 15;
-        CharityPoints = 15;
+        FaithPoints = 5;
+        CharityPoints = 5;
         GameManager.Instance.Player.ResetEnergy();
         GameManager.Instance.GameClock.SetClock(6, 1);
-        InventoryManager.Instance.ClearProvisions();
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);
     }
@@ -165,7 +165,7 @@ public class MissionManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameClock.StartNewDay -= NewDay;
+        GameClock.EndDay -= NewDay;
     }
 
     public void OverideCP(int cp)

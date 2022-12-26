@@ -10,6 +10,7 @@ public class GameClock
 
     public static UnityAction<double, int> Ticked;
     public static UnityAction ExecuteEvents;
+    public static UnityAction EndDay;
     public static UnityAction StartNewDay;
 
     public static bool DeltaTime { get; private set; }
@@ -61,7 +62,7 @@ public class GameClock
         if(Time > 23.5)
         {
             Day++;
-            Time = 0;
+            Time = 6;
             EndofDay = true;
         }
         else
@@ -75,7 +76,7 @@ public class GameClock
         {
             if(!EndofWeek())
                 SaveDataManager.Instance.SaveGame();
-            StartNewDay?.Invoke();
+            EndDay?.Invoke();
         }
         ExecuteEvents?.Invoke();
 
@@ -90,7 +91,7 @@ public class GameClock
 
     public bool EndofWeek()
     {
-        return Day > 7;
+        return Day > 5;
     }
 
     public void Reset()
