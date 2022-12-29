@@ -29,7 +29,7 @@ public class GameClock
         if (Time > 23.5)
         {
             Day++;
-            Time = Time - 24;
+            Time = 0;
         }
     }
 
@@ -39,7 +39,7 @@ public class GameClock
         if (Time > 23.5)
         {
             Day++;
-            Time = Time - 24;
+            Time = 0;
         }
     }
 

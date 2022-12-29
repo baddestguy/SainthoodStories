@@ -20,7 +20,7 @@ public class Energy
 
     public bool Depleted(int consumption = 0)
     {
-        return (Amount-consumption) <= 0;
+        return (Amount-consumption) < 0;
     }
 
     public void OnOveride(int amount)
