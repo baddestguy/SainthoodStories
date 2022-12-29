@@ -60,6 +60,8 @@ public class InteractableHouse : InteractableObject
     public Camera InteriorUICamera;
     public GameObject InteriorSpace;
 
+    public int PrayersProgress = 0;
+
     protected virtual void Start()
     {
         UI.Meditate += Meditated;
@@ -176,6 +178,7 @@ public class InteractableHouse : InteractableObject
                     BuildRelationship(ThankYouType.VOLUNTEER);
                     Player player = GameManager.Instance.Player;
                     var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+                    player.ConsumeEnergy(EnergyConsumption);
                     UpdateCharityPoints(VolunteerPoints, moddedEnergy);
                     VolunteerCountdown = 0;
                 }
@@ -312,7 +315,7 @@ public class InteractableHouse : InteractableObject
                         else
                             RequiredItems = mission != null ? mission.RequiredItems : 1; //Depending on Season
 
-                        DeadlineDeliveryBonus = 2;
+                        DeadlineDeliveryBonus = 1;
                         DeadlineSet = true;
                         PopMyIcon();
                         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
@@ -355,9 +358,14 @@ public class InteractableHouse : InteractableObject
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
 
-        player.ConsumeEnergy(-1);
         UI.Instance.DisplayMessage("MEDITATED!!");
-        UpdateFaithPoints(MeditationPoints, 1);
+        PrayersProgress++;
+        OnActionProgress?.Invoke(PrayersProgress / 4f, this, 0);
+        if (PrayersProgress == 4)
+        {
+            UpdateFaithPoints(MeditationPoints, 0);
+            PrayersProgress = 0;
+        }
         clock.Tick();
     }
 
@@ -466,13 +474,13 @@ public class InteractableHouse : InteractableObject
 
             BuildingCompleteDialog();
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            UpdateCharityPoints(8, moddedEnergy);
+            player.ConsumeEnergy(EnergyConsumption);
+            UpdateCharityPoints(1, moddedEnergy);
         }
         else
         {
             SoundManager.Instance.PlayOneShotSfx("Build_SFX", 1f, 5f);
         }
-        player.ConsumeEnergy(EnergyConsumption);
         GameClock clock = GameManager.Instance.GameClock;
         clock.Tick();
     }
@@ -819,7 +827,7 @@ public class InteractableHouse : InteractableObject
             if (Random.Range(0, 100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(Random.Range(100, 120));
+                TreasuryManager.Instance.DonateMoney(Random.Range(4, 5));
             }
         }
         else if (RelationshipPoints >= 30)
@@ -829,7 +837,7 @@ public class InteractableHouse : InteractableObject
             if(Random.Range(0,100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(Random.Range(70, 90));
+                TreasuryManager.Instance.DonateMoney(Random.Range(3,4));
             }
         }
         else if (RelationshipPoints >= 10)
@@ -839,7 +847,7 @@ public class InteractableHouse : InteractableObject
             if(Random.Range(0,100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(Random.Range(45, 65));
+                TreasuryManager.Instance.DonateMoney(Random.Range(2, 3));
             }
         }
         else if (RelationshipPoints > 1)
@@ -848,14 +856,14 @@ public class InteractableHouse : InteractableObject
             if (Random.Range(0, 100) < 50)
             {
                 MoneyThanks();
-                TreasuryManager.Instance.DonateMoney(Random.Range(30, 40));
+                TreasuryManager.Instance.DonateMoney(Random.Range(1, 2));
             }
         }
         else if (RelationshipPoints == 1)
         {
             ThankYouMessage(thanks);
             MoneyThanks();
-            TreasuryManager.Instance.DonateMoney(Random.Range(30, 40));
+            TreasuryManager.Instance.DonateMoney(Random.Range(1, 2));
         }
     }
 

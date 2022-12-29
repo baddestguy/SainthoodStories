@@ -76,7 +76,7 @@ public class InteractableOrphanage : InteractableHouse
     {
         if (BuildingState != BuildingState.NORMAL) return;
 
-        if (!DuringOpenHours()) return;
+     //   if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;
 
         double futureTime = time + RandomFutureTimeByDifficulty();
@@ -128,7 +128,7 @@ public class InteractableOrphanage : InteractableHouse
                             RequiredItems = mission != null ? mission.RequiredItems : Random.Range(1, 3); //Depending on Season
                         else
                             RequiredItems = mission != null ? mission.RequiredItems : 1; //Depending on Season
-                        DeadlineDeliveryBonus = 2;
+                        DeadlineDeliveryBonus = 1;
                         DeadlineSet = true;
                         PopMyIcon();
                         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
@@ -168,7 +168,6 @@ public class InteractableOrphanage : InteractableHouse
         {
             BuildingActivityState = BuildingActivityState.VOLUNTEERING;
             CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.ORPHANAGE_BONUS);
-            player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("VOLUNTEERED AT ORPHANAGE!");
             base.VolunteerWork(house);
             clock.Tick();

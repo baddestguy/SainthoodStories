@@ -58,7 +58,9 @@ public class InteractableHospital : InteractableHouse
                 if (DeliveryCountdown >= 4 || clock == EndDelivery)
                 {
                     UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
-                    UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) * 2, GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
+                    var moddedEnergy = GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption);
+                    GameManager.Instance.Player.ConsumeEnergy(EnergyConsumption);
+                    UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) * 2, moddedEnergy);
                     PopIcon.gameObject.SetActive(false);
                     UI.Instance.SideNotificationPop(GetType().Name);
                     DeliveryTimeSet = false;
@@ -170,7 +172,6 @@ public class InteractableHospital : InteractableHouse
         if (clock < EndDelivery)
         {
             BuildingActivityState = BuildingActivityState.DELIVERING_BABY;
-            player.ConsumeEnergy(EnergyConsumption);
             UI.Instance.DisplayMessage("Delivering a Baby!!");
             DeliveryCountdown++;
             OnActionProgress?.Invoke(DeliveryCountdown/4f, this, 1);   
@@ -246,7 +247,6 @@ public class InteractableHospital : InteractableHouse
 
         BuildingActivityState = BuildingActivityState.VOLUNTEERING;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-        player.ConsumeEnergy(EnergyConsumption);
         UI.Instance.DisplayMessage("VOLUNTEERED HOSPITAL!");
         base.VolunteerWork(house);
         clock.Tick();

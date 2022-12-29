@@ -62,7 +62,7 @@ public class GameClock
         if(Time > 23.5)
         {
             Day++;
-            Time = 6;
+            Time = 0;
             EndofDay = true;
         }
         else
