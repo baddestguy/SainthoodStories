@@ -89,8 +89,7 @@ public class SaveDataManager : MonoBehaviour
             InventoryItems = InventoryManager.Instance.Items.ToArray(),
             Provisions = InventoryManager.Instance.Provisions.ToArray()
         };
-    }
-    
+    }    
 
     public SaveObject NewGameData()
     {
@@ -98,7 +97,7 @@ public class SaveDataManager : MonoBehaviour
         {
             FP = 1,
             CP = 3,
-            Energy = 3,
+            Energy = 1,
             Week = 1,
             Day = 1,
             Time = 6,
