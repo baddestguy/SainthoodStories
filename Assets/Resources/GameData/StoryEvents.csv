@@ -12,10 +12,10 @@ Tutorial_6,1,1,13,StoryArt/Convent,TRUE,0
 Tutorial_605,1,1,14,StoryArt/Shop,TRUE,0
 Tutorial_7,1,1,18,StoryArt/Convent,TRUE,0
 Tutorial_8,1,1,19,StoryArt/Convent_Building,TRUE,0
-Tutorial_9,1,1,21,StoryArt/Convent_Building,TRUE,0
-Tutorial_10,1,1,22,StoryArt/Spazz_Convent,TRUE,0
-Tutorial_101,1,1,22,StoryArt/Convent,TRUE,1
-Tutorial_102,1,1,22,StoryArt/Convent_Building,TRUE,2
+Tutorial_9,1,1,20,StoryArt/Convent_Building,TRUE,0
+Tutorial_10,1,1,20,StoryArt/Spazz_Convent,TRUE,0
+Tutorial_101,10,1,22,StoryArt/Convent,TRUE,1
+Tutorial_102,10,1,22,StoryArt/Convent_Building,TRUE,2
 HeatwaveIntro,1,3,8,StoryArt/Christie,TRUE,0
 ProvisionsIntro,1,2,6,StoryArt/Spazz,TRUE,0
 OrphanageIntro,1,2,6,StoryArt/Eltee,TRUE,0

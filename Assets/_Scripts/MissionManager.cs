@@ -114,6 +114,10 @@ public class MissionManager : MonoBehaviour
             }
             SaveDataManager.Instance.DeleteSave();
             SoundManager.Instance.EndAllTracks();
+            EventsManager.Instance.ExecuteEvents();
+
+            while (EventsManager.Instance.EventInProgress) yield return null;
+
             GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
             yield break;
             //Game Over, Restart Week!

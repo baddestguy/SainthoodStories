@@ -97,7 +97,7 @@ public class PopUI : MonoBehaviour
         }
 
         Buttons = gameObject.GetComponentsInChildren<ActionButton>().ToList();
-        if (!GameSettings.Instance.FTUE || TutorialManager.Instance.CurrentTutorialStep >= 20)
+        if (!GameSettings.Instance.FTUE || TutorialManager.Instance.CurrentTutorialStep >= 15)
         {
             foreach (var b in Buttons)
             {

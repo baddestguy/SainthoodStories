@@ -238,7 +238,7 @@ public class TutorialManager : MonoBehaviour
         {
             ShowTutorialPopup(Resources.FindObjectsOfTypeAll<CustomEventPopup>()[0].EventData.LocalizationKey);
 
-            if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 20)
+            if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 15)
             {
                 GameSettings.Instance.FTUE = false;
                 SaveDataManager.Instance.SaveGame();
@@ -259,7 +259,7 @@ public class TutorialManager : MonoBehaviour
                     (CurrentTutorialStep >= 12 && CurrentTutorialStep <= 13) ||
                     CurrentTutorialStep >= 18);
             case "SLEEP": 
-                return CurrentTutorialStep >= 14 && CurrentTutorialStep <= 17;
+                return CurrentTutorialStep >= 14 && CurrentTutorialStep <= 15;
             case "BABY":
                 return false;
             case "VOLUNTEER": 

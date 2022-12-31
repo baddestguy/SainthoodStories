@@ -12,7 +12,7 @@ public class InteractableChurch : InteractableHouse
     public int PrayerPoints;
 
     private double LiturgyStartTime;
-    private int LiturgyEndTime;
+    private double LiturgyEndTime;
     public double ConfessionTime;
     public double MassStartTime;
     public double MassEndTime;
@@ -61,15 +61,15 @@ public class InteractableChurch : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         CheckParticipation(clock);
 
-        if (clock.Time > 21.5 || clock.Time <= 6.5)
+        if (clock.Time > 23 || clock.Time <= 6.5)
         {
             LiturgyStartTime = 6;
             LiturgyEndTime = 7;
         }
         else if(clock.Time > 18.5)
         {
-            LiturgyStartTime = 21;
-            LiturgyEndTime = 22;
+            LiturgyStartTime = 22.5;
+            LiturgyEndTime = 23.5;
         }
         else if(clock.Time > 12.5)
         {
@@ -157,7 +157,7 @@ public class InteractableChurch : InteractableHouse
         TooltipMouseOver mouseOverBtn = InteriorPopUI.GetComponentsInChildren<TooltipMouseOver>(true).Where(b => b.name == "Pray").FirstOrDefault();
 
         GameClock c = GameManager.Instance.GameClock;
-        if (c.Time > 21.5)
+        if (c.Time > 23)
             base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, c.Day + 1));
         else
             base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, c.Day));
