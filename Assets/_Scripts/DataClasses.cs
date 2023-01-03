@@ -441,6 +441,7 @@ public class MapData
 public class SaveObject
 {
     public int FP;
+    public int FPPool;
     public int CP;
     public int Energy;
     public int Week;

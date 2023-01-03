@@ -66,12 +66,13 @@ public class EndWeekSequence : MonoBehaviour
         SaintsUnlockObj.SetActive(true);
         SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
 
-        for (int i = 0; i < saintsUnlocked.Count(); i++)
+   //     for (int i = 0; i < saintsUnlocked.Count(); i++)
+        if(saintsUnlocked.Count() > 0)
         {
-            SaintPortraits[i].BG.color = new Color(1, 1, 1, 1);
-            SaintPortraits[i].Saint.gameObject.SetActive(true);
-            SaintPortraits[i].SaintName.text = saintsUnlocked.ElementAt(i).Name;
-            SaintPortraits[i].Saint.sprite = Resources.Load<Sprite>(saintsUnlocked.ElementAt(i).IconPath);
+            SaintPortraits[1].BG.color = new Color(1, 1, 1, 1);
+            SaintPortraits[1].Saint.gameObject.SetActive(true);
+            SaintPortraits[1].SaintName.text = saintsUnlocked.ElementAt(0).Name;
+            SaintPortraits[1].Saint.sprite = Resources.Load<Sprite>(saintsUnlocked.ElementAt(0).IconPath);
         }
 
         foreach (var sp in SaintPortraits)

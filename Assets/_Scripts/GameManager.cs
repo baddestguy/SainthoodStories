@@ -111,6 +111,10 @@ public class GameManager : MonoBehaviour
             {
                 SaveData.Time = 6;
             }
+            if(SaveData.Day > 5)
+            {
+                SaveData.Day = 1;
+            }
             GameClock = new GameClock(SaveData.Time, SaveData.Day);
 
             if(PreviousSceneID == SceneID.SaintsShowcase_Day)
@@ -145,7 +149,7 @@ public class GameManager : MonoBehaviour
             CurrentSceneID = SceneID.MainMenu;
             SaveDataManager.Instance.LoadGame((data, newGame) => {
                 TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
-                if (data.TutorialSteps >= 20) GameSettings.Instance.FTUE = false;
+                if (data.TutorialSteps >= 15) GameSettings.Instance.FTUE = false;
             },false, true);
             InGameSession = false;
         //    SoundManager.Instance.PlayAmbience();
@@ -227,7 +231,7 @@ public class GameManager : MonoBehaviour
                     }
 
                     SaveData = data;
-                    CurrentMission = new Mission(SaveData.FP, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
+                    CurrentMission = new Mission(SaveData.FP, SaveData.FPPool, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 
                     StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
@@ -244,7 +248,7 @@ public class GameManager : MonoBehaviour
     {
 
         SaveDataManager.Instance.LoadGame((data, newGame) => {
-            CurrentMission = new Mission(data.FP, data.CP, data.Energy, data.Time, 7, data.Week);
+            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.Energy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
         },false, true);
 
