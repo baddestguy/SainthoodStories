@@ -15,6 +15,7 @@ public class MissionManager : MonoBehaviour
     public Dictionary<TileType, int> HouseScores;
     public int CharityPoints { get; private set; }
     public int FaithPoints { get; private set; }
+    public int FaithPointsPool { get; private set; }
 
     private void Awake()
     {
@@ -35,6 +36,7 @@ public class MissionManager : MonoBehaviour
         CurrentMission = mission;
         CharityPoints = CurrentMission.StartingCharityPoints;
         FaithPoints = CurrentMission.StartingFaithPoints;
+        FaithPointsPool = CurrentMission.FaithPointsPool;
         UI.Instance.RefreshFP(FaithPoints);
         UI.Instance.RefreshCP(0, CharityPoints);
     }
@@ -142,19 +144,23 @@ public class MissionManager : MonoBehaviour
     public IEnumerable<SaintData> UnlockSaints()
     {
         var saintsUnlocked = new List<SaintData>();
+        FaithPointsPool += FaithPoints;
 
-        if (FaithPoints >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue)
+        Debug.Log(FaithPointsPool + " / " + GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue);
+
+        if (FaithPointsPool >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue)
         {
             saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
+            FaithPointsPool = 0;
         }
-        if (FaithPoints >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_2"].IntValue)
-        {
-            saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
-        }
-        if (FaithPoints >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_3"].IntValue)
-        {
-            saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
-        }
+        //if (FaithPoints >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_2"].IntValue)
+        //{
+        //    saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
+        //}
+        //if (FaithPoints >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_3"].IntValue)
+        //{
+        //    saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
+        //}
 
         return saintsUnlocked;
     }

@@ -194,7 +194,7 @@ public class InteractableHouse : InteractableObject
             RubbleGo.SetActive(true);
             GetComponent<BoxCollider>().enabled = true;
 
-            if(GameClock.DeltaTime) UpdateCharityPoints(-1, 0); //Subtract charity points every clock tick
+        //    if(GameClock.DeltaTime) UpdateCharityPoints(-1, 0); //Subtract charity points every clock tick
         }
     }
 
