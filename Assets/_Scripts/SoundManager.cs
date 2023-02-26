@@ -290,6 +290,7 @@ public class SoundManager : MonoBehaviour
 
     public void EndAllTracks()
     {
+        CancelInvoke("StartMusic");
         PlayHouseAmbience("", false, 0f);
         PlayWeatherAmbience(false);
         FadeMusic(1f);
