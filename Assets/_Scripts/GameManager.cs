@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour
             SaintsManager.Instance.LoadSaints(SaveData.Saints);
             InventoryManager.Instance.LoadInventory(SaveData);
             LoadScene("PauseMenu", LoadSceneMode.Additive);
-            SoundManager.Instance.PlayMusic("Convent_Music", "Field_Music");
+            SoundManager.Instance.PlayMusic("Convent_Music", "Field_Music", Random.Range(80, 100));
             if(GameClock.Time == 6)
             {
                 GameClock.StartNewDay?.Invoke();
@@ -152,8 +152,8 @@ public class GameManager : MonoBehaviour
                 if (data.TutorialSteps >= 15) GameSettings.Instance.FTUE = false;
             },false, true);
             InGameSession = false;
-        //    SoundManager.Instance.PlayAmbience();
-            SoundManager.Instance.PlayMusic("MainMenu_Music");
+            SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
+            SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay:70);
 
         }
         else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))

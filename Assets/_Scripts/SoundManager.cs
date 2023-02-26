@@ -39,32 +39,42 @@ public class SoundManager : MonoBehaviour
         
     }
 
-    public void PlayMusic(string songName = "", string songName2 = "", bool shouldLoop = true, float startTime = 0f)
+    public void PlayMusic(string songName = "", string songName2 = "", float loopDelay = 90)
     {
         if (string.IsNullOrEmpty(songName))
             return;
 
+        CancelInvoke("StartMusic");
+
         AudioSource oldTrack = MusicAudioSourceChannel1;
-     
+
         MusicAudioSourceChannel1 = gameObject.AddComponent<AudioSource>();
         MusicAudioSourceChannel1.outputAudioMixerGroup = audioMixerGroup["Music"];
         MusicAudioSourceChannel1.clip = Resources.Load("Audio/Music/" + songName, typeof(AudioClip)) as AudioClip;
-        MusicAudioSourceChannel1.Play();
-        MusicAudioSourceChannel1.loop = shouldLoop;
-        MusicAudioSourceChannel1.time = startTime;
 
         if (!string.IsNullOrEmpty(songName2))
         {
             MusicAudioSourceChannel2 = gameObject.AddComponent<AudioSource>();
             MusicAudioSourceChannel2.outputAudioMixerGroup = audioMixerGroup["Music2"];
             MusicAudioSourceChannel2.clip = Resources.Load("Audio/Music/" + songName2, typeof(AudioClip)) as AudioClip;
-            MusicAudioSourceChannel2.Play();
-            MusicAudioSourceChannel2.loop = shouldLoop;
-            MusicAudioSourceChannel2.time = startTime;
         }
+
+        InvokeRepeating("StartMusic", 0f, loopDelay);
+
         Destroy(oldTrack, 5);
         FadeMusic(1f);
         StartCoroutine(FadeAudioAsync(0f, oldTrack));
+
+    }
+
+    private void StartMusic()
+    {
+        MusicAudioSourceChannel1.Play();
+
+        if (MusicAudioSourceChannel2 != null)
+        {
+            MusicAudioSourceChannel2.Play();
+        }
     }
 
     public void SwitchMusicChannel(bool inConvent)
@@ -81,34 +91,42 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlayAmbience()
+    public void PlayAmbience(string overrideSeasons = "")
     {
         string ambience = "";
-        GameClock clock = GameManager.Instance.GameClock;
-        switch (MissionManager.Instance.CurrentMission.Season)
+
+        if (string.IsNullOrEmpty(overrideSeasons))
         {
-            case Season.SUMMER:
-                if (clock.Time >= 21 || clock.Time < 6)
-                {
-                    ambience = "SummerNight_Ambience";
-                }
-                else if (clock.Time >= 6)
-                {
-                    ambience = "SummerDay_Ambience";
-                }
-                break;
+            GameClock clock = GameManager.Instance.GameClock;
+            switch (MissionManager.Instance.CurrentMission.Season)
+            {
+                case Season.SUMMER:
+                    if (clock.Time >= 21 || clock.Time < 6)
+                    {
+                        ambience = "SummerNight_Ambience";
+                    }
+                    else if (clock.Time >= 6)
+                    {
+                        ambience = "SummerDay_Ambience";
+                    }
+                    break;
 
-            case Season.FALL:
-                ambience = "Fall_Ambience";
-                break;
+                case Season.FALL:
+                    ambience = "Fall_Ambience";
+                    break;
 
-            case Season.WINTER:
-                ambience = "Winter_Ambience";
-                break;
+                case Season.WINTER:
+                    ambience = "Winter_Ambience";
+                    break;
 
-            case Season.SPRING:
-                ambience = "Spring_Ambience";
-                break;
+                case Season.SPRING:
+                    ambience = "Spring_Ambience";
+                    break;
+            }
+        }
+        else
+        {
+            ambience = overrideSeasons;
         }
 
         if (string.IsNullOrEmpty(ambience) || AmbientTrackName == ambience)
