@@ -506,3 +506,8 @@ public class KSBackers
     public string Name;
 }
 
+public enum ProvisionsPopupPhase
+{
+    ADD_UPGRADE,
+    REPLACE
+}

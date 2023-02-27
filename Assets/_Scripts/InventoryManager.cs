@@ -94,6 +94,14 @@ public class InventoryManager : MonoBehaviour
         RefreshInventoryUI?.Invoke();
     }
 
+    public void RemoveProvision(Provision Id)
+    {
+        var prov = Provisions.Where(p => p.Id == Id).FirstOrDefault();
+        if (prov == null) return;
+
+        Provisions.Remove(prov);
+    }
+
     //We will never call this during a run as Provisions are now permanent
     public void ClearProvisions()
     {

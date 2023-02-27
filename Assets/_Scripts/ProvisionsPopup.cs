@@ -5,11 +5,18 @@ using UnityEngine.UI;
 
 public class ProvisionsPopup : MonoBehaviour
 {
+    public TextMeshProUGUI TitleText;
+    private ProvisionsPopupPhase PopupPhase;
+    private ProvisionData ProvisionToReplace;
+    public GameObject XButton;
+
+    public GameObject Provision1Obj;
     private ProvisionData Provision1;
     public TextMeshProUGUI ProvisionName1;
     public Image ProvisionIcon1;
     public TextMeshProUGUI ProvisionDescription1;
 
+    public GameObject Provision2Obj;
     private ProvisionData Provision2;
     public TextMeshProUGUI ProvisionName2;
     public Image ProvisionIcon2;
@@ -30,7 +37,10 @@ public class ProvisionsPopup : MonoBehaviour
     public void Init(ProvisionData prov1, ProvisionData prov2)
     {
         StartCoroutine(WaitThenHideUI());
+
+        SwitchPhase(ProvisionsPopupPhase.ADD_UPGRADE);
         CustomEventPopup.IsDisplaying = true;
+
         Provision1 = prov1;
         ProvisionName1.text = LocalizationManager.Instance.GetText(prov1.NameKey);
         ProvisionDescription1.text = LocalizationManager.Instance.GetText(prov1.DescriptionKey);
@@ -80,6 +90,50 @@ public class ProvisionsPopup : MonoBehaviour
 
     public void OnClick(string item)
     {
+        if(item == "X")
+        {
+            SwitchPhase(ProvisionsPopupPhase.ADD_UPGRADE);
+            return;
+        }
+
+        if (PopupPhase == ProvisionsPopupPhase.ADD_UPGRADE && InventoryManager.Instance.Provisions.Count == InventoryManager.Instance.MaxProvisionsSlots && (item == "ITEM1" || item == "ITEM2"))
+        {
+            switch (item)
+            {
+                case "ITEM1":
+                    ProvisionToReplace = Provision1;
+                    Provision2Obj.SetActive(false);
+                    break;
+
+                case "ITEM2":
+                    ProvisionToReplace = Provision2;
+                    Provision1Obj.SetActive(false);
+                    break;
+            }
+            SwitchPhase(ProvisionsPopupPhase.REPLACE);
+            return;
+        }
+        else if(PopupPhase == ProvisionsPopupPhase.REPLACE)
+        {
+            switch (item)
+            {
+                case "UPGRADE1":
+                    InventoryManager.Instance.RemoveProvision(ProvisionToUpgrade1.Id);
+                    InventoryManager.Instance.AddProvision(ProvisionToReplace);
+                    break;
+
+                case "UPGRADE2":
+                    InventoryManager.Instance.RemoveProvision(ProvisionToUpgrade2.Id);
+                    InventoryManager.Instance.AddProvision(ProvisionToReplace);
+                    break;
+            }
+
+            CustomEventPopup.IsDisplaying = false;
+            gameObject.SetActive(false);
+            UI.Instance.EnableAllUIElements(true);
+            return;
+        }
+
         switch (item)
         {
             case "ITEM1":
@@ -103,5 +157,24 @@ public class ProvisionsPopup : MonoBehaviour
         CustomEventPopup.IsDisplaying = false;
         gameObject.SetActive(false);
         UI.Instance.EnableAllUIElements(true);
+    }
+
+    private void SwitchPhase(ProvisionsPopupPhase phase)
+    {
+        PopupPhase = phase;
+        switch (phase)
+        {
+            case ProvisionsPopupPhase.ADD_UPGRADE:
+                TitleText.text = "CHOOSE ONE";
+                XButton.SetActive(false);
+                Provision1Obj.SetActive(true);
+                Provision2Obj.SetActive(true);
+                break;
+
+            case ProvisionsPopupPhase.REPLACE:
+                TitleText.text = "REPLACE EXISTING PROVISION?";
+                XButton.SetActive(true);
+                break;
+        }
     }
 }
