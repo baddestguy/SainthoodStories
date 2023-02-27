@@ -82,12 +82,12 @@ public class InventoryManager : MonoBehaviour
         if (HasProvision(currProvision.Id))
         {
             var prov = Provisions.SingleOrDefault(p => p.Id == currProvision.Id);
-            if (prov != null)
-                Provisions.Remove(prov);
+            if (prov == null) return;
 
             var upgradedProv = GameDataManager.Instance.GetProvision(prov.Id, prov.Level + 1);
             if(upgradedProv != null)
             {
+                Provisions.Remove(prov);
                 Provisions.Add(upgradedProv);
             }
         }
@@ -149,10 +149,16 @@ public class InventoryManager : MonoBehaviour
         //Check to make sure that we dont already have the Provision in our Inventory
         var prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
         prov1 = SwapProvisionBySeason(prov1);
+        while (Provisions.Any(p => p.Id == prov1.Id))
+        {
+            prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
+            prov1 = SwapProvisionBySeason(prov1);
+        }
+
         var prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
         prov2 = SwapProvisionBySeason(prov2);
 
-        while (prov2.Id == prov1.Id)
+        while (Provisions.Any(p => p.Id == prov2.Id) || prov2.Id == prov1.Id)
         {
             prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
             prov2 = SwapProvisionBySeason(prov2);

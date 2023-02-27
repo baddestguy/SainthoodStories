@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,11 +15,13 @@ public class ProvisionsPopup : MonoBehaviour
     public Image ProvisionIcon2;
     public TextMeshProUGUI ProvisionDescription2;
 
+    public GameObject ProvisionUpgrade1Obj;
     private ProvisionData ProvisionToUpgrade1;
     public TextMeshProUGUI ProvisionName3;
     public Image ProvisionIcon3;
     public TextMeshProUGUI ProvisionDescription3;
 
+    public GameObject ProvisionUpgrade2Obj;
     private ProvisionData ProvisionToUpgrade2;
     public TextMeshProUGUI ProvisionName4;
     public Image ProvisionIcon4;
@@ -26,6 +29,7 @@ public class ProvisionsPopup : MonoBehaviour
 
     public void Init(ProvisionData prov1, ProvisionData prov2)
     {
+        StartCoroutine(WaitThenHideUI());
         CustomEventPopup.IsDisplaying = true;
         Provision1 = prov1;
         ProvisionName1.text = LocalizationManager.Instance.GetText(prov1.NameKey);
@@ -37,13 +41,41 @@ public class ProvisionsPopup : MonoBehaviour
         ProvisionDescription2.text = LocalizationManager.Instance.GetText(prov2.DescriptionKey);
         ProvisionIcon2.sprite = Resources.Load<Sprite>($"Icons/{prov2.Id}");
 
-        if(InventoryManager.Instance.Provisions.Count > 0)
-            ProvisionToUpgrade1 = GameDataManager.Instance.GetProvision(InventoryManager.Instance.Provisions[0].Id);
-        if(InventoryManager.Instance.Provisions.Count > 1)
-            ProvisionToUpgrade2 = GameDataManager.Instance.GetProvision(InventoryManager.Instance.Provisions[1].Id);
+        var provisionsCount = InventoryManager.Instance.Provisions.Count;
+        if (provisionsCount > 0)
+        {
+            var p = InventoryManager.Instance.Provisions[Random.Range(0, provisionsCount)];
+            ProvisionToUpgrade1 = GameDataManager.Instance.GetProvision(p.Id, p.Level+1);
+        }
+        if(provisionsCount > 1)
+        {
+            var p = InventoryManager.Instance.Provisions[Random.Range(0, provisionsCount)];
+            while(p.Id == ProvisionToUpgrade1.Id) p = InventoryManager.Instance.Provisions[Random.Range(0, provisionsCount)];
+            ProvisionToUpgrade2 = GameDataManager.Instance.GetProvision(p.Id, p.Level+1);
+        }
 
         //Display Upgrade Provisions
+        if(ProvisionToUpgrade1 != null)
+        {
+            ProvisionUpgrade1Obj.SetActive(true);
+            ProvisionName3.text = LocalizationManager.Instance.GetText(ProvisionToUpgrade1.NameKey);
+            ProvisionDescription3.text = LocalizationManager.Instance.GetText(ProvisionToUpgrade1.DescriptionKey);
+            ProvisionIcon3.sprite = Resources.Load<Sprite>($"Icons/{ProvisionToUpgrade1.Id}");
+        }
 
+        if(ProvisionToUpgrade2 != null)
+        {
+            ProvisionUpgrade2Obj.SetActive(true);
+            ProvisionName4.text = LocalizationManager.Instance.GetText(ProvisionToUpgrade2.NameKey);
+            ProvisionDescription4.text = LocalizationManager.Instance.GetText(ProvisionToUpgrade2.DescriptionKey);
+            ProvisionIcon4.sprite = Resources.Load<Sprite>($"Icons/{ProvisionToUpgrade2.Id}");
+        }
+    }
+
+    private IEnumerator WaitThenHideUI()
+    {
+        yield return null;
+        UI.Instance.EnableAllUIElements(false);
     }
 
     public void OnClick(string item)
@@ -70,5 +102,6 @@ public class ProvisionsPopup : MonoBehaviour
         }
         CustomEventPopup.IsDisplaying = false;
         gameObject.SetActive(false);
+        UI.Instance.EnableAllUIElements(true);
     }
 }
