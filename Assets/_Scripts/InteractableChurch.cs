@@ -31,7 +31,7 @@ public class InteractableChurch : InteractableHouse
         PopIcon.transform.localPosition += new Vector3 (0, 0.5f, 0);
         ExteriorPopUI.transform.localPosition += new Vector3(0, 1, 0);
         EnergyConsumption = ServiceEnergy;
-        BuildPoints = 4;
+        BuildPoints = MaxBuildPoints;
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)

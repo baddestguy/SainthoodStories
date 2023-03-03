@@ -43,6 +43,7 @@ public class InteractableHouse : InteractableObject
 
     public BuildingState BuildingState;
     protected int BuildPoints = 0;
+    protected int MaxBuildPoints = 4;
     public GameObject RubbleGo;
     public GameObject BuildingGo;
 
@@ -451,11 +452,12 @@ public class InteractableHouse : InteractableObject
         Player player = GameManager.Instance.Player;
         if (player.EnergyDepleted() || !CanBuild()) return;
 
+
         BuildPoints++;
-        OnActionProgress?.Invoke(BuildPoints / 4f, this, 0);
+        OnActionProgress?.Invoke(BuildPoints / MaxBuildPoints, this, 0);
 
         UI.Instance.DisplayMessage("BUILDING!");
-        if(BuildPoints >= 4)
+        if(BuildPoints >= MaxBuildPoints)
         {
             //Play Cool Construction Vfx and Animation!
             BuildingState = BuildingState.NORMAL;
@@ -684,7 +686,13 @@ public class InteractableHouse : InteractableObject
         base.OnPlayerMoved(energy, tile);
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            if(GameManager.Instance.CurrentHouse != this)
+            var tools = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TOOLS);
+            if (tools != null)
+            {
+                MaxBuildPoints = tools.Value;
+            }
+
+            if (GameManager.Instance.CurrentHouse != this)
                 TriggerCustomEvent();
 
             GameManager.Instance.CurrentHouse = this;
@@ -725,7 +733,7 @@ public class InteractableHouse : InteractableObject
             HouseUIActive = false;
             InsideHouse = false;
             SoundManager.Instance.PlayOneShotSfx("Zoom_SFX");
-            if (BuildPoints >= 4)
+            if (BuildPoints >= MaxBuildPoints)
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
             else
                 SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
@@ -869,7 +877,7 @@ public class InteractableHouse : InteractableObject
 
     public bool CanBuild()
     {
-        if (BuildPoints >= 4 || BuildingState == BuildingState.NORMAL) return false;
+        if (BuildPoints >= MaxBuildPoints || BuildingState == BuildingState.NORMAL) return false;
         if (!GameDataManager.Instance.ConstructionAvailability.ContainsKey(GetType().Name)) return true;
 
         ConstructionAvailabilityData myAvailability = GameDataManager.Instance.ConstructionAvailability[GetType().Name];
@@ -925,7 +933,7 @@ public class InteractableHouse : InteractableObject
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
 
             case "CONSTRUCT":
-                if(4-BuildPoints == 1)
+                if(MaxBuildPoints - BuildPoints == 1)
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = 8, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
                 else
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };

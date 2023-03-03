@@ -8,7 +8,7 @@ public class InteractableMarket : InteractableHouse
     {
         PopUILocation = "UI/ExternalUI";
         base.Start();
-        BuildPoints = 4;
+        BuildPoints = MaxBuildPoints;
     }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)

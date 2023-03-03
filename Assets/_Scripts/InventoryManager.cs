@@ -13,7 +13,7 @@ public class InventoryManager : MonoBehaviour
     public List<ProvisionData> Provisions = new List<ProvisionData>();
 
     public int MaxInventorySlots = 2;
-    public int MaxProvisionsSlots = 3;
+    public int MaxProvisionsSlots = 5;
 
     private void Awake()
     {
