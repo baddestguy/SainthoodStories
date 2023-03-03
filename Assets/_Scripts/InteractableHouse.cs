@@ -48,6 +48,8 @@ public class InteractableHouse : InteractableObject
     public GameObject BuildingGo;
 
     public int RelationshipPoints;
+    protected int RelationshipBonus = 0;
+    protected int FPBonus = 0;
     protected int VolunteerCountdown = 0;
     public int EventsTriggered;
 
@@ -364,7 +366,7 @@ public class InteractableHouse : InteractableObject
         OnActionProgress?.Invoke(PrayersProgress / 4f, this, 0);
         if (PrayersProgress == 4)
         {
-            UpdateFaithPoints(MeditationPoints, 0);
+            UpdateFaithPoints(MeditationPoints + FPBonus, 0);
             PrayersProgress = 0;
         }
         clock.Tick();
@@ -452,7 +454,6 @@ public class InteractableHouse : InteractableObject
         Player player = GameManager.Instance.Player;
         if (player.EnergyDepleted() || !CanBuild()) return;
 
-
         BuildPoints++;
         OnActionProgress?.Invoke(BuildPoints / MaxBuildPoints, this, 0);
 
@@ -477,7 +478,19 @@ public class InteractableHouse : InteractableObject
             BuildingCompleteDialog();
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             player.ConsumeEnergy(EnergyConsumption);
-            UpdateCharityPoints(1, moddedEnergy);
+            var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
+            var moddedCPReward = tents?.Value ?? 0;
+            UpdateCharityPoints(1 + moddedCPReward, moddedEnergy);
+
+            var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
+            RelationshipBonus= buildingBlueprint?.Value ?? 0;
+
+            var chapelBlueprint = InventoryManager.Instance.GetProvision(Provision.CHAPEL_BLUEPRINT);
+            FPBonus = chapelBlueprint?.Value ?? 0;
+
+            //Reduce chance of environmental hazards
+            var sturdyMaterials = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
+
         }
         else
         {
@@ -819,7 +832,7 @@ public class InteractableHouse : InteractableObject
 
     public void BuildRelationship(ThankYouType thanks, int amount = 1)
     {
-        RelationshipPoints += Mathf.Clamp(amount, 0, 100);
+        RelationshipPoints += Mathf.Clamp(amount + RelationshipBonus, 0, 100);
         RelationshipReward(thanks);
         SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
     }
