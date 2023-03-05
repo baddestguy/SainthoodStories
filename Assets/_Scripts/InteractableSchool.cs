@@ -4,6 +4,7 @@ public class InteractableSchool : InteractableHouse
 {
     public int TeachPoints;
     private int TeachCountdown = 0;
+    private float MaxTeachPoints = 4f;
 
     protected override void Start()
     {
@@ -20,6 +21,7 @@ public class InteractableSchool : InteractableHouse
             if (BuildingState != BuildingState.RUBBLE)
             {
                 StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
+                MaxTeachPoints = CalculateMaxVolunteerPoints();
             }
             else
             {
@@ -66,17 +68,29 @@ public class InteractableSchool : InteractableHouse
     public void TeachSubject()
     {
         TeachCountdown++;
-        OnActionProgress?.Invoke(TeachCountdown / 4f, this, 0);
+        OnActionProgress?.Invoke(TeachCountdown / MaxTeachPoints, this, 0);
 
-        if (TeachCountdown >= 4)
+        if (TeachCountdown >= MaxTeachPoints)
         {
             Player player = GameManager.Instance.Player;
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            player.ConsumeEnergy(EnergyConsumption);
+            var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
+            moddedEnergy += schoolMaterials?.Value ?? 0;
+            player.ConsumeEnergy(moddedEnergy);
             UpdateCharityPoints(TeachPoints, moddedEnergy);
             BuildRelationship(ThankYouType.TEACH);
             TeachCountdown = 0;
         }
+    }
+
+    public override void BuildRelationship(ThankYouType thanks, int amount = 1)
+    {
+        if(thanks == ThankYouType.TEACH)
+        {
+            var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
+            amount += schoolMaterials?.Value ?? 0;
+        }
+        base.BuildRelationship(thanks, amount);
     }
 
     public override void DeliverItem(InteractableHouse house)
@@ -218,7 +232,7 @@ public class InteractableSchool : InteractableHouse
         switch (button)
         {
             case "VOLUNTEER":
-                if (4 - TeachCountdown == 1)
+                if (MaxTeachPoints - TeachCountdown == 1)
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = TeachPoints, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
                 else
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };

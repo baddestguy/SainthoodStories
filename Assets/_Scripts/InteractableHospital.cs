@@ -10,6 +10,7 @@ public class InteractableHospital : InteractableHouse
     private int DeliveryCountdown = 0;
     public int BabyPoints;
     public int FailedDeliveryPoints;
+    private float MaxDeliveryPoints = 4f;
 
     private string RandomBabyIcon;
 
@@ -28,6 +29,8 @@ public class InteractableHospital : InteractableHouse
             if(BuildingState != BuildingState.RUBBLE)
             {
                 StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
+                MaxDeliveryPoints = CalculateMaxVolunteerPoints();
+                MaxVolunteerPoints = CalculateMaxVolunteerPoints();
             }
             else
             {
@@ -43,6 +46,14 @@ public class InteractableHospital : InteractableHouse
         }
     }
 
+    protected override int ModVolunteerEnergyWithProvisions()
+    {
+        if (BuildingActivityState != BuildingActivityState.DELIVERING_BABY) return 0;
+
+        var hospitalMaterials = InventoryManager.Instance.GetProvision(Provision.HOSPITAL_RELATIONSHIP_BUILDER);
+        return hospitalMaterials?.Value ?? 0;
+    }
+
     public override void Tick(double time, int day)
     {
         if (GameClock.DeltaTime)
@@ -55,11 +66,12 @@ public class InteractableHospital : InteractableHouse
                 GameClock clock = GameManager.Instance.GameClock;
                 CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
 
-                if (DeliveryCountdown >= 4 || clock == EndDelivery)
+                if (DeliveryCountdown >= MaxDeliveryPoints || clock == EndDelivery)
                 {
                     UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
                     var moddedEnergy = GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption);
-                    GameManager.Instance.Player.ConsumeEnergy(EnergyConsumption);
+                    moddedEnergy += ModVolunteerEnergyWithProvisions();
+                    GameManager.Instance.Player.ConsumeEnergy(moddedEnergy);
                     UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)), moddedEnergy);
                     PopIcon.gameObject.SetActive(false);
                     UI.Instance.SideNotificationPop(GetType().Name);
@@ -83,6 +95,16 @@ public class InteractableHospital : InteractableHouse
         }
 
         base.Tick(time, day);
+    }
+
+    public override void BuildRelationship(ThankYouType thanks, int amount = 1)
+    {
+        if(thanks == ThankYouType.BABY)
+        {
+            var hospitalMaterials = InventoryManager.Instance.GetProvision(Provision.HOSPITAL_RELATIONSHIP_BUILDER);
+            amount += hospitalMaterials?.Value ?? 0;
+        }
+        base.BuildRelationship(thanks, amount);
     }
 
     private void CheckBabyDelivery()
@@ -174,7 +196,7 @@ public class InteractableHospital : InteractableHouse
             BuildingActivityState = BuildingActivityState.DELIVERING_BABY;
             UI.Instance.DisplayMessage("Delivering a Baby!!");
             DeliveryCountdown++;
-            OnActionProgress?.Invoke(DeliveryCountdown/4f, this, 1);   
+            OnActionProgress?.Invoke(DeliveryCountdown/ MaxDeliveryPoints, this, 1);   
             clock.Tick();
         }
         else if (EndDelivery == null || clock > EndDelivery)
@@ -257,7 +279,7 @@ public class InteractableHospital : InteractableHouse
         {
             case "BABY":
                 CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
-                if(4-DeliveryCountdown == 1)
+                if(MaxDeliveryPoints - DeliveryCountdown == 1)
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = (BabyPoints + (e != null ? (int)e.Gain : 0)) , Energy = -(GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption)*4)+DeliveryCountdown };
                 else
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };

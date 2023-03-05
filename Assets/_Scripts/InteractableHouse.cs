@@ -51,6 +51,7 @@ public class InteractableHouse : InteractableObject
     protected int RelationshipBonus = 0;
     protected int FPBonus = 0;
     protected int VolunteerCountdown = 0;
+    protected float MaxVolunteerPoints = 4f;
     public int EventsTriggered;
 
     public static UnityAction<bool> OnEnterHouse;
@@ -175,13 +176,14 @@ public class InteractableHouse : InteractableObject
         {
             case BuildingActivityState.VOLUNTEERING:
                 VolunteerCountdown++;
-                OnActionProgress?.Invoke(VolunteerCountdown / 4f, this, 0);
-                if (VolunteerCountdown >= 4)
+                OnActionProgress?.Invoke(VolunteerCountdown / MaxVolunteerPoints, this, 0);
+                if (VolunteerCountdown >= MaxVolunteerPoints)
                 {
                     BuildRelationship(ThankYouType.VOLUNTEER);
                     Player player = GameManager.Instance.Player;
                     var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-                    player.ConsumeEnergy(EnergyConsumption);
+                    moddedEnergy += ModVolunteerEnergyWithProvisions();
+                    player.ConsumeEnergy(moddedEnergy);
                     UpdateCharityPoints(VolunteerPoints, moddedEnergy);
                     VolunteerCountdown = 0;
                 }
@@ -199,6 +201,11 @@ public class InteractableHouse : InteractableObject
 
         //    if(GameClock.DeltaTime) UpdateCharityPoints(-1, 0); //Subtract charity points every clock tick
         }
+    }
+
+    protected virtual int ModVolunteerEnergyWithProvisions()
+    {
+        return 0;
     }
 
     protected virtual void TryZoom(float zoom)
@@ -477,7 +484,7 @@ public class InteractableHouse : InteractableObject
 
             BuildingCompleteDialog();
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            player.ConsumeEnergy(EnergyConsumption);
+            player.ConsumeEnergy(moddedEnergy);
             var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
             var moddedCPReward = tents?.Value ?? 0;
             UpdateCharityPoints(1 + moddedCPReward, moddedEnergy);
@@ -705,6 +712,8 @@ public class InteractableHouse : InteractableObject
                 MaxBuildPoints = tools.Value;
             }
 
+            MaxVolunteerPoints = CalculateMaxVolunteerPoints();
+
             if (GameManager.Instance.CurrentHouse != this)
                 TriggerCustomEvent();
 
@@ -830,7 +839,27 @@ public class InteractableHouse : InteractableObject
         }
     }
 
-    public void BuildRelationship(ThankYouType thanks, int amount = 1)
+    public float CalculateMaxVolunteerPoints()
+    {
+        if (RelationshipPoints >= 65)
+        {
+            return 1;
+        }
+        else if (RelationshipPoints >= 30)
+        {
+            return 2;
+        }
+        else if (RelationshipPoints >= 10)
+        {
+            return 3;
+        }
+        else
+        {
+            return 4;
+        }
+    }
+
+    public virtual void BuildRelationship(ThankYouType thanks, int amount = 1)
     {
         RelationshipPoints += Mathf.Clamp(amount + RelationshipBonus, 0, 100);
         RelationshipReward(thanks);

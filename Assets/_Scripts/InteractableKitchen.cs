@@ -44,11 +44,26 @@ public class InteractableKitchen : InteractableHouse
 
         if (item != ItemType.NONE)
         {
-            if (!InventoryManager.Instance.HasProvision(Provision.COOKING_UTENSILS))
+            var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
+            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+
+            if (utensils != null)
             {
-                player.ConsumeEnergy(EnergyConsumption);
+                moddedEnergy += utensils.Value;
+            }
+
+            if (RelationshipPoints >= 10 && RelationshipPoints < 30)
+            {
+                player.ConsumeEnergy(moddedEnergy);
+            }
+            else
+            {
+                player.ConsumeEnergy(moddedEnergy);
                 clock.Tick();
             }
+
+            BuildRelationship(ThankYouType.VOLUNTEER);
+
             InventoryManager.Instance.AddToInventory(ItemType.MEAL);
             CookFX.Play();
             UI.Instance.DisplayMessage("COOKED MEAL!");
@@ -57,6 +72,16 @@ public class InteractableKitchen : InteractableHouse
         {
             UI.Instance.DisplayMessage("YOU HAVE NO FOOD TO COOK!");
         }
+    }
+
+    public override void BuildRelationship(ThankYouType thanks, int amount = 1)
+    {
+        if (thanks == ThankYouType.VOLUNTEER)
+        {
+            var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
+            amount += utensils?.Value ?? 0;
+        }
+        base.BuildRelationship(thanks, amount);
     }
 
     public override void SetDeadlineTime(double time, int day)

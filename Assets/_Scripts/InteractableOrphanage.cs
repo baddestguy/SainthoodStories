@@ -18,6 +18,7 @@ public class InteractableOrphanage : InteractableHouse
             if (BuildingState != BuildingState.RUBBLE)
             {
                 StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
+                MaxVolunteerPoints = CalculateMaxVolunteerPoints();
             }
             else
             {
@@ -137,6 +138,21 @@ public class InteractableOrphanage : InteractableHouse
                 }
                 break;
         }
+    }
+
+    public override void BuildRelationship(ThankYouType thanks, int amount = 1)
+    {
+        if(thanks == ThankYouType.VOLUNTEER)
+        {
+            var orphanageMaterials = InventoryManager.Instance.GetProvision(Provision.ORPHANAGE_RELATIONSHIP_BUILDER);
+            amount += orphanageMaterials?.Value ?? 0;
+        }
+        base.BuildRelationship(thanks, amount);
+    }
+    protected override int ModVolunteerEnergyWithProvisions()
+    {
+        var orphanageMaterials = InventoryManager.Instance.GetProvision(Provision.ORPHANAGE_RELATIONSHIP_BUILDER);
+        return orphanageMaterials?.Value ?? 0;
     }
 
     public override void RelationshipReward(ThankYouType thanks)
