@@ -65,6 +65,7 @@ public class InteractableHouse : InteractableObject
     public GameObject InteriorSpace;
 
     public int PrayersProgress = 0;
+    public float MaxPrayerProgress = 4f;
 
     protected virtual void Start()
     {
@@ -370,9 +371,18 @@ public class InteractableHouse : InteractableObject
 
         UI.Instance.DisplayMessage("MEDITATED!!");
         PrayersProgress++;
-        OnActionProgress?.Invoke(PrayersProgress / 4f, this, 0);
-        if (PrayersProgress == 4)
+        OnActionProgress?.Invoke(PrayersProgress / MaxPrayerProgress, this, 0);
+        if (PrayersProgress == MaxPrayerProgress)
         {
+            var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+            var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+
+            if(koboko != null)
+            {
+                FPBonus += koboko?.Value ?? 0;
+                player.ConsumeEnergy(koboko.Value);
+            }
+            FPBonus += rosary?.Value ?? 0;
             UpdateFaithPoints(MeditationPoints + FPBonus, 0);
             PrayersProgress = 0;
         }
@@ -620,23 +630,20 @@ public class InteractableHouse : InteractableObject
     {
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_SPIRIT || i.Id == CustomEventType.LOW_SPIRIT);
 
-        var provData = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-        int faithMultiplier = provData != null ? provData.Value : 1;
+        int faithBonus = 0;
         if(e != null)
         {
             if(Random.Range(0,100) < 20)
             {
-                faithMultiplier += e.Id == CustomEventType.HIGH_SPIRIT ? (int)e.Gain : -faithMultiplier;
+                faithBonus += e.Id == CustomEventType.HIGH_SPIRIT ? (int)e.Gain : 0;
             }
         }
-        CurrentFaithPoints += amount * (amount < 0 ? 1 : faithMultiplier);
         Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
-        stack.Push(new Tuple<string, int>("InteractableChurch", amount * faithMultiplier));
+        stack.Push(new Tuple<string, int>("InteractableChurch", amount * faithBonus));
         if (energy != 0) stack.Push(new Tuple<string, int>("Energy", energy));
         StartCoroutine(PopUIFXIconsAsync(stack));
   
-        GameManager.Instance.MissionManager.UpdateFaithPoints(amount * faithMultiplier);
-        Debug.LogWarning("FAITH: " + CurrentFaithPoints);
+        GameManager.Instance.MissionManager.UpdateFaithPoints(amount + faithBonus);
     }
 
     public virtual void ReportScores()
@@ -713,9 +720,21 @@ public class InteractableHouse : InteractableObject
             }
 
             MaxVolunteerPoints = CalculateMaxVolunteerPoints();
+            var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+            MaxPrayerProgress = rosary != null ? 5f : 4f;
 
-            if (GameManager.Instance.CurrentHouse != this)
+            if (GameManager.Instance.CurrentHouse != this) //Entered a new building
+            {
+                var fasting = InventoryManager.Instance.GetProvision(Provision.FASTING);
+                if(fasting != null)
+                {
+                    Player player = GameManager.Instance.Player;
+                    player.ConsumeEnergy(fasting.Value);
+                    UpdateFaithPoints(fasting.Value, 0);
+                }
+
                 TriggerCustomEvent();
+            }
 
             GameManager.Instance.CurrentHouse = this;
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));

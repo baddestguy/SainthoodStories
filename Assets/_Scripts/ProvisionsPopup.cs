@@ -60,7 +60,7 @@ public class ProvisionsPopup : MonoBehaviour
         if(provisionsCount > 1)
         {
             var p = InventoryManager.Instance.Provisions[Random.Range(0, provisionsCount)];
-            while(p.Id == ProvisionToUpgrade1.Id) p = InventoryManager.Instance.Provisions[Random.Range(0, provisionsCount)];
+            while(ProvisionToUpgrade1 != null && p.Id == ProvisionToUpgrade1.Id) p = InventoryManager.Instance.Provisions[Random.Range(0, provisionsCount)];
             ProvisionToUpgrade2 = GameDataManager.Instance.GetProvision(p.Id, p.Level+1);
         }
 

@@ -171,7 +171,7 @@ public enum Provision
     ,FERVENT_PRAYER
     ,FASTING
     ,KOBOKO
-    ,ARMOR
+    ,INCENSE
     ,SECURITY_GUARDS
     ,PENICILLIN
     ,MAX_COUNT
