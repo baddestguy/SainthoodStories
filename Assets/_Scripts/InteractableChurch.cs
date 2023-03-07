@@ -23,6 +23,8 @@ public class InteractableChurch : InteractableHouse
     public int PrayerProgress;
     public int SleepProgress;
 
+    public float MaxSleepProgress = 2f;
+
     protected override void Start()
     {
         PopUILocation = "UI/ExternalUI";
@@ -55,6 +57,12 @@ public class InteractableChurch : InteractableHouse
     {
         var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
         MaxPrayerProgress = rosary != null ? 5f : 4f;
+
+        var ac = InventoryManager.Instance.GetProvision(Provision.REDUCE_SLEEP_TIME);
+        MaxSleepProgress = ac?.Value ?? 2f;
+
+        var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
+        MaxSleepProgress += mattress?.Value ?? 0;
     }
 
     public override void Tick(double time, int day)
@@ -372,16 +380,21 @@ public class InteractableChurch : InteractableHouse
         Player player = GameManager.Instance.Player;
 
         SleepProgress++;
-        OnActionProgress?.Invoke(SleepProgress / 2f, this, 0);
-        if (SleepProgress == 2)
+        OnActionProgress?.Invoke(SleepProgress / MaxSleepProgress, this, 0);
+        if (SleepProgress == MaxSleepProgress)
         {
-            player.ConsumeEnergy(SleepEnergy);
+            var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
+
+            player.ConsumeEnergy(SleepEnergy - (mattress?.Value ?? 0));
             player.ClearStatusEffects();
             PopUIFXIcons("Energy", -SleepEnergy);
             SleepProgress = 0;
         }
 
-        clock.Tick();
+        if(MaxSleepProgress > 0)
+        {
+            clock.Tick();
+        }
         UI.Instance.DisplayMessage("SLEPT!");
     }
 
