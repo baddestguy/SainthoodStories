@@ -199,6 +199,15 @@ public class GameDataManager : MonoBehaviour
         return returnData;
     }
 
+    public CustomEventData GetEvent(CustomEventType id)
+    {
+        var groupList = CustomEventData[id];
+        CustomEventData returnData = groupList.FirstOrDefault();
+
+        return returnData;
+    }
+
+
     public CustomEventData RemixEventBySeason(CustomEventData data)
     {
         switch (data.Id)

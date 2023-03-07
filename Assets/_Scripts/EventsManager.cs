@@ -109,6 +109,11 @@ public class EventsManager : MonoBehaviour
         else
         {
             var randomEvent = GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY);
+            var security = InventoryManager.Instance.GetProvision(Provision.SECURITY_GUARDS);
+            if(security != null && randomEvent.Id == CustomEventType.VANDALISM)
+            {
+                randomEvent = GameDataManager.Instance.GetEvent(CustomEventType.VANDALISM_STOPPED);
+            }
             randomEvent = GameDataManager.Instance.RemixEventBySeason(randomEvent);
             AddEventToList(randomEvent.Id);
         }

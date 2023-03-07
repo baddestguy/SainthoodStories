@@ -134,8 +134,6 @@ public class MissionManager : MonoBehaviour
 
         EventsManager.Instance.ExecuteEvents();
         EventsManager.Instance.CurrentEvents.Clear();
-     //   FaithPoints = 5;
-     //   CharityPoints = 5;
         GameManager.Instance.Player.ResetEnergy();
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);

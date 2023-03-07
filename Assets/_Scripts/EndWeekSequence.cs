@@ -23,6 +23,8 @@ public class EndWeekSequence : MonoBehaviour
     public IEnumerator RunSequenceAsync()
     {
         int cashAmount = Random.Range(2, 4);
+        var donation = InventoryManager.Instance.GetProvision(Provision.ALLOWANCE);
+        cashAmount += donation?.Value ?? 0;
         TreasuryManager.Instance.DonateMoney(cashAmount);
         var saintsUnlocked = MissionManager.Instance.UnlockSaints();
 
