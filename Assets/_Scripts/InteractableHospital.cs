@@ -71,7 +71,7 @@ public class InteractableHospital : InteractableHouse
                     UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
                     var moddedEnergy = GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption);
                     moddedEnergy += ModVolunteerEnergyWithProvisions();
-                    GameManager.Instance.Player.ConsumeEnergy(moddedEnergy);
+                    GameManager.Instance.Player.ConsumeEnergy(EnergyConsumption);
                     UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)), moddedEnergy);
                     PopIcon.gameObject.SetActive(false);
                     UI.Instance.SideNotificationPop(GetType().Name);

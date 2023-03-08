@@ -45,20 +45,14 @@ public class InteractableKitchen : InteractableHouse
         if (item != ItemType.NONE)
         {
             var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
-            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-
-            if (utensils != null)
-            {
-                moddedEnergy += utensils.Value;
-            }
-
+            
             if (RelationshipPoints >= 10 && RelationshipPoints < 30)
             {
-                player.ConsumeEnergy(moddedEnergy);
+                player.ConsumeEnergy(EnergyConsumption + utensils?.Value ?? 0);
             }
             else
             {
-                player.ConsumeEnergy(moddedEnergy);
+                player.ConsumeEnergy(EnergyConsumption + utensils?.Value ?? 0);
                 clock.Tick();
             }
 

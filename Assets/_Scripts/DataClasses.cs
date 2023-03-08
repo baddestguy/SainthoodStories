@@ -71,8 +71,11 @@ public enum ThankYouType
 public enum PlayerStatusEffect
 {
     NONE = 0,
-    FATIGUED,
-    FROZEN
+    FATIGUED, //Stat Debuff, more energy required for Actions
+    SICK, //Damage over time, lose energy every hour
+    VULNERABLE, //Setup for more effects
+    MIGRAINE, //Lose all Energy in x hours
+    FROZEN // Debilitating
 }
 
 public enum PlayerFacingDirection

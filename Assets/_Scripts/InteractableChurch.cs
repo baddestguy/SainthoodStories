@@ -386,7 +386,7 @@ public class InteractableChurch : InteractableHouse
             var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
 
             player.ConsumeEnergy(SleepEnergy - (mattress?.Value ?? 0));
-            player.ClearStatusEffects();
+            player.RemoveRandomStatusEffect();
             PopUIFXIcons("Energy", -SleepEnergy);
             SleepProgress = 0;
         }

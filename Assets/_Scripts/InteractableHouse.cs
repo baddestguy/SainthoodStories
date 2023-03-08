@@ -184,7 +184,7 @@ public class InteractableHouse : InteractableObject
                     Player player = GameManager.Instance.Player;
                     var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
                     moddedEnergy += ModVolunteerEnergyWithProvisions();
-                    player.ConsumeEnergy(moddedEnergy);
+                    player.ConsumeEnergy(EnergyConsumption);
                     UpdateCharityPoints(VolunteerPoints, moddedEnergy);
                     VolunteerCountdown = 0;
                 }
@@ -494,7 +494,7 @@ public class InteractableHouse : InteractableObject
 
             BuildingCompleteDialog();
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            player.ConsumeEnergy(moddedEnergy);
+            player.ConsumeEnergy(EnergyConsumption);
             var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
             var moddedCPReward = tents?.Value ?? 0;
             UpdateCharityPoints(1 + moddedCPReward, moddedEnergy);
@@ -799,14 +799,14 @@ public class InteractableHouse : InteractableObject
         if (UI.Instance.WeekBeginCrossFade) return;
         if (GameManager.Instance.PreviousSceneID == SceneID.SaintsShowcase_Day) return;
         if (DeadlineSet) return;
+        if (GameManager.Instance.Player.StatusEffects.Contains(PlayerStatusEffect.FATIGUED)) return;
 
-        if (Random.Range(0, 100) < 100)
+            if (Random.Range(0, 100) < 100)
         {
             switch (GetType().Name)
             {
                 case "InteractableChurch":
-                    if(!GameManager.Instance.Player.StatusEffects.Contains(PlayerStatusEffect.FATIGUED))
-                        EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.CHURCH).Id);
+                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.CHURCH).Id);
                     break;
                 case "InteractableHospital":
                     EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.HOSPITAL).Id);

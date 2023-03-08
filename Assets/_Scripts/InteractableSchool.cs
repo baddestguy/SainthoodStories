@@ -76,7 +76,7 @@ public class InteractableSchool : InteractableHouse
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
             moddedEnergy += schoolMaterials?.Value ?? 0;
-            player.ConsumeEnergy(moddedEnergy);
+            player.ConsumeEnergy(EnergyConsumption);
             UpdateCharityPoints(TeachPoints, moddedEnergy);
             BuildRelationship(ThankYouType.TEACH);
             TeachCountdown = 0;

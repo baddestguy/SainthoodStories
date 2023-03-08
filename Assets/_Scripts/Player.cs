@@ -39,6 +39,9 @@ public class Player : MonoBehaviour
     public ParticleSystem SnowSplash;
     public GameObject CharacterGO;
 
+    private int SickCountdown = 3;
+    private int MigraineCountdown = 6;
+
     void Start()
     {
         TargetPosition = transform.position;
@@ -72,7 +75,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (StatusEffects.Contains(PlayerStatusEffect.FATIGUED))
+        if (StatusEffects.Any())
         {
             FatigueFx.SetActive(true);
         }
@@ -170,8 +173,7 @@ public class Player : MonoBehaviour
                     if (Random.Range(0, 100) < 50)
                     {
                         WeatherStatusCounter = 0;
-                        StatusEffects.Add(PlayerStatusEffect.FATIGUED);
-                        Debug.LogWarning("SICK FROM RAIN!");
+                        AddRandomAilment();
                     }
                 }
                 break;
@@ -230,6 +232,7 @@ public class Player : MonoBehaviour
                 CurrentBuilding = iTile as InteractableHouse;
                 OnMove(iTile.CurrentGroundTile);
                 OnMoveSuccessEvent?.Invoke(Energy, iTile);
+                ApplyStatusEffect();
                 if(passTime)
                     GameManager.Instance.PassTime();
             }
@@ -245,7 +248,8 @@ public class Player : MonoBehaviour
                 transform.localScale = Vector3.one;
                 OnMove(newTile);
                 OnMoveSuccessEvent?.Invoke(Energy, newTile);
-                if(passTime)
+                ApplyStatusEffect();
+                if (passTime)
                     GameManager.Instance.PassTime();
                 GroundMoveFX.transform.position = newTile.transform.position + new Vector3(0,0.1f);
                 GroundMoveFX.SetActive(false);
@@ -256,11 +260,6 @@ public class Player : MonoBehaviour
             {
                 TileDance(newTile);
             }
-        }
-
-        if (Energy.Depleted())
-        {
-            StatusEffects.Add(PlayerStatusEffect.FATIGUED);
         }
     }
 
@@ -324,11 +323,14 @@ public class Player : MonoBehaviour
                 {
                     FrozenCounter = 3;
                     StatusEffects.Remove(PlayerStatusEffect.FROZEN);
-                    StatusEffects.Add(PlayerStatusEffect.FATIGUED);
+                    AddRandomAilment();
                     SnowSplash.Play();
                     Debug.LogWarning("SICK FROM ICE!");
                 }
                 FrozenFx.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.3f);
+
+                ApplyStatusEffect();
+
                 GameManager.Instance.PassTime();
                 return;
             }
@@ -361,14 +363,44 @@ public class Player : MonoBehaviour
         Energy.Consume(amount);
     }
 
-    public void ModifyStatusEffect(PlayerStatusEffect newStatus)
+    public void ApplyStatusEffect()
     {
-        StatusEffects.Add(newStatus);
+        if (StatusEffects.Contains(PlayerStatusEffect.SICK))
+        {
+            SickCountdown--;
+            if(SickCountdown == 0)
+            {
+                Energy.Consume(1);
+                SickCountdown = 3;
+            }
+        }
+
+        if (StatusEffects.Contains(PlayerStatusEffect.MIGRAINE))
+        {
+            MigraineCountdown--;
+            if(MigraineCountdown == 0)
+            {
+                Energy.Consume(1000);
+                MigraineCountdown = 6;
+            }
+        }
     }
 
-    public void ClearStatusEffects()
+    public void AddRandomAilment()
     {
-        StatusEffects.Clear();
+        if (StatusEffects.Contains(PlayerStatusEffect.VULNERABLE))
+        {
+            StatusEffects.Add((PlayerStatusEffect)Random.Range(1, 5));
+        }
+        StatusEffects.Add((PlayerStatusEffect)Random.Range(1, 5));
+        Debug.LogWarning("ADDED AILMENT!");
+    }
+
+    public void RemoveRandomStatusEffect()
+    {
+        if (!StatusEffects.Any()) return;
+
+        StatusEffects.RemoveAt(Random.Range(0, StatusEffects.Count));
     }
 
     public bool EnergyDepleted(int consumption = 0)
