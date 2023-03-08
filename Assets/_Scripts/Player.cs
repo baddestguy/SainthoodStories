@@ -162,10 +162,22 @@ public class Player : MonoBehaviour
     private void StormyWeatherEffect()
     {
         if (!WeatherManager.Instance.IsStormy()) return;
-        if (InventoryManager.Instance.HasProvision(Provision.UMBRELLA) || InventoryManager.Instance.HasProvision(Provision.WINTER_CLOAK)) return;
+        if (InventoryManager.Instance.HasProvision(Provision.UMBRELLA) || InventoryManager.Instance.HasProvision(Provision.WINTER_CLOAK) || InventoryManager.Instance.HasProvision(Provision.SHADES)) return;
 
         switch (MissionManager.Instance.CurrentMission.Season)
         {
+            case Season.SUMMER:
+                WeatherStatusCounter++;
+                if (WeatherStatusCounter >= 3)
+                {
+                    if (Random.Range(0, 100) < 50)
+                    {
+                        WeatherStatusCounter = 0;
+                        AddRandomAilment();
+                    }
+                }
+                break;
+
             case Season.FALL:
                 WeatherStatusCounter++;
                 if (WeatherStatusCounter >= 3)

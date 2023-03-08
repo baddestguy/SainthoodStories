@@ -182,19 +182,19 @@ public class InventoryManager : MonoBehaviour
             case Season.SUMMER:
                 if (prov.Id == Provision.WINTER_CLOAK || prov.Id == Provision.UMBRELLA)
                 {
-                    return GameDataManager.Instance.ProvisionData[Provision.ENERGY_DRINK][0];
+                    return GameDataManager.Instance.ProvisionData[Provision.SHADES][0];
                 }
                 break;
 
             case Season.FALL:
-                if(prov.Id == Provision.WINTER_CLOAK)
+                if(prov.Id == Provision.WINTER_CLOAK || prov.Id == Provision.SHADES)
                 {
                     return GameDataManager.Instance.ProvisionData[Provision.UMBRELLA][0];
                 }
                 break;
 
             case Season.WINTER:
-                if (prov.Id == Provision.UMBRELLA)
+                if (prov.Id == Provision.UMBRELLA || prov.Id == Provision.SHADES)
                 {
                     return GameDataManager.Instance.ProvisionData[Provision.WINTER_CLOAK][0];
                 }
