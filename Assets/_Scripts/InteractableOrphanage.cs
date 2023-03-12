@@ -233,4 +233,13 @@ public class InteractableOrphanage : InteractableHouse
 
         return base.CanDoAction(actionName);
     }
+
+    protected override void AutoDeliver(ItemType item)
+    {
+        if (item == ItemType.TOYS)
+        {
+            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
+            base.DeliverItem(this);
+        }
+    }
 }

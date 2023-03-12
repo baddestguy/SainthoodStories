@@ -292,15 +292,6 @@ public class Player : MonoBehaviour
         int energyAmount = amount;
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.SICK);
 
-        if (tile != null && InventoryManager.Instance.HasProvision(Provision.SHOES))
-        {
-            if (!tooltip && Random.Range(0,100) < 30)
-            {
-                var prov = InventoryManager.Instance.GetProvision(Provision.SHOES);
-                if(prov != null)
-                    energyAmount -= prov.Value;
-            }
-        }
         if(StatusEffects.Contains(PlayerStatusEffect.FATIGUED))
         {
             energyAmount++;

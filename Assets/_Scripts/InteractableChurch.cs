@@ -506,6 +506,10 @@ public class InteractableChurch : InteractableHouse
     {
 
     }
+    protected override void AutoDeliver(ItemType item)
+    {
+
+    }
 
     public override void OnDisable()
     {

@@ -11,6 +11,7 @@ public class InventoryManager : MonoBehaviour
 
     public List<ItemType> Items = new List<ItemType>();
     public List<ProvisionData> Provisions = new List<ProvisionData>();
+    public Dictionary<ItemType, GameClock> AutoDeliveryItems = new Dictionary<ItemType, GameClock>();
 
     public int MaxInventorySlots = 2;
     public int MaxProvisionsSlots = 5;
@@ -33,7 +34,8 @@ public class InventoryManager : MonoBehaviour
 
     public bool IsInventoryFull()
     {
-        return Items.Count >= MaxInventorySlots;
+        var autodelivery = GetProvision(Provision.AUTO_DELIVER);
+        return (Items.Count >= MaxInventorySlots && autodelivery == null) || (Items.Count >= MaxInventorySlots && autodelivery != null && AutoDeliveryItems.Count == autodelivery.Value);
     }
 
     public void AddToInventory(ItemType item)

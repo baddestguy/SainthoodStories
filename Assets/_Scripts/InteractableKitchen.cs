@@ -115,6 +115,10 @@ public class InteractableKitchen : InteractableHouse
 
         return base.CanDoAction(actionName);
     }
+    protected override void AutoDeliver(ItemType item)
+    {
+
+    }
 
     public override void OnDisable()
     {

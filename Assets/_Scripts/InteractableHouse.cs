@@ -75,6 +75,8 @@ public class InteractableHouse : InteractableObject
         UI.UIHidden += OnUIEnabled;
         EventsManager.EventExecuted += OnEventExecuted;
         GameControlsManager.TryZoom += TryZoom;
+        InteractableMarket.AutoDeliverToHouse += AutoDeliver;
+
         LoadData();
         Initialize();
     }
@@ -1115,8 +1117,14 @@ public class InteractableHouse : InteractableObject
         }
     }
 
+    protected virtual void AutoDeliver(ItemType item)
+    {
+        DeliverItem(this);
+    }
+
     public override void OnDisable()
     {
+        InteractableMarket.AutoDeliverToHouse -= AutoDeliver;
         UI.Meditate -= Meditated;
         MissionManager.EndOfDay -= EndofDay;
         MissionManager.EndOfDay -= ReportScores;

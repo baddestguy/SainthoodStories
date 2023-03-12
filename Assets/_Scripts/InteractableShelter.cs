@@ -141,4 +141,13 @@
 
         return base.CanDoAction(actionName);
     }
+
+    protected override void AutoDeliver(ItemType item)
+    {
+        if (item == ItemType.GROCERIES)
+        {
+            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
+            base.DeliverItem(this);
+        }
+    }
 }

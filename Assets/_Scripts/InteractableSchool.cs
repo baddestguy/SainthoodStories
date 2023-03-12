@@ -272,6 +272,15 @@ public class InteractableSchool : InteractableHouse
         base.ResetActionProgress();
     }
 
+    protected override void AutoDeliver(ItemType item)
+    {
+        if (item == ItemType.STATIONERY)
+        {
+            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
+            base.DeliverItem(this);
+        }
+    }
+
     public override void OnDisable()
     {
         base.OnDisable();

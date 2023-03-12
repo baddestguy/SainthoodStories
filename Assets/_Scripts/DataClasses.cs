@@ -143,7 +143,6 @@ public enum Provision
     EXTRA_INVENTORY,
     ENERGY_DRINK,
     ROSARY,
-    SHOES,
     COOKING_UTENSILS,
     DISCOUNT_CARD,
     ALLOWANCE,

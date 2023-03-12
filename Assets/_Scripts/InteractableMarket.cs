@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InteractableMarket : InteractableHouse
 {
+    public static UnityAction<ItemType> AutoDeliverToHouse;
+
     protected override void Start()
     {
         PopUILocation = "UI/ExternalUI";
@@ -35,6 +39,25 @@ public class InteractableMarket : InteractableHouse
         }
     }
 
+    public override void Tick(double time, int day)
+    {
+        if (GameClock.DeltaTime)
+        {
+            GameClock clock = GameManager.Instance.GameClock;
+
+            foreach(var kvp in InventoryManager.Instance.AutoDeliveryItems.ToList())
+            {
+                if (clock.Time == kvp.Value.Time) //Make sure only the items that match delivery times are triggering
+                {
+                    InventoryManager.Instance.AutoDeliveryItems.Remove(kvp.Key);
+                    AutoDeliverToHouse?.Invoke(kvp.Key);
+                }
+            }
+        }
+
+        base.Tick(time, day);
+    }
+
     public void BoughtItem(ItemType item)
     {
         GameClock clock = GameManager.Instance.GameClock;
@@ -50,7 +73,31 @@ public class InteractableMarket : InteractableHouse
                 return;
             }
             TreasuryManager.Instance.SpendMoney(moddedPrice);
-            InventoryManager.Instance.AddToInventory(item);
+
+            var autoDeliver = InventoryManager.Instance.GetProvision(Provision.AUTO_DELIVER);
+            if(autoDeliver != null && InventoryManager.Instance.AutoDeliveryItems.Count < autoDeliver.Value)
+            {
+                if(InventoryManager.Instance.AutoDeliveryItems.Count > 0)
+                {
+                    var lastItemTime = InventoryManager.Instance.AutoDeliveryItems.Last().Value.Time;
+                    if(lastItemTime == (clock.Time + 2.5))
+                    {
+                        InventoryManager.Instance.AutoDeliveryItems.Add(item, new GameClock(lastItemTime + 0.5));
+                    }
+                    else
+                    {
+                        InventoryManager.Instance.AutoDeliveryItems.Add(item, new GameClock(clock.Time + 2.5));
+                    }
+                }
+                else
+                {
+                    InventoryManager.Instance.AutoDeliveryItems.Add(item, new GameClock(clock.Time + 2.5));
+                }
+            }
+            else
+            {
+                InventoryManager.Instance.AddToInventory(item);
+            }
             ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
             InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
         }
@@ -167,6 +214,11 @@ public class InteractableMarket : InteractableHouse
     }
 
     public override void SetDeadlineTime(double time, int day)
+    {
+
+    }
+
+    protected override void AutoDeliver(ItemType item)
     {
 
     }
