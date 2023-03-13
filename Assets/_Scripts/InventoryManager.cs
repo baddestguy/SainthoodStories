@@ -90,7 +90,7 @@ public class InventoryManager : MonoBehaviour
             if(upgradedProv != null)
             {
                 Provisions.Remove(prov);
-                Provisions.Add(upgradedProv);
+                AddProvision(upgradedProv);
             }
         }
         RefreshInventoryUI?.Invoke();

@@ -45,7 +45,7 @@ public class TreasuryManager : MonoBehaviour
         if (donation == 0) return;
 
         TemporaryMoneyToDonate = donation;
-        Money += donation;
+        Money += Mathf.Clamp(float.Parse(donation+""), 0, 100);
         DonatedMoney?.Invoke(donation);
     }
 
