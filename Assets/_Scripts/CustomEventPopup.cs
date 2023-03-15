@@ -120,7 +120,7 @@ public class CustomEventPopup : MonoBehaviour
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
-        if (player.EnergyDepleted(moddedEnergy)) return;
+        if (player.CanUseEnergy(moddedEnergy)) return;
 
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
         CameraControls?.SetZoomTarget(6f);
@@ -222,7 +222,7 @@ public class CustomEventPopup : MonoBehaviour
         }
         Player player = GameManager.Instance.Player;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
-        if (player.EnergyDepleted(moddedEnergy)) return;
+        if (player.CanUseEnergy(moddedEnergy)) return;
 
         PointerDown = true;
         ChargeFx.SetActive(true);

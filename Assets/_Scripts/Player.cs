@@ -240,13 +240,7 @@ public class Player : MonoBehaviour
             if ((!passTime || WeCanMove(iTile.CurrentGroundTile)) && !StatusEffects.Contains(PlayerStatusEffect.FROZEN))
             {
                 transform.localScale = Vector3.one;
-                DissapearInHouse = true;
-                CurrentBuilding = iTile as InteractableHouse;
-                OnMove(iTile.CurrentGroundTile);
-                OnMoveSuccessEvent?.Invoke(Energy, iTile);
-                ApplyStatusEffect();
-                if(passTime)
-                    GameManager.Instance.PassTime();
+                StartCoroutine(WaitThenDisappear(iTile, passTime));
             }
             else
             {
@@ -273,6 +267,18 @@ public class Player : MonoBehaviour
                 TileDance(newTile);
             }
         }
+    }
+
+    private IEnumerator WaitThenDisappear(InteractableObject iTile, bool passTime)
+    {
+        CurrentBuilding = iTile as InteractableHouse;
+        OnMove(iTile.CurrentGroundTile);
+        yield return new WaitForSeconds(0.3f);
+        DissapearInHouse = true;
+        OnMoveSuccessEvent?.Invoke(Energy, iTile);
+        ApplyStatusEffect();
+        if (passTime)
+            GameManager.Instance.PassTime();
     }
 
     private void ResetPlayerOnEnergyDepletedAsync()
@@ -364,6 +370,15 @@ public class Player : MonoBehaviour
             amount = ModifyEnergyConsumption(amount: amount);
         }
         Energy.Consume(amount);
+
+        if (StatusEffects.Contains(PlayerStatusEffect.VULNERABLE))
+        {
+            AddRandomAilment();
+        }
+        else if(Energy.Amount <= 0 && Random.Range(0,100) < 50)
+        {
+            StatusEffects.Add(PlayerStatusEffect.VULNERABLE);
+        }
     }
 
     public void ApplyStatusEffect()
@@ -406,9 +421,14 @@ public class Player : MonoBehaviour
         StatusEffects.RemoveAt(Random.Range(0, StatusEffects.Count));
     }
 
-    public bool EnergyDepleted(int consumption = 0)
+    public bool EnergyDepleted()
     {
-        return Energy.Depleted(consumption);
+        return Energy.Depleted();
+    }
+
+    public bool CanUseEnergy(int consumption)
+    {
+        return Energy.CanUseEnergy(consumption);
     }
 
     public void ResetEnergy()

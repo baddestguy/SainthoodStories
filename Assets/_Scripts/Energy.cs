@@ -18,9 +18,14 @@ public class Energy
         EnergyConsumed?.Invoke(this);
     }
 
-    public bool Depleted(int consumption = 0)
+    public bool Depleted()
     {
-        return (Amount-consumption) < 0;
+        return Amount == 0;
+    }
+
+    public bool CanUseEnergy(int consumption)
+    {
+        return (Amount - consumption) < 0;
     }
 
     public void OnOveride(int amount)
