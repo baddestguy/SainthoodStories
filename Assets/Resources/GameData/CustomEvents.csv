@@ -18,6 +18,7 @@ MARKET_DISCOUNT,OK,DAILY,100,100,0,NONE,0,StoryArt/TownCrier,FALSE,Event_MarketD
 MARKET_MARKUP,OK,DAILY,100,10,0,NONE,0,StoryArt/TownCrier,FALSE,Event_MarketMarkup_10
 MARKET_MARKUP,OK,DAILY,100,20,0,NONE,0,StoryArt/TownCrier,FALSE,Event_MarketMarkup_20
 MARKET_MARKUP,OK,DAILY,100,30,0,NONE,0,StoryArt/TownCrier,FALSE,Event_MarketMarkup_30
+WEEKDAY_MASS,OK,DAILY,100,0,0,NONE,0,StoryArt/TownCrier,FALSE,Event_WeekdayMass
 SUNDAY_MASS,OK,DAILY,100,0,0,NONE,0,StoryArt/TownCrier,FALSE,Event_SundayMass
 SCHOOL_CLOSED,OK,DAILY,100,0,0,NONE,0,StoryArt/TownCrier,FALSE,Event_SchoolClosed
 SICK,OK,DAILY,100,1,0,NONE,0,StoryArt/TownCrier,FALSE,Event_Sick
@@ -32,9 +33,9 @@ HIGH_MORALE,OK,DAILY,100,0,3,NONE,0,StoryArt/TownCrier,FALSE,Event_HighMorale
 LOW_MORALE,OK,DAILY,100,0,0,NONE,0,StoryArt/TownCrier,FALSE,Event_LowMorale
 ORPHANAGE_BONUS,OK,DAILY,100,0,2,NONE,0,StoryArt/TownCrier,FALSE,Event_OrphanageBonus
 HOSPITAL_BONUS,OK,DAILY,100,0,2,NONE,0,StoryArt/TownCrier,FALSE,Event_HospitalBonus
-VANDALISM,OK,DAILY,100,-2,0,NONE,0,StoryArt/TownCrier,FALSE,Event_Vandalism
-VANDALISM,OK,DAILY,100,-3,0,NONE,0,StoryArt/TownCrier,FALSE,Event_Vandalism
 VANDALISM,OK,DAILY,100,-5,0,NONE,0,StoryArt/TownCrier,FALSE,Event_Vandalism
+VANDALISM,OK,DAILY,100,-7,0,NONE,0,StoryArt/TownCrier,FALSE,Event_Vandalism
+VANDALISM,OK,DAILY,100,-10,0,NONE,0,StoryArt/TownCrier,FALSE,Event_Vandalism
 SPIRITUAL_RETREAT,YESNO,CHURCH,100,-2,2,FP,3,StoryArt/Convent_Building,FALSE,Event_SpiritualRetreat
 BIBLE_STUDY,YESNO,CHURCH,100,-1,1,FP,3,StoryArt/Convent_Building,FALSE,Event_BibleStudy
 QUIET_TIME,YESNO,CHURCH,100,-2,1,FP,3,StoryArt/Convent,FALSE,Event_QuietTime
@@ -91,3 +92,4 @@ BABY_FAILED,OK,THANKYOU,100,0,0,NONE,0,StoryArt/Hospital,TRUE,Event_BabyFailed
 ENERGY_DEPLETED,OK,STORY,100,0,0,NONE,0,StoryArt/Convent,TRUE,EnergyDepleted
 TRYHARDER_FAITH,OK,STORY,100,0,0,NONE,0,StoryArt/Convent,TRUE,TryHarder_Faith
 TRYHARDER_CHARITY,OK,STORY,100,0,0,NONE,0,StoryArt/Hospital,TRUE,TryHarder_Charity
+VANDALISM_STOPPED,OK,STORY,100,0,0,NONE,0,StoryArt/TownCrier,TRUE,VandalismStopped

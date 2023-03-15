@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class TreasuryManager : MonoBehaviour
@@ -14,6 +15,26 @@ public class TreasuryManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        EventsManager.EventExecuted += OnEventExecuted;
+    }
+
+    private void OnEventExecuted(CustomEventData e)
+    {
+        StartCoroutine(OnEventExecutedAsync(e));
+    }
+
+    private IEnumerator OnEventExecutedAsync(CustomEventData e) 
+    {
+        while (EventsManager.Instance.EventInProgress) yield return null;
+
+        if (e.Id == CustomEventType.VANDALISM)
+        {
+            DonateMoney(e.Cost);
+        }
+    }
+
     public bool CanAfford(double price)
     {
         return Money >= price;
@@ -21,8 +42,10 @@ public class TreasuryManager : MonoBehaviour
 
     public void DonateMoney(double donation)
     {
+        if (donation == 0) return;
+
         TemporaryMoneyToDonate = donation;
-        Money += donation;
+        Money += Mathf.Clamp(float.Parse(donation+""), 0, 100);
         DonatedMoney?.Invoke(donation);
     }
 
@@ -30,5 +53,10 @@ public class TreasuryManager : MonoBehaviour
     {
         Money -= amount;
         DonatedMoney?.Invoke(-amount);
+    }
+
+    private void OnDisable()
+    {
+        EventsManager.EventExecuted -= OnEventExecuted;
     }
 }

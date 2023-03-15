@@ -43,11 +43,15 @@ public class InteractableHouse : InteractableObject
 
     public BuildingState BuildingState;
     protected int BuildPoints = 0;
+    protected int MaxBuildPoints = 4;
     public GameObject RubbleGo;
     public GameObject BuildingGo;
 
     public int RelationshipPoints;
+    protected int RelationshipBonus = 0;
+    protected int FPBonus = 0;
     protected int VolunteerCountdown = 0;
+    protected float MaxVolunteerPoints = 4f;
     public int EventsTriggered;
 
     public static UnityAction<bool> OnEnterHouse;
@@ -61,6 +65,7 @@ public class InteractableHouse : InteractableObject
     public GameObject InteriorSpace;
 
     public int PrayersProgress = 0;
+    public float MaxPrayerProgress = 4f;
 
     protected virtual void Start()
     {
@@ -70,6 +75,8 @@ public class InteractableHouse : InteractableObject
         UI.UIHidden += OnUIEnabled;
         EventsManager.EventExecuted += OnEventExecuted;
         GameControlsManager.TryZoom += TryZoom;
+        InteractableMarket.AutoDeliverToHouse += AutoDeliver;
+
         LoadData();
         Initialize();
     }
@@ -172,12 +179,13 @@ public class InteractableHouse : InteractableObject
         {
             case BuildingActivityState.VOLUNTEERING:
                 VolunteerCountdown++;
-                OnActionProgress?.Invoke(VolunteerCountdown / 4f, this, 0);
-                if (VolunteerCountdown >= 4)
+                OnActionProgress?.Invoke(VolunteerCountdown / MaxVolunteerPoints, this, 0);
+                if (VolunteerCountdown >= MaxVolunteerPoints)
                 {
                     BuildRelationship(ThankYouType.VOLUNTEER);
                     Player player = GameManager.Instance.Player;
                     var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+                    moddedEnergy += ModVolunteerEnergyWithProvisions();
                     player.ConsumeEnergy(EnergyConsumption);
                     UpdateCharityPoints(VolunteerPoints, moddedEnergy);
                     VolunteerCountdown = 0;
@@ -196,6 +204,11 @@ public class InteractableHouse : InteractableObject
 
         //    if(GameClock.DeltaTime) UpdateCharityPoints(-1, 0); //Subtract charity points every clock tick
         }
+    }
+
+    protected virtual int ModVolunteerEnergyWithProvisions()
+    {
+        return 0;
     }
 
     protected virtual void TryZoom(float zoom)
@@ -360,10 +373,19 @@ public class InteractableHouse : InteractableObject
 
         UI.Instance.DisplayMessage("MEDITATED!!");
         PrayersProgress++;
-        OnActionProgress?.Invoke(PrayersProgress / 4f, this, 0);
-        if (PrayersProgress == 4)
+        OnActionProgress?.Invoke(PrayersProgress / MaxPrayerProgress, this, 0);
+        if (PrayersProgress == MaxPrayerProgress)
         {
-            UpdateFaithPoints(MeditationPoints, 0);
+            var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+            var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+
+            if(koboko != null)
+            {
+                FPBonus += koboko?.Value ?? 0;
+                player.ConsumeEnergy(koboko.Value);
+            }
+            FPBonus += rosary?.Value ?? 0;
+            UpdateFaithPoints(MeditationPoints + FPBonus, 0);
             PrayersProgress = 0;
         }
         clock.Tick();
@@ -452,10 +474,10 @@ public class InteractableHouse : InteractableObject
         if (player.EnergyDepleted() || !CanBuild()) return;
 
         BuildPoints++;
-        OnActionProgress?.Invoke(BuildPoints / 4f, this, 0);
+        OnActionProgress?.Invoke(BuildPoints / MaxBuildPoints, this, 0);
 
         UI.Instance.DisplayMessage("BUILDING!");
-        if(BuildPoints >= 4)
+        if(BuildPoints >= MaxBuildPoints)
         {
             //Play Cool Construction Vfx and Animation!
             BuildingState = BuildingState.NORMAL;
@@ -475,7 +497,19 @@ public class InteractableHouse : InteractableObject
             BuildingCompleteDialog();
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             player.ConsumeEnergy(EnergyConsumption);
-            UpdateCharityPoints(1, moddedEnergy);
+            var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
+            var moddedCPReward = tents?.Value ?? 0;
+            UpdateCharityPoints(1 + moddedCPReward, moddedEnergy);
+
+            var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
+            RelationshipBonus= buildingBlueprint?.Value ?? 0;
+
+            var chapelBlueprint = InventoryManager.Instance.GetProvision(Provision.CHAPEL_BLUEPRINT);
+            FPBonus = chapelBlueprint?.Value ?? 0;
+
+            //Reduce chance of environmental hazards
+            var sturdyMaterials = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
+
         }
         else
         {
@@ -598,23 +632,20 @@ public class InteractableHouse : InteractableObject
     {
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_SPIRIT || i.Id == CustomEventType.LOW_SPIRIT);
 
-        var provData = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-        int faithMultiplier = provData != null ? provData.Value : 1;
+        int faithBonus = 0;
         if(e != null)
         {
             if(Random.Range(0,100) < 20)
             {
-                faithMultiplier += e.Id == CustomEventType.HIGH_SPIRIT ? (int)e.Gain : -faithMultiplier;
+                faithBonus += e.Id == CustomEventType.HIGH_SPIRIT ? (int)e.Gain : 0;
             }
         }
-        CurrentFaithPoints += amount * (amount < 0 ? 1 : faithMultiplier);
         Stack<Tuple<string, int>> stack = new Stack<Tuple<string, int>>();
-        stack.Push(new Tuple<string, int>("InteractableChurch", amount * faithMultiplier));
+        stack.Push(new Tuple<string, int>("InteractableChurch", amount * faithBonus));
         if (energy != 0) stack.Push(new Tuple<string, int>("Energy", energy));
         StartCoroutine(PopUIFXIconsAsync(stack));
   
-        GameManager.Instance.MissionManager.UpdateFaithPoints(amount * faithMultiplier);
-        Debug.LogWarning("FAITH: " + CurrentFaithPoints);
+        GameManager.Instance.MissionManager.UpdateFaithPoints(amount + faithBonus);
     }
 
     public virtual void ReportScores()
@@ -684,8 +715,28 @@ public class InteractableHouse : InteractableObject
         base.OnPlayerMoved(energy, tile);
         if (tile.GetInstanceID() == GetInstanceID())
         {
-            if(GameManager.Instance.CurrentHouse != this)
+            var tools = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TOOLS);
+            if (tools != null)
+            {
+                MaxBuildPoints = tools.Value;
+            }
+
+            MaxVolunteerPoints = CalculateMaxVolunteerPoints();
+            var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+            MaxPrayerProgress = rosary != null ? 5f : 4f;
+
+            if (GameManager.Instance.CurrentHouse != this) //Entered a new building
+            {
+                var fasting = InventoryManager.Instance.GetProvision(Provision.FASTING);
+                if(fasting != null)
+                {
+                    Player player = GameManager.Instance.Player;
+                    player.ConsumeEnergy(fasting.Value);
+                    UpdateFaithPoints(fasting.Value, 0);
+                }
+
                 TriggerCustomEvent();
+            }
 
             GameManager.Instance.CurrentHouse = this;
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
@@ -725,7 +776,7 @@ public class InteractableHouse : InteractableObject
             HouseUIActive = false;
             InsideHouse = false;
             SoundManager.Instance.PlayOneShotSfx("Zoom_SFX");
-            if (BuildPoints >= 4)
+            if (BuildPoints >= MaxBuildPoints)
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
             else
                 SoundManager.Instance.PlayHouseAmbience("Construction", false, 0.3f);
@@ -750,14 +801,14 @@ public class InteractableHouse : InteractableObject
         if (UI.Instance.WeekBeginCrossFade) return;
         if (GameManager.Instance.PreviousSceneID == SceneID.SaintsShowcase_Day) return;
         if (DeadlineSet) return;
+        if (GameManager.Instance.Player.StatusEffects.Contains(PlayerStatusEffect.FATIGUED)) return;
 
-        if (Random.Range(0, 100) < 100)
+            if (Random.Range(0, 100) < 100)
         {
             switch (GetType().Name)
             {
                 case "InteractableChurch":
-                    if(!GameManager.Instance.Player.StatusEffects.Contains(PlayerStatusEffect.FATIGUED))
-                        EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.CHURCH).Id);
+                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.CHURCH).Id);
                     break;
                 case "InteractableHospital":
                     EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.HOSPITAL).Id);
@@ -809,9 +860,29 @@ public class InteractableHouse : InteractableObject
         }
     }
 
-    public void BuildRelationship(ThankYouType thanks, int amount = 1)
+    public float CalculateMaxVolunteerPoints()
     {
-        RelationshipPoints += Mathf.Clamp(amount, 0, 100);
+        if (RelationshipPoints >= 65)
+        {
+            return 1;
+        }
+        else if (RelationshipPoints >= 30)
+        {
+            return 2;
+        }
+        else if (RelationshipPoints >= 10)
+        {
+            return 3;
+        }
+        else
+        {
+            return 4;
+        }
+    }
+
+    public virtual void BuildRelationship(ThankYouType thanks, int amount = 1)
+    {
+        RelationshipPoints += Mathf.Clamp(amount + RelationshipBonus, 0, 100);
         RelationshipReward(thanks);
         SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
     }
@@ -869,7 +940,7 @@ public class InteractableHouse : InteractableObject
 
     public bool CanBuild()
     {
-        if (BuildPoints >= 4 || BuildingState == BuildingState.NORMAL) return false;
+        if (BuildPoints >= MaxBuildPoints || BuildingState == BuildingState.NORMAL) return false;
         if (!GameDataManager.Instance.ConstructionAvailability.ContainsKey(GetType().Name)) return true;
 
         ConstructionAvailabilityData myAvailability = GameDataManager.Instance.ConstructionAvailability[GetType().Name];
@@ -925,7 +996,7 @@ public class InteractableHouse : InteractableObject
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
 
             case "CONSTRUCT":
-                if(4-BuildPoints == 1)
+                if(MaxBuildPoints - BuildPoints == 1)
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = 8, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
                 else
                     return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
@@ -1046,8 +1117,14 @@ public class InteractableHouse : InteractableObject
         }
     }
 
+    protected virtual void AutoDeliver(ItemType item)
+    {
+        DeliverItem(this);
+    }
+
     public override void OnDisable()
     {
+        InteractableMarket.AutoDeliverToHouse -= AutoDeliver;
         UI.Meditate -= Meditated;
         MissionManager.EndOfDay -= EndofDay;
         MissionManager.EndOfDay -= ReportScores;

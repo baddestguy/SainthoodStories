@@ -8,6 +8,7 @@ public class TutorialManager : MonoBehaviour
     
     public int CurrentTutorialStep = 0;
     public List<string> TutorialStrings = new List<string>();
+    public bool SkipTutorial;
 
     private void Awake()
     {

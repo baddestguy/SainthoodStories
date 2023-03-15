@@ -88,6 +88,16 @@
         }
     }
 
+    public override void BuildRelationship(ThankYouType thanks, int amount = 1)
+    {
+        if(thanks == ThankYouType.ITEM)
+        {
+            var shelterMaterials = InventoryManager.Instance.GetProvision(Provision.SHELTER_RELATIONSHIP_BUILDER);
+            amount += shelterMaterials?.Value ?? 0;
+        }
+        base.BuildRelationship(thanks, amount);
+    }
+
     public override void RelationshipReward(ThankYouType thanks)
     {
         if (RelationshipPoints == 100)
@@ -130,5 +140,14 @@
         }
 
         return base.CanDoAction(actionName);
+    }
+
+    protected override void AutoDeliver(ItemType item)
+    {
+        if (item == ItemType.GROCERIES)
+        {
+            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
+            base.DeliverItem(this);
+        }
     }
 }

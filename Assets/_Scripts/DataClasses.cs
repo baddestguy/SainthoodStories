@@ -71,8 +71,11 @@ public enum ThankYouType
 public enum PlayerStatusEffect
 {
     NONE = 0,
-    FATIGUED,
-    FROZEN
+    FATIGUED, //Stat Debuff, more energy required for Actions
+    SICK, //Damage over time, lose energy every hour
+    VULNERABLE, //Setup for more effects
+    MIGRAINE, //Lose all Energy in x hours
+    FROZEN // Debilitating
 }
 
 public enum PlayerFacingDirection
@@ -135,27 +138,32 @@ public enum ItemType
 public enum Provision
 {
     UMBRELLA,
+    WINTER_CLOAK,
+    SHADES,
     EXTRA_INVENTORY,
     ENERGY_DRINK,
     ROSARY,
-    SHOES,
     COOKING_UTENSILS,
     DISCOUNT_CARD,
-    WINTER_CLOAK,
     ALLOWANCE,
-    REVIVE,
-    REVIVE_ENERGY_BONUS,
-    SLEEP_ENERGY_MULTIPLIER,
-    CONSTRUCTION_TOOLS,
-    ORPHANAGE_STORYBOOK,
-    SCHOOL_TEACHING_MATERIALS,
-    HOSPITAL_TOOLS,
+    REDUCE_SLEEP_TIME,
+    CONSTRUCTION_TOOLS
+    ,STURDY_BUILDING_MATERIALS
+    ,CONSTRUCTION_TENTS
+    ,CHAPEL_BLUEPRINT
+    ,BUILDING_BLUEPRINT,
     HOSPITAL_RELATIONSHIP_BUILDER,
     SCHOOL_RELATIONSHIP_BUILDER,
     ORPHANAGE_RELATIONSHIP_BUILDER,
     KITCHEN_RELATIONSHIP_BUILDER,
-    SHELTER_RELATIONSHIP_BUILDER,
-    MAX_COUNT
+    SHELTER_RELATIONSHIP_BUILDER
+    ,AUTO_DELIVER
+    ,SOFT_MATTRESS
+    ,FASTING
+    ,KOBOKO
+    ,INCENSE
+    ,SECURITY_GUARDS
+    ,MAX_COUNT
 }
 
 public enum BuildingState
@@ -185,6 +193,7 @@ public enum CustomEventType
     ORPHANAGE_BONUS,
     HOSPITAL_BONUS,
     VANDALISM,
+    VANDALISM_STOPPED,
     SPIRITUAL_RETREAT,
     PRAYER_REQUEST,
     TOWN_HELP,
@@ -492,3 +501,8 @@ public class KSBackers
     public string Name;
 }
 
+public enum ProvisionsPopupPhase
+{
+    ADD_UPGRADE,
+    REPLACE
+}
