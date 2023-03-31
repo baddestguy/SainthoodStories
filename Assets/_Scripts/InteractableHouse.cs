@@ -159,7 +159,7 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
-            UpdateCharityPoints(-1, 0);
+            UpdateCharityPoints(-2, 0);
             SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
         }
         if(InteriorPopUI) //TEMP
@@ -650,19 +650,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual void ReportScores()
     {
-        GameManager.Instance.MissionManager.UpdateCharityPoints(0, this);
-
-        if (CurrentCharityPoints <= 0)
-        {
-            NeglectedMultiplier++;
-        }
-        else
-        {
-            NeglectedMultiplier = 1;
-        }
-
-        CurrentCharityPoints = 0;
-        CurrentFaithPoints = 0;
+        if (DeadlineSet) UpdateCharityPoints(-1, 0);
     }
 
     public virtual bool DuringOpenHours(GameClock newClock = null)

@@ -242,20 +242,8 @@ public class InteractableHospital : InteractableHouse
 
     public override void ReportScores()
     {
-        CheckFailedDelivery();
-        GameManager.Instance.MissionManager.UpdateCharityPoints(0, this);
-        FailedDelivery = false;
-
-        if (CurrentCharityPoints <= 0 && FailedDelivery)
-        {
-            NeglectedMultiplier++;
-        }
-        else
-        {
-            NeglectedMultiplier = 1;
-        }
-
-        CurrentCharityPoints = 0;
+        if (DeliveryTimeSet) UpdateCharityPoints(-2, 0);
+        base.ReportScores();
     }
 
     public override void VolunteerWork(InteractableHouse house)
