@@ -46,7 +46,7 @@ public class InteractableKitchen : InteractableHouse
         {
             var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
             
-            if (RelationshipPoints >= 10 && RelationshipPoints < 30)
+            if (RelationshipPoints >= 15)
             {
                 player.ConsumeEnergy(EnergyConsumption + utensils?.Value ?? 0);
             }

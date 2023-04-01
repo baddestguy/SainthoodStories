@@ -19,7 +19,15 @@ public class ProvisionUIItem : MonoBehaviour
         Type = itemType;
 
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
-        mouseOverBtn.Loc_Key = prov.DescriptionKey;
+        if(Type == ProvisionUIItemType.NEW)
+        {
+            mouseOverBtn.Loc_Key = "<b>NEW</b>\n" + LocalizationManager.Instance.GetText(prov.DescriptionKey) + "\n<i>" + prov.Tooltips;
+        }
+        else
+        {
+            ProvisionData previousLevel = GameDataManager.Instance.GetProvision(prov.Id, prov.Level - 1);
+            mouseOverBtn.Loc_Key = $"<b>UPGRADE\tLV{previousLevel.Level} -> LV.{prov.Level}</b>\n{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n<i>LV.{previousLevel.Level}\n{previousLevel.Tooltips} \n<color=\"white\">--\nLV.{prov.Level}\n{prov.Tooltips}";
+        }
     }
 
     public void OnClick()
@@ -27,5 +35,7 @@ public class ProvisionUIItem : MonoBehaviour
         if(Type == ProvisionUIItemType.NEW) SendMessageUpwards("AddNewProvision", Provision, SendMessageOptions.RequireReceiver);
 
         if(Type == ProvisionUIItemType.UPGRADE) SendMessageUpwards("UpgradeProvision", Provision, SendMessageOptions.RequireReceiver);
+
+        ToolTipManager.Instance.ShowToolTip("");
     }
 }

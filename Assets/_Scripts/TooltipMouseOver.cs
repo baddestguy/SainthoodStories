@@ -10,13 +10,13 @@ public class TooltipMouseOver : MonoBehaviour
 
     public static UnityAction OnHover;
     public static bool IsHovering;
+    public TooltipStats CustomToolStats = null;
 
     public void ShowToolTip()
     {
         OnHover?.Invoke();
         IsHovering = true;
 
-        TooltipStats customToolStats = null;
         switch (HouseName) 
         {
             case "House":
@@ -46,9 +46,9 @@ public class TooltipMouseOver : MonoBehaviour
             case "RejectEvent":
                 var customEvent = FindObjectOfType<CustomEventPopup>().EventData;
                 if(customEvent.RewardType == CustomEventRewardType.FP)
-                    customToolStats = new TooltipStats() { CP = 0, Energy = 0, FP = -(int)customEvent.RejectionCost, Ticks = 0 };
+                    CustomToolStats = new TooltipStats() { CP = 0, Energy = 0, FP = -(int)customEvent.RejectionCost, Ticks = 0 };
                 else
-                    customToolStats = new TooltipStats() { CP = -(int)customEvent.RejectionCost, Energy = 0, FP = 0, Ticks = 0 };
+                    CustomToolStats = new TooltipStats() { CP = -(int)customEvent.RejectionCost, Energy = 0, FP = 0, Ticks = 0 };
                 break;
         }
 
@@ -56,9 +56,9 @@ public class TooltipMouseOver : MonoBehaviour
         {
             ToolTipManager.Instance.ShowToolTip(Loc_Key, House.GetTooltipStatsForButton(ButtonName));
         }
-        else if(customToolStats != null)
+        else if(CustomToolStats != null)
         {
-            ToolTipManager.Instance.ShowToolTip(Loc_Key, customToolStats);
+            ToolTipManager.Instance.ShowToolTip(Loc_Key, CustomToolStats);
         }
         else
         {

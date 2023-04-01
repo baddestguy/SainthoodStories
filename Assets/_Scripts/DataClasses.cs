@@ -342,6 +342,7 @@ public class ProvisionData
     public int Value;
     public string NameKey;
     public string DescriptionKey;
+    public string Tooltips;
 }
 
 [System.Serializable]
