@@ -17,6 +17,9 @@ public class ProvisionUIItem : MonoBehaviour
         ProvisionDescription.text = LocalizationManager.Instance.GetText(prov.DescriptionKey);
         ProvisionIcon.sprite = Resources.Load<Sprite>($"Icons/{prov.Id}");
         Type = itemType;
+
+        TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
+        mouseOverBtn.Loc_Key = prov.DescriptionKey;
     }
 
     public void OnClick()
