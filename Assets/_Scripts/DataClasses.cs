@@ -506,3 +506,9 @@ public enum ProvisionsPopupPhase
     ADD_UPGRADE,
     REPLACE
 }
+
+public enum ProvisionUIItemType
+{
+    NEW,
+    UPGRADE
+}
