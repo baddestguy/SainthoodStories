@@ -44,6 +44,10 @@ public class TooltipMouseOver : MonoBehaviour
                 House = FindObjectOfType<InteractableClothesBank>();
                 break;
             case "RejectEvent":
+                if (GameManager.Instance.Player.CurrentBuilding.BuildingState == BuildingState.HAZARDOUS)
+                {
+                    Loc_Key = "Building will be destroyed";
+                }
                 var customEvent = FindObjectOfType<CustomEventPopup>().EventData;
                 if(customEvent.RewardType == CustomEventRewardType.FP)
                     CustomToolStats = new TooltipStats() { CP = 0, Energy = 0, FP = -(int)customEvent.RejectionCost, Ticks = 0 };

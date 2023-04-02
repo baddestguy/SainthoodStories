@@ -65,6 +65,12 @@ public class InteractableSchool : InteractableHouse
         base.Tick(time, day);
     }
 
+    public override void TriggerHazardousMode(double time, int day)
+    {
+        TeachCountdown = 0;
+        base.TriggerHazardousMode(time, day);
+    }
+
     public void TeachSubject()
     {
         TeachCountdown++;

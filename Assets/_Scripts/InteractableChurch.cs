@@ -469,6 +469,11 @@ public class InteractableChurch : InteractableHouse
         return base.GetTooltipStatsForButton(button);
     }
 
+    public override int GetEnergyCostForCustomEvent(int eventCost)
+    {
+        return eventCost;
+    }
+
     public override float SetButtonTimer(string actionName)
     {
         switch (actionName)

@@ -170,7 +170,7 @@ public enum BuildingState
 {
     RUBBLE = 0,
     NORMAL,
-    FIRE
+    HAZARDOUS
 }
 
 public enum CustomEventType
@@ -248,6 +248,11 @@ public enum CustomEventType
     ,ENERGY_DEPLETED
     ,TRYHARDER_FAITH
     ,TRYHARDER_CHARITY
+    ,SAVE_HOSPITAL
+    ,SAVE_SCHOOL
+    ,SAVE_ORPHANAGE
+    ,SAVE_KITCHEN
+    ,SAVE_SHELTER
 }
 
 public enum EventPopupType

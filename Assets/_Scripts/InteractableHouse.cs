@@ -20,6 +20,7 @@ public class InteractableHouse : InteractableObject
 
     public MissionDifficulty MissionDifficulty;
     public static int DeadlineCounter;
+    public static int HazardCounter;
 
     protected int CurrentCharityPoints;
     protected int CurrentFaithPoints;
@@ -48,8 +49,8 @@ public class InteractableHouse : InteractableObject
     public GameObject BuildingGo;
 
     public int RelationshipPoints;
-    protected int RelationshipBonus = 0;
-    protected int FPBonus = 0;
+    protected int RelationshipBonus = 0;//TODO: SAVE THIS
+    protected int FPBonus = 0;//TODO: SAVE THIS
     protected int VolunteerCountdown = 0;
     protected float MaxVolunteerPoints = 4f;
     public int EventsTriggered;
@@ -67,6 +68,11 @@ public class InteractableHouse : InteractableObject
     public int PrayersProgress = 0;
     public float MaxPrayerProgress = 4f;
 
+    public int SturdyMaterials = 0; //TODO: SAVE THIS
+    public int CurrentSturdyMaterials = 0;
+    public int EnvironmentalHazardDestructionChance = 10;
+    public int EnvironmentalHazardDestructionCountdown = -1;
+
     protected virtual void Start()
     {
         UI.Meditate += Meditated;
@@ -76,6 +82,7 @@ public class InteractableHouse : InteractableObject
         EventsManager.EventExecuted += OnEventExecuted;
         GameControlsManager.TryZoom += TryZoom;
         InteractableMarket.AutoDeliverToHouse += AutoDeliver;
+        WeatherManager.WeatherForecastActive += WeatherAlert;
 
         LoadData();
         Initialize();
@@ -127,6 +134,7 @@ public class InteractableHouse : InteractableObject
             PopUIFX.gameObject.SetActive(false);
         }
 
+        HazardCounter = 0;
         MyMissions = GameDataManager.Instance.GetBuildingMissionData(GetType().Name);
     }
 
@@ -204,6 +212,77 @@ public class InteractableHouse : InteractableObject
 
         //    if(GameClock.DeltaTime) UpdateCharityPoints(-1, 0); //Subtract charity points every clock tick
         }
+
+        if (GetType().Name != "InteractableChurch" && GetType().Name != "InteractableMarket")
+        {
+            if (GameClock.DeltaTime && WeatherManager.Instance.IsStormy())
+            {
+                if(CurrentSturdyMaterials == 0)
+                {
+                    if (BuildingState == BuildingState.NORMAL && Random.Range(0, 100) < EnvironmentalHazardDestructionChance)
+                    {
+                        TriggerHazardousMode(time, day);
+                    }
+
+                    if(BuildingState == BuildingState.HAZARDOUS)
+                    {
+                        EnvironmentalHazardDestructionCountdown--;
+                        if (EnvironmentalHazardDestructionCountdown < 0)
+                        {
+                            DestroyBuilding();
+                        }
+                    }
+                }
+                else
+                {
+                    CurrentSturdyMaterials--;
+                }
+            }
+        }
+        if (BuildingState == BuildingState.HAZARDOUS)
+        {
+            PopMyIcon();
+        }
+    }
+
+    public void DestroyBuilding()
+    {
+        BuildingState = BuildingState.RUBBLE;
+        BuildPoints = 0;
+        RelationshipPoints = 0;
+        RelationshipBonus = 0;
+        PopIcon.gameObject.SetActive(false);
+        UI.Instance.SideNotificationPop(GetType().Name + GetHazardIcon());
+        Destroy(ExteriorPopUI.gameObject);
+        Initialize();
+        if(InsideHouse)
+            StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
+    }
+
+    public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
+    {
+        if (weather != WeatherType.NONE) return;
+        CurrentSturdyMaterials = SturdyMaterials;
+    }
+
+    public virtual void TriggerHazardousMode(double time, int day)
+    {
+        if (HazardCounter > 0) return;
+        if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
+
+        BuildingState = BuildingState.HAZARDOUS;
+        EnvironmentalHazardDestructionCountdown = 8;
+        HazardCounter++;
+
+        DeadlineTime.SetClock(-1, day);
+        DeadlineSet = false;
+        RequiredItems = 0;
+        PopIcon.gameObject.SetActive(false);
+        UI.Instance.SideNotificationPop(GetType().Name);
+        OnActionProgress?.Invoke(1f, this, 1);
+
+        if(HouseUIActive)
+            UI.Instance.SideNotificationPush(GetHazardIcon(), 0, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown/2d, GameManager.Instance.GameClock.Day), GetType().Name + GetHazardIcon());
     }
 
     protected virtual int ModVolunteerEnergyWithProvisions()
@@ -509,7 +588,8 @@ public class InteractableHouse : InteractableObject
 
             //Reduce chance of environmental hazards
             var sturdyMaterials = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
-
+            SturdyMaterials = sturdyMaterials?.Value ?? 0;
+            CurrentSturdyMaterials = SturdyMaterials;
         }
         else
         {
@@ -610,7 +690,7 @@ public class InteractableHouse : InteractableObject
     {
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_MORALE || i.Id == CustomEventType.LOW_MORALE);
         int charityMultiplier = 1;
-        if (e != null)
+        if (e != null && BuildingState != BuildingState.HAZARDOUS)
         {
             if (Random.Range(0, 100) < 20)
             {
@@ -667,17 +747,37 @@ public class InteractableHouse : InteractableObject
 
         if (HouseUIActive)
         {
-            UI.Instance.SideNotificationPush(name, items, time, GetType().Name);
+            if (BuildingState == BuildingState.HAZARDOUS)
+            {
+                UI.Instance.SideNotificationPush(GetHazardIcon(), 0, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown/2d, GameManager.Instance.GameClock.Day), GetType().Name + GetHazardIcon());
+            }
+            else
+            {
+                UI.Instance.SideNotificationPush(name, items, time, GetType().Name);
+            }
             PopIcon.gameObject.SetActive(false);
             return;
         }
         else
         {
             UI.Instance.SideNotificationPop(GetType().Name);
+            UI.Instance.SideNotificationPop(GetType().Name+GetHazardIcon());
         }
 
         PopIcon.gameObject.SetActive(true);
-        PopIcon.Init(name, items, time);
+        if (BuildingState == BuildingState.HAZARDOUS)
+        {
+            PopIcon.Init(GetHazardIcon(), items, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown / 2d));
+        }
+        else
+        {
+            PopIcon.Init(name, items, time);
+        }
+    }
+
+    public virtual string GetHazardIcon()
+    {
+        return "Hazard";
     }
 
     public IEnumerator FadeAndSwitchCamerasAsync(Action callback)
@@ -715,7 +815,14 @@ public class InteractableHouse : InteractableObject
 
             if (GameManager.Instance.CurrentHouse != this) //Entered a new building
             {
-                TriggerCustomEvent();
+                if(BuildingState == BuildingState.HAZARDOUS)
+                {
+                    TriggerHazardousEvent();
+                }
+                else
+                {
+                    TriggerCustomEvent();
+                }
             }
 
             GameManager.Instance.CurrentHouse = this;
@@ -734,7 +841,7 @@ public class InteractableHouse : InteractableObject
             SoundManager.Instance.PlayOneShotSfx("Zoom_SFX");
             if(DuringOpenHours())
             {
-                if (BuildingState == BuildingState.NORMAL)
+                if (BuildingState == BuildingState.NORMAL) //TODO: IF HAZARDOUS, PLAY HAZARDOUS AMBIENCE
                     SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
             }
             if (BuildingState == BuildingState.RUBBLE)
@@ -775,7 +882,7 @@ public class InteractableHouse : InteractableObject
         if (GameSettings.Instance.FTUE) return;
         if (EventsTriggered > 0) return;
         if (EventsManager.Instance.EventInProgress) return;
-        if (BuildingState != BuildingState.NORMAL) return;
+        if (BuildingState != BuildingState.NORMAL) return; //TODO: IF HAZARDOUS, TRIGGER HAZARDOUS EVENT
         if (!DuringOpenHours()) return;
      //   if (EventsManager.Instance.CurrentEvents.Count > 3) return;
         if (UI.Instance.WeekBeginCrossFade) return;
@@ -783,7 +890,7 @@ public class InteractableHouse : InteractableObject
         if (DeadlineSet) return;
         if (GameManager.Instance.Player.StatusEffects.Contains(PlayerStatusEffect.FATIGUED)) return;
 
-            if (Random.Range(0, 100) < 100)
+        if (Random.Range(0, 100) < 100)
         {
             switch (GetType().Name)
             {
@@ -808,6 +915,38 @@ public class InteractableHouse : InteractableObject
             }
             EventsTriggered++;
         }
+    }
+
+    public virtual void TriggerHazardousEvent()
+    {
+        switch (GetType().Name)
+        {
+            case "InteractableHospital":
+                EventsManager.Instance.AddEventToList(CustomEventType.SAVE_HOSPITAL);
+                break;
+            case "InteractableKitchen":
+                EventsManager.Instance.AddEventToList(CustomEventType.SAVE_KITCHEN);
+                break;
+            case "InteractableOrphanage":
+                EventsManager.Instance.AddEventToList(CustomEventType.SAVE_ORPHANAGE);
+                break;
+            case "InteractableShelter":
+                EventsManager.Instance.AddEventToList(CustomEventType.SAVE_SHELTER);
+                break;
+            case "InteractableSchool":
+                EventsManager.Instance.AddEventToList(CustomEventType.SAVE_SCHOOL);
+                break;
+        }
+    }
+
+    public virtual void ClearHazard()
+    {
+        if (BuildingState != BuildingState.HAZARDOUS) return;
+
+        BuildingState = BuildingState.NORMAL;
+        PopIcon.gameObject.SetActive(false);
+        UI.Instance.SideNotificationPop(GetType().Name + GetHazardIcon());
+        HazardCounter = 0;
     }
 
     public virtual void ResetActionProgress()
@@ -920,7 +1059,7 @@ public class InteractableHouse : InteractableObject
 
     public bool CanBuild()
     {
-        if (BuildPoints >= MaxBuildPoints || BuildingState == BuildingState.NORMAL) return false;
+        if (BuildPoints >= MaxBuildPoints || BuildingState != BuildingState.RUBBLE) return false;
         if (!GameDataManager.Instance.ConstructionAvailability.ContainsKey(GetType().Name)) return true;
 
         ConstructionAvailabilityData myAvailability = GameDataManager.Instance.ConstructionAvailability[GetType().Name];
@@ -959,6 +1098,11 @@ public class InteractableHouse : InteractableObject
     public virtual float SetButtonTimer(string actionName)
     {
         return 1f;
+    }
+
+    public virtual int GetEnergyCostForCustomEvent(int eventCost)
+    {
+        return 1;
     }
 
     public virtual TooltipStats GetTooltipStatsForButton(string button)
@@ -1111,6 +1255,7 @@ public class InteractableHouse : InteractableObject
         UI.UIHidden -= OnUIEnabled;
         EventsManager.EventExecuted -= OnEventExecuted;
         GameControlsManager.TryZoom -= TryZoom;
+        WeatherManager.WeatherForecastActive -= WeatherAlert;
 
         HouseUIActive = false;
         base.OnDisable();

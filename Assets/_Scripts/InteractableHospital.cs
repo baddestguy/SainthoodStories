@@ -97,6 +97,15 @@ public class InteractableHospital : InteractableHouse
         base.Tick(time, day);
     }
 
+    public override void TriggerHazardousMode(double time, int day)
+    {
+        DeliveryTimeSet = false;
+        DeliveryCountdown = 0;
+        EndDelivery?.SetClock(time - 1, day);
+
+        base.TriggerHazardousMode(time, day);
+    }
+
     public override void BuildRelationship(ThankYouType thanks, int amount = 1)
     {
         if(thanks == ThankYouType.BABY)
