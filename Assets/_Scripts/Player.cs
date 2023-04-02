@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
 
     private int SickCountdown = 3;
     private int MigraineCountdown = 6;
+    private int FastingCoutndown = 6;
 
     void Start()
     {
@@ -113,6 +114,7 @@ public class Player : MonoBehaviour
         OnMoveSuccessEvent?.Invoke(Energy, CurrentBuilding);
         GameManager.Instance.GameClock.Ping();
         ToolTipManager.Instance.ShowToolTip("");
+        GameClock.Ticked += OnTick;
     }
 
     public bool WeCanMove(MapTile tile)
@@ -445,7 +447,24 @@ public class Player : MonoBehaviour
         return Energy.Amount;
     }
 
+    private void OnTick(double time, int day)
+    {
+        if (!GameClock.DeltaTime) return;
+
+        var fasting = InventoryManager.Instance.GetProvision(Provision.FASTING);
+        if (fasting == null) return;
+
+        FastingCoutndown--;
+        if(FastingCoutndown == 0)
+        {
+            ConsumeEnergy(fasting.Value);
+            GameManager.Instance.MissionManager.UpdateFaithPoints(fasting.Value);
+            FastingCoutndown = 6;
+        }
+    }
+
     private void OnDisable()
     {
+        GameClock.Ticked -= OnTick;
     }
 }

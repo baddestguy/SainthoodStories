@@ -69,13 +69,13 @@ SHELTER_RELATIONSHIP_BUILDER,3,3,Provision_ShelterRBuilderName,Provision_Shelter
 AUTO_DELIVER,1,1,Provision_AutoDeliverName,Provision_AutoDeliverDescription,"Auto deliver <color=""green""> 1 item"
 AUTO_DELIVER,2,2,Provision_AutoDeliverName,Provision_AutoDeliverDescription,"Auto deliver <color=""green""> 2 items"
 AUTO_DELIVER,3,3,Provision_AutoDeliverName,Provision_AutoDeliverDescription,"Auto deliver <color=""green""> 3 items"
-FASTING,1,1,Provision_FastingName,Provision_FastingDescription,"On entering a building:
+FASTING,1,1,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
 FP <color=""green"">+1<color=""white""> 
 En <color=""red"">-1"
-FASTING,2,2,Provision_FastingName,Provision_FastingDescription,"On entering a building:
+FASTING,2,2,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
 FP <color=""green"">+2<color=""white""> 
 En <color=""red"">-2"
-FASTING,3,3,Provision_FastingName,Provision_FastingDescription,"On entering a building:
+FASTING,3,3,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
 FP <color=""green"">+3<color=""white""> 
 En <color=""red"">-3"
 KOBOKO,1,1,Provision_KobokoName,Provision_KobokoDescription,"On praying:

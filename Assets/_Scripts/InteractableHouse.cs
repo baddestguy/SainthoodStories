@@ -715,14 +715,6 @@ public class InteractableHouse : InteractableObject
 
             if (GameManager.Instance.CurrentHouse != this) //Entered a new building
             {
-                var fasting = InventoryManager.Instance.GetProvision(Provision.FASTING);
-                if(fasting != null)
-                {
-                    Player player = GameManager.Instance.Player;
-                    player.ConsumeEnergy(fasting.Value);
-                    UpdateFaithPoints(fasting.Value, 0);
-                }
-
                 TriggerCustomEvent();
             }
 
