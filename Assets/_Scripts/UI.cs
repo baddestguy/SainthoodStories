@@ -131,7 +131,7 @@ public class UI : MonoBehaviour
     public void InitTimeEnergy(GameClock clock, Energy energy)
     {
         EnergyDisplay.text = $"{energy.Amount}";
-        TimeDisplay.text = $"{(int)clock.Time}:{(clock.Time % 1 == 0 ? "00" : "30")}";
+        TimeDisplay.text = clock.TimeDisplay();
         DayDisplay.text = DayofTheWeek(clock.Day);
     }
 
@@ -200,7 +200,7 @@ public class UI : MonoBehaviour
             ReportDisplay.text = "";
         }
 
-        TimeDisplay.text = $"{(int)time}:{(time % 1 == 0 ? "00" : "30")}";
+        TimeDisplay.text = GameManager.Instance.GameClock.TimeDisplay();
         DayDisplay.text = DayofTheWeek(day);
     }
 

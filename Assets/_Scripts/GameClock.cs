@@ -21,12 +21,22 @@ public class GameClock
         Day = day;
     }
 
+    public string TimeDisplay()
+    {
+        if (Time - (int)Time == 0) return $"{(int)Time}:00";
+        if (Time - (int)Time == 0.25) return $"{(int)Time}:15";
+        if (Time - (int)Time == 0.5) return $"{(int)Time}:30";
+        if (Time - (int)Time == 0.75) return $"{(int)Time}:45";
+
+        return "Error";
+    }
+
     public void SetClock(double time, int day)
     {
         Time = time;
         Day = day;
 
-        if (Time > 23.5)
+        if (Time > 23.75)
         {
             Day++;
             Time = 0;
@@ -36,7 +46,7 @@ public class GameClock
     public void AddTime(double deltaTime)
     {
         Time += deltaTime;
-        if (Time > 23.5)
+        if (Time > 23.75)
         {
             Day++;
             Time = 0;
@@ -47,8 +57,8 @@ public class GameClock
     {
         for(int i = 0; i < ticks; i++)
         {
-            Time += 0.5;
-            if (Time > 23.5)
+            Time += 0.25;
+            if (Time > 23.75)
             {
                 Day++;
                 Time = Time - 24;
@@ -58,8 +68,8 @@ public class GameClock
 
     public void Tick()
     {
-        Time += 0.5;
-        if(Time > 23.5)
+        Time += 0.25;
+        if(Time > 23.75)
         {
             Day++;
             Time = 0;
@@ -96,7 +106,7 @@ public class GameClock
 
     public void Reset()
     {
-        double timeDiff = 23.5 - Time;
+        double timeDiff = 23.75 - Time;
         Time += timeDiff;
         Tick();
     }
