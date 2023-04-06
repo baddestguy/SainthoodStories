@@ -184,7 +184,7 @@ public class UI : MonoBehaviour
         {
             yield return null;
         }
-
+        EventsManager.Instance.CurrentEvents.Clear();
         GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, showUI: complete);
     }
 

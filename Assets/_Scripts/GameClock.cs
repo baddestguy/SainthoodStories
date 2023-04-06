@@ -104,6 +104,12 @@ public class GameClock
         return Day > 5;
     }
 
+    public void EndTheWeek()
+    {
+        Day = 1;
+        Time = 6;
+    }
+
     public void Reset()
     {
         double timeDiff = 23.75 - Time;

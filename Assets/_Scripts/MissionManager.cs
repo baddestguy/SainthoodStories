@@ -128,12 +128,14 @@ public class MissionManager : MonoBehaviour
         {
             EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
             yield return seq.RunSequenceAsync();
-            if(GameManager.Instance.GameClock.EndofWeek())
+            if (GameManager.Instance.GameClock.EndofWeek())
+            {
                 CurrentMission.CurrentWeek++;
+                GameManager.Instance.GameClock.EndTheWeek();
+            }
         }
 
         EventsManager.Instance.ExecuteEvents();
-        EventsManager.Instance.CurrentEvents.Clear();
         GameManager.Instance.Player.ResetEnergy();
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);
