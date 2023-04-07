@@ -21,7 +21,7 @@ public class ProvisionUIItem : MonoBehaviour
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
         if(Type == ProvisionUIItemType.NEW)
         {
-            mouseOverBtn.Loc_Key = "<b>NEW</b>\n" + LocalizationManager.Instance.GetText(prov.DescriptionKey) + "\n<i>" + prov.Tooltips;
+            mouseOverBtn.Loc_Key = "<b>NEW</b>\n" + LocalizationManager.Instance.GetText(prov.DescriptionKey) + "\n\n<i>" + prov.Tooltips;
         }
         else
         {

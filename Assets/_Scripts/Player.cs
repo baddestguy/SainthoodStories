@@ -373,7 +373,7 @@ public class Player : MonoBehaviour
         }
         Energy.Consume(amount);
 
-        if (StatusEffects.Contains(PlayerStatusEffect.VULNERABLE))
+        if (amount > 0 && StatusEffects.Contains(PlayerStatusEffect.VULNERABLE))
         {
             AddRandomAilment();
         }
