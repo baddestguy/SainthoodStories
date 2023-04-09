@@ -83,7 +83,10 @@ public class InteractableSchool : InteractableHouse
             var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
             moddedEnergy += schoolMaterials?.Value ?? 0;
             player.ConsumeEnergy(EnergyConsumption);
-            UpdateCharityPoints(TeachPoints, moddedEnergy);
+            var extraPoints = 0;
+            if (PopUI.CriticalHitCount == MaxTeachPoints) extraPoints = 1;
+
+            UpdateCharityPoints(TeachPoints+ extraPoints, moddedEnergy);
             BuildRelationship(ThankYouType.TEACH);
             TeachCountdown = 0;
         }
@@ -152,6 +155,7 @@ public class InteractableSchool : InteractableHouse
     public override void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;
+        if (time >= 19) return;
 
     //    if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;

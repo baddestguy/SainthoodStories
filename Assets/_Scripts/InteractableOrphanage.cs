@@ -76,6 +76,7 @@ public class InteractableOrphanage : InteractableHouse
     public override void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;
+        if (time >= 19) return;
 
      //   if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;

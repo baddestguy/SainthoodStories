@@ -195,7 +195,9 @@ public class InteractableHouse : InteractableObject
                     var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
                     moddedEnergy += ModVolunteerEnergyWithProvisions();
                     player.ConsumeEnergy(EnergyConsumption);
-                    UpdateCharityPoints(VolunteerPoints, moddedEnergy);
+                    var extraPoints = 0;
+                    if (PopUI.CriticalHitCount == MaxVolunteerPoints) extraPoints = 1;
+                    UpdateCharityPoints(VolunteerPoints + extraPoints, moddedEnergy);
                     VolunteerCountdown = 0;
                 }
                 break;
@@ -464,6 +466,8 @@ public class InteractableHouse : InteractableObject
                 player.ConsumeEnergy(koboko.Value);
             }
             FPBonus += rosary?.Value ?? 0;
+            FPBonus += PopUI.CriticalHitCount == MaxPrayerProgress ? 1 : 0;
+
             UpdateFaithPoints(MeditationPoints + FPBonus, 0);
             PrayersProgress = 0;
         }
@@ -577,7 +581,9 @@ public class InteractableHouse : InteractableObject
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             player.ConsumeEnergy(EnergyConsumption);
             var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
-            var moddedCPReward = tents?.Value ?? 0;
+            var extraPoints = 0;
+            if (PopUI.CriticalHitCount == MaxBuildPoints) extraPoints = 1;
+            var moddedCPReward = extraPoints + tents?.Value ?? 0;
             UpdateCharityPoints(1 + moddedCPReward, moddedEnergy);
 
             var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
@@ -888,7 +894,8 @@ public class InteractableHouse : InteractableObject
         if (UI.Instance.WeekBeginCrossFade) return;
         if (GameManager.Instance.PreviousSceneID == SceneID.SaintsShowcase_Day) return;
         if (DeadlineSet) return;
-        if (GameManager.Instance.Player.StatusEffects.Contains(PlayerStatusEffect.FATIGUED)) return;
+        if (GameManager.Instance.Player.StatusEffects.Count > 0) return;
+        if (GameManager.Instance.GameClock.Time < 6) return;
 
         if (Random.Range(0, 100) < 100)
         {

@@ -12,10 +12,10 @@ ENERGY_DRINK,5,5,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,"Dai
 ENERGY_DRINK,6,6,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,"Daily starting En <color=""green"">+6"
 SOFT_MATTRESS,1,1,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+0.5hrs<color=""white"">
 En <color=""green"">+1"
-SOFT_MATTRESS,2,2,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1hr<color=""white"">
-En <color=""green"">+2"
-SOFT_MATTRESS,3,3,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1.5hrs<color=""white"">
+SOFT_MATTRESS,2,3,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1hr<color=""white"">
 En <color=""green"">+3"
+SOFT_MATTRESS,3,4,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1.5hrs<color=""white"">
+En <color=""green"">+4"
 REDUCE_SLEEP_TIME,1,1,Provision_SleepEnergyName,Provision_SleepEnergyDescription,"Sleep Time <color=""green"">-0.5hrs"
 ROSARY,1,1,Provision_RosaryName,Provision_RosaryDescription,"On praying: FP <color=""green"">+1"
 ROSARY,2,2,Provision_RosaryName,Provision_RosaryDescription,"On praying: FP <color=""green"">+2"

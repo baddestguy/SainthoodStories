@@ -36,7 +36,7 @@ public class GameClock
         Time = time;
         Day = day;
 
-        if (Time > 23.75)
+        if (Time > 23.5)
         {
             Day++;
             Time = 0;
@@ -46,7 +46,7 @@ public class GameClock
     public void AddTime(double deltaTime)
     {
         Time += deltaTime;
-        if (Time > 23.75)
+        if (Time > 23.5)
         {
             Day++;
             Time = 0;
@@ -58,7 +58,7 @@ public class GameClock
         for(int i = 0; i < ticks; i++)
         {
             Time += 0.25;
-            if (Time > 23.75)
+            if (Time > 23.5)
             {
                 Day++;
                 Time = Time - 24;
@@ -68,8 +68,8 @@ public class GameClock
 
     public void Tick()
     {
-        Time += 0.25;
-        if(Time > 23.75)
+        Time += 0.5;
+        if(Time > 23.5)
         {
             Day++;
             Time = 0;
@@ -112,7 +112,7 @@ public class GameClock
 
     public void Reset()
     {
-        double timeDiff = 23.75 - Time;
+        double timeDiff = 23.5 - Time;
         Time += timeDiff;
         Tick();
     }

@@ -779,6 +779,8 @@ public class UI : MonoBehaviour
 
     public void EnableAllUIElements(bool enable)
     {
+        if (LeftItems == null) return;
+
         LeftItems.SetActive(enable);
         foreach (Transform g in LeftItems.transform)
         {

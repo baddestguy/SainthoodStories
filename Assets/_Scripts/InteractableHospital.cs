@@ -72,7 +72,10 @@ public class InteractableHospital : InteractableHouse
                     var moddedEnergy = GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption);
                     moddedEnergy += ModVolunteerEnergyWithProvisions();
                     GameManager.Instance.Player.ConsumeEnergy(EnergyConsumption);
-                    UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)), moddedEnergy);
+                    var extraPoints = 0;
+                    if (PopUI.CriticalHitCount == MaxDeliveryPoints) extraPoints = 1;
+
+                    UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) + extraPoints, moddedEnergy);
                     PopIcon.gameObject.SetActive(false);
                     UI.Instance.SideNotificationPop(GetType().Name);
                     DeliveryTimeSet = false;
@@ -108,7 +111,7 @@ public class InteractableHospital : InteractableHouse
 
     public override void BuildRelationship(ThankYouType thanks, int amount = 1)
     {
-        if(thanks == ThankYouType.BABY)
+        if(thanks == ThankYouType.BABY || thanks == ThankYouType.VOLUNTEER)
         {
             var hospitalMaterials = InventoryManager.Instance.GetProvision(Provision.HOSPITAL_RELATIONSHIP_BUILDER);
             amount += hospitalMaterials?.Value ?? 0;

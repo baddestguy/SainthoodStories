@@ -233,7 +233,9 @@ public class InteractableChurch : InteractableHouse
                 OnActionProgress?.Invoke(ConfessionProgress/1f, this, 0);
             //    player.ConsumeEnergy(ServiceEnergy);
                 UI.Instance.DisplayMessage("ATTENDED CONFESSION!!");
-                UpdateFaithPoints(PrayerPoints, 0);
+                FPBonus += PopUI.CriticalHitCount == 1 ? 1 : 0;
+
+                UpdateFaithPoints(PrayerPoints + FPBonus, 0);
                 InteriorPopUI.PlayVFX("Halo");
                 clock.Tick();
             }
@@ -263,6 +265,8 @@ public class InteractableChurch : InteractableHouse
                             FPBonus += 2;
                         }
                     }
+                    FPBonus += PopUI.CriticalHitCount == 2 ? 1 : 0;
+
                     UpdateFaithPoints(PrayerPoints + FPBonus, 0);
                 }
 
@@ -286,6 +290,8 @@ public class InteractableChurch : InteractableHouse
                             FPBonus += 2;
                         }
                     }
+                    FPBonus += PopUI.CriticalHitCount == 2 ? 1 : 0;
+
                     UpdateFaithPoints(PrayerPoints + FPBonus, 0);
                 }
 
@@ -308,6 +314,8 @@ public class InteractableChurch : InteractableHouse
                         FPBonus += koboko?.Value ?? 0;
                         player.ConsumeEnergy(koboko.Value);
                     }
+                    FPBonus += PopUI.CriticalHitCount == MaxPrayerProgress ? 1 : 0;
+
                     UpdateFaithPoints(PrayerPoints + FPBonus, 0);
                     PrayerProgress = 0;
                 }
@@ -332,6 +340,8 @@ public class InteractableChurch : InteractableHouse
                         FPBonus += 2;
                     }
                 }
+                FPBonus += PopUI.CriticalHitCount == 2 ? 1 : 0;
+
                 UpdateFaithPoints(PrayerPoints +FPBonus, 0);
             }
 
@@ -354,6 +364,8 @@ public class InteractableChurch : InteractableHouse
                     FPBonus += koboko?.Value ?? 0;
                     player.ConsumeEnergy(koboko.Value);
                 }
+                FPBonus += PopUI.CriticalHitCount == MaxPrayerProgress ? 1 : 0;
+
                 UpdateFaithPoints(PrayerPoints + FPBonus, 0);
                 PrayerProgress = 0;
             }
@@ -384,8 +396,10 @@ public class InteractableChurch : InteractableHouse
         if (SleepProgress == MaxSleepProgress)
         {
             var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
+            var extraPoints = 0;
+            if (PopUI.CriticalHitCount == MaxSleepProgress) extraPoints = 1;
 
-            player.ConsumeEnergy(SleepEnergy - (mattress?.Value ?? 0));
+            player.ConsumeEnergy(SleepEnergy - (mattress?.Value ?? 0) - extraPoints);
             player.RemoveRandomStatusEffect();
             PopUIFXIcons("Energy", -SleepEnergy);
             SleepProgress = 0;
@@ -423,7 +437,7 @@ public class InteractableChurch : InteractableHouse
 
     public override bool HasResetActionProgress()
     {
-        return MassProgress == 0 && LotHProgress == 0 && ConfessionProgress == 0 && PrayerProgress == 0;
+        return MassProgress == 0 && LotHProgress == 0 && ConfessionProgress == 0 && PrayerProgress == 0 && SleepProgress == 0;
     }
 
     public override TooltipStats GetTooltipStatsForButton(string button)
