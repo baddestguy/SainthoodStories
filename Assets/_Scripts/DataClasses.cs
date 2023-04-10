@@ -175,7 +175,8 @@ public enum BuildingState
 
 public enum CustomEventType
 {
-    MARKET_HOURS = 0,
+    NONE = 0,
+    MARKET_HOURS,
     RAIN,
     HEATWAVE,
     BLIZZARD,
@@ -298,7 +299,16 @@ public enum QualityLevel
     QUALITY_SETTING_ULTRA
 }
 
-
+[System.Serializable]
+public class HouseSaveData
+{
+    public string HouseName;
+    public int RelationshipPoints;
+    public int RelationshipBonus;
+    public BuildingState BuildingState;
+    public int FPBonus;
+    public int SturdyMaterials;
+}
 
 public class TooltipStats
 {
@@ -475,9 +485,12 @@ public class SaveObject
     public BuildingState ShelterBuildingState;
     public BuildingState ClothesBuildingState;
     public BuildingState KitchenBuildingState;
+    public HouseSaveData[] Houses;
     public SaintID[] Saints;
     public ItemType[] InventoryItems;
     public ProvisionData[] Provisions;
+    public ProvisionData[] GeneratedProvisions;
+    public CustomEventType DailyEvent;
 }
 
 [System.Serializable]

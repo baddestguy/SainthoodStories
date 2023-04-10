@@ -253,6 +253,7 @@ public class InteractableHouse : InteractableObject
         BuildPoints = 0;
         RelationshipPoints = 0;
         RelationshipBonus = 0;
+        SturdyMaterials = 0;
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name + GetHazardIcon());
         Destroy(ExteriorPopUI.gameObject);
@@ -1213,39 +1214,39 @@ public class InteractableHouse : InteractableObject
 
     public void LoadData()
     {
-        var data = GameManager.Instance.SaveData;
-        switch (GetType().Name)
+        var data = GameManager.Instance.SaveData.Houses?.Where(h => h.HouseName == GetType().Name).FirstOrDefault();
+        if (data == null)
         {
-            case "InteractableOrphanage":
-                RelationshipPoints = data.OrphanageRelationshipPoints;
-                BuildingState = data.OrphanageBuildingState;
-                break;
-            case "InteractableHospital":
-                RelationshipPoints = data.HospitalRelationshipPoints;
-                BuildingState = data.HospitalBuildingState;
-                break;
-            case "InteractableShelter":
-                RelationshipPoints = data.OrphanageRelationshipPoints;
-                BuildingState = data.ShelterBuildingState;
-                break;
-            case "InteractableSchool":
-                RelationshipPoints = data.SchoolRelationshipPoints;
-                BuildingState = data.SchoolBuildingState;
-                break;
-            case "InteractableClothesBank":
-                RelationshipPoints = data.ClothesRelationshipPoints;
-                BuildingState = data.ClothesBuildingState;
-                break;
-            case "InteractableKitchen":
-                BuildingState = data.KitchenBuildingState;
-                break;
-            case "InteractableChurch":
+            if (GetType().Name == "InteractableChurch" || GetType().Name == "InteractableMarket")
+            {
                 BuildingState = BuildingState.NORMAL;
-                break;
-            case "InteractableMarket":
-                BuildingState = BuildingState.NORMAL;
-                break;
+            }
+            else
+            {
+                BuildingState = BuildingState.RUBBLE;
+            }
+
+            return;
         }
+
+        BuildingState = data.BuildingState;
+        FPBonus = data.FPBonus;
+        RelationshipBonus = data.RelationshipBonus;
+        RelationshipPoints = data.RelationshipPoints;
+        SturdyMaterials = data.SturdyMaterials;
+    }
+
+    public HouseSaveData GetHouseSave()
+    {
+        return new HouseSaveData()
+        {
+            HouseName = GetType().Name,
+            BuildingState = BuildingState,
+            FPBonus = FPBonus,
+            RelationshipBonus = RelationshipBonus,
+            RelationshipPoints = RelationshipPoints,
+            SturdyMaterials = SturdyMaterials
+        };
     }
 
     protected virtual void AutoDeliver(ItemType item)

@@ -225,7 +225,7 @@ public class GameManager : MonoBehaviour
                     
                     if (aNewGame)
                     {
-                        SaveDataManager.Instance.DeleteSave();
+                        SaveDataManager.Instance.DeleteProgress();
                         TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                         GameSettings.Instance.FTUE = !TutorialManager.Instance.SkipTutorial;
                     }

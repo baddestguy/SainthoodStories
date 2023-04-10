@@ -75,22 +75,20 @@ public class SaveDataManager : MonoBehaviour
             Time = GameManager.Instance.GameClock.Time,
             TutorialSteps = TutorialManager.Instance.CurrentTutorialStep,
             Money = TreasuryManager.Instance.Money,
-            HospitalRelationshipPoints = FindObjectOfType<InteractableHospital>().RelationshipPoints,
-            SchoolRelationshipPoints = FindObjectOfType<InteractableSchool>().RelationshipPoints,
-            OrphanageRelationshipPoints = FindObjectOfType<InteractableOrphanage>().RelationshipPoints,
-            ShelterRelationshipPoints = FindObjectOfType<InteractableShelter>().RelationshipPoints,
-            ClothesRelationshipPoints = FindObjectOfType<InteractableClothesBank>().RelationshipPoints,
-            HospitalBuildingState = FindObjectOfType<InteractableHospital>().BuildingState,
-            SchoolBuildingState = FindObjectOfType<InteractableSchool>().BuildingState,
-            OrphanageBuildingState = FindObjectOfType<InteractableOrphanage>().BuildingState,
-            ShelterBuildingState = FindObjectOfType<InteractableShelter>().BuildingState,
-            ClothesBuildingState = FindObjectOfType<InteractableClothesBank>().BuildingState,
-            KitchenBuildingState = FindObjectOfType<InteractableKitchen>().BuildingState,
+            Houses = GetSavedHouses(),
             Saints = SaintsManager.Instance.UnlockedSaints.Select(s => s.Id).ToArray(),
             InventoryItems = InventoryManager.Instance.Items.ToArray(),
-            Provisions = InventoryManager.Instance.Provisions.ToArray()
+            Provisions = InventoryManager.Instance.Provisions.ToArray(),
+            GeneratedProvisions = InventoryManager.Instance.GeneratedProvisions.ToArray(),
+            DailyEvent = EventsManager.Instance.DailyEvent
         };
     }    
+
+    public HouseSaveData[] GetSavedHouses()
+    {
+        var houses = FindObjectsOfType<InteractableHouse>().Select(h => h.GetHouseSave());
+        return houses.ToArray();
+    }
 
     public SaveObject NewGameData()
     {
@@ -334,7 +332,7 @@ public class SaveDataManager : MonoBehaviour
     }
 
 
-    public void DeleteSave()
+    public void DeleteProgress()
     {
         Debug.Log("Hit");
         if (File.Exists(Application.persistentDataPath + "/Sainthood.save"))

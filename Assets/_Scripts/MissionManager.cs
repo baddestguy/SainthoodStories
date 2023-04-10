@@ -114,7 +114,7 @@ public class MissionManager : MonoBehaviour
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
             }
-            SaveDataManager.Instance.DeleteSave();
+            SaveDataManager.Instance.DeleteProgress();
             SoundManager.Instance.EndAllTracks();
             EventsManager.Instance.ExecuteEvents();
 
@@ -137,6 +137,8 @@ public class MissionManager : MonoBehaviour
 
         EventsManager.Instance.ExecuteEvents();
         GameManager.Instance.Player.ResetEnergy();
+        InventoryManager.Instance.GeneratedProvisions.Clear();
+        EventsManager.Instance.DailyEvent = CustomEventType.NONE;
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);
     }
