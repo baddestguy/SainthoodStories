@@ -474,17 +474,6 @@ public class SaveObject
     public double Time;
     public int TutorialSteps;
     public double Money;
-    public int HospitalRelationshipPoints;
-    public int SchoolRelationshipPoints;
-    public int OrphanageRelationshipPoints;
-    public int ShelterRelationshipPoints;
-    public int ClothesRelationshipPoints;
-    public BuildingState HospitalBuildingState;
-    public BuildingState SchoolBuildingState;
-    public BuildingState OrphanageBuildingState;
-    public BuildingState ShelterBuildingState;
-    public BuildingState ClothesBuildingState;
-    public BuildingState KitchenBuildingState;
     public HouseSaveData[] Houses;
     public SaintID[] Saints;
     public ItemType[] InventoryItems;

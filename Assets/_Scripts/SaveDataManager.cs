@@ -295,8 +295,8 @@ public class SaveDataManager : MonoBehaviour
                 return;
             }
 
-            SavedDataUiHandler.instance.Pupulate(saveObjects, (data) =>
             {
+                SaveObject data = saveObjects.OrderBy(x => x.Day).LastOrDefault();
 
                 if (data == null)
                 {
@@ -314,7 +314,7 @@ public class SaveDataManager : MonoBehaviour
                 //CheckOveride(ref data);
                 callback?.Invoke(data, newGame);
                 SavedDataUiHandler.instance.Close();
-            }, ingameLoading);
+            }
         }
         else
         {
