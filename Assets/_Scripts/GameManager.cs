@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
     public SceneID PreviousSceneID;
     public bool InGameSession;
 
+    public int RunAttempts;
+
     private void Awake()
     {
         Instance = this;
@@ -134,7 +136,6 @@ public class GameManager : MonoBehaviour
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
             PlayAmbience(GameClock.Time, GameClock.Day);
             TreasuryManager.Instance.Money = SaveData.Money;
-            SaintsManager.Instance.LoadSaints(SaveData.Saints);
             InventoryManager.Instance.LoadInventory(SaveData);
             LoadScene("PauseMenu", LoadSceneMode.Additive);
             SoundManager.Instance.PlayMusic("Convent_Music", "Field_Music", Random.Range(80, 100));
@@ -228,9 +229,15 @@ public class GameManager : MonoBehaviour
                         SaveDataManager.Instance.DeleteProgress();
                         TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                         GameSettings.Instance.FTUE = !TutorialManager.Instance.SkipTutorial;
+                        RunAttempts++;
                     }
-
+                    else
+                    {
+                        RunAttempts = data.RunAttempts;
+                        SaintsManager.Instance.LoadSaints(data.Saints);
+                    }
                     SaveData = data;
+                    Debug.Log("Run Attempts: " + RunAttempts);
                     CurrentMission = new Mission(SaveData.FP, SaveData.FPPool, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 

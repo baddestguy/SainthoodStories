@@ -474,6 +474,7 @@ public class SaveObject
     public double Time;
     public int TutorialSteps;
     public double Money;
+    public int RunAttempts;
     public HouseSaveData[] Houses;
     public SaintID[] Saints;
     public ItemType[] InventoryItems;

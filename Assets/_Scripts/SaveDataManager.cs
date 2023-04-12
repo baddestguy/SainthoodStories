@@ -80,7 +80,8 @@ public class SaveDataManager : MonoBehaviour
             InventoryItems = InventoryManager.Instance.Items.ToArray(),
             Provisions = InventoryManager.Instance.Provisions.ToArray(),
             GeneratedProvisions = InventoryManager.Instance.GeneratedProvisions.ToArray(),
-            DailyEvent = EventsManager.Instance.DailyEvent
+            DailyEvent = EventsManager.Instance.DailyEvent,
+            RunAttempts = GameManager.Instance.RunAttempts
         };
     }    
 
@@ -219,50 +220,7 @@ public class SaveDataManager : MonoBehaviour
             return null;
 
         }
-        
-
-        
-        
-
-    }
-
-
-    [Obsolete("use LoadGame(Action<SaveObject> callback)")]
-    public SaveObject LoadGame()
-    {
-        SaveObject save;
-        if(File.Exists(Application.persistentDataPath + "/Sainthood.save"))
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/Sainthood.save", FileMode.Open);
-
-            save = (SaveObject)bf.Deserialize(file);
-            save.Day = OverrideClock ? DayOverride : save.Day;
-            save.Time = OverrideClock ? TimeOverride : save.Time;
-            file.Close();
-            Debug.Log("LOADED!");
-        }
-        else
-        {
-            //New Game
-            save = new SaveObject()
-            {
-                FP = 15,
-                CP = 15,
-                Energy = 20,
-                Week = 1,
-                Day = 1,
-                Time = 6,
-                TutorialSteps = 0,
-                Money = 100
-            };
-            Debug.Log("NEW GAME!");
-        }
-        return save;
-    }
-
-
-    
+    } 
     
     /// <summary>
     /// Load the game data 
@@ -334,13 +292,19 @@ public class SaveDataManager : MonoBehaviour
 
     public void DeleteProgress()
     {
-        Debug.Log("Hit");
         if (File.Exists(Application.persistentDataPath + "/Sainthood.save"))
         {
-            Debug.Log("Remove");
+            Debug.Log("RESET");
+            Dictionary<Days, SaveObject> keyVal = GetSavedDataSet();
+
+            SaveObject[] saveObjects = keyVal.Values.ToArray();
+            SaveObject save = saveObjects.OrderBy(x => x.Day).LastOrDefault();
+            var newSave = NewGameData();
+            GameManager.Instance.RunAttempts = save.RunAttempts;
+            SaintsManager.Instance.LoadSaints(save.Saints);
+            
             File.Delete(Application.persistentDataPath + "/Sainthood.save");
+            Save(new SaveObject[1] { newSave });
         }
     }
 }
-
-
