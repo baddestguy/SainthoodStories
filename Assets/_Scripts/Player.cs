@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public class Player : MonoBehaviour
 {
     public static event UnityAction<Energy, MapTile> OnMoveSuccessEvent;
+    public static UnityAction StatusEffectTrigger;
     public GameMap Map;
 
     public Energy Energy;
@@ -325,6 +326,7 @@ public class Player : MonoBehaviour
         }
         else if(tile == CurrentTile)
         {
+
             if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
             {
                 FrozenCounter--;
@@ -413,6 +415,7 @@ public class Player : MonoBehaviour
             StatusEffects.Add((PlayerStatusEffect)Random.Range(1, 5));
         }
         StatusEffects.Add((PlayerStatusEffect)Random.Range(1, 5));
+        StatusEffectTrigger?.Invoke();
         Debug.LogWarning("ADDED AILMENT!");
     }
 
@@ -420,6 +423,7 @@ public class Player : MonoBehaviour
     {
         if (!StatusEffects.Any()) return;
 
+        StatusEffectTrigger?.Invoke();
         StatusEffects.RemoveAt(Random.Range(0, StatusEffects.Count));
     }
 

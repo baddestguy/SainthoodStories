@@ -98,6 +98,7 @@ public class MissionManager : MonoBehaviour
         bool missionFailed = false;
         Player.LockMovement = true;
         MissionOver = true;
+        UI.Instance.GameOver();
         UI.Instance.CrossFade(1, 1f);
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);

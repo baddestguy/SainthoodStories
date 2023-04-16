@@ -79,6 +79,7 @@ public class UI : MonoBehaviour
     public EventSystem m_EventSystem;
     private PointerEventData m_PointerEventData;
 
+    public StatusEffectDisplay StatusEffectDisplay;
 
     public bool WasUiHit
     {
@@ -202,6 +203,11 @@ public class UI : MonoBehaviour
 
         TimeDisplay.text = GameManager.Instance.GameClock.TimeDisplay();
         DayDisplay.text = DayofTheWeek(day);
+
+        //if (GameClock.DeltaTime)
+        //{
+        //    StatusEffectDisplay.gameObject.SetActive(false);
+        //}
     }
 
     public void EnableProvisionPopup(ProvisionData prov1, ProvisionData prov2)
@@ -700,6 +706,19 @@ public class UI : MonoBehaviour
         return "";
     }
 
+    public void DisplayStatusEffect()
+    {
+        if (MissionManager.MissionOver)
+        {
+            return;
+        }
+
+        StatusEffectDisplay.gameObject.SetActive(!StatusEffectDisplay.gameObject.activeSelf);
+        if (!StatusEffectDisplay.gameObject.activeSelf) return;
+
+        StatusEffectDisplay.Init();
+    }
+
     public void DisplayToolTip(string text)
     {
         if (MissionManager.MissionOver)
@@ -799,6 +818,11 @@ public class UI : MonoBehaviour
         TreasuryAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         CPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         FPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    public void GameOver()
+    {
+        StatusEffectDisplay.gameObject.SetActive(false);
     }
 
     public void QuitGame()

@@ -361,6 +361,15 @@ public class ProvisionData
 }
 
 [System.Serializable]
+public class StatusEffectData
+{
+    public PlayerStatusEffect Id;
+    public string NameKey;
+    public string DescriptionKey;
+    public string Tooltips;
+}
+
+[System.Serializable]
 public class ConstantsData
 {
     public string Id;

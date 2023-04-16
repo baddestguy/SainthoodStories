@@ -603,3 +603,13 @@ VICTOR_Bio,"Victor Maurus, a Mauretanian native, was a soldier in the Praetorian
 Refusing to betray his beliefs, Maurus was whipped, imprisoned and, after an almost miraculous escape, imprisoned again. He was then dragged into a nearby elm wood and decapitated around the year 303.
 
 His relics are now part of the Basilica of Sant'Ambrogio, built by Ambrose, fourth-century bishop of Milan.",,,,,,
+FatiguedName,Fatigued,,,,,,
+SickName,Sick,,,,,,
+VulnerableName,Vulnerable,,,,,,
+MigraineName,Migraine,,,,,,
+FrozenName,Frozen,,,,,,
+FatiguedDescription,Your body is overworked,,,,,,
+SickDescription,You have come down with a terrible virus,,,,,,
+VulnerableDescription,Try to rest or you might get hit with multiple ailments!,,,,,,
+MigraineDescription,Your head pounds with increasing intensity. It might soon reach a fever pitch,,,,,,
+FrozenDescription,You joints are locked in place! Can't...move...,,,,,,
