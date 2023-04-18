@@ -187,7 +187,7 @@ public class PopUI : MonoBehaviour
         {
             if (!myButton.Enabled)
             {
-               SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+                SoundManager.Instance.PlayOneShotSfx("Button_SFX");
                 return;
             }
         }
@@ -231,12 +231,15 @@ public class PopUI : MonoBehaviour
     public void OnPointerUp()
     {
         StopCoroutine("CriticalCircle");
-        CriticalCircleFX.SetActive(false);
-        DOTween.Kill(CriticalCircleFX.transform.GetChild(0).transform);
+        if(CriticalCircleFX != null)
+        {
+            CriticalCircleFX.SetActive(false);
+            DOTween.Kill(CriticalCircleFX.transform.GetChild(0).transform);
+        }
 
-        var critCircleScaleX = CriticalCircleFX.transform.GetChild(0).transform.localScale.x;
         if (PointerDown)
         {
+            var critCircleScaleX = CriticalCircleFX.transform.GetChild(0).transform.localScale.x;
             if (critCircleScaleX > 0.65f && critCircleScaleX < 0.8f)
             {
                 //CRITICAL HIT!

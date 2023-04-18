@@ -117,7 +117,6 @@ public class EventsManager : MonoBehaviour
             }
             randomEvent = GameDataManager.Instance.RemixEventBySeason(randomEvent);
             DailyEvent = randomEvent.Id;
-            SaveDataManager.Instance.SaveGame();
             AddEventToList(randomEvent.Id);
         }
     }

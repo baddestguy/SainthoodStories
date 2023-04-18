@@ -46,12 +46,14 @@ public class MissionManager : MonoBehaviour
         if (!GameClock.DeltaTime) return;
 
         SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+        StartCoroutine(NewDayAsync());
+    }
+
+    private IEnumerator NewDayAsync()
+    {
+        yield return new WaitForSeconds(0.5f);
         EndOfDay?.Invoke();
-            
-      //  if(GameManager.Instance.GameClock.EndofWeek())
-        {
-            EndMission();
-        }
+        Instance.EndMission();
     }
 
     public void UpdateFaithPoints(int amount)
@@ -95,10 +97,12 @@ public class MissionManager : MonoBehaviour
 
     private IEnumerator EndMissionAsync()
     {
+        ToolTipManager.Instance.ShowToolTip("");
         bool missionFailed = false;
         Player.LockMovement = true;
         MissionOver = true;
         UI.Instance.GameOver();
+        while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress) yield return null;
         UI.Instance.CrossFade(1, 1f);
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);

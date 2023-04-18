@@ -84,8 +84,6 @@ public class GameClock
         Ticked?.Invoke(Time, Day);
         if (EndofDay)
         {
-            if(!EndofWeek())
-                SaveDataManager.Instance.SaveGame();
             EndDay?.Invoke();
         }
         ExecuteEvents?.Invoke();

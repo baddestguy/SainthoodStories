@@ -26,10 +26,7 @@ public class ProvisionsPopup : MonoBehaviour
         //Display Upgrade Provisions
         foreach (var provision in InventoryManager.Instance.Provisions)
         {
-            var provisionToUpgrade = GameDataManager.Instance.GetProvision(provision.Id, provision.Level+1);
-            if (provisionToUpgrade == null) continue;
-
-            AddProvisionUIItem(provisionToUpgrade, UpgradeProvisionScroller, ProvisionUIItemType.UPGRADE);
+            AddProvisionUIItem(provision, UpgradeProvisionScroller, ProvisionUIItemType.UPGRADE);
         }
     }
 
@@ -54,7 +51,14 @@ public class ProvisionsPopup : MonoBehaviour
             SwitchPhase(ProvisionsPopupPhase.REPLACE);
             return;
         }
-        else if (PopupPhase == ProvisionsPopupPhase.REPLACE)
+
+        InventoryManager.Instance.AddProvision(prov);
+        CloseUI();
+    }
+
+    public void UpgradeProvision(ProvisionData prov)
+    {
+        if (PopupPhase == ProvisionsPopupPhase.REPLACE)
         {
             InventoryManager.Instance.RemoveProvision(prov.Id);
             InventoryManager.Instance.AddProvision(ProvisionToReplace);
@@ -63,12 +67,9 @@ public class ProvisionsPopup : MonoBehaviour
             return;
         }
 
-        InventoryManager.Instance.AddProvision(prov);
-        CloseUI();
-    }
+        ProvisionData nextLevel = GameDataManager.Instance.GetProvision(prov.Id, prov.Level + 1);
+        if (nextLevel == null) return;
 
-    public void UpgradeProvision(ProvisionData prov)
-    {
         InventoryManager.Instance.UpgradeProvision(prov);
 
         CloseUI();

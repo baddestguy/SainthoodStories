@@ -127,8 +127,10 @@ public class GameManager : MonoBehaviour
             {
                 if (Player.OnEnergyDepleted)
                     UI.Instance.ShowWeekBeginText(LocalizationManager.Instance.GetText("WeekIntroEnergyDepleted"));
-                else
+                else if (PreviousSceneID == SceneID.MainMenu)
                     UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText(CurrentMission.SeasonLevel.Replace("Level", "_Splash"))}");
+                else
+                    UI.Instance.ShowDayBeginText("");
             }
 
             Player.GameStart(CurrentMission);

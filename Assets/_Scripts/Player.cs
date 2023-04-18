@@ -280,6 +280,7 @@ public class Player : MonoBehaviour
         DissapearInHouse = true;
         OnMoveSuccessEvent?.Invoke(Energy, iTile);
         ApplyStatusEffect();
+
         if (passTime)
             GameManager.Instance.PassTime();
     }

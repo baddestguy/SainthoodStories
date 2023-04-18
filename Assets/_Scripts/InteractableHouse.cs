@@ -436,6 +436,7 @@ public class InteractableHouse : InteractableObject
     public virtual void EndofDay()
     {
         EventsTriggered = 0;
+        DeadlineCounter = 0;
     }
 
     public override void MissionBegin(Mission mission)
@@ -617,23 +618,18 @@ public class InteractableHouse : InteractableObject
         switch (GetType().Name)
         {
             case "InteractableOrphanage":
-                EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_PRECOMPLETE);
                 EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_COMPLETE);
                 break;
             case "InteractableKitchen":
-                EventsManager.Instance.AddEventToList(CustomEventType.KITCHEN_PRECOMPLETE);
                 EventsManager.Instance.AddEventToList(CustomEventType.KITCHEN_COMPLETE);
                 break;
             case "InteractableShelter":
-                EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_PRECOMPLETE);
                 EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_COMPLETE);
                 break;
             case "InteractableSchool":
-                EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_PRECOMPLETE);
                 EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_COMPLETE);
                 break;
             case "InteractableClothesBank":
-                EventsManager.Instance.AddEventToList(CustomEventType.CLOTHES_PRECOMPLETE);
                 EventsManager.Instance.AddEventToList(CustomEventType.CLOTHES_COMPLETE);
                 break;
         }
@@ -896,7 +892,7 @@ public class InteractableHouse : InteractableObject
         if (GameManager.Instance.PreviousSceneID == SceneID.SaintsShowcase_Day) return;
         if (DeadlineSet) return;
         if (GameManager.Instance.Player.StatusEffects.Count > 0) return;
-        if (GameManager.Instance.GameClock.Time < 6) return;
+        if (GameManager.Instance.GameClock.Time > 22.5 || GameManager.Instance.GameClock.Time < 6) return;
 
         if (Random.Range(0, 100) < 100)
         {

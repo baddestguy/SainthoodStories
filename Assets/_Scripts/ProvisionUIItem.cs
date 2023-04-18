@@ -25,16 +25,23 @@ public class ProvisionUIItem : MonoBehaviour
         }
         else
         {
-            ProvisionData previousLevel = GameDataManager.Instance.GetProvision(prov.Id, prov.Level - 1);
-            mouseOverBtn.Loc_Key = $"<b>UPGRADE\tLV{previousLevel.Level} -> LV.{prov.Level}</b>\n{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n<i>LV.{previousLevel.Level}\n{previousLevel.Tooltips} \n<color=\"white\">--\nLV.{prov.Level}\n{prov.Tooltips}";
+            ProvisionData nextLevel = GameDataManager.Instance.GetProvision(prov.Id, prov.Level + 1);
+            if(nextLevel == null)
+            {
+                mouseOverBtn.Loc_Key = $"<b>MAX LEVEL</b>\n{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n<i>LV.{prov.Level}\n{prov.Tooltips}";
+            }
+            else
+            {
+                mouseOverBtn.Loc_Key = $"<b>UPGRADE\tLV{prov.Level} -> LV.{nextLevel.Level}</b>\n{LocalizationManager.Instance.GetText(nextLevel.DescriptionKey)}\n\n<i>LV.{prov.Level}\n{prov.Tooltips} \n<color=\"white\">--\nLV.{nextLevel.Level}\n{nextLevel.Tooltips}";
+            }
         }
     }
 
     public void OnClick()
     {
-        if(Type == ProvisionUIItemType.NEW) SendMessageUpwards("AddNewProvision", Provision, SendMessageOptions.RequireReceiver);
+        if (Type == ProvisionUIItemType.NEW) SendMessageUpwards("AddNewProvision", Provision, SendMessageOptions.RequireReceiver);
 
-        if(Type == ProvisionUIItemType.UPGRADE) SendMessageUpwards("UpgradeProvision", Provision, SendMessageOptions.RequireReceiver);
+        if (Type == ProvisionUIItemType.UPGRADE) SendMessageUpwards("UpgradeProvision", Provision, SendMessageOptions.RequireReceiver);
 
         ToolTipManager.Instance.ShowToolTip("");
     }

@@ -1,32 +1,16 @@
 Key,English,French,BrPt,Filipino,LatAmSpanish,Italian,German
 Tutorial_0,"You knock on the convent doors at the crack of dawn, tired from your long journey, with only the shoes on your feet and the habit on your back. ",,,,,,
-Tutorial_1,"The doors swing open to reveal a large woman, dressed in an all black habit, a stern look on her face.",,,,,,
-Tutorial_1,"""You must be the new girl."" she says, sizing you up. ""You look like you haven't had a meal in a month!""",,,,,,
-Tutorial_1,"She wasn't completely wrong, as you had barely a decent meal in the 60 days you took to travel here.",,,,,,
-Tutorial_1,"""No matter, we need all the help we can get. My name is Marguerite d'Youville, and I'm the Prioress here, come on in!"" she says, as she grabs your hand, ""You're just in time for Liturgy of the Hours. Come quickly, let us begin.""",,,,,,
+Tutorial_1,"The doors swing open to reveal the Prioress. ""Come on in!"" she says, as she grabs your hand, ""You're just in time for Liturgy of the Hours. Come quickly, let us begin.""",,,,,,
 Tutorial_11,"""Performing activities is straightforward. Simply <b>Press and Hold</b> the Prayer button to partake in Spiritual Activities.""",,,,,,
-Tutorial_2,"Afterwards, the Prioress shows you to your room. ""As you may have noticed,"" she starts, standing by the doorway, ""Everything around here runs according to schedule. You must always be aware of the time, and the activities that require your attention.""",,,,,,
-Tutorial_2,"""We have Liturgy of the Hours 4 times a day, every day, and we always post the Start Time of the next session above the Convent, so please try to make it as often as you can.""",,,,,,
-Tutorial_2,"You hear a knock on the door. ""Good. Your first task for today, you better get that."" the Prioress commands, and walks off.
-
-You open the door to reveal a tall, dark, heavily built man with a scruffy beard, clad in a tank top and baggy pants, with not a hair on his shiny head.",,,,,,
-Tutorial_21,"""The name's Eltee."" he says, his voice so hoarse you wonder how he does not squint from throat pain as he speaks. 
-
-""Spoke to ya Mother Superior, she said we could borrow some help with construction of the hospital? I suppose that help would be ya.""",,,,,,
-Tutorial_21,"Before you can respond, he continues. ""Ma'am, we really don't have time to chit chat. I need to head back. Come on down to the hospital at ya earliest convenience, we need all the help we can get.""
+Tutorial_2,"Afterwards, the Prioress shows you to your room. ""We have Liturgy of the Hours 4 times a day, every day, and we always post the Start Time of the next session above the Convent, so please try to make it as often as you can.""",,,,,,
+Tutorial_21,"Eltee, The Foreman, visits the Convent. ""Ma'am, please come on down to the hospital at ya earliest convenience, we need all the help we can get.""
 
 And with that, he walks off.",,,,,,
 Tutorial_3,"Arriving at the construction site, you see a small gathering of men and women helping out with all sorts of activities.
 
 ""Glad ya made it!"" Eltee bellows from behind, ""Couple of hours and we're done here!"" ",,,,,,
 Tutorial_3,"Feeling the sweat on your brow, you begin to track the Energy you consume, then, rolling up your sleeves, you get to work.",,,,,,
-Tutorial_40,"There is a loud cheer as everyone celebrates the completion of the hospital. Eltee catches up with you.
-
-""Not bad eh?"" he says with a smile that exposes gaps in both rows of teeth. ""Ya did good ma'am. Could use more of your help on the Orphanage too, I'll keep ya posted on that."" ",,,,,,
-Tutorial_4,"As he walks off, a young woman walks up to you. ""Hi there, you must be the new novice at the convent. Thank you so much for your help!""
-
-She shakes your hand with a heart warming smile. ""My name is Anna, and I'm the head nurse here.""",,,,,,
-Tutorial_4,"Her smile quickly fades. ""I must ask another favor of you.""
+Tutorial_4,"Anna, the nurse, walks over to you. ""Thank you so much for your help! But...I must ask another favor of you.""
 
 ""We are in desperate need of medical supplies. You will save a life if you could hurry and get us supplies from the Shop before time runs out!""",,,,,,
 Tutorial_4,"Looking at the time, you notice you could make Liturgy of the Hours on your way to the Shop. 
@@ -40,26 +24,19 @@ Tutorial_5,"""Keeping this balance between your service to your community, and y
 She ushers you into the chapel to begin the Liturgy.",,,,,,
 Tutorial_6,"""You better get going,"" the Prioress says, ""The hospital needs you.""",,,,,,
 Tutorial_605,"""Welcome, welcome! Bwahaha!"" a large man standing behind the counter bellows, grinning from ear to ear. ""I'm Andre. We don't often get visitors in our little town, so I'm glad you're here. I hope you do stay longer than our last visitor! Bwahaha!""",,,,,,
-Tutorial_605,"""Please, have a look at my wares."" he continues, ""Item pickups and dropoffs take <b>No time at all!</b>""
+Tutorial_605,"""Please, have a look at my wares."" he continues, ""Item pickups and dropoffs take <b>no time at all!</b>""
 
 ""Anything here is yours...provided you have enough Coin of course! Bwahaha!""",,,,,,
-Tutorial_61,"""Feel free to use our chapel to pray anytime you want."" Anna continues.
+Tutorial_61,"""Feel free to use our chapel to <b>pray</b> anytime you want."" Anna continues.
 
-""Also, we are open 24 hours, so please come volunteer with us whenever you have a moment.""",,,,,,
+""Also, we are open 24 hours, so please come <b>volunteer</b> with us whenever you have a moment.""",,,,,,
 Tutorial_61,"As you take your leave to catch the next Liturgy of the Hours, Anna stops you for one more thing...",,,,,,
 Tutorial_7,"""You seem to have planned out your day perfectly, not bad for a start."" the Prioress says as you walk into the chapel. ",,,,,,
 Tutorial_8,"You feel tired, and decide to take a nap for a couple of hours before the next Liturgy of the Hours.",,,,,,
-Tutorial_9,"One of the novices wakes you up. ""We should get going, it's time.""",,,,,,
+Tutorial_9,"One of the novices wakes you up. ""Someone at the door to see you.""",,,,,,
 Tutorial_10,"Postman Spazz stops by as he usually does, without regard for time.
 
-""Got a message for you ma'am,"" he says, brandishing his toothbrush moustache.",,,,,,
-Tutorial_10,"He opens a small parchment and reads:
-
 ""You're needed immediately at the hospital, a woman has gone into labor and there seems to be complications with the pregnancy. Please come quickly!""",,,,,,
-Tutorial_101,"The Prioress, not one to mince words, interjects.
-
-""Your time and energy are important, and you will need both for tomorrow's tasks. Always be aware of the time, and conserve your energy as you make efforts to assist others.""",,,,,,
-Tutorial_102,"As they both leave, you consider your options: Spend more time in prayer, go to bed to regain more Energy, or head out to the hospital to assist with the delivery...",,,,,,
 Endgame,"Thank you for playing the Sainthood Demo!
 
 There are 3 saints to unlock in total, so try and get them all!",,,,,,
@@ -272,39 +249,17 @@ KitchenIntro,"""Ahoy there!"" comes a cry from the distance. Eltee once again.
 
 ""Now it's time to finish up the Kitchen! You're gonna love this one I tell ya!""",,,,,,
 ClothesBankIntro,"Eltee meets up with you. ""Hello ma'am. I hope you had a good week. We're just about ready to put the finishing touches on the Clothing Bank. Will you come help us?""",,,,,,
-OrphanageConstructionPreComplete,"The crowd cheers as the last nail is hammered in. Food and drink are passed around, and everyone makes merry.
-
-""Another one down!"" beams Eltee with his mouth full of food, ""School's next! Hope to see ya there soon ma'am!""",,,,,,
-OrphanageConstructionComplete,"A petit woman, dressed in a long black dress approaches you.
+OrphanageConstructionComplete,"The crowd cheers as the last nail is hammered in. A petit woman, dressed in a long black dress approaches you.
 
 ""Thank you so much for your help. I'm Emelia, the director here at the Orphanage.""",,,,,,
 OrphanageConstructionComplete,"She gives you a warm hug. ""I hope you visit often, the kids would love to have you around to play with them in the evenings."" she says with a cheerful smile.",,,,,,
-OrphanageConstructionComplete,"""Our Chapel remains open for use anytime, even when we are closed, so you are very much welcome to use it to pray.""",,,,,,
-OrphanageConstructionComplete,"""We usually request for Toys for the children, and will put up our Deadline when we have new requests. Thank you so much once again.""",,,,,,
-SchoolConstructionPreComplete,"Another building completed, another celebration ensues. 
-
-""This town is really shaping up, all thanks to ya!"" Eltee says.",,,,,,
-SchoolConstructionComplete,"""Ahem!"" a stern voice clears their throat from behind. A tall dark man stands there, clad in a black suit, with shoes polished so well you could almost see his reflection.",,,,,,
-SchoolConstructionComplete,"""I'm Gabriel,"" he continues, his stern expression matching his voice in perfect unison. ""I'm the headmaster at this school, pleasure to make your acquaintance.""
+SchoolConstructionComplete,"""Ahem!"" a stern voice clears their throat from behind. ""I'm Gabriel,"" he continues, his stern expression matching his voice in perfect unison. ""I'm the headmaster at this school, pleasure to make your acquaintance.""
 
 He shakes your hand with a firm grasp, and you feel as though it would be crushed if any more pressure were applied to it.",,,,,,
-SchoolConstructionComplete,"""I really appreciate the work you have done here."" he says, paying no attention to your squirming.
-
-""We could always use an extra teacher, so I hope you will lend us your talents.""",,,,,,
-SchoolConstructionComplete,"""We usually request for Books and Stationery, and we will put up our Deadline when we have new requests. Ahem! Good day.""",,,,,,
-ShelterConstructionPreComplete,"With the shelter complete, another round of food and drinks goes around to celebrate.
-
-""This town is really changing 'fore our eyes, because of ya."" Eltee says.",,,,,,
-ShelterConstructionComplete,A man walks up to you so slowly that you cannot tell if he is fully concious or sleep walking.,,,,,,
-ShelterConstructionComplete,"""Hi there."" he starts with a loud yawn, his eyes half closed. ""I'm Thomas Katz...the manager of this here Shelter.""
+ShelterConstructionComplete,"A man walks up to you so slowly that you cannot tell if he is fully concious or sleep walking. ""Hi there."" he starts with a loud yawn, his eyes half closed. ""I'm Thomas Katz...the manager of this here Shelter.""
 
 ""I'd like to extend my thanks...homelessness is a real issue around here...and this will really aid us in our battle against it.""",,,,,,
-ShelterConstructionComplete,"""We usually request for Groceries...and will post our Deadline when we urgently need them, if you don't mind. Although...having cooked meals would have been nice...too bad we do not have a Kitchen yet...""",,,,,,
-ShelterConstructionComplete,"""Do please stop by often...if you don't mind."" he continues, delivering his lines at a snail's pace. ""I could always use an extra helping hand...""
-
-He walks away, just as slowly as he came.",,,,,,
-KitchenConstructionPreComplete,"Construction materials are cleared and stoves are lit up. ""Thank God!"" Eltee shouts with excitement, ""We can stop eating cold bread and canned beans all day everyday. Food's on the house everyone!""",,,,,,
-KitchenConstructionComplete,"A man walks up to you, twirling his long moustache.
+KitchenConstructionComplete,"Construction materials are cleared and stoves are lit up. A man walks up to you, twirling his long moustache.
 
 ""Hello there, I'm Jeff the Chef! Muah!"" he says with a Chef's Kiss.",,,,,,
 KitchenConstructionComplete,"""Thank you so much for all your help. I will do my part and make the best dishes ever tasted by the lips in this town, muah!""",,,,,,
@@ -328,20 +283,22 @@ Every activity takes <b>30mins</b>
 Special Activities could take <color=""red"">more time.
 <color=""white"">Purchasing / delivering items take <color=""green"">no time.",,,,,,
 Tooltip_Calendar,"<b>Current Day</b>
-Reach your FP and CP targets by Sunday at midnight.",,,,,,
+Maintain FP and CP until Friday at midnight.",,,,,,
 Tooltip_Weather,"<b>Stormy Weather</b>
-Walking in stormy weather consumes <color=""red"">more Energy.",,,,,,
+Chance to get an <color=""red"">Ailment<color=""white""> while out in severe weather
+Buildings may be <color=""red"">destroyed<color=""white""> during severe weather. Make them your #1 priority!",,,,,,
 Tooltip_FP,"<b>Faith Points (FP)</b>
-Target: <color=""green"">75 FP<color=""white""> by Sunday.
 Increase FP with Spiritual Activities.
-(Praying, Mass, Liturgy of the Hours, etc.)",,,,,,
+(Praying, Mass, Liturgy of the Hours, etc.)
+Use to unlock Saints!",,,,,,
 Tooltip_CP,"<b>Charity Points (CP)</b>
-Target: <color=""green"">75 CP<color=""white""> by Sunday.
 Increase CP by serving the community.
 (Deliver Items, Volunteer, etc)",,,,,,
 Tooltip_Energy,"<b>Energy (EN)</b>
-Walking and other Activities <color=""red"">deplete <color=""white"">your Energy.
-Pray or Sleep to <color=""green"">increase<color=""white""> your Energy.",,,,,,
+Used to partake in Activities
+Pray or Sleep to <color=""green"">increase<color=""white""> your Energy and remove <color=""red"">Ailments
+
+Click to view Ailments",,,,,,
 Tooltip_Inventory,"<b>Inventory</b>
 Purchased Items appear here.",,,,,,
 Tooltip_Provisions,"<b>Provisions</b>
@@ -421,32 +378,32 @@ Tooltip_ExitBuilding,"*Click*
 Go outside.",,,,,,
 Tooltip_SaintsCollection,"*Click*
 Saints Collection.",,,,,,
-Tutorial_Instruction_1,"Each activity takes 0.5 hrs to complete.
+Tutorial_Instruction_1,"Release when the two circles overlap for a <b>Critical Hit.</b>
 
-Spiritual activites like Praying and Liturgy of the Hours increase your Faith Points (FP).",,,,,,
-Tutorial_Instruction_2,Moving through each tile takes 0.5 hrs and costs Energy (EN).,,,,,,
+Landing all Critical Hits for an Activity results in varying bonuses, so try to get Critical Hits as much as you can! ",,,,,,
+Tutorial_Instruction_2,Moving through each tile takes 0.5 hrs,,,,,,
 Tutorial_Instruction_3,Charitable activites like volunteering and building construction increase your Charity Points (CP).,,,,,,
 Tutorial_Instruction_4,Side Notifications pop up to always remind you of the next Liturgy of the Hours and all upcoming building deadlines.,,,,,,
-Tutorial_Instruction_5,"Purchased items appear in your Inventory above.
+Tutorial_Instruction_5,"Purchased items appear in your Inventory.
 
 Purchasing/Delivering items take no time.",,,,,,
-Tutorial_Instruction_6,Sometimes money is given to you as a gift when you deliver items and volunteer your Time and Energy.,,,,,,
+Tutorial_Instruction_6,"Sometimes, money is given to you as a gift when you deliver items and volunteer your Time and Energy.",,,,,,
 Tutorial_Instruction_7,"Your goal each week is to achieve at least 75% CP and FP by Sunday.
 Manage your Time and Energy between Charitable and Spiritual activities to attain this goal!
 Hover your Mouse over any icon to get more information.",,,,,,
 Tutorial_Instruction_8,"When a building is ready to be constructed, the Construct icon will appear above it.
 
-You will continuously lose Charity Points (CP) if you do not construct a building that is ready to be constucted.",,,,,,
-Tutorial_Instruction_Rainfall,"In addition to consuming more Energy, walking during Rainfall will increase the chance of falling Sick. If you are Sick, you will consume more Energy for every activity (including walking) until you Sleep at the Convent.
+If by midnight you have not constructed a building that is ready to be built, you will lose all Charity Points (CP)",,,,,,
+Tutorial_Instruction_Rainfall,"Moving outside during Rainfall exposes you to Ailments, which impact your Energy. Rest at the Convent to remove Ailments 
 
-Using an Umbrella eliminates the chance of falling Sick.",,,,,,
-Tutorial_Instruction_Blizzard,"Walking during a Blizzard will increase the chance of Freezing. If you are frozen, in addition to falling Sick, you will also be unable to move, and must tap on the postulant repeatedly to break out of the snow. 
+Using an Umbrella eliminates the chance of getting Ailments",,,,,,
+Tutorial_Instruction_Blizzard,"Moving outside during a Blizzard will increase the chance of Freezing. If you are frozen, you will also be unable to move, and must tap on the postulant repeatedly to break out of the snow. 
 
 Each tap will pass Time and also consume Energy. Using a Winter Cloak eliminates the chance of Freezing.",,,,,,
-Tutorial_Instruction_9,"Occasionally, severe weather conditions such as Heatwaves, Rainfall, and Blizzards will occur, and the start time is always indicated with the corresponding weather icon. Walking during a Heatwave consumes more Energy.
+Tutorial_Instruction_9,"Occasionally, severe weather conditions such as Heatwaves, Rainfall, and Blizzards will occur. The start time is always indicated with the corresponding weather icon. Moving outside during a Heatwave exposes you to Ailments which impact your Energy.
 
-We do not know when the severe weather condition ends, so plan accordingly.",,,,,,
-Tutorial_Instruction_10,Provisions may appear at midnight. Their effects typically last no more than 24 hours.,,,,,,
+Rest at the Convent to remove Ailments ",,,,,,
+Tutorial_Instruction_10,Provisions always appear first thing in the morning. Use these strategically in your spiritual and charitable quest!,,,,,,
 Tutorial_Instruction_11,"Depleting your Energy (EN) while in the field will cause you to lose all progress and restart the current day.
 
 You are safe if it depletes while in a building. Keep an eye on your Energy!",,,,,,

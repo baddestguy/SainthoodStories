@@ -752,13 +752,13 @@ public class UI : MonoBehaviour
         GameManager.Instance.InGameSession = false;
         WeekBeginCrossFade = true;
         WeekIntroBGGraphic.gameObject.SetActive(true);
-        WeekIntroBGGraphic.DOFade(1, 4f);
+        WeekIntroBGGraphic.DOFade(1, 1f);
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(1.5f);
         CurrentWeekIntroGraphic.sprite = Resources.Load<Sprite>($"Icons/{MissionManager.Instance.CurrentMission.Season}");
         CurrentWeekIntroGraphic.DOFade(1f, 3f); 
 
-        if(!string.IsNullOrEmpty(text)) yield return new WaitForSeconds(5.5f);
+        if(!string.IsNullOrEmpty(text)) yield return new WaitForSeconds(3f);
 
         WeekIntroBGGraphic.DOFade(0, 3f);
         CurrentWeekIntroGraphic.DOFade(0f, 3f);
@@ -768,6 +768,34 @@ public class UI : MonoBehaviour
         WeekIntroBGGraphic.gameObject.SetActive(false);
         WeekBeginCrossFade = false;
         GameManager.Instance.InGameSession = true;
+        SaveDataManager.Instance.SaveGame();
+    }
+
+    public void ShowDayBeginText(string text)
+    {
+        StartCoroutine(ShowDayBeginTextAsync(text));
+    }
+
+    private IEnumerator ShowDayBeginTextAsync(string text)
+    {
+        yield return StartCoroutine(CrossFadeAsync(1, 10));
+        if (GameSettings.Instance.SkipSplashScreens) yield break;
+        GameManager.Instance.InGameSession = false;
+        WeekBeginCrossFade = true;
+        WeekIntroBGGraphic.gameObject.SetActive(true);
+        WeekIntroBGGraphic.DOFade(1, 1f);
+
+        yield return new WaitForSeconds(1f);
+
+        WeekIntroBGGraphic.DOFade(0, 1f);
+        CurrentWeekIntroGraphic.DOFade(0f, 1f);
+        yield return StartCoroutine(CrossFadeAsync(0, 5f));
+        yield return new WaitForSeconds(2f);
+
+        WeekIntroBGGraphic.gameObject.SetActive(false);
+        WeekBeginCrossFade = false;
+        GameManager.Instance.InGameSession = true;
+        SaveDataManager.Instance.SaveGame();
     }
 
     public void CrossFade(float fade, float speed = 5f)
