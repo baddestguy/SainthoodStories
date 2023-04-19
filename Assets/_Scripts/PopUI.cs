@@ -294,7 +294,7 @@ public class PopUI : MonoBehaviour
             }
         }
 
-        if (MyHouse.HasResetActionProgress())
+        if (MyHouse?.HasResetActionProgress() ?? false)
         {
             CriticalHitCount = 0;
         }
