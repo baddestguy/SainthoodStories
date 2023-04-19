@@ -459,18 +459,19 @@ public class InteractableHouse : InteractableObject
         OnActionProgress?.Invoke(PrayersProgress / MaxPrayerProgress, this, 0);
         if (PrayersProgress == MaxPrayerProgress)
         {
+            var extraPoints = 0;
             var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
             var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
 
             if(koboko != null)
             {
-                FPBonus += koboko?.Value ?? 0;
+                extraPoints += koboko?.Value ?? 0;
                 player.ConsumeEnergy(koboko.Value);
             }
-            FPBonus += rosary?.Value ?? 0;
-            FPBonus += PopUI.CriticalHitCount == MaxPrayerProgress ? 1 : 0;
+            extraPoints += rosary?.Value ?? 0;
+            extraPoints += PopUI.CriticalHitCount == MaxPrayerProgress ? 1 : 0;
 
-            UpdateFaithPoints(MeditationPoints + FPBonus, 0);
+            UpdateFaithPoints(MeditationPoints + FPBonus + extraPoints, 0);
             PrayersProgress = 0;
         }
         clock.Tick();
