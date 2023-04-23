@@ -94,4 +94,9 @@ public class OverideManager : MonoBehaviour
     {
         TreasuryManager.Instance.DonateMoney(Money);
     }
+
+    public void RunDayNightCycle()
+    {
+        FindObjectOfType<DayNightCycle>().RunDayNightCycle();
+    }
 }

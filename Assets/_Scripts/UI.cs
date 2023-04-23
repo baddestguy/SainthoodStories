@@ -150,7 +150,7 @@ public class UI : MonoBehaviour
 
         int oldEnergy = int.Parse(EnergyDisplay.text);
         EnergyDisplay.DOCounter(oldEnergy, energy.Amount, 0.5f).SetDelay(2f);
-        if (energy.Amount <= 5)
+        if (energy.Amount <= 1)
         {
             EnergyDisplay.color = Color.red;
             EnergyDisplayGlow.color = Color.red;
@@ -483,7 +483,7 @@ public class UI : MonoBehaviour
 
         if (Mathf.Abs(newCp - oldCP) > 0)
         {
-            if (newCp <= 10)
+            if (newCp <= 2)
 
             {
                 CPDisplayGlow.color = Color.red;
@@ -497,11 +497,11 @@ public class UI : MonoBehaviour
         
         if (Mathf.Abs(newCp - oldCP) > 0) AdditionPoints(CPAdditionDisplay, CPDisplayGlow, CachedCpAddition, 2f);
         
-        if (newCp < 50)
+        if (newCp < 2)
         {
             CPDisplay.color = Color.red;
         }
-        else if (newCp < 75)
+        else if (newCp < 4)
         {
             CPDisplay.color = Color.yellow;
         }
@@ -534,7 +534,7 @@ public class UI : MonoBehaviour
 
         if (Mathf.Abs(fp - oldFP) > 0)
         {
-            if (fp <= 10)
+            if (fp <= 2)
             {
                 FPDisplayGlow.color = Color.red;
                 SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
@@ -547,11 +547,11 @@ public class UI : MonoBehaviour
 
         if (Mathf.Abs(fp - oldFP) > 0) AdditionPoints(FPAdditionDisplay, FPDisplayGlow, fpAmount, 2f);
 
-        if (fp < 50)
+        if (fp < 2)
         {
             FPDisplay.color = Color.red;
         }
-        else if (fp < 75)
+        else if (fp < 4)
         {
             FPDisplay.color = Color.yellow;
         }

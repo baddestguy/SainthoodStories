@@ -546,12 +546,13 @@ public class InteractableHouse : InteractableObject
 
     protected IEnumerator PopUIFXIconsAsync(Stack<Tuple<string, int>> stack)
     {
-        while(stack.Count > 0)
-        {
-            var item = stack.Pop();
-            PopUIFXIcons(item.Item1, item.Item2);
-            yield return new WaitForSeconds(0.5f);
-        }
+        yield break;
+        //while(stack.Count > 0)
+        //{
+        //    var item = stack.Pop();
+        //    PopUIFXIcons(item.Item1, item.Item2);
+        //    yield return new WaitForSeconds(0.5f);
+        //}
     }
 
     public virtual void Build()

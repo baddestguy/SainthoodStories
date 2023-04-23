@@ -111,6 +111,11 @@ public class OverideManagerEditor : Editor
                 if (canClick)
                     overideManager.OverrideWeather();
             }
+            if (GUILayout.Button("Run Day/Night Cycle"))
+            {
+                if (canClick)
+                    overideManager.RunDayNightCycle();
+            }
             EditorGUILayout.EndHorizontal();
             
             GUILayout.Space(10);
