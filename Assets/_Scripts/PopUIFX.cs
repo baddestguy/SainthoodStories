@@ -19,27 +19,28 @@ public class PopUIFX : MonoBehaviour
     public void Init(string sprite, int value, float speed = 0.5f)
     {
         Icon.sprite = Resources.Load<Sprite>($"Icons/{sprite}");
-        OperatorDisplay.text = value > 0 ? "+" : value < 0 ? "-" : "";
-        ValueDisplay.text = $"{Mathf.Abs(value)}";
+        OperatorDisplay.text = ""; // value > 0 ? "+" : value < 0 ? "-" : "";
+        ValueDisplay.text = "";// $"{Mathf.Abs(value)}";
+        Icon.color = Color.red;
 
-        if(value > 0)
-        {
-            ValueDisplay.color = Color.green;
-            OperatorDisplay.color = Color.green;
-            Icon.color = Color.green;
-        }
-        else if (value < 0)
-        {
-            ValueDisplay.color = Color.red;
-            OperatorDisplay.color = Color.red;
-            Icon.color = Color.red;
-        }
-        else
-        {
-            ValueDisplay.color = Color.white;
-            OperatorDisplay.color = Color.white;
-            Icon.color = Color.white;
-        }
+        //if(value > 0)
+        //{
+        //    ValueDisplay.color = Color.green;
+        //    OperatorDisplay.color = Color.green;
+        //    Icon.color = Color.green;
+        //}
+        //else if (value < 0)
+        //{
+        //    ValueDisplay.color = Color.red;
+        //    OperatorDisplay.color = Color.red;
+        //    Icon.color = Color.red;
+        //}
+        //else
+        //{
+        //    ValueDisplay.color = Color.white;
+        //    OperatorDisplay.color = Color.white;
+        //    Icon.color = Color.white;
+        //}
 
         StopCoroutine("FadeOut");
         StartCoroutine("FadeOut", speed);
@@ -47,7 +48,7 @@ public class PopUIFX : MonoBehaviour
     
     IEnumerator FadeOut(float speed)
     {
-        Color color = ValueDisplay.color;
+        Color color = Icon.color;
         color.a = 1;
         ValueDisplay.color = color;
         OperatorDisplay.color = color;

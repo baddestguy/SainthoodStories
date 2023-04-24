@@ -100,6 +100,8 @@ public class InteractableHouse : InteractableObject
             OriginalPopUILocation = PopUILocation;
             PopUILocation = "UI/ConstructUI";
         }
+        
+        GetInteriorPopUI();
 
         InfoPopup = Instantiate(Resources.Load<GameObject>("UI/BuildingInfoPopup")).GetComponent<BuildingInformationPopup>();
         RubbleInfoPopup = Instantiate(Resources.Load<GameObject>("UI/RubbleInfoPopup")).GetComponent<BuildingInformationPopup>();
@@ -136,6 +138,11 @@ public class InteractableHouse : InteractableObject
 
         HazardCounter = 0;
         MyMissions = GameDataManager.Instance.GetBuildingMissionData(GetType().Name);
+    }
+
+    public virtual void GetInteriorPopUI()
+    {
+
     }
 
     public void Init(int deadline, MapTile groundTile, TileData tileData, Sprite[] sprites, int sortingOrder = 0)

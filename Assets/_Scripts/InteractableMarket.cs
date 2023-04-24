@@ -14,6 +14,11 @@ public class InteractableMarket : InteractableHouse
         base.Start();
         BuildPoints = MaxBuildPoints;
     }
+    public override void GetInteriorPopUI()
+    {
+        InteriorPopUI = UI.Instance.transform.Find("MarketUI").GetComponent<PopUI>();
+        base.GetInteriorPopUI();
+    }
 
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {

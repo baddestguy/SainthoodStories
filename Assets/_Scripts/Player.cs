@@ -161,7 +161,7 @@ public class Player : MonoBehaviour
 
         PopUIFX.transform.position = transform.position + new Vector3(0, 1, 0);
         PopUIFX.gameObject.SetActive(true);
-        PopUIFX.Init("Ailment", -EnergyConsumption);
+        PopUIFX.Init("Ailment", 0);
     }
 
     private void StormyWeatherEffect()

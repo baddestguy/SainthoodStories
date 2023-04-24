@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
         {
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = CurrentMission.SeasonSceneId;
-
+            Instantiate(Resources.Load("UI/UI"));
             MissionManager.MissionOver = false;
             Player = FindObjectOfType<Player>();
             Map = FindObjectOfType<GameMap>();

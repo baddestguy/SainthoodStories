@@ -113,9 +113,6 @@ public class UI : MonoBehaviour
         Instance = this;
     }
 
-
-
-
     void Start()
     {
         Player.OnMoveSuccessEvent += OnPlayerMoved;
@@ -127,6 +124,10 @@ public class UI : MonoBehaviour
 
         SideNotificationResource = Resources.Load("UI/SideNotification") as GameObject;
         BuildingAlertResource = Resources.Load("UI/BuildingIcon") as GameObject;
+        if (SceneManager.GetActiveScene().name.Contains("Level"))
+        {
+            GetComponent<Canvas>().worldCamera = GameObject.Find("2DUICam").GetComponent<Camera>();
+        }
     }
 
     public void InitTimeEnergy(GameClock clock, Energy energy)

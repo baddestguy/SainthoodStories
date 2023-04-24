@@ -215,6 +215,7 @@ public class PopUI : MonoBehaviour
         CriticalCircleFX.transform.SetParent(ChargeFx.transform, true);
         CriticalCircleFX.transform.localScale = new Vector3(0.005f, 0.005f, 0.005f);
         CriticalCircleFX.transform.localPosition = Vector3.zero;
+        CriticalCircleFX.transform.localEulerAngles = Vector3.zero;
 
         var critCircle = CriticalCircleFX.transform.GetChild(0);
         critCircle.localScale = new Vector3(5, 5, 5);
