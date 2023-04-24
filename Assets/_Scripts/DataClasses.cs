@@ -276,6 +276,11 @@ public enum EventGroup
     KITCHEN,
     SHELTER,
     CLOTHES
+    ,SAVE_HOSPITAL
+    ,SAVE_SCHOOL
+    ,SAVE_ORPHANAGE
+    ,SAVE_KITCHEN
+    ,SAVE_SHELTER
 }
 
 public enum Language
@@ -397,6 +402,7 @@ public class CustomEventData
 public class StoryEventData
 {
     public string Id;
+    public EventGroup EventGroup = EventGroup.STORY;
     public int Week;
     public int Day;
     public double Time;

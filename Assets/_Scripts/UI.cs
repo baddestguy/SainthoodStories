@@ -394,6 +394,12 @@ public class UI : MonoBehaviour
             case EventGroup.ORPHANAGE:
             case EventGroup.SCHOOL:
             case EventGroup.CLOTHES:
+            case EventGroup.SAVE_HOSPITAL:
+            case EventGroup.SAVE_KITCHEN:
+            case EventGroup.SAVE_ORPHANAGE:
+            case EventGroup.SAVE_SCHOOL:
+            case EventGroup.SAVE_SHELTER:
+
                 CenterItems.SetActive(true);
                 RightItems.SetActive(true);
                 foreach (Transform t in RightItems.GetComponentsInChildren<Transform>(true))

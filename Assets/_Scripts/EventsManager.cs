@@ -146,7 +146,7 @@ public class EventsManager : MonoBehaviour
         {
             EventInProgress = true;
             while (UI.Instance.WeekBeginCrossFade) yield return null;
-            UI.Instance.EventAlert(new CustomEventData() { LocalizationKey = e.Id, EventPopupType = EventPopupType.OK, ImagePath = e.ImagePath, IsOrderedSequence = e.IsOrderedSequence });
+            UI.Instance.EventAlert(new CustomEventData() { LocalizationKey = e.Id, EventGroup = e.EventGroup, EventPopupType = EventPopupType.OK, ImagePath = e.ImagePath, IsOrderedSequence = e.IsOrderedSequence });
             while (EventInProgress)
             {
                 yield return null;

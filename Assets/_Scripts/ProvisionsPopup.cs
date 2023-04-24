@@ -52,6 +52,9 @@ public class ProvisionsPopup : MonoBehaviour
             return;
         }
 
+        SoundManager.Instance.PlayOneShotSfx("Provisions_Collect", timeToDie: 5f);
+        SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
+
         InventoryManager.Instance.AddProvision(prov);
         CloseUI();
     }
@@ -70,6 +73,8 @@ public class ProvisionsPopup : MonoBehaviour
         ProvisionData nextLevel = GameDataManager.Instance.GetProvision(prov.Id, prov.Level + 1);
         if (nextLevel == null) return;
 
+        SoundManager.Instance.PlayOneShotSfx("Provisions_Collect", timeToDie: 5f);
+        SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
         InventoryManager.Instance.UpgradeProvision(prov);
 
         CloseUI();

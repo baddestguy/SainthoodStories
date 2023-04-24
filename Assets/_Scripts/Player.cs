@@ -468,6 +468,11 @@ public class Player : MonoBehaviour
             GameManager.Instance.MissionManager.UpdateFaithPoints(fasting.Value);
             FastingCoutndown = 6;
         }
+
+        if (StatusEffects.Any())
+        {
+            SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
+        }
     }
 
     private void OnDisable()
