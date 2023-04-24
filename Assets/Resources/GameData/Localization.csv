@@ -3,7 +3,7 @@ Tutorial_0,"You knock on the convent doors at the crack of dawn, tired from your
 Tutorial_1,"The doors swing open to reveal the Prioress. ""Come on in!"" she says, as she grabs your hand, ""You're just in time for Liturgy of the Hours. Come quickly, let us begin.""",,,,,,
 Tutorial_11,"""Performing activities is straightforward. Simply <b>Press and Hold</b> the Prayer button to partake in Spiritual Activities.""",,,,,,
 Tutorial_2,"Afterwards, the Prioress shows you to your room. ""We have Liturgy of the Hours 4 times a day, every day, and we always post the Start Time of the next session above the Convent, so please try to make it as often as you can.""",,,,,,
-Tutorial_21,"Eltee, The Foreman, visits the Convent. ""Ma'am, please come on down to the hospital at ya earliest convenience, we need all the help we can get.""
+Tutorial_21,"Eltee, the Foreman, visits the Convent. ""Ma'am, please come on down to the hospital at ya earliest convenience, we need all the help we can get.""
 
 And with that, he walks off.",,,,,,
 Tutorial_3,"Arriving at the construction site, you see a small gathering of men and women helping out with all sorts of activities.
@@ -296,7 +296,7 @@ Increase CP by serving the community.
 (Deliver Items, Volunteer, etc)",,,,,,
 Tooltip_Energy,"<b>Energy (EN)</b>
 Used to partake in Activities
-Pray or Sleep to <color=""green"">increase<color=""white""> your Energy and remove <color=""red"">Ailments
+Pray or Sleep to <color=""green"">increase<color=""white""> your Energy and remove <color=""red"">Ailments<color=""white"">
 
 Click to view Ailments",,,,,,
 Tooltip_Inventory,"<b>Inventory</b>
@@ -378,9 +378,9 @@ Tooltip_ExitBuilding,"*Click*
 Go outside.",,,,,,
 Tooltip_SaintsCollection,"*Click*
 Saints Collection.",,,,,,
-Tutorial_Instruction_1,"Release when the two circles overlap for a <b>Critical Hit.</b>
+Tutorial_Instruction_1,"Release the button when the two circles overlap for a <b>Critical Hit.</b>
 
-Landing all Critical Hits for an Activity results in varying bonuses, so try to get Critical Hits as much as you can! ",,,,,,
+Landing all Critical Hits for an Activity results in various bonuses, so try to get Critical Hits as much as you can! ",,,,,,
 Tutorial_Instruction_2,Moving through each tile takes 0.5 hrs,,,,,,
 Tutorial_Instruction_3,Charitable activites like volunteering and building construction increase your Charity Points (CP).,,,,,,
 Tutorial_Instruction_4,Side Notifications pop up to always remind you of the next Liturgy of the Hours and all upcoming building deadlines.,,,,,,

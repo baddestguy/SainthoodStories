@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour
             TreasuryManager.Instance.Money = SaveData.Money;
             InventoryManager.Instance.LoadInventory(SaveData);
             LoadScene("PauseMenu", LoadSceneMode.Additive);
-            SoundManager.Instance.PlayMusic("Convent_Music", "Field_Music", Random.Range(80, 100));
+            SoundManager.Instance.SongSelection();
             if(GameClock.Time == 6)
             {
                 GameClock.StartNewDay?.Invoke();

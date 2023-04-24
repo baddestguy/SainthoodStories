@@ -39,6 +39,23 @@ public class SoundManager : MonoBehaviour
         
     }
 
+    public void SongSelection()
+    {
+        var season = MissionManager.Instance.CurrentMission.Season;
+        switch (season)
+        {
+            case Season.SPRING:
+            case Season.SUMMER:
+                PlayMusic("Convent_Music", "Field_Music", Random.Range(80, 100));
+                break;
+
+            case Season.FALL:
+            case Season.WINTER:
+                PlayMusic("Field_Music_2", loopDelay: Random.Range(320, 360));
+                break;
+        }
+    }
+
     public void PlayMusic(string songName = "", string songName2 = "", float loopDelay = 90)
     {
         if (string.IsNullOrEmpty(songName))
@@ -79,6 +96,8 @@ public class SoundManager : MonoBehaviour
 
     public void SwitchMusicChannel(bool inConvent)
     {
+        if (MusicAudioSourceChannel2 == null) return;
+
         if (inConvent)
         {
             FadeMusic(1f, MusicAudioSourceChannel1);
