@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -42,6 +44,7 @@ public class GameManager : MonoBehaviour
     public bool InGameSession;
 
     public int RunAttempts;
+    public int[] MaptileIndexes = new int[6] {0, 3, 9, 19, 15, 21};
 
     private void Awake()
     {
@@ -131,6 +134,11 @@ public class GameManager : MonoBehaviour
                     UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText(CurrentMission.SeasonLevel.Replace("Level", "_Splash"))}");
                 else
                     UI.Instance.ShowDayBeginText("");
+            }
+
+            if(SaveData.Maptiles == null)
+            {
+                ScrambleMapTiles();
             }
 
             Player.GameStart(CurrentMission);
@@ -250,7 +258,24 @@ public class GameManager : MonoBehaviour
         MissionDifficulty = missionDifficulty;
     }
 
+    public MapTile GetNextRandomMapTile(string house)
+    {
+        switch (house)
+        {
+            case "InteractableHospital": return Player.Map.MapTiles[MaptileIndexes[0]];
+            case "InteractableOrphanage": return Player.Map.MapTiles[MaptileIndexes[1]];
+            case "InteractableSchool": return Player.Map.MapTiles[MaptileIndexes[2]];
+            case "InteractableShelter": return Player.Map.MapTiles[MaptileIndexes[3]];
+            case "InteractableKitchen": return Player.Map.MapTiles[MaptileIndexes[4]];
+        }
 
+        return null;
+    }
+
+    public void ScrambleMapTiles()
+    {
+        MaptileIndexes.Shuffle();
+    }
 
     public void ReloadLevel()
     {

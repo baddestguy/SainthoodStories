@@ -81,7 +81,8 @@ public class SaveDataManager : MonoBehaviour
             Provisions = InventoryManager.Instance.Provisions.ToArray(),
             GeneratedProvisions = InventoryManager.Instance.GeneratedProvisions.ToArray(),
             DailyEvent = EventsManager.Instance.DailyEvent,
-            RunAttempts = GameManager.Instance.RunAttempts
+            RunAttempts = GameManager.Instance.RunAttempts,
+            Maptiles = GameManager.Instance.MaptileIndexes
         };
     }    
 

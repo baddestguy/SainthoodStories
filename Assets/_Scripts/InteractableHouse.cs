@@ -100,7 +100,7 @@ public class InteractableHouse : InteractableObject
             OriginalPopUILocation = PopUILocation;
             PopUILocation = "UI/ConstructUI";
         }
-        
+
         GetInteriorPopUI();
 
         InfoPopup = Instantiate(Resources.Load<GameObject>("UI/BuildingInfoPopup")).GetComponent<BuildingInformationPopup>();
@@ -138,6 +138,14 @@ public class InteractableHouse : InteractableObject
 
         HazardCounter = 0;
         MyMissions = GameDataManager.Instance.GetBuildingMissionData(GetType().Name);
+
+        var tile = GameManager.Instance.GetNextRandomMapTile(GetType().Name);
+        if (tile != null)
+        {
+            CurrentGroundTile = tile;
+            var newPos = CurrentGroundTile.transform.position;
+            transform.position = new Vector3(newPos.x, newPos.y + 1.2f, newPos.z);
+        }
     }
 
     public virtual void GetInteriorPopUI()
@@ -218,8 +226,6 @@ public class InteractableHouse : InteractableObject
             PopIcon.Init("Rubble", 0, new GameClock(-1));
             RubbleGo.SetActive(true);
             GetComponent<BoxCollider>().enabled = true;
-
-        //    if(GameClock.DeltaTime) UpdateCharityPoints(-1, 0); //Subtract charity points every clock tick
         }
 
         if (GetType().Name != "InteractableChurch" && GetType().Name != "InteractableMarket")
@@ -361,7 +367,7 @@ public class InteractableHouse : InteractableObject
     public virtual void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;
-        if (time >= 19) return;
+        if (time >= 19 || time < 6) return;
         if ((DeadlineTime.Time != -1)) return;
 
         switch (MissionDifficulty)
