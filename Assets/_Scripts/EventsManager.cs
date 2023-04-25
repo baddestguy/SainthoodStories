@@ -91,7 +91,17 @@ public class EventsManager : MonoBehaviour
         var storyEvent = GameDataManager.Instance.StoryEventData.Select(y => y.Value).Where(s => s.Week == CurrentWeek && s.Day == currentClock.Day && s.Time == currentClock.Time).OrderBy(x => x.OrderBy);
         if (storyEvent == null) return;
 
-        StoryEvents.AddRange(storyEvent);
+        var filteredEvents = storyEvent.Where(e => 
+        { 
+            if(e.Id.Contains("Tutorial") && !GameSettings.Instance.FTUE)
+            {
+                return false;
+            }
+
+            return true;
+        });
+
+        StoryEvents.AddRange(filteredEvents);
     }
 
     public void StartNewDay()
@@ -100,7 +110,7 @@ public class EventsManager : MonoBehaviour
         GameClock c = GameManager.Instance.GameClock;
 
         if (c.EndofWeek()) return;
-        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
+        if (GameSettings.Instance.FTUE && GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
 
         if (c.Day % 5 == 0)
         {

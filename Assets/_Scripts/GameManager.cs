@@ -214,14 +214,6 @@ public class GameManager : MonoBehaviour
 
         switch (missionDifficulty)
         {
-            //case MissionDifficulty.EASY: 
-            //    CurrentMission = new Mission(75, 75, 30, 5.5, 1); 
-            //    SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
-            //    break;
-            //case MissionDifficulty.NORMAL: 
-            //    CurrentMission = new Mission(50, 50, 20, 5.5, 7); 
-            //    SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
-            //    break;
             case MissionDifficulty.HARD:
                 
                 SaveDataManager.Instance.LoadGame((data, aNewGame) => {
@@ -243,7 +235,14 @@ public class GameManager : MonoBehaviour
                     CurrentMission = new Mission(SaveData.FP, SaveData.FPPool, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 
-                    StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
+                    if (GameSettings.Instance.FTUE)
+                    {
+                        StartCoroutine(WaitAndLoadScene("TutorialLevel"));
+                    }
+                    else
+                    {
+                        StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
+                    }
                 }, newGame, false, !activeScene.name.Contains("MainMenu"), showUI: showUI);
                 break;
         }

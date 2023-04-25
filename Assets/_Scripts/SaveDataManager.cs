@@ -102,7 +102,7 @@ public class SaveDataManager : MonoBehaviour
                 CP = 3,
                 Energy = 3,
                 Week = 1,
-                Day = 2,
+                Day = 1,
                 Time = 6,
                 TutorialSteps = 40,
                 Money = 10

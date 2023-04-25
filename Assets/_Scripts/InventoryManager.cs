@@ -139,7 +139,7 @@ public class InventoryManager : MonoBehaviour
         GameClock c = GameManager.Instance.GameClock;
 
         if (c.EndofWeek()) return;
-        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
+        if (GameSettings.Instance.FTUE && GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
 
         StartCoroutine(WaitAndEnableProvisionPopupAsync());
     }
