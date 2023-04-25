@@ -21,6 +21,16 @@ public class GameClock
         Day = day;
     }
 
+    public string TimeDisplay()
+    {
+        if (Time - (int)Time == 0) return $"{(int)Time}:00";
+        if (Time - (int)Time == 0.25) return $"{(int)Time}:15";
+        if (Time - (int)Time == 0.5) return $"{(int)Time}:30";
+        if (Time - (int)Time == 0.75) return $"{(int)Time}:45";
+
+        return "Error";
+    }
+
     public void SetClock(double time, int day)
     {
         Time = time;
@@ -74,8 +84,6 @@ public class GameClock
         Ticked?.Invoke(Time, Day);
         if (EndofDay)
         {
-            if(!EndofWeek())
-                SaveDataManager.Instance.SaveGame();
             EndDay?.Invoke();
         }
         ExecuteEvents?.Invoke();
@@ -92,6 +100,12 @@ public class GameClock
     public bool EndofWeek()
     {
         return Day > 5;
+    }
+
+    public void EndTheWeek()
+    {
+        Day = 1;
+        Time = 6;
     }
 
     public void Reset()

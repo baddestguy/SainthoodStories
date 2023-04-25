@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
     public SceneID PreviousSceneID;
     public bool InGameSession;
 
+    public int RunAttempts;
+
     private void Awake()
     {
         Instance = this;
@@ -102,7 +104,7 @@ public class GameManager : MonoBehaviour
         {
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = CurrentMission.SeasonSceneId;
-
+            Instantiate(Resources.Load("UI/UI"));
             MissionManager.MissionOver = false;
             Player = FindObjectOfType<Player>();
             Map = FindObjectOfType<GameMap>();
@@ -125,8 +127,10 @@ public class GameManager : MonoBehaviour
             {
                 if (Player.OnEnergyDepleted)
                     UI.Instance.ShowWeekBeginText(LocalizationManager.Instance.GetText("WeekIntroEnergyDepleted"));
-                else
+                else if (PreviousSceneID == SceneID.MainMenu)
                     UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText(CurrentMission.SeasonLevel.Replace("Level", "_Splash"))}");
+                else
+                    UI.Instance.ShowDayBeginText("");
             }
 
             Player.GameStart(CurrentMission);
@@ -134,10 +138,9 @@ public class GameManager : MonoBehaviour
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
             PlayAmbience(GameClock.Time, GameClock.Day);
             TreasuryManager.Instance.Money = SaveData.Money;
-            SaintsManager.Instance.LoadSaints(SaveData.Saints);
             InventoryManager.Instance.LoadInventory(SaveData);
             LoadScene("PauseMenu", LoadSceneMode.Additive);
-            SoundManager.Instance.PlayMusic("Convent_Music", "Field_Music", Random.Range(80, 100));
+            SoundManager.Instance.SongSelection();
             if(GameClock.Time == 6)
             {
                 GameClock.StartNewDay?.Invoke();
@@ -225,12 +228,18 @@ public class GameManager : MonoBehaviour
                     
                     if (aNewGame)
                     {
-                        SaveDataManager.Instance.DeleteSave();
+                        SaveDataManager.Instance.DeleteProgress();
                         TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                         GameSettings.Instance.FTUE = !TutorialManager.Instance.SkipTutorial;
+                        RunAttempts++;
                     }
-
+                    else
+                    {
+                        RunAttempts = data.RunAttempts;
+                        SaintsManager.Instance.LoadSaints(data.Saints);
+                    }
                     SaveData = data;
+                    Debug.Log("Run Attempts: " + RunAttempts);
                     CurrentMission = new Mission(SaveData.FP, SaveData.FPPool, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 

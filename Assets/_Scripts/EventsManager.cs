@@ -16,6 +16,7 @@ public class EventsManager : MonoBehaviour
     public bool EventInProgress;
 
     private Coroutine eventRoutine;
+    public CustomEventType DailyEvent;
 
     private void Awake()
     {
@@ -108,13 +109,14 @@ public class EventsManager : MonoBehaviour
         }
         else
         {
-            var randomEvent = GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY);
+            var randomEvent = GameManager.Instance.SaveData.DailyEvent == CustomEventType.NONE ? GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY) : GameDataManager.Instance.GetEvent(GameManager.Instance.SaveData.DailyEvent);
             var security = InventoryManager.Instance.GetProvision(Provision.SECURITY_GUARDS);
             if(security != null && randomEvent.Id == CustomEventType.VANDALISM)
             {
                 randomEvent = GameDataManager.Instance.GetEvent(CustomEventType.VANDALISM_STOPPED);
             }
             randomEvent = GameDataManager.Instance.RemixEventBySeason(randomEvent);
+            DailyEvent = randomEvent.Id;
             AddEventToList(randomEvent.Id);
         }
     }
@@ -144,7 +146,7 @@ public class EventsManager : MonoBehaviour
         {
             EventInProgress = true;
             while (UI.Instance.WeekBeginCrossFade) yield return null;
-            UI.Instance.EventAlert(new CustomEventData() { LocalizationKey = e.Id, EventPopupType = EventPopupType.OK, ImagePath = e.ImagePath, IsOrderedSequence = e.IsOrderedSequence });
+            UI.Instance.EventAlert(new CustomEventData() { LocalizationKey = e.Id, EventGroup = e.EventGroup, EventPopupType = EventPopupType.OK, ImagePath = e.ImagePath, IsOrderedSequence = e.IsOrderedSequence });
             while (EventInProgress)
             {
                 yield return null;

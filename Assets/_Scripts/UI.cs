@@ -79,6 +79,7 @@ public class UI : MonoBehaviour
     public EventSystem m_EventSystem;
     private PointerEventData m_PointerEventData;
 
+    public StatusEffectDisplay StatusEffectDisplay;
 
     public bool WasUiHit
     {
@@ -112,9 +113,6 @@ public class UI : MonoBehaviour
         Instance = this;
     }
 
-
-
-
     void Start()
     {
         Player.OnMoveSuccessEvent += OnPlayerMoved;
@@ -126,12 +124,16 @@ public class UI : MonoBehaviour
 
         SideNotificationResource = Resources.Load("UI/SideNotification") as GameObject;
         BuildingAlertResource = Resources.Load("UI/BuildingIcon") as GameObject;
+        if (SceneManager.GetActiveScene().name.Contains("Level"))
+        {
+            GetComponent<Canvas>().worldCamera = GameObject.Find("2DUICam").GetComponent<Camera>();
+        }
     }
 
     public void InitTimeEnergy(GameClock clock, Energy energy)
     {
         EnergyDisplay.text = $"{energy.Amount}";
-        TimeDisplay.text = $"{(int)clock.Time}:{(clock.Time % 1 == 0 ? "00" : "30")}";
+        TimeDisplay.text = clock.TimeDisplay();
         DayDisplay.text = DayofTheWeek(clock.Day);
     }
 
@@ -149,7 +151,7 @@ public class UI : MonoBehaviour
 
         int oldEnergy = int.Parse(EnergyDisplay.text);
         EnergyDisplay.DOCounter(oldEnergy, energy.Amount, 0.5f).SetDelay(2f);
-        if (energy.Amount <= 5)
+        if (energy.Amount <= 1)
         {
             EnergyDisplay.color = Color.red;
             EnergyDisplayGlow.color = Color.red;
@@ -184,7 +186,7 @@ public class UI : MonoBehaviour
         {
             yield return null;
         }
-
+        EventsManager.Instance.CurrentEvents.Clear();
         GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, showUI: complete);
     }
 
@@ -200,8 +202,13 @@ public class UI : MonoBehaviour
             ReportDisplay.text = "";
         }
 
-        TimeDisplay.text = $"{(int)time}:{(time % 1 == 0 ? "00" : "30")}";
+        TimeDisplay.text = GameManager.Instance.GameClock.TimeDisplay();
         DayDisplay.text = DayofTheWeek(day);
+
+        //if (GameClock.DeltaTime)
+        //{
+        //    StatusEffectDisplay.gameObject.SetActive(false);
+        //}
     }
 
     public void EnableProvisionPopup(ProvisionData prov1, ProvisionData prov2)
@@ -387,6 +394,12 @@ public class UI : MonoBehaviour
             case EventGroup.ORPHANAGE:
             case EventGroup.SCHOOL:
             case EventGroup.CLOTHES:
+            case EventGroup.SAVE_HOSPITAL:
+            case EventGroup.SAVE_KITCHEN:
+            case EventGroup.SAVE_ORPHANAGE:
+            case EventGroup.SAVE_SCHOOL:
+            case EventGroup.SAVE_SHELTER:
+
                 CenterItems.SetActive(true);
                 RightItems.SetActive(true);
                 foreach (Transform t in RightItems.GetComponentsInChildren<Transform>(true))
@@ -477,7 +490,7 @@ public class UI : MonoBehaviour
 
         if (Mathf.Abs(newCp - oldCP) > 0)
         {
-            if (newCp <= 10)
+            if (newCp <= 2)
 
             {
                 CPDisplayGlow.color = Color.red;
@@ -491,11 +504,11 @@ public class UI : MonoBehaviour
         
         if (Mathf.Abs(newCp - oldCP) > 0) AdditionPoints(CPAdditionDisplay, CPDisplayGlow, CachedCpAddition, 2f);
         
-        if (newCp < 50)
+        if (newCp < 2)
         {
             CPDisplay.color = Color.red;
         }
-        else if (newCp < 75)
+        else if (newCp < 4)
         {
             CPDisplay.color = Color.yellow;
         }
@@ -528,7 +541,7 @@ public class UI : MonoBehaviour
 
         if (Mathf.Abs(fp - oldFP) > 0)
         {
-            if (fp <= 10)
+            if (fp <= 2)
             {
                 FPDisplayGlow.color = Color.red;
                 SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
@@ -541,11 +554,11 @@ public class UI : MonoBehaviour
 
         if (Mathf.Abs(fp - oldFP) > 0) AdditionPoints(FPAdditionDisplay, FPDisplayGlow, fpAmount, 2f);
 
-        if (fp < 50)
+        if (fp < 2)
         {
             FPDisplay.color = Color.red;
         }
-        else if (fp < 75)
+        else if (fp < 4)
         {
             FPDisplay.color = Color.yellow;
         }
@@ -700,6 +713,19 @@ public class UI : MonoBehaviour
         return "";
     }
 
+    public void DisplayStatusEffect()
+    {
+        if (MissionManager.MissionOver)
+        {
+            return;
+        }
+
+        StatusEffectDisplay.gameObject.SetActive(!StatusEffectDisplay.gameObject.activeSelf);
+        if (!StatusEffectDisplay.gameObject.activeSelf) return;
+
+        StatusEffectDisplay.Init();
+    }
+
     public void DisplayToolTip(string text)
     {
         if (MissionManager.MissionOver)
@@ -733,13 +759,13 @@ public class UI : MonoBehaviour
         GameManager.Instance.InGameSession = false;
         WeekBeginCrossFade = true;
         WeekIntroBGGraphic.gameObject.SetActive(true);
-        WeekIntroBGGraphic.DOFade(1, 4f);
+        WeekIntroBGGraphic.DOFade(1, 1f);
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(1.5f);
         CurrentWeekIntroGraphic.sprite = Resources.Load<Sprite>($"Icons/{MissionManager.Instance.CurrentMission.Season}");
         CurrentWeekIntroGraphic.DOFade(1f, 3f); 
 
-        if(!string.IsNullOrEmpty(text)) yield return new WaitForSeconds(5.5f);
+        if(!string.IsNullOrEmpty(text)) yield return new WaitForSeconds(3f);
 
         WeekIntroBGGraphic.DOFade(0, 3f);
         CurrentWeekIntroGraphic.DOFade(0f, 3f);
@@ -749,6 +775,34 @@ public class UI : MonoBehaviour
         WeekIntroBGGraphic.gameObject.SetActive(false);
         WeekBeginCrossFade = false;
         GameManager.Instance.InGameSession = true;
+        SaveDataManager.Instance.SaveGame();
+    }
+
+    public void ShowDayBeginText(string text)
+    {
+        StartCoroutine(ShowDayBeginTextAsync(text));
+    }
+
+    private IEnumerator ShowDayBeginTextAsync(string text)
+    {
+        yield return StartCoroutine(CrossFadeAsync(1, 10));
+        if (GameSettings.Instance.SkipSplashScreens) yield break;
+        GameManager.Instance.InGameSession = false;
+        WeekBeginCrossFade = true;
+        WeekIntroBGGraphic.gameObject.SetActive(true);
+        WeekIntroBGGraphic.DOFade(1, 1f);
+
+        yield return new WaitForSeconds(1f);
+
+        WeekIntroBGGraphic.DOFade(0, 1f);
+        CurrentWeekIntroGraphic.DOFade(0f, 1f);
+        yield return StartCoroutine(CrossFadeAsync(0, 5f));
+        yield return new WaitForSeconds(2f);
+
+        WeekIntroBGGraphic.gameObject.SetActive(false);
+        WeekBeginCrossFade = false;
+        GameManager.Instance.InGameSession = true;
+        SaveDataManager.Instance.SaveGame();
     }
 
     public void CrossFade(float fade, float speed = 5f)
@@ -779,6 +833,8 @@ public class UI : MonoBehaviour
 
     public void EnableAllUIElements(bool enable)
     {
+        if (LeftItems == null) return;
+
         LeftItems.SetActive(enable);
         foreach (Transform g in LeftItems.transform)
         {
@@ -797,6 +853,11 @@ public class UI : MonoBehaviour
         TreasuryAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         CPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         FPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    public void GameOver()
+    {
+        StatusEffectDisplay.gameObject.SetActive(false);
     }
 
     public void QuitGame()

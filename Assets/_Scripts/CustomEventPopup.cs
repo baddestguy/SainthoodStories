@@ -65,7 +65,7 @@ public class CustomEventPopup : MonoBehaviour
                 c.AddTicks(Mathf.Abs((int)customEvent.Cost));
                 TimeDisplay.text = $"{(int)c.Time}:{(c.Time % 1 == 0 ? "00" : "30")}";
 
-                var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)customEvent.Cost);
+                var moddedEnergy = player.ModifyEnergyConsumption(amount: player.CurrentBuilding.GetEnergyCostForCustomEvent((int)EventData.Cost));
                 EnergyDisplay.text = moddedEnergy == 0 ? "0" : moddedEnergy > 0 ? $"-{moddedEnergy}" : $"+{-moddedEnergy}";
 
                 FPIcon.SetActive(customEvent.RewardType == CustomEventRewardType.FP);
@@ -119,15 +119,15 @@ public class CustomEventPopup : MonoBehaviour
         }
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
-        var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
-        if (player.EnergyDepleted(moddedEnergy)) return;
+        var moddedEnergy = player.ModifyEnergyConsumption(amount: player.CurrentBuilding.GetEnergyCostForCustomEvent((int)EventData.Cost));
+        if (player.CanUseEnergy(moddedEnergy)) return;
 
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
         CameraControls?.SetZoomTarget(6f);
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(true);
 
-        player.ConsumeEnergy((int)EventData.Cost);
+        player.ConsumeEnergy(player.CurrentBuilding.GetEnergyCostForCustomEvent((int)EventData.Cost));
         switch (EventData.RewardType) {
             case CustomEventRewardType.FP:
                 player.CurrentBuilding.UpdateFaithPoints((int)EventData.Gain, -moddedEnergy);
@@ -141,6 +141,8 @@ public class CustomEventPopup : MonoBehaviour
                 TreasuryManager.Instance.DonateMoney((int)EventData.Gain);
                 break;
         }
+
+        player.CurrentBuilding.ClearHazard();
 
         var timeCost = Mathf.Abs(EventData.Cost);
         for (int i = 0; i < timeCost; i++)
@@ -171,6 +173,10 @@ public class CustomEventPopup : MonoBehaviour
         gameObject.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
         SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
+        if (player.CurrentBuilding.BuildingState == BuildingState.HAZARDOUS)
+        {
+            player.CurrentBuilding.DestroyBuilding();
+        }
     }
 
     public void OK()
@@ -221,8 +227,8 @@ public class CustomEventPopup : MonoBehaviour
             return;
         }
         Player player = GameManager.Instance.Player;
-        var moddedEnergy = player.ModifyEnergyConsumption(amount: (int)EventData.Cost);
-        if (player.EnergyDepleted(moddedEnergy)) return;
+        var moddedEnergy = player.ModifyEnergyConsumption(amount: player.CurrentBuilding.GetEnergyCostForCustomEvent((int)EventData.Cost));
+        if (player.CanUseEnergy(moddedEnergy)) return;
 
         PointerDown = true;
         ChargeFx.SetActive(true);

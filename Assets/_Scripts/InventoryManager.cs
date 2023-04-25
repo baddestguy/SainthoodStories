@@ -16,6 +16,8 @@ public class InventoryManager : MonoBehaviour
     public int MaxInventorySlots = 2;
     public int MaxProvisionsSlots = 5;
 
+    public List<ProvisionData> GeneratedProvisions = new List<ProvisionData>();
+
     private void Awake()
     {
         Instance = this;
@@ -174,7 +176,19 @@ public class InventoryManager : MonoBehaviour
             prov2 = SwapProvisionBySeason(prov2);
         }
 
-        UI.Instance.EnableProvisionPopup(prov1, prov2);
+        GeneratedProvisions = GameManager.Instance.SaveData.GeneratedProvisions?.ToList();
+        if (GeneratedProvisions != null && GeneratedProvisions.Any())
+        {
+            UI.Instance.EnableProvisionPopup(GeneratedProvisions[0], GeneratedProvisions[1]);
+        }
+        else
+        {
+            GeneratedProvisions = new List<ProvisionData>();
+            GeneratedProvisions.Add(prov1);
+            GeneratedProvisions.Add(prov2);
+            UI.Instance.EnableProvisionPopup(prov1, prov2);
+        }
+        SaveDataManager.Instance.SaveGame();
     }
 
     private ProvisionData SwapProvisionBySeason(ProvisionData prov)

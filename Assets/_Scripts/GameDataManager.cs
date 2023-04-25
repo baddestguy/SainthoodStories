@@ -13,6 +13,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<CustomEventType, List<CustomEventData>> CustomEventData = new Dictionary<CustomEventType, List<CustomEventData>>();
     public Dictionary<string, List<LocalizationData>> LocalizationData = new Dictionary<string, List<LocalizationData>>();
     public Dictionary<Provision, List<ProvisionData>> ProvisionData = new Dictionary<Provision, List<ProvisionData>>();
+    public Dictionary<PlayerStatusEffect, List<StatusEffectData>> StatusEffectData = new Dictionary<PlayerStatusEffect, List<StatusEffectData>>();
     public Dictionary<ItemType, ShopItemData> ShopItemData = new Dictionary<ItemType, ShopItemData>();
     public Dictionary<string, ConstructionAvailabilityData> ConstructionAvailability = new Dictionary<string, ConstructionAvailabilityData>();
     public Dictionary<SaintID, SaintData> Saints = new Dictionary<SaintID, SaintData>();
@@ -167,6 +168,28 @@ public class GameDataManager : MonoBehaviour
         }
 
         yield return null;
+
+        //Status Effects
+        csvFile = Resources.Load<TextAsset>("GameData/StatusEffects");
+        var statusData = CSVSerializer.Deserialize<StatusEffectData>(csvFile.text);
+        foreach (var status in statusData)
+        {
+            if (StatusEffectData.ContainsKey(status.Id))
+            {
+                StatusEffectData[status.Id].Add(status);
+            }
+            else
+            {
+                StatusEffectData.Add(status.Id, new List<StatusEffectData>() { status });
+            }
+        }
+
+        yield return null;
+    }
+
+    public StatusEffectData GetStatusEffectData(PlayerStatusEffect id)
+    {
+        return StatusEffectData[id].FirstOrDefault();
     }
 
     public ProvisionData GetProvision(Provision provision, int level = 1)

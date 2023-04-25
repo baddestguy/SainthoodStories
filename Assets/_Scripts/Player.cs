@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public class Player : MonoBehaviour
 {
     public static event UnityAction<Energy, MapTile> OnMoveSuccessEvent;
+    public static UnityAction StatusEffectTrigger;
     public GameMap Map;
 
     public Energy Energy;
@@ -41,6 +42,7 @@ public class Player : MonoBehaviour
 
     private int SickCountdown = 3;
     private int MigraineCountdown = 6;
+    private int FastingCoutndown = 6;
 
     void Start()
     {
@@ -113,6 +115,7 @@ public class Player : MonoBehaviour
         OnMoveSuccessEvent?.Invoke(Energy, CurrentBuilding);
         GameManager.Instance.GameClock.Ping();
         ToolTipManager.Instance.ShowToolTip("");
+        GameClock.Ticked += OnTick;
     }
 
     public bool WeCanMove(MapTile tile)
@@ -154,9 +157,11 @@ public class Player : MonoBehaviour
 
     private void PopUIFXIcons()
     {
+        if (StatusEffects.Count < 1) return;
+
         PopUIFX.transform.position = transform.position + new Vector3(0, 1, 0);
         PopUIFX.gameObject.SetActive(true);
-        PopUIFX.Init("Energy", -EnergyConsumption);
+        PopUIFX.Init("Ailment", 0);
     }
 
     private void StormyWeatherEffect()
@@ -240,13 +245,7 @@ public class Player : MonoBehaviour
             if ((!passTime || WeCanMove(iTile.CurrentGroundTile)) && !StatusEffects.Contains(PlayerStatusEffect.FROZEN))
             {
                 transform.localScale = Vector3.one;
-                DissapearInHouse = true;
-                CurrentBuilding = iTile as InteractableHouse;
-                OnMove(iTile.CurrentGroundTile);
-                OnMoveSuccessEvent?.Invoke(Energy, iTile);
-                ApplyStatusEffect();
-                if(passTime)
-                    GameManager.Instance.PassTime();
+                StartCoroutine(WaitThenDisappear(iTile, passTime));
             }
             else
             {
@@ -273,6 +272,19 @@ public class Player : MonoBehaviour
                 TileDance(newTile);
             }
         }
+    }
+
+    private IEnumerator WaitThenDisappear(InteractableObject iTile, bool passTime)
+    {
+        CurrentBuilding = iTile as InteractableHouse;
+        OnMove(iTile.CurrentGroundTile);
+        yield return new WaitForSeconds(0.3f);
+        DissapearInHouse = true;
+        OnMoveSuccessEvent?.Invoke(Energy, iTile);
+        ApplyStatusEffect();
+
+        if (passTime)
+            GameManager.Instance.PassTime();
     }
 
     private void ResetPlayerOnEnergyDepletedAsync()
@@ -317,6 +329,7 @@ public class Player : MonoBehaviour
         }
         else if(tile == CurrentTile)
         {
+
             if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
             {
                 FrozenCounter--;
@@ -364,6 +377,15 @@ public class Player : MonoBehaviour
             amount = ModifyEnergyConsumption(amount: amount);
         }
         Energy.Consume(amount);
+
+        if (amount > 0 && StatusEffects.Contains(PlayerStatusEffect.VULNERABLE))
+        {
+            AddRandomAilment();
+        }
+        else if(Energy.Amount <= 0 && Random.Range(0,100) < 50)
+        {
+            StatusEffects.Add(PlayerStatusEffect.VULNERABLE);
+        }
     }
 
     public void ApplyStatusEffect()
@@ -396,6 +418,7 @@ public class Player : MonoBehaviour
             StatusEffects.Add((PlayerStatusEffect)Random.Range(1, 5));
         }
         StatusEffects.Add((PlayerStatusEffect)Random.Range(1, 5));
+        StatusEffectTrigger?.Invoke();
         Debug.LogWarning("ADDED AILMENT!");
     }
 
@@ -403,12 +426,18 @@ public class Player : MonoBehaviour
     {
         if (!StatusEffects.Any()) return;
 
+        StatusEffectTrigger?.Invoke();
         StatusEffects.RemoveAt(Random.Range(0, StatusEffects.Count));
     }
 
-    public bool EnergyDepleted(int consumption = 0)
+    public bool EnergyDepleted()
     {
-        return Energy.Depleted(consumption);
+        return Energy.Depleted();
+    }
+
+    public bool CanUseEnergy(int consumption)
+    {
+        return Energy.CanUseEnergy(consumption);
     }
 
     public void ResetEnergy()
@@ -425,7 +454,29 @@ public class Player : MonoBehaviour
         return Energy.Amount;
     }
 
+    private void OnTick(double time, int day)
+    {
+        if (!GameClock.DeltaTime) return;
+
+        var fasting = InventoryManager.Instance.GetProvision(Provision.FASTING);
+        if (fasting == null) return;
+
+        FastingCoutndown--;
+        if(FastingCoutndown == 0)
+        {
+            ConsumeEnergy(fasting.Value);
+            GameManager.Instance.MissionManager.UpdateFaithPoints(fasting.Value);
+            FastingCoutndown = 6;
+        }
+
+        if (StatusEffects.Any())
+        {
+            SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
+        }
+    }
+
     private void OnDisable()
     {
+        GameClock.Ticked -= OnTick;
     }
 }

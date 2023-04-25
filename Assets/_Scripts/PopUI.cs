@@ -35,6 +35,8 @@ public class PopUI : MonoBehaviour
 
     private InteractableHouse MyHouse;
     private GameObject CurrentVfx;
+    private GameObject CriticalCircleFX;
+    public static int CriticalHitCount = 0;
 
     void Start()
     {
@@ -144,12 +146,9 @@ public class PopUI : MonoBehaviour
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
         ChargeFx.transform.position = myButton.transform.position - new Vector3(0, -0.1f, 0.1f);
         ChargeFx.SetActive(false);
-        ButtonPressFx.SetActive(true);
-        ButtonPressFx.transform.position = ChargeFx.transform.position;
-        if (myButton.ButtonName == "EXIT" || myButton.ButtonName == "ENTER")
+      //  if (myButton.ButtonName == "EXIT" || myButton.ButtonName == "ENTER")
             SoundManager.Instance.PlayOneShotSfx("Button_SFX");
-        else
-            SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
+        //else
 
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
         CameraControls?.SetZoomTarget(6f);
@@ -188,7 +187,7 @@ public class PopUI : MonoBehaviour
         {
             if (!myButton.Enabled)
             {
-               SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+                SoundManager.Instance.PlayOneShotSfx("Button_SFX");
                 return;
             }
         }
@@ -203,10 +202,68 @@ public class PopUI : MonoBehaviour
         CameraControls?.SetZoomTarget(5.5f);
 
         SoundManager.Instance.PlayOneShotSfx("Charge_SFX", timeToDie: myButton.Timer);
+        StartCoroutine("CriticalCircle", myButton);
     }
+
+    private IEnumerator CriticalCircle(ActionButton myButton)
+    {
+        if(CriticalCircleFX == null)
+        {
+            CriticalCircleFX = Instantiate(Resources.Load<GameObject>("UI/CriticalCircle"));
+        }
+        CriticalCircleFX.SetActive(true);
+        CriticalCircleFX.transform.SetParent(ChargeFx.transform, true);
+        CriticalCircleFX.transform.localScale = new Vector3(0.005f, 0.005f, 0.005f);
+        CriticalCircleFX.transform.localPosition = Vector3.zero;
+        CriticalCircleFX.transform.localEulerAngles = Vector3.zero;
+
+        var critCircle = CriticalCircleFX.transform.GetChild(0);
+        critCircle.localScale = new Vector3(5, 5, 5);
+        critCircle.DOScale(new Vector3(0.3f, 0.3f, 0.3f), myButton.Timer);
+
+        yield return new WaitForSeconds(myButton.Timer);
+
+        //Play FX
+        CriticalCircleFX.SetActive(false);
+        critCircle.localScale = new Vector3(5, 5, 5);
+    }
+
 
     public void OnPointerUp()
     {
+        StopCoroutine("CriticalCircle");
+        if(CriticalCircleFX != null)
+        {
+            CriticalCircleFX.SetActive(false);
+            DOTween.Kill(CriticalCircleFX.transform.GetChild(0).transform);
+        }
+
+        if (PointerDown)
+        {
+            var critCircleScaleX = CriticalCircleFX.transform.GetChild(0).transform.localScale.x;
+            if (critCircleScaleX > 0.65f && critCircleScaleX < 0.8f)
+            {
+                //CRITICAL HIT!
+                Debug.LogWarning("CRITICAL HIT!");
+                PointerDown = false;
+                ButtonTimer = 0f;
+                CriticalHitCount++;
+                OnClick(ButtonName);
+                ButtonPressFx.SetActive(true);
+                ButtonPressFx.transform.position = ChargeFx.transform.position;
+                SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
+            }
+            else if(critCircleScaleX < 0.65f || (critCircleScaleX > 0.8f && critCircleScaleX < 2.2f))
+            {
+                //Regular HIT!
+                Debug.LogWarning("Regular HIT!");
+                PointerDown = false;
+                ButtonTimer = 0f;
+                CriticalHitCount = 0;
+                OnClick(ButtonName);
+            }
+        }
+
         PointerDown = false;
         ChargeFx.SetActive(false);
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
@@ -220,8 +277,10 @@ public class PopUI : MonoBehaviour
         {
             //Play VFX
             ButtonTimer += Time.deltaTime;
-            if(ButtonTimer >= ButtonTimerTarget)
+            if (ButtonTimer >= ButtonTimerTarget)
             {
+                Debug.LogWarning("LEft Lingering Regular HIT!");
+                CriticalHitCount = 0;
                 PointerDown = false;
                 ButtonTimer = 0f;
                 OnClick(ButtonName);
@@ -235,6 +294,11 @@ public class PopUI : MonoBehaviour
                 ButtonTimer = 0;
             }
         }
+
+        if (MyHouse?.HasResetActionProgress() ?? false)
+        {
+            CriticalHitCount = 0;
+        }
     }
 
     private void UpdateProgressBar(float progress, InteractableHouse house, int progressBar = 0)
@@ -246,7 +310,7 @@ public class PopUI : MonoBehaviour
         ProgressBar.gameObject.SetActive(true);
         ProgressBar.DOValue(progress, 0.5f);
 
-        if(progress > 0.75f)
+        if(progress > 0.99f)
         {
             StartCoroutine(DisableProgressBar());
         }

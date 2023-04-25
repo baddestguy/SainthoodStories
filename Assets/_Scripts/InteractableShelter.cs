@@ -6,6 +6,12 @@
         base.Start();
     }
 
+    public override void GetInteriorPopUI()
+    {
+        InteriorPopUI = UI.Instance.transform.Find("FoodShelterUI").GetComponent<PopUI>();
+        base.GetInteriorPopUI();
+    }
+
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         base.OnPlayerMoved(energy, tile);

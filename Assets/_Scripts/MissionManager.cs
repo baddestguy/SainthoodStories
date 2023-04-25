@@ -46,12 +46,14 @@ public class MissionManager : MonoBehaviour
         if (!GameClock.DeltaTime) return;
 
         SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+        StartCoroutine(NewDayAsync());
+    }
+
+    private IEnumerator NewDayAsync()
+    {
+        yield return new WaitForSeconds(0.5f);
         EndOfDay?.Invoke();
-            
-      //  if(GameManager.Instance.GameClock.EndofWeek())
-        {
-            EndMission();
-        }
+        Instance.EndMission();
     }
 
     public void UpdateFaithPoints(int amount)
@@ -95,9 +97,12 @@ public class MissionManager : MonoBehaviour
 
     private IEnumerator EndMissionAsync()
     {
+        ToolTipManager.Instance.ShowToolTip("");
         bool missionFailed = false;
         Player.LockMovement = true;
         MissionOver = true;
+        UI.Instance.GameOver();
+        while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress) yield return null;
         UI.Instance.CrossFade(1, 1f);
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
@@ -114,11 +119,11 @@ public class MissionManager : MonoBehaviour
             {
                 EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
             }
-            SaveDataManager.Instance.DeleteSave();
+            SaveDataManager.Instance.DeleteProgress();
             SoundManager.Instance.EndAllTracks();
             EventsManager.Instance.ExecuteEvents();
 
-            while (EventsManager.Instance.EventInProgress) yield return null;
+            while (EventsManager.Instance.HasEventsInQueue()) yield return null;
 
             GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
             yield break;
@@ -128,13 +133,17 @@ public class MissionManager : MonoBehaviour
         {
             EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
             yield return seq.RunSequenceAsync();
-            if(GameManager.Instance.GameClock.EndofWeek())
+            if (GameManager.Instance.GameClock.EndofWeek())
+            {
                 CurrentMission.CurrentWeek++;
+                GameManager.Instance.GameClock.EndTheWeek();
+            }
         }
 
         EventsManager.Instance.ExecuteEvents();
-        EventsManager.Instance.CurrentEvents.Clear();
         GameManager.Instance.Player.ResetEnergy();
+        InventoryManager.Instance.GeneratedProvisions.Clear();
+        EventsManager.Instance.DailyEvent = CustomEventType.NONE;
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);
     }

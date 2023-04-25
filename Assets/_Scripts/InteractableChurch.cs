@@ -37,6 +37,12 @@ public class InteractableChurch : InteractableHouse
         InventoryManager.RefreshInventoryUI += CheckProvisions;
     }
 
+    public override void GetInteriorPopUI()
+    {
+        InteriorPopUI = UI.Instance.transform.Find("ChurchUI").GetComponent<PopUI>();
+        base.GetInteriorPopUI();
+    }
+
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         base.OnPlayerMoved(energy, tile);
@@ -233,7 +239,10 @@ public class InteractableChurch : InteractableHouse
                 OnActionProgress?.Invoke(ConfessionProgress/1f, this, 0);
             //    player.ConsumeEnergy(ServiceEnergy);
                 UI.Instance.DisplayMessage("ATTENDED CONFESSION!!");
-                UpdateFaithPoints(PrayerPoints, 0);
+                var extraPoints = 0;
+                if (PopUI.CriticalHitCount == 1) extraPoints = 1;
+
+                UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
                 InteriorPopUI.PlayVFX("Halo");
                 clock.Tick();
             }
@@ -255,15 +264,18 @@ public class InteractableChurch : InteractableHouse
                 }
                 if (MassProgress == 2)
                 {
+                    var extraPoints = 0;
                     var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
                     if (incense != null)
                     {
                         if (Random.Range(0, 100) <= incense.Value)
                         {
-                            FPBonus += 2;
+                            extraPoints += 2;
                         }
                     }
-                    UpdateFaithPoints(PrayerPoints + FPBonus, 0);
+                    if (PopUI.CriticalHitCount == 2) extraPoints += 1;
+
+                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
                 }
 
                 clock.Tick();
@@ -278,15 +290,18 @@ public class InteractableChurch : InteractableHouse
                 InteriorPopUI.PlayVFX("Halo");
                 if (LotHProgress == 2)
                 {
+                    var extraPoints = 0;
                     var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
                     if (incense != null)
                     {
                         if (Random.Range(0, 100) <= incense.Value)
                         {
-                            FPBonus += 2;
+                            extraPoints += 2;
                         }
                     }
-                    UpdateFaithPoints(PrayerPoints + FPBonus, 0);
+                    if (PopUI.CriticalHitCount == 2) extraPoints += 1;
+
+                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
                 }
 
                 clock.Tick();
@@ -299,16 +314,19 @@ public class InteractableChurch : InteractableHouse
                 OnActionProgress?.Invoke(PrayerProgress / MaxPrayerProgress, this, 0);
                 if (PrayerProgress == MaxPrayerProgress)
                 {
+                    var extraPoints = 0;
                     var provData = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-                    FPBonus += provData?.Value ?? 0;
+                    extraPoints += provData?.Value ?? 0;
                     var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
 
                     if (koboko != null)
                     {
-                        FPBonus += koboko?.Value ?? 0;
+                        extraPoints += koboko?.Value ?? 0;
                         player.ConsumeEnergy(koboko.Value);
                     }
-                    UpdateFaithPoints(PrayerPoints + FPBonus, 0);
+                    if (PopUI.CriticalHitCount == MaxPrayerProgress) extraPoints += 1;
+
+                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
                     PrayerProgress = 0;
                 }
                 clock.Tick();
@@ -324,15 +342,18 @@ public class InteractableChurch : InteractableHouse
             InteriorPopUI.PlayVFX("Halo");
             if (LotHProgress == 2)
             {
+                var extraPoints = 0;
                 var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
                 if(incense != null)
                 {
                     if (Random.Range(0, 100) <= incense.Value)
                     {
-                        FPBonus += 2;
+                        extraPoints += 2;
                     }
                 }
-                UpdateFaithPoints(PrayerPoints +FPBonus, 0);
+                if (PopUI.CriticalHitCount == 2) extraPoints += 1;
+
+                UpdateFaithPoints(PrayerPoints +FPBonus + extraPoints, 0);
             }
 
             clock.Tick();
@@ -345,16 +366,19 @@ public class InteractableChurch : InteractableHouse
             OnActionProgress?.Invoke(PrayerProgress / MaxPrayerProgress, this, 0);
             if(PrayerProgress == MaxPrayerProgress)
             {
+                var extraPoints = 0;
                 var provData = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-                FPBonus += provData?.Value ?? 0;
+                extraPoints += provData?.Value ?? 0;
                 var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
 
                 if (koboko != null)
                 {
-                    FPBonus += koboko?.Value ?? 0;
+                    extraPoints += koboko?.Value ?? 0;
                     player.ConsumeEnergy(koboko.Value);
                 }
-                UpdateFaithPoints(PrayerPoints + FPBonus, 0);
+                if (PopUI.CriticalHitCount == MaxPrayerProgress) extraPoints += 1;
+
+                UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
                 PrayerProgress = 0;
             }
             clock.Tick();
@@ -384,8 +408,10 @@ public class InteractableChurch : InteractableHouse
         if (SleepProgress == MaxSleepProgress)
         {
             var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
+            var extraPoints = 0;
+            if (PopUI.CriticalHitCount == MaxSleepProgress) extraPoints = 1;
 
-            player.ConsumeEnergy(SleepEnergy - (mattress?.Value ?? 0));
+            player.ConsumeEnergy(SleepEnergy - (mattress?.Value ?? 0) - extraPoints);
             player.RemoveRandomStatusEffect();
             PopUIFXIcons("Energy", -SleepEnergy);
             SleepProgress = 0;
@@ -423,7 +449,7 @@ public class InteractableChurch : InteractableHouse
 
     public override bool HasResetActionProgress()
     {
-        return MassProgress == 0 && LotHProgress == 0 && ConfessionProgress == 0 && PrayerProgress == 0;
+        return MassProgress == 0 && LotHProgress == 0 && ConfessionProgress == 0 && PrayerProgress == 0 && SleepProgress == 0;
     }
 
     public override TooltipStats GetTooltipStatsForButton(string button)
@@ -467,6 +493,11 @@ public class InteractableChurch : InteractableHouse
         }
 
         return base.GetTooltipStatsForButton(button);
+    }
+
+    public override int GetEnergyCostForCustomEvent(int eventCost)
+    {
+        return eventCost;
     }
 
     public override float SetButtonTimer(string actionName)

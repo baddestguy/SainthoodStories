@@ -10,6 +10,12 @@ public class InteractableKitchen : InteractableHouse
         base.Start();
     }
 
+    public override void GetInteriorPopUI()
+    {
+        InteriorPopUI = UI.Instance.transform.Find("KitchenUI").GetComponent<PopUI>();
+        base.GetInteriorPopUI();
+    }
+
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         base.OnPlayerMoved(energy, tile);
@@ -46,7 +52,7 @@ public class InteractableKitchen : InteractableHouse
         {
             var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
             
-            if (RelationshipPoints >= 10 && RelationshipPoints < 30)
+            if (RelationshipPoints >= 15)
             {
                 player.ConsumeEnergy(EnergyConsumption + utensils?.Value ?? 0);
             }

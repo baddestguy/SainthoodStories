@@ -10,6 +10,12 @@ public class InteractableOrphanage : InteractableHouse
         base.Start();
     }
 
+    public override void GetInteriorPopUI()
+    {
+        InteriorPopUI = UI.Instance.transform.Find("OrphanageUI").GetComponent<PopUI>();
+        base.GetInteriorPopUI();
+    }
+
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         base.OnPlayerMoved(energy, tile);
@@ -76,6 +82,7 @@ public class InteractableOrphanage : InteractableHouse
     public override void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;
+        if (time >= 19) return;
 
      //   if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;

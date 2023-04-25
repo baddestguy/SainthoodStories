@@ -31,7 +31,8 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < provisions.Count; i++)
         {
             Provisions[i].gameObject.SetActive(true);
-            Provisions[i].sprite = Resources.Load<Sprite>($"Icons/{provisions[i]}");
+            Provisions[i].sprite = Resources.Load<Sprite>($"Icons/{provisions[i].Id}");
+            Provisions[i].GetComponent<ProvisionDisplayItem>().Init(provisions[i]);
         }
 
         ExtraSlots.SetActive(InventoryManager.Instance.MaxInventorySlots > 2);

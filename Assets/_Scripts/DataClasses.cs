@@ -170,12 +170,13 @@ public enum BuildingState
 {
     RUBBLE = 0,
     NORMAL,
-    FIRE
+    HAZARDOUS
 }
 
 public enum CustomEventType
 {
-    MARKET_HOURS = 0,
+    NONE = 0,
+    MARKET_HOURS,
     RAIN,
     HEATWAVE,
     BLIZZARD,
@@ -248,6 +249,11 @@ public enum CustomEventType
     ,ENERGY_DEPLETED
     ,TRYHARDER_FAITH
     ,TRYHARDER_CHARITY
+    ,SAVE_HOSPITAL
+    ,SAVE_SCHOOL
+    ,SAVE_ORPHANAGE
+    ,SAVE_KITCHEN
+    ,SAVE_SHELTER
 }
 
 public enum EventPopupType
@@ -270,6 +276,11 @@ public enum EventGroup
     KITCHEN,
     SHELTER,
     CLOTHES
+    ,SAVE_HOSPITAL
+    ,SAVE_SCHOOL
+    ,SAVE_ORPHANAGE
+    ,SAVE_KITCHEN
+    ,SAVE_SHELTER
 }
 
 public enum Language
@@ -293,7 +304,16 @@ public enum QualityLevel
     QUALITY_SETTING_ULTRA
 }
 
-
+[System.Serializable]
+public class HouseSaveData
+{
+    public string HouseName;
+    public int RelationshipPoints;
+    public int RelationshipBonus;
+    public BuildingState BuildingState;
+    public int FPBonus;
+    public int SturdyMaterials;
+}
 
 public class TooltipStats
 {
@@ -342,6 +362,16 @@ public class ProvisionData
     public int Value;
     public string NameKey;
     public string DescriptionKey;
+    public string Tooltips;
+}
+
+[System.Serializable]
+public class StatusEffectData
+{
+    public PlayerStatusEffect Id;
+    public string NameKey;
+    public string DescriptionKey;
+    public string Tooltips;
 }
 
 [System.Serializable]
@@ -372,6 +402,7 @@ public class CustomEventData
 public class StoryEventData
 {
     public string Id;
+    public EventGroup EventGroup = EventGroup.STORY;
     public int Week;
     public int Day;
     public double Time;
@@ -458,20 +489,13 @@ public class SaveObject
     public double Time;
     public int TutorialSteps;
     public double Money;
-    public int HospitalRelationshipPoints;
-    public int SchoolRelationshipPoints;
-    public int OrphanageRelationshipPoints;
-    public int ShelterRelationshipPoints;
-    public int ClothesRelationshipPoints;
-    public BuildingState HospitalBuildingState;
-    public BuildingState SchoolBuildingState;
-    public BuildingState OrphanageBuildingState;
-    public BuildingState ShelterBuildingState;
-    public BuildingState ClothesBuildingState;
-    public BuildingState KitchenBuildingState;
+    public int RunAttempts;
+    public HouseSaveData[] Houses;
     public SaintID[] Saints;
     public ItemType[] InventoryItems;
     public ProvisionData[] Provisions;
+    public ProvisionData[] GeneratedProvisions;
+    public CustomEventType DailyEvent;
 }
 
 [System.Serializable]
@@ -505,4 +529,10 @@ public enum ProvisionsPopupPhase
 {
     ADD_UPGRADE,
     REPLACE
+}
+
+public enum ProvisionUIItemType
+{
+    NEW,
+    UPGRADE
 }

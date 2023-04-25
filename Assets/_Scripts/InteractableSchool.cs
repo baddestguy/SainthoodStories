@@ -12,6 +12,12 @@ public class InteractableSchool : InteractableHouse
         base.Start();
     }
 
+    public override void GetInteriorPopUI()
+    {
+        InteriorPopUI = UI.Instance.transform.Find("SchoolUI").GetComponent<PopUI>();
+        base.GetInteriorPopUI();
+    }
+
     public override void OnPlayerMoved(Energy energy, MapTile tile)
     {
         base.OnPlayerMoved(energy, tile);
@@ -65,6 +71,12 @@ public class InteractableSchool : InteractableHouse
         base.Tick(time, day);
     }
 
+    public override void TriggerHazardousMode(double time, int day)
+    {
+        TeachCountdown = 0;
+        base.TriggerHazardousMode(time, day);
+    }
+
     public void TeachSubject()
     {
         TeachCountdown++;
@@ -77,7 +89,10 @@ public class InteractableSchool : InteractableHouse
             var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
             moddedEnergy += schoolMaterials?.Value ?? 0;
             player.ConsumeEnergy(EnergyConsumption);
-            UpdateCharityPoints(TeachPoints, moddedEnergy);
+            var extraPoints = 0;
+            if (PopUI.CriticalHitCount == MaxTeachPoints) extraPoints = 1;
+
+            UpdateCharityPoints(TeachPoints+ extraPoints, moddedEnergy);
             BuildRelationship(ThankYouType.TEACH);
             TeachCountdown = 0;
         }
@@ -146,6 +161,7 @@ public class InteractableSchool : InteractableHouse
     public override void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;
+        if (time >= 19) return;
 
     //    if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;
