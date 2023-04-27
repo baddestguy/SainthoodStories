@@ -46,10 +46,10 @@ public class SoundManager : MonoBehaviour
         {
             case Season.SPRING:
             case Season.SUMMER:
+            case Season.FALL:
                 PlayMusic("Convent_Music", "Field_Music", Random.Range(100, 120));
                 break;
 
-            case Season.FALL:
             case Season.WINTER:
                 PlayMusic("Field_Music_2", loopDelay: Random.Range(320, 360));
                 break;
