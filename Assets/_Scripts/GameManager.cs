@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -42,6 +44,7 @@ public class GameManager : MonoBehaviour
     public bool InGameSession;
 
     public int RunAttempts;
+    public int[] MaptileIndexes = new int[6] {0, 3, 9, 19, 15, 21};
 
     private void Awake()
     {
@@ -133,6 +136,11 @@ public class GameManager : MonoBehaviour
                     UI.Instance.ShowDayBeginText("");
             }
 
+            if(SaveData.Maptiles == null)
+            {
+                ScrambleMapTiles();
+            }
+
             Player.GameStart(CurrentMission);
             MissionBegin?.Invoke(CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
@@ -214,14 +222,6 @@ public class GameManager : MonoBehaviour
 
         switch (missionDifficulty)
         {
-            //case MissionDifficulty.EASY: 
-            //    CurrentMission = new Mission(75, 75, 30, 5.5, 1); 
-            //    SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
-            //    break;
-            //case MissionDifficulty.NORMAL: 
-            //    CurrentMission = new Mission(50, 50, 20, 5.5, 7); 
-            //    SceneManager.LoadScene("NormalLevel", LoadSceneMode.Single);
-            //    break;
             case MissionDifficulty.HARD:
                 
                 SaveDataManager.Instance.LoadGame((data, aNewGame) => {
@@ -243,7 +243,14 @@ public class GameManager : MonoBehaviour
                     CurrentMission = new Mission(SaveData.FP, SaveData.FPPool, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 
-                    StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
+                    if (GameSettings.Instance.FTUE)
+                    {
+                        StartCoroutine(WaitAndLoadScene("TutorialLevel"));
+                    }
+                    else
+                    {
+                        StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
+                    }
                 }, newGame, false, !activeScene.name.Contains("MainMenu"), showUI: showUI);
                 break;
         }
@@ -251,7 +258,24 @@ public class GameManager : MonoBehaviour
         MissionDifficulty = missionDifficulty;
     }
 
+    public MapTile GetNextRandomMapTile(string house)
+    {
+        switch (house)
+        {
+            case "InteractableHospital": return Player.Map.MapTiles[MaptileIndexes[0]];
+            case "InteractableOrphanage": return Player.Map.MapTiles[MaptileIndexes[1]];
+            case "InteractableSchool": return Player.Map.MapTiles[MaptileIndexes[2]];
+            case "InteractableShelter": return Player.Map.MapTiles[MaptileIndexes[3]];
+            case "InteractableKitchen": return Player.Map.MapTiles[MaptileIndexes[4]];
+        }
 
+        return null;
+    }
+
+    public void ScrambleMapTiles()
+    {
+        MaptileIndexes.Shuffle();
+    }
 
     public void ReloadLevel()
     {

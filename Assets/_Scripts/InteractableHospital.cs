@@ -84,6 +84,7 @@ public class InteractableHospital : InteractableHouse
                     UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) + extraPoints, moddedEnergy);
                     PopIcon.gameObject.SetActive(false);
                     UI.Instance.SideNotificationPop(GetType().Name);
+                    DeadlineCounter--;
                     DeliveryTimeSet = false;
                     DeliveryCountdown = 0;
                     EndDelivery.SetClock(clock.Time - 1, clock.Day);
@@ -108,6 +109,10 @@ public class InteractableHospital : InteractableHouse
 
     public override void TriggerHazardousMode(double time, int day)
     {
+        if (HazardCounter > 0) return;
+        if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
+
+        DeadlineCounter--;
         DeliveryTimeSet = false;
         DeliveryCountdown = 0;
         EndDelivery?.SetClock(time - 1, day);
@@ -144,6 +149,7 @@ public class InteractableHospital : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         DeliveryTimeSet = true;
         DeliveryCountdown = 0;
+        DeadlineCounter++;
 
         EndDelivery = new GameClock(clock.Time, clock.Day);
         EndDelivery.AddTime(bMission != null ? bMission.DeadlineHours : 9);
@@ -162,6 +168,7 @@ public class InteractableHospital : InteractableHouse
             if (clock > EndDelivery)
             {
                 DeliveryTimeSet = false;
+                DeadlineCounter--;
                 FailedDelivery = true;
                 PopIcon.gameObject.SetActive(false);
                 UI.Instance.SideNotificationPop(GetType().Name);

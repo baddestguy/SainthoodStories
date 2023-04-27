@@ -73,6 +73,9 @@ public class InteractableSchool : InteractableHouse
 
     public override void TriggerHazardousMode(double time, int day)
     {
+        if (HazardCounter > 0) return;
+        if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
+
         TeachCountdown = 0;
         base.TriggerHazardousMode(time, day);
     }

@@ -63,6 +63,7 @@ public class InteractableKitchen : InteractableHouse
             }
 
             BuildRelationship(ThankYouType.VOLUNTEER);
+            TreasuryManager.Instance.DonateMoney(2);
 
             InventoryManager.Instance.AddToInventory(ItemType.MEAL);
             CookFX.Play();

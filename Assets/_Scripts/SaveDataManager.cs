@@ -81,7 +81,8 @@ public class SaveDataManager : MonoBehaviour
             Provisions = InventoryManager.Instance.Provisions.ToArray(),
             GeneratedProvisions = InventoryManager.Instance.GeneratedProvisions.ToArray(),
             DailyEvent = EventsManager.Instance.DailyEvent,
-            RunAttempts = GameManager.Instance.RunAttempts
+            RunAttempts = GameManager.Instance.RunAttempts,
+            Maptiles = GameManager.Instance.MaptileIndexes
         };
     }    
 
@@ -102,7 +103,7 @@ public class SaveDataManager : MonoBehaviour
                 CP = 3,
                 Energy = 3,
                 Week = 1,
-                Day = 2,
+                Day = 1,
                 Time = 6,
                 TutorialSteps = 40,
                 Money = 10

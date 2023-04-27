@@ -496,6 +496,7 @@ public class SaveObject
     public ProvisionData[] Provisions;
     public ProvisionData[] GeneratedProvisions;
     public CustomEventType DailyEvent;
+    public int[] Maptiles;
 }
 
 [System.Serializable]
