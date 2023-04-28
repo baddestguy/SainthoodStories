@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
 using DG.Tweening;
+using Michsky.UI.ModernUIPack;
 using TMPro;
 using UnityEngine;
 
@@ -13,19 +14,23 @@ public class EndWeekSequence : MonoBehaviour
     public GameObject ContinueObj;
 
     public TextMeshProUGUI Title;
+    public TextMeshProUGUI SaintUnlockedTitle;
     public TextMeshProUGUI Score;
+    public TextMeshProUGUI SaintScore;
     public TextMeshProUGUI CashAmount;
 
     public EndgameSaintPortrait[] SaintPortraits;
-    
+    public ProgressBar SaintProgressBar;
     private bool Continue = false;
 
     public IEnumerator RunSequenceAsync()
     {
-        int cashAmount = Random.Range(2, 4);
+        int cashAmount = MissionManager.Instance.CharityPoints;
         var donation = InventoryManager.Instance.GetProvision(Provision.ALLOWANCE);
         cashAmount += donation?.Value ?? 0;
         TreasuryManager.Instance.DonateMoney(cashAmount);
+        SaintProgressBar.currentPercent = MissionManager.Instance.FaithPointsPool * 100f / GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue;
+        SaintProgressBar.endPercent = (MissionManager.Instance.FaithPointsPool + MissionManager.Instance.FaithPoints) * 100f / GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue;
         var saintsUnlocked = MissionManager.Instance.UnlockSaints();
 
         BG.SetActive(true);
@@ -54,40 +59,37 @@ public class EndWeekSequence : MonoBehaviour
         ContinueObj.SetActive(false);
         Continue = false;
 
+        SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie: 5f);
+        SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
         CashUnlockObj.SetActive(false);
         Title.text = LocalizationManager.Instance.GetText("FP_ENDGAME_TITLE");
-        Score.DOCounter(0, MissionManager.Instance.FaithPoints, 3f);
-        SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie: 5f);
+        SaintScore.DOCounter(0, MissionManager.Instance.FaithPoints, 3f);
+        SaintsUnlockObj.SetActive(true);
+        SaintProgressBar.gameObject.SetActive(true);
+        SaintProgressBar.isOn = true;
 
         yield return new WaitForSeconds(4f);
 
-        //Show Counter to a single Saint unlock at the End of the Week
-
-        Title.text = "";
-        Score.text = "";
-        SaintsUnlockObj.SetActive(true);
-        SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
-
-   //     for (int i = 0; i < saintsUnlocked.Count(); i++)
+        var sp = SaintPortraits[1];
         if(saintsUnlocked.Count() > 0)
         {
-            SaintPortraits[1].BG.color = new Color(1, 1, 1, 1);
-            SaintPortraits[1].Saint.gameObject.SetActive(true);
-            SaintPortraits[1].SaintName.text = saintsUnlocked.ElementAt(0).Name;
-            SaintPortraits[1].Saint.sprite = Resources.Load<Sprite>(saintsUnlocked.ElementAt(0).IconPath);
-        }
-
-        foreach (var sp in SaintPortraits)
-        {
+            Title.text = "";
+            Score.text = "";
+            SaintUnlockedTitle.text = LocalizationManager.Instance.GetText("NEW SAINT UNLOCKED!");
+            SaintProgressBar.gameObject.SetActive(false);
+            SoundManager.Instance.PlayOneShotSfx("MassBegin_SFX", timeToDie: 4);
+            SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+            SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
+            sp.BG.color = new Color(1, 1, 1, 1);
+            sp.Saint.gameObject.SetActive(true);
+            sp.SaintName.text = saintsUnlocked.ElementAt(0).Name;
+            sp.Saint.sprite = Resources.Load<Sprite>(saintsUnlocked.ElementAt(0).IconPath);
             localPosition = sp.transform.localPosition.x;
             sp.gameObject.SetActive(true);
             sp.BG.gameObject.SetActive(true);
             sp.transform.localPosition = new Vector3(sp.transform.localPosition.x - 50, sp.transform.localPosition.y, sp.transform.localPosition.z);
             sp.transform.DOLocalMoveX(localPosition, 0.5f);
-            yield return new WaitForSeconds(0.25f);
         }
-
-        yield return new WaitForSeconds(3f);
 
         ContinueObj.SetActive(true);
         while (!Continue)
