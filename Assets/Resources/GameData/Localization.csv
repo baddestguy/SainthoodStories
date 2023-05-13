@@ -2,17 +2,17 @@ Key,English,French,BrPt,Filipino,LatAmSpanish,Italian,German
 Tutorial_0,"You knock on the convent doors at the crack of dawn, tired from your long journey, with only the shoes on your feet and the habit on your back. ",,,,,,
 Tutorial_1,"The doors swing open to reveal the Prioress. ""Come on in!"" she says, as she grabs your hand, ""You're just in time for Liturgy of the Hours. Come quickly, let us begin.""",,,,,,
 Tutorial_11,"""Performing activities is straightforward. Simply <b>Press and Hold</b> the Prayer button to partake in Spiritual Activities.""",,,,,,
-Tutorial_2,"Afterwards, the Prioress shows you to your room. ""We have Liturgy of the Hours 4 times a day, every day, and we always post the Start Time of the next session above the Convent, so please try to make it as often as you can.""",,,,,,
+Tutorial_2,"Afterwards, the Prioress shows you to your room. ""We have Liturgy of the Hours 4 times a day, every day, and we always post the <b>Start Time</b> of the next session above the Convent, so please try to make it as often as you can.""",,,,,,
 Tutorial_21,"Eltee, the Foreman, visits the Convent. ""Ma'am, please come on down to the hospital at ya earliest convenience, we need all the help we can get.""
 
 And with that, he walks off.",,,,,,
 Tutorial_3,"Arriving at the construction site, you see a small gathering of men and women helping out with all sorts of activities.
 
-""Glad ya made it!"" Eltee bellows from behind, ""Couple of hours and we're done here!"" ",,,,,,
-Tutorial_3,"Feeling the sweat on your brow, you begin to track the Energy you consume, then, rolling up your sleeves, you get to work.",,,,,,
+""Glad ya made it!"" Eltee bellows from behind, ""Couple hours and we're done here!"" ",,,,,,
+Tutorial_3,"Feeling the sweat on your brow, you begin to track the <b>Energy</b> you consume, then, rolling up your sleeves, you get to work.",,,,,,
 Tutorial_4,"Anna, the nurse, walks over to you. ""Thank you so much for your help! But...I must ask another favor of you.""
 
-""We are in desperate need of medical supplies. You will save a life if you could hurry and get us supplies from the Shop before time runs out!""",,,,,,
+""We are in desperate need of medical supplies. You will save a life if you could hurry and get us supplies from the <b>Shop</b> before time runs out!""",,,,,,
 Tutorial_4,"Looking at the time, you notice you could make Liturgy of the Hours on your way to the Shop. 
 
 You head out immediately.",,,,,,
@@ -26,7 +26,7 @@ Tutorial_6,"""You better get going,"" the Prioress says, ""The hospital needs yo
 Tutorial_605,"""Welcome, welcome! Bwahaha!"" a large man standing behind the counter bellows, grinning from ear to ear. ""I'm Andre. We don't often get visitors in our little town, so I'm glad you're here. I hope you do stay longer than our last visitor! Bwahaha!""",,,,,,
 Tutorial_605,"""Please, have a look at my wares."" he continues, ""Item pickups and dropoffs take <b>no time at all!</b>""
 
-""Anything here is yours...provided you have enough Coin of course! Bwahaha!""",,,,,,
+""Anything here is yours...provided you have enough <b>Coin</b> of course! Bwahaha!""",,,,,,
 Tutorial_61,"""Feel free to use our chapel to <b>pray</b> anytime you want."" Anna continues.
 
 ""Also, we are open 24 hours, so please come <b>volunteer</b> with us whenever you have a moment.""",,,,,,
@@ -378,35 +378,42 @@ Tooltip_ExitBuilding,"*Click*
 Go outside.",,,,,,
 Tooltip_SaintsCollection,"*Click*
 Saints Collection.",,,,,,
-Tutorial_Instruction_1,"Release the button when the two circles overlap for a <b>Critical Hit.</b>
+Tutorial_Instruction_1,"Release the button when the two circles overlap for a <b>CRITICAL HIT.</b>
 
-Landing all Critical Hits for an Activity results in various bonuses, so try to get Critical Hits as much as you can! ",,,,,,
-Tutorial_Instruction_2,Moving through each tile takes 0.5 hrs,,,,,,
-Tutorial_Instruction_3,Charitable activites like volunteering and building construction increase your Charity Points (CP).,,,,,,
-Tutorial_Instruction_4,Side Notifications pop up to always remind you of the next Liturgy of the Hours and all upcoming building deadlines.,,,,,,
+Landing all Critical Hits for an Activity results in various bonuses, so try to get as many Critical Hits as you can! ",,,,,,
+Tutorial_Instruction_2,Stepping through each tile takes 0.5 hrs.,,,,,,
+Tutorial_Instruction_3,"Charitable activites like building construction and volunteering increase your Charity Points (CP).
+
+If your CP falls to zero. It is Game Over.",,,,,,
+Tutorial_Instruction_4,"Side Notifications pop up to always remind you of the next Liturgy of the Hours and all upcoming building deadlines.
+
+Convent activities display the start & end times, while other buildings display their deadlines.",,,,,,
 Tutorial_Instruction_5,"Purchased items appear in your Inventory.
 
 Purchasing/Delivering items take no time.",,,,,,
-Tutorial_Instruction_6,"Sometimes, money is given to you as a gift when you deliver items and volunteer your Time and Energy.",,,,,,
-Tutorial_Instruction_7,"Your goal each week is to achieve at least 75% CP and FP by Sunday.
+Tutorial_Instruction_6,"Sometimes, money is given to you as a gift when you deliver items or volunteer.",,,,,,
+Tutorial_Instruction_7,"Your daily goal is to maintain CP and FP above zero.
 Manage your Time and Energy between Charitable and Spiritual activities to attain this goal!
 Hover your Mouse over any icon to get more information.",,,,,,
 Tutorial_Instruction_8,"When a building is ready to be constructed, the Construct icon will appear above it.
 
-If by midnight you have not constructed a building that is ready to be built, you will lose all Charity Points (CP)",,,,,,
-Tutorial_Instruction_Rainfall,"Moving outside during Rainfall exposes you to Ailments, which impact your Energy. Rest at the Convent to remove Ailments 
+If you have any unconstructed buildings by midnight, you will lose all Charity Points (CP).",,,,,,
+Tutorial_Instruction_Rainfall,"Stepping outside during Rainfall exposes you to Ailments, which negatively impact your Energy. Click the Energy button to view current Ailments. Sleep at the Convent to remove Ailments. 
 
-Using an Umbrella eliminates the chance of getting Ailments",,,,,,
-Tutorial_Instruction_Blizzard,"Moving outside during a Blizzard will increase the chance of Freezing. If you are frozen, you will also be unable to move, and must tap on the postulant repeatedly to break out of the snow. 
+An Umbrella eliminates the chance of getting Ailments.",,,,,,
+Tutorial_Instruction_Blizzard,"Stepping outside during a Blizzard will increase the chance of Freezing. If you are frozen, you will also be unable to move, and must tap on the postulant repeatedly to break out of the snow. 
 
 Each tap will pass Time and also consume Energy. Using a Winter Cloak eliminates the chance of Freezing.",,,,,,
-Tutorial_Instruction_9,"Occasionally, severe weather conditions such as Heatwaves, Rainfall, and Blizzards will occur. The start time is always indicated with the corresponding weather icon. Moving outside during a Heatwave exposes you to Ailments which impact your Energy.
+Tutorial_Instruction_9,"Occasionally, severe weather conditions such as Heatwaves, Rainfall, and Blizzards will occur. The start time is always indicated with the corresponding weather icon. Stepping outside during a Heatwave exposes you to Ailments which negatively impact your Energy.
 
-Rest at the Convent to remove Ailments ",,,,,,
+Rest at the Convent to remove Ailments.",,,,,,
 Tutorial_Instruction_10,Provisions always appear first thing in the morning. Use these strategically in your spiritual and charitable quest!,,,,,,
 Tutorial_Instruction_11,"Depleting your Energy (EN) while in the field will cause you to lose all progress and restart the current day.
 
 You are safe if it depletes while in a building. Keep an eye on your Energy!",,,,,,
+Tutorial_Instruction_Relationship,"Every activity performed at a building (except the Convent & Shop) increases <b>Relationship Points (RP)</b> for that building.
+
+Higher RP allows you to complete activities at that building quicker, alongside other bonuses.",,,,,,
 Bakhita_Patron,of Sudan.,,,,,,
 Teresa_Patron,of World Youth Day.,,,,,,
 SanMartin_Patron,"of Mixed Race, Barbers, Public Health Workers, Innkeepers.",,,,,,

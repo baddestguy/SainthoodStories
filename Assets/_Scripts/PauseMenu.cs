@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject PauseSettings;
     public GameObject GraphicsSettings;
     public GameObject SoundSettings;
+    public Toggle TutorialEnabled;
+
     [HideInInspector] public bool active;
     public static PauseMenu Instance
     {
@@ -33,6 +36,11 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
+        if (TutorialManager.Instance != null && TutorialEnabled != null)
+        {
+            TutorialEnabled.SetIsOnWithoutNotify(!TutorialManager.Instance.SkipTutorial);
+        }
+
     }
 
     public void Activate()
@@ -60,6 +68,11 @@ public class PauseMenu : MonoBehaviour
         CloseAll();
         SoundSettings.SetActive(true);
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+    }
+
+    public void ToggleTutorial()
+    {
+        TutorialManager.Instance.SkipTutorial = !TutorialManager.Instance.SkipTutorial;
     }
 
     public void SetHeaderText(string value)

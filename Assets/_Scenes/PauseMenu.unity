@@ -13650,6 +13650,7 @@ MonoBehaviour:
   PauseSettings: {fileID: 620159762}
   GraphicsSettings: {fileID: 858852813}
   SoundSettings: {fileID: 543474792}
+  TutorialEnabled: {fileID: 0}
   active: 0
 --- !u!114 &1121818747
 MonoBehaviour:

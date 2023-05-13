@@ -140,7 +140,7 @@ public class InteractableHouse : InteractableObject
         MyMissions = GameDataManager.Instance.GetBuildingMissionData(GetType().Name);
 
         var tile = GameManager.Instance.GetNextRandomMapTile(GetType().Name);
-        if (tile != null)
+        if (!GameSettings.Instance.FTUE && tile != null)
         {
             CurrentGroundTile = tile;
             var newPos = CurrentGroundTile.transform.position;
