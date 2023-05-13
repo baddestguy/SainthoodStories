@@ -36,9 +36,11 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
-        if (TutorialManager.Instance != null && TutorialEnabled != null)
+        TutorialManager.Instance.SkipTutorial = !GameSettings.Instance.TutorialToggle;
+
+        if (GameSettings.Instance != null && TutorialEnabled != null)
         {
-            TutorialEnabled.SetIsOnWithoutNotify(!TutorialManager.Instance.SkipTutorial);
+            TutorialEnabled.SetIsOnWithoutNotify(GameSettings.Instance.TutorialToggle);
         }
 
     }
