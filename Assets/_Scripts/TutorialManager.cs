@@ -129,7 +129,7 @@ public class TutorialManager : MonoBehaviour
                         TutorialStrings.Add("Tutorial_Instruction_6");
                     }
                     return;
-                case 20:
+                case 16:
                     if (!TutorialStrings.Contains("Tutorial_Instruction_7"))
                     {
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_7");
