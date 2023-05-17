@@ -35,13 +35,13 @@
         }
     }
 
-    public override void DeliverItem(InteractableHouse house)
+    public override void DeliverItem(InteractableHouse house, bool autoDeliver = false)
     {
         if (house != this) return;
 
         if(DeadlineSet)
         {
-            DeliverDeadlineItem();
+            DeliverDeadlineItem(autoDeliver);
             return;
         }
 
@@ -51,7 +51,7 @@
         {
             UI.Instance.DisplayMessage("DELIVERED GROCERIES!");
             UpdateCharityPoints(ItemDeliveryPoints, 0);
-            base.DeliverItem(house);
+            base.DeliverItem(house, autoDeliver);
             return;
         }
 
@@ -60,7 +60,7 @@
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
             UpdateCharityPoints(ItemDeliveryPoints*2, 0);
-            base.DeliverItem(house);
+            base.DeliverItem(house, autoDeliver);
             return;
         }
 
@@ -73,14 +73,14 @@
         base.ItemDeliveryThanks();
     }
 
-    private void DeliverDeadlineItem()
+    private void DeliverDeadlineItem( bool autoDeliver = false)
     {
         ItemType meal = InventoryManager.Instance.GetItem(ItemType.MEAL);
         if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
             UpdateCharityPoints(ItemDeliveryPoints * 2 * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(this);
+            base.DeliverItem(this, autoDeliver);
         }
         else
         {
@@ -89,7 +89,7 @@
             {
                 UI.Instance.DisplayMessage("FED THE HUNGRY!");
                 UpdateCharityPoints(ItemDeliveryPoints * 1 * DeadlineDeliveryBonus, 0);
-                base.DeliverItem(this);
+                base.DeliverItem(this, autoDeliver);
             }
         }
     }
@@ -153,7 +153,7 @@
         if (item == ItemType.GROCERIES)
         {
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(this);
+            base.DeliverItem(this, true);
         }
     }
 }

@@ -29,7 +29,7 @@
         }
     }
 
-    public override void DeliverItem(InteractableHouse house)
+    public override void DeliverItem(InteractableHouse house, bool autoDeliver = false)
     {
         if (house != this) return;
 
@@ -39,7 +39,7 @@
         {
             UI.Instance.DisplayMessage("CLOTHED THE NAKED!");
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(house);
+            base.DeliverItem(house, autoDeliver);
         }
         else
         {

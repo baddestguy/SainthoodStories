@@ -55,7 +55,7 @@ public class InteractableOrphanage : InteractableHouse
         base.Tick(time, day);
     }
 
-    public override void DeliverItem(InteractableHouse house)
+    public override void DeliverItem(InteractableHouse house, bool autoDeliver = false)
     {
         if (house != this) return;
 
@@ -65,7 +65,7 @@ public class InteractableOrphanage : InteractableHouse
         {
             UI.Instance.DisplayMessage("GAVE TOYS TO THE KIDS!");
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(house);
+            base.DeliverItem(house, autoDeliver);
         }
         else
         {
@@ -246,7 +246,7 @@ public class InteractableOrphanage : InteractableHouse
         if (item == ItemType.TOYS)
         {
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(this);
+            base.DeliverItem(this, true);
         }
     }
 }

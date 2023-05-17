@@ -490,7 +490,7 @@ public class InteractableHouse : InteractableObject
         clock.Tick();
     }
 
-    public virtual void DeliverItem(InteractableHouse house)
+    public virtual void DeliverItem(InteractableHouse house, bool autoDeliver = false)
     {
         if (house != this) return;
 
@@ -511,7 +511,10 @@ public class InteractableHouse : InteractableObject
             UI.Instance.SideNotificationPop(GetType().Name);
 
             BuildRelationship(ThankYouType.ITEM);
-            GameClock.ExecuteEvents?.Invoke();
+            if (!autoDeliver)
+            {
+                GameClock.ExecuteEvents?.Invoke();
+            }
         }
     }
 
@@ -1262,7 +1265,7 @@ public class InteractableHouse : InteractableObject
 
     protected virtual void AutoDeliver(ItemType item)
     {
-        DeliverItem(this);
+        DeliverItem(this, true);
     }
 
     public override void OnDisable()

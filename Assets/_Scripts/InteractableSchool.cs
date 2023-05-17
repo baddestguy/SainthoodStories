@@ -111,7 +111,7 @@ public class InteractableSchool : InteractableHouse
         base.BuildRelationship(thanks, amount);
     }
 
-    public override void DeliverItem(InteractableHouse house)
+    public override void DeliverItem(InteractableHouse house, bool autoDeliver = false)
     {
         if (house != this) return;
 
@@ -121,7 +121,7 @@ public class InteractableSchool : InteractableHouse
         {
             UI.Instance.DisplayMessage("DELIVERED STATIONERY!");
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(house);
+            base.DeliverItem(house, autoDeliver);
         }
         else
         {
@@ -296,7 +296,7 @@ public class InteractableSchool : InteractableHouse
         if (item == ItemType.STATIONERY)
         {
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(this);
+            base.DeliverItem(this, true);
         }
     }
 

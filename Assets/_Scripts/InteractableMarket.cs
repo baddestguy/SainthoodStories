@@ -52,10 +52,13 @@ public class InteractableMarket : InteractableHouse
 
             foreach(var kvp in InventoryManager.Instance.AutoDeliveryItems.ToList())
             {
-                if (clock.Time == kvp.Value.Time) //Make sure only the items that match delivery times are triggering
+                foreach(var item in kvp.Value)
                 {
-                    InventoryManager.Instance.AutoDeliveryItems.Remove(kvp.Key);
-                    AutoDeliverToHouse?.Invoke(kvp.Key);
+                    if (clock.Time == item.Time) //Make sure only the items that match delivery times are triggering
+                    {
+                        InventoryManager.Instance.AutoDeliveryItems.Remove(kvp.Key);
+                        AutoDeliverToHouse?.Invoke(kvp.Key);
+                    }
                 }
             }
         }
@@ -80,23 +83,37 @@ public class InteractableMarket : InteractableHouse
             TreasuryManager.Instance.SpendMoney(moddedPrice);
 
             var autoDeliver = InventoryManager.Instance.GetProvision(Provision.AUTO_DELIVER);
-            if(autoDeliver != null && InventoryManager.Instance.AutoDeliveryItems.Count < autoDeliver.Value)
+            if(autoDeliver != null && InventoryManager.Instance.AutoDeliveryItems.Sum(x => x.Value.Count) < autoDeliver.Value)
             {
-                if(InventoryManager.Instance.AutoDeliveryItems.Count > 0)
+                //if(InventoryManager.Instance.AutoDeliveryItems.Count > 0)
+                //{
+                //    var lastItemTime = InventoryManager.Instance.AutoDeliveryItems.Last().Value.Last().Time;
+                //    if(lastItemTime == (clock.Time + 2.5))
+                //    {
+                //        if (InventoryManager.Instance.AutoDeliveryItems.ContainsKey(item))
+                //        {
+                //            InventoryManager.Instance.AutoDeliveryItems[item].Add(new GameClock(lastItemTime + 0.5));
+                //        }
+                //        else
+                //        {
+                //            InventoryManager.Instance.AutoDeliveryItems.Add(item, new List<GameClock>() { new GameClock(lastItemTime + 0.5) });
+                //        }
+                //    }
+                //    else
+                //    {
+                //        InventoryManager.Instance.AutoDeliveryItems.Add(item, new GameClock(clock.Time + 2.5));
+                //    }
+                //}
+                //else
                 {
-                    var lastItemTime = InventoryManager.Instance.AutoDeliveryItems.Last().Value.Time;
-                    if(lastItemTime == (clock.Time + 2.5))
+                    if (InventoryManager.Instance.AutoDeliveryItems.ContainsKey(item))
                     {
-                        InventoryManager.Instance.AutoDeliveryItems.Add(item, new GameClock(lastItemTime + 0.5));
+                        InventoryManager.Instance.AutoDeliveryItems[item].Add(new GameClock(clock.Time + 2.5));
                     }
                     else
                     {
-                        InventoryManager.Instance.AutoDeliveryItems.Add(item, new GameClock(clock.Time + 2.5));
+                        InventoryManager.Instance.AutoDeliveryItems.Add(item, new List<GameClock>() { new GameClock(clock.Time + 2.5) });
                     }
-                }
-                else
-                {
-                    InventoryManager.Instance.AutoDeliveryItems.Add(item, new GameClock(clock.Time + 2.5));
                 }
             }
             else
