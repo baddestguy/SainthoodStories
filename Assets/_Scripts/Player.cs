@@ -382,7 +382,7 @@ public class Player : MonoBehaviour
         {
             AddRandomAilment();
         }
-        else if(Energy.Amount <= 0 && Random.Range(0,100) < 50)
+        else if(Energy.Amount <= 0 && Random.Range(0,100) < 50 && (MissionManager.Instance.CurrentMission.CurrentWeek > 1 || GameManager.Instance.GameClock.Day >= 3))
         {
             StatusEffects.Add(PlayerStatusEffect.VULNERABLE);
         }
