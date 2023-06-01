@@ -230,27 +230,29 @@ public class InteractableHouse : InteractableObject
 
         if (GetType().Name != "InteractableChurch" && GetType().Name != "InteractableMarket")
         {
-            if (GameClock.DeltaTime && WeatherManager.Instance.IsStormy())
+            if (GameClock.DeltaTime)
             {
-                if(CurrentSturdyMaterials == 0)
+                if (WeatherManager.Instance.IsStormy())
                 {
-                    if (BuildingState == BuildingState.NORMAL && Random.Range(0, 100) < EnvironmentalHazardDestructionChance)
+                    if(CurrentSturdyMaterials == 0)
                     {
-                        TriggerHazardousMode(time, day);
-                    }
-
-                    if(BuildingState == BuildingState.HAZARDOUS)
-                    {
-                        EnvironmentalHazardDestructionCountdown--;
-                        if (EnvironmentalHazardDestructionCountdown < 0)
+                        if (BuildingState == BuildingState.NORMAL && Random.Range(0, 100) < EnvironmentalHazardDestructionChance)
                         {
-                            DestroyBuilding();
+                            TriggerHazardousMode(time, day);
                         }
                     }
+                    else
+                    {
+                        CurrentSturdyMaterials--;
+                    }
                 }
-                else
+                if (BuildingState == BuildingState.HAZARDOUS)
                 {
-                    CurrentSturdyMaterials--;
+                    EnvironmentalHazardDestructionCountdown--;
+                    if (EnvironmentalHazardDestructionCountdown < 0)
+                    {
+                        DestroyBuilding();
+                    }
                 }
             }
         }
