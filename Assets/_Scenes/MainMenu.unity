@@ -80866,7 +80866,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '[DEMO V1.0]'
+  m_text: '[PRE-ALPHA]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
@@ -80937,8 +80937,8 @@ MonoBehaviour:
     textComponent: {fileID: 1424443780}
     characterCount: 11
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 3
+    spaceCount: 0
+    wordCount: 1
     linkCount: 0
     lineCount: 1
     pageCount: 1
