@@ -33,7 +33,7 @@ public class InteractableChurch : InteractableHouse
         PopIcon.transform.localPosition += new Vector3 (0, 0.5f, 0);
         ExteriorPopUI.transform.localPosition += new Vector3(0, 1, 0);
         EnergyConsumption = ServiceEnergy;
-        BuildPoints = MaxBuildPoints;
+        BuildPoints = (int)MaxBuildPoints;
         InventoryManager.RefreshInventoryUI += CheckProvisions;
     }
 
@@ -404,7 +404,7 @@ public class InteractableChurch : InteractableHouse
         Player player = GameManager.Instance.Player;
 
         SleepProgress++;
-        OnActionProgress?.Invoke(SleepProgress / MaxSleepProgress, this, 0);
+        OnActionProgress?.Invoke(SleepProgress / MaxSleepProgress, this, 1);
         if (SleepProgress == MaxSleepProgress)
         {
             var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
@@ -436,6 +436,7 @@ public class InteractableChurch : InteractableHouse
         yield return new WaitForSeconds(1.5f);
         ResetActionProgress();
         OnActionProgress?.Invoke(0, this, 0);
+        OnActionProgress?.Invoke(0, this, 1);
     }
 
     public override void ResetActionProgress()

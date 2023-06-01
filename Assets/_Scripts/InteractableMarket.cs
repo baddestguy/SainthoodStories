@@ -12,7 +12,7 @@ public class InteractableMarket : InteractableHouse
     {
         PopUILocation = "UI/ExternalUI";
         base.Start();
-        BuildPoints = MaxBuildPoints;
+        BuildPoints = (int)MaxBuildPoints;
     }
     public override void GetInteriorPopUI()
     {

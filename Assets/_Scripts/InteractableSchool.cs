@@ -83,7 +83,7 @@ public class InteractableSchool : InteractableHouse
     public void TeachSubject()
     {
         TeachCountdown++;
-        OnActionProgress?.Invoke(TeachCountdown / MaxTeachPoints, this, 0);
+        OnActionProgress?.Invoke(TeachCountdown / MaxTeachPoints, this, 1);
 
         if (TeachCountdown >= MaxTeachPoints)
         {

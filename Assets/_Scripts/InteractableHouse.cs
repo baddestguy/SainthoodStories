@@ -44,7 +44,7 @@ public class InteractableHouse : InteractableObject
 
     public BuildingState BuildingState;
     protected int BuildPoints = 0;
-    protected int MaxBuildPoints = 4;
+    protected float MaxBuildPoints = 4f;
     public GameObject RubbleGo;
     public GameObject BuildingGo;
 
@@ -202,7 +202,7 @@ public class InteractableHouse : InteractableObject
         {
             case BuildingActivityState.VOLUNTEERING:
                 VolunteerCountdown++;
-                OnActionProgress?.Invoke(VolunteerCountdown / MaxVolunteerPoints, this, 0);
+                OnActionProgress?.Invoke(VolunteerCountdown / MaxVolunteerPoints, this, 1);
                 if (VolunteerCountdown >= MaxVolunteerPoints)
                 {
                     BuildRelationship(ThankYouType.VOLUNTEER);
@@ -295,7 +295,7 @@ public class InteractableHouse : InteractableObject
         RequiredItems = 0;
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name);
-        OnActionProgress?.Invoke(1f, this, 1);
+        OnActionProgress?.Invoke(1f, this, 1); //Reset all progress bars
 
         if(HouseUIActive)
             UI.Instance.SideNotificationPush(GetHazardIcon(), 0, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown/2d, GameManager.Instance.GameClock.Day), GetType().Name + GetHazardIcon());
