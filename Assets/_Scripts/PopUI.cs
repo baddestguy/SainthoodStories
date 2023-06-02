@@ -247,7 +247,7 @@ public class PopUI : MonoBehaviour
                 Debug.LogWarning("CRITICAL HIT!");
                 PointerDown = false;
                 ButtonTimer = 0f;
-                CriticalHitCount++;
+                if(CriticalHitCount > -1) CriticalHitCount++;
                 OnClick(ButtonName);
                 ButtonPressFx.SetActive(true);
                 ButtonPressFx.transform.position = ChargeFx.transform.position;
@@ -259,7 +259,7 @@ public class PopUI : MonoBehaviour
                 Debug.LogWarning("Regular HIT!");
                 PointerDown = false;
                 ButtonTimer = 0f;
-                CriticalHitCount = 0;
+                CriticalHitCount = -1;
                 OnClick(ButtonName);
             }
         }
@@ -280,7 +280,7 @@ public class PopUI : MonoBehaviour
             if (ButtonTimer >= ButtonTimerTarget)
             {
                 Debug.LogWarning("LEft Lingering Regular HIT!");
-                CriticalHitCount = 0;
+                CriticalHitCount = -1;
                 PointerDown = false;
                 ButtonTimer = 0f;
                 OnClick(ButtonName);
@@ -310,9 +310,19 @@ public class PopUI : MonoBehaviour
         ProgressBar.gameObject.SetActive(true);
         ProgressBar.DOValue(progress, 0.5f);
 
-        if(progress > 0.99f)
+        if(CriticalHitCount > 0)
+        {
+            ProgressBar.fillRect.GetComponent<Image>().color = Color.yellow;
+        }
+        else
+        {
+            ProgressBar.fillRect.GetComponent<Image>().color = Color.green;
+        }
+
+        if (progress > 0.99f)
         {
             StartCoroutine(DisableProgressBar());
+            CriticalHitCount = 0;
         }
         else if(progress == 0)
         {

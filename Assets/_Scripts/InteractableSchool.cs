@@ -83,6 +83,8 @@ public class InteractableSchool : InteractableHouse
     public void TeachSubject()
     {
         TeachCountdown++;
+        var extraPoints = 0;
+        if (PopUI.CriticalHitCount == MaxTeachPoints) extraPoints = 1;
         OnActionProgress?.Invoke(TeachCountdown / MaxTeachPoints, this, 1);
 
         if (TeachCountdown >= MaxTeachPoints)
@@ -92,8 +94,6 @@ public class InteractableSchool : InteractableHouse
             var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
             moddedEnergy += schoolMaterials?.Value ?? 0;
             player.ConsumeEnergy(EnergyConsumption);
-            var extraPoints = 0;
-            if (PopUI.CriticalHitCount == MaxTeachPoints) extraPoints = 1;
 
             UpdateCharityPoints(TeachPoints+ extraPoints, moddedEnergy);
             BuildRelationship(ThankYouType.TEACH);
@@ -290,6 +290,12 @@ public class InteractableSchool : InteractableHouse
         TeachCountdown = 0;
         base.ResetActionProgress();
     }
+
+    public override bool HasResetActionProgress()
+    {
+        return TeachCountdown == 0 && base.HasResetActionProgress();
+    }
+
 
     protected override void AutoDeliver(ItemType item)
     {

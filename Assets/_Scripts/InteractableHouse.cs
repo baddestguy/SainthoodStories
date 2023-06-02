@@ -202,6 +202,8 @@ public class InteractableHouse : InteractableObject
         {
             case BuildingActivityState.VOLUNTEERING:
                 VolunteerCountdown++;
+                var extraPoints = 0;
+                if (PopUI.CriticalHitCount == MaxVolunteerPoints) extraPoints = 1;
                 OnActionProgress?.Invoke(VolunteerCountdown / MaxVolunteerPoints, this, 1);
                 if (VolunteerCountdown >= MaxVolunteerPoints)
                 {
@@ -210,8 +212,6 @@ public class InteractableHouse : InteractableObject
                     var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
                     moddedEnergy += ModVolunteerEnergyWithProvisions();
                     player.ConsumeEnergy(EnergyConsumption);
-                    var extraPoints = 0;
-                    if (PopUI.CriticalHitCount == MaxVolunteerPoints) extraPoints = 1;
                     UpdateCharityPoints(VolunteerPoints + extraPoints, moddedEnergy);
                     VolunteerCountdown = 0;
                 }
@@ -478,10 +478,11 @@ public class InteractableHouse : InteractableObject
 
         UI.Instance.DisplayMessage("MEDITATED!!");
         PrayersProgress++;
+        var extraPoints = 0;
+        extraPoints += PopUI.CriticalHitCount == MaxPrayerProgress ? 1 : 0;
         OnActionProgress?.Invoke(PrayersProgress / MaxPrayerProgress, this, 0);
         if (PrayersProgress == MaxPrayerProgress)
         {
-            var extraPoints = 0;
             var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
             var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
 
@@ -491,7 +492,6 @@ public class InteractableHouse : InteractableObject
                 player.ConsumeEnergy(koboko.Value);
             }
             extraPoints += rosary?.Value ?? 0;
-            extraPoints += PopUI.CriticalHitCount == MaxPrayerProgress ? 1 : 0;
 
             UpdateFaithPoints(MeditationPoints + FPBonus + extraPoints, 0);
             PrayersProgress = 0;
@@ -586,6 +586,8 @@ public class InteractableHouse : InteractableObject
         if (player.EnergyDepleted() || !CanBuild()) return;
 
         BuildPoints++;
+        var extraPoints = 0;
+        if (PopUI.CriticalHitCount == MaxBuildPoints) extraPoints = 1;
         OnActionProgress?.Invoke(BuildPoints / MaxBuildPoints, this, 0);
 
         UI.Instance.DisplayMessage("BUILDING!");
@@ -610,8 +612,6 @@ public class InteractableHouse : InteractableObject
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             player.ConsumeEnergy(EnergyConsumption);
             var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
-            var extraPoints = 0;
-            if (PopUI.CriticalHitCount == MaxBuildPoints) extraPoints = 1;
             var moddedCPReward = extraPoints + tents?.Value ?? 0;
             UpdateCharityPoints(1 + moddedCPReward, moddedEnergy);
 
@@ -988,7 +988,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual bool HasResetActionProgress()
     {
-        return VolunteerCountdown == 0;
+        return VolunteerCountdown == 0 && PrayersProgress == 0;
     }
 
     private void OnUIEnabled(bool enabled)
