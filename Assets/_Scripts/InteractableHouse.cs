@@ -317,6 +317,7 @@ public class InteractableHouse : InteractableObject
     public static bool Zooming;
     IEnumerator TryZoomAsync(float zoom) 
     {
+        InfoPopup.gameObject.SetActive(false);
         if (!CameraLockOnMe || Zooming)
         {
             yield break;
@@ -329,6 +330,8 @@ public class InteractableHouse : InteractableObject
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
             ExteriorPopUI.gameObject.SetActive(true);
+            HouseUIActive = true;
+            PopIcon.gameObject.SetActive(false);
         }
         else
         {
@@ -340,8 +343,12 @@ public class InteractableHouse : InteractableObject
             {
                 ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
                 ExteriorPopUI.gameObject.SetActive(false);
+                HouseUIActive = false;
+                PopIcon.UIPopped(false);
             }
         }
+        var clock = GameManager.Instance.GameClock;
+        clock.Ping();
 
         yield return new WaitForSeconds(0.5f);
         Zooming = false;
