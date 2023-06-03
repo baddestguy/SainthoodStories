@@ -273,8 +273,10 @@ public class InteractableHouse : InteractableObject
         UI.Instance.SideNotificationPop(GetType().Name + GetHazardIcon());
         Destroy(ExteriorPopUI.gameObject);
         Initialize();
-        if(InsideHouse)
+        if (InsideHouse && CameraLockOnMe)
+        {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
+        }
     }
 
     public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
