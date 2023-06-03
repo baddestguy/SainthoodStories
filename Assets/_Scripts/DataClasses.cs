@@ -394,6 +394,7 @@ public class CustomEventData
     public CustomEventRewardType RewardType;
     public float RejectionCost;
     public bool IsOrderedSequence;
+    public string TriggerWeekDay;
     public string ImagePath;
     public string LocalizationKey;
 }

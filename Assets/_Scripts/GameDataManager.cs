@@ -212,7 +212,13 @@ public class GameDataManager : MonoBehaviour
 
         if(eGroup == EventGroup.DAILY)
         {
-            while (TriggeredDailyEvents.Contains(returnData.Id))
+            var currentDay = GameManager.Instance.GameClock.Day;
+            var currentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
+
+            var eventWeek = int.Parse(returnData.TriggerWeekDay.Split(',')[0]);
+            var eventDay = int.Parse(returnData.TriggerWeekDay.Split(',')[1]);
+
+            while (TriggeredDailyEvents.Contains(returnData.Id) && currentDay >= eventDay && currentWeek >= eventWeek)
             {
                 returnData = groupList[Random.Range(0, groupList.Count)];
             }
