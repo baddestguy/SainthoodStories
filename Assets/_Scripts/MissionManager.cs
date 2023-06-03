@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -101,6 +102,7 @@ public class MissionManager : MonoBehaviour
         bool missionFailed = false;
         Player.LockMovement = true;
         MissionOver = true;
+        UI.Instance.EnableAllUIElements(false);
         UI.Instance.GameOver();
         while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress) yield return null;
         UI.Instance.CrossFade(1, 1f);
@@ -185,5 +187,10 @@ public class MissionManager : MonoBehaviour
     public void OverideFP(int fp)
     {
         UpdateFaithPoints(fp);
+    }
+
+    public bool FirstWeek()
+    {
+        return CurrentMission.CurrentWeek == 1;
     }
 }

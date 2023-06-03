@@ -83,7 +83,9 @@ public class InteractableSchool : InteractableHouse
     public void TeachSubject()
     {
         TeachCountdown++;
-        OnActionProgress?.Invoke(TeachCountdown / MaxTeachPoints, this, 0);
+        var extraPoints = 0;
+        if (PopUI.CriticalHitCount == MaxTeachPoints) extraPoints = 1;
+        OnActionProgress?.Invoke(TeachCountdown / MaxTeachPoints, this, 1);
 
         if (TeachCountdown >= MaxTeachPoints)
         {
@@ -92,8 +94,6 @@ public class InteractableSchool : InteractableHouse
             var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
             moddedEnergy += schoolMaterials?.Value ?? 0;
             player.ConsumeEnergy(EnergyConsumption);
-            var extraPoints = 0;
-            if (PopUI.CriticalHitCount == MaxTeachPoints) extraPoints = 1;
 
             UpdateCharityPoints(TeachPoints+ extraPoints, moddedEnergy);
             BuildRelationship(ThankYouType.TEACH);
@@ -111,7 +111,7 @@ public class InteractableSchool : InteractableHouse
         base.BuildRelationship(thanks, amount);
     }
 
-    public override void DeliverItem(InteractableHouse house)
+    public override void DeliverItem(InteractableHouse house, bool autoDeliver = false)
     {
         if (house != this) return;
 
@@ -121,7 +121,7 @@ public class InteractableSchool : InteractableHouse
         {
             UI.Instance.DisplayMessage("DELIVERED STATIONERY!");
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(house);
+            base.DeliverItem(house, autoDeliver);
         }
         else
         {
@@ -291,12 +291,18 @@ public class InteractableSchool : InteractableHouse
         base.ResetActionProgress();
     }
 
+    public override bool HasResetActionProgress()
+    {
+        return TeachCountdown == 0 && base.HasResetActionProgress();
+    }
+
+
     protected override void AutoDeliver(ItemType item)
     {
         if (item == ItemType.STATIONERY)
         {
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(this);
+            base.DeliverItem(this, true);
         }
     }
 

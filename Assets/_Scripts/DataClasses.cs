@@ -516,6 +516,7 @@ public class SaveSettingsData
     public float sfxVolume;
     public float musicVolume;
     public float ambianceVolume;
+    public bool tutorialEnabled;
 
     public Language language;
 }

@@ -89,7 +89,7 @@ public class InteractableHospital : InteractableHouse
                     DeliveryCountdown = 0;
                     EndDelivery.SetClock(clock.Time - 1, clock.Day);
                     BuildRelationship(ThankYouType.BABY);
-                    OnActionProgress?.Invoke(1f, this, 1);
+                    OnActionProgress?.Invoke(1f, this, 2);
                 }
             }
         }
@@ -221,7 +221,7 @@ public class InteractableHospital : InteractableHouse
             BuildingActivityState = BuildingActivityState.DELIVERING_BABY;
             UI.Instance.DisplayMessage("Delivering a Baby!!");
             DeliveryCountdown++;
-            OnActionProgress?.Invoke(DeliveryCountdown/ MaxDeliveryPoints, this, 1);   
+            OnActionProgress?.Invoke(DeliveryCountdown/ MaxDeliveryPoints, this, 2);   
             clock.Tick();
         }
         else if (EndDelivery == null || clock > EndDelivery)
@@ -230,7 +230,7 @@ public class InteractableHospital : InteractableHouse
         }
     }
 
-    public override void DeliverItem(InteractableHouse house)
+    public override void DeliverItem(InteractableHouse house, bool autoDeliver = false)
     {
         if (house != this) return;
 
@@ -240,7 +240,7 @@ public class InteractableHospital : InteractableHouse
         {
             UI.Instance.DisplayMessage("DELIVERED MEDS!");
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(house);
+            base.DeliverItem(house, autoDeliver);
         }
         else
         {
@@ -357,7 +357,7 @@ public class InteractableHospital : InteractableHouse
         if(item == ItemType.MEDS)
         {
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
-            base.DeliverItem(this);
+            base.DeliverItem(this, true);
         }
     }
 

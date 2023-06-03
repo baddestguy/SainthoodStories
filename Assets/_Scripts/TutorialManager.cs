@@ -129,7 +129,7 @@ public class TutorialManager : MonoBehaviour
                         TutorialStrings.Add("Tutorial_Instruction_6");
                     }
                     return;
-                case 20:
+                case 16:
                     if (!TutorialStrings.Contains("Tutorial_Instruction_7"))
                     {
                         UI.Instance.TutorialPopupOn("Tutorial_Instruction_7");
@@ -242,7 +242,21 @@ public class TutorialManager : MonoBehaviour
             if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 15)
             {
                 GameSettings.Instance.FTUE = false;
+                SwapHospitalMapTileIndex();
                 SaveDataManager.Instance.SaveGame();
+            }
+        }
+    }
+
+    private void SwapHospitalMapTileIndex()
+    {
+        for(int i = 0; i < GameManager.Instance.MaptileIndexes.Length; i++)
+        {
+            if(GameManager.Instance.MaptileIndexes[i] == 19)
+            {
+                var temp = GameManager.Instance.MaptileIndexes[i];
+                GameManager.Instance.MaptileIndexes[i] = GameManager.Instance.MaptileIndexes[0];
+                GameManager.Instance.MaptileIndexes[0] = temp;
             }
         }
     }

@@ -44,7 +44,7 @@ public class InteractableHouse : InteractableObject
 
     public BuildingState BuildingState;
     protected int BuildPoints = 0;
-    protected int MaxBuildPoints = 4;
+    protected float MaxBuildPoints = 4f;
     public GameObject RubbleGo;
     public GameObject BuildingGo;
 
@@ -140,7 +140,7 @@ public class InteractableHouse : InteractableObject
         MyMissions = GameDataManager.Instance.GetBuildingMissionData(GetType().Name);
 
         var tile = GameManager.Instance.GetNextRandomMapTile(GetType().Name);
-        if (tile != null)
+        if (!GameSettings.Instance.FTUE && tile != null)
         {
             CurrentGroundTile = tile;
             var newPos = CurrentGroundTile.transform.position;
@@ -202,7 +202,9 @@ public class InteractableHouse : InteractableObject
         {
             case BuildingActivityState.VOLUNTEERING:
                 VolunteerCountdown++;
-                OnActionProgress?.Invoke(VolunteerCountdown / MaxVolunteerPoints, this, 0);
+                var extraPoints = 0;
+                if (PopUI.CriticalHitCount == MaxVolunteerPoints) extraPoints = 1;
+                OnActionProgress?.Invoke(VolunteerCountdown / MaxVolunteerPoints, this, 1);
                 if (VolunteerCountdown >= MaxVolunteerPoints)
                 {
                     BuildRelationship(ThankYouType.VOLUNTEER);
@@ -210,8 +212,6 @@ public class InteractableHouse : InteractableObject
                     var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
                     moddedEnergy += ModVolunteerEnergyWithProvisions();
                     player.ConsumeEnergy(EnergyConsumption);
-                    var extraPoints = 0;
-                    if (PopUI.CriticalHitCount == MaxVolunteerPoints) extraPoints = 1;
                     UpdateCharityPoints(VolunteerPoints + extraPoints, moddedEnergy);
                     VolunteerCountdown = 0;
                 }
@@ -230,27 +230,29 @@ public class InteractableHouse : InteractableObject
 
         if (GetType().Name != "InteractableChurch" && GetType().Name != "InteractableMarket")
         {
-            if (GameClock.DeltaTime && WeatherManager.Instance.IsStormy())
+            if (GameClock.DeltaTime)
             {
-                if(CurrentSturdyMaterials == 0)
+                if (WeatherManager.Instance.IsStormy())
                 {
-                    if (BuildingState == BuildingState.NORMAL && Random.Range(0, 100) < EnvironmentalHazardDestructionChance)
+                    if(CurrentSturdyMaterials == 0)
                     {
-                        TriggerHazardousMode(time, day);
-                    }
-
-                    if(BuildingState == BuildingState.HAZARDOUS)
-                    {
-                        EnvironmentalHazardDestructionCountdown--;
-                        if (EnvironmentalHazardDestructionCountdown < 0)
+                        if (BuildingState == BuildingState.NORMAL && Random.Range(0, 100) < EnvironmentalHazardDestructionChance)
                         {
-                            DestroyBuilding();
+                            TriggerHazardousMode(time, day);
                         }
                     }
+                    else
+                    {
+                        CurrentSturdyMaterials--;
+                    }
                 }
-                else
+                if (BuildingState == BuildingState.HAZARDOUS)
                 {
-                    CurrentSturdyMaterials--;
+                    EnvironmentalHazardDestructionCountdown--;
+                    if (EnvironmentalHazardDestructionCountdown < 0)
+                    {
+                        DestroyBuilding();
+                    }
                 }
             }
         }
@@ -271,8 +273,10 @@ public class InteractableHouse : InteractableObject
         UI.Instance.SideNotificationPop(GetType().Name + GetHazardIcon());
         Destroy(ExteriorPopUI.gameObject);
         Initialize();
-        if(InsideHouse)
+        if (InsideHouse && CameraLockOnMe)
+        {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
+        }
     }
 
     public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
@@ -295,7 +299,7 @@ public class InteractableHouse : InteractableObject
         RequiredItems = 0;
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name);
-        OnActionProgress?.Invoke(1f, this, 1);
+        OnActionProgress?.Invoke(1f, this, 1); //Reset all progress bars
 
         if(HouseUIActive)
             UI.Instance.SideNotificationPush(GetHazardIcon(), 0, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown/2d, GameManager.Instance.GameClock.Day), GetType().Name + GetHazardIcon());
@@ -315,6 +319,7 @@ public class InteractableHouse : InteractableObject
     public static bool Zooming;
     IEnumerator TryZoomAsync(float zoom) 
     {
+        InfoPopup.gameObject.SetActive(false);
         if (!CameraLockOnMe || Zooming)
         {
             yield break;
@@ -327,6 +332,8 @@ public class InteractableHouse : InteractableObject
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
             ExteriorPopUI.gameObject.SetActive(true);
+            HouseUIActive = true;
+            PopIcon.gameObject.SetActive(false);
         }
         else
         {
@@ -338,8 +345,12 @@ public class InteractableHouse : InteractableObject
             {
                 ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
                 ExteriorPopUI.gameObject.SetActive(false);
+                HouseUIActive = false;
+                PopIcon.UIPopped(false);
             }
         }
+        var clock = GameManager.Instance.GameClock;
+        clock.Ping();
 
         yield return new WaitForSeconds(0.5f);
         Zooming = false;
@@ -469,10 +480,11 @@ public class InteractableHouse : InteractableObject
 
         UI.Instance.DisplayMessage("MEDITATED!!");
         PrayersProgress++;
+        var extraPoints = 0;
+        extraPoints += PopUI.CriticalHitCount == MaxPrayerProgress ? 1 : 0;
         OnActionProgress?.Invoke(PrayersProgress / MaxPrayerProgress, this, 0);
         if (PrayersProgress == MaxPrayerProgress)
         {
-            var extraPoints = 0;
             var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
             var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
 
@@ -482,7 +494,6 @@ public class InteractableHouse : InteractableObject
                 player.ConsumeEnergy(koboko.Value);
             }
             extraPoints += rosary?.Value ?? 0;
-            extraPoints += PopUI.CriticalHitCount == MaxPrayerProgress ? 1 : 0;
 
             UpdateFaithPoints(MeditationPoints + FPBonus + extraPoints, 0);
             PrayersProgress = 0;
@@ -490,7 +501,7 @@ public class InteractableHouse : InteractableObject
         clock.Tick();
     }
 
-    public virtual void DeliverItem(InteractableHouse house)
+    public virtual void DeliverItem(InteractableHouse house, bool autoDeliver = false)
     {
         if (house != this) return;
 
@@ -511,7 +522,10 @@ public class InteractableHouse : InteractableObject
             UI.Instance.SideNotificationPop(GetType().Name);
 
             BuildRelationship(ThankYouType.ITEM);
-            GameClock.ExecuteEvents?.Invoke();
+            if (!autoDeliver)
+            {
+                GameClock.ExecuteEvents?.Invoke();
+            }
         }
     }
 
@@ -574,6 +588,8 @@ public class InteractableHouse : InteractableObject
         if (player.EnergyDepleted() || !CanBuild()) return;
 
         BuildPoints++;
+        var extraPoints = 0;
+        if (PopUI.CriticalHitCount == MaxBuildPoints) extraPoints = 1;
         OnActionProgress?.Invoke(BuildPoints / MaxBuildPoints, this, 0);
 
         UI.Instance.DisplayMessage("BUILDING!");
@@ -598,8 +614,6 @@ public class InteractableHouse : InteractableObject
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             player.ConsumeEnergy(EnergyConsumption);
             var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
-            var extraPoints = 0;
-            if (PopUI.CriticalHitCount == MaxBuildPoints) extraPoints = 1;
             var moddedCPReward = extraPoints + tents?.Value ?? 0;
             UpdateCharityPoints(1 + moddedCPReward, moddedEnergy);
 
@@ -976,7 +990,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual bool HasResetActionProgress()
     {
-        return VolunteerCountdown == 0;
+        return VolunteerCountdown == 0 && PrayersProgress == 0;
     }
 
     private void OnUIEnabled(bool enabled)
@@ -1262,7 +1276,7 @@ public class InteractableHouse : InteractableObject
 
     protected virtual void AutoDeliver(ItemType item)
     {
-        DeliverItem(this);
+        DeliverItem(this, true);
     }
 
     public override void OnDisable()

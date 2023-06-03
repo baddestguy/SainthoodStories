@@ -140,6 +140,10 @@ public class GameManager : MonoBehaviour
             {
                 ScrambleMapTiles();
             }
+            else
+            {
+                MaptileIndexes = SaveData.Maptiles;
+            }
 
             Player.GameStart(CurrentMission);
             MissionBegin?.Invoke(CurrentMission);

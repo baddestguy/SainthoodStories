@@ -62,6 +62,7 @@ public class GameSettings : MonoBehaviour
             sfxEnebled = data.sfxEnabled;
             musicEnabled = data.musicEnabled;
             ambianceEnabled = data.ambianceEnabled;
+            TutorialToggle = data.tutorialEnabled;
 
             SetVolume("Global", data.globalVolume);
             SetVolume("Music", data.musicVolume);
@@ -113,6 +114,7 @@ public class GameSettings : MonoBehaviour
             sfxVolume = sfxVolume,
             musicVolume = musicVolume,
             ambianceVolume = ambianceVolume,
+            tutorialEnabled = !TutorialManager.Instance.SkipTutorial,
             
             //Language
             language = currentLanguage

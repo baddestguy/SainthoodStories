@@ -228,7 +228,7 @@ public class CustomEventPopup : MonoBehaviour
         }
         Player player = GameManager.Instance.Player;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: player.CurrentBuilding.GetEnergyCostForCustomEvent((int)EventData.Cost));
-        if (player.CanUseEnergy(moddedEnergy)) return;
+        if (player.CanUseEnergy(moddedEnergy) || player.CurrentBuilding.BuildingState == BuildingState.RUBBLE) return;
 
         PointerDown = true;
         ChargeFx.SetActive(true);
