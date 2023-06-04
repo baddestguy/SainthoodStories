@@ -145,6 +145,7 @@ public class GameManager : MonoBehaviour
                 MaptileIndexes = SaveData.Maptiles;
             }
 
+            InteractableHouse.HouseTriggeredEvent = SaveData.HouseTriggeredEvent;
             Player.GameStart(CurrentMission);
             MissionBegin?.Invoke(CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);

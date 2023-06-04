@@ -100,6 +100,12 @@ public class EventsManager : MonoBehaviour
 
             return true;
         });
+        
+        if(!EventList.Any(x=> x.Id == InteractableHouse.HouseTriggeredEvent) && InteractableHouse.HouseTriggeredEvent != CustomEventType.NONE)
+        {
+            AddEventToList(InteractableHouse.HouseTriggeredEvent);
+            ExecuteEvents();
+        }
 
         StoryEvents.AddRange(filteredEvents);
     }

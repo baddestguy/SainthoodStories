@@ -313,6 +313,11 @@ public class HouseSaveData
     public BuildingState BuildingState;
     public int FPBonus;
     public int SturdyMaterials;
+    public bool DeadlineSet;
+    public int DeadlineCounter;
+    public int RequiredItems;
+    public double DeadlineTime;
+    public int DeadlineDay;
 }
 
 public class TooltipStats
@@ -498,6 +503,9 @@ public class SaveObject
     public ProvisionData[] GeneratedProvisions;
     public CustomEventType DailyEvent;
     public int[] Maptiles;
+    public string CurrentHouse;
+    public PlayerStatusEffect[] StatusEffects;
+    public CustomEventType HouseTriggeredEvent;
 }
 
 [System.Serializable]

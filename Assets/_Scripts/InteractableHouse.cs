@@ -54,6 +54,7 @@ public class InteractableHouse : InteractableObject
     protected int VolunteerCountdown = 0;
     protected float MaxVolunteerPoints = 4f;
     public int EventsTriggered;
+    public static CustomEventType HouseTriggeredEvent;
 
     public static UnityAction<bool> OnEnterHouse;
     public BuildingActivityState BuildingActivityState = BuildingActivityState.NONE;
@@ -277,6 +278,8 @@ public class InteractableHouse : InteractableObject
         {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
         }
+     
+        SaveDataManager.Instance.SaveGame();
     }
 
     public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
@@ -634,6 +637,7 @@ public class InteractableHouse : InteractableObject
         }
         GameClock clock = GameManager.Instance.GameClock;
         clock.Tick();
+        SaveDataManager.Instance.SaveGame();
     }
 
     private IEnumerator ClearToolTipAfterBuildingAsync()
@@ -914,7 +918,7 @@ public class InteractableHouse : InteractableObject
         if (GameSettings.Instance.FTUE) return;
         if (EventsTriggered > 0) return;
         if (EventsManager.Instance.EventInProgress) return;
-        if (BuildingState != BuildingState.NORMAL) return; //TODO: IF HAZARDOUS, TRIGGER HAZARDOUS EVENT
+        if (BuildingState != BuildingState.NORMAL) return;
         if (!DuringOpenHours()) return;
      //   if (EventsManager.Instance.CurrentEvents.Count > 3) return;
         if (UI.Instance.WeekBeginCrossFade) return;
@@ -925,27 +929,35 @@ public class InteractableHouse : InteractableObject
 
         if (Random.Range(0, 100) < 100)
         {
+            CustomEventType triggeredEvent = CustomEventType.NONE;
             switch (GetType().Name)
             {
                 case "InteractableChurch":
-                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.CHURCH).Id);
+                    triggeredEvent = GameDataManager.Instance.GetRandomEvent(EventGroup.CHURCH).Id;
+                    EventsManager.Instance.AddEventToList(triggeredEvent);
                     break;
                 case "InteractableHospital":
-                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.HOSPITAL).Id);
+                    triggeredEvent = GameDataManager.Instance.GetRandomEvent(EventGroup.HOSPITAL).Id;
+                    EventsManager.Instance.AddEventToList(triggeredEvent);
                     break;
                 case "InteractableKitchen":
-                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.KITCHEN).Id);
+                    triggeredEvent = GameDataManager.Instance.GetRandomEvent(EventGroup.KITCHEN).Id;
+                    EventsManager.Instance.AddEventToList(triggeredEvent);
                     break;
                 case "InteractableOrphanage":
-                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.ORPHANAGE).Id);
+                    triggeredEvent = GameDataManager.Instance.GetRandomEvent(EventGroup.ORPHANAGE).Id;
+                    EventsManager.Instance.AddEventToList(triggeredEvent);
                     break;
                 case "InteractableShelter":
-                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.SHELTER).Id);
+                    triggeredEvent = GameDataManager.Instance.GetRandomEvent(EventGroup.SHELTER).Id;
+                    EventsManager.Instance.AddEventToList(triggeredEvent);
                     break;
                 case "InteractableSchool":
-                    EventsManager.Instance.AddEventToList(GameDataManager.Instance.GetRandomEvent(EventGroup.SCHOOL).Id);
+                    triggeredEvent = GameDataManager.Instance.GetRandomEvent(EventGroup.SCHOOL).Id;
+                    EventsManager.Instance.AddEventToList(triggeredEvent);
                     break;
             }
+            HouseTriggeredEvent = triggeredEvent;
             EventsTriggered++;
         }
     }
@@ -1088,6 +1100,8 @@ public class InteractableHouse : InteractableObject
             MoneyThanks();
             TreasuryManager.Instance.DonateMoney(Random.Range(1, 2));
         }
+
+        SaveDataManager.Instance.SaveGame();
     }
 
     public bool CanBuild()
@@ -1259,6 +1273,10 @@ public class InteractableHouse : InteractableObject
         RelationshipBonus = data.RelationshipBonus;
         RelationshipPoints = data.RelationshipPoints;
         SturdyMaterials = data.SturdyMaterials;
+        DeadlineSet = data.DeadlineSet;
+        DeadlineCounter = data.DeadlineCounter;
+        DeadlineTime = new GameClock(data.DeadlineTime, data.DeadlineDay);
+        RequiredItems = data.RequiredItems;
     }
 
     public HouseSaveData GetHouseSave()
@@ -1270,7 +1288,12 @@ public class InteractableHouse : InteractableObject
             FPBonus = FPBonus,
             RelationshipBonus = RelationshipBonus,
             RelationshipPoints = RelationshipPoints,
-            SturdyMaterials = SturdyMaterials
+            SturdyMaterials = SturdyMaterials,
+            DeadlineSet = DeadlineSet,
+            DeadlineCounter = DeadlineCounter,
+            DeadlineTime = DeadlineTime.Time,
+            DeadlineDay = DeadlineTime.Day,
+            RequiredItems = RequiredItems
         };
     }
 

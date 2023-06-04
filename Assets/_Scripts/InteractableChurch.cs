@@ -426,8 +426,6 @@ public class InteractableChurch : InteractableHouse
 
     public void OpenUnlockedSaints()
     {
-        SaveDataManager.Instance.SaveGame();
-
         GameManager.Instance.FadeAndLoadScene("SaintsShowcase_Day");
     }
 

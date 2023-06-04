@@ -82,7 +82,10 @@ public class SaveDataManager : MonoBehaviour
             GeneratedProvisions = InventoryManager.Instance.GeneratedProvisions.ToArray(),
             DailyEvent = EventsManager.Instance.DailyEvent,
             RunAttempts = GameManager.Instance.RunAttempts,
-            Maptiles = GameManager.Instance.MaptileIndexes
+            Maptiles = GameManager.Instance.MaptileIndexes,
+            CurrentHouse = GameManager.Instance.Player.CurrentBuilding.GetType().Name,
+            StatusEffects = GameManager.Instance.Player.StatusEffects.ToArray(),
+            HouseTriggeredEvent = InteractableHouse.HouseTriggeredEvent
         };
     }    
 
