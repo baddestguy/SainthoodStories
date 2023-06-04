@@ -154,7 +154,6 @@ public class CustomEventPopup : MonoBehaviour
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
-        SaveDataManager.Instance.SaveGame();
     }
 
     public void No()

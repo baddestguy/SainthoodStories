@@ -318,7 +318,6 @@ public class Player : MonoBehaviour
 
         if (passTime)
             GameManager.Instance.PassTime();
-        SaveDataManager.Instance.SaveGame();
     }
 
     private void ResetPlayerOnEnergyDepletedAsync()

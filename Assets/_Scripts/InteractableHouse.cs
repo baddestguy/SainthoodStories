@@ -637,7 +637,6 @@ public class InteractableHouse : InteractableObject
         }
         GameClock clock = GameManager.Instance.GameClock;
         clock.Tick();
-        SaveDataManager.Instance.SaveGame();
     }
 
     private IEnumerator ClearToolTipAfterBuildingAsync()

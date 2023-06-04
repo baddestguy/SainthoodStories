@@ -775,7 +775,6 @@ public class UI : MonoBehaviour
         WeekIntroBGGraphic.gameObject.SetActive(false);
         WeekBeginCrossFade = false;
         GameManager.Instance.InGameSession = true;
-        SaveDataManager.Instance.SaveGame();
     }
 
     public void ShowDayBeginText(string text)
@@ -802,7 +801,6 @@ public class UI : MonoBehaviour
         WeekIntroBGGraphic.gameObject.SetActive(false);
         WeekBeginCrossFade = false;
         GameManager.Instance.InGameSession = true;
-        SaveDataManager.Instance.SaveGame();
     }
 
     public void CrossFade(float fade, float speed = 5f)

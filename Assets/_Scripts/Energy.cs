@@ -16,7 +16,6 @@ public class Energy
     {
         Amount = Mathf.Clamp((Amount - amount), 0, 100);
         EnergyConsumed?.Invoke(this);
-        SaveDataManager.Instance.SaveGame();
     }
 
     public bool Depleted()

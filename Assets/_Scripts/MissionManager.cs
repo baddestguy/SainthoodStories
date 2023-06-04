@@ -68,8 +68,6 @@ public class MissionManager : MonoBehaviour
             EndMission();
             return;
         }
-
-        SaveDataManager.Instance.SaveGame();
     }
 
     public void UpdateCharityPoints(int amount, InteractableHouse house)
@@ -84,8 +82,6 @@ public class MissionManager : MonoBehaviour
             return;
         }
 
-        SaveDataManager.Instance.SaveGame();
-        
         if (house == null) return;
         HouseScores[house.TileType] = amount;
 
