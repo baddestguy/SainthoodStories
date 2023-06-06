@@ -124,6 +124,7 @@ public class PauseMenu : MonoBehaviour
     {
         //maybe do check before quit
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+        GameManager.Instance.ClearData();
         StartCoroutine(ScheduleCallback(() => {
             SoundManager.Instance.EndAllTracks();
             GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);

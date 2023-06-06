@@ -299,6 +299,16 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 
+    public void ClearData()
+    {
+        InteractableHouse.DeadlineCounter = 0;
+        InteractableHouse.InsideHouse = false;
+        InteractableHouse.HouseUIActive = false;
+        InteractableHouse.HazardCounter = 0;
+        InteractableHouse.HouseTriggeredEvent = CustomEventType.NONE;
+        InteractableHouse.InsideHouse = false;
+    }
+
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnLevelLoaded;
