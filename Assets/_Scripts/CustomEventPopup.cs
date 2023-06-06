@@ -117,6 +117,7 @@ public class CustomEventPopup : MonoBehaviour
             DOTween.Complete(StoryEventText);
             return;
         }
+        InteractableHouse.HouseTriggeredEvent = CustomEventType.NONE;
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: player.CurrentBuilding.GetEnergyCostForCustomEvent((int)EventData.Cost));
@@ -162,9 +163,10 @@ public class CustomEventPopup : MonoBehaviour
             DOTween.Complete(StoryEventText);
             return;
         }
-        Player player = GameManager.Instance.Player;
 
-        if(EventData.RewardType == CustomEventRewardType.FP)
+        InteractableHouse.HouseTriggeredEvent = CustomEventType.NONE;
+        Player player = GameManager.Instance.Player;
+        if (EventData.RewardType == CustomEventRewardType.FP)
             player.CurrentBuilding.UpdateFaithPoints(-(int)EventData.RejectionCost, 0);
         else
             player.CurrentBuilding.UpdateCharityPoints(-(int)EventData.RejectionCost, 0);

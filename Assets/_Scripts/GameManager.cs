@@ -145,6 +145,7 @@ public class GameManager : MonoBehaviour
                 MaptileIndexes = SaveData.Maptiles;
             }
 
+            InteractableHouse.HouseTriggeredEvent = SaveData.HouseTriggeredEvent;
             Player.GameStart(CurrentMission);
             MissionBegin?.Invoke(CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
@@ -296,6 +297,16 @@ public class GameManager : MonoBehaviour
         UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+    }
+
+    public void ClearData()
+    {
+        InteractableHouse.DeadlineCounter = 0;
+        InteractableHouse.InsideHouse = false;
+        InteractableHouse.HouseUIActive = false;
+        InteractableHouse.HazardCounter = 0;
+        InteractableHouse.HouseTriggeredEvent = CustomEventType.NONE;
+        InteractableHouse.InsideHouse = false;
     }
 
     private void OnDisable()

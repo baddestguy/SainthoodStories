@@ -87,7 +87,7 @@ public class GameClock
             EndDay?.Invoke();
         }
         ExecuteEvents?.Invoke();
-
+        SaveDataManager.Instance.SaveGame();
         DeltaTime = false;
     }
 

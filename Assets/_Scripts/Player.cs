@@ -100,18 +100,49 @@ public class Player : MonoBehaviour
 
     public void GameStart(Mission missionDetails)
     {
-        StartTile = CurrentBuilding;
+        StatusEffects = GameManager.Instance.SaveData.StatusEffects?.ToList() ?? new List<PlayerStatusEffect>();
         Energy = missionDetails.StartingEnergy;
         StartingEnergy = Energy.Amount;
         OnEnergyDepleted = false;
-        AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
         LockMovement = false;
         StartCoroutine(WaitThenEnterChurch());
+    }
+
+    private InteractableHouse GetCurrentBuilding()
+    {        
+        if(GameManager.Instance.GameClock.Day == 1 && GameManager.Instance.GameClock.Time == 6) return FindObjectOfType<InteractableChurch>();
+
+        switch (GameManager.Instance.SaveData.CurrentHouse)
+        {
+            case "InteractableChurch":
+                return FindObjectOfType<InteractableChurch>();
+            case "InteractableHospital":
+                return FindObjectOfType<InteractableHospital>();
+            case "InteractableKitchen":
+                return FindObjectOfType<InteractableKitchen>();
+            case "InteractableOrphanage":
+                return FindObjectOfType<InteractableOrphanage>();
+            case "InteractableShelter":
+                return FindObjectOfType<InteractableShelter>();
+            case "InteractableSchool":
+                return FindObjectOfType<InteractableSchool>();
+            case "InteractableClothesBank":
+                return FindObjectOfType<InteractableClothesBank>();
+            case "InteractableMarket":
+                return FindObjectOfType<InteractableMarket>();
+        }
+
+        return FindObjectOfType<InteractableChurch>();
     }
 
     IEnumerator WaitThenEnterChurch()
     {
         yield return new WaitForSeconds(1f);
+        CurrentBuilding = GetCurrentBuilding();
+        AdjacentTiles = Map.GetAdjacentTiles(CurrentBuilding.CurrentGroundTile);
+        OnMove(CurrentBuilding.CurrentGroundTile);
+        StartTile = CurrentBuilding;
+
         OnMoveSuccessEvent?.Invoke(Energy, CurrentBuilding);
         GameManager.Instance.GameClock.Ping();
         ToolTipManager.Instance.ShowToolTip("");
@@ -120,6 +151,8 @@ public class Player : MonoBehaviour
 
     public bool WeCanMove(MapTile tile)
     {
+        if (AdjacentTiles == null) return false;
+
         if (GameSettings.Instance.FTUE)
         {
             return TutorialManager.Instance.GetTutorialMapTiles().Contains(tile) && CurrentTile != tile && AdjacentTiles.ContainsValue(tile) && tile.TileType != TileType.BARRIER;

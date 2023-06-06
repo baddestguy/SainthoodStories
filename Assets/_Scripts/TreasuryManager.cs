@@ -47,12 +47,14 @@ public class TreasuryManager : MonoBehaviour
         TemporaryMoneyToDonate = donation;
         Money += Mathf.Clamp(float.Parse(donation+""), 0, 100);
         DonatedMoney?.Invoke(donation);
+        SaveDataManager.Instance.SaveGame();
     }
 
     public void SpendMoney(double amount)
     {
         Money -= amount;
         DonatedMoney?.Invoke(-amount);
+        SaveDataManager.Instance.SaveGame();
     }
 
     private void OnDisable()

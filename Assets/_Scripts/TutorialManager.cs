@@ -243,7 +243,6 @@ public class TutorialManager : MonoBehaviour
             {
                 GameSettings.Instance.FTUE = false;
                 SwapHospitalMapTileIndex();
-                SaveDataManager.Instance.SaveGame();
             }
         }
     }
