@@ -293,7 +293,7 @@ public class InteractableHospital : InteractableHouse
             case "BABY":
                 CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
                 if (MaxDeliveryPoints - DeliveryCountdown == 1)
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.BABY, cpModifier: (e != null ? (int)e.Gain : 0), energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.BABY, cpModifier: (int?)e?.Gain ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
                 else
                     return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
         }

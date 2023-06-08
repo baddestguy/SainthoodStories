@@ -465,7 +465,7 @@ public class InteractableChurch : InteractableHouse
                     {
                         var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
                         var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
-                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, cpModifier: rosary?.Value ?? 0, fpModifier: FPBonus);
+                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, fpModifier: FPBonus + rosary?.Value ?? 0);
                     }
                     else
                     {
@@ -478,7 +478,7 @@ public class InteractableChurch : InteractableHouse
                     {
                         var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
                         var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
-                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, cpModifier: rosary?.Value ?? 0, fpModifier: FPBonus);
+                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, fpModifier: FPBonus + rosary?.Value ?? 0);
                     }
                     else
                     {
