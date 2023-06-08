@@ -252,9 +252,9 @@ public class InteractableSchool : InteractableHouse
         {
             case "VOLUNTEER":
                 if (MaxTeachPoints - TeachCountdown == 1)
-                    return new TooltipStats() { Ticks = 1, FP = 0, CP = TeachPoints, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
                 else
-                    return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
         }
 
         return base.GetTooltipStatsForButton(button);

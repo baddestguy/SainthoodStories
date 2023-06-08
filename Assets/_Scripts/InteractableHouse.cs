@@ -1156,20 +1156,21 @@ public class InteractableHouse : InteractableObject
         switch (button)
         {
             case "PRAY":
-                return new TooltipStats() { Ticks = 1, FP = 1, CP = 0, Energy = 1 };
-            case "SLEEP":
-                return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = 3 };
-            case "VOLUNTEER":
-                if(4-VolunteerCountdown == 1)
-                    return new TooltipStats() { Ticks = 1, FP = 0, CP = VolunteerPoints, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
+                if (MaxPrayerProgress - PrayersProgress == 1)
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY);
                 else
-                    return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
+            case "VOLUNTEER":
+                if (4 - VolunteerCountdown == 1)
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
+                else
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
 
             case "CONSTRUCT":
-                if(MaxBuildPoints - BuildPoints == 1)
-                    return new TooltipStats() { Ticks = 1, FP = 0, CP = 8, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
+                if (MaxBuildPoints - BuildPoints == 1)
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
                 else
-                    return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
         }
 
         return new TooltipStats() { Ticks = 0, FP = 0, CP = 0, Energy = 0 };
@@ -1187,7 +1188,7 @@ public class InteractableHouse : InteractableObject
             RubbleInfoPopup.gameObject.SetActive(true);
             if (CanBuild()) RubbleInfoPopup.UpdateReadyForConstruction();
             if(GameManager.Instance.Player.WeCanMove(CurrentGroundTile))
-                ToolTipManager.Instance.ShowToolTip("Tooltip_ConstructionSite", new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true) });
+                ToolTipManager.Instance.ShowToolTip("Tooltip_ConstructionSite", GameDataManager.Instance.GetToolTip(TooltipStatId.MOVE, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true)));
             else
                 ToolTipManager.Instance.ShowToolTip("Tooltip_ConstructionSite");
         }
@@ -1196,7 +1197,7 @@ public class InteractableHouse : InteractableObject
             InfoPopup.gameObject.SetActive(true);
 
             if (GameManager.Instance.Player.WeCanMove(CurrentGroundTile))
-                ToolTipManager.Instance.ShowToolTip("Tooltip_"+GetType().Name, new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true) });
+                ToolTipManager.Instance.ShowToolTip("Tooltip_"+GetType().Name, GameDataManager.Instance.GetToolTip(TooltipStatId.MOVE, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true)));
             else
                 ToolTipManager.Instance.ShowToolTip("Tooltip_" + GetType().Name);
         }

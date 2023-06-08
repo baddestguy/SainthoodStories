@@ -304,6 +304,19 @@ public enum QualityLevel
     QUALITY_SETTING_ULTRA
 }
 
+public enum TooltipStatId
+{
+    NONE = 0,
+    MOVE,
+    BUILD,
+    CONSTRUCT,
+    PRAY,
+    SLEEP,
+    VOLUNTEER,
+    BABY,
+    TIME
+}
+
 [System.Serializable]
 public class HouseSaveData
 {
@@ -322,6 +335,7 @@ public class HouseSaveData
 
 public class TooltipStats
 {
+    public TooltipStatId Id;
     public double Ticks;
     public int FP;
     public int CP;

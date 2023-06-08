@@ -342,10 +342,6 @@ public class Player : MonoBehaviour
             energyAmount++;
         }
 
-        if(tile != null && WeatherManager.Instance.IsStormy())
-        {
-            energyAmount++;
-        }     
         if(e != null)
         {
             energyAmount += (int)e.Cost;
