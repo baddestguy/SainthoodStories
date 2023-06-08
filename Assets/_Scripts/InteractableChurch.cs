@@ -463,7 +463,9 @@ public class InteractableChurch : InteractableHouse
                 {
                     if (clock.Time == ConfessionTime || 2-MassProgress == 1 || 2-LotHProgress == 1 || MaxPrayerProgress - PrayerProgress == 1)
                     {
-                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, fpModifier: FPBonus);
+                        var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+                        var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, cpModifier: rosary?.Value ?? 0, fpModifier: FPBonus);
                     }
                     else
                     {
@@ -474,7 +476,9 @@ public class InteractableChurch : InteractableHouse
                 {
                     if (2-LotHProgress == 1 || MaxPrayerProgress - PrayerProgress == 1)
                     {
-                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, fpModifier: FPBonus);
+                        var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+                        var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, cpModifier: rosary?.Value ?? 0, fpModifier: FPBonus);
                     }
                     else
                     {
@@ -483,7 +487,10 @@ public class InteractableChurch : InteractableHouse
                 }
             case "SLEEP":
                 if (MaxSleepProgress - SleepProgress == 1)
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.SLEEP);
+                {
+                    var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.SLEEP, energyModifier: mattress?.Value ?? 0);
+                }
                 else
                     return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
 

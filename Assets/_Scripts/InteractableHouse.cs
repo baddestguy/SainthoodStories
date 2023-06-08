@@ -1157,7 +1157,11 @@ public class InteractableHouse : InteractableObject
         {
             case "PRAY":
                 if (MaxPrayerProgress - PrayersProgress == 1)
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY);
+                {
+                    var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+                    var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, cpModifier: rosary?.Value ?? 0);
+                }
                 else
                     return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
             case "VOLUNTEER":
@@ -1168,7 +1172,10 @@ public class InteractableHouse : InteractableObject
 
             case "CONSTRUCT":
                 if (MaxBuildPoints - BuildPoints == 1)
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
+                {
+                    var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, cpModifier: tents?.Value ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
+                }
                 else
                     return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
         }
