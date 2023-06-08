@@ -20,6 +20,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<string, StoryEventData> StoryEventData = new Dictionary<string, StoryEventData>();
     public Dictionary<string, List<BuildingMissionData>> BuildingMissionData = new Dictionary<string, List<BuildingMissionData>>();
     public List<WeatherData> WeatherData = new List<WeatherData>();
+    public Dictionary<TooltipStatId, TooltipStats> ToolTips = new Dictionary<TooltipStatId, TooltipStats>();
 
     public int MidnightEventChosenIndex;
     public List<CustomEventType> TriggeredDailyEvents;
@@ -185,6 +186,16 @@ public class GameDataManager : MonoBehaviour
         }
 
         yield return null;
+
+        //Tooltips
+        csvFile = Resources.Load<TextAsset>("GameData/Tooltips");
+        var tips = CSVSerializer.Deserialize<TooltipStats>(csvFile.text);
+        foreach (var item in tips)
+        {
+            ToolTips.Add(item.Id, item);
+        }
+
+        yield return null;
     }
 
     public StatusEffectData GetStatusEffectData(PlayerStatusEffect id)
@@ -285,5 +296,32 @@ public class GameDataManager : MonoBehaviour
     public IEnumerable<BuildingMissionData> GetBuildingMissionData(string houseName)
     {
         return BuildingMissionData.ContainsKey(houseName) ? BuildingMissionData[houseName] : new List<BuildingMissionData>();
+    }
+
+    public TooltipStats GetToolTip(TooltipStatId id, double ticksModifier = 0, int fpModifier = 0, int cpModifier = 0, int energyModifier = 0)
+    {
+        var tooltip = new TooltipStats() { Id = ToolTips[id].Id, Ticks = ToolTips[id].Ticks, CP = ToolTips[id].CP, FP = ToolTips[id].FP, Energy = ToolTips[id].Energy };
+
+        if(ticksModifier != 0)
+        {
+            tooltip.Ticks += ticksModifier;
+        }
+
+        if(fpModifier != 0)
+        {
+            tooltip.FP += fpModifier;
+        }
+
+        if(cpModifier != 0)
+        {
+            tooltip.CP += cpModifier;
+        }
+
+        if(energyModifier != 0)
+        {
+            tooltip.Energy += energyModifier;
+        }
+
+        return tooltip;
     }
 }

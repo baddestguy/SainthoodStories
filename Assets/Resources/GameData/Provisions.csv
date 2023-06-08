@@ -17,9 +17,15 @@ En <color=""green"">+3"
 SOFT_MATTRESS,3,4,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1.5hrs<color=""white"">
 En <color=""green"">+4"
 REDUCE_SLEEP_TIME,1,1,Provision_SleepEnergyName,Provision_SleepEnergyDescription,"Sleep Time <color=""green"">-0.5hrs"
-ROSARY,1,1,Provision_RosaryName,Provision_RosaryDescription,"On praying: FP <color=""green"">+1"
-ROSARY,2,2,Provision_RosaryName,Provision_RosaryDescription,"On praying: FP <color=""green"">+2"
-ROSARY,3,3,Provision_RosaryName,Provision_RosaryDescription,"On praying: FP <color=""green"">+3"
+ROSARY,1,1,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP <color=""green"">+1
+Time <color=""red"">+0.5hrs"
+ROSARY,2,2,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP <color=""green"">+2
+Time <color=""red"">+0.5hrs"
+ROSARY,3,3,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP <color=""green"">+3
+Time <color=""red"">+0.5hrs"
 COOKING_UTENSILS,1,1,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +1<color=""white"">
 Relationship bonus <color=""green"">+1"
 COOKING_UTENSILS,2,2,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +2<color=""white"">
@@ -44,9 +50,9 @@ STURDY_BUILDING_MATERIALS,3,7,Provision_SturdyMaterialsName,Provision_SturdyMate
 CONSTRUCTION_TENTS,1,1,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building completion: CP <color=""green"">+1"
 CONSTRUCTION_TENTS,2,2,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building completion: CP <color=""green"">+2"
 CONSTRUCTION_TENTS,3,3,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building completion: CP <color=""green"">+3"
-CHAPEL_BLUEPRINT,1,1,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"On praying: FP <color=""green"">+1"
-CHAPEL_BLUEPRINT,2,2,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"On praying: FP <color=""green"">+2"
-CHAPEL_BLUEPRINT,3,3,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"On praying: FP <color=""green"">+3"
+CHAPEL_BLUEPRINT,1,1,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"When praying: FP <color=""green"">+1"
+CHAPEL_BLUEPRINT,2,2,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"When praying: FP <color=""green"">+2"
+CHAPEL_BLUEPRINT,3,3,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"When praying: FP <color=""green"">+3"
 BUILDING_BLUEPRINT,1,1,Provision_BlueprintName,Provision_BlueprintDescription,"Relationship Bonus <color=""green""> +1"
 BUILDING_BLUEPRINT,2,2,Provision_BlueprintName,Provision_BlueprintDescription,"Relationship Bonus <color=""green""> +2"
 BUILDING_BLUEPRINT,3,3,Provision_BlueprintName,Provision_BlueprintDescription,"Relationship Bonus <color=""green""> +3"
@@ -77,17 +83,17 @@ En <color=""red"">-2"
 FASTING,3,3,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
 FP <color=""green"">+3<color=""white""> 
 En <color=""red"">-3"
-KOBOKO,1,1,Provision_KobokoName,Provision_KobokoDescription,"On praying:
+KOBOKO,1,1,Provision_KobokoName,Provision_KobokoDescription,"When praying:
 FP <color=""green"">+1<color=""white""> 
 En <color=""red""> -1"
-KOBOKO,2,2,Provision_KobokoName,Provision_KobokoDescription,"On praying:
+KOBOKO,2,2,Provision_KobokoName,Provision_KobokoDescription,"When praying:
 FP <color=""green"">+2<color=""white""> 
 En <color=""red""> -2"
-KOBOKO,3,3,Provision_KobokoName,Provision_KobokoDescription,"On praying:
+KOBOKO,3,3,Provision_KobokoName,Provision_KobokoDescription,"When praying:
 FP <color=""green"">+3<color=""white""> 
 En <color=""red""> -3"
-INCENSE,1,10,Provision_IncenseName,Provision_IncenseDescription,"Extra FP chance <color=""green"">10%"
-INCENSE,2,15,Provision_IncenseName,Provision_IncenseDescription,"Extra FP chance <color=""green"">15%"
-INCENSE,3,20,Provision_IncenseName,Provision_IncenseDescription,"Extra FP chance <color=""green"">20%"
-INCENSE,4,25,Provision_IncenseName,Provision_IncenseDescription,"Extra FP chance <color=""green"">25%"
+INCENSE,1,10,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">10%"
+INCENSE,2,15,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">15%"
+INCENSE,3,20,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">20%"
+INCENSE,4,25,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">25%"
 SECURITY_GUARDS,1,1,Provision_SecurityGuardsName,Provision_SecurityGuardsDescription,"Chance of preventing robberies <color=""green"">100%"

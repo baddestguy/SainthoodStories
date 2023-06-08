@@ -456,39 +456,44 @@ public class InteractableChurch : InteractableHouse
         switch (button)
         {
             case "PRAY":
-                var fp = 0;
                 GameClock clock = GameManager.Instance.GameClock;
                 CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
 
                 if (clock.Day % 5 == 0 || e != null)
                 {
-                    if (clock.Time == ConfessionTime)
+                    if (clock.Time == ConfessionTime || 2-MassProgress == 1 || 2-LotHProgress == 1 || MaxPrayerProgress - PrayerProgress == 1)
                     {
-                       fp = PrayerPoints * 4;
-                    }
-                    else if (clock.Time >= MassStartTime && clock.Time < MassEndTime)
-                    {
-                        fp = PrayerPoints * 4;
-                    }
-                    else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
-                    {
-                        fp = PrayerPoints * 2;
+                        var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+                        var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, fpModifier: FPBonus + rosary?.Value ?? 0);
                     }
                     else
                     {
-                        fp = PrayerPoints;
+                        return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
                     }
                 }
-                else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
+                else 
                 {
-                    fp = PrayerPoints * 2;
+                    if (2-LotHProgress == 1 || MaxPrayerProgress - PrayerProgress == 1)
+                    {
+                        var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+                        var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, fpModifier: FPBonus + rosary?.Value ?? 0);
+                    }
+                    else
+                    {
+                        return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
+                    }
+                }
+            case "SLEEP":
+                if (MaxSleepProgress - SleepProgress == 1)
+                {
+                    var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.SLEEP, energyModifier: mattress?.Value ?? 0);
                 }
                 else
-                {
-                    fp = PrayerPoints;
-                }
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
 
-                return new TooltipStats() { Ticks = 1, FP = fp, CP = 0, Energy = 1 };
         }
 
         return base.GetTooltipStatsForButton(button);

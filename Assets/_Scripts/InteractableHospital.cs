@@ -292,10 +292,10 @@ public class InteractableHospital : InteractableHouse
         {
             case "BABY":
                 CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
-                if(MaxDeliveryPoints - DeliveryCountdown == 1)
-                    return new TooltipStats() { Ticks = 1, FP = 0, CP = (BabyPoints + (e != null ? (int)e.Gain : 0)) , Energy = -(GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption)*4)+DeliveryCountdown };
+                if (MaxDeliveryPoints - DeliveryCountdown == 1)
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.BABY, cpModifier: (int?)e?.Gain ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
                 else
-                    return new TooltipStats() { Ticks = 1, FP = 0, CP = 0, Energy = -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption) };
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
         }
 
         return base.GetTooltipStatsForButton(button);
