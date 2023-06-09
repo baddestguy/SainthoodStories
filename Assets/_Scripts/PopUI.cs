@@ -99,7 +99,7 @@ public class PopUI : MonoBehaviour
         }
 
         Buttons = gameObject.GetComponentsInChildren<ActionButton>().ToList();
-        if (!GameSettings.Instance.FTUE || TutorialManager.Instance.CurrentTutorialStep >= 15)
+        if (!GameSettings.Instance.FTUE || TutorialManager.Instance.CurrentTutorialStep >= 16)
         {
             foreach (var b in Buttons)
             {
@@ -187,6 +187,13 @@ public class PopUI : MonoBehaviour
         {
             if (!myButton.Enabled)
             {
+                Player player = GameManager.Instance.Player;
+                if (player.EnergyDepleted())
+                {
+                    UI.Instance.ErrorFlash("Energy");
+                    return;
+                }
+
                 SoundManager.Instance.PlayOneShotSfx("Button_SFX");
                 return;
             }

@@ -213,8 +213,11 @@ public class InteractableHospital : InteractableHouse
     {
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
-        if (player.EnergyDepleted()) return;
-
+        if (player.EnergyDepleted())
+        {
+            UI.Instance.ErrorFlash("Energy");
+            return;
+        }
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
         if (clock < EndDelivery)
         {
@@ -278,7 +281,11 @@ public class InteractableHospital : InteractableHouse
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HOSPITAL_BONUS);
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
-        if (player.EnergyDepleted()) return;
+        if (player.EnergyDepleted())
+        {
+            UI.Instance.ErrorFlash("Energy");
+            return;
+        }
 
         BuildingActivityState = BuildingActivityState.VOLUNTEERING;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);

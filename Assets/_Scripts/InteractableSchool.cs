@@ -47,8 +47,11 @@ public class InteractableSchool : InteractableHouse
     {
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
-        if (player.EnergyDepleted()) return;
-
+        if (player.EnergyDepleted())
+        {
+            UI.Instance.ErrorFlash("Energy");
+            return;
+        }
         if (DuringOpenHours())
         {
             BuildingActivityState = BuildingActivityState.TEACHING;

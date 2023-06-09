@@ -588,7 +588,11 @@ public class InteractableHouse : InteractableObject
     public virtual void Build()
     {
         Player player = GameManager.Instance.Player;
-        if (player.EnergyDepleted() || !CanBuild()) return;
+        if (player.EnergyDepleted() || !CanBuild())
+        {
+            UI.Instance.ErrorFlash("Energy");
+            return;
+        }
 
         BuildPoints++;
         var extraPoints = 0;

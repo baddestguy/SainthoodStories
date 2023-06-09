@@ -583,6 +583,25 @@ public class UI : MonoBehaviour
         display.DOFade(0, 0.5f).SetDelay(delay);
     }
 
+    public void ErrorFlash(string displayGlow)
+    {
+        SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
+        switch (displayGlow) {
+            case "Energy":
+                ErrorFlash(EnergyDisplayGlow);
+                break;
+        }
+
+    }
+
+    private void ErrorFlash(Image glow)
+    {
+        glow.color = Color.red;
+        glow.transform.localScale = Vector3.one;
+        glow.transform.DOScale(new Vector3(1.4f, 1.4f, 1.4f), 0.5f);
+        glow.DOFade(0, 1f);
+    }
+
     public void ResetAdditionPoints()
     {
         CPDisplay.DOComplete();
