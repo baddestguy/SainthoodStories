@@ -47,8 +47,11 @@ public class InteractableSchool : InteractableHouse
     {
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
-        if (player.EnergyDepleted()) return;
-
+        if (player.EnergyDepleted())
+        {
+            UI.Instance.ErrorFlash("Energy");
+            return;
+        }
         if (DuringOpenHours())
         {
             BuildingActivityState = BuildingActivityState.TEACHING;
@@ -301,6 +304,7 @@ public class InteractableSchool : InteractableHouse
     {
         if (item == ItemType.STATIONERY)
         {
+            EventsManager.Instance.AddEventToList(CustomEventType.AUTO_DELIVER_COMPLETE);
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }

@@ -18,13 +18,13 @@ SOFT_MATTRESS,3,4,Provision_MattressName,Provision_MattressDescription,"Sleep Ti
 En <color=""green"">+4"
 REDUCE_SLEEP_TIME,1,1,Provision_SleepEnergyName,Provision_SleepEnergyDescription,"Sleep Time <color=""green"">-0.5hrs"
 ROSARY,1,1,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP <color=""green"">+1
+FP <color=""green"">+1<color=""white"">
 Time <color=""red"">+0.5hrs"
 ROSARY,2,2,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP <color=""green"">+2
+FP <color=""green"">+2<color=""white"">
 Time <color=""red"">+0.5hrs"
 ROSARY,3,3,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP <color=""green"">+3
+FP <color=""green"">+3<color=""white"">
 Time <color=""red"">+0.5hrs"
 COOKING_UTENSILS,1,1,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +1<color=""white"">
 Relationship bonus <color=""green"">+1"
@@ -92,8 +92,8 @@ En <color=""red""> -2"
 KOBOKO,3,3,Provision_KobokoName,Provision_KobokoDescription,"When praying:
 FP <color=""green"">+3<color=""white""> 
 En <color=""red""> -3"
-INCENSE,1,10,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">10%"
-INCENSE,2,15,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">15%"
-INCENSE,3,20,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">20%"
-INCENSE,4,25,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">25%"
+INCENSE,1,10,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">10%"
+INCENSE,2,15,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">15%"
+INCENSE,3,20,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">20%"
+INCENSE,4,25,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">25%"
 SECURITY_GUARDS,1,1,Provision_SecurityGuardsName,Provision_SecurityGuardsDescription,"Chance of preventing robberies <color=""green"">100%"

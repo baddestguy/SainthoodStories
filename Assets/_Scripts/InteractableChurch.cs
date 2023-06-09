@@ -82,15 +82,10 @@ public class InteractableChurch : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         CheckParticipation(clock);
 
-        if (clock.Time > 23 || clock.Time <= 6.5)
+        if(clock.Time > 18.5 || clock.Time <= 6.5)
         {
             LiturgyStartTime = 6;
             LiturgyEndTime = 7;
-        }
-        else if(clock.Time > 18.5)
-        {
-            LiturgyStartTime = 22.5;
-            LiturgyEndTime = 23.5;
         }
         else if(clock.Time > 12.5)
         {
@@ -178,11 +173,13 @@ public class InteractableChurch : InteractableHouse
         TooltipMouseOver mouseOverBtn = InteriorPopUI.GetComponentsInChildren<TooltipMouseOver>(true).Where(b => b.name == "Pray").FirstOrDefault();
 
         GameClock c = GameManager.Instance.GameClock;
-        if (c.Time > 23)
-            base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, c.Day + 1));
-        else
+        if (c.Time < 19)
             base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, c.Day));
-
+        else
+        {
+            UI.Instance.SideNotificationPop(GetType().Name);
+            PopIcon.gameObject.SetActive(false);
+        }
         GameClock clock = GameManager.Instance.GameClock;
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
         if (clock.Day % 5 == 0 || e!= null)

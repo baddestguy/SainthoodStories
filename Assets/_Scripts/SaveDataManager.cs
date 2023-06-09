@@ -49,6 +49,8 @@ public class SaveDataManager : MonoBehaviour
 
     public void SaveGame()
     {
+        if (GameSettings.Instance.FTUE) return;
+
         if (!FileExixst(FILENAME))
         {
            //Beter just do a direct save than looking for what do not exist...

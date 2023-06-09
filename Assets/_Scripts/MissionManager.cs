@@ -137,6 +137,18 @@ public class MissionManager : MonoBehaviour
             yield return seq.RunSequenceAsync();
             if (GameManager.Instance.GameClock.EndofWeek())
             {
+                if(CurrentMission.Season == Season.WINTER)
+                {
+                    //BONUS: GIVE THE CHOICE TO ASCEND TO HEAVEN OR STAY AND CONTINUE TO HELP!
+
+                    EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
+                    EventsManager.Instance.ExecuteEvents();
+                    SaveDataManager.Instance.DeleteProgress();
+                    while (EventsManager.Instance.HasEventsInQueue()) yield return null;
+
+                    GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+                    yield break;
+                }
                 CurrentMission.CurrentWeek++;
                 GameManager.Instance.GameClock.EndTheWeek();
             }

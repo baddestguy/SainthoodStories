@@ -28,6 +28,8 @@ public class EventsManager : MonoBehaviour
 
     public void AddEventToList(CustomEventType newEvent)
     {
+        if (EventInProgress) return;
+
         var e = GameDataManager.Instance.CustomEventData[newEvent][0]; //Grab based on weight
 
         EventList.Add(e);
@@ -82,6 +84,7 @@ public class EventsManager : MonoBehaviour
 
     public void TryEventTrigger(double time, int day)
     {
+        if (!GameClock.DeltaTime) return;
         if (!UI.Instance.WeekBeginCrossFade && !GameSettings.Instance.FTUE && !GameClock.DeltaTime) return;
 
         if (!GameSettings.Instance.StoryToggle) return;
@@ -108,6 +111,12 @@ public class EventsManager : MonoBehaviour
         }
 
         StoryEvents.AddRange(filteredEvents);
+    }
+
+    public void ForceTriggerStoryEvent(IEnumerable<StoryEventData> events)
+    {
+        StoryEvents.AddRange(events);
+        ExecuteEvents();
     }
 
     public void StartNewDay()
@@ -181,6 +190,11 @@ public class EventsManager : MonoBehaviour
     public bool HasEventsInQueue()
     {
         return EventList.Count > 0 || StoryEvents.Count > 0;
+    }
+
+    public bool HasEvent(CustomEventType e)
+    {
+        return EventList.Any(x => x.Id == e);
     }
 
     public void OnOveride()

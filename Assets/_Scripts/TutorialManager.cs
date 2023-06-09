@@ -239,7 +239,7 @@ public class TutorialManager : MonoBehaviour
         {
             ShowTutorialPopup(Resources.FindObjectsOfTypeAll<CustomEventPopup>()[0].EventData.LocalizationKey);
 
-            if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 15)
+            if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 16)
             {
                 GameSettings.Instance.FTUE = false;
                 SwapHospitalMapTileIndex();

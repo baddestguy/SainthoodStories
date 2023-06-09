@@ -1,8 +1,8 @@
 Key,English,French,BrPt,Filipino,LatAmSpanish,Italian,German
-Tutorial_0,"You knock on the convent doors at the crack of dawn, tired from your long journey, with only the shoes on your feet and the habit on your back. ",,,,,,
-Tutorial_1,"The doors swing open to reveal the Prioress. ""Come on in!"" she says, as she grabs your hand, ""You're just in time for Liturgy of the Hours. Come quickly, let us begin.""",,,,,,
+Tutorial_0,"You knock on the convent doors at the crack of dawn, tired from your long journey, with only a backpack and your little lantern.",,,,,,
+Tutorial_1,"The doors swing open to reveal the Prioress. ""Welcome to Purgatorio. Come on in!"" she says, as she grabs your hand, ""You're just in time for Liturgy of the Hours. Come quickly, let us begin.""",,,,,,
 Tutorial_11,"""Performing activities is straightforward. Simply <b>Press and Hold</b> the Prayer button to partake in Spiritual Activities.""",,,,,,
-Tutorial_2,"Afterwards, the Prioress shows you to your room. ""We have Liturgy of the Hours 4 times a day, every day, and we always post the <b>Start Time</b> of the next session above the Convent, so please try to make it as often as you can.""",,,,,,
+Tutorial_2,"Afterwards, the Prioress shows you to your room. ""We have Liturgy of the Hours 3 times a day, and we always post the <b>Start Time</b> of the next session above the Convent, so please try to make it as often as you can.""",,,,,,
 Tutorial_21,"Eltee, the Foreman, visits the Convent. ""Ma'am, please come on down to the hospital at ya earliest convenience, we need all the help we can get.""
 
 And with that, he walks off.",,,,,,
@@ -18,8 +18,8 @@ Tutorial_4,"Looking at the time, you notice you could make Liturgy of the Hours 
 You head out immediately.",,,,,,
 Tutorial_5,"""Good, I'm glad you could join us for this."" the Prioress says, and for a split second you imagine the slightest crack of a smile on the corner of her lips.
 
-""Your services will always be required by the community, and you will do well to serve them. But, you must also make time for God.""",,,,,,
-Tutorial_5,"""Keeping this balance between your service to your community, and your prayers to God is the path to Sainthood.""
+""Your services will always be required by the community, and you will do well to serve them. But, you must also make time for the Lord of Light.""",,,,,,
+Tutorial_5,"""Keeping this balance between your service to your community, and your prayers to the Lord of Light is the path to Sainthood.""
 
 She ushers you into the chapel to begin the Liturgy.",,,,,,
 Tutorial_6,"""You better get going,"" the Prioress says, ""The hospital needs you.""",,,,,,
@@ -32,7 +32,7 @@ Tutorial_61,"""Feel free to use our chapel to <b>pray</b> anytime you want."" An
 ""Also, we are open 24 hours, so please come <b>volunteer</b> with us whenever you have a moment.""",,,,,,
 Tutorial_61,"As you take your leave to catch the next Liturgy of the Hours, Anna stops you for one more thing...",,,,,,
 Tutorial_7,"""You seem to have planned out your day perfectly, not bad for a start."" the Prioress says as you walk into the chapel. ",,,,,,
-Tutorial_8,"You feel tired, and decide to take a nap for a couple of hours before the next Liturgy of the Hours.",,,,,,
+Tutorial_8,"You feel tired, and decide to take a nap for an hour to regain your strength.",,,,,,
 Tutorial_9,"One of the novices wakes you up. ""Someone at the door to see you.""",,,,,,
 Tutorial_10,"Postman Spazz stops by as he usually does, without regard for time.
 
@@ -46,8 +46,8 @@ Endgame,"Your feedback is very important. Please let me know what you think!
 Send me your comments on Discord with the invite link on the Main Menu.",,,,,,
 Endgame,Have fun!,,,,,,
 HeatwaveIntro,"Out in the fields, a woman in a trenchcoat holds a strange vial containing black liquid. As you approach her, you notice a label on her trenchcoat reads: ""Christie the Weather-Lady"".",,,,,,
-HeatwaveIntro,"""Temperatures are skyrocketing, a heatwave must be incoming."" she says, eyes laser focused on the device. ""You will burn extra Energy traversing the fields during a heatwave.""",,,,,,
-HeatwaveIntro,"""If I were you, I would plan ahead and try to stay indoors as much as possible to conserve Energy."" she concludes, and begins taking notes in her little notebook.",,,,,,
+HeatwaveIntro,"""Temperatures are skyrocketing, a heatwave must be incoming."" she says, eyes laser focused on the device. ""You may get a sunburn traversing the fields during a heatwave.""",,,,,,
+HeatwaveIntro,"""If I were you, I would plan ahead and try to stay indoors as much as possible."" she concludes, and begins taking notes in her little notebook.",,,,,,
 RainIntro,"Out in the fields, Christie the Weather-Lady seems to be fiddling with a strange instrument made up of 4 cup-shaped objects, mounted on a vertical shaft, and spinning horizontally.",,,,,,
 RainIntro,"""It's going to rain today."" she mumurs, without looking up. ""You could possibly fall sick when traversing the fields during a storm...unless you had an umbrella.""
 
@@ -142,20 +142,26 @@ Provision_SchoolRBuilderDescription,Gain a Relationship bonus for teaching at th
 Provision_OrphanageRBuilderDescription,Gain a Relationship bonus for volunteering at the Orphanage,,,,,,
 Provision_KitchenRBuilderDescription,Gain a Relationship bonus for cooking at the Kitchen,,,,,,
 Provision_ShelterRBuilderDescription,Gain a Relationship bonus for delivering items at the Shelter,,,,,,
-Provision_AutoDeliverDescription,An assistant makes deliveries on your behalf in 2.5 hours,,,,,,
+Provision_AutoDeliverDescription,An assistant makes deliveries on your behalf 2.5 hours after purchase,,,,,,
 Provision_FastingDescription,Wear this scapular and pledge to fast from eating today,,,,,,
 Provision_KobokoDescription,"An extreme form of penance perhaps, but worth it",,,,,,
 Provision_IncenseDescription,A thurible charged with burning sticks of red hot charcoal radiates smoke that carries your prayers to heaven,,,,,,
 Provision_SecurityGuardsDescription,Hire a security man to prevent robbers from stealing from the Treasury,,,,,,
 Event_Donation,Someone left a package at the Convent doors. You open it to reveal an anonymous donation!,,,,,,
 Event_IconUnlock,You received a Spiritual Revelation!,,,,,,
-Event_SpiritualCrisis,"Your heart fills with a deep sense of dread, it feels like all is lost, and there is no hope.",,,,,,
-Event_TownRiots,"The townsfolk are angry and have worked themselves into a rage. A violent riot starts, and the town is burned to the ground.",,,,,,
+Event_Endgame,"Your time in Purgatorio has come to an end. The people gather around you, chanting prayers in a circle as you commit your spirit to the Great Ascension.",,,,,,
+Event_Endgame,"Your spirit rises to the heavens, and the Lord of Light welcomes you into the Grand Palace, where the music and dancing never stops, and the joy and laughter never ends.",,,,,,
+Event_SpiritualCrisis,"Your Faith Points dropped to zero.
+
+Your heart fills with a deep sense of dread, it feels like all is lost, and there is no hope.",,,,,,
+Event_TownRiots,"Your Charity Points dropped to zero.
+
+The townsfolk are angry and have worked themselves into a rage. A violent riot starts, and the town is burned to the ground.",,,,,,
 Event_ThankYouItemHospital,"""Thank you so much for the medical items! We really needed this!"" Anna says with a smile.",,,,,,
 Event_ThankYouItemHospital,"""You are much too kind. Thank you so much for this."" Anna says, smiling from ear to ear.",,,,,,
 Event_ThankYouItemHospital,"""Oh, you are such a dear. Thank you."" Anna says as she collects the items.",,,,,,
 Event_ThankYouItemHospital,"""Bless your heart."" Anna says, receiving the supplies.",,,,,,
-Event_ThankYouItemHospital,"""You have saved a life today, may God never forget you."" Anna says with tears in her eyes.",,,,,,
+Event_ThankYouItemHospital,"""You have saved a life today, may the Lord of Light never forget you."" Anna says with tears in her eyes.",,,,,,
 Event_ThankYouItemSchool,"""Ahem!"" Gabriel clears his throat, ""Thank you for the textbooks, we can distribute more to the kids to study!""",,,,,,
 Event_ThankYouItemSchool,"""Ahem!"" Gabriel begins, ""I really appreciate your efforts with this, thank you.""",,,,,,
 Event_ThankYouItemSchool,"""Ahem! Thank you, these supplies will go a long way in helping the kids."" Gabriel says.",,,,,,
@@ -296,7 +302,7 @@ Increase CP by serving the community.
 (Deliver Items, Volunteer, etc)",,,,,,
 Tooltip_Energy,"<b>Energy (EN)</b>
 Used to partake in Activities
-Pray or Sleep to <color=""green"">increase<color=""white""> your Energy and remove <color=""red"">Ailments<color=""white"">
+Sleep to <color=""green"">increase<color=""white""> your Energy and remove <color=""red"">Ailments<color=""white"">
 
 Click to view Ailments",,,,,,
 Tooltip_Inventory,"<b>Inventory</b>
@@ -305,9 +311,9 @@ Tooltip_Provisions,"<b>Provisions</b>
 Daily Provisions appear here.",,,,,,
 Tooltip_Treasury,"<b>Treasury</b>
 Total funds for purchasing Items.",,,,,,
-Tooltip_SideNotifications,"Liturgy of the Hours and other building deadlines are listed here.
-Missing Convent Activities will <color=""red"">cost you FP.<color=""white"">
-Missing other building deadlines will <color=""red"">cost you CP.",,,,,,
+Tooltip_SideNotifications,"Side Notifications pop up to always remind you of the next Liturgy of the Hours and all upcoming building deadlines.
+
+Convent activities display their Start Times, while other buildings display their Deadlines.",,,,,,
 Tooltip_Pray,"*Press and Hold*
 Pray the Rosary in the Chapel.",,,,,,
 Tooltip_PrayShed,"*Press and Hold*
@@ -382,25 +388,27 @@ Tutorial_Instruction_1,"Release the button when the two circles overlap for a <b
 
 Landing all Critical Hits for an Activity results in various bonuses, so try to get as many Critical Hits as you can! ",,,,,,
 Tutorial_Instruction_2,Stepping through each tile takes 0.5 hrs.,,,,,,
-Tutorial_Instruction_3,"Charitable activites like building construction and volunteering increase your Charity Points (CP).
+Tutorial_Instruction_3,"Charitable activites like building construction, delivering items, and volunteering increase your Charity Points (CP).
 
 If your CP falls to zero. It is Game Over.",,,,,,
 Tutorial_Instruction_4,"Side Notifications pop up to always remind you of the next Liturgy of the Hours and all upcoming building deadlines.
 
-Convent activities display the start & end times, while other buildings display their deadlines.",,,,,,
+Convent activities display their Start Times, while other buildings display their Deadlines.",,,,,,
 Tutorial_Instruction_5,"Purchased items appear in your Inventory.
 
 Purchasing/Delivering items take no time.",,,,,,
-Tutorial_Instruction_6,"Sometimes, money is given to you as a gift when you deliver items or volunteer.",,,,,,
-Tutorial_Instruction_7,"Your daily goal is to maintain CP and FP above zero.
+Tutorial_Instruction_6,"Sometimes, money is given to you as a gift when you deliver items or volunteer.
+
+Performing activities in a building increases your Relationship Points (RP), allowing you to perform activities quicker at that building.",,,,,,
+Tutorial_Instruction_7,"Your daily goal is to maintain both CP and FP above zero.
 Manage your Time and Energy between Charitable and Spiritual activities to attain this goal!
 Hover your Mouse over any icon to get more information.",,,,,,
 Tutorial_Instruction_8,"When a building is ready to be constructed, the Construct icon will appear above it.
 
 If you have any unconstructed buildings by midnight, you will lose all Charity Points (CP).",,,,,,
-Tutorial_Instruction_Rainfall,"Stepping outside during Rainfall exposes you to Ailments, which negatively impact your Energy. Click the Energy button to view current Ailments. Sleep at the Convent to remove Ailments. 
+Tutorial_Instruction_Rainfall,"Severe weather conditions may cause damage to the structural integrity of a building, leading to its destruction. 
 
-An Umbrella eliminates the chance of getting Ailments.",,,,,,
+Saving these buildings are your highest priority, as you will lose all RP if a building is destroyed.",,,,,,
 Tutorial_Instruction_Blizzard,"Stepping outside during a Blizzard will increase the chance of Freezing. If you are frozen, you will also be unable to move, and must tap on the postulant repeatedly to break out of the snow. 
 
 Each tap will pass Time and also consume Energy. Using a Winter Cloak eliminates the chance of Freezing.",,,,,,
@@ -414,6 +422,8 @@ You are safe if it depletes while in a building. Keep an eye on your Energy!",,,
 Tutorial_Instruction_Relationship,"Every activity performed at a building (except the Convent & Shop) increases <b>Relationship Points (RP)</b> for that building.
 
 Higher RP allows you to complete activities at that building quicker, alongside other bonuses.",,,,,,
+AutoDeliver_Begin,Your helper is on the way to deliver your item.,,,,,,
+AutoDeliver_Complete,Your helper delivered the item successfully!,,,,,,
 Bakhita_Patron,of Sudan.,,,,,,
 Teresa_Patron,of World Youth Day.,,,,,,
 SanMartin_Patron,"of Mixed Race, Barbers, Public Health Workers, Innkeepers.",,,,,,

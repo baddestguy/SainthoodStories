@@ -43,7 +43,11 @@ public class InteractableKitchen : InteractableHouse
     {
 
         Player player = GameManager.Instance.Player;
-        if (player.EnergyDepleted()) return;
+        if (player.EnergyDepleted())
+        {
+            UI.Instance.ErrorFlash("Energy");
+            return;
+        }
 
         ItemType item = InventoryManager.Instance.GetItem(ItemType.GROCERIES);
         GameClock clock = GameManager.Instance.GameClock;
