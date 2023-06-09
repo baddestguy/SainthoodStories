@@ -92,8 +92,8 @@ En <color=""red""> -2"
 KOBOKO,3,3,Provision_KobokoName,Provision_KobokoDescription,"When praying:
 FP <color=""green"">+3<color=""white""> 
 En <color=""red""> -3"
-INCENSE,1,10,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">10%"
-INCENSE,2,15,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">15%"
-INCENSE,3,20,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">20%"
-INCENSE,4,25,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance <color=""green"">25%"
+INCENSE,1,10,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">10%"
+INCENSE,2,15,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">15%"
+INCENSE,3,20,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">20%"
+INCENSE,4,25,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">25%"
 SECURITY_GUARDS,1,1,Provision_SecurityGuardsName,Provision_SecurityGuardsDescription,"Chance of preventing robberies <color=""green"">100%"
