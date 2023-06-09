@@ -254,6 +254,10 @@ public enum CustomEventType
     ,SAVE_ORPHANAGE
     ,SAVE_KITCHEN
     ,SAVE_SHELTER
+    ,ENDGAME
+    ,AUTO_DELIVER_BEGIN
+    ,AUTO_DELIVER_COMPLETE
+
 }
 
 public enum EventPopupType

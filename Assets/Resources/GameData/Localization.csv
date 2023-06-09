@@ -422,6 +422,8 @@ You are safe if it depletes while in a building. Keep an eye on your Energy!",,,
 Tutorial_Instruction_Relationship,"Every activity performed at a building (except the Convent & Shop) increases <b>Relationship Points (RP)</b> for that building.
 
 Higher RP allows you to complete activities at that building quicker, alongside other bonuses.",,,,,,
+AutoDeliver_Begin,Your helper is on the way to deliver your item.,,,,,,
+AutoDeliver_Complete,Your helper delivered the item successfully!,,,,,,
 Bakhita_Patron,of Sudan.,,,,,,
 Teresa_Patron,of World Youth Day.,,,,,,
 SanMartin_Patron,"of Mixed Race, Barbers, Public Health Workers, Innkeepers.",,,,,,

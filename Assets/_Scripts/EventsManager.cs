@@ -28,6 +28,8 @@ public class EventsManager : MonoBehaviour
 
     public void AddEventToList(CustomEventType newEvent)
     {
+        if (EventInProgress) return;
+
         var e = GameDataManager.Instance.CustomEventData[newEvent][0]; //Grab based on weight
 
         EventList.Add(e);
@@ -82,6 +84,7 @@ public class EventsManager : MonoBehaviour
 
     public void TryEventTrigger(double time, int day)
     {
+        if (!GameClock.DeltaTime) return;
         if (!UI.Instance.WeekBeginCrossFade && !GameSettings.Instance.FTUE && !GameClock.DeltaTime) return;
 
         if (!GameSettings.Instance.StoryToggle) return;

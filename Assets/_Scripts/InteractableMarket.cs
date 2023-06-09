@@ -85,35 +85,15 @@ public class InteractableMarket : InteractableHouse
             var autoDeliver = InventoryManager.Instance.GetProvision(Provision.AUTO_DELIVER);
             if(autoDeliver != null && InventoryManager.Instance.AutoDeliveryItems.Sum(x => x.Value.Count) < autoDeliver.Value)
             {
-                //if(InventoryManager.Instance.AutoDeliveryItems.Count > 0)
-                //{
-                //    var lastItemTime = InventoryManager.Instance.AutoDeliveryItems.Last().Value.Last().Time;
-                //    if(lastItemTime == (clock.Time + 2.5))
-                //    {
-                //        if (InventoryManager.Instance.AutoDeliveryItems.ContainsKey(item))
-                //        {
-                //            InventoryManager.Instance.AutoDeliveryItems[item].Add(new GameClock(lastItemTime + 0.5));
-                //        }
-                //        else
-                //        {
-                //            InventoryManager.Instance.AutoDeliveryItems.Add(item, new List<GameClock>() { new GameClock(lastItemTime + 0.5) });
-                //        }
-                //    }
-                //    else
-                //    {
-                //        InventoryManager.Instance.AutoDeliveryItems.Add(item, new GameClock(clock.Time + 2.5));
-                //    }
-                //}
-                //else
+                EventsManager.Instance.AddEventToList(CustomEventType.AUTO_DELIVER_BEGIN);
+                EventsManager.Instance.ExecuteEvents();
+                if (InventoryManager.Instance.AutoDeliveryItems.ContainsKey(item))
                 {
-                    if (InventoryManager.Instance.AutoDeliveryItems.ContainsKey(item))
-                    {
-                        InventoryManager.Instance.AutoDeliveryItems[item].Add(new GameClock(clock.Time + 2.5));
-                    }
-                    else
-                    {
-                        InventoryManager.Instance.AutoDeliveryItems.Add(item, new List<GameClock>() { new GameClock(clock.Time + 2.5) });
-                    }
+                    InventoryManager.Instance.AutoDeliveryItems[item].Add(new GameClock(clock.Time + 2.5));
+                }
+                else
+                {
+                    InventoryManager.Instance.AutoDeliveryItems.Add(item, new List<GameClock>() { new GameClock(clock.Time + 2.5) });
                 }
             }
             else

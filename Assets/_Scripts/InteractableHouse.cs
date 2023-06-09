@@ -1001,7 +1001,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual bool HasResetActionProgress()
     {
-        return VolunteerCountdown == 0 && PrayersProgress == 0;
+        return VolunteerCountdown == 0 && PrayersProgress == 0 || (BuildingState == BuildingState.RUBBLE && BuildPoints == 0);
     }
 
     private void OnUIEnabled(bool enabled)

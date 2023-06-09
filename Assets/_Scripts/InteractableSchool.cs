@@ -301,6 +301,7 @@ public class InteractableSchool : InteractableHouse
     {
         if (item == ItemType.STATIONERY)
         {
+            EventsManager.Instance.AddEventToList(CustomEventType.AUTO_DELIVER_COMPLETE);
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }

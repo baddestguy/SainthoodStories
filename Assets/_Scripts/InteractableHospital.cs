@@ -356,6 +356,7 @@ public class InteractableHospital : InteractableHouse
     {
         if(item == ItemType.MEDS)
         {
+            EventsManager.Instance.AddEventToList(CustomEventType.AUTO_DELIVER_COMPLETE);
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }

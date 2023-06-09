@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
 
     private InteractableHouse GetCurrentBuilding()
     {        
-        if(GameManager.Instance.GameClock.Day == 1 && GameManager.Instance.GameClock.Time == 6) return FindObjectOfType<InteractableChurch>();
+        if(GameManager.Instance.GameClock.Time == 6) return FindObjectOfType<InteractableChurch>();
 
         switch (GameManager.Instance.SaveData.CurrentHouse)
         {
