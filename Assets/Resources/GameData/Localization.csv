@@ -1,8 +1,8 @@
 Key,English,French,BrPt,Filipino,LatAmSpanish,Italian,German
 Tutorial_0,"You knock on the convent doors at the crack of dawn, tired from your long journey, with only the shoes on your feet and the habit on your back. ",,,,,,
-Tutorial_1,"The doors swing open to reveal the Prioress. ""Come on in!"" she says, as she grabs your hand, ""You're just in time for Liturgy of the Hours. Come quickly, let us begin.""",,,,,,
+Tutorial_1,"The doors swing open to reveal the Prioress. ""Welcome to Purgatorio. Come on in!"" she says, as she grabs your hand, ""You're just in time for Liturgy of the Hours. Come quickly, let us begin.""",,,,,,
 Tutorial_11,"""Performing activities is straightforward. Simply <b>Press and Hold</b> the Prayer button to partake in Spiritual Activities.""",,,,,,
-Tutorial_2,"Afterwards, the Prioress shows you to your room. ""We have Liturgy of the Hours 4 times a day, and we always post the <b>Start Time</b> of the next session above the Convent, so please try to make it as often as you can.""",,,,,,
+Tutorial_2,"Afterwards, the Prioress shows you to your room. ""We have Liturgy of the Hours 3 times a day, and we always post the <b>Start Time</b> of the next session above the Convent, so please try to make it as often as you can.""",,,,,,
 Tutorial_21,"Eltee, the Foreman, visits the Convent. ""Ma'am, please come on down to the hospital at ya earliest convenience, we need all the help we can get.""
 
 And with that, he walks off.",,,,,,
@@ -46,8 +46,8 @@ Endgame,"Your feedback is very important. Please let me know what you think!
 Send me your comments on Discord with the invite link on the Main Menu.",,,,,,
 Endgame,Have fun!,,,,,,
 HeatwaveIntro,"Out in the fields, a woman in a trenchcoat holds a strange vial containing black liquid. As you approach her, you notice a label on her trenchcoat reads: ""Christie the Weather-Lady"".",,,,,,
-HeatwaveIntro,"""Temperatures are skyrocketing, a heatwave must be incoming."" she says, eyes laser focused on the device. ""You will burn extra Energy traversing the fields during a heatwave.""",,,,,,
-HeatwaveIntro,"""If I were you, I would plan ahead and try to stay indoors as much as possible to conserve Energy."" she concludes, and begins taking notes in her little notebook.",,,,,,
+HeatwaveIntro,"""Temperatures are skyrocketing, a heatwave must be incoming."" she says, eyes laser focused on the device. ""You may get a sunburn traversing the fields during a heatwave.""",,,,,,
+HeatwaveIntro,"""If I were you, I would plan ahead and try to stay indoors as much as possible."" she concludes, and begins taking notes in her little notebook.",,,,,,
 RainIntro,"Out in the fields, Christie the Weather-Lady seems to be fiddling with a strange instrument made up of 4 cup-shaped objects, mounted on a vertical shaft, and spinning horizontally.",,,,,,
 RainIntro,"""It's going to rain today."" she mumurs, without looking up. ""You could possibly fall sick when traversing the fields during a storm...unless you had an umbrella.""
 
