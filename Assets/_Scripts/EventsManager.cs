@@ -113,9 +113,9 @@ public class EventsManager : MonoBehaviour
         StoryEvents.AddRange(filteredEvents);
     }
 
-    public void ForceTriggerStoryEvent(StoryEventData e)
+    public void ForceTriggerStoryEvent(IEnumerable<StoryEventData> events)
     {
-        StoryEvents.Add(e);
+        StoryEvents.AddRange(events);
         ExecuteEvents();
     }
 
@@ -190,6 +190,11 @@ public class EventsManager : MonoBehaviour
     public bool HasEventsInQueue()
     {
         return EventList.Count > 0 || StoryEvents.Count > 0;
+    }
+
+    public bool HasEvent(CustomEventType e)
+    {
+        return EventList.Any(x => x.Id == e);
     }
 
     public void OnOveride()

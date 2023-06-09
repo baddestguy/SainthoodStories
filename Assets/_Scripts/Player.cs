@@ -148,13 +148,28 @@ public class Player : MonoBehaviour
         ToolTipManager.Instance.ShowToolTip("");
         GameClock.Ticked += OnTick;
 
-        if (GameSettings.Instance.FTUE && GameManager.Instance.GameClock.Time == 6)
+        if (GameSettings.Instance.StoryToggle)
         {
-            var list = new List<StoryEventData>();
-            list.Add(GameDataManager.Instance.StoryEventData["Tutorial_0"]);
-            list.Add(GameDataManager.Instance.StoryEventData["Tutorial_1"]);
-            list.Add(GameDataManager.Instance.StoryEventData["Tutorial_11"]);
-            EventsManager.Instance.ForceTriggerStoryEvent(list);
+            int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
+            GameClock currentClock = GameManager.Instance.GameClock;
+            var storyEvent = GameDataManager.Instance.StoryEventData.Select(y => y.Value).Where(s => s.Week == CurrentWeek && s.Day == currentClock.Day && s.Time == currentClock.Time).OrderBy(x => x.OrderBy);
+            var filteredEvents = storyEvent.Where(e =>
+            {
+                if (e.Id.Contains("Tutorial") && !GameSettings.Instance.FTUE)
+                {
+                    return false;
+                }
+
+                return true;
+            });
+
+            if (!EventsManager.Instance.HasEvent(InteractableHouse.HouseTriggeredEvent) && InteractableHouse.HouseTriggeredEvent != CustomEventType.NONE)
+            {
+                EventsManager.Instance.AddEventToList(InteractableHouse.HouseTriggeredEvent);
+                EventsManager.Instance.ExecuteEvents();
+            }
+
+            EventsManager.Instance.ForceTriggerStoryEvent(filteredEvents);
         }
     }
 
