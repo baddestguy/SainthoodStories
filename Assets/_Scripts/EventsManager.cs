@@ -113,6 +113,12 @@ public class EventsManager : MonoBehaviour
         StoryEvents.AddRange(filteredEvents);
     }
 
+    public void ForceTriggerStoryEvent(StoryEventData e)
+    {
+        StoryEvents.Add(e);
+        ExecuteEvents();
+    }
+
     public void StartNewDay()
     {
         CurrentEvents.Clear();

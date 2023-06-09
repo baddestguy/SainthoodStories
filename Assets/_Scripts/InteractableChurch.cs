@@ -82,7 +82,7 @@ public class InteractableChurch : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         CheckParticipation(clock);
 
-        if(clock.Time > 18.5)
+        if(clock.Time > 18.5 || clock.Time <= 6.5)
         {
             LiturgyStartTime = 6;
             LiturgyEndTime = 7;

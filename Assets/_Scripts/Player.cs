@@ -147,6 +147,15 @@ public class Player : MonoBehaviour
         GameManager.Instance.GameClock.Ping();
         ToolTipManager.Instance.ShowToolTip("");
         GameClock.Ticked += OnTick;
+
+        if (GameSettings.Instance.FTUE && GameManager.Instance.GameClock.Time == 6)
+        {
+            var list = new List<StoryEventData>();
+            list.Add(GameDataManager.Instance.StoryEventData["Tutorial_0"]);
+            list.Add(GameDataManager.Instance.StoryEventData["Tutorial_1"]);
+            list.Add(GameDataManager.Instance.StoryEventData["Tutorial_11"]);
+            EventsManager.Instance.ForceTriggerStoryEvent(list);
+        }
     }
 
     public bool WeCanMove(MapTile tile)
