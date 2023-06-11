@@ -665,13 +665,11 @@ public class UI : MonoBehaviour
     public GameObject SettingsMenuGO;
     public void SettingsMenu()
     {
+        PauseMenu.Instance.Activate();
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
-        SettingsMenuGO.SetActive(true);
-        PopulateLanguageDropdown();
     }
     public void CloseSettingsMenu()
     {
-        SettingsMenuGO.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 

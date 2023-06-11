@@ -251,6 +251,7 @@ public class PopUI : MonoBehaviour
             if (critCircleScaleX > 0.65f && critCircleScaleX < 0.8f)
             {
                 //CRITICAL HIT!
+                CameraControls?.MyCamera.DOShakeRotation(1f, 1f);
                 Debug.LogWarning("CRITICAL HIT!");
                 PointerDown = false;
                 ButtonTimer = 0f;

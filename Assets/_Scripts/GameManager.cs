@@ -64,13 +64,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (InGameSession)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                PauseMenu.Instance.Activate();
-            }
-        }
     }
 
     public void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Additive)
@@ -154,7 +147,6 @@ public class GameManager : MonoBehaviour
             PlayAmbience(GameClock.Time, GameClock.Day);
             TreasuryManager.Instance.Money = SaveData.Money;
             InventoryManager.Instance.LoadInventory(SaveData);
-            LoadScene("PauseMenu", LoadSceneMode.Additive);
             SoundManager.Instance.SongSelection();
             if(GameClock.Time == 6)
             {
@@ -176,7 +168,6 @@ public class GameManager : MonoBehaviour
         }
         else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))
         {
-            LoadScene("PauseMenu", LoadSceneMode.Additive);
             loadWeekDaysScene = false;
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.SaintsShowcase_Day;

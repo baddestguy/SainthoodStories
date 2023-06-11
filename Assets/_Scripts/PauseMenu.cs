@@ -2,6 +2,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject settingsPannel;
     public GameObject saintsPanel;
     public GameObject mainPanel;
+    public GameObject PauseToggleObj;
 
     public GameObject PauseSettings;
     public GameObject GraphicsSettings;
@@ -45,14 +47,42 @@ public class PauseMenu : MonoBehaviour
 
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) || Gamepad.current.startButton.wasPressedThisFrame)
+        {
+            Activate();
+        }
+        else if (active && Gamepad.current.buttonEast.wasPressedThisFrame)
+        {
+            Activate();
+        }
+    }
+
     public void Activate()
     {
         active = !active;
         mainPanel.SetActive(active);
+
+        if (active)
+        {
+            if (!GameManager.Instance.InGameSession)
+            {
+                PauseToggleObj.SetActive(false);
+                ToggleGraphics();
+            }
+            else
+            {
+                PauseToggleObj.SetActive(true);
+                TogglePause();
+            }
+        }
     }
 
     public void TogglePause()
     {
+        if (!GameManager.Instance.InGameSession) return;
+
         CloseAll();
         PauseSettings.SetActive(true);
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
@@ -124,6 +154,7 @@ public class PauseMenu : MonoBehaviour
     {
         //maybe do check before quit
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+        Activate();
         GameManager.Instance.ClearData();
         StartCoroutine(ScheduleCallback(() => {
             SoundManager.Instance.EndAllTracks();

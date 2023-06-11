@@ -352,7 +352,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""StartButton"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""f3d42376-b9b9-4cb1-b354-d38bd427cac9"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -817,7 +817,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""StartButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

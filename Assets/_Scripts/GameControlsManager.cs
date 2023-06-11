@@ -30,6 +30,7 @@ public class GameControlsManager : MonoBehaviour
         {
             TryZoom?.Invoke(mouseScroll);
         }
+
     }
 
     private void OnDisable()
