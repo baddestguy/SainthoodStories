@@ -349,6 +349,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Quaternion"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""StartButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""f3d42376-b9b9-4cb1-b354-d38bd427cac9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -802,6 +810,17 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""efff2f92-467b-49db-b1ac-d535d4730167"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -891,6 +910,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        m_UI_StartButton = m_UI.FindAction("StartButton", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -999,6 +1019,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_UI_RightClick;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
+    private readonly InputAction m_UI_StartButton;
     public struct UIActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -1013,6 +1034,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+        public InputAction @StartButton => m_Wrapper.m_UI_StartButton;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1052,6 +1074,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @TrackedDeviceOrientation.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
+                @StartButton.started -= m_Wrapper.m_UIActionsCallbackInterface.OnStartButton;
+                @StartButton.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnStartButton;
+                @StartButton.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnStartButton;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -1086,6 +1111,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
                 @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+                @StartButton.started += instance.OnStartButton;
+                @StartButton.performed += instance.OnStartButton;
+                @StartButton.canceled += instance.OnStartButton;
             }
         }
     }
@@ -1153,5 +1181,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        void OnStartButton(InputAction.CallbackContext context);
     }
 }

@@ -336,6 +336,14 @@
                     "expectedControlType": "Quaternion",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "StartButton",
+                    "type": "Button",
+                    "id": "f3d42376-b9b9-4cb1-b354-d38bd427cac9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -787,6 +795,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "efff2f92-467b-49db-b1ac-d535d4730167",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StartButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

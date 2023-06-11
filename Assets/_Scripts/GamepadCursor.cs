@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Users;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -15,7 +14,6 @@ public class GamepadCursor : MonoBehaviour
     private string PreviousControlScheme = "";
     private Mouse CurrentMouse = Mouse.current;
     private MapTile PreviousHitMapTile;
-    private int loadingCooldownTimer = 30;
     private bool HasInitialized;
    
     [SerializeField]
@@ -38,21 +36,9 @@ public class GamepadCursor : MonoBehaviour
 
     private void OnEnable()
     {
-        Invoke("Init", 1f);
-    }
-
-    private void Init()
-    {
         MainCamera = PlayerInput.camera;
 
-        if (VirtualMouse == null)
-        {
-            VirtualMouse = (Mouse)InputSystem.AddDevice("VirtualMouse");
-        }
-        else if (!VirtualMouse.added)
-        {
-            InputSystem.AddDevice(VirtualMouse);
-        }
+        VirtualMouse = GameControlsManager.Instance.VirtualMouse;
 
         InputUser.PerformPairingWithDevice(VirtualMouse, PlayerInput.user);
 
@@ -65,6 +51,11 @@ public class GamepadCursor : MonoBehaviour
         InputSystem.onAfterUpdate += UpdateMotion;
         PlayerInput.actions["Click"].performed += ActionButton;
         PlayerInput.actions["ScrollWheel"].performed += Scroll;
+        Invoke("Init", 0.1f);
+    }
+
+    private void Init()
+    {
         HasInitialized = true;
     }
 
@@ -74,7 +65,6 @@ public class GamepadCursor : MonoBehaviour
         PlayerInput.actions["Click"].performed -= ActionButton;
         PlayerInput.actions["ScrollWheel"].performed -= Scroll;
         PlayerInput.user.UnpairDevicesAndRemoveUser();
-        InputSystem.RemoveDevice(VirtualMouse);
     }
 
     private void OnControlsChanged()
