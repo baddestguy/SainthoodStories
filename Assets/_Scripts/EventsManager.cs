@@ -206,6 +206,15 @@ public class EventsManager : MonoBehaviour
         EventDialogTriggered?.Invoke(false);
     }
 
+    public void ClearData()
+    {
+        StopAllCoroutines();
+        StoryEvents.Clear();
+        CurrentEvents.Clear();
+        EventList.Clear();
+        EventInProgress = false;
+    }
+
     private void OnDisable()
     {
         GameClock.ExecuteEvents -= ExecuteEvents;

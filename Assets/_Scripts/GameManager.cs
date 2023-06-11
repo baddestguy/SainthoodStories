@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     public SceneID CurrentSceneID;
     public SceneID PreviousSceneID;
     public bool InGameSession;
+    public bool SceneLoaded;
 
     public int RunAttempts;
     public int[] MaptileIndexes = new int[6] {0, 3, 9, 19, 15, 21};
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Additive)
     {
+        SceneLoaded = false;
         Scene scene = SceneManager.GetSceneByName(sceneName);
         if (!scene.isLoaded)
         {
@@ -187,6 +189,7 @@ public class GameManager : MonoBehaviour
         {
             LoadScene("WeekDaysUI");
         }
+        SceneLoaded = true;
     }
 
     private void OnTap(MapTile tile)
@@ -296,6 +299,7 @@ public class GameManager : MonoBehaviour
     {
         UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
+        SceneLoaded = false;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 
@@ -307,6 +311,7 @@ public class GameManager : MonoBehaviour
         InteractableHouse.HazardCounter = 0;
         InteractableHouse.HouseTriggeredEvent = CustomEventType.NONE;
         InteractableHouse.InsideHouse = false;
+        EventsManager.Instance.ClearData();
     }
 
     private void OnDisable()

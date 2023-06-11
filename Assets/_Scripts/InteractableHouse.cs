@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 public class InteractableHouse : InteractableObject
@@ -1187,7 +1188,7 @@ public class InteractableHouse : InteractableObject
         return new TooltipStats() { Ticks = 0, FP = 0, CP = 0, Energy = 0 };
     }
 
-    public override void OnMouseOver()
+    public override void Hover()
     {
         if (UI.Instance.WeekBeginCrossFade) return;
         if (EventsManager.Instance.EventInProgress) return;
@@ -1215,7 +1216,7 @@ public class InteractableHouse : InteractableObject
 
         InfoPopup.Init(GetType().Name, OpenTime, ClosingTime, RelationshipPoints, DuringOpenHours());
         PopIcon.gameObject.SetActive(false);
-        base.OnMouseOver();
+        base.Hover();
     }
 
     private bool HouseJumping = false;
@@ -1248,7 +1249,7 @@ public class InteractableHouse : InteractableObject
         HouseJumping = false;
     }
 
-    public override void OnMouseExit()
+    public override void HoverExit()
     {
         if (UI.Instance.WeekBeginCrossFade) return;
         if (EventsManager.Instance.EventInProgress) return;
@@ -1259,7 +1260,7 @@ public class InteractableHouse : InteractableObject
         ToolTipManager.Instance.ShowToolTip("");
         var clock = GameManager.Instance.GameClock;
         clock.Ping();
-        base.OnMouseExit();
+        base.HoverExit();
     }
 
     public void LoadData()
