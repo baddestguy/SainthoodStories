@@ -310,6 +310,14 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
+    public override HouseSaveData LoadData()
+    {
+        var data = base.LoadData();
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.SCHOOL_CLOSED);
+        if (e != null) ClosingTime = 0;
+        return data;
+    }
+
     public override void OnDisable()
     {
         base.OnDisable();

@@ -86,7 +86,8 @@ public class SaveDataManager : MonoBehaviour
             Maptiles = GameManager.Instance.MaptileIndexes,
             CurrentHouse = GameManager.Instance.Player.CurrentBuilding.GetType().Name,
             StatusEffects = GameManager.Instance.Player.StatusEffects.ToArray(),
-            HouseTriggeredEvent = InteractableHouse.HouseTriggeredEvent
+            HouseTriggeredEvent = InteractableHouse.HouseTriggeredEvent,
+            CurrentDailyEvent = EventsManager.Instance.CurrentEvents.Find(e => e.EventGroup == EventGroup.DAILY)
         };
     }    
 

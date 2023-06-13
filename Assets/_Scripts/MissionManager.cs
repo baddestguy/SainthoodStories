@@ -156,6 +156,7 @@ public class MissionManager : MonoBehaviour
 
         EventsManager.Instance.ExecuteEvents();
         GameManager.Instance.Player.ResetEnergy();
+        GameManager.Instance.Player.StatusEffects.Clear();
         InventoryManager.Instance.GeneratedProvisions.Clear();
         EventsManager.Instance.DailyEvent = CustomEventType.NONE;
         SaveDataManager.Instance.SaveGame();

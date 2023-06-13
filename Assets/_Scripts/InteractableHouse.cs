@@ -264,8 +264,9 @@ public class InteractableHouse : InteractableObject
             PopMyIcon();
         }
 
-        if(time == 0 && BuildingState == BuildingState.RUBBLE)
+        if(time == 0 && CanBuild())
         {
+            Debug.LogWarning("FAILED TO BUILD A HOUSE AT MIDNIGHT!: " + GetType());
             UpdateCharityPoints(-1000, 0);
         }
     }

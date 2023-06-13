@@ -174,6 +174,8 @@ public class GameManager : MonoBehaviour
                 {
                     UI.Instance.DisableMainMenuContinueBtn();
                 }
+
+                EventsManager.Instance.CurrentEvents.Add(data.CurrentDailyEvent);
             }, false, true);
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");

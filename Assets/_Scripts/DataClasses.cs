@@ -527,6 +527,7 @@ public class SaveObject
     public string CurrentHouse;
     public PlayerStatusEffect[] StatusEffects;
     public CustomEventType HouseTriggeredEvent;
+    public CustomEventData CurrentDailyEvent;
 }
 
 [System.Serializable]
