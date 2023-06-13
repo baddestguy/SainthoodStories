@@ -160,7 +160,11 @@ public class GameManager : MonoBehaviour
             SaveDataManager.Instance.LoadGame((data, newGame) => {
                 TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                 if (data.TutorialSteps >= 15) GameSettings.Instance.FTUE = false;
-            },false, true);
+                if (data.RunAttempts > 0)
+                {
+                    TutorialManager.Instance.SkipTutorial = true;
+                }
+            }, false, true);
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
             SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay:70);
