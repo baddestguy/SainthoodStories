@@ -411,9 +411,9 @@ If you have any unconstructed buildings by midnight, you will lose all Charity P
 Tutorial_Instruction_Rainfall,"Severe weather conditions may cause damage to the structural integrity of a building, leading to its destruction. 
 
 Saving these buildings are your highest priority, as you will lose all RP if a building is destroyed.",,,,,,
-Tutorial_Instruction_Blizzard,"Stepping outside during a Blizzard will increase the chance of Freezing. If you are frozen, you will also be unable to move, and must tap on the postulant repeatedly to break out of the snow. 
+Tutorial_Instruction_Blizzard,"Stepping outside during a Blizzard will increase the chance of <b>Freezing</b>. If you are frozen, you will be unable to move, and must tap on your avatar repeatedly to break out of the snow. 
 
-Each tap will pass Time and also consume Energy. Using a Winter Cloak eliminates the chance of Freezing.",,,,,,
+Time and Energy are consumed with each tap.",,,,,,
 Tutorial_Instruction_9,"Occasionally, severe weather conditions such as Heatwaves, Rainfall, and Blizzards will occur. The start time is always indicated with the corresponding weather icon. Stepping outside during a Heatwave exposes you to Ailments which negatively impact your Energy.
 
 Rest at the Convent to remove Ailments.",,,,,,
