@@ -7,9 +7,9 @@ RAIN,OK,DAILY,100,24,0,NONE,0,"2,1",StoryArt/TownCrier,FALSE,Event_Rain_24
 BLIZZARD,OK,DAILY,100,6,0,NONE,0,"3,1",StoryArt/TownCrier,FALSE,Event_Snow_6
 BLIZZARD,OK,DAILY,100,12,0,NONE,0,"3,1",StoryArt/TownCrier,FALSE,Event_Snow_12
 BLIZZARD,OK,DAILY,100,24,0,NONE,0,"3,1",StoryArt/TownCrier,FALSE,Event_Snow_24
-HEATWAVE,OK,DAILY,100,6,0,NONE,0,"1,3",StoryArt/TownCrier,FALSE,Event_Heat_6
-HEATWAVE,OK,DAILY,100,12,0,NONE,0,"1,3",StoryArt/TownCrier,FALSE,Event_Heat_12
-HEATWAVE,OK,DAILY,100,24,0,NONE,0,"1,3",StoryArt/TownCrier,FALSE,Event_Heat_24
+HEATWAVE,OK,DAILY,100,6,0,NONE,0,"1,4",StoryArt/TownCrier,FALSE,Event_Heat_6
+HEATWAVE,OK,DAILY,100,12,0,NONE,0,"1,4",StoryArt/TownCrier,FALSE,Event_Heat_12
+HEATWAVE,OK,DAILY,100,24,0,NONE,0,"1,4",StoryArt/TownCrier,FALSE,Event_Heat_24
 BABY_FEVER,OK,DAILY,100,0.65,0,NONE,0,"1,1",StoryArt/TownCrier,FALSE,Event_BabyFever
 MARKET_DISCOUNT,OK,DAILY,100,15,0,NONE,0,"1,1",StoryArt/TownCrier,FALSE,Event_MarketDiscount_15
 MARKET_DISCOUNT,OK,DAILY,100,30,0,NONE,0,"1,1",StoryArt/TownCrier,FALSE,Event_MarketDiscount_30
