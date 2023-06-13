@@ -169,6 +169,11 @@ public class GameManager : MonoBehaviour
                 }
 
                 UI.Instance.DisplayRunAttempts();
+
+                if(data.Maptiles == null)
+                {
+                    UI.Instance.DisableMainMenuContinueBtn();
+                }
             }, false, true);
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");

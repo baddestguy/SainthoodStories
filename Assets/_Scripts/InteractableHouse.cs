@@ -263,6 +263,11 @@ public class InteractableHouse : InteractableObject
         {
             PopMyIcon();
         }
+
+        if(time == 0 && BuildingState == BuildingState.RUBBLE)
+        {
+            UpdateCharityPoints(-1000, 0);
+        }
     }
 
     public void DestroyBuilding()

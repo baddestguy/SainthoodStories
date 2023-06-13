@@ -85417,6 +85417,7 @@ MonoBehaviour:
   m_EventSystem: {fileID: 0}
   StatusEffectDisplay: {fileID: 0}
   RunAttemptsDisplay: {fileID: 1508948164}
+  ContinueBtn: {fileID: 58004109}
   SettingsMenuGO: {fileID: 0}
   Dropdown: {fileID: 1699368930}
   WeekBeginCrossFade: 0

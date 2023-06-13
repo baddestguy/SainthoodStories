@@ -81,6 +81,7 @@ public class UI : MonoBehaviour
 
     public StatusEffectDisplay StatusEffectDisplay;
     public TextMeshProUGUI RunAttemptsDisplay;
+    public Button ContinueBtn;
 
     public bool WasUiHit
     {
@@ -661,6 +662,11 @@ public class UI : MonoBehaviour
     {
         
         GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, newGame);
+    }
+
+    public void DisableMainMenuContinueBtn()
+    {
+        ContinueBtn.interactable = false;
     }
 
     public GameObject SettingsMenuGO;
