@@ -335,6 +335,9 @@ public class HouseSaveData
     public int RequiredItems;
     public double DeadlineTime;
     public int DeadlineDay;
+    public bool DeliveryTimeSet;
+    public double DeliveryTime;
+    public int DeliveryDay;
 }
 
 public class TooltipStats

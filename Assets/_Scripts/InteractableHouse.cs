@@ -1263,7 +1263,7 @@ public class InteractableHouse : InteractableObject
         base.HoverExit();
     }
 
-    public void LoadData()
+    public virtual HouseSaveData LoadData()
     {
         var data = GameManager.Instance.SaveData.Houses?.Where(h => h.HouseName == GetType().Name).FirstOrDefault();
         if (data == null)
@@ -1277,7 +1277,7 @@ public class InteractableHouse : InteractableObject
                 BuildingState = BuildingState.RUBBLE;
             }
 
-            return;
+            return data;
         }
 
         BuildingState = data.BuildingState;
@@ -1289,9 +1289,11 @@ public class InteractableHouse : InteractableObject
         DeadlineCounter = data.DeadlineCounter;
         DeadlineTime = new GameClock(data.DeadlineTime, data.DeadlineDay);
         RequiredItems = data.RequiredItems;
+
+        return data;
     }
 
-    public HouseSaveData GetHouseSave()
+    public virtual HouseSaveData GetHouseSave()
     {
         return new HouseSaveData()
         {
