@@ -60,6 +60,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Activate()
     {
+        if (UI.Instance.WeekBeginCrossFade) return;
         active = !active;
         mainPanel.SetActive(active);
 

@@ -295,4 +295,9 @@ public class TutorialManager : MonoBehaviour
 
         return true;
     }
+
+    public void ClearData()
+    {
+        TutorialStrings.Clear();
+    }
 }

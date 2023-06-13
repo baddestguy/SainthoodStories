@@ -309,6 +309,7 @@ public class GameManager : MonoBehaviour
         InteractableHouse.HouseTriggeredEvent = CustomEventType.NONE;
         InteractableHouse.InsideHouse = false;
         EventsManager.Instance.ClearData();
+        TutorialManager.Instance.ClearData();
     }
 
     private void OnDisable()
