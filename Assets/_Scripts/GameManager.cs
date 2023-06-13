@@ -158,12 +158,17 @@ public class GameManager : MonoBehaviour
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.MainMenu;
             SaveDataManager.Instance.LoadGame((data, newGame) => {
+                RunAttempts = data.RunAttempts;
+                SaintsManager.Instance.LoadSaints(data.Saints);
+
                 TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                 if (data.TutorialSteps >= 15) GameSettings.Instance.FTUE = false;
                 if (data.RunAttempts > 0)
                 {
                     TutorialManager.Instance.SkipTutorial = true;
                 }
+
+                UI.Instance.DisplayRunAttempts();
             }, false, true);
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
@@ -231,15 +236,10 @@ public class GameManager : MonoBehaviour
                     
                     if (aNewGame)
                     {
+                        RunAttempts++;
                         SaveDataManager.Instance.DeleteProgress();
                         TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                         GameSettings.Instance.FTUE = !TutorialManager.Instance.SkipTutorial;
-                        RunAttempts++;
-                    }
-                    else
-                    {
-                        RunAttempts = data.RunAttempts;
-                        SaintsManager.Instance.LoadSaints(data.Saints);
                     }
                     SaveData = data;
                     Debug.Log("Run Attempts: " + RunAttempts);

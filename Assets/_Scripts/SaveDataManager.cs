@@ -61,7 +61,6 @@ public class SaveDataManager : MonoBehaviour
             DoSequentialSave();
         }
 
-        Debug.Log("SAVED!");
     }
 
     public SaveObject CurrentSaveData()
@@ -197,6 +196,7 @@ public class SaveDataManager : MonoBehaviour
         FileStream file = File.Create(GetPath(FILENAME));
         bf.Serialize(file, data);
         file.Close();
+        Debug.Log("SAVED!");
     }
 
     private void Save(object data)
@@ -306,10 +306,11 @@ public class SaveDataManager : MonoBehaviour
             SaveObject[] saveObjects = keyVal.Values.ToArray();
             SaveObject save = saveObjects.OrderBy(x => x.Day).LastOrDefault();
             var newSave = NewGameData();
-            GameManager.Instance.RunAttempts = save.RunAttempts;
-            SaintsManager.Instance.LoadSaints(save.Saints);
+            newSave.Saints = save.Saints;
+            newSave.RunAttempts = GameManager.Instance.RunAttempts;
             
             File.Delete(Application.persistentDataPath + "/Sainthood.save");
+
             Save(new SaveObject[1] { newSave });
         }
     }

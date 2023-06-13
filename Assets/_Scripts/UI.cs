@@ -80,6 +80,7 @@ public class UI : MonoBehaviour
     private PointerEventData m_PointerEventData;
 
     public StatusEffectDisplay StatusEffectDisplay;
+    public TextMeshProUGUI RunAttemptsDisplay;
 
     public bool WasUiHit
     {
@@ -761,6 +762,14 @@ public class UI : MonoBehaviour
         if (text != "")
         {
             TooltipDisplay.transform.parent.gameObject.SetActive(true);
+        }
+    }
+
+    public void DisplayRunAttempts()
+    {
+        if(RunAttemptsDisplay != null)
+        {
+            RunAttemptsDisplay.text = "Run Attempts: " + GameManager.Instance.RunAttempts;
         }
     }
 
