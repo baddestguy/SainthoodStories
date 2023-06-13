@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -1195,6 +1196,8 @@ public class InteractableHouse : InteractableObject
         if (HouseUIActive || EventsManager.Instance.HasEventsInQueue()) return;
         if (!CameraControls.ZoomComplete) return;
 
+        BuildingGo.transform.DOComplete();
+        BuildingGo.transform.DOPunchScale(transform.localScale * 0.5f, 0.5f, elasticity: 0f);
         if (BuildingState == BuildingState.RUBBLE)
         {
             RubbleInfoPopup.gameObject.SetActive(true);

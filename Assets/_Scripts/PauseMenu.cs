@@ -44,7 +44,6 @@ public class PauseMenu : MonoBehaviour
         {
             TutorialEnabled.SetIsOnWithoutNotify(GameSettings.Instance.TutorialToggle);
         }
-
     }
 
     void Update()
@@ -76,6 +75,11 @@ public class PauseMenu : MonoBehaviour
                 PauseToggleObj.SetActive(true);
                 TogglePause();
             }
+
+            if (GameManager.Instance.InGameSession)
+                TutorialEnabled.transform.parent.gameObject.SetActive(false);
+            else
+                TutorialEnabled.transform.parent.gameObject.SetActive(true);
         }
     }
 
