@@ -528,6 +528,11 @@ public class SaveObject
     public PlayerStatusEffect[] StatusEffects;
     public CustomEventType HouseTriggeredEvent;
     public CustomEventData CurrentDailyEvent;
+    public double WeatherStartTime;
+    public int WeatherStartDay;
+    public double WeatherEndTime;
+    public int WeatherEndDay;
+    public bool WeatherActivated;
 }
 
 [System.Serializable]

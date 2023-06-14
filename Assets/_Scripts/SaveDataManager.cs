@@ -87,7 +87,12 @@ public class SaveDataManager : MonoBehaviour
             CurrentHouse = GameManager.Instance.Player.CurrentBuilding.GetType().Name,
             StatusEffects = GameManager.Instance.Player.StatusEffects.ToArray(),
             HouseTriggeredEvent = InteractableHouse.HouseTriggeredEvent,
-            CurrentDailyEvent = EventsManager.Instance.CurrentEvents.Find(e => e.EventGroup == EventGroup.DAILY)
+            CurrentDailyEvent = EventsManager.Instance.CurrentEvents.Find(e => e.EventGroup == EventGroup.DAILY),
+            WeatherActivated = WeatherManager.Instance.WeatherForecastTriggered,
+            WeatherStartTime = WeatherManager.Instance.WeatherStartTime.Time,
+            WeatherStartDay = WeatherManager.Instance.WeatherStartTime.Day,
+            WeatherEndTime = WeatherManager.Instance.WeatherEndTime.Time,
+            WeatherEndDay = WeatherManager.Instance.WeatherEndTime.Day
         };
     }    
 
