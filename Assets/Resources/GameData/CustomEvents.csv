@@ -18,7 +18,7 @@ MARKET_DISCOUNT,OK,DAILY,100,100,0,NONE,0,"1,1",StoryArt/TownCrier,FALSE,Event_M
 MARKET_MARKUP,OK,DAILY,100,10,0,NONE,0,"1,1",StoryArt/TownCrier,FALSE,Event_MarketMarkup_10
 MARKET_MARKUP,OK,DAILY,100,20,0,NONE,0,"1,1",StoryArt/TownCrier,FALSE,Event_MarketMarkup_20
 MARKET_MARKUP,OK,DAILY,100,30,0,NONE,0,"1,1",StoryArt/TownCrier,FALSE,Event_MarketMarkup_30
-WEEKDAY_MASS,OK,DAILY,100,0,0,NONE,0,"2,1",StoryArt/TownCrier,FALSE,Event_WeekdayMass
+WEEKDAY_MASS,OK,STORY,100,0,0,NONE,0,"2,1",StoryArt/TownCrier,FALSE,Event_WeekdayMass
 SUNDAY_MASS,OK,DAILY,100,0,0,NONE,0,"1,5",StoryArt/TownCrier,FALSE,Event_SundayMass
 SCHOOL_CLOSED,OK,DAILY,100,0,0,NONE,0,"2,1",StoryArt/TownCrier,FALSE,Event_SchoolClosed
 SICK,OK,DAILY,100,1,0,NONE,0,"1,1",StoryArt/TownCrier,FALSE,Event_Sick

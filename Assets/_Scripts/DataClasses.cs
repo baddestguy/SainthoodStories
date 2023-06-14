@@ -338,6 +338,8 @@ public class HouseSaveData
     public bool DeliveryTimeSet;
     public double DeliveryTime;
     public int DeliveryDay;
+    public int EnvironmentalHazardDestructionCountdown;
+    public int HazardCounter;
 }
 
 public class TooltipStats

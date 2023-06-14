@@ -158,8 +158,9 @@ public class GameManager : MonoBehaviour
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.MainMenu;
             SaveDataManager.Instance.LoadGame((data, newGame) => {
+                //CAREFUL! GAMEDATAMANAGER HAS NOT BEEN LOADED YET!
+                SaveData = data;
                 RunAttempts = data.RunAttempts;
-                SaintsManager.Instance.LoadSaints(data.Saints);
 
                 TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                 if (data.TutorialSteps >= 15) GameSettings.Instance.FTUE = false;

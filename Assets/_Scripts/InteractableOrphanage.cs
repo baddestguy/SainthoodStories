@@ -92,43 +92,11 @@ public class InteractableOrphanage : InteractableHouse
 
         switch (MissionDifficulty)
         {
-            case MissionDifficulty.EASY:
-                if (DeadlineCounter < 1)
-                {
-                    if (Random.Range(0, 100) < 1)
-                    {
-                        DeadlineCounter++;
-                        DeadlineTime.SetClock(futureTime, day);
-                        DeadlineDeliveryBonus = 4;
-                        RequiredItems = 1;
-                        DeadlineSet = true;
-                        PopMyIcon();
-                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
-                    }
-                }
-                break;
-
-            case MissionDifficulty.NORMAL:
-                if (DeadlineCounter < 2)
-                {
-                    if (Random.Range(0, 100) < 3)
-                    {
-                        DeadlineCounter++;
-                        DeadlineTime.SetClock(futureTime, day);
-                        DeadlineDeliveryBonus = 3;
-                        RequiredItems = Random.Range(1, 3);
-                        DeadlineSet = true;
-                        PopMyIcon();
-                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
-                    }
-                }
-                break;
-
             case MissionDifficulty.HARD:
                 if (DeadlineCounter < 3)
                 {
                     var mission = GetBuildingMission(BuildingEventType.DELIVER_ITEM);
-                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 10))
+                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < DeadlinePercentChance))
                     {
                         DeadlineCounter++;
                         DeadlineTime.SetClock(mission != null ? mission.DeadlineHours : futureTime, day);

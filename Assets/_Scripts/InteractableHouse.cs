@@ -18,7 +18,8 @@ public class InteractableHouse : InteractableObject
     public int VolunteerPoints;
     public int DeadlineDeliveryBonus;
     public bool DeadlineSet;
-    public int RequiredItems;    
+    public int RequiredItems;
+    public int DeadlinePercentChance;
 
     public MissionDifficulty MissionDifficulty;
     public static int DeadlineCounter;
@@ -93,7 +94,14 @@ public class InteractableHouse : InteractableObject
 
     public void Initialize()
     {
-        if (BuildingState == BuildingState.NORMAL)
+        switch (MissionManager.Instance.CurrentMission.CurrentWeek)
+        {
+            case 1: DeadlinePercentChance = 5; break;
+            case 2: DeadlinePercentChance = 7; break;
+            case 3: DeadlinePercentChance = 7; break;
+        }
+
+        if (BuildingState == BuildingState.NORMAL || BuildingState == BuildingState.HAZARDOUS)
         {
             PopIcon = Instantiate(Resources.Load<GameObject>("UI/PopIcon")).GetComponent<PopIcon>();
         }
@@ -110,8 +118,8 @@ public class InteractableHouse : InteractableObject
         RubbleInfoPopup = Instantiate(Resources.Load<GameObject>("UI/RubbleInfoPopup")).GetComponent<BuildingInformationPopup>();
         
         RubbleGo.SetActive(BuildingState == BuildingState.RUBBLE && CanBuild());
-        GetComponent<BoxCollider>().enabled = BuildingState == BuildingState.NORMAL || (BuildingState == BuildingState.RUBBLE && CanBuild());
-        BuildingGo.SetActive(BuildingState == BuildingState.NORMAL);
+        GetComponent<BoxCollider>().enabled = BuildingState == BuildingState.NORMAL || BuildingState == BuildingState.HAZARDOUS || (BuildingState == BuildingState.RUBBLE && CanBuild());
+        BuildingGo.SetActive(BuildingState == BuildingState.NORMAL || BuildingState == BuildingState.HAZARDOUS);
 
         PopIcon.transform.SetParent(transform);
         PopIcon.transform.localPosition = new Vector3(0, 1, 0);
@@ -286,6 +294,7 @@ public class InteractableHouse : InteractableObject
         {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
         }
+        UpdateCharityPoints(-5, 0);
      
         SaveDataManager.Instance.SaveGame();
     }
@@ -300,6 +309,7 @@ public class InteractableHouse : InteractableObject
     {
         if (HazardCounter > 0) return;
         if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
+        if (InsideHouse && CameraLockOnMe) return;
 
         BuildingState = BuildingState.HAZARDOUS;
         EnvironmentalHazardDestructionCountdown = 8;
@@ -394,45 +404,11 @@ public class InteractableHouse : InteractableObject
 
         switch (MissionDifficulty)
         {
-            case MissionDifficulty.EASY:
-                if (DeadlineCounter < 1)
-                {
-                    var mission = GetBuildingMission(BuildingEventType.DELIVER_ITEM);
-                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 1))
-                    {
-                        DeadlineCounter++;
-                        DeadlineTime.SetClock(time + (mission != null ? mission.DeadlineHours : RandomFutureTimeByDifficulty()), day);
-                        RequiredItems = mission != null ? mission.RequiredItems : 1;
-                        DeadlineDeliveryBonus = 4;
-                        DeadlineSet = true;
-                        PopMyIcon();
-                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
-                    }
-                }
-                break;
-
-            case MissionDifficulty.NORMAL:
-                if (DeadlineCounter < 2)
-                {
-                    var mission = GetBuildingMission(BuildingEventType.DELIVER_ITEM);
-                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 1))
-                    {
-                        DeadlineCounter++;
-                        DeadlineTime.SetClock(time + (mission != null ? mission.DeadlineHours : RandomFutureTimeByDifficulty()), day);
-                        RequiredItems = mission != null ? mission.RequiredItems : Random.Range(1,3);
-                        DeadlineDeliveryBonus = 3;
-                        DeadlineSet = true;
-                        PopMyIcon();
-                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
-                    }
-                }
-                break;
-
             case MissionDifficulty.HARD:
                 if (DeadlineCounter < 3)
                 {
                     var mission = GetBuildingMission(BuildingEventType.DELIVER_ITEM);
-                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 3))
+                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < DeadlinePercentChance))
                     {
                         DeadlineCounter++;
                         if(time < 6)
@@ -896,6 +872,11 @@ public class InteractableHouse : InteractableObject
             SoundManager.Instance.FadeAmbience(0.1f);
             OnEnterHouse?.Invoke(InsideHouse);
             UI.Instance.RefreshTreasuryBalance(0);
+
+            if (GameManager.Instance.Player.StatusEffects.Contains(PlayerStatusEffect.FROZEN))
+            {
+                GameManager.Instance.Player.StatusEffects.Remove(PlayerStatusEffect.FROZEN);
+            }
         }
         else if(CameraLockOnMe)
         {
@@ -1298,6 +1279,8 @@ public class InteractableHouse : InteractableObject
         DeadlineCounter = data.DeadlineCounter;
         DeadlineTime = new GameClock(data.DeadlineTime, data.DeadlineDay);
         RequiredItems = data.RequiredItems;
+        EnvironmentalHazardDestructionCountdown = data.EnvironmentalHazardDestructionCountdown;
+        HazardCounter = data.HazardCounter;
 
         return data;
     }
@@ -1316,7 +1299,9 @@ public class InteractableHouse : InteractableObject
             DeadlineCounter = DeadlineCounter,
             DeadlineTime = DeadlineTime.Time,
             DeadlineDay = DeadlineTime.Day,
-            RequiredItems = RequiredItems
+            RequiredItems = RequiredItems,
+            EnvironmentalHazardDestructionCountdown = EnvironmentalHazardDestructionCountdown,
+            HazardCounter = HazardCounter
         };
     }
 
