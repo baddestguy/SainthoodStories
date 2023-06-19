@@ -335,6 +335,11 @@ public class HouseSaveData
     public int RequiredItems;
     public double DeadlineTime;
     public int DeadlineDay;
+    public bool DeliveryTimeSet;
+    public double DeliveryTime;
+    public int DeliveryDay;
+    public int EnvironmentalHazardDestructionCountdown;
+    public int HazardCounter;
 }
 
 public class TooltipStats
@@ -524,6 +529,12 @@ public class SaveObject
     public string CurrentHouse;
     public PlayerStatusEffect[] StatusEffects;
     public CustomEventType HouseTriggeredEvent;
+    public CustomEventData CurrentDailyEvent;
+    public double WeatherStartTime;
+    public int WeatherStartDay;
+    public double WeatherEndTime;
+    public int WeatherEndDay;
+    public bool WeatherActivated;
 }
 
 [System.Serializable]

@@ -74,6 +74,7 @@ public class InteractableHospital : InteractableHouse
 
                 if (DeliveryCountdown >= MaxDeliveryPoints || clock == EndDelivery)
                 {
+                    //Add events with percentage chance to potentially lose the baby if not full participation
                     UI.Instance.DisplayMessage("Baby Delivered Successfuly!!");
                     var moddedEnergy = GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption);
                     moddedEnergy += ModVolunteerEnergyWithProvisions();
@@ -136,7 +137,7 @@ public class InteractableHospital : InteractableHouse
 
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.BABY_FEVER);
         var mission = GetBuildingMission(BuildingEventType.BABY);
-        if (mission != null || (!SameDayAsMission() && !DeliveryTimeSet && !DeadlineSet && Random.Range(0, 1.0f) > (e != null ? e.Cost : 0.98f)))
+        if (mission != null || (!SameDayAsMission() && DeadlineCounter < 3 && !DeliveryTimeSet && !DeadlineSet && Random.Range(0, 1.0f) > (e != null ? e.Cost : 0.97f)))
         {
             SetBabyDelivery(mission);
         }
@@ -144,7 +145,7 @@ public class InteractableHospital : InteractableHouse
 
     private void SetBabyDelivery(BuildingMissionData bMission)
     {
-        if (VolunteerCountdown > 0) return;
+        if (DeliveryTimeSet || VolunteerCountdown > 0) return;
 
         GameClock clock = GameManager.Instance.GameClock;
         DeliveryTimeSet = true;
@@ -161,11 +162,12 @@ public class InteractableHospital : InteractableHouse
 
     private void CheckFailedDelivery()
     {
+        if (BuildingActivityState == BuildingActivityState.DELIVERING_BABY) return;
         GameClock clock = GameManager.Instance.GameClock;
         if (DeliveryTimeSet)
         {
             PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
-            if (clock > EndDelivery)
+            if (clock >= EndDelivery)
             {
                 DeliveryTimeSet = false;
                 DeadlineCounter--;
@@ -367,6 +369,28 @@ public class InteractableHospital : InteractableHouse
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
+    }
+
+    public override HouseSaveData LoadData()
+    {
+        var data = base.LoadData();
+        if (data == null) return data;
+
+        DeliveryTimeSet = data.DeliveryTimeSet;
+        EndDelivery = new GameClock(data.DeliveryTime, data.DeliveryDay);
+        RandomBabyIcon = "Baby" + Random.Range(1, 3);
+
+        return data;
+    }
+
+    public override HouseSaveData GetHouseSave()
+    {
+        var save = base.GetHouseSave();
+        save.DeliveryTimeSet = DeliveryTimeSet;
+        save.DeliveryTime = EndDelivery?.Time ?? 0;
+        save.DeliveryDay = EndDelivery?.Day ?? 1;
+
+        return save;
     }
 
     public override void OnDisable()

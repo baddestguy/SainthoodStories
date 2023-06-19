@@ -60,27 +60,27 @@ public class MissionManager : MonoBehaviour
     public void UpdateFaithPoints(int amount)
     {
         if (MissionOver) return;
-        FaithPoints = Mathf.Clamp(FaithPoints + amount, 0, 5);
+        FaithPoints = Mathf.Clamp(FaithPoints + amount, -100, 5);
         UI.Instance.RefreshFP(FaithPoints);
 
-        if (FaithPoints <= 0)
-        {
-            EndMission();
-            return;
-        }
+        //if (FaithPoints <= 0)
+        //{
+        //    EndMission();
+        //    return;
+        //}
     }
 
     public void UpdateCharityPoints(int amount, InteractableHouse house)
     {
         if (MissionOver) return;
-        CharityPoints = Mathf.Clamp(CharityPoints + amount, 0, 5);
+        CharityPoints = Mathf.Clamp(CharityPoints + amount, -100, 5);
         UI.Instance.RefreshCP(amount, CharityPoints);
 
-        if (CharityPoints <= 0)
-        {
-            EndMission();
-            return;
-        }
+        //if (CharityPoints <= 0)
+        //{
+        //    EndMission();
+        //    return;
+        //}
 
         if (house == null) return;
         HouseScores[house.TileType] = amount;
@@ -156,6 +156,7 @@ public class MissionManager : MonoBehaviour
 
         EventsManager.Instance.ExecuteEvents();
         GameManager.Instance.Player.ResetEnergy();
+        GameManager.Instance.Player.StatusEffects.Clear();
         InventoryManager.Instance.GeneratedProvisions.Clear();
         EventsManager.Instance.DailyEvent = CustomEventType.NONE;
         SaveDataManager.Instance.SaveGame();

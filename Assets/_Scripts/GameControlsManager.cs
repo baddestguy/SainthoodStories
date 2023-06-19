@@ -1,15 +1,24 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class GameControlsManager : MonoBehaviour
 {
     public static GameControlsManager Instance { get; private set; }
     public static UnityAction<float> TryZoom;
+    public Mouse VirtualMouse;
 
     private void Awake()
     {
         Instance = this;
+        if (VirtualMouse == null)
+        {
+            VirtualMouse = (Mouse)InputSystem.AddDevice("VirtualMouse");
+        }
+        else if (!VirtualMouse.added)
+        {
+            InputSystem.AddDevice(VirtualMouse);
+        }
     }
 
     void Update()
@@ -21,5 +30,11 @@ public class GameControlsManager : MonoBehaviour
         {
             TryZoom?.Invoke(mouseScroll);
         }
+
+    }
+
+    private void OnDisable()
+    {
+        InputSystem.RemoveDevice(VirtualMouse);
     }
 }

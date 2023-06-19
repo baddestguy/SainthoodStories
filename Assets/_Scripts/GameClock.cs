@@ -36,20 +36,20 @@ public class GameClock
         Time = time;
         Day = day;
 
-        if (Time > 23.5)
+        if (Time > 23)
         {
-            Day++;
-            Time = 0;
+            //Day++;
+            Time = 23;
         }
     }
 
     public void AddTime(double deltaTime)
     {
         Time += deltaTime;
-        if (Time > 23.5)
+        if (Time > 23)
         {
-            Day++;
-            Time = 0;
+            //Day++;
+            Time = 23;
         }
     }
 

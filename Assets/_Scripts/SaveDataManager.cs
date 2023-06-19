@@ -61,7 +61,6 @@ public class SaveDataManager : MonoBehaviour
             DoSequentialSave();
         }
 
-        Debug.Log("SAVED!");
     }
 
     public SaveObject CurrentSaveData()
@@ -87,7 +86,13 @@ public class SaveDataManager : MonoBehaviour
             Maptiles = GameManager.Instance.MaptileIndexes,
             CurrentHouse = GameManager.Instance.Player.CurrentBuilding.GetType().Name,
             StatusEffects = GameManager.Instance.Player.StatusEffects.ToArray(),
-            HouseTriggeredEvent = InteractableHouse.HouseTriggeredEvent
+            HouseTriggeredEvent = InteractableHouse.HouseTriggeredEvent,
+            CurrentDailyEvent = EventsManager.Instance.CurrentEvents.Find(e => e.EventGroup == EventGroup.DAILY),
+            WeatherActivated = WeatherManager.Instance.WeatherForecastTriggered,
+            WeatherStartTime = WeatherManager.Instance.WeatherStartTime.Time,
+            WeatherStartDay = WeatherManager.Instance.WeatherStartTime.Day,
+            WeatherEndTime = WeatherManager.Instance.WeatherEndTime.Time,
+            WeatherEndDay = WeatherManager.Instance.WeatherEndTime.Day
         };
     }    
 
@@ -197,6 +202,7 @@ public class SaveDataManager : MonoBehaviour
         FileStream file = File.Create(GetPath(FILENAME));
         bf.Serialize(file, data);
         file.Close();
+        Debug.Log("SAVED!");
     }
 
     private void Save(object data)
@@ -306,10 +312,11 @@ public class SaveDataManager : MonoBehaviour
             SaveObject[] saveObjects = keyVal.Values.ToArray();
             SaveObject save = saveObjects.OrderBy(x => x.Day).LastOrDefault();
             var newSave = NewGameData();
-            GameManager.Instance.RunAttempts = save.RunAttempts;
-            SaintsManager.Instance.LoadSaints(save.Saints);
+            newSave.Saints = save.Saints;
+            newSave.RunAttempts = GameManager.Instance.RunAttempts;
             
             File.Delete(Application.persistentDataPath + "/Sainthood.save");
+
             Save(new SaveObject[1] { newSave });
         }
     }

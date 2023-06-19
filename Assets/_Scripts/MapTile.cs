@@ -26,14 +26,14 @@ public class MapTile : MonoBehaviour
         GameClock.Ticked += Tick;
         GameManager.MissionBegin += MissionBegin;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
-        TooltipMouseOver.OnHover += OnMouseExit;
+        TooltipMouseOver.OnHover += HoverExit;
     }
 
     public virtual void OnDisable(){
         GameClock.Ticked -= Tick;
         GameManager.MissionBegin -= MissionBegin;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
-        TooltipMouseOver.OnHover -= OnMouseExit;
+        TooltipMouseOver.OnHover -= HoverExit;
     }
 
     public void Init(TileData tileData, Sprite [] sprites, int sortingOrder = 0) {
@@ -42,21 +42,6 @@ public class MapTile : MonoBehaviour
             SpriteRenderer.sprite = sprites[TileData.TileSpriteId];
             SpriteRenderer.sortingOrder = sortingOrder;
         }
-    }
-
-    public void OnRelease()
-    {
-
-    }
-
-    public void OnMouseUpAsButton(){
-
-        //Make a check if a ui was click..
-        if (UI.Instance.WasUiHit) return;
-
-        if (EventSystem.current.currentSelectedGameObject != null) return;
-        if(!CameraControls.CameraMove && !CameraControls.CameraZoom)
-            OnClickEvent?.Invoke(this);
     }
 
     public static InteractableObject GetInteractableObject(TileData tileData, GameObject tileGameObject, MapTile groundTile, Sprite [] sprites, int sortingOrder)
@@ -96,6 +81,16 @@ public class MapTile : MonoBehaviour
 
     public virtual void OnMouseOver()
     {
+        Hover();
+    }
+
+    public virtual void OnMouseExit()
+    {
+        HoverExit();
+    }
+
+    public virtual void Hover()
+    {
         if (TooltipMouseOver.IsHovering) return;
         if (EventsManager.Instance.EventInProgress) return;
         if (GridTile == null || !CameraControls.ZoomComplete) return;
@@ -119,11 +114,28 @@ public class MapTile : MonoBehaviour
         }
     }
 
-    public virtual void OnMouseExit()
+    public virtual void HoverExit()
     {
         if (TooltipMouseOver.IsHovering) return;
         if (GridTile == null) return;
         GridTile.gameObject.SetActive(false);
         ToolTipManager.Instance.ShowToolTip("");
+    }
+
+    public virtual void Click()
+    {
+        //Make a check if a ui was click..
+        if (UI.Instance.WasUiHit) return;
+
+        if (EventSystem.current.currentSelectedGameObject != null) return;
+        if (!CameraControls.CameraMove && !CameraControls.CameraZoom)
+            OnClickEvent?.Invoke(this);
+    }
+
+    private void OnMouseUpAsButton()
+    {
+        if (InteractableHouse.InsideHouse) return;
+
+        Click();
     }
 }

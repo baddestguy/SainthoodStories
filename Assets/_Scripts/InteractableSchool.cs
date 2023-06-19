@@ -167,7 +167,7 @@ public class InteractableSchool : InteractableHouse
     public override void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;
-        if (time >= 19) return;
+        if (time >= 19 || time < 6) return;
 
     //    if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;
@@ -177,43 +177,11 @@ public class InteractableSchool : InteractableHouse
 
         switch (MissionDifficulty)
         {
-            case MissionDifficulty.EASY:
-                if (DeadlineCounter < 1)
-                {
-                    if (Random.Range(0, 100) < 1)
-                    {
-                        DeadlineCounter++;
-                        DeadlineTime.SetClock(futureTime, day);
-                        DeadlineDeliveryBonus = 4;
-                        RequiredItems = 1;
-                        DeadlineSet = true;
-                        PopMyIcon();
-                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
-                    }
-                }
-                break;
-
-            case MissionDifficulty.NORMAL:
-                if (DeadlineCounter < 2)
-                {
-                    if (Random.Range(0, 100) < 3)
-                    {
-                        DeadlineCounter++;
-                        DeadlineTime.SetClock(futureTime, day);
-                        DeadlineDeliveryBonus = 3;
-                        RequiredItems = Random.Range(1, 3);
-                        DeadlineSet = true;
-                        PopMyIcon();
-                        Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
-                    }
-                }
-                break;
-
             case MissionDifficulty.HARD:
                 if (DeadlineCounter < 3)
                 {
                     var mission = GetBuildingMission(BuildingEventType.DELIVER_ITEM);
-                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < 10))
+                    if (mission != null || (!SameDayAsMission() && Random.Range(0, 100) < DeadlinePercentChance))
                     {
                         DeadlineCounter++;
                         DeadlineTime.SetClock(mission != null ? mission.DeadlineHours : futureTime, day);
@@ -308,6 +276,14 @@ public class InteractableSchool : InteractableHouse
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
+    }
+
+    public override HouseSaveData LoadData()
+    {
+        var data = base.LoadData();
+        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.SCHOOL_CLOSED);
+        if (e != null) ClosingTime = 0;
+        return data;
     }
 
     public override void OnDisable()

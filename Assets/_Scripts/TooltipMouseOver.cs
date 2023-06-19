@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class TooltipMouseOver : MonoBehaviour
 {
@@ -11,9 +13,10 @@ public class TooltipMouseOver : MonoBehaviour
     public static UnityAction OnHover;
     public static bool IsHovering;
     public TooltipStats CustomToolStats = null;
-
     public void ShowToolTip()
     {
+        transform.DOComplete();
+        transform.DOPunchScale(transform.localScale * 0.5f, 0.5f, elasticity: 0f);
         OnHover?.Invoke();
         IsHovering = true;
 
@@ -74,5 +77,7 @@ public class TooltipMouseOver : MonoBehaviour
     {
         ToolTipManager.Instance.ShowToolTip("");
         IsHovering = false;
+        transform.DOComplete();
+        EventSystem.current.SetSelectedGameObject(null);
     }
 }

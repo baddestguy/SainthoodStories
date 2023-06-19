@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     public SceneID CurrentSceneID;
     public SceneID PreviousSceneID;
     public bool InGameSession;
+    public bool SceneLoaded;
 
     public int RunAttempts;
     public int[] MaptileIndexes = new int[6] {0, 3, 9, 19, 15, 21};
@@ -63,17 +64,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (InGameSession)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                PauseMenu.Instance.Activate();
-            }
-        }
     }
 
     public void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Additive)
     {
+        SceneLoaded = false;
         Scene scene = SceneManager.GetSceneByName(sceneName);
         if (!scene.isLoaded)
         {
@@ -152,7 +147,6 @@ public class GameManager : MonoBehaviour
             PlayAmbience(GameClock.Time, GameClock.Day);
             TreasuryManager.Instance.Money = SaveData.Money;
             InventoryManager.Instance.LoadInventory(SaveData);
-            LoadScene("PauseMenu", LoadSceneMode.Additive);
             SoundManager.Instance.SongSelection();
             if(GameClock.Time == 6)
             {
@@ -164,9 +158,26 @@ public class GameManager : MonoBehaviour
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.MainMenu;
             SaveDataManager.Instance.LoadGame((data, newGame) => {
+                //CAREFUL! GAMEDATAMANAGER HAS NOT BEEN LOADED YET!
+                SaveData = data;
+                RunAttempts = data.RunAttempts;
+
                 TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                 if (data.TutorialSteps >= 15) GameSettings.Instance.FTUE = false;
-            },false, true);
+                if (data.RunAttempts > 0)
+                {
+                    TutorialManager.Instance.SkipTutorial = true;
+                }
+
+                UI.Instance.DisplayRunAttempts();
+
+                if(data.Maptiles == null)
+                {
+                    UI.Instance.DisableMainMenuContinueBtn();
+                }
+
+                EventsManager.Instance.CurrentEvents.Add(data.CurrentDailyEvent);
+            }, false, true);
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
             SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay:70);
@@ -174,7 +185,6 @@ public class GameManager : MonoBehaviour
         }
         else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))
         {
-            LoadScene("PauseMenu", LoadSceneMode.Additive);
             loadWeekDaysScene = false;
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.SaintsShowcase_Day;
@@ -187,6 +197,7 @@ public class GameManager : MonoBehaviour
         {
             LoadScene("WeekDaysUI");
         }
+        SceneLoaded = true;
     }
 
     private void OnTap(MapTile tile)
@@ -233,15 +244,10 @@ public class GameManager : MonoBehaviour
                     
                     if (aNewGame)
                     {
+                        RunAttempts++;
                         SaveDataManager.Instance.DeleteProgress();
                         TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                         GameSettings.Instance.FTUE = !TutorialManager.Instance.SkipTutorial;
-                        RunAttempts++;
-                    }
-                    else
-                    {
-                        RunAttempts = data.RunAttempts;
-                        SaintsManager.Instance.LoadSaints(data.Saints);
                     }
                     SaveData = data;
                     Debug.Log("Run Attempts: " + RunAttempts);
@@ -256,6 +262,8 @@ public class GameManager : MonoBehaviour
                     {
                         StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
                     }
+
+                    UI.Instance.DisplayRunAttempts();
                 }, newGame, false, !activeScene.name.Contains("MainMenu"), showUI: showUI);
                 break;
         }
@@ -296,6 +304,7 @@ public class GameManager : MonoBehaviour
     {
         UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
+        SceneLoaded = false;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 
@@ -307,6 +316,8 @@ public class GameManager : MonoBehaviour
         InteractableHouse.HazardCounter = 0;
         InteractableHouse.HouseTriggeredEvent = CustomEventType.NONE;
         InteractableHouse.InsideHouse = false;
+        EventsManager.Instance.ClearData();
+        TutorialManager.Instance.ClearData();
     }
 
     private void OnDisable()

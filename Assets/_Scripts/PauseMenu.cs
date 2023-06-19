@@ -2,6 +2,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject settingsPannel;
     public GameObject saintsPanel;
     public GameObject mainPanel;
+    public GameObject PauseToggleObj;
 
     public GameObject PauseSettings;
     public GameObject GraphicsSettings;
@@ -36,23 +38,58 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
-        TutorialManager.Instance.SkipTutorial = !GameSettings.Instance.TutorialToggle;
 
-        if (GameSettings.Instance != null && TutorialEnabled != null)
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) || (Gamepad.current != null && Gamepad.current.startButton.wasPressedThisFrame))
         {
-            TutorialEnabled.SetIsOnWithoutNotify(GameSettings.Instance.TutorialToggle);
+            Activate();
         }
-
+        else if (active && (Gamepad.current != null && Gamepad.current.buttonEast.wasPressedThisFrame))
+        {
+            Activate();
+        }
     }
 
     public void Activate()
     {
+        if (UI.Instance.WeekBeginCrossFade) return;
         active = !active;
         mainPanel.SetActive(active);
+
+        if (active)
+        {
+            TutorialManager.Instance.SkipTutorial = !GameSettings.Instance.TutorialToggle;
+
+            if (GameSettings.Instance != null && TutorialEnabled != null)
+            {
+                TutorialEnabled.SetIsOnWithoutNotify(GameSettings.Instance.TutorialToggle);
+            }
+
+            if (!GameManager.Instance.InGameSession)
+            {
+                PauseToggleObj.SetActive(false);
+                ToggleGraphics();
+            }
+            else
+            {
+                PauseToggleObj.SetActive(true);
+                TogglePause();
+            }
+
+            if (GameManager.Instance.InGameSession)
+                TutorialEnabled.transform.parent.gameObject.SetActive(false);
+            else
+                TutorialEnabled.transform.parent.gameObject.SetActive(true);
+        }
     }
 
     public void TogglePause()
     {
+        if (!GameManager.Instance.InGameSession) return;
+
         CloseAll();
         PauseSettings.SetActive(true);
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
@@ -124,6 +161,7 @@ public class PauseMenu : MonoBehaviour
     {
         //maybe do check before quit
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+        Activate();
         GameManager.Instance.ClearData();
         StartCoroutine(ScheduleCallback(() => {
             SoundManager.Instance.EndAllTracks();

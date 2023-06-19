@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,11 +10,11 @@ public class WeatherManager : MonoBehaviour
     public WeatherType WeatherType;
     public bool WeatherActive;
 
-    private bool WeatherForecastTriggered;
+    public bool WeatherForecastTriggered;
     private Object RainResource;
     private GameObject CurrentWeatherGO;
-    private GameClock WeatherStartTime;
-    private GameClock WeatherEndTime;
+    public GameClock WeatherStartTime;
+    public GameClock WeatherEndTime;
     private DayNightCycle DayNightCycle;
 
     public static UnityAction<WeatherType, GameClock, GameClock> WeatherForecastActive;
@@ -35,10 +36,40 @@ public class WeatherManager : MonoBehaviour
 
     private void MissionBegin(Mission mission)
     {
+        StartCoroutine(MissionBeginAsync(mission));
+    }
+
+    private IEnumerator MissionBeginAsync(Mission mission) 
+    {
+        yield return new WaitForSeconds(1f);
         RainResource = Resources.Load("Weather/Rain");
-        WeatherStartTime = new GameClock(0);
-        WeatherEndTime = new GameClock(0);
         DayNightCycle = FindObjectOfType<DayNightCycle>();
+        var data = GameManager.Instance.SaveData;
+        WeatherForecastTriggered = data.WeatherActivated;
+        if (data.WeatherActivated)
+        {
+            WeatherStartTime = new GameClock(data.WeatherStartTime, data.WeatherStartDay);
+            WeatherEndTime = new GameClock(data.WeatherEndTime, data.WeatherEndDay);
+            GameClock c = GameManager.Instance.GameClock;
+            if(c >= WeatherStartTime && c < WeatherEndTime)
+            {
+                SetWeatherType();
+                if (CurrentWeatherGO != null)
+                {
+                    CurrentWeatherGO?.SetActive(true);
+                    CurrentWeatherGO?.GetComponent<StormyWeather>()?.StartStorm();
+                }
+            }
+            else
+            {
+                SetPreStormWeather();
+            }
+        }
+        else
+        {
+            WeatherStartTime = new GameClock(0);
+            WeatherEndTime = new GameClock(0);
+        }
         BroadcastWeather();
         UI.Instance.WeatherAlert(WeatherType, WeatherStartTime, WeatherEndTime);
     }
@@ -81,8 +112,6 @@ public class WeatherManager : MonoBehaviour
 
         //HACK: Don't trigger weather before tutorials
         if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && day < 3) return;
-        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 2 && day < 2) return;
-        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 3 && day < 2) return;
 
         var wData = GetWeatherData();
 

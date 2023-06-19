@@ -37,6 +37,11 @@ public class StatusEffectDisplay : MonoBehaviour
         }
     }
 
+    public void OnClose()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void OnDisable()
     {
         Player.StatusEffectTrigger -= Init;

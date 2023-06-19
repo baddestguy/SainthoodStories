@@ -6,12 +6,15 @@ using UnityEngine.UI;
 public class ProvisionsPopup : MonoBehaviour
 {
     public TextMeshProUGUI TitleText;
+    public TextMeshProUGUI Title2Text;
     private ProvisionsPopupPhase PopupPhase;
     private ProvisionData ProvisionToReplace;
     public GameObject XButton;
     public GameObject ProvisionItemResource;
     public ScrollRect NewProvisionScroller;
     public ScrollRect UpgradeProvisionScroller;
+    public ProvisionUIItem[] NewProvisionUIItems = new ProvisionUIItem[2];
+    public ProvisionUIItem[] UpgradeProvisionUIItems = new ProvisionUIItem[5];
 
     public void Init(ProvisionData prov1, ProvisionData prov2)
     {
@@ -20,13 +23,13 @@ public class ProvisionsPopup : MonoBehaviour
         SwitchPhase(ProvisionsPopupPhase.ADD_UPGRADE);
         CustomEventPopup.IsDisplaying = true;
 
-        AddProvisionUIItem(prov1, NewProvisionScroller, ProvisionUIItemType.NEW);
-        AddProvisionUIItem(prov2, NewProvisionScroller, ProvisionUIItemType.NEW);
+        NewProvisionUIItems[0].Init(prov1, ProvisionUIItemType.NEW);
+        NewProvisionUIItems[1].Init(prov2, ProvisionUIItemType.NEW);
 
         //Display Upgrade Provisions
-        foreach (var provision in InventoryManager.Instance.Provisions)
+        for(int i = 0; i < InventoryManager.Instance.Provisions.Count; i++)
         {
-            AddProvisionUIItem(provision, UpgradeProvisionScroller, ProvisionUIItemType.UPGRADE);
+            UpgradeProvisionUIItems[i].Init(InventoryManager.Instance.Provisions[i], ProvisionUIItemType.UPGRADE);
         }
     }
 
@@ -96,14 +99,22 @@ public class ProvisionsPopup : MonoBehaviour
         {
             case ProvisionsPopupPhase.ADD_UPGRADE:
                 TitleText.text = "CHOOSE ONE";
+                Title2Text.text = "---------------- OR UPGRADE ----------------";
                 XButton.SetActive(false);
-                NewProvisionScroller.gameObject.SetActive(true);
+                foreach (var provItem in NewProvisionUIItems)
+                {
+                    provItem.gameObject.SetActive(true);
+                }
                 break;
 
             case ProvisionsPopupPhase.REPLACE:
-                TitleText.text = "REPLACE EXISTING PROVISION?";
+                TitleText.text = "";
+                Title2Text.text = "-- REPLACE EXISTING PROVISION? --";
                 XButton.SetActive(true);
-                NewProvisionScroller.gameObject.SetActive(false);
+                foreach(var provItem in NewProvisionUIItems)
+                {
+                    provItem.gameObject.SetActive(false);
+                }
                 break;
         }
     }

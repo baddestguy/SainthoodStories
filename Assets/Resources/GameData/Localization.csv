@@ -387,10 +387,12 @@ Saints Collection.",,,,,,
 Tutorial_Instruction_1,"Release the button when the two circles overlap for a <b>CRITICAL HIT.</b>
 
 Landing all Critical Hits for an Activity results in various bonuses, so try to get as many Critical Hits as you can! ",,,,,,
-Tutorial_Instruction_2,Stepping through each tile takes 0.5 hrs.,,,,,,
+Tutorial_Instruction_2,"Stepping through each tile takes 0.5 hrs.
+
+Zoom with the Scroll Wheel on the mouse or Up/Down on the D-pad.",,,,,,
 Tutorial_Instruction_3,"Charitable activites like building construction, delivering items, and volunteering increase your Charity Points (CP).
 
-If your CP falls to zero. It is Game Over.",,,,,,
+If your CP falls to zero by midnight. It is Game Over.",,,,,,
 Tutorial_Instruction_4,"Side Notifications pop up to always remind you of the next Liturgy of the Hours and all upcoming building deadlines.
 
 Convent activities display their Start Times, while other buildings display their Deadlines.",,,,,,
@@ -400,18 +402,18 @@ Purchasing/Delivering items take no time.",,,,,,
 Tutorial_Instruction_6,"Sometimes, money is given to you as a gift when you deliver items or volunteer.
 
 Performing activities in a building increases your Relationship Points (RP), allowing you to perform activities quicker at that building.",,,,,,
-Tutorial_Instruction_7,"Your daily goal is to maintain both CP and FP above zero.
+Tutorial_Instruction_7,"Each day ends at midnight. Your goal is to maintain both CP and FP above zero.
 Manage your Time and Energy between Charitable and Spiritual activities to attain this goal!
-Hover your Mouse over any icon to get more information.",,,,,,
+Hover your cursor over any icon to get more information.",,,,,,
 Tutorial_Instruction_8,"When a building is ready to be constructed, the Construct icon will appear above it.
 
 If you have any unconstructed buildings by midnight, you will lose all Charity Points (CP).",,,,,,
 Tutorial_Instruction_Rainfall,"Severe weather conditions may cause damage to the structural integrity of a building, leading to its destruction. 
 
 Saving these buildings are your highest priority, as you will lose all RP if a building is destroyed.",,,,,,
-Tutorial_Instruction_Blizzard,"Stepping outside during a Blizzard will increase the chance of Freezing. If you are frozen, you will also be unable to move, and must tap on the postulant repeatedly to break out of the snow. 
+Tutorial_Instruction_Blizzard,"Stepping outside during a Blizzard will increase the chance of <b>Freezing</b>. If you are frozen, you will be unable to move, and must tap on your avatar repeatedly to break out of the snow. 
 
-Each tap will pass Time and also consume Energy. Using a Winter Cloak eliminates the chance of Freezing.",,,,,,
+Time and Energy are consumed with each tap.",,,,,,
 Tutorial_Instruction_9,"Occasionally, severe weather conditions such as Heatwaves, Rainfall, and Blizzards will occur. The start time is always indicated with the corresponding weather icon. Stepping outside during a Heatwave exposes you to Ailments which negatively impact your Energy.
 
 Rest at the Convent to remove Ailments.",,,,,,

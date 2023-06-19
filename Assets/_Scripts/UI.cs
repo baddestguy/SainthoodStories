@@ -80,6 +80,8 @@ public class UI : MonoBehaviour
     private PointerEventData m_PointerEventData;
 
     public StatusEffectDisplay StatusEffectDisplay;
+    public TextMeshProUGUI RunAttemptsDisplay;
+    public Button ContinueBtn;
 
     public bool WasUiHit
     {
@@ -573,7 +575,7 @@ public class UI : MonoBehaviour
         if (amount == 0) return;
 
         glow.transform.localScale = Vector3.one;
-        glow.transform.DOScale(new Vector3(1.4f, 1.4f, 1.4f), 0.5f);
+        glow.transform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
         glow.DOFade(0, 1f);
 
         display.text = amount > 0 ? $"+{amount}" : $"{amount}";
@@ -598,7 +600,7 @@ public class UI : MonoBehaviour
     {
         glow.color = Color.red;
         glow.transform.localScale = Vector3.one;
-        glow.transform.DOScale(new Vector3(1.4f, 1.4f, 1.4f), 0.5f);
+        glow.transform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
         glow.DOFade(0, 1f);
     }
 
@@ -662,16 +664,19 @@ public class UI : MonoBehaviour
         GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, newGame);
     }
 
+    public void DisableMainMenuContinueBtn()
+    {
+        ContinueBtn.interactable = false;
+    }
+
     public GameObject SettingsMenuGO;
     public void SettingsMenu()
     {
+        PauseMenu.Instance.Activate();
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
-        SettingsMenuGO.SetActive(true);
-        PopulateLanguageDropdown();
     }
     public void CloseSettingsMenu()
     {
-        SettingsMenuGO.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 
@@ -763,6 +768,14 @@ public class UI : MonoBehaviour
         if (text != "")
         {
             TooltipDisplay.transform.parent.gameObject.SetActive(true);
+        }
+    }
+
+    public void DisplayRunAttempts()
+    {
+        if(RunAttemptsDisplay != null)
+        {
+            RunAttemptsDisplay.text = "Run Attempts: " + GameManager.Instance.RunAttempts;
         }
     }
 

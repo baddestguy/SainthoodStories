@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class TutorialPopup : MonoBehaviour
@@ -77,5 +78,6 @@ public class TutorialPopup : MonoBehaviour
         UI.Instance.TutorialPopupOff();
         TutorialManager.Instance.ShowTutorialArrow();
         Text.pageToDisplay = 1;
+        EventSystem.current.SetSelectedGameObject(null);
     }
 }

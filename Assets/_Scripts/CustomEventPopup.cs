@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CustomEventPopup : MonoBehaviour
@@ -316,5 +317,6 @@ public class CustomEventPopup : MonoBehaviour
         TooltipMouseOver.IsHovering = false;
         Hearts.gameObject.SetActive(false);
         Coins.gameObject.SetActive(false);
+        EventSystem.current?.SetSelectedGameObject(null);
     }
 }
