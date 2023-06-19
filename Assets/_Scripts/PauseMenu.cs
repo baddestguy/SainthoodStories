@@ -43,11 +43,11 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) || Gamepad.current.startButton.wasPressedThisFrame)
+        if (Input.GetKeyDown(KeyCode.Escape) || (Gamepad.current != null && Gamepad.current.startButton.wasPressedThisFrame))
         {
             Activate();
         }
-        else if (active && Gamepad.current.buttonEast.wasPressedThisFrame)
+        else if (active && (Gamepad.current != null && Gamepad.current.buttonEast.wasPressedThisFrame))
         {
             Activate();
         }

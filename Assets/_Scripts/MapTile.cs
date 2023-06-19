@@ -79,6 +79,16 @@ public class MapTile : MonoBehaviour
     {
     }
 
+    public virtual void OnMouseOver()
+    {
+        Hover();
+    }
+
+    public virtual void OnMouseExit()
+    {
+        HoverExit();
+    }
+
     public virtual void Hover()
     {
         if (TooltipMouseOver.IsHovering) return;

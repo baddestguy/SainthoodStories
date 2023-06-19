@@ -224,43 +224,51 @@ public class Player : MonoBehaviour
     private void StormyWeatherEffect()
     {
         if (!WeatherManager.Instance.IsStormy()) return;
-        if (InventoryManager.Instance.HasProvision(Provision.UMBRELLA) || InventoryManager.Instance.HasProvision(Provision.WINTER_CLOAK) || InventoryManager.Instance.HasProvision(Provision.SHADES)) return;
 
         switch (MissionManager.Instance.CurrentMission.Season)
         {
             case Season.SUMMER:
-                WeatherStatusCounter++;
-                if (WeatherStatusCounter >= 3)
+                if (!InventoryManager.Instance.HasProvision(Provision.SHADES))
                 {
-                    if (Random.Range(0, 100) < 50)
+                    WeatherStatusCounter++;
+                    if (WeatherStatusCounter >= 3)
                     {
-                        WeatherStatusCounter = 0;
-                        AddRandomAilment();
+                        if (Random.Range(0, 100) < 50)
+                        {
+                            WeatherStatusCounter = 0;
+                            AddRandomAilment();
+                        }
                     }
                 }
                 break;
 
             case Season.FALL:
-                WeatherStatusCounter++;
-                if (WeatherStatusCounter >= 3)
+                if (!InventoryManager.Instance.HasProvision(Provision.UMBRELLA))
                 {
-                    if (Random.Range(0, 100) < 50)
+                    WeatherStatusCounter++;
+                    if (WeatherStatusCounter >= 3)
                     {
-                        WeatherStatusCounter = 0;
-                        AddRandomAilment();
+                        if (Random.Range(0, 100) < 50)
+                        {
+                            WeatherStatusCounter = 0;
+                            AddRandomAilment();
+                        }
                     }
                 }
                 break;
 
             case Season.WINTER:
-                WeatherStatusCounter++;
-                if (WeatherStatusCounter >= 3)
+                if (!InventoryManager.Instance.HasProvision(Provision.WINTER_CLOAK))
                 {
-                    if (Random.Range(0, 100) < 50)
+                    WeatherStatusCounter++;
+                    if (WeatherStatusCounter >= 3)
                     {
-                        WeatherStatusCounter = 0;
-                        StatusEffects.Add(PlayerStatusEffect.FROZEN);
-                        Debug.LogWarning("FROZEN!");
+                        if (Random.Range(0, 100) < 50)
+                        {
+                            WeatherStatusCounter = 0;
+                            StatusEffects.Add(PlayerStatusEffect.FROZEN);
+                            Debug.LogWarning("FROZEN!");
+                        }
                     }
                 }
                 break;
