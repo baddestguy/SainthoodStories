@@ -61,6 +61,7 @@ public class EventsManager : MonoBehaviour
         Player.LockMovement = true;
 
         UI.Instance.EnableAllUIElements(false);
+     //   if (EventList.Any()) yield return new WaitForSeconds(2f);
         //Execute events one by one
         foreach (var e in EventList)
         {
@@ -166,6 +167,7 @@ public class EventsManager : MonoBehaviour
 
         UI.Instance.EnableAllUIElements(false);
         if (GameSettings.Instance.FTUE && TutorialManager.Instance.CurrentTutorialStep < 1) yield return new WaitForSeconds(10f);
+   //     else if (StoryEvents.Any()) yield return new WaitForSeconds(2f);
         //Execute events one by one
         foreach (var e in StoryEvents)
         {
