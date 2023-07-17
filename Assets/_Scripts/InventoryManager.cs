@@ -71,11 +71,6 @@ public class InventoryManager : MonoBehaviour
             case Provision.EXTRA_INVENTORY:
                 MaxInventorySlots = provision.Value;
                 break;
-
-            case Provision.ENERGY_DRINK:
-                Player player = GameManager.Instance.Player;
-                player.ConsumeEnergy(-provision.Value);
-                break;
         }
 
         RefreshInventoryUI?.Invoke();

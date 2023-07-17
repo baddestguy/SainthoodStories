@@ -505,9 +505,7 @@ public class Player : MonoBehaviour
     {
         Energy.Consume(10000);
 
-        var bonusEnergy = InventoryManager.Instance.GetProvision(Provision.ENERGY_DRINK);
-
-        Energy.Consume(-3 - (bonusEnergy?.Value ?? 0));
+        Energy.Consume(-3);
     }
 
     public int GetEnergyAmount()
