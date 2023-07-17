@@ -18504,6 +18504,7 @@ MonoBehaviour:
   GraphicsSettings: {fileID: 1086156791}
   SoundSettings: {fileID: 1807011066}
   TutorialEnabled: {fileID: 1943738805}
+  MenuToggleGroup: {fileID: 414853737}
   active: 0
 --- !u!114 &1539138721
 MonoBehaviour:

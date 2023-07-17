@@ -21,6 +21,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject GraphicsSettings;
     public GameObject SoundSettings;
     public Toggle TutorialEnabled;
+    public ToggleGroup MenuToggleGroup;
 
     [HideInInspector] public bool active;
     public static PauseMenu Instance
@@ -72,11 +73,15 @@ public class PauseMenu : MonoBehaviour
             {
                 PauseToggleObj.SetActive(false);
                 ToggleGraphics();
+                var graphicsToggle = MenuToggleGroup.transform.Find("Graphics").GetComponent<Toggle>();
+                graphicsToggle.isOn = true;
             }
             else
             {
                 PauseToggleObj.SetActive(true);
                 TogglePause();
+                var pauseToggle = MenuToggleGroup.transform.Find("PauseTab").GetComponent<Toggle>();
+                pauseToggle.isOn = true;
             }
 
             if (GameManager.Instance.InGameSession)
