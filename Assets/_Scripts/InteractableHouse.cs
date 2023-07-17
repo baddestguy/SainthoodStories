@@ -231,10 +231,9 @@ public class InteractableHouse : InteractableObject
 
         BuildingActivityState = BuildingActivityState.NONE;
 
-        if (CanBuild() && !HouseUIActive)
+        if (CanBuild())
         {
-            PopIcon.gameObject.SetActive(true);
-            PopIcon.Init("Rubble", 0, new GameClock(-1));
+            PopMyIcon("Rubble", 0, new GameClock(0, GameManager.Instance.GameClock.Day+1));
             RubbleGo.SetActive(true);
             GetComponent<BoxCollider>().enabled = true;
         }

@@ -17,7 +17,8 @@ public class SideNotification : MonoBehaviour
 
         if (deadline != null) 
         {
-            DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
+            if(deadline.Time != -1)
+                DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
             GameClock clock = GameManager.Instance.GameClock;
             if (clock.TimeDifference(deadline) <= 1.5)
             {
