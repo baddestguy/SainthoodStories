@@ -75,7 +75,7 @@ public class GameSettings : MonoBehaviour
         else
         {
             fullScreenMode = false;
-            SetQuality(QualityLevel.QUALITY_SETTING_MEDIUM);
+            SetQuality(QualityLevel.QUALITY_SETTING_ULTRA);
             brightnessPercent = 0.5f;
             currentResolution = GetResolution($"{Screen.currentResolution.width}x{Screen.currentResolution.height}");
 
