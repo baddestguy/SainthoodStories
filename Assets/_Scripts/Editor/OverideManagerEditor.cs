@@ -67,6 +67,7 @@ public class OverideManagerEditor : Editor
 
     private void DrawTimeDay_Override(bool canClick)
     {
+        SerializedProperty Season = serializedObject.FindProperty(nameof(overideManager.SeasonOverride));
         SerializedProperty Day = this.serializedObject.FindProperty(nameof(overideManager.DayOverride));
         SerializedProperty Time = serializedObject.FindProperty(nameof(overideManager.TimeOverride));
         //SerializedProperty futureStartTime = serializedObject.FindProperty(nameof(overideManager.FutureStartTime));
@@ -77,6 +78,7 @@ public class OverideManagerEditor : Editor
             overideManager.showDayTimeUI = !overideManager.showDayTimeUI;
         if (overideManager.showDayTimeUI)
         {
+            EditorGUILayout.PropertyField(Season, new GUIContent(nameof(overideManager.SeasonOverride)));
             EditorGUILayout.PropertyField(Day, new GUIContent(nameof(overideManager.DayOverride)));
             EditorGUILayout.PropertyField(Time, new GUIContent(nameof(overideManager.TimeOverride)));
             //EditorGUILayout.PropertyField(futureStartTime, new GUIContent(nameof(overideManager.FutureStartTime)));
@@ -100,6 +102,11 @@ public class OverideManagerEditor : Editor
 
             SetColor(canClick);
             EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Overide Season"))
+            {
+                if (canClick)
+                    overideManager.OverrideSeason();
+            }
             if (GUILayout.Button("Overide Time/Day"))
             {
                 if (canClick)

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OverideManager : MonoBehaviour
 {
-
+    public Season SeasonOverride;
     public int DayOverride;
     public double TimeOverride;
 
@@ -32,6 +32,21 @@ public class OverideManager : MonoBehaviour
         //StartCoroutine(RunDayNight());
         GameManager.Instance.GameClock.OnOveride(DayOverride, TimeOverride);
         TryOveride();
+    }
+
+    public void OverrideSeason()
+    {
+        StartCoroutine(OverrideSeasonAsync());
+    }
+
+    IEnumerator OverrideSeasonAsync()
+    {
+        MissionManager.Instance.CurrentMission.OverrideSeason(SeasonOverride);
+        SaveDataManager.Instance.SaveGame();
+
+        yield return new WaitForEndOfFrame();
+
+        GameManager.Instance.ReloadLevel();
     }
 
     IEnumerator RunDayNight()
