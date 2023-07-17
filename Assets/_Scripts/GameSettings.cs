@@ -14,7 +14,7 @@ public class GameSettings : MonoBehaviour
     public bool FTUE; //First Time User Experience!
     public bool TutorialToggle;
     public bool SkipSplashScreens;
-
+    public bool IgnoreHouseBuildingAtEndofDay;
 
     [HideInInspector] public bool fullScreenMode;
     [HideInInspector] public QualityLevel currentQualityLevel;

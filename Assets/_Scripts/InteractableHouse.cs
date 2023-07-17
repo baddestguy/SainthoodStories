@@ -274,8 +274,11 @@ public class InteractableHouse : InteractableObject
 
         if(time == 0 && CanBuild())
         {
-            Debug.LogWarning("FAILED TO BUILD A HOUSE AT MIDNIGHT!: " + GetType());
-            UpdateCharityPoints(-1000, 0);
+            if (!GameSettings.Instance.IgnoreHouseBuildingAtEndofDay)
+            {
+                Debug.LogWarning("FAILED TO BUILD A HOUSE AT MIDNIGHT!: " + GetType());
+                UpdateCharityPoints(-1000, 0);
+            }
         }
     }
 
