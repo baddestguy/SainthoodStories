@@ -313,6 +313,7 @@ public class InteractableHouse : InteractableObject
         if (HazardCounter > 0) return;
         if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
         if (InsideHouse && CameraLockOnMe) return;
+        if (time >= 21) return;
 
         BuildingState = BuildingState.HAZARDOUS;
         EnvironmentalHazardDestructionCountdown = 8;
