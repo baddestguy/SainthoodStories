@@ -476,9 +476,13 @@ public class Player : MonoBehaviour
     {
         if (StatusEffects.Contains(PlayerStatusEffect.VULNERABLE))
         {
+            StatusEffects.Add((PlayerStatusEffect)Random.Range(2, 5));
+            StatusEffects.Add((PlayerStatusEffect)Random.Range(2, 5));
+        }
+        else
+        {
             StatusEffects.Add((PlayerStatusEffect)Random.Range(1, 5));
         }
-        StatusEffects.Add((PlayerStatusEffect)Random.Range(1, 5));
         StatusEffectTrigger?.Invoke();
         Debug.LogWarning("ADDED AILMENT!");
     }
@@ -488,7 +492,14 @@ public class Player : MonoBehaviour
         if (!StatusEffects.Any()) return;
 
         StatusEffectTrigger?.Invoke();
-        StatusEffects.RemoveAt(Random.Range(0, StatusEffects.Count));
+        if (StatusEffects.Contains(PlayerStatusEffect.VULNERABLE))
+        {
+            StatusEffects.Remove(PlayerStatusEffect.VULNERABLE);
+        }
+        else
+        {
+            StatusEffects.RemoveAt(Random.Range(0, StatusEffects.Count));
+        }
     }
 
     public bool EnergyDepleted()
