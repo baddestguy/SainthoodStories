@@ -7,10 +7,12 @@ public class SideNotification : MonoBehaviour
     public Image BuildingIcon;
     public TextMeshProUGUI ItemsRequiredDisplay;
     public TextMeshProUGUI DeadlineDisplay;
+    private TooltipMouseOver MouseOver; 
 
     public void Init(string sprite, int items, GameClock deadline)
     {
-
+        MouseOver = GetComponent<TooltipMouseOver>();
+        MouseOver.Loc_Key = "SideNotificationTooltip_" + sprite;
         BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{sprite}");
         ItemsRequiredDisplay.text = $"{(items > 0 ? items.ToString() : "")}";
         DeadlineDisplay.text = "";

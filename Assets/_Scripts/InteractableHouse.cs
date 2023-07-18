@@ -625,6 +625,7 @@ public class InteractableHouse : InteractableObject
             var sturdyMaterials = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
             SturdyMaterials = sturdyMaterials?.Value ?? 0;
             CurrentSturdyMaterials = SturdyMaterials;
+            UI.Instance.SideNotificationPop(GetType().Name);
         }
         else
         {
