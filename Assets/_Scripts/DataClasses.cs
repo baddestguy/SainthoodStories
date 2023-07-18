@@ -340,6 +340,7 @@ public class HouseSaveData
     public int DeliveryDay;
     public int EnvironmentalHazardDestructionCountdown;
     public int HazardCounter;
+    public bool HasBeenDestroyed;
 }
 
 public class TooltipStats

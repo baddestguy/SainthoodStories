@@ -76,6 +76,7 @@ public class InteractableHouse : InteractableObject
     public int CurrentSturdyMaterials = 0;
     public int EnvironmentalHazardDestructionChance = 10;
     public int EnvironmentalHazardDestructionCountdown = -1;
+    public bool HasBeenDestroyed;
 
     protected virtual void Start()
     {
@@ -284,6 +285,7 @@ public class InteractableHouse : InteractableObject
     public void DestroyBuilding()
     {
         BuildingState = BuildingState.RUBBLE;
+        HasBeenDestroyed = true;
         BuildPoints = 0;
         RelationshipPoints = 0;
         RelationshipBonus = 0;
@@ -603,8 +605,10 @@ public class InteractableHouse : InteractableObject
             {
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
             }
-
-            BuildingCompleteDialog();
+            if (!HasBeenDestroyed)
+            {
+                BuildingCompleteDialog();
+            }
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             player.ConsumeEnergy(EnergyConsumption);
             var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
@@ -1287,6 +1291,7 @@ public class InteractableHouse : InteractableObject
         RequiredItems = data.RequiredItems;
         EnvironmentalHazardDestructionCountdown = data.EnvironmentalHazardDestructionCountdown;
         HazardCounter = data.HazardCounter;
+        HasBeenDestroyed = data.HasBeenDestroyed;
 
         return data;
     }
@@ -1307,7 +1312,8 @@ public class InteractableHouse : InteractableObject
             DeadlineDay = DeadlineTime.Day,
             RequiredItems = RequiredItems,
             EnvironmentalHazardDestructionCountdown = EnvironmentalHazardDestructionCountdown,
-            HazardCounter = HazardCounter
+            HazardCounter = HazardCounter,
+            HasBeenDestroyed = HasBeenDestroyed
         };
     }
 
