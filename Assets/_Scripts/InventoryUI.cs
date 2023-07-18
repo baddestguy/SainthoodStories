@@ -26,6 +26,7 @@ public class InventoryUI : MonoBehaviour
         {
             Items[i].gameObject.SetActive(true);
             Items[i].sprite = Resources.Load<Sprite>($"Icons/{items[i]}");
+            Items[i].GetComponent<TooltipMouseOver>().Loc_Key = "InventoryTooltip_" + items[i];
         }
 
         for (int i = 0; i < provisions.Count; i++)
