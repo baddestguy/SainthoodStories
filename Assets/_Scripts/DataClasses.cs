@@ -140,7 +140,6 @@ public enum Provision
     UMBRELLA,
     WINTER_CLOAK,
     SHADES,
-    EXTRA_INVENTORY, //HIDE TEMPORARILY!
     ENERGY_DRINK,
     ROSARY,
     COOKING_UTENSILS,
@@ -157,13 +156,14 @@ public enum Provision
     ORPHANAGE_RELATIONSHIP_BUILDER,
     KITCHEN_RELATIONSHIP_BUILDER,
     SHELTER_RELATIONSHIP_BUILDER
-    ,AUTO_DELIVER
     ,SOFT_MATTRESS
     ,FASTING
     ,KOBOKO
     ,INCENSE
     ,SECURITY_GUARDS
-    ,MAX_COUNT
+    ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
+    ,EXTRA_INVENTORY 
+    ,AUTO_DELIVER
 }
 
 public enum BuildingState

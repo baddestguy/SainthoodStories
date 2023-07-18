@@ -28,9 +28,10 @@ public class InventoryManager : MonoBehaviour
     {
         Items = save.InventoryItems?.ToList() ?? new List<ItemType>();
         Provisions = save.Provisions?.ToList() ?? new List<ProvisionData>();
-        //if (HasProvision(Provision.EXTRA_INVENTORY)){
-        //    MaxInventorySlots = GetProvision(Provision.EXTRA_INVENTORY).Value;
-        //}
+        if (HasProvision(Provision.EXTRA_INVENTORY))
+        {
+            MaxInventorySlots = GetProvision(Provision.EXTRA_INVENTORY).Value;
+        }
         RefreshInventoryUI?.Invoke();
     }
 
@@ -68,9 +69,9 @@ public class InventoryManager : MonoBehaviour
 
         switch (provision.Id)
         {
-            //case Provision.EXTRA_INVENTORY:
-            //    MaxInventorySlots = provision.Value;
-            //    break;
+            case Provision.EXTRA_INVENTORY:
+                MaxInventorySlots = provision.Value;
+                break;
         }
 
         RefreshInventoryUI?.Invoke();
