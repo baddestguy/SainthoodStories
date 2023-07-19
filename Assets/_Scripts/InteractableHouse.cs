@@ -346,6 +346,7 @@ public class InteractableHouse : InteractableObject
     IEnumerator TryZoomAsync(float zoom) 
     {
         InfoPopup.gameObject.SetActive(false);
+        RubbleInfoPopup.gameObject.SetActive(false);
         if (!CameraLockOnMe || Zooming)
         {
             yield break;
@@ -626,6 +627,7 @@ public class InteractableHouse : InteractableObject
             SturdyMaterials = sturdyMaterials?.Value ?? 0;
             CurrentSturdyMaterials = SturdyMaterials;
             UI.Instance.SideNotificationPop(GetType().Name);
+            InsideHouse = true;
         }
         else
         {
@@ -911,6 +913,11 @@ public class InteractableHouse : InteractableObject
 
         InfoPopup.gameObject.SetActive(false);
         RubbleInfoPopup.gameObject.SetActive(false);
+
+        if (BuildingState == BuildingState.RUBBLE && InsideHouse)
+        {
+            PopUICallback("EXIT");
+        }
     }
 
     public virtual void TriggerCustomEvent()
