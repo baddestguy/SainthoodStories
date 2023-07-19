@@ -121,6 +121,10 @@ public class ProvisionsPopup : MonoBehaviour
 
     private void CloseUI()
     {
+        var bonusEnergy = InventoryManager.Instance.GetProvision(Provision.ENERGY_DRINK);
+        Player player = GameManager.Instance.Player;
+        player.ConsumeEnergy(-bonusEnergy?.Value ?? 0);
+
         CustomEventPopup.IsDisplaying = false;
         gameObject.SetActive(false);
         UI.Instance.EnableAllUIElements(true);

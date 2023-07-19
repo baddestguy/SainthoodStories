@@ -28,7 +28,8 @@ public class InventoryManager : MonoBehaviour
     {
         Items = save.InventoryItems?.ToList() ?? new List<ItemType>();
         Provisions = save.Provisions?.ToList() ?? new List<ProvisionData>();
-        if (HasProvision(Provision.EXTRA_INVENTORY)){
+        if (HasProvision(Provision.EXTRA_INVENTORY))
+        {
             MaxInventorySlots = GetProvision(Provision.EXTRA_INVENTORY).Value;
         }
         RefreshInventoryUI?.Invoke();
@@ -70,11 +71,6 @@ public class InventoryManager : MonoBehaviour
         {
             case Provision.EXTRA_INVENTORY:
                 MaxInventorySlots = provision.Value;
-                break;
-
-            case Provision.ENERGY_DRINK:
-                Player player = GameManager.Instance.Player;
-                player.ConsumeEnergy(-provision.Value);
                 break;
         }
 

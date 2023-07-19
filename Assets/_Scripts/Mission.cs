@@ -28,6 +28,7 @@ public class Mission
     public Season Season { 
         get 
         {
+            //TODO: This will eventually break once we go past week 18!!
             var summerArray = new int[] { 1,4,7,10,13,16 };
             var fallArray = new int[] { 2,5,8,11,14,17 };
             var winterArray = new int[] {3,6,9,12,15,18 };
@@ -38,6 +39,16 @@ public class Mission
 
             return Season.SUMMER;
         } 
+    }
+
+    public void OverrideSeason(Season season)
+    {
+        switch (season)
+        {
+            case Season.SUMMER: CurrentWeek = 1; break;
+            case Season.FALL: CurrentWeek = 2; break;
+            case Season.WINTER: CurrentWeek = 3; break;
+        }
     }
 
     public string SeasonLevel

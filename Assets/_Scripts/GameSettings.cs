@@ -14,7 +14,7 @@ public class GameSettings : MonoBehaviour
     public bool FTUE; //First Time User Experience!
     public bool TutorialToggle;
     public bool SkipSplashScreens;
-
+    public bool IgnoreHouseBuildingAtEndofDay;
 
     [HideInInspector] public bool fullScreenMode;
     [HideInInspector] public QualityLevel currentQualityLevel;
@@ -75,7 +75,7 @@ public class GameSettings : MonoBehaviour
         else
         {
             fullScreenMode = false;
-            SetQuality(QualityLevel.QUALITY_SETTING_MEDIUM);
+            SetQuality(QualityLevel.QUALITY_SETTING_ULTRA);
             brightnessPercent = 0.5f;
             currentResolution = GetResolution($"{Screen.currentResolution.width}x{Screen.currentResolution.height}");
 

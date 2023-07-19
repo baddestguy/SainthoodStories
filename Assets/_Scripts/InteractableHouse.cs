@@ -76,6 +76,7 @@ public class InteractableHouse : InteractableObject
     public int CurrentSturdyMaterials = 0;
     public int EnvironmentalHazardDestructionChance = 10;
     public int EnvironmentalHazardDestructionCountdown = -1;
+    public bool HasBeenDestroyed;
 
     protected virtual void Start()
     {
@@ -231,10 +232,9 @@ public class InteractableHouse : InteractableObject
 
         BuildingActivityState = BuildingActivityState.NONE;
 
-        if (CanBuild() && !HouseUIActive)
+        if (CanBuild())
         {
-            PopIcon.gameObject.SetActive(true);
-            PopIcon.Init("Rubble", 0, new GameClock(-1));
+            PopMyIcon("Rubble", 0, new GameClock(0, GameManager.Instance.GameClock.Day+1));
             RubbleGo.SetActive(true);
             GetComponent<BoxCollider>().enabled = true;
         }
@@ -274,14 +274,18 @@ public class InteractableHouse : InteractableObject
 
         if(time == 0 && CanBuild())
         {
-            Debug.LogWarning("FAILED TO BUILD A HOUSE AT MIDNIGHT!: " + GetType());
-            UpdateCharityPoints(-1000, 0);
+            if (!GameSettings.Instance.IgnoreHouseBuildingAtEndofDay)
+            {
+                Debug.LogWarning("FAILED TO BUILD A HOUSE AT MIDNIGHT!: " + GetType());
+                UpdateCharityPoints(-1000, 0);
+            }
         }
     }
 
     public void DestroyBuilding()
     {
         BuildingState = BuildingState.RUBBLE;
+        HasBeenDestroyed = true;
         BuildPoints = 0;
         RelationshipPoints = 0;
         RelationshipBonus = 0;
@@ -310,6 +314,7 @@ public class InteractableHouse : InteractableObject
         if (HazardCounter > 0) return;
         if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
         if (InsideHouse && CameraLockOnMe) return;
+        if (time >= 21) return;
 
         BuildingState = BuildingState.HAZARDOUS;
         EnvironmentalHazardDestructionCountdown = 8;
@@ -341,6 +346,7 @@ public class InteractableHouse : InteractableObject
     IEnumerator TryZoomAsync(float zoom) 
     {
         InfoPopup.gameObject.SetActive(false);
+        RubbleInfoPopup.gameObject.SetActive(false);
         if (!CameraLockOnMe || Zooming)
         {
             yield break;
@@ -600,8 +606,10 @@ public class InteractableHouse : InteractableObject
             {
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, true, 0.3f);
             }
-
-            BuildingCompleteDialog();
+            if (!HasBeenDestroyed)
+            {
+                BuildingCompleteDialog();
+            }
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             player.ConsumeEnergy(EnergyConsumption);
             var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
@@ -618,6 +626,8 @@ public class InteractableHouse : InteractableObject
             var sturdyMaterials = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
             SturdyMaterials = sturdyMaterials?.Value ?? 0;
             CurrentSturdyMaterials = SturdyMaterials;
+            UI.Instance.SideNotificationPop(GetType().Name);
+            InsideHouse = true;
         }
         else
         {
@@ -903,6 +913,11 @@ public class InteractableHouse : InteractableObject
 
         InfoPopup.gameObject.SetActive(false);
         RubbleInfoPopup.gameObject.SetActive(false);
+
+        if (BuildingState == BuildingState.RUBBLE && InsideHouse)
+        {
+            PopUICallback("EXIT");
+        }
     }
 
     public virtual void TriggerCustomEvent()
@@ -1284,6 +1299,7 @@ public class InteractableHouse : InteractableObject
         RequiredItems = data.RequiredItems;
         EnvironmentalHazardDestructionCountdown = data.EnvironmentalHazardDestructionCountdown;
         HazardCounter = data.HazardCounter;
+        HasBeenDestroyed = data.HasBeenDestroyed;
 
         return data;
     }
@@ -1304,7 +1320,8 @@ public class InteractableHouse : InteractableObject
             DeadlineDay = DeadlineTime.Day,
             RequiredItems = RequiredItems,
             EnvironmentalHazardDestructionCountdown = EnvironmentalHazardDestructionCountdown,
-            HazardCounter = HazardCounter
+            HazardCounter = HazardCounter,
+            HasBeenDestroyed = HasBeenDestroyed
         };
     }
 

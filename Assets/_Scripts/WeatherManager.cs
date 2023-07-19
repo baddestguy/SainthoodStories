@@ -112,6 +112,7 @@ public class WeatherManager : MonoBehaviour
 
         //HACK: Don't trigger weather before tutorials
         if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && day < 3) return;
+        if (time > 18) return;
 
         var wData = GetWeatherData();
 

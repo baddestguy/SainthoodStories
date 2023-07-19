@@ -324,14 +324,14 @@ public class SoundManager : MonoBehaviour
     public void EnableSFX(bool value, float volumePercent = 0)
     {
         
-        float val = (volumePercent * 20.0f) - 10f;
+        float val = (volumePercent * 40.0f) - 40f;
         if (volumePercent == 0) val = -80;
         audioMixer.SetFloat("SFXVolume", (value) ? val : -80.0f);
         
     }
     public void EnableMusic(bool value, float volumePercent = 0)
     {
-        float val = (volumePercent * 20.0f) - 10f;
+        float val = (volumePercent * 40.0f) - 40f;
         if (volumePercent == 0) val = -80;
         audioMixer.SetFloat("MusicVolume", (value) ? val : -80.0f);
         audioMixer.SetFloat("Music2Volume", (value) ? val : -80.0f);
@@ -339,7 +339,7 @@ public class SoundManager : MonoBehaviour
 
     public void EnableAmbiance(bool value, float volumePercent = 0)
     {
-        float val = (volumePercent * 20.0f) - 10f;
+        float val = (volumePercent * 40.0f) - 40f;
         if (volumePercent == 0) val = -80;
         audioMixer.SetFloat("AmbianceVolume", (value) ? val : -80.0f);
     }
@@ -347,7 +347,7 @@ public class SoundManager : MonoBehaviour
     public void SetGlobalAudio(bool value, float volumePercent = 0)
     {
         
-        float val = (volumePercent * 20.0f) - 10f;
+        float val = (volumePercent * 40f) - 40f;
         if (volumePercent == 0) val = -80;
 
          audioMixer.SetFloat("GlobalVolume", (value) ? val : -80.0f);

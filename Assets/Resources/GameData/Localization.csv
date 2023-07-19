@@ -384,6 +384,25 @@ Tooltip_ExitBuilding,"*Click*
 Go outside.",,,,,,
 Tooltip_SaintsCollection,"*Click*
 Saints Collection.",,,,,,
+SideNotificationTooltip_Rubble,Help to construct this building before midnight!,,,,,,
+SideNotificationTooltip_Hazard,Rush to their aid quickly to prevent the building's destruction!,,,,,,
+SideNotificationTooltip_InteractableChurch,"This is the <color=""green"">Start Time<color=""white""> for the next Liturgy. If you join after the start time, you won't lose FP, but you won't gain FP either.",,,,,,
+SideNotificationTooltip_InteractableMarket,This is the market.,,,,,,
+SideNotificationTooltip_InteractableHospital,"Purchase Meds from the Shop and deliver to the hospital before this <color=""red"">deadline.",,,,,,
+SideNotificationTooltip_Baby1,Go to the hospital and help with delivering a baby!,,,,,,
+SideNotificationTooltip_Baby2,Go to the hospital and help with delivering a baby!,,,,,,
+SideNotificationTooltip_InteractableSchool,"Purchase Books from the Shop and deliver to the school before this <color=""red"">deadline.",,,,,,
+SideNotificationTooltip_InteractableOrphanage,"Purchase Toys from the Shop and deliver to the orphanage before this <color=""red"">deadline.",,,,,,
+SideNotificationTooltip_InteractableKitchen,"Purchase Food from the Shop and deliver to the kitchen before this <color=""red"">deadline.",,,,,,
+SideNotificationTooltip_InteractableShelter,"Purchase Food from the Shop and deliver to the Shelter before this <color=""red"">deadline.
+
+Alternatively, you can cook food at the Kitchen before delivering to the Shelter for bonus CP!",,,,,,
+InventoryTooltip_GROCERIES,Groceries to be delivered to the Shelter.,,,,,,
+InventoryTooltip_CLOTHES,Clothes to be delivered to the Clothes Bank.,,,,,,
+InventoryTooltip_TOYS,Toys to be delivered to the Orphanage.,,,,,,
+InventoryTooltip_STATIONERY,Books to be delivered to the School.,,,,,,
+InventoryTooltip_MEDS,Meds to be delivered to the Hospital.,,,,,,
+InventoryTooltip_MEAL,A deliciously cooked meal to be delivered to the Shelter.,,,,,,
 Tutorial_Instruction_1,"Release the button when the two circles overlap for a <b>CRITICAL HIT.</b>
 
 Landing all Critical Hits for an Activity results in various bonuses, so try to get as many Critical Hits as you can! ",,,,,,

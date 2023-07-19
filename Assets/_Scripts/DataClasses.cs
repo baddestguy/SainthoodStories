@@ -71,9 +71,9 @@ public enum ThankYouType
 public enum PlayerStatusEffect
 {
     NONE = 0,
+    VULNERABLE, //Setup for more effects
     FATIGUED, //Stat Debuff, more energy required for Actions
     SICK, //Damage over time, lose energy every hour
-    VULNERABLE, //Setup for more effects
     MIGRAINE, //Lose all Energy in x hours
     FROZEN // Debilitating
 }
@@ -140,7 +140,6 @@ public enum Provision
     UMBRELLA,
     WINTER_CLOAK,
     SHADES,
-    EXTRA_INVENTORY,
     ENERGY_DRINK,
     ROSARY,
     COOKING_UTENSILS,
@@ -157,13 +156,14 @@ public enum Provision
     ORPHANAGE_RELATIONSHIP_BUILDER,
     KITCHEN_RELATIONSHIP_BUILDER,
     SHELTER_RELATIONSHIP_BUILDER
-    ,AUTO_DELIVER
     ,SOFT_MATTRESS
     ,FASTING
     ,KOBOKO
     ,INCENSE
     ,SECURITY_GUARDS
-    ,MAX_COUNT
+    ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
+    ,EXTRA_INVENTORY 
+    ,AUTO_DELIVER
 }
 
 public enum BuildingState
@@ -340,6 +340,7 @@ public class HouseSaveData
     public int DeliveryDay;
     public int EnvironmentalHazardDestructionCountdown;
     public int HazardCounter;
+    public bool HasBeenDestroyed;
 }
 
 public class TooltipStats
