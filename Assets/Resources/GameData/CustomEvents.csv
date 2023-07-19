@@ -1,9 +1,9 @@
 Id,EventPopupType,EventGroup,Weight,Cost,Gain,RewardType,RejectionCost,TriggerWeekDay,ImagePath,IsOrderedSequence,LocalizationKey
 MARKET_HOURS,OK,DAILY,100,24,0,NONE,0,"1,1",StoryArt/TownCrier,FALSE,Event_MarketHours_24
 MARKET_HOURS,OK,DAILY,100,18,0,NONE,0,"1,1",StoryArt/TownCrier,FALSE,Event_MarketHours_18
-RAIN,OK,DAILY,100,6,0,NONE,0,"2,1",StoryArt/TownCrier,FALSE,Event_Rain_6
-RAIN,OK,DAILY,100,12,0,NONE,0,"2,1",StoryArt/TownCrier,FALSE,Event_Rain_12
-RAIN,OK,DAILY,100,24,0,NONE,0,"2,1",StoryArt/TownCrier,FALSE,Event_Rain_24
+RAIN,OK,DAILY,100,6,0,NONE,0,"2,2",StoryArt/TownCrier,FALSE,Event_Rain_6
+RAIN,OK,DAILY,100,12,0,NONE,0,"2,2",StoryArt/TownCrier,FALSE,Event_Rain_12
+RAIN,OK,DAILY,100,24,0,NONE,0,"2,2",StoryArt/TownCrier,FALSE,Event_Rain_24
 BLIZZARD,OK,DAILY,100,6,0,NONE,0,"3,1",StoryArt/TownCrier,FALSE,Event_Snow_6
 BLIZZARD,OK,DAILY,100,12,0,NONE,0,"3,1",StoryArt/TownCrier,FALSE,Event_Snow_12
 BLIZZARD,OK,DAILY,100,24,0,NONE,0,"3,1",StoryArt/TownCrier,FALSE,Event_Snow_24
@@ -67,7 +67,7 @@ DONATION,OK,ENDWEEK,100,0,5,COIN,0,,StoryArt/Hospital,FALSE,Event_Donation
 ICON,OK,ENDWEEK,100,0,10,NONE,0,,StoryArt/Hospital,FALSE,Event_IconUnlock
 SPIRITUALCRISIS,OK,ENDWEEK,100,0,0,NONE,0,,StoryArt/Convent_Building,FALSE,Event_SpiritualCrisis
 RIOTS,OK,ENDWEEK,100,0,0,NONE,0,,StoryArt/TownBurned,FALSE,Event_TownRiots
-ENDGAME,OK,ENDWEEK,100,0,0,NONE,0,,StoryArt/Endgame,TRUE,Event_Endgame
+ENDGAME,OK,ENDWEEK,100,0,0,NONE,0,,StoryArt/Endgame,TRUE,Endgame
 THANKYOU_ITEM_HOSPITAL,OK,THANKYOU,100,0,0,CP,0,,StoryArt/Hospital,FALSE,Event_ThankYouItemHospital
 THANKYOU_ITEM_SCHOOL,OK,THANKYOU,100,0,0,CP,0,,StoryArt/School,FALSE,Event_ThankYouItemSchool
 THANKYOU_ITEM_ORPHANAGE,OK,THANKYOU,100,0,0,CP,0,,StoryArt/Orphanage,FALSE,Event_ThankYouItemOrphanage

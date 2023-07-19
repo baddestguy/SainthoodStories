@@ -232,9 +232,11 @@ public class GameDataManager : MonoBehaviour
             var eventWeek = int.Parse(returnData.TriggerWeekDay.Split(',')[0]);
             var eventDay = int.Parse(returnData.TriggerWeekDay.Split(',')[1]);
 
-            while (TriggeredDailyEvents.Contains(returnData.Id) && currentDay >= eventDay && currentWeek >= eventWeek)
+            while (TriggeredDailyEvents.Contains(returnData.Id) || currentWeek < eventWeek || currentDay < eventDay)
             {
                 returnData = groupList[Random.Range(0, groupList.Count)];
+                eventWeek = int.Parse(returnData.TriggerWeekDay.Split(',')[0]);
+                eventDay = int.Parse(returnData.TriggerWeekDay.Split(',')[1]);
             }
             TriggeredDailyEvents.Add(returnData.Id);
         }

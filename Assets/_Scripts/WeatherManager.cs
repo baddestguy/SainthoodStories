@@ -201,7 +201,7 @@ public class WeatherManager : MonoBehaviour
                 WeatherType = WeatherType.PREHEAT;
                 break;
         }
-        DayNightCycle.SetFutureSkyBox(WeatherType);
+        DayNightCycle?.SetFutureSkyBox(WeatherType);
     }
 
     private void SetWeatherType()

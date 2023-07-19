@@ -18,6 +18,8 @@ public class MapTile : MonoBehaviour
     [SerializeField]
     private Image GridTile;
 
+    public GamepadCursor GamepadCursor;
+
     private void Awake(){
         SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
@@ -27,6 +29,7 @@ public class MapTile : MonoBehaviour
         GameManager.MissionBegin += MissionBegin;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
         TooltipMouseOver.OnHover += HoverExit;
+        GamepadCursor = FindObjectOfType<GamepadCursor>();
     }
 
     public virtual void OnDisable(){
@@ -81,6 +84,8 @@ public class MapTile : MonoBehaviour
 
     public virtual void OnMouseOver()
     {
+        if (GamepadCursor != null && GamepadCursor.PlayerInput.currentControlScheme == "Gamepad") return;
+
         Hover();
     }
 

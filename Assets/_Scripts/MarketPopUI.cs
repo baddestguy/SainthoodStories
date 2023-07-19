@@ -21,6 +21,17 @@ public class MarketPopUI : PopUI
         SetDisplayPrice(ItemType.TOYS, ToysDisplayPrice);
         SetDisplayPrice(ItemType.STATIONERY, StationeryDisplayPrice);
         SetDisplayPrice(ItemType.MEDS, MedsDisplayPrice);
+
+        //Tried to hide buttons only if the building has not yet been constructed!
+        foreach(var b in Buttons)
+        {
+            if (!b.Enabled)
+            {
+                //b.RefreshButton(house?.CanDoAction(b.ButtonName) ?? false);
+
+                //b.gameObject.SetActive(false);
+            }
+        }
     }
 
     private void SetDisplayPrice(ItemType type, TextMeshProUGUI display)

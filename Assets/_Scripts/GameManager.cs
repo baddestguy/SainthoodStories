@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
             {
                 if (Player.OnEnergyDepleted)
                     UI.Instance.ShowWeekBeginText(LocalizationManager.Instance.GetText("WeekIntroEnergyDepleted"));
-                else if (PreviousSceneID == SceneID.MainMenu)
+                else if (PreviousSceneID == SceneID.MainMenu || (GameClock.Day == 1 && PreviousSceneID != SceneID.SaintsShowcase_Day))
                     UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText(CurrentMission.SeasonLevel.Replace("Level", "_Splash"))}");
                 else
                     UI.Instance.ShowDayBeginText("");
@@ -155,6 +155,8 @@ public class GameManager : MonoBehaviour
         }
         else if (scene.name.Contains("MainMenu"))
         {
+            GamepadCursor.CursorSpeed = 2000f;
+
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.MainMenu;
             SaveDataManager.Instance.LoadGame((data, newGame) => {
@@ -260,6 +262,11 @@ public class GameManager : MonoBehaviour
                     }
                     else
                     {
+                        if (GameSettings.Instance.DEMO_MODE)
+                        {
+                            CurrentMission.OverrideSeason(Season.FALL);
+                        }
+
                         StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
                     }
 

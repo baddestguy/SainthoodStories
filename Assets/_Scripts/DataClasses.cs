@@ -556,6 +556,7 @@ public class SaveSettingsData
     public float musicVolume;
     public float ambianceVolume;
     public bool tutorialEnabled;
+    public bool DEMO_MODE;
 
     public Language language;
 }

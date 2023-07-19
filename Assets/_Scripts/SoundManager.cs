@@ -318,6 +318,7 @@ public class SoundManager : MonoBehaviour
         Destroy(MusicAudioSourceChannel1, 5);
         Destroy(MusicAudioSourceChannel2, 5);
         Destroy(AmbientAudioSource, 5);
+        AmbientTrackName = "";
         FadeAmbience(0.3f);
     }
 

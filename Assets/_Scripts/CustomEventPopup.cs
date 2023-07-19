@@ -107,6 +107,8 @@ public class CustomEventPopup : MonoBehaviour
             }
         }
         
+        FindObjectOfType<GamepadCursor>().SnapToLocation(OKGO.transform.position);
+
         ButtonTimerTarget = 1f;
         SoundManager.Instance.PlayOneShotSfx("DialogOpen_SFX");
     }
@@ -318,5 +320,6 @@ public class CustomEventPopup : MonoBehaviour
         Hearts.gameObject.SetActive(false);
         Coins.gameObject.SetActive(false);
         EventSystem.current?.SetSelectedGameObject(null);
+        GamepadCursor.CursorSpeed = 2000f;
     }
 }

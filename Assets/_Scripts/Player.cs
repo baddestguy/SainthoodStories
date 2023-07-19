@@ -51,7 +51,18 @@ public class Player : MonoBehaviour
         PopUIFX = Instantiate(Resources.Load("UI/PopUIFX") as GameObject).GetComponent<PopUIFX>();
         PopUIFX.gameObject.SetActive(false);
 
-        GroundTapFX = Instantiate(Resources.Load("Environment/GroundLeavesFx") as GameObject);
+        switch (MissionManager.Instance.CurrentMission.Season) {
+            case Season.SUMMER:
+                GroundTapFX = Instantiate(Resources.Load("Environment/GroundLeavesFx") as GameObject);
+                break;
+            case Season.FALL:
+                GroundTapFX = Instantiate(Resources.Load("Environment/GroundLeavesFallFx") as GameObject);
+                break;
+            case Season.WINTER:
+                GroundTapFX = Instantiate(Resources.Load("Environment/GroundLeavesWinterFx") as GameObject);
+                break;
+        }
+
         GroundMoveFX = Instantiate(Resources.Load("Environment/GroundMoveFx") as GameObject);
     }
 

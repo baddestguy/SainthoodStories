@@ -167,7 +167,7 @@ public class InteractableSchool : InteractableHouse
     public override void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;
-        if (time >= 19 || time < 6) return;
+        if (time >= 17 || time < 6) return;
 
     //    if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;

@@ -154,6 +154,30 @@ public class MissionManager : MonoBehaviour
             }
         }
 
+        if (GameSettings.Instance.DEMO_MODE){
+            if (CurrentMission.CurrentWeek == 1)
+            {
+                CurrentMission.CurrentWeek++;
+                GameManager.Instance.GameClock.EndTheWeek();
+                CharityPoints = 3;
+                FaithPoints = 3;
+            }
+            else if (GameManager.Instance.GameClock.Day > 3)
+            {
+                EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
+
+                SaveDataManager.Instance.DeleteProgress();
+                SoundManager.Instance.EndAllTracks();
+                EventsManager.Instance.ExecuteEvents();
+
+                while (EventsManager.Instance.HasEventsInQueue()) yield return null;
+
+                GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+                yield break;
+            }
+        }
+
+        InteractableHouse.HazardCounter = 0;
         EventsManager.Instance.ExecuteEvents();
         GameManager.Instance.Player.ResetEnergy();
         GameManager.Instance.Player.StatusEffects.Clear();
@@ -165,6 +189,8 @@ public class MissionManager : MonoBehaviour
 
     public IEnumerable<SaintData> UnlockSaints()
     {
+        if (GameSettings.Instance.DEMO_MODE && SaintsManager.Instance.UnlockedSaints.Count >= 3) return new List<SaintData>();
+
         var saintsUnlocked = new List<SaintData>();
         FaithPointsPool += FaithPoints;
 

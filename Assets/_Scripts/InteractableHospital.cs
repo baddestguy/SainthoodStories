@@ -82,7 +82,7 @@ public class InteractableHospital : InteractableHouse
                     var extraPoints = 0;
                     if (PopUI.CriticalHitCount == MaxDeliveryPoints) extraPoints = 1;
 
-                    UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) + extraPoints, moddedEnergy);
+                    UpdateCharityPoints(BabyPoints + (e != null ? (int)e.Gain : 0) + extraPoints, moddedEnergy);
                     PopIcon.gameObject.SetActive(false);
                     UI.Instance.SideNotificationPop(GetType().Name);
                     DeadlineCounter--;

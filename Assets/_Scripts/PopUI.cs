@@ -30,13 +30,15 @@ public class PopUI : MonoBehaviour
     public Slider[] ProgressBars;
     public Slider ProgressBar;
 
-    private List<ActionButton> Buttons;
+    protected List<ActionButton> Buttons;
     public CameraControls CameraControls;
 
     private InteractableHouse MyHouse;
     private GameObject CurrentVfx;
     private GameObject CriticalCircleFX;
     public static int CriticalHitCount = 0;
+
+    public TextMeshProUGUI RPDisplay;
 
     void Start()
     {
@@ -53,6 +55,11 @@ public class PopUI : MonoBehaviour
         ItemsRequiredDisplay.text = $"{items}";
         DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
         CameraControls = cameraControls;
+        if (RPDisplay != null && MyHouse != null)
+        {
+            RPDisplay.text = $"{MyHouse?.RelationshipPoints ?? 0}";
+            transform.Find("Heart").GetComponent<TooltipMouseOver>().Loc_Key = $"{LocalizationManager.Instance.GetText("Tooltip_RP")}\n\n<b>Next Milestone: {MyHouse.GetNextRPMilestone()} RP</b>";
+        }
         if (items <= 0)
         {
             ItemsRequiredDisplay.gameObject.SetActive(false);
@@ -166,7 +173,12 @@ public class PopUI : MonoBehaviour
             myButton.SendMessage("HideToolTip", SendMessageOptions.DontRequireReceiver);
         
         Callback?.Invoke(button);
-        
+        if (RPDisplay != null && MyHouse != null)
+        {
+            RPDisplay.text = $"{MyHouse?.RelationshipPoints ?? 0}";
+            transform.Find("Heart").GetComponent<TooltipMouseOver>().Loc_Key = $"{LocalizationManager.Instance.GetText("Tooltip_RP")}\n\n<b>Next Milestone: {MyHouse.GetNextRPMilestone()} RP</b>";
+        }
+
         if (myButton.ButtonName != "EXIT")
             myButton.SendMessage("ShowToolTip", SendMessageOptions.DontRequireReceiver);
     }
@@ -255,7 +267,10 @@ public class PopUI : MonoBehaviour
                 Debug.LogWarning("CRITICAL HIT!");
                 PointerDown = false;
                 ButtonTimer = 0f;
-                if(CriticalHitCount > -1) CriticalHitCount++;
+                if (CriticalHitCount > -1)
+                {
+                    CriticalHitCount++;
+                }
                 OnClick(ButtonName);
                 ButtonPressFx.SetActive(true);
                 ButtonPressFx.transform.position = ChargeFx.transform.position;
@@ -265,6 +280,7 @@ public class PopUI : MonoBehaviour
             {
                 //Regular HIT!
                 Debug.LogWarning("Regular HIT!");
+                if(CriticalHitCount >= 1) SoundManager.Instance.PlayOneShotSfx("Crit_Bad");
                 PointerDown = false;
                 ButtonTimer = 0f;
                 CriticalHitCount = -1;
@@ -288,6 +304,7 @@ public class PopUI : MonoBehaviour
             if (ButtonTimer >= ButtonTimerTarget)
             {
                 Debug.LogWarning("LEft Lingering Regular HIT!");
+                if(CriticalHitCount >= 1) SoundManager.Instance.PlayOneShotSfx("Crit_Bad");
                 CriticalHitCount = -1;
                 PointerDown = false;
                 ButtonTimer = 0f;
@@ -330,11 +347,22 @@ public class PopUI : MonoBehaviour
         if (progress > 0.99f)
         {
             StartCoroutine(DisableProgressBar());
+            if(CriticalHitCount > 0)
+            {
+                CriticalSequence();
+            }
             CriticalHitCount = 0;
         }
         else if(progress == 0)
         {
             ProgressBar.gameObject.SetActive(false);
+        }
+        else
+        {
+            if (CriticalHitCount > 0)
+            {
+                SoundManager.Instance.PlayOneShotSfx("Crit_Good");
+            }
         }
     }
 
@@ -354,6 +382,19 @@ public class PopUI : MonoBehaviour
 
         CurrentVfx.SetActive(false);
         CurrentVfx.SetActive(true);
+    }
+
+    public void CriticalSequence()
+    {
+        var house = MyHouse as InteractableChurch;
+        if (house != null && (house.LotHProgress == 2 || house.MassProgress == 2))
+        {
+            SoundManager.Instance.PlayOneShotSfx("MassBegin_SFX", timeToDie: 4);
+        }
+        else
+        {
+            SoundManager.Instance.PlayOneShotSfx("Cheer_SFX", 1f, 5f);
+        }
     }
 
     private void OnEnable()

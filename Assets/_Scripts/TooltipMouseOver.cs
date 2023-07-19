@@ -13,11 +13,11 @@ public class TooltipMouseOver : MonoBehaviour
     public static UnityAction OnHover;
     public static bool IsHovering;
     public TooltipStats CustomToolStats = null;
+
     public void ShowToolTip()
     {
         transform.DOComplete();
         transform.DOPunchScale(transform.localScale * 0.5f, 0.5f, elasticity: 0f);
-        OnHover?.Invoke();
         IsHovering = true;
 
         switch (HouseName) 
@@ -71,6 +71,8 @@ public class TooltipMouseOver : MonoBehaviour
         {
             ToolTipManager.Instance.ShowToolTip(Loc_Key);
         }
+
+        GamepadCursor.CursorSpeed = 500f;
     }
 
     public void HideToolTip()
@@ -79,5 +81,6 @@ public class TooltipMouseOver : MonoBehaviour
         IsHovering = false;
         transform.DOComplete();
         EventSystem.current.SetSelectedGameObject(null);
+        GamepadCursor.CursorSpeed = 2000f;
     }
 }

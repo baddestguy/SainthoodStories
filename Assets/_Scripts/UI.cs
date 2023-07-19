@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -129,6 +130,17 @@ public class UI : MonoBehaviour
         if (SceneManager.GetActiveScene().name.Contains("Level"))
         {
             GetComponent<Canvas>().worldCamera = GameObject.Find("2DUICam").GetComponent<Camera>();
+        }
+    }
+
+    private void Update()
+    {
+        if (Gamepad.current != null && Gamepad.current.buttonEast.wasPressedThisFrame)
+        {
+            if (StatusEffectDisplay != null && StatusEffectDisplay.gameObject.activeSelf)
+            {
+                StatusEffectDisplay.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -722,6 +734,11 @@ public class UI : MonoBehaviour
         Application.OpenURL("https://discord.com/invite/3NZdTqDVda");
     }
 
+    public void SteamWishlist()
+    {
+        Application.OpenURL("https://store.steampowered.com/app/1748600/Sainthood/");
+    }
+
     private string DayofTheWeek(int Day)
     {
         switch (Day)
@@ -786,10 +803,14 @@ public class UI : MonoBehaviour
 
     private IEnumerator ShowWeekBeginTextAsync(string text)
     {
-        yield return StartCoroutine(CrossFadeAsync(1, 10));
-        if (GameSettings.Instance.SkipSplashScreens) yield break;
-        GameManager.Instance.InGameSession = false;
         WeekBeginCrossFade = true;
+        yield return StartCoroutine(CrossFadeAsync(1, 10));
+        if (GameSettings.Instance.SkipSplashScreens)
+        {
+            WeekBeginCrossFade = false;
+            yield break;
+        }
+        GameManager.Instance.InGameSession = false;
         WeekIntroBGGraphic.gameObject.SetActive(true);
         WeekIntroBGGraphic.DOFade(1, 1f);
 
@@ -816,10 +837,14 @@ public class UI : MonoBehaviour
 
     private IEnumerator ShowDayBeginTextAsync(string text)
     {
-        yield return StartCoroutine(CrossFadeAsync(1, 10));
-        if (GameSettings.Instance.SkipSplashScreens) yield break;
-        GameManager.Instance.InGameSession = false;
         WeekBeginCrossFade = true;
+        yield return StartCoroutine(CrossFadeAsync(1, 10));
+        if (GameSettings.Instance.SkipSplashScreens)
+        {
+            WeekBeginCrossFade = false;
+            yield break;
+        }
+        GameManager.Instance.InGameSession = false;
         WeekIntroBGGraphic.gameObject.SetActive(true);
         WeekIntroBGGraphic.DOFade(1, 1f);
 
