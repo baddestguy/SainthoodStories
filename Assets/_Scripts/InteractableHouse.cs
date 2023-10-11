@@ -18,6 +18,7 @@ public class InteractableHouse : InteractableObject
     public int VolunteerPoints;
     public int DeadlineDeliveryBonus;
     public bool DeadlineSet;
+    public bool DeadlineTriggeredForTheDay;
     public int RequiredItems;
     public int DeadlinePercentChance;
 
@@ -77,6 +78,8 @@ public class InteractableHouse : InteractableObject
     public int EnvironmentalHazardDestructionChance = 10;
     public int EnvironmentalHazardDestructionCountdown = -1;
     public bool HasBeenDestroyed;
+
+    protected List<CustomEventType> MyStoryEvents = new List<CustomEventType>();
 
     protected virtual void Start()
     {
@@ -190,6 +193,7 @@ public class InteractableHouse : InteractableObject
             DeadlineTime.SetClock(-1, day);
             DeadlineDeliveryBonus = 1;
             DeadlineSet = false;
+            DeadlineTriggeredForTheDay = false;
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
@@ -408,6 +412,7 @@ public class InteractableHouse : InteractableObject
         if (BuildingState != BuildingState.NORMAL) return;
         if (time >= 17 || time < 6) return;
         if ((DeadlineTime.Time != -1)) return;
+        if (DeadlineTriggeredForTheDay) return;
 
         switch (MissionDifficulty)
         {
@@ -430,6 +435,7 @@ public class InteractableHouse : InteractableObject
 
                         DeadlineDeliveryBonus = 1;
                         DeadlineSet = true;
+                        DeadlineTriggeredForTheDay = true;
                         PopMyIcon();
                         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
@@ -543,6 +549,12 @@ public class InteractableHouse : InteractableObject
                 VolunteerThanks();
                 break;
         }
+    }
+
+    public virtual void TriggerStory()
+    {
+        if (HasBeenDestroyed) return;
+
     }
 
     public virtual void ItemDeliveryThanks()
@@ -725,7 +737,7 @@ public class InteractableHouse : InteractableObject
     {
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_MORALE || i.Id == CustomEventType.LOW_MORALE);
         int charityMultiplier = 1;
-        if (e != null && BuildingState != BuildingState.HAZARDOUS)
+        if (e != null && BuildingState != BuildingState.HAZARDOUS && amount > 0)
         {
             if (Random.Range(0, 100) < 20)
             {
@@ -1042,7 +1054,7 @@ public class InteractableHouse : InteractableObject
         {
             return 2;
         }
-        else if (RelationshipPoints >= 10)
+        else if (RelationshipPoints >= 5) //ONLY FOR THE DEMO!
         {
             return 3;
         }
@@ -1126,7 +1138,7 @@ public class InteractableHouse : InteractableObject
             MoneyThanks();
             TreasuryManager.Instance.DonateMoney(Random.Range(1, 2));
         }
-
+        TriggerStory();
         SaveDataManager.Instance.SaveGame();
     }
 
@@ -1220,7 +1232,7 @@ public class InteractableHouse : InteractableObject
         if (!InfoPopup.gameObject.activeSelf)
         {
             BuildingGo.transform.DOComplete();
-            BuildingGo.transform.DOPunchScale(transform.localScale * 0.5f, 0.5f, elasticity: 0f);
+            BuildingGo.transform.DOPunchScale(transform.localScale * 0.15f, 0.5f, elasticity: 0f);
         }
         if (BuildingState == BuildingState.RUBBLE)
         {
@@ -1326,6 +1338,8 @@ public class InteractableHouse : InteractableObject
         EnvironmentalHazardDestructionCountdown = data.EnvironmentalHazardDestructionCountdown;
         HazardCounter = data.HazardCounter;
         HasBeenDestroyed = data.HasBeenDestroyed;
+        DeadlineTriggeredForTheDay = data.DeadlineTriggeredForTheDay;
+        MyStoryEvents = data.MyStoryEvents;
 
         return data;
     }
@@ -1344,10 +1358,12 @@ public class InteractableHouse : InteractableObject
             DeadlineCounter = DeadlineCounter,
             DeadlineTime = DeadlineTime.Time,
             DeadlineDay = DeadlineTime.Day,
+            DeadlineTriggeredForTheDay = DeadlineTriggeredForTheDay,
             RequiredItems = RequiredItems,
             EnvironmentalHazardDestructionCountdown = EnvironmentalHazardDestructionCountdown,
             HazardCounter = HazardCounter,
-            HasBeenDestroyed = HasBeenDestroyed
+            HasBeenDestroyed = HasBeenDestroyed,
+            MyStoryEvents = MyStoryEvents
         };
     }
 

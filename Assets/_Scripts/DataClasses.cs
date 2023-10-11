@@ -257,7 +257,11 @@ public enum CustomEventType
     ,ENDGAME
     ,AUTO_DELIVER_BEGIN
     ,AUTO_DELIVER_COMPLETE
-
+    ,HOSPITAL_STORY_1
+    ,HOSPITAL_STORY_2
+    ,HOSPITAL_STORY_3
+    ,HOSPITAL_STORY_4
+    ,HOSPITAL_STORY_5
 }
 
 public enum EventPopupType
@@ -335,12 +339,14 @@ public class HouseSaveData
     public int RequiredItems;
     public double DeadlineTime;
     public int DeadlineDay;
+    public bool DeadlineTriggeredForTheDay;
     public bool DeliveryTimeSet;
     public double DeliveryTime;
     public int DeliveryDay;
     public int EnvironmentalHazardDestructionCountdown;
     public int HazardCounter;
     public bool HasBeenDestroyed;
+    public List<CustomEventType> MyStoryEvents;
 }
 
 public class TooltipStats

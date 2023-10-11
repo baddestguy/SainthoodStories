@@ -171,6 +171,7 @@ public class InteractableSchool : InteractableHouse
 
     //    if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;
+        if (DeadlineTriggeredForTheDay) return;
 
         double futureTime = time + RandomFutureTimeByDifficulty();
    //     if (futureTime > ClosingTime) return;
@@ -191,6 +192,7 @@ public class InteractableSchool : InteractableHouse
                             RequiredItems = mission != null ? mission.RequiredItems : 1; //Depending on Season
                         DeadlineDeliveryBonus = 1;
                         DeadlineSet = true;
+                        DeadlineTriggeredForTheDay = true;
                         PopMyIcon();
                         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");

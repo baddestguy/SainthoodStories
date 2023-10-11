@@ -18,8 +18,8 @@ Tutorial_4,"Looking at the time, you notice you could make Liturgy of the Hours 
 You head out immediately.",,,,,,
 Tutorial_5,"""Good, I'm glad you could join us for this."" the Prioress says, and for a split second you imagine the slightest crack of a smile on the corner of her lips.
 
-""Your services will always be required by the community, and you will do well to serve them. But, you must also make time for the Lord of Light.""",,,,,,
-Tutorial_5,"""Keeping this balance between your service to your community, and your prayers to the Lord of Light is the path to Sainthood.""
+""Your services will always be required by the community, and you will do well to serve them. But, you must also make time for the Lord.""",,,,,,
+Tutorial_5,"""Keeping this balance between your service to your community, and your prayers to the Lord is the path to Sainthood.""
 
 She ushers you into the chapel to begin the Liturgy.",,,,,,
 Tutorial_6,"""You better get going,"" the Prioress says, ""The hospital needs you.""",,,,,,
@@ -149,7 +149,7 @@ Provision_SecurityGuardsDescription,Hire a security man to prevent robbers from 
 Event_Donation,Someone left a package at the Convent doors. You open it to reveal an anonymous donation!,,,,,,
 Event_IconUnlock,You received a Spiritual Revelation!,,,,,,
 Event_Endgame,"Your time in Purgatorio has come to an end. The people gather around you, chanting prayers in a circle as you commit your spirit to the Great Ascension.",,,,,,
-Event_Endgame,"Your spirit rises to the heavens, and the Lord of Light welcomes you into the Grand Palace, where the music and dancing never stops, and the joy and laughter never ends.",,,,,,
+Event_Endgame,"Your spirit rises to the heavens, and the Lord welcomes you into the Grand Palace, where the music and dancing never stops, and the joy and laughter never ends.",,,,,,
 Event_SpiritualCrisis,"Your Faith Points dropped to zero.
 
 Your heart fills with a deep sense of dread, it feels like all is lost, and there is no hope.",,,,,,
@@ -160,7 +160,7 @@ Event_ThankYouItemHospital,"""Thank you so much for the medical items! We really
 Event_ThankYouItemHospital,"""You are much too kind. Thank you so much for this."" Anna says, smiling from ear to ear.",,,,,,
 Event_ThankYouItemHospital,"""Oh, you are such a dear. Thank you."" Anna says as she collects the items.",,,,,,
 Event_ThankYouItemHospital,"""Bless your heart."" Anna says, receiving the supplies.",,,,,,
-Event_ThankYouItemHospital,"""You have saved a life today, may the Lord of Light never forget you."" Anna says with tears in her eyes.",,,,,,
+Event_ThankYouItemHospital,"""You have saved a life today, may the Lord never forget you."" Anna says with tears in her eyes.",,,,,,
 Event_ThankYouItemSchool,"""Ahem!"" Gabriel clears his throat, ""Thank you for the textbooks, we can distribute more to the kids to study!""",,,,,,
 Event_ThankYouItemSchool,"""Ahem!"" Gabriel begins, ""I really appreciate your efforts with this, thank you.""",,,,,,
 Event_ThankYouItemSchool,"""Ahem! Thank you, these supplies will go a long way in helping the kids."" Gabriel says.",,,,,,
@@ -209,9 +209,15 @@ Event_ThankYouTeach,You notice some true gifts of the children in Fine Arts clas
 Event_ThankYouTeach,The kids are a bit restless as you try to teach them Languages.,,,,,,
 Event_ThankYouTeach,Science is always a pleasure for both you and the kids as they love to experiment and try things out.,,,,,,
 Event_ThankYouVolunteerHospital,"An older man walks up to you at the ward. ""Thank you so much for all you do here,"" he says with a smile, tears in his eyes, ""it means so much to me and my family.""",,,,,,
-Event_ThankYouVolunteerHospital,"""I don't have much time left,"" the old lady begins, ""But the time I have spent with you makes it all worth it.""",,,,,,
+Event_ThankYouVolunteerHospital,"You spend time comforting an elderly woman on life support. 
+
+""I don't have much time left,"" the old lady begins, ""But the time I have spent with you makes it all worth it.""",,,,,,
 Event_ThankYouVolunteerHospital,You always enjoy hearing the tales of the retired soldier of his days in the war.,,,,,,
-Event_ThankYouVolunteerHospital,"""Thank you so much for helping my boy,"" a woman says, placing your hands in hers. ""It means so much to him.""",,,,,,
+Event_ThankYouVolunteerHospital,"You spend time caring for a boy who broke his arm.
+
+""Thank you so much for helping my boy,"" his father says, placing your hands in his. ""It means so much to him. Ever since his mother passed, he...""
+
+The man cannot bring himself to finish the words.",,,,,,
 Event_ThankYouVolunteerHospital,"""Your work here is very much appreciated,"" another nurse says, smiling. ""We truly could not manage without you.""",,,,,,
 Event_ThankYouVolunteerHospital,"You help around with the backlog of registration and accounting paperwork, certainly no easy task.",,,,,,
 Event_ThankYouVolunteerOrphanage,"A little girl catches up with you in the hallway. ""Thank you for being like a mommy to me."" she says, and hands you a little teddy.",,,,,,
@@ -610,3 +616,28 @@ SickDescription,You have come down with a terrible virus,,,,,,
 VulnerableDescription,Try to rest or you might get hit with multiple ailments!,,,,,,
 MigraineDescription,Your head pounds with increasing intensity. It might soon reach a fever pitch,,,,,,
 FrozenDescription,You joints are locked in place! Can't...move...,,,,,,
+HospitalStory1,"As you turn to leave the ward, Anna calls out to you, beckoning you to follow her.",,,,,,
+HospitalStory1,"You both walk past several private rooms filled with all kinds of patients, from the youngest kids to the oldest of the elderly, some confined to their beds, others on their feet with some assistance.
+
+""At last, some privacy."" Anna says, as she leads you into an empty room. You are surprised at how much of the commotion from the hallway is silenced in here.",,,,,,
+HospitalStory1,"Anna shuts the door behind you, then gestures for you to have a seat.
+
+""Listen,"" she begins, with a smile on her face. ""I know you could be doing a million other things, but you have chosen to spend time to help us here, and I just wanted to let you know that I appreciate you for that."" ",,,,,,
+HospitalStory1,"""Seeing your passion for helping the sick reminds me of why I started. I've wanted to be a nurse for as long as I can remember. Caring for others, providing comfort—it's been my calling. 
+
+""I come from a close-knit family. My parents and my sister, Lily, were always there for me.""",,,,,,
+HospitalStory1,She pauses for a moment.,,,,,,
+HospitalStory1,"""We had our disagreements, but they were always supportive.""",,,,,,
+HospitalStory1,"You sense there might be more to the story, but you keep silent.
+
+""Anyway,"" she continues, ""your work here has not gone unnoticed, and I would like to offer you a little reward as a token of my gratitude.""",,,,,,
+HospitalStory1,"""From now on, I will assign an assistant nurse to you whenever you volunteer here. They will aid you in your duties, which should result in taking <b>less time</b> to complete.""
+
+Before you can reply, she holds up her hand. ""No need to thank me. You have already done so much, and I can't wait to see how much more we can accomplish together!""",,,,,,
+HospitalStory1,"Anna opens the door, turns around and smiles at you, then leaves.
+
+You wonder to yourself how your overall strategy will be impacted moving forward now that you can complete hospital tasks at a quicker rate.",,,,,,
+HospitalStory2,,,,,,,
+HospitalStory3,,,,,,,
+HospitalStory4,,,,,,,
+HospitalStory5,,,,,,,

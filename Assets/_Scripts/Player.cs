@@ -308,6 +308,11 @@ public class Player : MonoBehaviour
         {
             TutorialManager.Instance.RemoveTileFromGroup();
         }
+
+        if (StatusEffects.Count > 0)
+        {
+            UI.Instance.ErrorFlash("Energy");
+        }
     }
 
     public void OnInteract(MapTile newTile, bool passTime = true)
@@ -457,6 +462,11 @@ public class Player : MonoBehaviour
         else if(Energy.Amount <= 0 && Random.Range(0,100) < 50 && (MissionManager.Instance.CurrentMission.CurrentWeek > 1 || GameManager.Instance.GameClock.Day >= 3))
         {
             StatusEffects.Add(PlayerStatusEffect.VULNERABLE);
+        }
+
+        if(StatusEffects.Count > 0)
+        {
+            UI.Instance.ErrorFlash("Energy");
         }
     }
 

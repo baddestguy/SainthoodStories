@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     public bool SceneLoaded;
 
     public int RunAttempts;
-    public int[] MaptileIndexes = new int[6] {0, 3, 9, 19, 15, 21};
+    public int[] MaptileIndexes = new int[7] {0, 3, 6, 9, 19, 15, 21};
 
     private void Awake()
     {
@@ -287,6 +287,7 @@ public class GameManager : MonoBehaviour
             case "InteractableSchool": return Player.Map.MapTiles[MaptileIndexes[2]];
             case "InteractableShelter": return Player.Map.MapTiles[MaptileIndexes[3]];
             case "InteractableKitchen": return Player.Map.MapTiles[MaptileIndexes[4]];
+            case "InteractableMarket": return Player.Map.MapTiles[MaptileIndexes[5]];
         }
 
         return null;

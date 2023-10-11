@@ -17,7 +17,7 @@ public class TooltipMouseOver : MonoBehaviour
     public void ShowToolTip()
     {
         transform.DOComplete();
-        transform.DOPunchScale(transform.localScale * 0.5f, 0.5f, elasticity: 0f);
+        transform.DOPunchScale(transform.localScale * 0.15f, 0.5f, elasticity: 0f);
         IsHovering = true;
 
         switch (HouseName) 
