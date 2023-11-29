@@ -30,7 +30,7 @@ public class EndWeekSequence : MonoBehaviour
         cashAmount += donation?.Value ?? 0;
         TreasuryManager.Instance.DonateMoney(cashAmount);
         SaintProgressBar.currentPercent = MissionManager.Instance.FaithPointsPool * 100f / GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue;
-        SaintProgressBar.endPercent = (MissionManager.Instance.FaithPointsPool + MissionManager.Instance.FaithPoints) * 100f / GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue;
+        SaintProgressBar.maxValue = (MissionManager.Instance.FaithPointsPool + MissionManager.Instance.FaithPoints) * 100f / GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue;
         var saintsUnlocked = MissionManager.Instance.UnlockSaints();
 
         BG.SetActive(true);
