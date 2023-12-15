@@ -64,7 +64,6 @@ public class GameSettings : MonoBehaviour
             musicEnabled = data.musicEnabled;
             ambianceEnabled = data.ambianceEnabled;
             TutorialToggle = data.tutorialEnabled;
-            DEMO_MODE = data.DEMO_MODE;
 
             SetVolume("Global", data.globalVolume);
             SetVolume("Music", data.musicVolume);
@@ -80,7 +79,6 @@ public class GameSettings : MonoBehaviour
             SetQuality(QualityLevel.QUALITY_SETTING_ULTRA);
             brightnessPercent = 0.5f;
             currentResolution = GetResolution($"1920x1080");
-            DEMO_MODE = true;
             sfxEnebled = true;
             musicEnabled = true;
             ambianceEnabled = true;
