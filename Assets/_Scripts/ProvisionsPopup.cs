@@ -128,5 +128,7 @@ public class ProvisionsPopup : MonoBehaviour
         CustomEventPopup.IsDisplaying = false;
         gameObject.SetActive(false);
         UI.Instance.EnableAllUIElements(true);
+        GamepadCursor.CursorSpeed = 2000f;
+
     }
 }

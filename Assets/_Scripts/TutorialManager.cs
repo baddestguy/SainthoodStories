@@ -167,11 +167,12 @@ public class TutorialManager : MonoBehaviour
                     return;
 
                 case "ProvisionsIntro":
-                    if (!TutorialStrings.Contains("Tutorial_Instruction_10"))
-                    {
-                        UI.Instance.TutorialPopupOn("Tutorial_Instruction_10");
-                        TutorialStrings.Add("Tutorial_Instruction_10");
-                    }
+                    Debug.Log("Former Provisions Tutorial");
+                    //if (!TutorialStrings.Contains("Tutorial_Instruction_10"))
+                    //{
+                    //    UI.Instance.TutorialPopupOn("Tutorial_Instruction_10");
+                    //    TutorialStrings.Add("Tutorial_Instruction_10");
+                    //}
                     return;
 
                 case "OrphanageIntro":
@@ -242,6 +243,8 @@ public class TutorialManager : MonoBehaviour
             if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 16)
             {
                 GameSettings.Instance.FTUE = false;
+                GameSettings.Instance.TutorialToggle = false;
+                GameSettings.Instance.Save();
                 SwapHospitalMapTileIndex();
             }
         }

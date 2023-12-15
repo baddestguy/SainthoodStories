@@ -145,6 +145,11 @@ public class EventsManager : MonoBehaviour
             DailyEvent = randomEvent.Id;
             AddEventToList(randomEvent.Id);
         }
+
+        if(GameSettings.Instance.DEMO_MODE && c.Day == 1)
+        {
+            StoryEvents.Add(GameDataManager.Instance.StoryEventData.Select(y => y.Value).Where(s => s.Id == "ProvisionsIntro").FirstOrDefault());
+        }
     }
 
     private void ExecuteEvent(CustomEventData e)

@@ -61,7 +61,7 @@ public class TutorialPopup : MonoBehaviour
                 Image.sprite = Resources.Load<Sprite>("Icons/Tut_11");
                 break;
         }
-
+        FindObjectOfType<GamepadCursor>().SnapToLocation(transform.Find("OK").transform.position);
     }
 
     public void Okay()
@@ -78,6 +78,7 @@ public class TutorialPopup : MonoBehaviour
         UI.Instance.TutorialPopupOff();
         TutorialManager.Instance.ShowTutorialArrow();
         Text.pageToDisplay = 1;
+        GamepadCursor.CursorSpeed = 2000f;
         EventSystem.current.SetSelectedGameObject(null);
     }
 }

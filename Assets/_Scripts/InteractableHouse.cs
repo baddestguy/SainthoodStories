@@ -18,6 +18,7 @@ public class InteractableHouse : InteractableObject
     public int VolunteerPoints;
     public int DeadlineDeliveryBonus;
     public bool DeadlineSet;
+    public bool DeadlineTriggeredForTheDay;
     public int RequiredItems;
     public int DeadlinePercentChance;
 
@@ -77,6 +78,8 @@ public class InteractableHouse : InteractableObject
     public int EnvironmentalHazardDestructionChance = 10;
     public int EnvironmentalHazardDestructionCountdown = -1;
     public bool HasBeenDestroyed;
+
+    protected List<CustomEventType> MyStoryEvents = new List<CustomEventType>();
 
     protected virtual void Start()
     {
@@ -148,7 +151,6 @@ public class InteractableHouse : InteractableObject
             PopUIFX.gameObject.SetActive(false);
         }
 
-        HazardCounter = 0;
         MyMissions = GameDataManager.Instance.GetBuildingMissionData(GetType().Name);
 
         var tile = GameManager.Instance.GetNextRandomMapTile(GetType().Name);
@@ -191,6 +193,7 @@ public class InteractableHouse : InteractableObject
             DeadlineTime.SetClock(-1, day);
             DeadlineDeliveryBonus = 1;
             DeadlineSet = false;
+            DeadlineTriggeredForTheDay = false;
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
@@ -317,7 +320,7 @@ public class InteractableHouse : InteractableObject
         if (time >= 21) return;
 
         BuildingState = BuildingState.HAZARDOUS;
-        EnvironmentalHazardDestructionCountdown = 8;
+        EnvironmentalHazardDestructionCountdown = 13;
         HazardCounter++;
 
         DeadlineTime.SetClock(-1, day);
@@ -338,13 +341,15 @@ public class InteractableHouse : InteractableObject
 
     protected virtual void TryZoom(float zoom)
     {
-        if (CustomEventPopup.IsDisplaying) return;
+        if (EventsManager.Instance.EventInProgress || CustomEventPopup.IsDisplaying) return;
         StartCoroutine("TryZoomAsync", zoom);
     }
 
     public static bool Zooming;
     IEnumerator TryZoomAsync(float zoom) 
     {
+        if (GameSettings.Instance.FTUE && TutorialManager.Instance.CurrentTutorialStep < 2) yield break;
+
         InfoPopup.gameObject.SetActive(false);
         RubbleInfoPopup.gameObject.SetActive(false);
         if (!CameraLockOnMe || Zooming)
@@ -405,8 +410,9 @@ public class InteractableHouse : InteractableObject
     public virtual void SetDeadlineTime(double time, int day)
     {
         if (BuildingState != BuildingState.NORMAL) return;
-        if (time >= 19 || time < 6) return;
+        if (time >= 17 || time < 6) return;
         if ((DeadlineTime.Time != -1)) return;
+        if (DeadlineTriggeredForTheDay) return;
 
         switch (MissionDifficulty)
         {
@@ -429,6 +435,7 @@ public class InteractableHouse : InteractableObject
 
                         DeadlineDeliveryBonus = 1;
                         DeadlineSet = true;
+                        DeadlineTriggeredForTheDay = true;
                         PopMyIcon();
                         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
@@ -544,6 +551,12 @@ public class InteractableHouse : InteractableObject
         }
     }
 
+    public virtual void TriggerStory()
+    {
+        if (HasBeenDestroyed) return;
+
+    }
+
     public virtual void ItemDeliveryThanks()
     {
     }
@@ -613,7 +626,7 @@ public class InteractableHouse : InteractableObject
             var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
             player.ConsumeEnergy(EnergyConsumption);
             var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
-            var moddedCPReward = extraPoints + tents?.Value ?? 0;
+            var moddedCPReward = extraPoints + (tents?.Value ?? 0);
             UpdateCharityPoints(1 + moddedCPReward, moddedEnergy);
 
             var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
@@ -628,6 +641,7 @@ public class InteractableHouse : InteractableObject
             CurrentSturdyMaterials = SturdyMaterials;
             UI.Instance.SideNotificationPop(GetType().Name);
             InsideHouse = true;
+            GamepadCursor.CursorSpeed = 2000f;
         }
         else
         {
@@ -723,7 +737,7 @@ public class InteractableHouse : InteractableObject
     {
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_MORALE || i.Id == CustomEventType.LOW_MORALE);
         int charityMultiplier = 1;
-        if (e != null && BuildingState != BuildingState.HAZARDOUS)
+        if (e != null && BuildingState != BuildingState.HAZARDOUS && amount > 0)
         {
             if (Random.Range(0, 100) < 20)
             {
@@ -914,7 +928,7 @@ public class InteractableHouse : InteractableObject
         InfoPopup.gameObject.SetActive(false);
         RubbleInfoPopup.gameObject.SetActive(false);
 
-        if (BuildingState == BuildingState.RUBBLE && InsideHouse)
+        if (CameraLockOnMe && BuildingState == BuildingState.RUBBLE && InsideHouse)
         {
             PopUICallback("EXIT");
         }
@@ -998,7 +1012,6 @@ public class InteractableHouse : InteractableObject
         BuildingState = BuildingState.NORMAL;
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name + GetHazardIcon());
-        HazardCounter = 0;
     }
 
     public virtual void ResetActionProgress()
@@ -1041,7 +1054,7 @@ public class InteractableHouse : InteractableObject
         {
             return 2;
         }
-        else if (RelationshipPoints >= 10)
+        else if (RelationshipPoints >= 5) //ONLY FOR THE DEMO!
         {
             return 3;
         }
@@ -1049,6 +1062,24 @@ public class InteractableHouse : InteractableObject
         {
             return 4;
         }
+    }
+
+    public int GetNextRPMilestone()
+    {
+        if (RelationshipPoints >= 65)
+        {
+            return 100;
+        }
+        else if (RelationshipPoints >= 30)
+        {
+            return 65;
+        }
+        else if (RelationshipPoints >= 10)
+        {
+            return 30;
+        }
+
+        return 10;
     }
 
     public virtual void BuildRelationship(ThankYouType thanks, int amount = 1)
@@ -1107,7 +1138,7 @@ public class InteractableHouse : InteractableObject
             MoneyThanks();
             TreasuryManager.Instance.DonateMoney(Random.Range(1, 2));
         }
-
+        TriggerStory();
         SaveDataManager.Instance.SaveGame();
     }
 
@@ -1201,7 +1232,7 @@ public class InteractableHouse : InteractableObject
         if (!InfoPopup.gameObject.activeSelf)
         {
             BuildingGo.transform.DOComplete();
-            BuildingGo.transform.DOPunchScale(transform.localScale * 0.5f, 0.5f, elasticity: 0f);
+            BuildingGo.transform.DOPunchScale(transform.localScale * 0.15f, 0.5f, elasticity: 0f);
         }
         if (BuildingState == BuildingState.RUBBLE)
         {
@@ -1276,7 +1307,7 @@ public class InteractableHouse : InteractableObject
         var data = GameManager.Instance.SaveData.Houses?.Where(h => h.HouseName == GetType().Name).FirstOrDefault();
         if (data == null)
         {
-            if (GetType().Name == "InteractableChurch" || GetType().Name == "InteractableMarket")
+            if ((GameSettings.Instance.DEMO_MODE && !GameSettings.Instance.FTUE && GetType().Name != "InteractableClothesBank") || GetType().Name == "InteractableChurch" || GetType().Name == "InteractableMarket")
             {
                 BuildingState = BuildingState.NORMAL;
             }
@@ -1288,7 +1319,14 @@ public class InteractableHouse : InteractableObject
             return data;
         }
 
-        BuildingState = data.BuildingState;
+        if (GameSettings.Instance.DEMO_MODE && !GameSettings.Instance.FTUE && GameManager.Instance.GameClock.Day == 1 && GameManager.Instance.GameClock.Time == 6 && GetType().Name != "InteractableClothesBank")
+        {
+            BuildingState = BuildingState.NORMAL;
+        }
+        else
+        {
+            BuildingState = data.BuildingState;
+        }
         FPBonus = data.FPBonus;
         RelationshipBonus = data.RelationshipBonus;
         RelationshipPoints = data.RelationshipPoints;
@@ -1300,6 +1338,8 @@ public class InteractableHouse : InteractableObject
         EnvironmentalHazardDestructionCountdown = data.EnvironmentalHazardDestructionCountdown;
         HazardCounter = data.HazardCounter;
         HasBeenDestroyed = data.HasBeenDestroyed;
+        DeadlineTriggeredForTheDay = data.DeadlineTriggeredForTheDay;
+        MyStoryEvents = data.MyStoryEvents;
 
         return data;
     }
@@ -1318,10 +1358,12 @@ public class InteractableHouse : InteractableObject
             DeadlineCounter = DeadlineCounter,
             DeadlineTime = DeadlineTime.Time,
             DeadlineDay = DeadlineTime.Day,
+            DeadlineTriggeredForTheDay = DeadlineTriggeredForTheDay,
             RequiredItems = RequiredItems,
             EnvironmentalHazardDestructionCountdown = EnvironmentalHazardDestructionCountdown,
             HazardCounter = HazardCounter,
-            HasBeenDestroyed = HasBeenDestroyed
+            HasBeenDestroyed = HasBeenDestroyed,
+            MyStoryEvents = MyStoryEvents
         };
     }
 

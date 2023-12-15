@@ -17,13 +17,13 @@ public class GamepadCursor : MonoBehaviour
     private bool HasInitialized;
    
     [SerializeField]
-    private PlayerInput PlayerInput;
+    public PlayerInput PlayerInput;
 
     [SerializeField]
     private RectTransform CursorTransform;
 
     [SerializeField]
-    private float CursorSpeed = 1000;
+    public static float CursorSpeed = 2000;
 
     [SerializeField]
     private RectTransform CanvasRectTransform;
@@ -44,7 +44,7 @@ public class GamepadCursor : MonoBehaviour
 
         if (CursorTransform != null)
         {
-            Vector2 position = CursorTransform.anchoredPosition;
+            Vector2 position = new Vector2(Screen.width/2, Screen.height/2);
             InputState.Change(VirtualMouse.position, position);
         }
 
@@ -88,6 +88,7 @@ public class GamepadCursor : MonoBehaviour
             InputState.Change(VirtualMouse.position, CurrentMouse.position.ReadValue());
             AnchorCursor(CurrentMouse.position.ReadValue());
             PreviousControlScheme = GamepadScheme;
+            TooltipMouseOver.OnHover?.Invoke();
         }
     }
 
@@ -157,11 +158,16 @@ public class GamepadCursor : MonoBehaviour
             var mapTile = hit.transform.GetComponent<MapTile>();
             if(mapTile != null && mapTile != PreviousHitMapTile)
             {
-                PreviousHitMapTile?.HoverExit();
+            //    PreviousHitMapTile?.HoverExit();
+                TooltipMouseOver.OnHover?.Invoke();
                 mapTile.Hover();
                 PreviousHitMapTile = mapTile;
             }
-         //  Debug.Log("hit: " + hit.transform.name);
+            //  Debug.Log("hit: " + hit.transform.name);
+        }
+        else
+        {
+            TooltipMouseOver.OnHover?.Invoke();
         }
 
     }
@@ -193,5 +199,17 @@ public class GamepadCursor : MonoBehaviour
             var scrollDirection = (Vector2)ctx.control.ReadValueAsObject();
             GameControlsManager.TryZoom?.Invoke(scrollDirection.y);
         }
+    }
+
+    public void SnapToLocation(Vector2 newPosition)
+    {
+        var screenPosition = UI.Instance.GetComponent<Canvas>().worldCamera.WorldToScreenPoint(newPosition);
+        InputState.Change(VirtualMouse.position, screenPosition);
+#if UNITY_EDITOR
+#else
+        screenPosition.Set(Screen.width, Screen.height, screenPosition.z);
+#endif
+        Debug.Log(screenPosition);
+    //    CurrentMouse.WarpCursorPosition(screenPosition);
     }
 }

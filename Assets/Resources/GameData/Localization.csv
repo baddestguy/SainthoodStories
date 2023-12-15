@@ -18,8 +18,8 @@ Tutorial_4,"Looking at the time, you notice you could make Liturgy of the Hours 
 You head out immediately.",,,,,,
 Tutorial_5,"""Good, I'm glad you could join us for this."" the Prioress says, and for a split second you imagine the slightest crack of a smile on the corner of her lips.
 
-""Your services will always be required by the community, and you will do well to serve them. But, you must also make time for the Lord of Light.""",,,,,,
-Tutorial_5,"""Keeping this balance between your service to your community, and your prayers to the Lord of Light is the path to Sainthood.""
+""Your services will always be required by the community, and you will do well to serve them. But, you must also make time for the Lord.""",,,,,,
+Tutorial_5,"""Keeping this balance between your service to your community, and your prayers to the Lord is the path to Sainthood.""
 
 She ushers you into the chapel to begin the Liturgy.",,,,,,
 Tutorial_6,"""You better get going,"" the Prioress says, ""The hospital needs you.""",,,,,,
@@ -37,14 +37,12 @@ Tutorial_9,"One of the novices wakes you up. ""Someone at the door to see you.""
 Tutorial_10,"Postman Spazz stops by as he usually does, without regard for time.
 
 ""You're needed immediately at the hospital, a woman has gone into labor and there seems to be complications with the pregnancy. Please come quickly!""",,,,,,
-Endgame,"Thank you for playing the Sainthood Demo!
-
-There are 3 saints to unlock in total, so try and get them all!",,,,,,
+Endgame,Thank you for playing the Sainthood Demo!,,,,,,
 Endgame,"This demo is a continuous work in progress, so there may be issues, tweaks and changes to the game and its systems.",,,,,,
 Endgame,"Your feedback is very important. Please let me know what you think! 
 
 Send me your comments on Discord with the invite link on the Main Menu.",,,,,,
-Endgame,Have fun!,,,,,,
+Endgame,"There are over 20 Provisions to experiment with, so try different combinations!",,,,,,
 HeatwaveIntro,"Out in the fields, a woman in a trenchcoat holds a strange vial containing black liquid. As you approach her, you notice a label on her trenchcoat reads: ""Christie the Weather-Lady"".",,,,,,
 HeatwaveIntro,"""Temperatures are skyrocketing, a heatwave must be incoming."" she says, eyes laser focused on the device. ""You may get a sunburn traversing the fields during a heatwave.""",,,,,,
 HeatwaveIntro,"""If I were you, I would plan ahead and try to stay indoors as much as possible."" she concludes, and begins taking notes in her little notebook.",,,,,,
@@ -57,6 +55,7 @@ RainIntro,"You look with awe as the instrument works its magic, increasing in ve
 BlizzardIntro,"Out in the snowy fields, Christie the Weather-Lady is tinkering with another of her strange devices.",,,,,,
 BlizzardIntro,"""I detect a blizzard is on its way."" she begins with a worried look on her face. ""There's a high chance you could Freeze if you are caught out in the storm. If you do not have a Winter Cloak, please stay indoors.""",,,,,,
 ProvisionsIntro,"Postman Spazz stops by with a large duffel bag. ""I've got provisions for you ma'am. You get to choose only one though, as we have to share with the community, so pick wisely.""",,,,,,
+ProvisionsIntro,Provisions always appear first thing in the morning. Use these strategically in your spiritual and charitable quest!,,,,,,
 OrphanageIntro,"Eltee walks up and taps you on the shoulder. ""Guess what? We just got approved to finish up the Orphanage! Of course ya know we can't do it without ya, so come on down when ya got a moment to spare us will ya?""",,,,,,
 Event_MarketHours_24,"The Town Crier announces: ""Good News! The shop will be open for 24 hours!""",,,,,,
 Event_MarketHours_24,"The Town Crier announces: ""I just heard that the shop will be open for the next 24 hours!""",,,,,,
@@ -87,8 +86,8 @@ Event_HighSpirit,"As the Town Crier makes his announcement, you are suddenly fil
 Event_LowSpirit,"As the Town Crier makes his announcement, you wake up with a gloom feeling of existential dread. It seems at times as if praying has no effect on Faith Points.",,,,,,
 Event_HighMorale,"The Town Crier announces: ""Everyone seems to be in high spirits today! Charitable actions might get you an extra smile or two!""",,,,,,
 Event_LowMorale,"The Town Crier announces: ""Everyone is in a bad mood today, including myself! Don't expect any smiles from anyone!""",,,,,,
-Event_OrphanageBonus,"The Town Crier announces: ""Special event happening at the Orphanage today, please *Volunteer* and help out if you can!""",,,,,,
-Event_HospitalBonus,"The Town Crier announces: ""The hospital needs some extra helping hands today, please *Volunteer* and help out if you can!""",,,,,,
+Event_OrphanageBonus,"The Town Crier announces: ""Special event happening at the Orphanage today, please <b>Volunteer</b> and help out if you can!""",,,,,,
+Event_HospitalBonus,"The Town Crier announces: ""The hospital needs some extra helping hands today, please <b>Volunteer</b> and help out if you can!""",,,,,,
 Event_Vandalism,"The Town Crier announces: ""The Convent Treasury has been robbed! The thieves escaped with a bit of money!""",,,,,,
 Event_SpiritualRetreat,"One of the other novices runs up to you. ""We are having a little spiritual retreat and would love for you to join us.""",,,,,,
 Event_PrayerRequest,"One of the patients catches up to you. ""Would you please pray for my boy, he's not feeling so well.""",,,,,,
@@ -150,7 +149,7 @@ Provision_SecurityGuardsDescription,Hire a security man to prevent robbers from 
 Event_Donation,Someone left a package at the Convent doors. You open it to reveal an anonymous donation!,,,,,,
 Event_IconUnlock,You received a Spiritual Revelation!,,,,,,
 Event_Endgame,"Your time in Purgatorio has come to an end. The people gather around you, chanting prayers in a circle as you commit your spirit to the Great Ascension.",,,,,,
-Event_Endgame,"Your spirit rises to the heavens, and the Lord of Light welcomes you into the Grand Palace, where the music and dancing never stops, and the joy and laughter never ends.",,,,,,
+Event_Endgame,"Your spirit rises to the heavens, and the Lord welcomes you into the Grand Palace, where the music and dancing never stops, and the joy and laughter never ends.",,,,,,
 Event_SpiritualCrisis,"Your Faith Points dropped to zero.
 
 Your heart fills with a deep sense of dread, it feels like all is lost, and there is no hope.",,,,,,
@@ -161,7 +160,7 @@ Event_ThankYouItemHospital,"""Thank you so much for the medical items! We really
 Event_ThankYouItemHospital,"""You are much too kind. Thank you so much for this."" Anna says, smiling from ear to ear.",,,,,,
 Event_ThankYouItemHospital,"""Oh, you are such a dear. Thank you."" Anna says as she collects the items.",,,,,,
 Event_ThankYouItemHospital,"""Bless your heart."" Anna says, receiving the supplies.",,,,,,
-Event_ThankYouItemHospital,"""You have saved a life today, may the Lord of Light never forget you."" Anna says with tears in her eyes.",,,,,,
+Event_ThankYouItemHospital,"""You have saved a life today, may the Lord never forget you."" Anna says with tears in her eyes.",,,,,,
 Event_ThankYouItemSchool,"""Ahem!"" Gabriel clears his throat, ""Thank you for the textbooks, we can distribute more to the kids to study!""",,,,,,
 Event_ThankYouItemSchool,"""Ahem!"" Gabriel begins, ""I really appreciate your efforts with this, thank you.""",,,,,,
 Event_ThankYouItemSchool,"""Ahem! Thank you, these supplies will go a long way in helping the kids."" Gabriel says.",,,,,,
@@ -210,9 +209,15 @@ Event_ThankYouTeach,You notice some true gifts of the children in Fine Arts clas
 Event_ThankYouTeach,The kids are a bit restless as you try to teach them Languages.,,,,,,
 Event_ThankYouTeach,Science is always a pleasure for both you and the kids as they love to experiment and try things out.,,,,,,
 Event_ThankYouVolunteerHospital,"An older man walks up to you at the ward. ""Thank you so much for all you do here,"" he says with a smile, tears in his eyes, ""it means so much to me and my family.""",,,,,,
-Event_ThankYouVolunteerHospital,"""I don't have much time left,"" the old lady begins, ""But the time I have spent with you makes it all worth it.""",,,,,,
+Event_ThankYouVolunteerHospital,"You spend time comforting an elderly woman on life support. 
+
+""I don't have much time left,"" the old lady begins, ""But the time I have spent with you makes it all worth it.""",,,,,,
 Event_ThankYouVolunteerHospital,You always enjoy hearing the tales of the retired soldier of his days in the war.,,,,,,
-Event_ThankYouVolunteerHospital,"""Thank you so much for helping my boy,"" a woman says, placing your hands in hers. ""It means so much to him.""",,,,,,
+Event_ThankYouVolunteerHospital,"You spend time caring for a boy who broke his arm.
+
+""Thank you so much for helping my boy,"" his father says, placing your hands in his. ""It means so much to him. Ever since his mother passed, he...""
+
+The man cannot bring himself to finish the words.",,,,,,
 Event_ThankYouVolunteerHospital,"""Your work here is very much appreciated,"" another nurse says, smiling. ""We truly could not manage without you.""",,,,,,
 Event_ThankYouVolunteerHospital,"You help around with the backlog of registration and accounting paperwork, certainly no easy task.",,,,,,
 Event_ThankYouVolunteerOrphanage,"A little girl catches up with you in the hallway. ""Thank you for being like a mommy to me."" she says, and hands you a little teddy.",,,,,,
@@ -384,7 +389,9 @@ Tooltip_ExitBuilding,"*Click*
 Go outside.",,,,,,
 Tooltip_SaintsCollection,"*Click*
 Saints Collection.",,,,,,
-SideNotificationTooltip_Rubble,Help to construct this building before midnight!,,,,,,
+SideNotificationTooltip_Rubble,"Help to construct this building before midnight!
+
+Otherwise, game over!",,,,,,
 SideNotificationTooltip_Hazard,Rush to their aid quickly to prevent the building's destruction!,,,,,,
 SideNotificationTooltip_InteractableChurch,"This is the <color=""green"">Start Time<color=""white""> for the next Liturgy. If you join after the start time, you won't lose FP, but you won't gain FP either.",,,,,,
 SideNotificationTooltip_InteractableMarket,This is the market.,,,,,,
@@ -394,15 +401,16 @@ SideNotificationTooltip_Baby2,Go to the hospital and help with delivering a baby
 SideNotificationTooltip_InteractableSchool,"Purchase Books from the Shop and deliver to the school before this <color=""red"">deadline.",,,,,,
 SideNotificationTooltip_InteractableOrphanage,"Purchase Toys from the Shop and deliver to the orphanage before this <color=""red"">deadline.",,,,,,
 SideNotificationTooltip_InteractableKitchen,"Purchase Food from the Shop and deliver to the kitchen before this <color=""red"">deadline.",,,,,,
-SideNotificationTooltip_InteractableShelter,"Purchase Food from the Shop and deliver to the Shelter before this <color=""red"">deadline.
+SideNotificationTooltip_InteractableShelter,"Purchase Food from the Shop and deliver to the Shelter before this <color=""red"">deadline.<color=""white"">
 
-Alternatively, you can cook food at the Kitchen before delivering to the Shelter for bonus CP!",,,,,,
+Alternatively, you can <color=""green"">cook food<color=""white""> at the Kitchen before delivering to the Shelter for <color=""green"">bonus CP!",,,,,,
 InventoryTooltip_GROCERIES,Groceries to be delivered to the Shelter.,,,,,,
 InventoryTooltip_CLOTHES,Clothes to be delivered to the Clothes Bank.,,,,,,
 InventoryTooltip_TOYS,Toys to be delivered to the Orphanage.,,,,,,
 InventoryTooltip_STATIONERY,Books to be delivered to the School.,,,,,,
 InventoryTooltip_MEDS,Meds to be delivered to the Hospital.,,,,,,
 InventoryTooltip_MEAL,A deliciously cooked meal to be delivered to the Shelter.,,,,,,
+Tooltip_RP,"Take <color=""green"">less time<color=""white""> to volunteer at this building with every relationship milestone.",,,,,,
 Tutorial_Instruction_1,"Release the button when the two circles overlap for a <b>CRITICAL HIT.</b>
 
 Landing all Critical Hits for an Activity results in various bonuses, so try to get as many Critical Hits as you can! ",,,,,,
@@ -411,7 +419,7 @@ Tutorial_Instruction_2,"Stepping through each tile takes 0.5 hrs.
 Zoom with the Scroll Wheel on the mouse or Up/Down on the D-pad.",,,,,,
 Tutorial_Instruction_3,"Charitable activites like building construction, delivering items, and volunteering increase your Charity Points (CP).
 
-If your CP falls to zero by midnight. It is Game Over.",,,,,,
+If your CP falls to zero or below by midnight. It is Game Over.",,,,,,
 Tutorial_Instruction_4,"Side Notifications pop up to always remind you of the next Liturgy of the Hours and all upcoming building deadlines.
 
 Convent activities display their Start Times, while other buildings display their Deadlines.",,,,,,
@@ -429,7 +437,7 @@ Tutorial_Instruction_8,"When a building is ready to be constructed, the Construc
 If you have any unconstructed buildings by midnight, you will lose all Charity Points (CP).",,,,,,
 Tutorial_Instruction_Rainfall,"Severe weather conditions may cause damage to the structural integrity of a building, leading to its destruction. 
 
-Saving these buildings are your highest priority, as you will lose all RP if a building is destroyed.",,,,,,
+You will lose all Relationship Progress if a building is destroyed, so hurry to their aid!",,,,,,
 Tutorial_Instruction_Blizzard,"Stepping outside during a Blizzard will increase the chance of <b>Freezing</b>. If you are frozen, you will be unable to move, and must tap on your avatar repeatedly to break out of the snow. 
 
 Time and Energy are consumed with each tap.",,,,,,
@@ -477,7 +485,7 @@ VandalismStopped,"The Town Crier announces: ""There was a robbery attempt at the
 SaveHospital,"""The basement is flooded! Please help or we could lose the building!""",,,,,,
 SaveSchool,"""The foundation is cracked. Please help with repairs or the whole building could collapse!""",,,,,,
 SaveOrphanage,"""We're in big trouble, the harsh weather has severly damaged the roof and it's about to cave in! Please get up there quickly!""",,,,,,
-SaveKitchen,"""The weather damaged out stoves and set the place on fire, please help us or we will lose the building!""",,,,,,
+SaveKitchen,"""The weather damaged our stoves and set the place on fire, please help us or we will lose the building!""",,,,,,
 SaveShelter,"""This unrelenting weather has damaged the internal structure of the building, we're gonna need some major help with fixes!""",,,,,,
 ANDREW_Bio,"Andrew Kim Taegon was the first Korean priest and patron saint of Korean clergy. Kim's father was martyred for practising Christianity, which was highly prohibited in a heavily Confucian Korea.
 
@@ -608,3 +616,28 @@ SickDescription,You have come down with a terrible virus,,,,,,
 VulnerableDescription,Try to rest or you might get hit with multiple ailments!,,,,,,
 MigraineDescription,Your head pounds with increasing intensity. It might soon reach a fever pitch,,,,,,
 FrozenDescription,You joints are locked in place! Can't...move...,,,,,,
+HospitalStory1,"As you turn to leave the ward, Anna calls out to you, beckoning you to follow her.",,,,,,
+HospitalStory1,"You both walk past several private rooms filled with all kinds of patients, from the youngest kids to the oldest of the elderly, some confined to their beds, others on their feet with some assistance.
+
+""At last, some privacy."" Anna says, as she leads you into an empty room. You are surprised at how much of the commotion from the hallway is silenced in here.",,,,,,
+HospitalStory1,"Anna shuts the door behind you, then gestures for you to have a seat.
+
+""Listen,"" she begins, with a smile on her face. ""I know you could be doing a million other things, but you have chosen to spend time to help us here, and I just wanted to let you know that I appreciate you for that."" ",,,,,,
+HospitalStory1,"""Seeing your passion for helping the sick reminds me of why I started. I've wanted to be a nurse for as long as I can remember. Caring for others, providing comfort—it's been my calling. 
+
+""I come from a close-knit family. My parents and my sister, Lily, were always there for me.""",,,,,,
+HospitalStory1,She pauses for a moment.,,,,,,
+HospitalStory1,"""We had our disagreements, but they were always supportive.""",,,,,,
+HospitalStory1,"You sense there might be more to the story, but you keep silent.
+
+""Anyway,"" she continues, ""your work here has not gone unnoticed, and I would like to offer you a little reward as a token of my gratitude.""",,,,,,
+HospitalStory1,"""From now on, I will assign an assistant nurse to you whenever you volunteer here. They will aid you in your duties, which should result in taking <b>less time</b> to complete.""
+
+Before you can reply, she holds up her hand. ""No need to thank me. You have already done so much, and I can't wait to see how much more we can accomplish together!""",,,,,,
+HospitalStory1,"Anna opens the door, turns around and smiles at you, then leaves.
+
+You wonder to yourself how your overall strategy will be impacted moving forward now that you can complete hospital tasks at a quicker rate.",,,,,,
+HospitalStory2,,,,,,,
+HospitalStory3,,,,,,,
+HospitalStory4,,,,,,,
+HospitalStory5,,,,,,,

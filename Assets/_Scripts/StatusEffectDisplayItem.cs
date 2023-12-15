@@ -18,7 +18,7 @@ public class StatusEffectDisplayItem : MonoBehaviour
 
         StatusEffectName.text = LocalizationManager.Instance.GetText(StatusEffectData.NameKey);
         StatusEffectDescription.text = LocalizationManager.Instance.GetText(StatusEffectData.DescriptionKey);
-        StatusEffectIcon.sprite = Resources.Load<Sprite>($"Icons/{StatusEffectData.Id}");
+        StatusEffectIcon.sprite = Resources.Load<Sprite>($"Icons/Ailment");
 
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
         mouseOverBtn.Loc_Key = $"<b>{LocalizationManager.Instance.GetText(StatusEffectData.NameKey)}</b>\n{LocalizationManager.Instance.GetText(StatusEffectData.DescriptionKey)}\n\n<i>{StatusEffectData.Tooltips}";

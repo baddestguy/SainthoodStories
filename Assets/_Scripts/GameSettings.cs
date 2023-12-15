@@ -15,6 +15,7 @@ public class GameSettings : MonoBehaviour
     public bool TutorialToggle;
     public bool SkipSplashScreens;
     public bool IgnoreHouseBuildingAtEndofDay;
+    public bool DEMO_MODE;
 
     [HideInInspector] public bool fullScreenMode;
     [HideInInspector] public QualityLevel currentQualityLevel;
@@ -74,17 +75,16 @@ public class GameSettings : MonoBehaviour
         }
         else
         {
-            fullScreenMode = false;
+            fullScreenMode = true;
             SetQuality(QualityLevel.QUALITY_SETTING_ULTRA);
             brightnessPercent = 0.5f;
-            currentResolution = GetResolution($"{Screen.currentResolution.width}x{Screen.currentResolution.height}");
-
+            currentResolution = GetResolution($"1920x1080");
             sfxEnebled = true;
             musicEnabled = true;
             ambianceEnabled = true;
             SetVolume("Global", 1);
             SetVolume("Music", 1);
-            SetVolume("SFX", 1);
+            SetVolume("SFX", 0.85f);
             SetVolume("Ambiance", 1);
 
             SetLanguage(Language.ENGLISH);
@@ -115,7 +115,8 @@ public class GameSettings : MonoBehaviour
             musicVolume = musicVolume,
             ambianceVolume = ambianceVolume,
             tutorialEnabled = !TutorialManager.Instance.SkipTutorial,
-            
+            DEMO_MODE = DEMO_MODE,
+
             //Language
             language = currentLanguage
         };

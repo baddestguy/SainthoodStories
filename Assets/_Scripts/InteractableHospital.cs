@@ -82,14 +82,14 @@ public class InteractableHospital : InteractableHouse
                     var extraPoints = 0;
                     if (PopUI.CriticalHitCount == MaxDeliveryPoints) extraPoints = 1;
 
-                    UpdateCharityPoints((BabyPoints + (e != null ? (int)e.Gain : 0)) + extraPoints, moddedEnergy);
+                    UpdateCharityPoints(BabyPoints + (e != null ? (int)e.Gain : 0) + extraPoints, moddedEnergy);
                     PopIcon.gameObject.SetActive(false);
                     UI.Instance.SideNotificationPop(GetType().Name);
                     DeadlineCounter--;
                     DeliveryTimeSet = false;
                     DeliveryCountdown = 0;
                     EndDelivery.SetClock(clock.Time - 1, clock.Day);
-                    BuildRelationship(ThankYouType.BABY);
+                    BuildRelationship(ThankYouType.BABY, 2);
                     OnActionProgress?.Invoke(1f, this, 2);
                 }
             }
@@ -178,6 +178,29 @@ public class InteractableHospital : InteractableHouse
                 UI.Instance.DisplayMessage($"FAILED TO DELIVER BABY!");
                 SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
             }
+        }
+    }
+
+    public override void TriggerStory()
+    {
+        if (HasBeenDestroyed) return;
+
+        //These values are temporary just for the DEMO!!
+
+        if (RelationshipPoints >= 65 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_3))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_3);
+            MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_3);
+        }
+        else if (RelationshipPoints >= 30 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_2))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_2);
+            MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_2);
+        }
+        else if (RelationshipPoints >= 5 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_1))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_1);
+            MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_1);
         }
     }
 

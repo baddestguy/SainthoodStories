@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     public bool SceneLoaded;
 
     public int RunAttempts;
-    public int[] MaptileIndexes = new int[6] {0, 3, 9, 19, 15, 21};
+    public int[] MaptileIndexes = new int[7] {0, 3, 6, 9, 19, 15, 21};
 
     private void Awake()
     {
@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
             {
                 if (Player.OnEnergyDepleted)
                     UI.Instance.ShowWeekBeginText(LocalizationManager.Instance.GetText("WeekIntroEnergyDepleted"));
-                else if (PreviousSceneID == SceneID.MainMenu)
+                else if (PreviousSceneID == SceneID.MainMenu || (GameClock.Day == 1 && PreviousSceneID != SceneID.SaintsShowcase_Day))
                     UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText(CurrentMission.SeasonLevel.Replace("Level", "_Splash"))}");
                 else
                     UI.Instance.ShowDayBeginText("");
@@ -155,6 +155,8 @@ public class GameManager : MonoBehaviour
         }
         else if (scene.name.Contains("MainMenu"))
         {
+            GamepadCursor.CursorSpeed = 2000f;
+
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.MainMenu;
             SaveDataManager.Instance.LoadGame((data, newGame) => {
@@ -260,6 +262,11 @@ public class GameManager : MonoBehaviour
                     }
                     else
                     {
+                        if (GameSettings.Instance.DEMO_MODE)
+                        {
+                            CurrentMission.OverrideSeason(Season.FALL);
+                        }
+
                         StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
                     }
 
@@ -280,6 +287,7 @@ public class GameManager : MonoBehaviour
             case "InteractableSchool": return Player.Map.MapTiles[MaptileIndexes[2]];
             case "InteractableShelter": return Player.Map.MapTiles[MaptileIndexes[3]];
             case "InteractableKitchen": return Player.Map.MapTiles[MaptileIndexes[4]];
+            case "InteractableMarket": return Player.Map.MapTiles[MaptileIndexes[5]];
         }
 
         return null;
