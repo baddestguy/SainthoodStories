@@ -1,6 +1,6 @@
 ## How To Deploy to local xbox
 
-### Create UWP Pacakge
+### 1. Prepare Game For deployment
 1. Build Settings -> Player Settings
     1. Update Version here
         1. Note that this will not affect the version when creating the final UWP package in Visual Studio but that version should match what is set here for consistency.
@@ -8,6 +8,11 @@
     1. In my case that is `C:\Users\lytai\Repos\Sainthood-Builds\3`
         1. Where the `3` at the end is typically incremented to separate builds. In theory, I could also use the version number from above to keep things consistent.
 1. Open the `Sainthood.sln` file in visual studio
+    1. To Deploy to xbox see [here](#2a-create-uwp-package)
+    2. To run it locally see [here](#2b-run-uwp-locally)
+
+
+### 2a. Create UWP Package
 1. Right click on **Universal Windows** project and select publish -> Create App Package
     1. Sideloading is the method that will be used
 1. Select *Yes, use the current certificate*
@@ -17,7 +22,7 @@
 1. Disable all architectures but x64. 
 1. Click Create
 
-### Deploy UWP Package to Xbox
+### 3a. Deploy UWP Package to Xbox
 1. I'm going to assume your xbox is already in dev mode. If not, look it up.
 1. Get the remote access url
     1. If you set up a username and password in the remote access settings, well you're gonna need them. Or you can easily change it on the xbox if you can't remember it.
@@ -29,3 +34,10 @@
 1. Select the `.appx` file that's listed there and select next
 1. For dependencies, navigate to the `x64` dependency directory and upload all files that are there `C:\Users\lytai\Repos\Sainthood-Builds\3\AppPackages\Sainthood\Sainthood_2.0.5.0_x64_Debug_Test\Dependencies\x64`
 1. Click next. Hopefully it all works
+
+### 2b. Run UWP Locally
+1. Set Target machine to `Local Machine`
+1. Set Configuratino to `Master`
+1. Set platform to `x64
+1. Clean Solution
+1. Run
