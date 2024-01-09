@@ -73,9 +73,26 @@ public class PauseMenu : MonoBehaviour
             if (!GameManager.Instance.InGameSession)
             {
                 PauseToggleObj.SetActive(false);
-                ToggleGraphics();
-                var graphicsToggle = MenuToggleGroup.transform.Find("Graphics").GetComponent<Toggle>();
-                graphicsToggle.isOn = true;
+
+                var graphicsToggleTransform = MenuToggleGroup.transform.Find("Graphics");
+
+                if (GameSettings.Instance.IsXboxMode)
+                {
+                    //We don't allow changes to graphics settings when running in xbox mode.
+                    graphicsToggleTransform.gameObject.SetActive(false);
+
+                    ToggleSound();
+                    var soundToggleTransform = MenuToggleGroup.transform.Find("SoundTab");
+                    soundToggleTransform.localPosition = new Vector3(graphicsToggleTransform.localPosition.x, soundToggleTransform.localPosition.y);
+                    var soundToggle = soundToggleTransform.GetComponent<Toggle>();
+                    soundToggle.isOn = true;
+                }
+                else
+                {
+                    ToggleGraphics();
+                    var graphicsToggle = graphicsToggleTransform.GetComponent<Toggle>();
+                    graphicsToggle.isOn = true;
+                }
             }
             else
             {
