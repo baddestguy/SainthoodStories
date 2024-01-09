@@ -70,20 +70,23 @@ public class PauseMenu : MonoBehaviour
                 TutorialEnabled.SetIsOnWithoutNotify(GameSettings.Instance.TutorialToggle);
             }
 
+            var graphicsToggleTransform = MenuToggleGroup.transform.Find("Graphics");
+            var soundToggleTransform = MenuToggleGroup.transform.Find("SoundTab");
+            if (GameSettings.Instance.IsXboxMode)
+            {
+                //We don't allow changes to graphics settings when running in xbox mode.
+                graphicsToggleTransform.gameObject.SetActive(false);
+                soundToggleTransform.localPosition = new Vector3(graphicsToggleTransform.localPosition.x, soundToggleTransform.localPosition.y);
+            }
+
             if (!GameManager.Instance.InGameSession)
             {
                 PauseToggleObj.SetActive(false);
 
-                var graphicsToggleTransform = MenuToggleGroup.transform.Find("Graphics");
 
                 if (GameSettings.Instance.IsXboxMode)
                 {
-                    //We don't allow changes to graphics settings when running in xbox mode.
-                    graphicsToggleTransform.gameObject.SetActive(false);
-
                     ToggleSound();
-                    var soundToggleTransform = MenuToggleGroup.transform.Find("SoundTab");
-                    soundToggleTransform.localPosition = new Vector3(graphicsToggleTransform.localPosition.x, soundToggleTransform.localPosition.y);
                     var soundToggle = soundToggleTransform.GetComponent<Toggle>();
                     soundToggle.isOn = true;
                 }
