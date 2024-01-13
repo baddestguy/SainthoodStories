@@ -21,6 +21,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject GraphicsSettings;
     public GameObject SoundSettings;
     public Toggle TutorialEnabled;
+    public Toggle ShowGridToggle;
     public ToggleGroup MenuToggleGroup;
 
     [HideInInspector] public bool active;
@@ -84,6 +85,8 @@ public class PauseMenu : MonoBehaviour
                 pauseToggle.isOn = true;
             }
 
+            ShowGridToggle.SetIsOnWithoutNotify(GameSettings.Instance.ShowGrid);
+
             if (GameManager.Instance.InGameSession)
                 TutorialEnabled.transform.parent.gameObject.SetActive(false);
             else
@@ -117,6 +120,11 @@ public class PauseMenu : MonoBehaviour
     public void ToggleTutorial()
     {
         TutorialManager.Instance.SkipTutorial = !TutorialManager.Instance.SkipTutorial;
+    }
+
+    public void ToggleGrid()
+    {
+        GameSettings.Instance.ToggleGrid();
     }
 
     public void SetHeaderText(string value)

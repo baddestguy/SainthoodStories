@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
     private int MigraineCountdown = 6;
     private int FastingCoutndown = 6;
 
+    public GameObject Grid;
     void Start()
     {
         TargetPosition = transform.position;
@@ -117,6 +118,7 @@ public class Player : MonoBehaviour
         OnEnergyDepleted = false;
         LockMovement = false;
         StartCoroutine(WaitThenEnterChurch());
+        RefreshGrid();
     }
 
     private InteractableHouse GetCurrentBuilding()
@@ -564,6 +566,11 @@ public class Player : MonoBehaviour
         {
             SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
         }
+    }
+
+    public void RefreshGrid()
+    {
+        Grid.SetActive(GameSettings.Instance.ShowGrid);
     }
 
     private void OnDisable()

@@ -67,7 +67,7 @@ DONATION,OK,ENDWEEK,100,0,5,COIN,0,,StoryArt/Hospital,FALSE,Event_Donation
 ICON,OK,ENDWEEK,100,0,10,NONE,0,,StoryArt/Hospital,FALSE,Event_IconUnlock
 SPIRITUALCRISIS,OK,ENDWEEK,100,0,0,NONE,0,,StoryArt/Convent_Building,FALSE,Event_SpiritualCrisis
 RIOTS,OK,ENDWEEK,100,0,0,NONE,0,,StoryArt/TownBurned,FALSE,Event_TownRiots
-ENDGAME,OK,ENDWEEK,100,0,0,NONE,0,,StoryArt/Endgame,TRUE,Endgame
+ENDGAME,OK,ENDWEEK,100,0,0,NONE,0,,StoryArt/Endgame,TRUE,Event_Endgame
 THANKYOU_ITEM_HOSPITAL,OK,THANKYOU,100,0,0,CP,0,,StoryArt/Hospital,FALSE,Event_ThankYouItemHospital
 THANKYOU_ITEM_SCHOOL,OK,THANKYOU,100,0,0,CP,0,,StoryArt/School,FALSE,Event_ThankYouItemSchool
 THANKYOU_ITEM_ORPHANAGE,OK,THANKYOU,100,0,0,CP,0,,StoryArt/Orphanage,FALSE,Event_ThankYouItemOrphanage

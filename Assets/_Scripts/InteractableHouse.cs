@@ -193,7 +193,6 @@ public class InteractableHouse : InteractableObject
             DeadlineTime.SetClock(-1, day);
             DeadlineDeliveryBonus = 1;
             DeadlineSet = false;
-            DeadlineTriggeredForTheDay = false;
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
@@ -461,6 +460,7 @@ public class InteractableHouse : InteractableObject
     {
         EventsTriggered = 0;
         DeadlineCounter = 0;
+        DeadlineTriggeredForTheDay = false;
     }
 
     public override void MissionBegin(Mission mission)
