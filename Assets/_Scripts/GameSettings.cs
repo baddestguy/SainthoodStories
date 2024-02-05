@@ -16,6 +16,7 @@ public class GameSettings : MonoBehaviour
     public bool SkipSplashScreens;
     public bool IgnoreHouseBuildingAtEndofDay;
     public bool DEMO_MODE;
+    public bool ShowGrid;
 
     [HideInInspector] public bool fullScreenMode;
     [HideInInspector] public QualityLevel currentQualityLevel;
@@ -64,6 +65,7 @@ public class GameSettings : MonoBehaviour
             musicEnabled = data.musicEnabled;
             ambianceEnabled = data.ambianceEnabled;
             TutorialToggle = data.tutorialEnabled;
+            ShowGrid = data.ShowGrid;
 
             SetVolume("Global", data.globalVolume);
             SetVolume("Music", data.musicVolume);
@@ -82,6 +84,7 @@ public class GameSettings : MonoBehaviour
             sfxEnebled = true;
             musicEnabled = true;
             ambianceEnabled = true;
+            ShowGrid = false;
             SetVolume("Global", 1);
             SetVolume("Music", 1);
             SetVolume("SFX", 0.85f);
@@ -116,6 +119,7 @@ public class GameSettings : MonoBehaviour
             ambianceVolume = ambianceVolume,
             tutorialEnabled = !TutorialManager.Instance.SkipTutorial,
             DEMO_MODE = DEMO_MODE,
+            ShowGrid = ShowGrid,
 
             //Language
             language = currentLanguage
@@ -145,6 +149,15 @@ public class GameSettings : MonoBehaviour
 
         }
 
+    }
+
+    public void ToggleGrid()
+    {
+        ShowGrid = !ShowGrid;
+        if (GameManager.Instance.InGameSession)
+        {
+            GameManager.Instance.Player.RefreshGrid();
+        }
     }
 
     public Resolution GetResolution(string value)
