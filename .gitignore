@@ -109,3 +109,9 @@ sysinfo.txt
 /Assets/Modern UI Pack/
 /Assets/Low Poly Vegetation Pack/
 /Assets/Low Poly Vegetation Pack.meta
+/Logs/
+/UserSettings/
+/Logs/Packages-Update.log
+/ProjectSettings/MemorySettings.asset
+/ProjectSettings/VersionControlSettings.asset
+/.vsconfig
