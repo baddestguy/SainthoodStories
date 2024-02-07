@@ -694,10 +694,23 @@ public class InteractableHouse : InteractableObject
                 StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
                 break;
 
+            case "WORLD":
+                StartCoroutine(GoToWorldMap());
+                break;
+
             case "ENTER":
                 OnPlayerMoved(GameManager.Instance.Player.Energy, this);
                 break;
         }
+    }
+
+    IEnumerator GoToWorldMap()
+    {
+        SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
+        InsideHouse = false;
+        OnEnterHouse?.Invoke(InsideHouse);
+        yield return StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
+        GameManager.Instance.ExitHouse();
     }
 
     public void InteriorLightsOff()
@@ -1173,6 +1186,7 @@ public class InteractableHouse : InteractableObject
             case "PRAY": return true;
             case "SLEEP": return true;
             case "EXIT": return true;
+            case "WORLD": return true;
             case "ENTER": return true;
             case "SAINTS": return true;
         }

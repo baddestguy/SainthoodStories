@@ -181,6 +181,8 @@ public class InteractableMarket : InteractableHouse
                 return base.CanDoAction(actionName);
             case "ENTER":
                 return base.CanDoAction(actionName);
+            case "WORLD":
+                return base.CanDoAction(actionName);
         }
 
         ItemType itemType = (ItemType)Enum.Parse(typeof(ItemType), actionName);

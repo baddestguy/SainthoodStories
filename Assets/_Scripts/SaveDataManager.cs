@@ -84,7 +84,7 @@ public class SaveDataManager : MonoBehaviour
             DailyEvent = EventsManager.Instance.DailyEvent,
             RunAttempts = GameManager.Instance.RunAttempts,
             Maptiles = GameManager.Instance.MaptileIndexes,
-            CurrentHouse = GameManager.Instance.Player.CurrentBuilding.GetType().Name,
+            CurrentHouse = GameManager.Instance.CurrentBuilding,
             StatusEffects = GameManager.Instance.Player.StatusEffects.ToArray(),
             HouseTriggeredEvent = InteractableHouse.HouseTriggeredEvent,
             CurrentDailyEvent = EventsManager.Instance.CurrentEvents.Find(e => e.EventGroup == EventGroup.DAILY),
@@ -98,7 +98,7 @@ public class SaveDataManager : MonoBehaviour
 
     public HouseSaveData[] GetSavedHouses()
     {
-        var houses = FindObjectsOfType<InteractableHouse>().Select(h => h.GetHouseSave());
+        var houses = GameManager.Instance.Houses.Select(h => h.GetHouseSave());
         return houses.ToArray();
     }
 
