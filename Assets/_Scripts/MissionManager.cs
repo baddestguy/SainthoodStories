@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -12,6 +13,8 @@ public class MissionManager : MonoBehaviour
     public static UnityAction<bool> MissionComplete;
     public static UnityAction EndOfDay;
     public static bool MissionOver;
+    public List<ObjectivesData> CompletedObjectives;
+    public List<ObjectivesData> CurrentObjectives;
 
     public Dictionary<TileType, int> HouseScores;
     public int CharityPoints { get; private set; }
@@ -42,12 +45,47 @@ public class MissionManager : MonoBehaviour
         UI.Instance.RefreshCP(0, CharityPoints);
     }
 
-    private void NewDay()
+    public void MissionsBegin()
     {
-        if (!GameClock.DeltaTime) return;
+        CompletedObjectives = GameManager.Instance.SaveData.CompletedObjectives?.ToList();
+        for (int i = 1; i < GameDataManager.Instance.ObjectivesData.Count; i++)
+        {
+            var comp = CompletedObjectives?.Where(x => x.Id == i) ?? Enumerable.Empty<ObjectivesData>();
+            if(CompletedObjectives == null || comp.Count() < GameDataManager.Instance.ObjectivesData[i].Count)
+            {
+                CurrentObjectives = GameDataManager.Instance.GetObjectivesData(i).ToList();
+                foreach(var c in comp)
+                {
+                    var done = CurrentObjectives.Remove(c);
+                }
+                break;
+            }
+        }
 
-        SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
-        StartCoroutine(NewDayAsync());
+        //if (!GameClock.DeltaTime) return;
+
+        //SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+        //StartCoroutine(NewDayAsync());
+    }
+
+    public void CompleteObjective(ObjectivesData obj)
+    {
+        if (obj == null) return;
+
+        CurrentObjectives.Remove(obj);
+        if(CompletedObjectives == null)
+        {
+            CompletedObjectives = new List<ObjectivesData>() { obj };
+        }
+        else
+        {
+            CompletedObjectives.Add(obj);
+        }
+
+        if (!CurrentObjectives.Any())
+        {
+            StartCoroutine(NewDayAsync());
+        }
     }
 
     private IEnumerator NewDayAsync()
@@ -109,49 +147,49 @@ public class MissionManager : MonoBehaviour
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
 
-        if (FaithPoints <= 0 || CharityPoints <= 0)
-        {
-            missionFailed = true;
-            //instant game over
-            if (CharityPoints <= 0)
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
-            }
-            if (FaithPoints <= 0)
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
-            }
-            SaveDataManager.Instance.DeleteProgress();
-            SoundManager.Instance.EndAllTracks();
-            EventsManager.Instance.ExecuteEvents();
+        //if (FaithPoints <= 0 || CharityPoints <= 0)
+        //{
+        //    missionFailed = true;
+        //    //instant game over
+        //    if (CharityPoints <= 0)
+        //    {
+        //        EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
+        //    }
+        //    if (FaithPoints <= 0)
+        //    {
+        //        EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
+        //    }
+        //    SaveDataManager.Instance.DeleteProgress();
+        //    SoundManager.Instance.EndAllTracks();
+        //    EventsManager.Instance.ExecuteEvents();
 
-            while (EventsManager.Instance.HasEventsInQueue()) yield return null;
+        //    while (EventsManager.Instance.HasEventsInQueue()) yield return null;
 
-            GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
-            yield break;
-            //Game Over, Restart Week!
-        }
-        else
+        //    GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+        //    yield break;
+        //    //Game Over, Restart Week!
+        //}
+        //else
         {
             EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
             yield return seq.RunSequenceAsync();
-            if (MissionOver) //TODO: Use a different condition to switch seasons
-            {
-                if(CurrentMission.Season == Season.WINTER)
-                {
-                    //BONUS: GIVE THE CHOICE TO ASCEND TO HEAVEN OR STAY AND CONTINUE TO HELP!
+            //if (MissionOver) //TODO: Use a different condition to switch seasons
+            //{
+            //    if(CurrentMission.Season == Season.WINTER)
+            //    {
+            //        //BONUS: GIVE THE CHOICE TO ASCEND TO HEAVEN OR STAY AND CONTINUE TO HELP!
 
-                    EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
-                    EventsManager.Instance.ExecuteEvents();
-                    SaveDataManager.Instance.DeleteProgress();
-                    while (EventsManager.Instance.HasEventsInQueue()) yield return null;
+            //        EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
+            //        EventsManager.Instance.ExecuteEvents();
+            //        SaveDataManager.Instance.DeleteProgress();
+            //        while (EventsManager.Instance.HasEventsInQueue()) yield return null;
 
-                    GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
-                    yield break;
-                }
-                CurrentMission.CurrentWeek++;
-                GameManager.Instance.GameClock.EndTheWeek();
-            }
+            //        GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+            //        yield break;
+            //    }
+            //    CurrentMission.CurrentWeek++;
+            //    GameManager.Instance.GameClock.EndTheWeek();
+            //}
         }
 
         if (GameSettings.Instance.DEMO_MODE){
@@ -183,6 +221,7 @@ public class MissionManager : MonoBehaviour
         GameManager.Instance.Player.StatusEffects.Clear();
         InventoryManager.Instance.GeneratedProvisions.Clear();
         EventsManager.Instance.DailyEvent = CustomEventType.NONE;
+        GameManager.Instance.GameClock.Reset();
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);
     }
@@ -215,7 +254,6 @@ public class MissionManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameClock.EndDay -= NewDay;
     }
 
     public void OverideCP(int cp)

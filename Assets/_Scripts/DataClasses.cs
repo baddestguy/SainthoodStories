@@ -49,7 +49,9 @@ public enum BuildingEventType
     NONE = 0,
     DELIVER_ITEM,
     BABY,
-    VOLUNTEER
+    VOLUNTEER,
+    CONSTRUCT,
+    REPAIR
 }
 
 public enum BuildingActivityState
@@ -369,6 +371,38 @@ public class WeatherData
 }
 
 [System.Serializable]
+public class ObjectivesData
+{
+    public int Id;
+    public BuildingEventType Event;
+    public string House;
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        ObjectivesData other = (ObjectivesData)obj;
+        return Id == other.Id && Event == other.Event && House == other.House;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 23 + Id.GetHashCode();
+            hash = hash * 23 + (Event.GetHashCode());
+            hash = hash * 23 + (House != null ? House.GetHashCode() : 0);
+            return hash;
+        }
+    }
+
+}
+
+[System.Serializable]
 public class BuildingMissionData
 {
     public int Week;
@@ -542,6 +576,7 @@ public class SaveObject
     public double WeatherEndTime;
     public int WeatherEndDay;
     public bool WeatherActivated;
+    public ObjectivesData[] CompletedObjectives;
 }
 
 [System.Serializable]

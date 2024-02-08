@@ -92,7 +92,8 @@ public class SaveDataManager : MonoBehaviour
             WeatherStartTime = WeatherManager.Instance.WeatherStartTime.Time,
             WeatherStartDay = WeatherManager.Instance.WeatherStartTime.Day,
             WeatherEndTime = WeatherManager.Instance.WeatherEndTime.Time,
-            WeatherEndDay = WeatherManager.Instance.WeatherEndTime.Day
+            WeatherEndDay = WeatherManager.Instance.WeatherEndTime.Day,
+            CompletedObjectives = MissionManager.Instance.CompletedObjectives?.ToArray()
         };
     }    
 

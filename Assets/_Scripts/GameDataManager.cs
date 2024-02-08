@@ -19,6 +19,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<SaintID, SaintData> Saints = new Dictionary<SaintID, SaintData>();
     public Dictionary<string, StoryEventData> StoryEventData = new Dictionary<string, StoryEventData>();
     public Dictionary<string, List<BuildingMissionData>> BuildingMissionData = new Dictionary<string, List<BuildingMissionData>>();
+    public Dictionary<int, List<ObjectivesData>> ObjectivesData = new Dictionary<int, List<ObjectivesData>>();
     public List<WeatherData> WeatherData = new List<WeatherData>();
     public Dictionary<TooltipStatId, TooltipStats> ToolTips = new Dictionary<TooltipStatId, TooltipStats>();
 
@@ -145,6 +146,23 @@ public class GameDataManager : MonoBehaviour
             else
             {
                 BuildingMissionData.Add(item.InteractableHouse, new List<BuildingMissionData>() { item });
+            }
+        }
+
+        yield return null;
+
+        //Objectives
+        csvFile = Resources.Load<TextAsset>("GameData/Objectives");
+        var objData = CSVSerializer.Deserialize<ObjectivesData>(csvFile.text);
+        foreach (var item in objData)
+        {
+            if (ObjectivesData.ContainsKey(item.Id))
+            {
+                ObjectivesData[item.Id].Add(item);
+            }
+            else
+            {
+                ObjectivesData.Add(item.Id, new List<ObjectivesData>() { item });
             }
         }
 
@@ -301,6 +319,17 @@ public class GameDataManager : MonoBehaviour
     public IEnumerable<BuildingMissionData> GetBuildingMissionData(string houseName)
     {
         return BuildingMissionData.ContainsKey(houseName) ? BuildingMissionData[houseName] : new List<BuildingMissionData>();
+    }
+
+    public IEnumerable<ObjectivesData> GetObjectivesData(int id)
+    {
+        if (ObjectivesData.ContainsKey(id))
+            return ObjectivesData[id];
+        else
+        {
+            Debug.Log("COULD NOT FIND OBJECTIVE WITH ID: " + id);
+            return Enumerable.Empty<ObjectivesData>();
+        }
     }
 
     public TooltipStats GetToolTip(TooltipStatId id, double ticksModifier = 0, int fpModifier = 0, int cpModifier = 0, int energyModifier = 0)

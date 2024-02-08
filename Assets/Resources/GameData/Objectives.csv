@@ -1,0 +1,11 @@
+Id,Event,House
+1,CONSTRUCT,InteractableHospital
+2,CONSTRUCT,InteractableOrphanage
+2,DELIVER_ITEM,InteractableHospital
+3,VOLUNTEER,Any
+3,CONSTRUCT,InteractableSchool
+4,CONSTRUCT,InteractableShelter
+4,DELIVER_ITEM,InteractableSchool
+4,DELIVER_ITEM,InteractableOrphanage
+5,CONSTRUCT,InteractableKitchen
+5,BABY,InteractableHospital

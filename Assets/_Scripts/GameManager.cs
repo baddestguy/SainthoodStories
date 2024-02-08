@@ -276,6 +276,7 @@ public class GameManager : MonoBehaviour
 
                         StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
                     }
+                    MissionManager.MissionsBegin();
 
                     UI.Instance.DisplayRunAttempts();
                 }, newGame, false, !activeScene.name.Contains("MainMenu"), showUI: showUI);

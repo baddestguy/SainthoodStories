@@ -80,7 +80,7 @@ public class InteractableHouse : InteractableObject
     public bool HasBeenDestroyed;
 
     protected List<CustomEventType> MyStoryEvents = new List<CustomEventType>();
-
+    public ObjectivesData MyObjective;
     protected virtual void Start()
     {
         UI.Meditate += Meditated;
@@ -98,6 +98,8 @@ public class InteractableHouse : InteractableObject
 
     public void Initialize()
     {
+        MyObjective = MissionManager.Instance.CurrentObjectives.Where(obj => obj.House == GetType().Name).FirstOrDefault();
+
         switch (MissionManager.Instance.CurrentMission.CurrentWeek)
         {
             case 1: DeadlinePercentChance = 5; break;
@@ -160,6 +162,16 @@ public class InteractableHouse : InteractableObject
             var newPos = CurrentGroundTile.transform.position;
             transform.position = new Vector3(newPos.x, newPos.y + 1.2f, newPos.z);
         }
+
+        if(MyObjective != null && MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+        {
+            RequiredItems = 1;
+            DeadlineSet = true;
+            DeadlineTriggeredForTheDay = true;
+            PopMyIcon();
+            SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
+            InventoryManager.Instance.AddToInventory(ItemType.MEDS); //TODO: TEMPORARY!
+        }
     }
 
     public virtual void GetInteriorPopUI()
@@ -174,31 +186,13 @@ public class InteractableHouse : InteractableObject
 
     public override void Tick(double time, int day)
     {
-        if (DeadlineTime.Time != -1)
-        {
-            PopMyIcon();
          //   Debug.LogWarning($"{name}: Deadline: {DeadlineTime.Time} : DAY {DeadlineTime.Day} : {RequiredItems} Items!!");
-        }
 
         if(GameClock.DeltaTime)
         {
-            SetDeadlineTime(time, day);
+        //    SetDeadlineTime(time, day);
         }
 
-        if ((DeadlineTime.Time != -1) && (time > DeadlineTime.Time && day >= DeadlineTime.Day))
-        {
-            Debug.LogError($"{name}: TIME UP!");
-            NeglectedMultiplier++;
-            DeadlineCounter--;
-            DeadlineTime.SetClock(-1, day);
-            DeadlineDeliveryBonus = 1;
-            DeadlineSet = false;
-            RequiredItems = 0;
-            PopIcon.gameObject.SetActive(false);
-            UI.Instance.SideNotificationPop(GetType().Name);
-            UpdateCharityPoints(-2, 0);
-            SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
-        }
         if(InteriorPopUI) //TEMP
             InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
         ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
@@ -272,15 +266,6 @@ public class InteractableHouse : InteractableObject
         if (BuildingState == BuildingState.HAZARDOUS)
         {
             PopMyIcon();
-        }
-
-        if(time == 0 && CanBuild())
-        {
-            if (!GameSettings.Instance.IgnoreHouseBuildingAtEndofDay)
-            {
-                Debug.LogWarning("FAILED TO BUILD A HOUSE AT MIDNIGHT!: " + GetType());
-                UpdateCharityPoints(-1000, 0);
-            }
         }
     }
 
@@ -520,7 +505,7 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
-
+            MissionManager.Instance.CompleteObjective(MyObjective);
             BuildRelationship(ThankYouType.ITEM);
             if (!autoDeliver)
             {
@@ -642,6 +627,8 @@ public class InteractableHouse : InteractableObject
             UI.Instance.SideNotificationPop(GetType().Name);
             InsideHouse = true;
             GamepadCursor.CursorSpeed = 2000f;
+
+            MissionManager.Instance.CompleteObjective(MyObjective);
         }
         else
         {
@@ -744,6 +731,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual void VolunteerWork(InteractableHouse house)
     {
+        MissionManager.Instance.CompleteObjective(MyObjective);
     }
 
     public virtual void UpdateCharityPoints(int amount, int energy)
@@ -1157,18 +1145,11 @@ public class InteractableHouse : InteractableObject
 
     public bool CanBuild()
     {
-        if (BuildPoints >= MaxBuildPoints || BuildingState != BuildingState.RUBBLE) return false;
-        if (!GameDataManager.Instance.ConstructionAvailability.ContainsKey(GetType().Name)) return true;
+        if (BuildPoints >= MaxBuildPoints || BuildingState != BuildingState.RUBBLE || MyObjective == null) return false;
 
-        ConstructionAvailabilityData myAvailability = GameDataManager.Instance.ConstructionAvailability[GetType().Name];
-        GameClock myClock = new GameClock(myAvailability.Time, myAvailability.Day);
-        GameClock currentClock = GameManager.Instance.GameClock;
-        int CurrentWeek = MissionManager.Instance.CurrentMission.CurrentWeek;
+        if (MyObjective.Event == BuildingEventType.CONSTRUCT) return true;
 
-        if (CurrentWeek > myAvailability.Week) return true;
-        if (CurrentWeek < myAvailability.Week) return false;
-
-        return currentClock >= myClock;
+        return false;
     }
 
     protected virtual void OnEventExecuted(CustomEventData e)

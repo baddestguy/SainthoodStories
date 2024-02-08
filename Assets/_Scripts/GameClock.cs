@@ -90,6 +90,8 @@ public class GameClock
         ExecuteEvents?.Invoke();
         SaveDataManager.Instance.SaveGame();
         DeltaTime = false;
+
+        Debug.Log(Day + " : " + Time);
     }
 
     public void Ping()
@@ -106,9 +108,12 @@ public class GameClock
 
     public void Reset()
     {
-        double timeDiff = 23.5 - Time;
-        Time += timeDiff;
-        Tick();
+        if(Time > 6)
+        {
+            Day++;
+            if (Day > 7) Day = 1;
+        }
+        Time = 6;
     }
 
     public bool DuringTheDay()

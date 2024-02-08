@@ -149,6 +149,17 @@ public class InteractableChurch : InteractableHouse
         }
     }
 
+    public override bool CanDoAction(string actionName)
+    {
+        switch (actionName)
+        {
+            case "WORLD":
+                return GameManager.Instance.GameClock.Time >= 7;
+        }
+
+        return base.CanDoAction(actionName);
+    }
+
     public override void PopUICallback(string button)
     {
         base.PopUICallback(button);
