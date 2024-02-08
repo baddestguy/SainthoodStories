@@ -25,7 +25,7 @@ public class MissionManager : MonoBehaviour
 
     private void Start()
     {
-        GameClock.EndDay += NewDay;
+     //   GameClock.EndDay += NewDay;
 
         HouseScores = new Dictionary<TileType, int>();
     }
@@ -135,7 +135,7 @@ public class MissionManager : MonoBehaviour
         {
             EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
             yield return seq.RunSequenceAsync();
-            if (GameManager.Instance.GameClock.EndofWeek())
+            if (MissionOver) //TODO: Use a different condition to switch seasons
             {
                 if(CurrentMission.Season == Season.WINTER)
                 {

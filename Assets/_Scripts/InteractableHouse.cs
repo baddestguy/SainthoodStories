@@ -177,7 +177,7 @@ public class InteractableHouse : InteractableObject
         if (DeadlineTime.Time != -1)
         {
             PopMyIcon();
-            Debug.LogWarning($"{name}: Deadline: {DeadlineTime.Time} : DAY {DeadlineTime.Day} : {RequiredItems} Items!!");
+         //   Debug.LogWarning($"{name}: Deadline: {DeadlineTime.Time} : DAY {DeadlineTime.Day} : {RequiredItems} Items!!");
         }
 
         if(GameClock.DeltaTime)
@@ -851,7 +851,7 @@ public class InteractableHouse : InteractableObject
         UI.Instance.CrossFade(1f, 15f);
         while (UI.Instance.CrossFading) yield return null;
 
-        if (GameManager.Instance.GameClock.EndofWeek()) yield break;
+        if (MissionManager.MissionOver) yield break;
 
         callback();
 

@@ -355,7 +355,10 @@ public class UI : MonoBehaviour
 
     public void UpdateDayNightIcon(DayNight dayNight)
     {
-        DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{dayNight}");
+        if(DayNightIcon != null)
+        {
+            DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{dayNight}");
+        }
     }
 
     public void EventAlert(CustomEventData customEvent)

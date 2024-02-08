@@ -72,6 +72,7 @@ public class GameClock
         if(Time > 23.5)
         {
             Day++;
+            if (Day > 7) Day = 1;
             Time = 0;
             EndofDay = true;
         }
@@ -95,11 +96,6 @@ public class GameClock
     {
         Ticked?.Invoke(Time, Day);
         ExecuteEvents?.Invoke();
-    }
-
-    public bool EndofWeek()
-    {
-        return Day > 5;
     }
 
     public void EndTheWeek()

@@ -116,14 +116,6 @@ public class GameManager : MonoBehaviour
             Player = FindObjectOfType<Player>();
             Map = FindObjectOfType<GameMap>();
             MissionManager.LoadAllMissions(CurrentMission);
-            if (SaveData.Time < 6)
-            {
-                SaveData.Time = 6;
-            }
-            if(SaveData.Day > 5)
-            {
-                SaveData.Day = 1;
-            }
             GameClock = new GameClock(SaveData.Time, SaveData.Day);
 
             if(PreviousSceneID == SceneID.SaintsShowcase_Day || PreviousSceneID == SceneID.WorldMap)

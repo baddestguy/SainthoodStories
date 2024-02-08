@@ -45,7 +45,7 @@ public class EventsManager : MonoBehaviour
         }
 
         GameClock c = GameManager.Instance.GameClock;
-        if (c.EndofWeek())
+        if (MissionManager.MissionOver)
         {
             EventList.RemoveAll(e => e.EventGroup != EventGroup.ENDWEEK);
         }
@@ -125,7 +125,7 @@ public class EventsManager : MonoBehaviour
         CurrentEvents.Clear();
         GameClock c = GameManager.Instance.GameClock;
 
-        if (c.EndofWeek()) return;
+        if (MissionManager.MissionOver) return;
         if (GameSettings.Instance.FTUE && GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
 
         if (c.Day % 5 == 0)
