@@ -188,6 +188,8 @@ public class Player : MonoBehaviour
 
     public bool WeCanMove(MapTile tile)
     {
+        return false;
+
         if (AdjacentTiles == null) return false;
 
         if (GameSettings.Instance.FTUE)
