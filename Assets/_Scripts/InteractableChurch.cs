@@ -154,7 +154,7 @@ public class InteractableChurch : InteractableHouse
         switch (actionName)
         {
             case "WORLD":
-                return GameManager.Instance.GameClock.Time >= 7;
+                return GameManager.Instance.GameClock.Time < 6 || GameManager.Instance.GameClock.Time >= 7;
         }
 
         return base.CanDoAction(actionName);

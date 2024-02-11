@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class WorldMapManager : MonoBehaviour
 {
-    public int EnviroMinutes;
-    public int EnviroHours;
     // Start is called before the first frame update
     void Start()
     {

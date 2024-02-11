@@ -38,6 +38,8 @@ public class EventsManager : MonoBehaviour
 
     public void ExecuteEvents()
     {
+        if (GameManager.Instance.CurrentBuilding == null) return;
+
         if (!GameSettings.Instance.CustomEventsToggle)
         {
             EventList.Clear();

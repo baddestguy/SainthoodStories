@@ -874,6 +874,7 @@ public class InteractableHouse : InteractableObject
             }
 
             GameManager.Instance.CurrentHouse = this;
+            GameManager.Instance.CurrentBuilding = GameManager.Instance.CurrentHouse.GetType().Name;
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
             if (InteriorCam)
@@ -1147,7 +1148,7 @@ public class InteractableHouse : InteractableObject
     {
         if (BuildPoints >= MaxBuildPoints || BuildingState != BuildingState.RUBBLE || MyObjective == null) return false;
 
-        if (MyObjective.Event == BuildingEventType.CONSTRUCT) return true;
+        if (MyObjective?.Event == BuildingEventType.CONSTRUCT) return true;
 
         return false;
     }

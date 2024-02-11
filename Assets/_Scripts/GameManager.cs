@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     public int[] MaptileIndexes = new int[7] {0, 3, 6, 9, 19, 15, 21};
 
     public InteractableHouse[] Houses;
+    public Dictionary<string,BuildingState> HouseStates = new Dictionary<string, BuildingState>();
 
     private void Awake()
     {
@@ -72,6 +73,7 @@ public class GameManager : MonoBehaviour
 
     public void ExitHouse()
     {
+        GetBuildingStates();
         LoadScene("WorldMap", LoadSceneMode.Single);
     }
 
@@ -209,6 +211,13 @@ public class GameManager : MonoBehaviour
         SceneLoaded = true;
     }
 
+    public void GetBuildingStates()
+    {
+        foreach (var h in Houses)
+        {
+            HouseStates[h.GetType().Name] = h.BuildingState;
+        }
+    }
     private void OnTap(MapTile tile)
     {
         if (Player == null) return;
