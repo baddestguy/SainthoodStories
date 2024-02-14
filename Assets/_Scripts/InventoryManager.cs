@@ -10,6 +10,7 @@ public class InventoryManager : MonoBehaviour
     public static UnityAction RefreshInventoryUI;
 
     public List<ItemType> Items = new List<ItemType>();
+    public List<string> Collectibles = new List<string>();
     public List<ProvisionData> Provisions = new List<ProvisionData>();
     public Dictionary<ItemType, List<GameClock>> AutoDeliveryItems = new Dictionary<ItemType, List<GameClock>>();
 
@@ -32,6 +33,7 @@ public class InventoryManager : MonoBehaviour
         {
             MaxInventorySlots = GetProvision(Provision.EXTRA_INVENTORY).Value;
         }
+        Collectibles = save.Collectibles?.ToList() ?? new List<string>();
         RefreshInventoryUI?.Invoke();
     }
 
@@ -50,6 +52,13 @@ public class InventoryManager : MonoBehaviour
         }
         Items.Add(item);
         RefreshInventoryUI?.Invoke();
+    }
+
+    public void AddCollectible(string newCollectible)
+    {
+        Collectibles.Add(newCollectible);
+        GameManager.Instance.WorldCollectibles.Remove(newCollectible);
+        Debug.Log("COLLECTED: " + newCollectible);
     }
 
     public void SwapProvision(ProvisionData provisionFrom, ProvisionData provisionTo)

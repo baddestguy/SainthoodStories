@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
 
     public InteractableHouse[] Houses;
     public Dictionary<string,BuildingState> HouseStates = new Dictionary<string, BuildingState>();
+    public List<string> WorldCollectibles = new List<string>();
 
     private void Awake()
     {

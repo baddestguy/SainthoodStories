@@ -50,12 +50,23 @@ public class InteractableChurch : InteractableHouse
         {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
             SoundManager.Instance.SwitchMusicChannel(true);
+            CheckCollectibleObjectives();
         }
         else
         {
             ExteriorPopUI.gameObject.SetActive(false);
             PopIcon.UIPopped(false);
             SoundManager.Instance.SwitchMusicChannel(false);
+        }
+    }
+
+    public void CheckCollectibleObjectives()
+    {
+        if (MissionManager.Instance.CurrentCollectibleCounter == GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount)
+        {
+            EventsManager.Instance.AddEventToList(GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].OnComplete);
+            MissionManager.Instance.CurrentCollectibleMissionId++;
+            MissionManager.Instance.CurrentCollectibleCounter = 0;
         }
     }
 

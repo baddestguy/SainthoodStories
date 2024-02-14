@@ -93,7 +93,11 @@ public class SaveDataManager : MonoBehaviour
             WeatherStartDay = WeatherManager.Instance.WeatherStartTime.Day,
             WeatherEndTime = WeatherManager.Instance.WeatherEndTime.Time,
             WeatherEndDay = WeatherManager.Instance.WeatherEndTime.Day,
-            CompletedObjectives = MissionManager.Instance.CompletedObjectives?.ToArray()
+            CompletedObjectives = MissionManager.Instance.CompletedObjectives?.ToArray(),
+            Collectibles = InventoryManager.Instance.Collectibles?.ToArray(),
+            CurrentCollectibleMissionId = MissionManager.Instance.CurrentCollectibleMissionId,
+            CurrentCollectibleCounter = MissionManager.Instance.CurrentCollectibleCounter,
+            WorldCollectibles = GameManager.Instance.WorldCollectibles.ToArray()
         };
     }    
 

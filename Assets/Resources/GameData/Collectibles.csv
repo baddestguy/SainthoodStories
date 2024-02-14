@@ -1,0 +1,121 @@
+Id,Name,Description
+BIBLE,Genesis,Bible Book
+BIBLE,Exodus,Bible Book
+BIBLE,Leviticus,Bible Book
+BIBLE,Numbers,Bible Book
+BIBLE,Deuteronomy,Bible Book
+BIBLE,Joshua,Bible Book
+BIBLE,Judges,Bible Book
+BIBLE,Ruth,Bible Book
+BIBLE,1 Samuel,Bible Book
+BIBLE,2 Samuel,Bible Book
+BIBLE,1 Kings,Bible Book
+BIBLE,2 Kings,Bible Book
+BIBLE,1 Chronicles,Bible Book
+BIBLE,2 Chronicles,Bible Book
+BIBLE,Ezra,Bible Book
+BIBLE,Nehemiah,Bible Book
+BIBLE,Esther,Bible Book
+BIBLE,Job,Bible Book
+BIBLE,Psalms,Bible Book
+BIBLE,Proverbs,Bible Book
+BIBLE,Ecclesiastes,Bible Book
+BIBLE,Song of Solomon (Song of Songs),Bible Book
+BIBLE,Isaiah,Bible Book
+BIBLE,Jeremiah,Bible Book
+BIBLE,Lamentations,Bible Book
+BIBLE,Ezekiel,Bible Book
+BIBLE,Daniel,Bible Book
+BIBLE,Hosea,Bible Book
+BIBLE,Joel,Bible Book
+BIBLE,Amos,Bible Book
+BIBLE,Obadiah,Bible Book
+BIBLE,Jonah,Bible Book
+BIBLE,Micah,Bible Book
+BIBLE,Nahum,Bible Book
+BIBLE,Habakkuk,Bible Book
+BIBLE,Zephaniah,Bible Book
+BIBLE,Haggai,Bible Book
+BIBLE,Zechariah,Bible Book
+BIBLE,Malachi,Bible Book
+BIBLE,Matthew,Bible Book
+BIBLE,Mark,Bible Book
+BIBLE,Luke,Bible Book
+BIBLE,John,Bible Book
+BIBLE,Acts (of the Apostles),Bible Book
+BIBLE,Romans,Bible Book
+BIBLE,1 Corinthians,Bible Book
+BIBLE,2 Corinthians,Bible Book
+BIBLE,Galatians,Bible Book
+BIBLE,Ephesians,Bible Book
+BIBLE,Philippians,Bible Book
+BIBLE,Colossians,Bible Book
+BIBLE,1 Thessalonians,Bible Book
+BIBLE,2 Thessalonians,Bible Book
+BIBLE,1 Timothy,Bible Book
+BIBLE,2 Timothy,Bible Book
+BIBLE,Titus,Bible Book
+BIBLE,Philemon,Bible Book
+BIBLE,Hebrews,Bible Book
+BIBLE,James,Bible Book
+BIBLE,1 Peter,Bible Book
+BIBLE,2 Peter,Bible Book
+BIBLE,1 John,Bible Book
+BIBLE,2 John,Bible Book
+BIBLE,3 John,Bible Book
+BIBLE,Jude,Bible Book
+BIBLE,Revelation (or Apocalypse),Bible Book
+SACRED_ARTIFACTS,Crucifix,Symbolizes the sacrifice of Jesus Christ for humanity's salvation.
+SACRED_ARTIFACTS,Rosary,"A tool for prayer and meditation, consisting of beads and a cross or medal."
+SACRED_ARTIFACTS,Cross,"Represents faith, redemption, and the triumph of good over evil."
+SACRED_ARTIFACTS,Ichthys (Fish Symbol),Signifies Christ and the Christian faith.
+SACRED_ARTIFACTS,Dove,Symbolizing the Holy Spirit and peace.
+SACRED_ARTIFACTS,Alpha and Omega,"Represents the beginning and the end, symbolizing God's eternal nature."
+SACRED_ARTIFACTS,Chi-Rho,"Combining the first two letters of ""Christ"" in Greek, representing Jesus Christ."
+SACRED_ARTIFACTS,Lamb,Symbolizing Christ as the sacrificial lamb and the Good Shepherd.
+SACRED_ARTIFACTS,Crown of Thorns,Signifying Jesus' suffering and kingship.
+SACRED_ARTIFACTS,Sacred Heart,Represents Jesus' divine love and compassion for humanity.
+SACRED_ARTIFACTS,Piece of the True Cross,Relic believed to be part of the cross on which Jesus was crucified.
+SACRED_ARTIFACTS,Shroud of Turin,"Cloth believed to bear the image of Jesus' face, associated with his burial."
+SACRED_ARTIFACTS,Holy Grail,"Legendary cup used by Jesus at the Last Supper, sought after for its sacred significance."
+SACRED_ARTIFACTS,Veil of Veronica,"Cloth believed to bear the imprint of Jesus' face, associated with his Passion."
+SACRED_ARTIFACTS,Holy Lance,Spear used by a Roman soldier to pierce Jesus' side during the Crucifixion.
+SACRED_ARTIFACTS,Crown of Thorns,Relic believed to be part of the crown worn by Jesus during his Passion.
+SACRED_ARTIFACTS,Saint's Relic,"Relic associated with a specific saint, such as bones, clothing, or personal items."
+SACRED_ARTIFACTS,Eucharistic Miracle,"Relic associated with a miraculous manifestation of the Eucharist, such as bleeding hosts or incorruptible bread."
+SACRED_ARTIFACTS,Martyr's Relic,"Relic associated with a Christian martyr, representing their sacrifice and witness to the faith."
+SACRED_ARTIFACTS,Icon Relic,"Relic associated with a sacred icon, believed to possess spiritual power and protection."
+SACRED_ARTIFACTS,Holy Water,"Water blessed by a priest, used for purification and spiritual protection."
+SACRED_ARTIFACTS,Monstrance,Ornate vessel used to display and honor the consecrated Eucharist during adoration.
+SACRED_ARTIFACTS,Crown of Glory,"Symbol of eternal reward and victory in heaven, often depicted in Christian art."
+SACRED_ARTIFACTS,Tabernacle,Ornate container used to store the consecrated Eucharist in Catholic churches.
+SACRED_ARTIFACTS,Chalice,"Cup used to hold the wine during the Eucharistic celebration, representing the blood of Christ."
+SACRED_ARTIFACTS,Paten,"Plate used to hold the bread during the Eucharistic celebration, representing the body of Christ."
+SACRED_ARTIFACTS,Ciborium,Container used to hold consecrated hosts for distribution during Communion.
+SACRED_ARTIFACTS,Reliquary,Ornate container used to enshrine relics of saints or holy objects for veneration.
+SACRED_ARTIFACTS,Holy Oil,"Oil blessed by a bishop, used in sacramental rituals such as anointing the sick and baptizing."
+SACRED_ARTIFACTS,Cincture,"Cord worn around the waist by clergy and religious, symbolizing chastity and commitment to service."
+PRAYER,Sofia Patel,A prayer for someone special
+PRAYER,Amir Santos,A prayer
+PRAYER,Aisha Nguyen,A prayer
+PRAYER,Luca García,A prayer
+PRAYER,Mei Khan,A prayer
+PRAYER,Alejandro Silva,A prayer
+PRAYER,Isabella Kim,A prayer
+PRAYER,Anand Müller,A prayer
+PRAYER,Leila Martinez,A prayer
+PRAYER,Mateo Petrov,A prayer
+PRAYER,Aaliyah Alves,A prayer
+PRAYER,Kai Wong,A prayer
+PRAYER,Ingrid Andersson,A prayer
+PRAYER,Nikhil Dubois,A prayer
+PRAYER,Emilia Costa,A prayer
+PRAYER,Youssef Rossi,A prayer
+PRAYER,Maya Patel,A prayer
+PRAYER,Liam Sato,A prayer
+PRAYER,Fatima Oliveira,A prayer
+PRAYER,Hugo Lee,A prayer
+PRAYER,Kira Volkov,A prayer
+PRAYER,Tariq Van der Berg,A prayer
+PRAYER,Amira González,A prayer
+PRAYER,Nikolai Ibrahim,A prayer

@@ -15,6 +15,9 @@ public class MissionManager : MonoBehaviour
     public static bool MissionOver;
     public List<ObjectivesData> CompletedObjectives;
     public List<ObjectivesData> CurrentObjectives;
+    public List<CollectibleObjectivesData> CurrentCollectibleObjectives;
+    public int CurrentCollectibleCounter = 0;
+    public int CurrentCollectibleMissionId = 0;
 
     public Dictionary<TileType, int> HouseScores;
     public int CharityPoints { get; private set; }
@@ -47,7 +50,8 @@ public class MissionManager : MonoBehaviour
 
     public void MissionsBegin()
     {
-        CompletedObjectives = GameManager.Instance.SaveData.CompletedObjectives?.ToList();
+        var saveData = GameManager.Instance.SaveData;
+        CompletedObjectives = saveData.CompletedObjectives?.ToList();
         for (int i = 1; i < GameDataManager.Instance.ObjectivesData.Count; i++)
         {
             var comp = CompletedObjectives?.Where(x => x.Id == i) ?? Enumerable.Empty<ObjectivesData>();
@@ -61,6 +65,9 @@ public class MissionManager : MonoBehaviour
                 break;
             }
         }
+
+        CurrentCollectibleMissionId = saveData.CurrentCollectibleMissionId == 0 ? 1 : saveData.CurrentCollectibleMissionId;
+        CurrentCollectibleCounter = saveData.CurrentCollectibleCounter;
 
         //if (!GameClock.DeltaTime) return;
 
@@ -86,6 +93,12 @@ public class MissionManager : MonoBehaviour
         {
             StartCoroutine(NewDayAsync());
         }
+    }
+
+    public void Collect(string item)
+    {
+        CurrentCollectibleCounter++;
+        InventoryManager.Instance.AddCollectible(item);
     }
 
     private IEnumerator NewDayAsync()

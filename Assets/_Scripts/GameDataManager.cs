@@ -20,6 +20,8 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<string, StoryEventData> StoryEventData = new Dictionary<string, StoryEventData>();
     public Dictionary<string, List<BuildingMissionData>> BuildingMissionData = new Dictionary<string, List<BuildingMissionData>>();
     public Dictionary<int, List<ObjectivesData>> ObjectivesData = new Dictionary<int, List<ObjectivesData>>();
+    public Dictionary<int, CollectibleObjectivesData> CollectibleObjectivesData = new Dictionary<int, CollectibleObjectivesData>();
+    public Dictionary<string, List<CollectibleData>> CollectibleData = new Dictionary<string, List<CollectibleData>>();
     public List<WeatherData> WeatherData = new List<WeatherData>();
     public Dictionary<TooltipStatId, TooltipStats> ToolTips = new Dictionary<TooltipStatId, TooltipStats>();
 
@@ -163,6 +165,40 @@ public class GameDataManager : MonoBehaviour
             else
             {
                 ObjectivesData.Add(item.Id, new List<ObjectivesData>() { item });
+            }
+        }
+
+        yield return null;
+
+        //Collectible Objectives
+        csvFile = Resources.Load<TextAsset>("GameData/CollectibleObjectives");
+        var colObjData = CSVSerializer.Deserialize<CollectibleObjectivesData>(csvFile.text);
+        foreach (var item in colObjData)
+        {
+            if (CollectibleObjectivesData.ContainsKey(item.Id))
+            {
+                CollectibleObjectivesData[item.Id] = item;
+            }
+            else
+            {
+                CollectibleObjectivesData.Add(item.Id, item);
+            }
+        }
+
+        yield return null;
+
+        //Collectibles
+        csvFile = Resources.Load<TextAsset>("GameData/Collectibles");
+        var colData = CSVSerializer.Deserialize<CollectibleData>(csvFile.text);
+        foreach (var item in colData)
+        {
+            if (CollectibleData.ContainsKey(item.Id))
+            {
+                CollectibleData[item.Id].Add(item);
+            }
+            else
+            {
+                CollectibleData.Add(item.Id, new List<CollectibleData>() { item });
             }
         }
 

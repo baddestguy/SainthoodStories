@@ -264,6 +264,18 @@ public enum CustomEventType
     ,HOSPITAL_STORY_3
     ,HOSPITAL_STORY_4
     ,HOSPITAL_STORY_5
+    ,COLLECTIBLE_MISSION_1
+    ,COLLECTIBLE_MISSION_2
+    ,COLLECTIBLE_MISSION_3
+    ,COLLECTIBLE_MISSION_4
+    ,COLLECTIBLE_MISSION_5
+    ,COLLECTIBLE_MISSION_6
+    ,COLLECTIBLE_MISSION_7
+    ,COLLECTIBLE_MISSION_8
+    ,COLLECTIBLE_MISSION_9
+    ,COLLECTIBLE_MISSION_10
+    ,COLLECTIBLE_MISSION_11
+    ,COLLECTIBLE_MISSION_12
 }
 
 public enum EventPopupType
@@ -368,6 +380,22 @@ public class WeatherData
     public double Time;
     public double StartTime;
     public double Duration;
+}
+
+[System.Serializable]
+public class CollectibleData
+{
+    public string Id;
+    public string Name;
+    public string Description;
+}
+
+[System.Serializable]
+public class CollectibleObjectivesData
+{
+    public int Id;
+    public int Amount;
+    public CustomEventType OnComplete;
 }
 
 [System.Serializable]
@@ -577,6 +605,10 @@ public class SaveObject
     public int WeatherEndDay;
     public bool WeatherActivated;
     public ObjectivesData[] CompletedObjectives;
+    public string[] Collectibles;
+    public int CurrentCollectibleMissionId;
+    public int CurrentCollectibleCounter;
+    public string[] WorldCollectibles;
 }
 
 [System.Serializable]
