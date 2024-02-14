@@ -162,43 +162,10 @@ public class SaveDataManager : MonoBehaviour
 
     private void DoSequentialSave()
     {
-        SaveObject saveObject = CurrentSaveData();
+        SaveObject save = CurrentSaveData();
+        SaveObject[] saves = new SaveObject[1] { save };
 
-        Dictionary<Days, SaveObject> keyVal = GetSavedDataSet();
-
-        if(keyVal == null)
-        {
-            FirstSave();
-            return;
-        }
-
-        //Compare the saved week with the current
-        
-        if (IsNewWeek(keyVal.Values.ToArray(), saveObject))
-        {
-            SaveObject save = CurrentSaveData();
-            SaveObject[] saves = new SaveObject[1] { save };
-
-            Save(saves);
-            return;
-        }
-
-
-        if (keyVal.ContainsKey((Days)saveObject.Day))
-        {
-            keyVal[(Days)saveObject.Day] = saveObject;
-        }
-        else
-        {
-            keyVal.Add((Days)saveObject.Day, saveObject);
-        }
-
-        SaveObject[] saveObjects = keyVal.Values.ToArray().OrderBy(x => x.Day).ToArray();
-
-
-        Save(saveObjects);
-
-        
+        Save(saves);
     }
 
     private void Save(params SaveObject[] data)
@@ -210,18 +177,8 @@ public class SaveDataManager : MonoBehaviour
         Debug.Log("SAVED!");
     }
 
-    private void Save(object data)
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(GetPath(FILENAME));
-        bf.Serialize(file, data);
-        file.Close();
-    }
-
     private Dictionary<Days, SaveObject> GetSavedDataSet()
     {
-
-        
         try
         {
             BinaryFormatter bf = new BinaryFormatter();

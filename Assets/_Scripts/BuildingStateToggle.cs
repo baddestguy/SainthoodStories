@@ -1,4 +1,5 @@
 using System.Linq;
+using CompassNavigatorPro;
 using Opsive.UltimateCharacterController.Character;
 using UnityEngine;
 
@@ -32,6 +33,11 @@ public class BuildingStateToggle : MonoBehaviour
             var player = FindObjectOfType<UltimateCharacterLocomotion>();
             player.SetPosition(PlayerAnchorPoint.position);
         }
-    }
 
+        if(myObjective != null)
+        {
+            var myPoi = gameObject.AddComponent<CompassProPOI>();
+            myPoi.visibility = POIVisibility.AlwaysVisible;
+        }
+    }
 }
