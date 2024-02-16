@@ -9,14 +9,24 @@ public class BuildingStateToggle : MonoBehaviour
     public GameObject RubbleGO;
     public GameObject BuildingGO;
     public GameObject FireGO;
-
     public Transform PlayerAnchorPoint;
+
+    public ObjectivesData MyObjective;
+
     // Start is called before the first frame update
     void Start()
     {
         var myState = GameManager.Instance.HouseStates[HouseName];
-        var myObjective = MissionManager.Instance.CurrentObjectives.Where(obj => obj.House == HouseName).FirstOrDefault();
-        gameObject.SetActive(myState == BuildingState.NORMAL || (myState == BuildingState.RUBBLE && myObjective?.Event == BuildingEventType.CONSTRUCT));
+        var objectives = MissionManager.Instance.CurrentObjectives.Where(obj => obj.House == HouseName || (obj.House == "Any" && HouseName != "InteractableChurch"));
+        if (objectives.Count() > 1)
+        {
+            MyObjective = objectives.Where(obj => obj.House == HouseName).FirstOrDefault();
+        }
+        else
+        {
+            MyObjective = objectives.FirstOrDefault();
+        }
+        gameObject.SetActive(myState == BuildingState.NORMAL || (myState == BuildingState.RUBBLE && MyObjective?.Event == BuildingEventType.CONSTRUCT));
 
         if (GameManager.Instance.HouseStates.ContainsKey(HouseName))
         {
@@ -34,7 +44,7 @@ public class BuildingStateToggle : MonoBehaviour
             player.SetPosition(PlayerAnchorPoint.position);
         }
 
-        if(myObjective != null)
+        if(MyObjective != null)
         {
             var myPoi = gameObject.AddComponent<CompassProPOI>();
             myPoi.visibility = POIVisibility.AlwaysVisible;

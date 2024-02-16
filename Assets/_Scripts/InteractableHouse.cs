@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CompassNavigatorPro;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
@@ -98,7 +99,15 @@ public class InteractableHouse : InteractableObject
 
     public void Initialize()
     {
-        MyObjective = MissionManager.Instance.CurrentObjectives.Where(obj => obj.House == GetType().Name).FirstOrDefault();
+        var objectives = MissionManager.Instance.CurrentObjectives.Where(obj => obj.House == GetType().Name || (obj.House == "Any" && GetType().Name != "InteractableChurch"));
+        if(objectives.Count() > 1)
+        {
+            MyObjective = objectives.Where(obj => obj.House == GetType().Name).FirstOrDefault();
+        }
+        else
+        {
+            MyObjective = objectives.FirstOrDefault();
+        }
 
         switch (MissionManager.Instance.CurrentMission.CurrentWeek)
         {
@@ -163,15 +172,22 @@ public class InteractableHouse : InteractableObject
             transform.position = new Vector3(newPos.x, newPos.y + 1.2f, newPos.z);
         }
 
-        if(MyObjective != null && MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+        SetObjectiveParameters();
+    }
+
+    protected virtual void SetObjectiveParameters()
+    {
+        if (MyObjective == null) return;
+
+        if(MyObjective.Event == BuildingEventType.DELIVER_ITEM)
         {
             RequiredItems = 1;
             DeadlineSet = true;
             DeadlineTriggeredForTheDay = true;
             PopMyIcon();
             SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
-            InventoryManager.Instance.AddToInventory(ItemType.MEDS); //TODO: TEMPORARY!
         }
+
     }
 
     public virtual void GetInteriorPopUI()

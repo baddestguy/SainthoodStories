@@ -35,6 +35,18 @@
         }
     }
 
+    protected override void SetObjectiveParameters()
+    {
+        if (MyObjective == null) return;
+
+        base.SetObjectiveParameters();
+
+        if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+        {
+            InventoryManager.Instance.AddToInventory(ItemType.GROCERIES);
+        }
+    }
+
     public override void DeliverItem(InteractableHouse house, bool autoDeliver = false)
     {
         if (house != this) return;

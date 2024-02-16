@@ -52,6 +52,18 @@ public class InteractableHospital : InteractableHouse
         }
     }
 
+    protected override void SetObjectiveParameters()
+    {
+        if (MyObjective == null) return;
+   
+        base.SetObjectiveParameters();
+
+        if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+        {
+            InventoryManager.Instance.AddToInventory(ItemType.MEDS);
+        }
+    }
+
     protected override int ModVolunteerEnergyWithProvisions()
     {
         if (BuildingActivityState != BuildingActivityState.DELIVERING_BABY) return 0;

@@ -43,6 +43,18 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
+    protected override void SetObjectiveParameters()
+    {
+        if (MyObjective == null) return;
+
+        base.SetObjectiveParameters();
+
+        if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+        {
+            InventoryManager.Instance.AddToInventory(ItemType.STATIONERY);
+        }
+    }
+
     public void Teach()
     {
         GameClock clock = GameManager.Instance.GameClock;

@@ -39,6 +39,19 @@ public class InteractableOrphanage : InteractableHouse
             PopIcon.UIPopped(false);
         }
     }
+
+    protected override void SetObjectiveParameters()
+    {
+        if (MyObjective == null) return;
+
+        base.SetObjectiveParameters();
+
+        if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+        {
+            InventoryManager.Instance.AddToInventory(ItemType.TOYS);
+        }
+    }
+
     public override void Tick(double time, int day)
     {
         if(day > 5)
