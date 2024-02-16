@@ -242,6 +242,7 @@ public class InteractableHouse : InteractableObject
                     player.ConsumeEnergy(EnergyConsumption);
                     UpdateCharityPoints(VolunteerPoints + extraPoints, moddedEnergy);
                     VolunteerCountdown = 0;
+                    MissionManager.Instance.CompleteObjective(MyObjective);
                 }
                 break;
         }
@@ -751,7 +752,6 @@ public class InteractableHouse : InteractableObject
 
     public virtual void VolunteerWork(InteractableHouse house)
     {
-        MissionManager.Instance.CompleteObjective(MyObjective);
     }
 
     public virtual void UpdateCharityPoints(int amount, int energy)
