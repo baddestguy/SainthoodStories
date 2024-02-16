@@ -36,6 +36,22 @@ public enum SaintID
     ,VICTOR
 }   
 
+public enum SacredItemBehaviour
+{
+    HOVER = 0,
+    BOUNCE,
+    PATROL,
+    RUNAWAY,
+    DECOY,
+    MIRROR_MOVEMENT,
+    TELEPORT,
+    ZIP,
+    BURST,
+    SPIRAL,
+    CONCENTRATION,
+    WEATHER_CHANGING
+}
+
 public enum CustomEventRewardType
 {
     NONE = 0,

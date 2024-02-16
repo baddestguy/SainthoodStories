@@ -130,23 +130,23 @@ public class EventsManager : MonoBehaviour
         if (MissionManager.MissionOver) return;
         if (GameSettings.Instance.FTUE && GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
 
-        if (c.Day % 5 == 0)
-        {
-            AddEventToList(CustomEventType.SUNDAY_MASS);
-            GameDataManager.Instance.TriggeredDailyEvents.Clear();
-        }
-        else
-        {
-            var randomEvent = GameManager.Instance.SaveData.DailyEvent == CustomEventType.NONE ? GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY) : GameDataManager.Instance.GetEvent(GameManager.Instance.SaveData.DailyEvent);
-            var security = InventoryManager.Instance.GetProvision(Provision.SECURITY_GUARDS);
-            if(security != null && randomEvent.Id == CustomEventType.VANDALISM)
-            {
-                randomEvent = GameDataManager.Instance.GetEvent(CustomEventType.VANDALISM_STOPPED);
-            }
-            randomEvent = GameDataManager.Instance.RemixEventBySeason(randomEvent);
-            DailyEvent = randomEvent.Id;
-            AddEventToList(randomEvent.Id);
-        }
+        //if (c.Day % 5 == 0)
+        //{
+        //    AddEventToList(CustomEventType.SUNDAY_MASS);
+        //    GameDataManager.Instance.TriggeredDailyEvents.Clear();
+        //}
+        //else
+        //{
+        //    var randomEvent = GameManager.Instance.SaveData.DailyEvent == CustomEventType.NONE ? GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY) : GameDataManager.Instance.GetEvent(GameManager.Instance.SaveData.DailyEvent);
+        //    var security = InventoryManager.Instance.GetProvision(Provision.SECURITY_GUARDS);
+        //    if(security != null && randomEvent.Id == CustomEventType.VANDALISM)
+        //    {
+        //        randomEvent = GameDataManager.Instance.GetEvent(CustomEventType.VANDALISM_STOPPED);
+        //    }
+        //    randomEvent = GameDataManager.Instance.RemixEventBySeason(randomEvent);
+        //    DailyEvent = randomEvent.Id;
+        //    AddEventToList(randomEvent.Id);
+        //}
 
         if(GameSettings.Instance.DEMO_MODE && c.Day == 1)
         {

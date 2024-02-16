@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Linq;
+using Enviro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -72,6 +73,16 @@ public class WeatherManager : MonoBehaviour
         }
         BroadcastWeather();
         UI.Instance.WeatherAlert(WeatherType, WeatherStartTime, WeatherEndTime);
+    }
+
+    public void ChangeWeather(int weatherId)
+    {
+        EnviroManager.instance.Weather.ChangeWeather(weatherId);
+    }
+
+    public void ChangeTimeOfDay(float time)
+    {
+        EnviroManager.instance.Time.SetTimeOfDay(time);
     }
 
     private void TriggerWeatherForecast(double time, int day)
