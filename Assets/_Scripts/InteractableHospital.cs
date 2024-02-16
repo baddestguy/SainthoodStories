@@ -62,6 +62,10 @@ public class InteractableHospital : InteractableHouse
         {
             InventoryManager.Instance.AddToInventory(ItemType.MEDS);
         }
+        else if(MyObjective.Event == BuildingEventType.BABY)
+        {
+            SetBabyDelivery(null);
+        }
     }
 
     protected override int ModVolunteerEnergyWithProvisions()
@@ -123,7 +127,7 @@ public class InteractableHospital : InteractableHouse
     public override void TriggerHazardousMode(double time, int day)
     {
         if (HazardCounter > 0) return;
-        if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
+     //   if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
 
         DeadlineCounter--;
         DeliveryTimeSet = false;

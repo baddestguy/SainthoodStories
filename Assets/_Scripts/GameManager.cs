@@ -127,11 +127,6 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (Player.OnEnergyDepleted)
-                    UI.Instance.ShowWeekBeginText(LocalizationManager.Instance.GetText("WeekIntroEnergyDepleted"));
-                else if (PreviousSceneID == SceneID.MainMenu || (GameClock.Day == 1 && PreviousSceneID != SceneID.SaintsShowcase_Day))
-                    UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText(CurrentMission.SeasonLevel.Replace("Level", "_Splash"))}");
-                else
                     UI.Instance.ShowDayBeginText("");
             }
 
@@ -203,6 +198,8 @@ public class GameManager : MonoBehaviour
         {
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.WorldMap;
+            int[] randomWeather = new int[] {6, 10, 22, 24};
+            WeatherManager.Instance.ChangeWeather(randomWeather[Random.Range(0, randomWeather.Length-1)]);
         }
 
         if (loadWeekDaysScene)

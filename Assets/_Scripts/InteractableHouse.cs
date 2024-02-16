@@ -187,7 +187,11 @@ public class InteractableHouse : InteractableObject
             PopMyIcon();
             SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
         }
-
+        else if(MyObjective.Event == BuildingEventType.REPAIR)
+        {
+            var clock = GameManager.Instance.GameClock;
+            TriggerHazardousMode(clock.Time, clock.Day);
+        }
     }
 
     public virtual void GetInteriorPopUI()
@@ -315,9 +319,9 @@ public class InteractableHouse : InteractableObject
     public virtual void TriggerHazardousMode(double time, int day)
     {
         if (HazardCounter > 0) return;
-        if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
+     //   if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
         if (InsideHouse && CameraLockOnMe) return;
-        if (time >= 21) return;
+     //   if (time >= 21) return;
 
         BuildingState = BuildingState.HAZARDOUS;
         EnvironmentalHazardDestructionCountdown = 13;
