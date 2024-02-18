@@ -13,7 +13,7 @@ public class CollectibleItem : MonoBehaviour
     {
         if(other.name == "Nun")
         {
-            MissionManager.Instance.Collect(Name);
+            MissionManager.Instance.Collect(gameObject.name + ":" + Name);
             gameObject.SetActive(false);
         }
     }

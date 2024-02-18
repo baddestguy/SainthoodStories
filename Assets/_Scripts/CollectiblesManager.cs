@@ -24,7 +24,7 @@ public class CollectiblesManager : MonoBehaviour
         {
             if (!collection.activeSelf) continue;
 
-            var list = collection.GetComponentsInChildren<CollectibleItem>(true);
+            var list = collection.GetComponentsInChildren<CollectibleItem>(true).Where(go => !InventoryManager.Instance.Collectibles.Any(c => c.Contains(go.name+":"))).ToArray();
             var spawnAmount = GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount - MissionManager.Instance.CurrentCollectibleCounter;
             for (int i = 0; i < spawnAmount; i++)
             {

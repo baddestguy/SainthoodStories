@@ -15,7 +15,7 @@ public class WorldPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 1f);
+        MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 1.25f);
         StartCoroutine("BoostAsync");
     }
 
@@ -70,6 +70,6 @@ public class WorldPlayer : MonoBehaviour
         if (Boosted) return;
         
         //Fail Boost FX
-        MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 1f);
+        MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 1.25f);
     }
 }

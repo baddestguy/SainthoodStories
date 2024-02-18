@@ -146,7 +146,7 @@ public class InventoryManager : MonoBehaviour
         if (MissionManager.MissionOver) return;
         if (GameSettings.Instance.FTUE && GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
 
-        StartCoroutine(WaitAndEnableProvisionPopupAsync());
+    //    StartCoroutine(WaitAndEnableProvisionPopupAsync());
     }
 
     IEnumerator WaitAndEnableProvisionPopupAsync()
