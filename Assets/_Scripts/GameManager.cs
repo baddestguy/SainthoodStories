@@ -115,6 +115,7 @@ public class GameManager : MonoBehaviour
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = CurrentMission.SeasonSceneId;
             Instantiate(Resources.Load("UI/UI"));
+            EventsManager.Instance.LoadTriggeredMissionEvents(SaveData.MissionEvents);
             MissionManager.MissionOver = false;
             Player = FindObjectOfType<Player>();
             Map = FindObjectOfType<GameMap>();
@@ -198,8 +199,16 @@ public class GameManager : MonoBehaviour
         {
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.WorldMap;
-            int[] randomWeather = new int[] {6, 10, 22, 24};
-            WeatherManager.Instance.ChangeWeather(randomWeather[Random.Range(0, randomWeather.Length-1)]);
+            var obj = MissionManager.Instance.CurrentObjectives.FirstOrDefault();
+            if(obj != null)
+            {
+                WeatherManager.Instance.ChangeWeather(obj.WeatherId);
+            }
+            else
+            {
+                int[] randomWeather = new int[] {6, 10, 22, 24};
+                WeatherManager.Instance.ChangeWeather(randomWeather[Random.Range(0, randomWeather.Length-1)]);
+            }
         }
 
         if (loadWeekDaysScene)

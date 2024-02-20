@@ -48,7 +48,8 @@ public class InteractableOrphanage : InteractableHouse
 
         if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
         {
-            InventoryManager.Instance.AddToInventory(ItemType.TOYS);
+            InventoryManager.Instance.ClearInventory();
+            InventoryManager.Instance.AddToInventory(ItemType.TOYS, MyObjective.RequiredAmount);
         }
     }
 

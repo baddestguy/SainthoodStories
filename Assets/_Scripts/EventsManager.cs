@@ -13,6 +13,7 @@ public class EventsManager : MonoBehaviour
     private List<CustomEventData> EventList = new List<CustomEventData>();
     private List<StoryEventData> StoryEvents = new List<StoryEventData>();
     public List<CustomEventData> CurrentEvents = new List<CustomEventData>();
+    public List<CustomEventType> TriggeredMissionEvents = new List<CustomEventType>();
     public bool EventInProgress;
 
     private Coroutine eventRoutine;
@@ -22,8 +23,13 @@ public class EventsManager : MonoBehaviour
     {
         Instance = this;
         GameClock.ExecuteEvents += ExecuteEvents;
-        GameClock.Ticked += TryEventTrigger;
+    //    GameClock.Ticked += TryEventTrigger;
         GameClock.StartNewDay += StartNewDay;
+    }
+
+    public void LoadTriggeredMissionEvents(CustomEventType[] missions)
+    {
+        TriggeredMissionEvents = missions?.ToList() ?? new List<CustomEventType>();
     }
 
     public void AddEventToList(CustomEventType newEvent)
@@ -31,6 +37,8 @@ public class EventsManager : MonoBehaviour
         if (EventInProgress) return;
 
         var e = GameDataManager.Instance.CustomEventData[newEvent][0]; //Grab based on weight
+        
+        if (EventList.Contains(e)) return;
 
         EventList.Add(e);
         CurrentEvents.Add(e);
@@ -227,7 +235,7 @@ public class EventsManager : MonoBehaviour
     private void OnDisable()
     {
         GameClock.ExecuteEvents -= ExecuteEvents;
-        GameClock.Ticked -= TryEventTrigger;
+    //    GameClock.Ticked -= TryEventTrigger;
         GameClock.StartNewDay -= StartNewDay;
     }
 }

@@ -43,14 +43,23 @@ public class InventoryManager : MonoBehaviour
         return (Items.Count >= MaxInventorySlots && autodelivery == null) || (Items.Count >= MaxInventorySlots && autodelivery != null && AutoDeliveryItems.Sum(x => x.Value.Count) == autodelivery.Value);
     }
 
-    public void AddToInventory(ItemType item)
+    public void AddToInventory(ItemType item, int amount = 1)
     {
-        if (Items.Count == MaxInventorySlots)
+        for(int i = 0; i < amount; i++)
         {
-            UI.Instance.DisplayMessage("INVENTORY FULL!");
-            return;
+            if (Items.Count == MaxInventorySlots)
+            {
+                UI.Instance.DisplayMessage("INVENTORY FULL!");
+                return;
+            }
+            Items.Add(item);
+            RefreshInventoryUI?.Invoke();
         }
-        Items.Add(item);
+    }
+
+    public void ClearInventory()
+    {
+        Items.Clear();
         RefreshInventoryUI?.Invoke();
     }
 

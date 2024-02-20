@@ -182,7 +182,7 @@ public class Player : MonoBehaviour
                 EventsManager.Instance.ExecuteEvents();
             }
 
-            EventsManager.Instance.ForceTriggerStoryEvent(filteredEvents);
+         //   EventsManager.Instance.ForceTriggerStoryEvent(filteredEvents);
         }
     }
 

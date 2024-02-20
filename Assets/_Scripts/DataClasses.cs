@@ -253,6 +253,8 @@ public enum CustomEventType
     ,SHELTER_BUILDEXTRA
     ,STOCK_SHELVES
     ,REGISTRATION
+    ,HOSPITAL_ARRIVAL
+    ,HOSPITAL_COMPLETE
     ,ORPHANAGE_PRECOMPLETE
     ,ORPHANAGE_COMPLETE
     ,SCHOOL_PRECOMPLETE
@@ -292,6 +294,16 @@ public enum CustomEventType
     ,COLLECTIBLE_MISSION_10
     ,COLLECTIBLE_MISSION_11
     ,COLLECTIBLE_MISSION_12
+    ,MISSION_1
+    ,MISSION_2
+    ,MISSION_3
+    ,MISSION_4
+    ,MISSION_5
+    ,MISSION_6
+    ,MISSION_7
+    ,MISSION_8
+    ,MISSION_9
+    ,MISSION_10
 }
 
 public enum EventPopupType
@@ -420,6 +432,9 @@ public class ObjectivesData
     public int Id;
     public BuildingEventType Event;
     public string House;
+    public int RequiredAmount;
+    public CustomEventType CustomEventId;
+    public int WeatherId;
 
     public override bool Equals(object obj)
     {
@@ -429,7 +444,9 @@ public class ObjectivesData
         }
 
         ObjectivesData other = (ObjectivesData)obj;
-        return Id == other.Id && Event == other.Event && House == other.House;
+        return Id == other.Id && Event == other.Event && House == other.House
+            && RequiredAmount == other.RequiredAmount && CustomEventId == other.CustomEventId
+            && WeatherId == other.WeatherId;
     }
 
     public override int GetHashCode()
@@ -440,6 +457,9 @@ public class ObjectivesData
             hash = hash * 23 + Id.GetHashCode();
             hash = hash * 23 + (Event.GetHashCode());
             hash = hash * 23 + (House != null ? House.GetHashCode() : 0);
+            hash = hash * 23 + RequiredAmount.GetHashCode();
+            hash = hash * 23 + (CustomEventId.GetHashCode());
+            hash = hash * 23 + WeatherId.GetHashCode();
             return hash;
         }
     }
@@ -625,6 +645,7 @@ public class SaveObject
     public int CurrentCollectibleMissionId;
     public int CurrentCollectibleCounter;
     public string[] WorldCollectibles;
+    public CustomEventType[] MissionEvents;
 }
 
 [System.Serializable]

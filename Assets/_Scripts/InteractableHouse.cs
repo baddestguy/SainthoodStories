@@ -179,9 +179,15 @@ public class InteractableHouse : InteractableObject
     {
         if (MyObjective == null) return;
 
+        if(MyObjective.CustomEventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(MyObjective.CustomEventId) ?? false))
+        {
+            EventsManager.Instance.AddEventToList(MyObjective.CustomEventId);
+            EventsManager.Instance.TriggeredMissionEvents.Add(MyObjective.CustomEventId);
+        }
+
         if(MyObjective.Event == BuildingEventType.DELIVER_ITEM)
         {
-            RequiredItems = 1;
+            RequiredItems = MyObjective.RequiredAmount;
             DeadlineSet = true;
             DeadlineTriggeredForTheDay = true;
             PopMyIcon();
@@ -242,7 +248,8 @@ public class InteractableHouse : InteractableObject
                     player.ConsumeEnergy(EnergyConsumption);
                     UpdateCharityPoints(VolunteerPoints + extraPoints, moddedEnergy);
                     VolunteerCountdown = 0;
-                    MissionManager.Instance.CompleteObjective(MyObjective);
+                    if(MyObjective.Event == BuildingEventType.VOLUNTEER)
+                        MissionManager.Instance.CompleteObjective(MyObjective);
                 }
                 break;
         }
@@ -442,7 +449,6 @@ public class InteractableHouse : InteractableObject
                         DeadlineSet = true;
                         DeadlineTriggeredForTheDay = true;
                         PopMyIcon();
-                        SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
                     }
                 }
@@ -526,7 +532,8 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
-            MissionManager.Instance.CompleteObjective(MyObjective);
+            if(MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+                MissionManager.Instance.CompleteObjective(MyObjective);
             BuildRelationship(ThankYouType.ITEM);
             if (!autoDeliver)
             {
@@ -649,7 +656,8 @@ public class InteractableHouse : InteractableObject
             InsideHouse = true;
             GamepadCursor.CursorSpeed = 2000f;
 
-            MissionManager.Instance.CompleteObjective(MyObjective);
+            if(MyObjective.Event == BuildingEventType.CONSTRUCT)
+                MissionManager.Instance.CompleteObjective(MyObjective);
         }
         else
         {
@@ -669,20 +677,29 @@ public class InteractableHouse : InteractableObject
     {
         switch (GetType().Name)
         {
+            case "InteractableHospital":
+                if(!EventsManager.Instance.TriggeredMissionEvents.Contains(CustomEventType.HOSPITAL_COMPLETE))
+                    EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_COMPLETE);
+                break;
             case "InteractableOrphanage":
-                EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_COMPLETE);
+                if(!EventsManager.Instance.TriggeredMissionEvents.Contains(CustomEventType.ORPHANAGE_COMPLETE))
+                    EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_COMPLETE);
                 break;
             case "InteractableKitchen":
-                EventsManager.Instance.AddEventToList(CustomEventType.KITCHEN_COMPLETE);
+                if(!EventsManager.Instance.TriggeredMissionEvents.Contains(CustomEventType.KITCHEN_COMPLETE))
+                    EventsManager.Instance.AddEventToList(CustomEventType.KITCHEN_COMPLETE);
                 break;
             case "InteractableShelter":
-                EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_COMPLETE);
+                if(!EventsManager.Instance.TriggeredMissionEvents.Contains(CustomEventType.SHELTER_COMPLETE))
+                    EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_COMPLETE);
                 break;
             case "InteractableSchool":
-                EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_COMPLETE);
+                if(!EventsManager.Instance.TriggeredMissionEvents.Contains(CustomEventType.SCHOOL_COMPLETE))
+                    EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_COMPLETE);
                 break;
             case "InteractableClothesBank":
-                EventsManager.Instance.AddEventToList(CustomEventType.CLOTHES_COMPLETE);
+                if(!EventsManager.Instance.TriggeredMissionEvents.Contains(CustomEventType.CLOTHES_COMPLETE))
+                    EventsManager.Instance.AddEventToList(CustomEventType.CLOTHES_COMPLETE);
                 break;
         }
     }
@@ -1034,6 +1051,8 @@ public class InteractableHouse : InteractableObject
         BuildingState = BuildingState.NORMAL;
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name + GetHazardIcon());
+        if (MyObjective.Event == BuildingEventType.REPAIR)
+            MissionManager.Instance.CompleteObjective(MyObjective);
     }
 
     public virtual void ResetActionProgress()

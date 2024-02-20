@@ -43,6 +43,8 @@ public class InteractableHospital : InteractableHouse
                 ExteriorPopUI.gameObject.SetActive(true);
                 ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
                 PopIcon.UIPopped(true);
+                if (!EventsManager.Instance.TriggeredMissionEvents.Contains(CustomEventType.HOSPITAL_ARRIVAL))
+                    EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_ARRIVAL);
             }
         }
         else
@@ -60,7 +62,8 @@ public class InteractableHospital : InteractableHouse
 
         if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
         {
-            InventoryManager.Instance.AddToInventory(ItemType.MEDS);
+            InventoryManager.Instance.ClearInventory();
+            InventoryManager.Instance.AddToInventory(ItemType.MEDS, MyObjective.RequiredAmount);
         }
         else if(MyObjective.Event == BuildingEventType.BABY)
         {
@@ -107,6 +110,9 @@ public class InteractableHospital : InteractableHouse
                     EndDelivery.SetClock(clock.Time - 1, clock.Day);
                     BuildRelationship(ThankYouType.BABY, 2);
                     OnActionProgress?.Invoke(1f, this, 2);
+                    if (MyObjective.Event == BuildingEventType.BABY)
+                        MissionManager.Instance.CompleteObjective(MyObjective);
+
                 }
             }
         }

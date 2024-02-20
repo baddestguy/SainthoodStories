@@ -51,7 +51,8 @@ public class InteractableSchool : InteractableHouse
 
         if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
         {
-            InventoryManager.Instance.AddToInventory(ItemType.STATIONERY);
+            InventoryManager.Instance.ClearInventory();
+            InventoryManager.Instance.AddToInventory(ItemType.STATIONERY, MyObjective.RequiredAmount);
         }
     }
 

@@ -111,7 +111,7 @@ public class MissionManager : MonoBehaviour
     public void UpdateFaithPoints(int amount)
     {
         if (MissionOver) return;
-        FaithPoints = Mathf.Clamp(FaithPoints + amount, -100, 5);
+        FaithPoints = Mathf.Clamp(FaithPoints + amount, -100, 15);
         UI.Instance.RefreshFP(FaithPoints);
 
         //if (FaithPoints <= 0)
@@ -124,7 +124,7 @@ public class MissionManager : MonoBehaviour
     public void UpdateCharityPoints(int amount, InteractableHouse house)
     {
         if (MissionOver) return;
-        CharityPoints = Mathf.Clamp(CharityPoints + amount, -100, 5);
+        CharityPoints = Mathf.Clamp(CharityPoints + amount, -100, 100);
         UI.Instance.RefreshCP(amount, CharityPoints);
 
         //if (CharityPoints <= 0)

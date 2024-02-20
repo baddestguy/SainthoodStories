@@ -43,7 +43,8 @@
 
         if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
         {
-            InventoryManager.Instance.AddToInventory(ItemType.GROCERIES);
+            InventoryManager.Instance.ClearInventory();
+            InventoryManager.Instance.AddToInventory(ItemType.GROCERIES, MyObjective.RequiredAmount);
         }
     }
 

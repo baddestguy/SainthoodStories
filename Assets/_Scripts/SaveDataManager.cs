@@ -97,7 +97,8 @@ public class SaveDataManager : MonoBehaviour
             Collectibles = InventoryManager.Instance.Collectibles?.ToArray(),
             CurrentCollectibleMissionId = MissionManager.Instance.CurrentCollectibleMissionId,
             CurrentCollectibleCounter = MissionManager.Instance.CurrentCollectibleCounter,
-            WorldCollectibles = GameManager.Instance.WorldCollectibles.ToArray()
+            WorldCollectibles = GameManager.Instance.WorldCollectibles.ToArray(),
+            MissionEvents = EventsManager.Instance.TriggeredMissionEvents.ToArray()
         };
     }    
 
