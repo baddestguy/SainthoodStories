@@ -7,27 +7,42 @@ using UnityEngine;
 public class WorldPlayer : MonoBehaviour
 {
     public UltimateCharacterLocomotion MyLocomotor;
+    private AnimatorMonitor MyAnimator;
     float BoostTimer = 5f;
     float BoostWindowTimer = 1f;
     bool BoostWindow = false;
     bool Boosted = false;
 
+    float accelerator = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
-        MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 1.25f);
+        MyAnimator = GetComponentInChildren<AnimatorMonitor>();
         StartCoroutine("BoostAsync");
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (MyAnimator.Moving)
+        {
+            accelerator = Mathf.Clamp(accelerator+0.035f, 0, 1);
+        }
+        else
+        {
+            accelerator = 0f;
+        }
+
+        if (Boosted)
+            MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 3.2f);
+        else
+            MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 1.5f * accelerator);
     }
 
     public void OnBoost(Ability ability, bool trigger)
     {
-        if (ability is not BoostAbility) return;
+        if (ability is not BoostAbility || !trigger) return;
 
         if (!BoostWindow)
         {
@@ -38,38 +53,29 @@ public class WorldPlayer : MonoBehaviour
         }
 
         Boosted = true;
-        MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 3.2f);
+        StopCoroutine("BoostAsync");
+        BoostWindow = false;
+        StartCoroutine("BoostAsync");
+
         SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
         SoundManager.Instance.PlayOneShotSfx("Crit_Good");
     }
 
     IEnumerator BoostAsync()
     {
-  //      while (true)
-        {
-            yield return new WaitForSeconds(BoostTimer);
-            SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
-            BoostWindow = true;
-            yield return new WaitForSeconds(BoostWindowTimer);
-            BoostWindow = false;
-            EndBoost();
-            //if (!Boosted)
-            //{
-            //    SoundManager.Instance.PlayOneShotSfx("Crit_Bad");
-            //}
-            Boosted = false;
-        }
+        yield return new WaitForSeconds(BoostTimer);
+        SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
+        BoostWindow = true;
+        yield return new WaitForSeconds(BoostWindowTimer);
+        BoostWindow = false;
+        EndBoost();
     }
 
     public void EndBoost()
     {
         StopCoroutine("BoostAsync");
+        Boosted = false;
         BoostWindow = false;
         StartCoroutine("BoostAsync");
-
-        if (Boosted) return;
-        
-        //Fail Boost FX
-        MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 1.25f);
     }
 }

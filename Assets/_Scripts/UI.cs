@@ -49,6 +49,7 @@ public class UI : MonoBehaviour
     private Dictionary<string, GameObject> InstantiatedBuildingAlerts = new Dictionary<string, GameObject>();
 
     public GameObject InventoryUI;
+    public GameObject PackageSelectorUI;
     public GameObject TreasuryUI;
     public TextMeshProUGUI TreasuryAmount;
     public Image TreasuryDisplayGlow;
@@ -470,6 +471,16 @@ public class UI : MonoBehaviour
         TreasuryAmount.DOCounter(oldAmount, (int)TreasuryManager.Instance.Money, 0.5f).SetDelay(2f);
 
         AdditionPoints(TreasuryAdditionDisplay, TreasuryDisplayGlow, (int)delta, 2f);
+    }
+
+    public void EnablePackageSelector(bool enable, InteractableHouse house = null)
+    {
+        EnableAllUIElements(false);
+        PackageSelectorUI.SetActive(enable);
+        if(house != null)
+        {
+            PackageSelectorUI.GetComponent<PackageSelector>().House = house;
+        }
     }
 
     public void EnableInventoryUI(bool enable)

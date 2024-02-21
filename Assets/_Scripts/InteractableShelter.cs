@@ -40,12 +40,6 @@
         if (MyObjective == null) return;
 
         base.SetObjectiveParameters();
-
-        if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
-        {
-            InventoryManager.Instance.ClearInventory();
-            InventoryManager.Instance.AddToInventory(ItemType.GROCERIES, MyObjective.RequiredAmount);
-        }
     }
 
     public override void DeliverItem(InteractableHouse house, bool autoDeliver = false)

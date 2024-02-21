@@ -720,7 +720,17 @@ public class InteractableHouse : InteractableObject
                 break;
 
             case "WORLD":
-                StartCoroutine(GoToWorldMap());
+                foreach (var house in GameManager.Instance.Houses)
+                {
+                    if (house.MyObjective != null && house.MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+                    {
+                        UI.Instance.EnablePackageSelector(true, this);
+                        return;
+                    }
+                }
+
+                GoToWorldMap();
+
                 break;
 
             case "ENTER":
@@ -729,8 +739,15 @@ public class InteractableHouse : InteractableObject
         }
     }
 
-    IEnumerator GoToWorldMap()
+    public void GoToWorldMap()
     {
+        StartCoroutine(GoToWorldMapAsync());
+    }
+
+    IEnumerator GoToWorldMapAsync()
+    {
+        UI.Instance.EnablePackageSelector(false);
+
         SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
         InsideHouse = false;
         OnEnterHouse?.Invoke(InsideHouse);

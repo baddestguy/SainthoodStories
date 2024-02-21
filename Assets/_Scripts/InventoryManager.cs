@@ -57,6 +57,11 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public void RemoveFromInventory(ItemType item)
+    {
+        Items.Remove(item);
+    }
+
     public void ClearInventory()
     {
         Items.Clear();

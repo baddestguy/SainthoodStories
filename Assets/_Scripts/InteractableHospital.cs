@@ -60,12 +60,7 @@ public class InteractableHospital : InteractableHouse
    
         base.SetObjectiveParameters();
 
-        if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
-        {
-            InventoryManager.Instance.ClearInventory();
-            InventoryManager.Instance.AddToInventory(ItemType.MEDS, MyObjective.RequiredAmount);
-        }
-        else if(MyObjective.Event == BuildingEventType.BABY)
+        if(MyObjective.Event == BuildingEventType.BABY)
         {
             SetBabyDelivery(null);
         }

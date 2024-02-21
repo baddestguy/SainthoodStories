@@ -45,12 +45,6 @@ public class InteractableOrphanage : InteractableHouse
         if (MyObjective == null) return;
 
         base.SetObjectiveParameters();
-
-        if (MyObjective.Event == BuildingEventType.DELIVER_ITEM)
-        {
-            InventoryManager.Instance.ClearInventory();
-            InventoryManager.Instance.AddToInventory(ItemType.TOYS, MyObjective.RequiredAmount);
-        }
     }
 
     public override void Tick(double time, int day)
