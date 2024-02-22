@@ -646,6 +646,7 @@ public class SaveObject
     public int CurrentCollectibleCounter;
     public string[] WorldCollectibles;
     public CustomEventType[] MissionEvents;
+    public bool HasChosenProvision;
 }
 
 [System.Serializable]

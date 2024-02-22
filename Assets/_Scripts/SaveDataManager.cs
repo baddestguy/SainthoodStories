@@ -98,7 +98,8 @@ public class SaveDataManager : MonoBehaviour
             CurrentCollectibleMissionId = MissionManager.Instance.CurrentCollectibleMissionId,
             CurrentCollectibleCounter = MissionManager.Instance.CurrentCollectibleCounter,
             WorldCollectibles = GameManager.Instance.WorldCollectibles.ToArray(),
-            MissionEvents = EventsManager.Instance.TriggeredMissionEvents.ToArray()
+            MissionEvents = EventsManager.Instance.TriggeredMissionEvents.ToArray(),
+            HasChosenProvision = InventoryManager.HasChosenProvision
         };
     }    
 
@@ -175,6 +176,7 @@ public class SaveDataManager : MonoBehaviour
         FileStream file = File.Create(GetPath(FILENAME));
         bf.Serialize(file, data);
         file.Close();
+        GameManager.Instance.SaveData = data[0];
         Debug.Log("SAVED!");
     }
 

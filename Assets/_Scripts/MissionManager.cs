@@ -235,6 +235,7 @@ public class MissionManager : MonoBehaviour
         InventoryManager.Instance.GeneratedProvisions.Clear();
         EventsManager.Instance.DailyEvent = CustomEventType.NONE;
         GameManager.Instance.GameClock.Reset();
+        InventoryManager.HasChosenProvision = false;
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);
     }

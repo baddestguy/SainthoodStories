@@ -18,17 +18,19 @@ public class InventoryManager : MonoBehaviour
     public int MaxProvisionsSlots = 5;
 
     public List<ProvisionData> GeneratedProvisions = new List<ProvisionData>();
+    public static bool HasChosenProvision;
 
     private void Awake()
     {
         Instance = this;
-        GameClock.StartNewDay += GenerateProvisionsForNewDay;
+    //    GameClock.StartNewDay += GenerateProvisionsForNewDay;
     }
 
     public void LoadInventory(SaveObject save)
     {
         Items = save.InventoryItems?.ToList() ?? new List<ItemType>();
         Provisions = save.Provisions?.ToList() ?? new List<ProvisionData>();
+        HasChosenProvision = save.HasChosenProvision;
         if (HasProvision(Provision.EXTRA_INVENTORY))
         {
             MaxInventorySlots = GetProvision(Provision.EXTRA_INVENTORY).Value;
@@ -96,7 +98,7 @@ public class InventoryManager : MonoBehaviour
                 MaxInventorySlots = provision.Value;
                 break;
         }
-
+        HasChosenProvision = true;
         RefreshInventoryUI?.Invoke();
     }
 
@@ -114,6 +116,7 @@ public class InventoryManager : MonoBehaviour
                 AddProvision(upgradedProv);
             }
         }
+        HasChosenProvision = true;
         RefreshInventoryUI?.Invoke();
     }
 
@@ -160,7 +163,7 @@ public class InventoryManager : MonoBehaviour
         if (MissionManager.MissionOver) return;
         if (GameSettings.Instance.FTUE && GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
 
-    //    StartCoroutine(WaitAndEnableProvisionPopupAsync());
+        StartCoroutine(WaitAndEnableProvisionPopupAsync());
     }
 
     IEnumerator WaitAndEnableProvisionPopupAsync()
@@ -265,6 +268,6 @@ public class InventoryManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameClock.StartNewDay -= GenerateProvisionsForNewDay;
+    //    GameClock.StartNewDay -= GenerateProvisionsForNewDay;
     }
 }

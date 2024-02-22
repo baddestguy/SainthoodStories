@@ -720,12 +720,20 @@ public class InteractableHouse : InteractableObject
                 break;
 
             case "WORLD":
-                foreach (var house in GameManager.Instance.Houses)
+                if(GetType().Name == "InteractableChurch")
                 {
-                    if (house.MyObjective != null && house.MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+                    foreach (var house in GameManager.Instance.Houses)
                     {
-                        UI.Instance.EnablePackageSelector(true, this);
-                        return;
+                        if (house.MyObjective != null && house.MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+                        {
+                            UI.Instance.EnablePackageSelector(true, this);
+                            return;
+                        }
+                        else if(!InventoryManager.HasChosenProvision)
+                        {
+                            InventoryManager.Instance.GenerateProvisionsForNewDay();
+                            return;
+                        }
                     }
                 }
 

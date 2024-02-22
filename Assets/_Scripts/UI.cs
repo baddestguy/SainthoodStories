@@ -230,6 +230,7 @@ public class UI : MonoBehaviour
     {
         ProvisionPopup.gameObject.SetActive(true);
         ProvisionPopup.Init(prov1, prov2);
+        ProvisionPopup.House = GameManager.Instance.CurrentHouse;
     }
 
     public void BuildingAlertPush(string sprite)

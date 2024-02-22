@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,13 +16,16 @@ public class PackageSelector : MonoBehaviour
     void Start()
     {
         ItemGO = Resources.Load<GameObject>("UI/PackageUIItem");
+        var instantiatedGos = new List<PackageItem>();
         foreach (var house in GameManager.Instance.Houses)
         {
             if(house.MyObjective != null && house.MyObjective.Event == BuildingEventType.DELIVER_ITEM)
             {
                 var item = Instantiate(ItemGO);
                 item.transform.SetParent(Scroller.content);
-                item.GetComponent<PackageItem>().Init(house.MyObjective);
+                var pItem = item.GetComponent<PackageItem>();
+                pItem.Init(house.MyObjective);
+                instantiatedGos.Add(pItem);
             }
         }
 
@@ -29,8 +33,7 @@ public class PackageSelector : MonoBehaviour
 
         for(int i = 0; i < items.Count; i++)
         {
-            ItemList[i].PackageIcon.gameObject.SetActive(true);
-            ItemList[i].PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{items[i]}");
+            PackageSelected(instantiatedGos.Where(go => go.Item == items[i]).FirstOrDefault());
         }
     }
 
@@ -75,9 +78,14 @@ public class PackageSelector : MonoBehaviour
 
     public void GoToWorld()
     {
-        if (House == null) return;
+        gameObject.SetActive(false);
+        if(!InventoryManager.HasChosenProvision)
+            InventoryManager.Instance.GenerateProvisionsForNewDay();
+        else
+        {
+            if (House == null) return;
 
-        House.GoToWorldMap();
+            House.GoToWorldMap();
+        }
     }
-
 }
