@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
             InventoryManager.Instance.LoadInventory(SaveData);
             SoundManager.Instance.SongSelection();
             Houses = FindObjectsOfType<InteractableHouse>();
-            if (GameClock.Time == 6)
+            if (GameClock.Time == 5)
             {
                 GameClock.StartNewDay?.Invoke();
             }

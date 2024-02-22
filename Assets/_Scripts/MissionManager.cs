@@ -18,6 +18,7 @@ public class MissionManager : MonoBehaviour
     public List<CollectibleObjectivesData> CurrentCollectibleObjectives;
     public int CurrentCollectibleCounter = 0;
     public int CurrentCollectibleMissionId = 0;
+    public int CurrentMissionId = 0;
 
     public Dictionary<TileType, int> HouseScores;
     public int CharityPoints { get; private set; }
@@ -55,13 +56,20 @@ public class MissionManager : MonoBehaviour
         for (int i = 1; i < GameDataManager.Instance.ObjectivesData.Count; i++)
         {
             var comp = CompletedObjectives?.Where(x => x.Id == i) ?? Enumerable.Empty<ObjectivesData>();
-            if(CompletedObjectives == null || comp.Count() < GameDataManager.Instance.ObjectivesData[i].Count)
+            if(CompletedObjectives == null || comp.Count() < GameDataManager.Instance.ObjectivesData[i].Count+1)
             {
+                CurrentMissionId = i;
                 CurrentObjectives = GameDataManager.Instance.GetObjectivesData(i).ToList();
                 foreach(var c in comp)
                 {
                     var done = CurrentObjectives.Remove(c);
                 }
+                if (!CurrentObjectives.Any())
+                {
+                    //TODO: SHOW POPUP TO END DAY
+                    CurrentObjectives.Add(new ObjectivesData() { Id = CurrentMissionId, Event = BuildingEventType.RETURN, House = "InteractableChurch" });
+                }
+
                 break;
             }
         }
@@ -91,7 +99,8 @@ public class MissionManager : MonoBehaviour
 
         if (!CurrentObjectives.Any())
         {
-            StartCoroutine(NewDayAsync());
+            //TODO: SHOW POPUP TO END DAY
+            CurrentObjectives.Add(new ObjectivesData() { Id = CurrentMissionId, Event = BuildingEventType.RETURN, House = "InteractableChurch" });
         }
     }
 
@@ -99,6 +108,12 @@ public class MissionManager : MonoBehaviour
     {
         CurrentCollectibleCounter++;
         InventoryManager.Instance.AddCollectible(item);
+    }
+
+    public void EndDay()
+    {
+        CurrentObjectives.Clear();
+        StartCoroutine(NewDayAsync());
     }
 
     private IEnumerator NewDayAsync()

@@ -67,7 +67,8 @@ public enum BuildingEventType
     BABY,
     VOLUNTEER,
     CONSTRUCT,
-    REPAIR
+    REPAIR,
+    RETURN
 }
 
 public enum BuildingActivityState
@@ -623,6 +624,7 @@ public class SaveObject
     public double Time;
     public int TutorialSteps;
     public double Money;
+    public double TemporaryMoneyToDonate;
     public int RunAttempts;
     public HouseSaveData[] Houses;
     public SaintID[] Saints;

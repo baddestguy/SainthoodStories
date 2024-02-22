@@ -125,26 +125,26 @@ public class WeatherManager : MonoBehaviour
         if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && day < 3) return;
         if (time > 18) return;
 
-        var wData = GetWeatherData();
+        //var wData = GetWeatherData();
 
-        switch (GameManager.MissionDifficulty)
-        {
-            case MissionDifficulty.NORMAL:
-                if (wData != null || !SameDayAsMission() && Random.Range(0, 100) < 1)
-                {
-                    WeatherActivation(wData != null ? wData.StartTime : Random.Range(4, 7), wData != null ? wData.Duration : Random.Range(2, 3));
-                }
-                break;
+        //switch (GameManager.MissionDifficulty)
+        //{
+        //    case MissionDifficulty.NORMAL:
+        //        if (wData != null || !SameDayAsMission() && Random.Range(0, 100) < 1)
+        //        {
+        //            WeatherActivation(wData != null ? wData.StartTime : Random.Range(4, 7), wData != null ? wData.Duration : Random.Range(2, 3));
+        //        }
+        //        break;
 
-            case MissionDifficulty.HARD:
-                if (wData != null || !SameDayAsMission() && Random.Range(0, 100) < 2)
-                {
-                    if (MissionManager.Instance.CurrentMission.Season == Season.SUMMER && !GameManager.Instance.GameClock.DuringTheDay()) break;
+        //    case MissionDifficulty.HARD:
+        //        if (wData != null || !SameDayAsMission() && Random.Range(0, 100) < 2)
+        //        {
+        //            if (MissionManager.Instance.CurrentMission.Season == Season.SUMMER && !GameManager.Instance.GameClock.DuringTheDay()) break;
                     
-                    WeatherActivation(wData != null ? wData.StartTime : Random.Range(3, 5), wData != null ? wData.Duration : Random.Range(4, 5));
-                }
-                break;
-        }
+        //            WeatherActivation(wData != null ? wData.StartTime : Random.Range(3, 5), wData != null ? wData.Duration : Random.Range(4, 5));
+        //        }
+        //        break;
+        //}
     }
 
     private void WeatherActivation(double futureStartTime, double futureEndTime)

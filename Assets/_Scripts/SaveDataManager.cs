@@ -76,6 +76,7 @@ public class SaveDataManager : MonoBehaviour
             Time = GameManager.Instance.GameClock.Time,
             TutorialSteps = TutorialManager.Instance.CurrentTutorialStep,
             Money = TreasuryManager.Instance.Money,
+            TemporaryMoneyToDonate = TreasuryManager.Instance.TemporaryMoneyToDonate,
             Houses = GetSavedHouses(),
             Saints = SaintsManager.Instance.UnlockedSaints.Select(s => s.Id).ToArray(),
             InventoryItems = InventoryManager.Instance.Items.ToArray(),
@@ -121,7 +122,7 @@ public class SaveDataManager : MonoBehaviour
                 Energy = 3,
                 Week = 1,
                 Day = 1,
-                Time = 6,
+                Time = 5,
                 TutorialSteps = 40,
                 Money = 10
             };
@@ -135,7 +136,7 @@ public class SaveDataManager : MonoBehaviour
             Energy = 1,
             Week = 1,
             Day = 1,
-            Time = 6,
+            Time = 5,
             TutorialSteps = 0,
             Money = 10
         };

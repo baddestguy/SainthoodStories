@@ -51,6 +51,7 @@ public class InteractableChurch : InteractableHouse
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
             SoundManager.Instance.SwitchMusicChannel(true);
             CheckCollectibleObjectives();
+            TreasuryManager.Instance.DepositMoney();
         }
         else
         {
@@ -93,17 +94,17 @@ public class InteractableChurch : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         CheckParticipation(clock);
 
-        if(clock.Time > 18.5 || clock.Time <= 6.5)
+        if(clock.Time > 18.5 || clock.Time <= 5.5)
         {
-            LiturgyStartTime = 6;
-            LiturgyEndTime = 7;
+            LiturgyStartTime = 5;
+            LiturgyEndTime = 6;
         }
         else if(clock.Time > 12.5)
         {
             LiturgyStartTime = 18;
             LiturgyEndTime = 19;
         }
-        else if(clock.Time > 6.5)
+        else if(clock.Time > 5.5)
         {
             LiturgyStartTime = 12;
             LiturgyEndTime = 13;
@@ -165,7 +166,7 @@ public class InteractableChurch : InteractableHouse
         switch (actionName)
         {
             case "WORLD":
-                return GameManager.Instance.GameClock.Time < 6 || GameManager.Instance.GameClock.Time >= 7;
+                return GameManager.Instance.GameClock.Time < 5 || GameManager.Instance.GameClock.Time >= 6;
         }
 
         return base.CanDoAction(actionName);
@@ -419,28 +420,31 @@ public class InteractableChurch : InteractableHouse
 
     public void Sleep()
     {
-        GameClock clock = GameManager.Instance.GameClock;
-        Player player = GameManager.Instance.Player;
+        MissionManager.Instance.CompleteObjective(MyObjective);
+        MissionManager.Instance.EndDay();
 
-        SleepProgress++;
-        var extraPoints = 0;
-        if (PopUI.CriticalHitCount == MaxSleepProgress) extraPoints = 1;
-        OnActionProgress?.Invoke(SleepProgress / MaxSleepProgress, this, 1);
-        if (SleepProgress == MaxSleepProgress)
-        {
-            var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
+        //GameClock clock = GameManager.Instance.GameClock;
+        //Player player = GameManager.Instance.Player;
 
-            player.ConsumeEnergy(SleepEnergy - (mattress?.Value ?? 0) - extraPoints);
-            player.RemoveRandomStatusEffect();
-            PopUIFXIcons("Energy", -SleepEnergy);
-            SleepProgress = 0;
-        }
+        //SleepProgress++;
+        //var extraPoints = 0;
+        //if (PopUI.CriticalHitCount == MaxSleepProgress) extraPoints = 1;
+        //OnActionProgress?.Invoke(SleepProgress / MaxSleepProgress, this, 1);
+        //if (SleepProgress == MaxSleepProgress)
+        //{
+        //    var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
 
-        if(MaxSleepProgress > 0)
-        {
-            clock.Tick();
-        }
-        UI.Instance.DisplayMessage("SLEPT!");
+        //    player.ConsumeEnergy(SleepEnergy - (mattress?.Value ?? 0) - extraPoints);
+        //    player.RemoveRandomStatusEffect();
+        //    PopUIFXIcons("Energy", -SleepEnergy);
+        //    SleepProgress = 0;
+        //}
+
+        //if(MaxSleepProgress > 0)
+        //{
+        //    clock.Tick();
+        //}
+        //UI.Instance.DisplayMessage("SLEPT!");
     }
 
     public void OpenUnlockedSaints()
