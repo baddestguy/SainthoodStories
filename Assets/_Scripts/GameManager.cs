@@ -147,7 +147,6 @@ public class GameManager : MonoBehaviour
             PlayAmbience(GameClock.Time, GameClock.Day);
             TreasuryManager.Instance.Money = SaveData.Money;
             InventoryManager.Instance.LoadInventory(SaveData);
-            SoundManager.Instance.SongSelection();
             Houses = FindObjectsOfType<InteractableHouse>();
             if (GameClock.Time == 5)
             {
@@ -295,6 +294,7 @@ public class GameManager : MonoBehaviour
                     MissionManager.MissionsBegin();
 
                     UI.Instance.DisplayRunAttempts();
+                    SoundManager.Instance.StartPlaylist();
                 }, newGame, false, !activeScene.name.Contains("MainMenu"), showUI: showUI);
                 break;
         }

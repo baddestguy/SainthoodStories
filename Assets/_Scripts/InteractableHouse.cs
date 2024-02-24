@@ -771,7 +771,6 @@ public class InteractableHouse : InteractableObject
         OnEnterHouse?.Invoke(InsideHouse);
         yield return StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
         GameManager.Instance.ExitHouse();
-        SoundManager.Instance.SwitchMusicChannel(false);
     }
 
     public void InteriorLightsOff()

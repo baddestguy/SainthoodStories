@@ -49,7 +49,6 @@ public class InteractableChurch : InteractableHouse
         if (tile.GetInstanceID() == GetInstanceID())
         {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
-            SoundManager.Instance.SwitchMusicChannel(true);
             CheckCollectibleObjectives();
             TreasuryManager.Instance.DepositMoney();
         }
@@ -57,7 +56,6 @@ public class InteractableChurch : InteractableHouse
         {
             ExteriorPopUI.gameObject.SetActive(false);
             PopIcon.UIPopped(false);
-            SoundManager.Instance.SwitchMusicChannel(false);
         }
     }
 

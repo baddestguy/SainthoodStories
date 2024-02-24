@@ -19,6 +19,7 @@ public class SoundManager : MonoBehaviour
     private string AmbientTrackName;
     [HideInInspector]public AudioSource gameplayTrack;
     [HideInInspector]public AudioLowPassFilter lowPassFilter;
+    public string[] MusicPlaylist = new string[] { "Convent_Music", "Field_Music", "Temp1", "Temp2", "Temp3" };
 
     public AudioMixer audioMixer;
 
@@ -41,73 +42,63 @@ public class SoundManager : MonoBehaviour
 
     public void SongSelection()
     {
+        //Keeping this just in case we want to have a summer/fall/winter playlist
         var season = MissionManager.Instance.CurrentMission.Season;
         switch (season)
         {
             case Season.SPRING:
             case Season.SUMMER:
             case Season.FALL:
-                PlayMusic("Convent_Music", "Field_Music", Random.Range(100, 120));
                 break;
 
             case Season.WINTER:
-                PlayMusic("Field_Music_2", loopDelay: Random.Range(320, 360));
                 break;
         }
     }
 
-    public void PlayMusic(string songName = "", string songName2 = "", float loopDelay = 90)
+    public void StartPlaylist()
+    {
+        MusicPlaylist = new string[] { "Convent_Music", "Field_Music", "Temp1", "Temp2", "Temp3" };
+        MusicPlaylist.Shuffle();
+        PlayMusic(MusicPlaylist[0]);
+        StartCoroutine(StartPlaylistAsync());
+    }
+
+    IEnumerator StartPlaylistAsync()
+    {
+        var index = 1;
+        while (true)
+        {
+            yield return new WaitForSeconds(5);
+            if (MusicAudioSourceChannel1.isPlaying) continue;
+
+            yield return new WaitForSeconds(Random.Range(40, 60));
+            PlayMusic(MusicPlaylist[index]);
+            index++;
+            if (index == MusicPlaylist.Length)
+            {
+                index = 0;
+                MusicPlaylist.Shuffle();
+            }
+        }
+    }
+
+    public void PlayMusic(string songName = "", float loopDelay = 90)
     {
         if (string.IsNullOrEmpty(songName))
             return;
-
-        CancelInvoke("StartMusic");
 
         AudioSource oldTrack = MusicAudioSourceChannel1;
 
         MusicAudioSourceChannel1 = gameObject.AddComponent<AudioSource>();
         MusicAudioSourceChannel1.outputAudioMixerGroup = audioMixerGroup["Music"];
         MusicAudioSourceChannel1.clip = Resources.Load("Audio/Music/" + songName, typeof(AudioClip)) as AudioClip;
-
-        if (!string.IsNullOrEmpty(songName2))
-        {
-            MusicAudioSourceChannel2 = gameObject.AddComponent<AudioSource>();
-            MusicAudioSourceChannel2.outputAudioMixerGroup = audioMixerGroup["Music2"];
-            MusicAudioSourceChannel2.clip = Resources.Load("Audio/Music/" + songName2, typeof(AudioClip)) as AudioClip;
-        }
-
-        InvokeRepeating("StartMusic", 0f, loopDelay);
+        MusicAudioSourceChannel1.Play();
 
         Destroy(oldTrack, 5);
         FadeMusic(1f);
         StartCoroutine(FadeAudioAsync(0f, oldTrack));
 
-    }
-
-    private void StartMusic()
-    {
-        MusicAudioSourceChannel1.Play();
-
-        if (MusicAudioSourceChannel2 != null)
-        {
-            MusicAudioSourceChannel2.Play();
-        }
-    }
-
-    public void SwitchMusicChannel(bool inConvent)
-    {
-        if (MusicAudioSourceChannel2 == null) return;
-
-        if (inConvent)
-        {
-            FadeMusic(1f, MusicAudioSourceChannel1);
-            FadeMusic(0f, MusicAudioSourceChannel2);
-        }
-        else
-        {
-            FadeMusic(1f, MusicAudioSourceChannel2);
-            FadeMusic(0f, MusicAudioSourceChannel1);
-        }
     }
 
     public void PlayAmbience(string overrideSeasons = "")
@@ -309,7 +300,7 @@ public class SoundManager : MonoBehaviour
 
     public void EndAllTracks()
     {
-        CancelInvoke("StartMusic");
+        StopAllCoroutines();
         PlayHouseAmbience("", false, 0f);
         PlayWeatherAmbience(false);
         FadeMusic(1f);
