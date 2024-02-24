@@ -49,7 +49,8 @@ public enum SacredItemBehaviour
     BURST,
     SPIRAL,
     CONCENTRATION,
-    WEATHER_CHANGING
+    WEATHER_CHANGING,
+    CHASE
 }
 
 public enum CustomEventRewardType

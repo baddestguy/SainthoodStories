@@ -5,6 +5,7 @@ using DG.Tweening;
 //using FMODUnity;
 using Opsive.UltimateCharacterController.Character;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SacredItem : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class SacredItem : MonoBehaviour
     private GameObject MyExplosion;
     private GameObject MySphere;
     private bool HasTriggered = false;
+    private NavMeshAgent Agent;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +29,15 @@ public class SacredItem : MonoBehaviour
         MyExplosion = Resources.Load<GameObject>("MemoryExplodeFx");
     //    MySphere = transform.Find("Sphere").gameObject;
         ExhibitBehaviour();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (Behaviour == SacredItemBehaviour.CHASE && other.name == "Nun")
+        {
+            MissionManager.Instance.UpdateFaithPoints(-1);
+            gameObject.SetActive(false);
+        }
     }
 
     public void Triggered()
@@ -115,6 +126,23 @@ public class SacredItem : MonoBehaviour
             case SacredItemBehaviour.SPIRAL:
                 transform.DOSpiral(25, new Vector3(0, 1, 0), speed: 0.1f, frequency: 1).SetLoops(-1, LoopType.Yoyo);
                 break;
+
+            case SacredItemBehaviour.CHASE:
+                StartCoroutine(ChaseAsync());
+                break;
+        }
+    }
+
+    IEnumerator ChaseAsync()
+    {
+        var player = FindObjectOfType<WorldPlayer>();
+        Agent = GetComponent<NavMeshAgent>();
+        MyRenderer.material = RedMaterial;
+
+        while (true)
+        {
+            Agent.destination = player.transform.position;
+            yield return null;
         }
     }
 

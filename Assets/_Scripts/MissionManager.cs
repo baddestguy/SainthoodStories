@@ -128,7 +128,11 @@ public class MissionManager : MonoBehaviour
     {
         if (MissionOver) return;
         FaithPoints = Mathf.Clamp(FaithPoints + amount, -100, 15);
-        UI.Instance.RefreshFP(FaithPoints);
+
+        if(UI.Instance != null)
+        {
+            UI.Instance.RefreshFP(FaithPoints);
+        }
 
         //if (FaithPoints <= 0)
         //{
