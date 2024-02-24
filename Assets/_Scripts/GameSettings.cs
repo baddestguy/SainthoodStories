@@ -17,6 +17,7 @@ public class GameSettings : MonoBehaviour
     public bool IgnoreHouseBuildingAtEndofDay;
     public bool DEMO_MODE;
     public bool ShowGrid;
+    public bool InfiniteBoost;
 
     [HideInInspector] public bool fullScreenMode;
     [HideInInspector] public QualityLevel currentQualityLevel;

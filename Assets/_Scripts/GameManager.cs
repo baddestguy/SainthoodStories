@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public GameMap Map;
     public Player Player;
+    public int PlayerEnergy;
     public GameClock GameClock;
     public static MissionDifficulty MissionDifficulty;
     public SaveObject SaveData;
@@ -75,6 +76,7 @@ public class GameManager : MonoBehaviour
     public void ExitHouse()
     {
         GetBuildingStates();
+        PlayerEnergy = Player.Energy.Amount;
         LoadScene("WorldMap", LoadSceneMode.Single);
     }
 
@@ -326,11 +328,21 @@ public class GameManager : MonoBehaviour
     {
 
         SaveDataManager.Instance.LoadGame((data, newGame) => {
-            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.Energy, data.Time, 7, data.Week);
+            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, PlayerEnergy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
             SaveData = data;
         }, false, true);
 
+    }
+
+    public bool HasPlayerEnergy()
+    {
+        return PlayerEnergy > 0 || GameSettings.Instance.InfiniteBoost;
+    }
+
+    public void UpdatePlayerEnergyFromWorld(int amount)
+    {
+        PlayerEnergy = Mathf.Clamp(PlayerEnergy + amount, 0, 100);
     }
 
     private IEnumerator WaitAndLoadScene(string sceneName)

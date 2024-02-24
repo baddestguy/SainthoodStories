@@ -260,7 +260,7 @@ public class InteractableChurch : InteractableHouse
             //    player.ConsumeEnergy(ServiceEnergy);
                 UI.Instance.DisplayMessage("ATTENDED CONFESSION!!");
 
-                UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
+                UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                 InteriorPopUI.PlayVFX("Halo");
                 clock.Tick();
             }
@@ -293,7 +293,7 @@ public class InteractableChurch : InteractableHouse
                         }
                     }
 
-                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
+                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                 }
 
                 clock.Tick();
@@ -319,7 +319,7 @@ public class InteractableChurch : InteractableHouse
                         }
                     }
 
-                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
+                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                 }
 
                 clock.Tick();
@@ -344,7 +344,7 @@ public class InteractableChurch : InteractableHouse
                         player.ConsumeEnergy(koboko.Value);
                     }
 
-                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
+                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                     PrayerProgress = 0;
                 }
                 clock.Tick();
@@ -371,7 +371,7 @@ public class InteractableChurch : InteractableHouse
                     }
                 }
 
-                UpdateFaithPoints(PrayerPoints +FPBonus + extraPoints, 0);
+                UpdateFaithPoints(PrayerPoints +FPBonus + extraPoints);
             }
 
             clock.Tick();
@@ -396,7 +396,7 @@ public class InteractableChurch : InteractableHouse
                     player.ConsumeEnergy(koboko.Value);
                 }
 
-                UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
+                UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                 PrayerProgress = 0;
             }
             clock.Tick();

@@ -510,7 +510,7 @@ public class InteractableHouse : InteractableObject
             }
             extraPoints += rosary?.Value ?? 0;
 
-            UpdateFaithPoints(MeditationPoints + FPBonus + extraPoints, 0);
+            UpdateFaithPoints(MeditationPoints + FPBonus + extraPoints);
             PrayersProgress = 0;
         }
         clock.Tick();
@@ -828,7 +828,7 @@ public class InteractableHouse : InteractableObject
         UI.Instance.BuildingAlertPop(GetType().Name);
     }
 
-    public virtual void UpdateFaithPoints(int amount, int energy)
+    public virtual void UpdateFaithPoints(int amount, int energy = -1)
     {
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.HIGH_SPIRIT || i.Id == CustomEventType.LOW_SPIRIT);
 
@@ -844,7 +844,8 @@ public class InteractableHouse : InteractableObject
         stack.Push(new Tuple<string, int>("InteractableChurch", amount * faithBonus));
         if (energy != 0) stack.Push(new Tuple<string, int>("Energy", energy));
         StartCoroutine(PopUIFXIconsAsync(stack));
-  
+
+        GameManager.Instance.Player.ConsumeEnergy(energy);
         GameManager.Instance.MissionManager.UpdateFaithPoints(amount + faithBonus);
     }
 

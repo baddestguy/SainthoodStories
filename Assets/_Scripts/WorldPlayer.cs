@@ -42,7 +42,7 @@ public class WorldPlayer : MonoBehaviour
 
     public void OnBoost(Ability ability, bool trigger)
     {
-        if (ability is not BoostAbility || !trigger) return;
+        if (ability is not BoostAbility || !trigger || !GameManager.Instance.HasPlayerEnergy()) return;
 
         if (!BoostWindow)
         {
@@ -57,6 +57,7 @@ public class WorldPlayer : MonoBehaviour
         BoostWindow = false;
         StartCoroutine("BoostAsync");
 
+        GameManager.Instance.UpdatePlayerEnergyFromWorld(-1);
         SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
         SoundManager.Instance.PlayOneShotSfx("Crit_Good");
     }
