@@ -105,8 +105,11 @@ public class InteractableHospital : InteractableHouse
                     EndDelivery.SetClock(clock.Time - 1, clock.Day);
                     BuildRelationship(ThankYouType.BABY, 2);
                     OnActionProgress?.Invoke(1f, this, 2);
-                    if (MyObjective.Event == BuildingEventType.BABY)
+                    if (MyObjective?.Event == BuildingEventType.BABY)
+                    {
                         MissionManager.Instance.CompleteObjective(MyObjective);
+                        MyObjective = null;
+                    }
 
                 }
             }

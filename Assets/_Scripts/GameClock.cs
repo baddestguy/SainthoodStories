@@ -108,12 +108,12 @@ public class GameClock
 
     public void Reset()
     {
-        if(Time > 6)
+        if(Time > 5)
         {
             Day++;
             if (Day > 7) Day = 1;
         }
-        Time = 6;
+        Time = 5;
     }
 
     public bool DuringTheDay()

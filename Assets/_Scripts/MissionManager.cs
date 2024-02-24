@@ -88,7 +88,8 @@ public class MissionManager : MonoBehaviour
         if (obj == null) return;
 
         CurrentObjectives.Remove(obj);
-        if(CompletedObjectives == null)
+
+        if (CompletedObjectives == null)
         {
             CompletedObjectives = new List<ObjectivesData>() { obj };
         }

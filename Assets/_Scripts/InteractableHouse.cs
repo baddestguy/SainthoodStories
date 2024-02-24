@@ -248,8 +248,11 @@ public class InteractableHouse : InteractableObject
                     player.ConsumeEnergy(EnergyConsumption);
                     UpdateCharityPoints(VolunteerPoints + extraPoints, moddedEnergy);
                     VolunteerCountdown = 0;
-                    if(MyObjective.Event == BuildingEventType.VOLUNTEER)
+                    if(MyObjective?.Event == BuildingEventType.VOLUNTEER)
+                    {
                         MissionManager.Instance.CompleteObjective(MyObjective);
+                        MyObjective = null;
+                    }
                 }
                 break;
         }
@@ -532,8 +535,12 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
-            if(MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+            if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM)
+            {
                 MissionManager.Instance.CompleteObjective(MyObjective);
+                MyObjective = null;
+            }
+
             BuildRelationship(ThankYouType.ITEM);
             if (!autoDeliver)
             {
@@ -656,8 +663,11 @@ public class InteractableHouse : InteractableObject
             InsideHouse = true;
             GamepadCursor.CursorSpeed = 2000f;
 
-            if(MyObjective.Event == BuildingEventType.CONSTRUCT)
+            if(MyObjective?.Event == BuildingEventType.CONSTRUCT)
+            {
                 MissionManager.Instance.CompleteObjective(MyObjective);
+                MyObjective = null;
+            }
         }
         else
         {
@@ -729,11 +739,11 @@ public class InteractableHouse : InteractableObject
                             UI.Instance.EnablePackageSelector(true, this);
                             return;
                         }
-                        else if(!InventoryManager.HasChosenProvision)
-                        {
-                            InventoryManager.Instance.GenerateProvisionsForNewDay();
-                            return;
-                        }
+                    }
+                    if(!InventoryManager.HasChosenProvision)
+                    {
+                        InventoryManager.Instance.GenerateProvisionsForNewDay();
+                        return;
                     }
                 }
 
@@ -1077,8 +1087,11 @@ public class InteractableHouse : InteractableObject
         BuildingState = BuildingState.NORMAL;
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name + GetHazardIcon());
-        if (MyObjective.Event == BuildingEventType.REPAIR)
+        if (MyObjective?.Event == BuildingEventType.REPAIR)
+        {
             MissionManager.Instance.CompleteObjective(MyObjective);
+            MyObjective = null;
+        }
     }
 
     public virtual void ResetActionProgress()
