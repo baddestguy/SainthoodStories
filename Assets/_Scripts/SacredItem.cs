@@ -137,11 +137,12 @@ public class SacredItem : MonoBehaviour
     {
         var player = FindObjectOfType<WorldPlayer>();
         Agent = GetComponent<NavMeshAgent>();
+        Agent.speed = Random.Range(3.5f, 6);
         MyRenderer.material = RedMaterial;
 
         while (true)
         {
-            Agent.destination = player.transform.position;
+            Agent.SetDestination(player.transform.position);
             yield return null;
         }
     }
@@ -149,26 +150,18 @@ public class SacredItem : MonoBehaviour
     IEnumerator RunawayAsync()
     {
         var player = FindObjectOfType<WorldPlayer>();
-        var posIndex = 0;
-        var originalPos = transform.position;
-        var savedLocations = EndLocations.Select(p => p.position).ToList();
+        Agent = GetComponent<NavMeshAgent>();
+        Agent.speed = 6;
+        var playerMotor = player.GetComponentInChildren<AnimatorMonitor>();
+
         while (true)
         {
             yield return null;
-            var speed = player.GetComponentInChildren<AnimatorMonitor>().ForwardMovement;
-            if(speed > 0.7f && Vector3.Distance(player.transform.position, transform.position) < 5)
+            var speed = playerMotor.ForwardMovement;
+            if(speed > 1f && Vector3.Distance(player.transform.position, transform.position) < 5)
             {
-                if(posIndex >= savedLocations.Count)
-                {
-                    posIndex = 0;
-                    transform.DOJump(originalPos, 10, 5, 5);
-                }
-                else
-                {
-                    transform.DOJump(savedLocations[posIndex], 10, 5, 5);
-                    posIndex++;
-                }
-                yield return new WaitForSeconds(5);
+                var fleeDirection = transform.position - player.transform.position;
+                Agent.destination = transform.position + fleeDirection;
             }
         }
     }
