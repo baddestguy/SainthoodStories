@@ -26,12 +26,12 @@ public class BuildingStateToggle : MonoBehaviour
         {
             MyObjective = objectives.FirstOrDefault();
         }
-        gameObject.SetActive(myState == BuildingState.NORMAL || (myState == BuildingState.RUBBLE && MyObjective?.Event == BuildingEventType.CONSTRUCT));
+        gameObject.SetActive(myState != BuildingState.RUBBLE || (myState == BuildingState.RUBBLE && MyObjective?.Event == BuildingEventType.CONSTRUCT));
 
         if (GameManager.Instance.HouseStates.ContainsKey(HouseName))
         {
             RubbleGO.SetActive(myState == BuildingState.RUBBLE);
-            BuildingGO.SetActive(myState == BuildingState.NORMAL);
+            BuildingGO.SetActive(myState != BuildingState.RUBBLE);
             if(FireGO != null)
             {
                 FireGO.SetActive(myState == BuildingState.HAZARDOUS);

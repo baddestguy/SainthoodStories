@@ -111,7 +111,7 @@ public class SoundManager : MonoBehaviour
             switch (MissionManager.Instance.CurrentMission.Season)
             {
                 case Season.SUMMER:
-                    if (clock.Time >= 21 || clock.Time < 6)
+                    if (clock.Time >= 19 || clock.Time < 6)
                     {
                         ambience = "SummerNight_Ambience";
                     }
@@ -165,16 +165,16 @@ public class SoundManager : MonoBehaviour
 
         switch (MissionManager.Instance.CurrentMission.Season)
         {
-            case Season.SUMMER:
-                weather = "Heatwave_Ambience";
-                if (start && InteractableHouse.InsideHouse && WeatherAmbientAudioSource != null)
-                {
-                    if (WeatherCoroutine != null) StopCoroutine(WeatherCoroutine);
-                    WeatherAmbientAudioSource.volume = 0.2f;
-                    return;
-                }
-                break;
+                //weather = "Heatwave_Ambience";
+                //if (start && InteractableHouse.InsideHouse && WeatherAmbientAudioSource != null)
+                //{
+                //    if (WeatherCoroutine != null) StopCoroutine(WeatherCoroutine);
+                //    WeatherAmbientAudioSource.volume = 0.2f;
+                //    return;
+                //}
+                //break;
 
+            case Season.SUMMER:
             case Season.FALL:
                 if (InteractableHouse.InsideHouse)
                     weather = "RainInterior_Ambience";

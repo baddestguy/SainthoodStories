@@ -217,13 +217,13 @@ public class InventoryManager : MonoBehaviour
     {
         switch (MissionManager.Instance.CurrentMission.Season)
         {
-            case Season.SUMMER:
-                if (prov.Id == Provision.WINTER_CLOAK || prov.Id == Provision.UMBRELLA)
-                {
-                    return GameDataManager.Instance.ProvisionData[Provision.SHADES][0];
-                }
-                break;
+                //if (prov.Id == Provision.WINTER_CLOAK || prov.Id == Provision.UMBRELLA)
+                //{
+                //    return GameDataManager.Instance.ProvisionData[Provision.SHADES][0];
+                //}
+                //break;
 
+            case Season.SUMMER:
             case Season.FALL:
                 if(prov.Id == Provision.WINTER_CLOAK || prov.Id == Provision.SHADES)
                 {

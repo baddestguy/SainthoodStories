@@ -30,7 +30,7 @@ public class DayNightCycle : MonoBehaviour
     public DayNight DayNight
     {
         get { 
-            if (GameManager.Instance.GameClock.Time >= 6 && GameManager.Instance.GameClock.Time < 21) return DayNight.DAY;
+            if (GameManager.Instance.GameClock.Time >= 6 && GameManager.Instance.GameClock.Time < 19) return DayNight.DAY;
             else return DayNight.NIGHT; 
         }
     }
@@ -49,7 +49,7 @@ public class DayNightCycle : MonoBehaviour
     private void StartingSkybox()
     {
         GameClock clock = GameManager.Instance.GameClock;
-        if (clock.Time >= 21 || clock.Time < 6)
+        if (clock.Time >= 19 || clock.Time < 6)
         {
             OverrideSkybox(NightSkyboxTextures);
         }

@@ -35,7 +35,7 @@ public class SacredItem : MonoBehaviour
     {
         if (Behaviour == SacredItemBehaviour.CHASE && other.name == "Nun")
         {
-            MissionManager.Instance.UpdateFaithPoints(-1);
+            MissionManager.Instance.UpdateFaithPoints((int)-transform.localScale.x);
             gameObject.SetActive(false);
         }
     }
@@ -135,6 +135,8 @@ public class SacredItem : MonoBehaviour
 
     IEnumerator ChaseAsync()
     {
+        var size = Random.Range(1, 5);
+        transform.localScale = new Vector3(size, size, size);
         var player = FindObjectOfType<WorldPlayer>();
         Agent = GetComponent<NavMeshAgent>();
         Agent.speed = Random.Range(3.5f, 6);

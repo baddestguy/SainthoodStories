@@ -36,6 +36,14 @@ public enum SaintID
     ,VICTOR
 }   
 
+public enum WeatherId
+{
+    CLEAR = 6,
+    FOG = 10,
+    SANDSTORM = 22,
+    RAIN = 24
+}
+
 public enum SacredItemBehaviour
 {
     HOVER = 0,

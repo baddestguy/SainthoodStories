@@ -290,6 +290,34 @@ public class MissionManager : MonoBehaviour
     {
     }
 
+    public void OverrideMission(int missionId)
+    {
+        if(CompletedObjectives != null)
+        {
+            CompletedObjectives.Clear();
+        }
+
+        for (int i = 1; i < missionId; i++)
+        {
+            for(int j = 0; j < GameDataManager.Instance.ObjectivesData[i].Count; j++)
+            {
+                CompleteObjective(GameDataManager.Instance.ObjectivesData[i][j]);
+            }
+            CurrentMissionId = i;
+            CurrentObjectives = GameDataManager.Instance.GetObjectivesData(i).ToList();
+            CompleteObjective(new ObjectivesData() { Id = CurrentMissionId, Event = BuildingEventType.RETURN, House = "InteractableChurch" });
+        }
+
+        foreach(var house in GameManager.Instance.Houses)
+        {
+            house.OverrideState(CurrentMissionId);
+        }
+
+        SaveDataManager.Instance.SaveGame();
+        MissionsBegin();
+        GameManager.Instance.ReloadLevel();
+    }
+
     public void OverideCP(int cp)
     {
         UpdateCharityPoints(cp, null);

@@ -21,7 +21,7 @@ public class EvilSpiritsManager : MonoBehaviour
 
         while (true)
         {
-            if(EnviroManager.instance.Time.hours > 21 || EnviroManager.instance.Time.hours < 5)
+            if(EnviroManager.instance.Time.hours > 18 || EnviroManager.instance.Time.hours < 5)
             {
                 yield return new WaitForSeconds(30);
 

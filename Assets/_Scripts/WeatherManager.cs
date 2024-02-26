@@ -91,19 +91,19 @@ public class WeatherManager : MonoBehaviour
 
         if (WeatherForecastTriggered)
         {
-            if (GameManager.Instance.GameClock == WeatherEndTime)
-            {
-                if(CurrentWeatherGO != null && CurrentWeatherGO.GetComponent<StormyWeather>() != null)
-                {
-                    CurrentWeatherGO.GetComponent<StormyWeather>().StopStorm();
-                }
-                WeatherForecastTriggered = false;
-                WeatherType = WeatherType.NONE;
-                BroadcastWeather();
-                DayNightCycle.SetFutureSkyBox(WeatherType);
-                SoundManager.Instance.PlayWeatherAmbience(false);
-            }
-            else if (GameManager.Instance.GameClock == WeatherStartTime)
+            //if (GameManager.Instance.GameClock == WeatherEndTime)
+            //{
+            //    if(CurrentWeatherGO != null && CurrentWeatherGO.GetComponent<StormyWeather>() != null)
+            //    {
+            //        CurrentWeatherGO.GetComponent<StormyWeather>().StopStorm();
+            //    }
+            //    WeatherForecastTriggered = false;
+            //    WeatherType = WeatherType.NONE;
+            //    BroadcastWeather();
+            //    DayNightCycle.SetFutureSkyBox(WeatherType);
+            //    SoundManager.Instance.PlayWeatherAmbience(false);
+            //}
+            if (GameManager.Instance.GameClock == WeatherStartTime)
             {
                 SetWeatherType();
                 if(CurrentWeatherGO != null)
@@ -205,12 +205,12 @@ public class WeatherManager : MonoBehaviour
             case Season.SPRING:
             case Season.FALL:
             case Season.WINTER:
+            case Season.SUMMER:
                 SoundManager.Instance.PlayOneShotSfx("Thunder_SFX", 1f, 30);
                 WeatherType = WeatherType.PRESTORM;
                 break;
-            case Season.SUMMER:
-                WeatherType = WeatherType.PREHEAT;
-                break;
+                //WeatherType = WeatherType.PREHEAT;
+                //break;
         }
         DayNightCycle?.SetFutureSkyBox(WeatherType);
     }
@@ -219,12 +219,12 @@ public class WeatherManager : MonoBehaviour
     {
         switch (MissionManager.Instance.CurrentMission.Season)
         {
-            case Season.SPRING:
-                WeatherType = WeatherType.HAIL;
-                break;
+            //case Season.SPRING:
+            //    WeatherType = WeatherType.HAIL;
+            //    break;
+            //    WeatherType = WeatherType.HEATWAVE;
+            //    break;
             case Season.SUMMER:
-                WeatherType = WeatherType.HEATWAVE;
-                break;
             case Season.FALL:
                 CurrentWeatherGO = Instantiate(RainResource) as GameObject;
                 WeatherType = WeatherType.RAIN;

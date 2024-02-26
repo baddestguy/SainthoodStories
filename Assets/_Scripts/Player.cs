@@ -242,21 +242,21 @@ public class Player : MonoBehaviour
 
         switch (MissionManager.Instance.CurrentMission.Season)
         {
-            case Season.SUMMER:
-                if (!InventoryManager.Instance.HasProvision(Provision.SHADES))
-                {
-                    WeatherStatusCounter++;
-                    if (WeatherStatusCounter >= 3)
-                    {
-                        if (Random.Range(0, 100) < 50)
-                        {
-                            WeatherStatusCounter = 0;
-                            AddRandomAilment();
-                        }
-                    }
-                }
-                break;
+                //if (!InventoryManager.Instance.HasProvision(Provision.SHADES))
+                //{
+                //    WeatherStatusCounter++;
+                //    if (WeatherStatusCounter >= 3)
+                //    {
+                //        if (Random.Range(0, 100) < 50)
+                //        {
+                //            WeatherStatusCounter = 0;
+                //            AddRandomAilment();
+                //        }
+                //    }
+                //}
+                //break;
 
+            case Season.SUMMER:
             case Season.FALL:
                 if (!InventoryManager.Instance.HasProvision(Provision.UMBRELLA))
                 {

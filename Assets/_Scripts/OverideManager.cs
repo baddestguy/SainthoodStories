@@ -17,6 +17,7 @@ public class OverideManager : MonoBehaviour
     public WeatherType weatherType;
     public SaintID NewSaint;
     public bool UnlockedSaints;
+    public int MissionId;
 
     [SerializeField]
     public bool showDayTimeUI;
@@ -24,6 +25,8 @@ public class OverideManager : MonoBehaviour
     public bool showCpFpEnUI;
     [SerializeField]
     public bool showInvProUI;
+    [SerializeField]
+    public bool showMissionUI;
 
     public void OverideTime()
     {
@@ -85,6 +88,11 @@ public class OverideManager : MonoBehaviour
             MissionManager.Instance.OverideFP(FP);
         if(_energy)
             GameManager.Instance.Player.Energy.OnOveride(energy);
+    }
+
+    public void OverrideMission()
+    {
+        MissionManager.Instance.OverrideMission(MissionId);
     }
 
     public void OverrideProvitionInventory(bool provision, bool inventory, bool adding)

@@ -338,9 +338,9 @@ public class UI : MonoBehaviour
                 case Season.SPRING:
                     WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Hail");
                     break;
+                    //WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Heatwave");
+                    //break;
                 case Season.SUMMER:
-                    WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Heatwave");
-                    break;
                 case Season.FALL:
                     WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Rain");
                     break;

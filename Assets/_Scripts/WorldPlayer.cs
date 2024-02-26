@@ -65,7 +65,10 @@ public class WorldPlayer : MonoBehaviour
     IEnumerator BoostAsync()
     {
         yield return new WaitForSeconds(BoostTimer);
-        SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
+        if (GameManager.Instance.HasPlayerEnergy())
+        {
+            SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
+        }
         BoostWindow = true;
         yield return new WaitForSeconds(BoostWindowTimer);
         BoostWindow = false;

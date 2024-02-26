@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Enviro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -153,6 +154,11 @@ public class GameManager : MonoBehaviour
             if (GameClock.Time == 5)
             {
                 GameClock.StartNewDay?.Invoke();
+            }
+            var obj = MissionManager.Instance.CurrentObjectives.FirstOrDefault();
+            if (obj != null && obj.WeatherId == (int)WeatherId.RAIN)
+            {
+                WeatherManager.Instance.OverrideWeatherActivation(0, 1);
             }
         }
         else if (scene.name.Contains("MainMenu"))

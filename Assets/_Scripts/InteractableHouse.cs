@@ -276,7 +276,7 @@ public class InteractableHouse : InteractableObject
                     {
                         if (BuildingState == BuildingState.NORMAL && Random.Range(0, 100) < EnvironmentalHazardDestructionChance)
                         {
-                            TriggerHazardousMode(time, day);
+                            //TriggerHazardousMode(time, day);
                         }
                     }
                     else
@@ -1444,6 +1444,49 @@ public class InteractableHouse : InteractableObject
     protected virtual void AutoDeliver(ItemType item)
     {
         DeliverItem(this, true);
+    }
+
+    public void OverrideState(int missionId)
+    {
+        switch (GetType().Name)
+        {
+            case "InteractableHospital":
+                if (missionId > 1)
+                {
+                    BuildingState = BuildingState.NORMAL;
+                }    
+                break;
+            case "InteractableOrphanage":
+                if (missionId > 2)
+                {
+                    BuildingState = BuildingState.NORMAL;
+                }
+                break;
+            case "InteractableKitchen":
+                if (missionId > 5)
+                {
+                    BuildingState = BuildingState.NORMAL;
+                }
+                break;
+            case "InteractableShelter":
+                if (missionId > 4)
+                {
+                    BuildingState = BuildingState.NORMAL;
+                }
+                break;
+            case "InteractableSchool":
+                if (missionId > 3)
+                {
+                    BuildingState = BuildingState.NORMAL;
+                }
+                break;
+            case "InteractableClothesBank":
+                if (missionId > 6)
+                {
+                    BuildingState = BuildingState.NORMAL;
+                }
+                break;
+        }
     }
 
     public override void OnDisable()
