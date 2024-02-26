@@ -23,7 +23,7 @@ public class WorldMapManager : MonoBehaviour
             yield return null;
             if (EnviroManager.instance.Time.minutes == 30 || EnviroManager.instance.Time.minutes == 0)
             {
-                GameManager.Instance.GameClock.Tick();
+                GameManager.Instance.PassTime();
                 yield return new WaitForSeconds(1.5f);
             }
         }

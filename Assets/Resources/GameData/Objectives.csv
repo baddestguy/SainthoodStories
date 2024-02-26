@@ -9,7 +9,7 @@ Id,Event,House,RequiredAmount,CustomEventId,WeatherId
 4,DELIVER_ITEM,InteractableOrphanage,1,NONE,10
 5,CONSTRUCT,InteractableKitchen,0,MISSION_5,10
 5,BABY,InteractableHospital,0,NONE,10
-6,REPAIR,InteractableSchool,0,MISSION_6,24
+6,REPAIR_URGENT,InteractableSchool,0,MISSION_6,24
 7,VOLUNTEER,InteractableSchool,0,MISSION_7,24
 8,DELIVER_ITEM,InteractableShelter,4,MISSION_8,24
 9,DELIVER_ITEM,InteractableSchool,2,MISSION_9,24

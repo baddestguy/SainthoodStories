@@ -77,7 +77,14 @@ public enum BuildingEventType
     VOLUNTEER,
     CONSTRUCT,
     REPAIR,
-    RETURN
+    RETURN,
+    URGENT,
+    DELIVER_ITEM_URGENT,
+    BABY_URGENT,
+    VOLUNTEER_URGENT,
+    REPAIR_URGENT,
+    CONSTRUCT_URGENT,
+    RETURN_URGENT
 }
 
 public enum BuildingActivityState

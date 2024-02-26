@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += OnLevelLoaded;
         MapTile.OnClickEvent += OnTap;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
-        GameClock.Ticked += PlayAmbience;
+        GameClock.Ticked += OnTick;
         LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
@@ -250,6 +250,18 @@ public class GameManager : MonoBehaviour
         GameClock.Tick();
     }
 
+    private void OnTick(double time, int day)
+    {
+        PlayAmbience(time, day);
+        if(time % 2 == 0 && CurrentSceneID == SceneID.Summer || CurrentSceneID == SceneID.WorldMap)
+        {
+            if(MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event > BuildingEventType.URGENT))
+            {
+                MissionManager.Instance.UpdateCharityPoints(-1, null);
+            }
+        }
+    }
+
     public void PlayAmbience(double time, int day)
     {
         if (MissionManager.MissionOver) return;
@@ -377,6 +389,6 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnLevelLoaded;
         MapTile.OnClickEvent -= OnTap;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
-        GameClock.Ticked -= PlayAmbience;
+        GameClock.Ticked -= OnTick;
     }
 }

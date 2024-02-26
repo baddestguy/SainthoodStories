@@ -178,10 +178,6 @@ public class CustomEventPopup : MonoBehaviour
         gameObject.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
         SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
-        if (player.CurrentBuilding.BuildingState == BuildingState.HAZARDOUS)
-        {
-            player.CurrentBuilding.DestroyBuilding();
-        }
     }
 
     public void OK()

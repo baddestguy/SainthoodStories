@@ -287,10 +287,10 @@ public class InteractableHouse : InteractableObject
                 if (BuildingState == BuildingState.HAZARDOUS)
                 {
                     EnvironmentalHazardDestructionCountdown--;
-                    if (EnvironmentalHazardDestructionCountdown < 0)
-                    {
-                        DestroyBuilding();
-                    }
+                    //if (EnvironmentalHazardDestructionCountdown < 0)
+                    //{
+                    //    DestroyBuilding();
+                    //}
                 }
             }
         }
@@ -846,7 +846,7 @@ public class InteractableHouse : InteractableObject
         StartCoroutine(PopUIFXIconsAsync(stack));
 
         GameManager.Instance.Player.ConsumeEnergy(energy);
-        GameManager.Instance.MissionManager.UpdateFaithPoints(amount + faithBonus);
+        MissionManager.Instance.UpdateFaithPoints(amount + faithBonus);
     }
 
     public virtual void ReportScores()

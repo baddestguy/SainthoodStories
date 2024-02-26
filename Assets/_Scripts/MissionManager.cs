@@ -145,7 +145,10 @@ public class MissionManager : MonoBehaviour
     {
         if (MissionOver) return;
         CharityPoints = Mathf.Clamp(CharityPoints + amount, -100, 100);
-        UI.Instance.RefreshCP(amount, CharityPoints);
+        if(UI.Instance != null)
+        {
+            UI.Instance.RefreshCP(amount, CharityPoints);
+        }
 
         //if (CharityPoints <= 0)
         //{
