@@ -28,6 +28,8 @@ public class GameDataManager : MonoBehaviour
     public int MidnightEventChosenIndex;
     public List<CustomEventType> TriggeredDailyEvents;
 
+    public const int TOTAL_UNLOCKABLE_SAINTS = 25;
+
     void Awake()
     {
         Instance = this;
@@ -344,6 +346,15 @@ public class GameDataManager : MonoBehaviour
         }
 
         return data;
+    }
+
+    public int GetNextSaintUnlockThreshold()
+    {
+        var unlockedSaintsCount = GameManager.Instance.SaveData.Saints.Length;
+
+        if(unlockedSaintsCount == TOTAL_UNLOCKABLE_SAINTS) return Constants[$"SAINTS_UNLOCK_THRESHOLD_25"].IntValue;
+
+        return Constants[$"SAINTS_UNLOCK_THRESHOLD_{ unlockedSaintsCount + 1 }"].IntValue;
     }
 
     public bool IsSpritualEvent(CustomEventType e)

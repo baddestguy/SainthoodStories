@@ -634,6 +634,7 @@ public class SaveObject
     public int FP;
     public int FPPool;
     public int CP;
+    public int CPPool;
     public int Energy;
     public int Week;
     public int Day;

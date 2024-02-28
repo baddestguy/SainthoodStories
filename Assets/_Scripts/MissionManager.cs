@@ -22,6 +22,7 @@ public class MissionManager : MonoBehaviour
 
     public Dictionary<TileType, int> HouseScores;
     public int CharityPoints { get; private set; }
+    public int CharityPointsPool { get; private set; }
     public int FaithPoints { get; private set; }
     public int FaithPointsPool { get; private set; }
 
@@ -43,10 +44,11 @@ public class MissionManager : MonoBehaviour
 
         CurrentMission = mission;
         CharityPoints = CurrentMission.StartingCharityPoints;
+        CharityPointsPool = CurrentMission.CharityPointsPool;
         FaithPoints = CurrentMission.StartingFaithPoints;
         FaithPointsPool = CurrentMission.FaithPointsPool;
-        UI.Instance.RefreshFP(FaithPoints);
-        UI.Instance.RefreshCP(0, CharityPoints);
+        UI.Instance.RefreshFP(FaithPointsPool);
+        UI.Instance.RefreshCP(0, CharityPointsPool);
     }
 
     public void MissionsBegin()
@@ -127,11 +129,11 @@ public class MissionManager : MonoBehaviour
     public void UpdateFaithPoints(int amount)
     {
         if (MissionOver) return;
-        FaithPoints = Mathf.Clamp(FaithPoints + amount, -100, 15);
+        FaithPointsPool = Mathf.Clamp(FaithPointsPool + amount, -100, 5);
 
         if(UI.Instance != null)
         {
-            UI.Instance.RefreshFP(FaithPoints);
+            UI.Instance.RefreshFP(FaithPointsPool);
         }
 
         //if (FaithPoints <= 0)
@@ -144,10 +146,10 @@ public class MissionManager : MonoBehaviour
     public void UpdateCharityPoints(int amount, InteractableHouse house)
     {
         if (MissionOver) return;
-        CharityPoints = Mathf.Clamp(CharityPoints + amount, -100, 100);
+        CharityPointsPool = Mathf.Clamp(FaithPointsPool + amount, -100, 5);
         if(UI.Instance != null)
         {
-            UI.Instance.RefreshCP(amount, CharityPoints);
+            UI.Instance.RefreshCP(amount, CharityPointsPool);
         }
 
         //if (CharityPoints <= 0)
@@ -228,29 +230,6 @@ public class MissionManager : MonoBehaviour
             //}
         }
 
-        if (GameSettings.Instance.DEMO_MODE){
-            if (CurrentMission.CurrentWeek == 1)
-            {
-                CurrentMission.CurrentWeek++;
-                GameManager.Instance.GameClock.EndTheWeek();
-                CharityPoints = 3;
-                FaithPoints = 3;
-            }
-            else if (GameManager.Instance.GameClock.Day > 3)
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
-
-                SaveDataManager.Instance.DeleteProgress();
-                SoundManager.Instance.EndAllTracks();
-                EventsManager.Instance.ExecuteEvents();
-
-                while (EventsManager.Instance.HasEventsInQueue()) yield return null;
-
-                GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
-                yield break;
-            }
-        }
-
         InteractableHouse.HazardCounter = 0;
         EventsManager.Instance.ExecuteEvents();
         GameManager.Instance.Player.ResetEnergy();
@@ -259,6 +238,10 @@ public class MissionManager : MonoBehaviour
         EventsManager.Instance.DailyEvent = CustomEventType.NONE;
         GameManager.Instance.GameClock.Reset();
         InventoryManager.HasChosenProvision = false;
+        FaithPoints += FaithPointsPool;
+        CharityPoints += CharityPointsPool;
+        FaithPointsPool = 0;
+        CharityPointsPool = 0;
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);
     }
@@ -268,23 +251,17 @@ public class MissionManager : MonoBehaviour
         if (GameSettings.Instance.DEMO_MODE && SaintsManager.Instance.UnlockedSaints.Count >= 3) return new List<SaintData>();
 
         var saintsUnlocked = new List<SaintData>();
-        FaithPointsPool += FaithPoints;
 
-        Debug.Log(FaithPointsPool + " / " + GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue);
+        Debug.Log((FaithPoints + FaithPointsPool) + " / " + GameDataManager.Instance.GetNextSaintUnlockThreshold());
 
-        if (FaithPointsPool >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue)
+        if ((FaithPoints + FaithPointsPool) >= GameDataManager.Instance.GetNextSaintUnlockThreshold())
         {
-            saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
-            FaithPointsPool = 0;
+            var newSaint = SaintsManager.Instance.UnlockSaint();
+            if(newSaint != null)
+            {
+                saintsUnlocked.Add(newSaint);
+            }
         }
-        //if (FaithPoints >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_2"].IntValue)
-        //{
-        //    saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
-        //}
-        //if (FaithPoints >= GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_3"].IntValue)
-        //{
-        //    saintsUnlocked.Add(SaintsManager.Instance.UnlockSaint());
-        //}
 
         return saintsUnlocked;
     }

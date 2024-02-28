@@ -79,7 +79,7 @@ public class SaintShowcaseHandler : MonoBehaviour
         //Load game data after saits scene is exited.. Modify to what is expected
         SaveDataManager.Instance.LoadGame((data, newgame) => {
             GameManager.Instance.SaveData = data;
-            GameManager.Instance.CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.Energy, data.Time, data.Day, data.Week);
+            GameManager.Instance.CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, data.Energy, data.Time, data.Day, data.Week);
             TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
             GameSettings.Instance.FTUE = false;
         }, false, true);

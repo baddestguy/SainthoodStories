@@ -22,6 +22,7 @@ public class Mission
     public int StartingFaithPoints;
     public int FaithPointsPool;
     public int StartingCharityPoints;
+    public int CharityPointsPool;
     public int TotalDays;
     public int CurrentWeek;
 
@@ -81,7 +82,7 @@ public class Mission
         }
     }
 
-    public Mission(int faithPoints, int faithPointsPool, int charityPoints, int startingEnergy, double startTime, int days, int week)
+    public Mission(int faithPoints, int faithPointsPool, int charityPoints, int charityPointsPool, int startingEnergy, double startTime, int days, int week)
     {
         StartingFaithPoints = faithPoints;
         StartingCharityPoints = charityPoints;
@@ -89,6 +90,7 @@ public class Mission
         StartingClock = startTime;
         TotalDays = days;
         FaithPointsPool = faithPointsPool;
+        CharityPointsPool = charityPointsPool;
         CurrentWeek = week;
     }
 }

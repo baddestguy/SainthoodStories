@@ -291,11 +291,10 @@ public class GameManager : MonoBehaviour
                         RunAttempts++;
                         SaveDataManager.Instance.DeleteProgress();
                         TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
-                        GameSettings.Instance.FTUE = !TutorialManager.Instance.SkipTutorial;
                     }
                     SaveData = data;
                     Debug.Log("Run Attempts: " + RunAttempts);
-                    CurrentMission = new Mission(SaveData.FP, SaveData.FPPool, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
+                    CurrentMission = new Mission(SaveData.FP, SaveData.FPPool, SaveData.CP, SaveData.CPPool, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 
                     if (GameSettings.Instance.FTUE)
@@ -346,7 +345,7 @@ public class GameManager : MonoBehaviour
     {
 
         SaveDataManager.Instance.LoadGame((data, newGame) => {
-            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, PlayerEnergy, data.Time, 7, data.Week);
+            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, PlayerEnergy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
             SaveData = data;
         }, false, true);

@@ -1430,12 +1430,13 @@ MonoBehaviour:
   StoryToggle: 1
   CustomEventsToggle: 1
   ProvisionsToggle: 1
-  FTUE: 1
+  FTUE: 0
   TutorialToggle: 1
   SkipSplashScreens: 0
   IgnoreHouseBuildingAtEndofDay: 0
   DEMO_MODE: 0
   ShowGrid: 0
+  InfiniteBoost: 1
   fullScreenMode: 0
   currentQualityLevel: 0
   brightnessPercent: 0
@@ -13144,10 +13145,12 @@ MonoBehaviour:
   MapGenerator: {fileID: 0}
   Map: {fileID: 0}
   Player: {fileID: 0}
+  PlayerEnergy: 0
   SaveData:
     FP: 0
     FPPool: 0
     CP: 0
+    CPPool: 0
     Energy: 0
     Week: 0
     Day: 0
@@ -18105,9 +18108,11 @@ MonoBehaviour:
   weatherType: 0
   NewSaint: 0
   UnlockedSaints: 0
+  MissionId: 0
   showDayTimeUI: 1
   showCpFpEnUI: 1
   showInvProUI: 1
+  showMissionUI: 1
 --- !u!1 &1507825749
 GameObject:
   m_ObjectHideFlags: 0

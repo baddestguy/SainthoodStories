@@ -25,18 +25,18 @@ public class EndWeekSequence : MonoBehaviour
 
     public IEnumerator RunSequenceAsync()
     {
-        int cashAmount = MissionManager.Instance.CharityPoints;
+        int cashAmount = MissionManager.Instance.CharityPointsPool;
         var donation = InventoryManager.Instance.GetProvision(Provision.ALLOWANCE);
         cashAmount += donation?.Value ?? 0;
         TreasuryManager.Instance.DonateMoney(cashAmount);
-        SaintProgressBar.currentPercent = MissionManager.Instance.FaithPointsPool * 100f / GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue;
-        SaintProgressBar.endPercent = (MissionManager.Instance.FaithPointsPool + MissionManager.Instance.FaithPoints) * 100f / GameDataManager.Instance.Constants["SAINTS_UNLOCK_THRESHOLD_1"].IntValue;
+        SaintProgressBar.currentPercent = MissionManager.Instance.FaithPoints * 100f / GameDataManager.Instance.GetNextSaintUnlockThreshold();
+        SaintProgressBar.endPercent = (MissionManager.Instance.FaithPointsPool + MissionManager.Instance.FaithPoints) * 100f / GameDataManager.Instance.GetNextSaintUnlockThreshold();
         var saintsUnlocked = MissionManager.Instance.UnlockSaints();
 
         BG.SetActive(true);
         CPFPObj.SetActive(true);
         Title.text = LocalizationManager.Instance.GetText("CP_ENDGAME_TITLE");
-        Score.DOCounter(0, MissionManager.Instance.CharityPoints, 3f);
+        Score.DOCounter(MissionManager.Instance.CharityPoints, MissionManager.Instance.CharityPoints + MissionManager.Instance.CharityPointsPool, 3f);
         SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie:5f);
 
         yield return new WaitForSeconds(4f);
@@ -56,45 +56,50 @@ public class EndWeekSequence : MonoBehaviour
         {
             yield return null;
         }
-        ContinueObj.SetActive(false);
-        Continue = false;
 
-        SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie: 5f);
-        SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
-        CashUnlockObj.SetActive(false);
-        Title.text = LocalizationManager.Instance.GetText("FP_ENDGAME_TITLE");
-        SaintScore.DOCounter(0, MissionManager.Instance.FaithPoints, 3f);
-        SaintsUnlockObj.SetActive(true);
-        SaintProgressBar.gameObject.SetActive(true);
-        SaintProgressBar.isOn = true;
-
-        yield return new WaitForSeconds(4f);
-
-        var sp = SaintPortraits[1];
-        if(saintsUnlocked.Count() > 0)
+        if(SaintsManager.Instance.UnlockedSaints.Count < GameDataManager.TOTAL_UNLOCKABLE_SAINTS)
         {
-            Title.text = "";
-            Score.text = "";
-            SaintUnlockedTitle.text = LocalizationManager.Instance.GetText("NEW SAINT UNLOCKED!");
-            SaintProgressBar.gameObject.SetActive(false);
-            SoundManager.Instance.PlayOneShotSfx("MassBegin_SFX", timeToDie: 4);
-            SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
-            SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
-            sp.BG.color = new Color(1, 1, 1, 1);
-            sp.Saint.gameObject.SetActive(true);
-            sp.SaintName.text = saintsUnlocked.ElementAt(0).Name;
-            sp.Saint.sprite = Resources.Load<Sprite>(saintsUnlocked.ElementAt(0).IconPath);
-            localPosition = sp.transform.localPosition.x;
-            sp.gameObject.SetActive(true);
-            sp.BG.gameObject.SetActive(true);
-            sp.transform.localPosition = new Vector3(sp.transform.localPosition.x - 50, sp.transform.localPosition.y, sp.transform.localPosition.z);
-            sp.transform.DOLocalMoveX(localPosition, 0.5f);
-        }
+            ContinueObj.SetActive(false);
+            Continue = false;
 
-        ContinueObj.SetActive(true);
-        while (!Continue)
-        {
-            yield return null;
+            SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie: 5f);
+            SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
+            CashUnlockObj.SetActive(false);
+            Title.text = LocalizationManager.Instance.GetText("FP_ENDGAME_TITLE");
+            SaintScore.DOCounter(MissionManager.Instance.FaithPoints, MissionManager.Instance.FaithPoints + MissionManager.Instance.FaithPointsPool, 3f);
+            SaintsUnlockObj.SetActive(true);
+            SaintProgressBar.gameObject.SetActive(true);
+            SaintProgressBar.isOn = true;
+            SaintProgressBar.speed = 1;
+
+            yield return new WaitForSeconds(4f);
+
+            var sp = SaintPortraits[1];
+            if(saintsUnlocked.Count() > 0)
+            {
+                Title.text = "";
+                Score.text = "";
+                SaintUnlockedTitle.text = LocalizationManager.Instance.GetText("NEW SAINT UNLOCKED!");
+                SaintProgressBar.gameObject.SetActive(false);
+                SoundManager.Instance.PlayOneShotSfx("MassBegin_SFX", timeToDie: 4);
+                SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+                SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
+                sp.BG.color = new Color(1, 1, 1, 1);
+                sp.Saint.gameObject.SetActive(true);
+                sp.SaintName.text = saintsUnlocked.ElementAt(0).Name;
+                sp.Saint.sprite = Resources.Load<Sprite>(saintsUnlocked.ElementAt(0).IconPath);
+                localPosition = sp.transform.localPosition.x;
+                sp.gameObject.SetActive(true);
+                sp.BG.gameObject.SetActive(true);
+                sp.transform.localPosition = new Vector3(sp.transform.localPosition.x - 50, sp.transform.localPosition.y, sp.transform.localPosition.z);
+                sp.transform.DOLocalMoveX(localPosition, 0.5f);
+            }
+
+            ContinueObj.SetActive(true);
+            while (!Continue)
+            {
+                yield return null;
+            }
         }
 
         gameObject.SetActive(false);

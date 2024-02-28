@@ -70,6 +70,7 @@ public class SaveDataManager : MonoBehaviour
             FP = MissionManager.Instance.FaithPoints,
             FPPool = MissionManager.Instance.FaithPointsPool,
             CP = MissionManager.Instance.CharityPoints,
+            CPPool = MissionManager.Instance.CharityPointsPool,
             Energy = GameManager.Instance.Player.GetEnergyAmount(),
             Week = MissionManager.Instance.CurrentMission.CurrentWeek,
             Day = GameManager.Instance.GameClock.Day,
@@ -116,9 +117,10 @@ public class SaveDataManager : MonoBehaviour
         {
             return new SaveObject()
             {
-                FP = 3,
+                FP = 0,
                 FPPool = 0,
-                CP = 3,
+                CP = 0,
+                CPPool = 0,
                 Energy = 3,
                 Week = 1,
                 Day = 1,
@@ -130,9 +132,10 @@ public class SaveDataManager : MonoBehaviour
 
         return new SaveObject()
         {
-            FP = 1,
+            FP = 0,
             FPPool = 0,
-            CP = 3,
+            CP = 0,
+            CPPool = 0,
             Energy = 1,
             Week = 1,
             Day = 1,
