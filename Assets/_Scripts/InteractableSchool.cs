@@ -145,6 +145,11 @@ public class InteractableSchool : InteractableHouse
         base.ItemDeliveryThanks();
     }
 
+    public override void UpgradeThanks()
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_SCHOOL);
+    }
+
     public override bool DuringOpenHours(GameClock newClock = null)
     {
         GameClock clock = newClock ?? GameManager.Instance.GameClock;

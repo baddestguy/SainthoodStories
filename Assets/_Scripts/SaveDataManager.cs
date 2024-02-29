@@ -127,7 +127,7 @@ public class SaveDataManager : MonoBehaviour
                 Day = 1,
                 Time = 5,
                 TutorialSteps = 40,
-                Money = 10
+                Money = 0
             };
         }
 
@@ -142,7 +142,7 @@ public class SaveDataManager : MonoBehaviour
             Day = 1,
             Time = 5,
             TutorialSteps = 0,
-            Money = 10
+            Money = 0
         };
     }
 

@@ -69,7 +69,8 @@ public class InteractableHouse : InteractableObject
 
     public Camera InteriorCam;
     public Camera InteriorUICamera;
-    public GameObject InteriorSpace;
+    public GameObject[] InteriorSpaces;
+    public int UpgradeLevel;
 
     public int PrayersProgress = 0;
     public float MaxPrayerProgress = 4f;
@@ -82,6 +83,7 @@ public class InteractableHouse : InteractableObject
 
     protected List<CustomEventType> MyStoryEvents = new List<CustomEventType>();
     public ObjectivesData MyObjective;
+
     protected virtual void Start()
     {
         UI.Meditate += Meditated;
@@ -568,6 +570,10 @@ public class InteractableHouse : InteractableObject
             case ThankYouType.VOLUNTEER:
                 VolunteerThanks();
                 break;
+
+            case ThankYouType.UPGRADE:
+                UpgradeThanks();
+                break;
         }
     }
 
@@ -583,6 +589,11 @@ public class InteractableHouse : InteractableObject
 
     public virtual void VolunteerThanks()
     {
+    }
+
+    public virtual void UpgradeThanks()
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_CHURCH);
     }
 
     public virtual void MoneyThanks()
@@ -754,6 +765,10 @@ public class InteractableHouse : InteractableObject
             case "ENTER":
                 OnPlayerMoved(GameManager.Instance.Player.Energy, this);
                 break;
+
+            case "UPGRADE":
+                UpgradeBuilding();
+                break;
         }
     }
 
@@ -785,7 +800,7 @@ public class InteractableHouse : InteractableObject
         ExteriorCamera.Instance.UICamera.enabled = true;
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
         InteriorCam.GetComponent<CameraControls>().SetZoomTarget(7f);
-        InteriorSpace.SetActive(false);
+        InteriorSpaces[UpgradeLevel].SetActive(false);
     }
 
     public void InteriorLightsOn()
@@ -799,7 +814,7 @@ public class InteractableHouse : InteractableObject
         InteriorUICamera.enabled = true;
         ExteriorCamera.Instance.Camera.enabled = false;
         ExteriorCamera.Instance.UICamera.enabled = false;
-        InteriorSpace.SetActive(true);
+        InteriorSpaces[UpgradeLevel].SetActive(true);
     }
 
     public virtual void VolunteerWork(InteractableHouse house)
@@ -953,7 +968,7 @@ public class InteractableHouse : InteractableObject
             if (InteriorCam)
             {
                 ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
-                InteriorCam.GetComponent<CameraControls>().SetCameraTarget(InteriorSpace.transform.TransformPoint(3.68f, 7.44f, -1.12f), false);
+                InteriorCam.GetComponent<CameraControls>().SetCameraTarget(InteriorSpaces[UpgradeLevel].transform.TransformPoint(3.68f, 7.44f, -1.12f), false);
                 InteriorCam.GetComponent<CameraControls>().SetZoomTarget(6f);
             }
             CameraLockOnMe = true;
@@ -1110,7 +1125,7 @@ public class InteractableHouse : InteractableObject
         if (CameraLockOnMe)
         {
             ExteriorPopUI.gameObject.SetActive(enabled);
-            if(InteriorPopUI && InteriorSpace.activeSelf)
+            if(InteriorPopUI && InteriorSpaces[UpgradeLevel].activeSelf)
             InteriorPopUI.gameObject.SetActive(enabled);
         }
 
@@ -1249,9 +1264,28 @@ public class InteractableHouse : InteractableObject
             case "WORLD": return true;
             case "ENTER": return true;
             case "SAINTS": return true;
+            case "UPGRADE": return CanAffordUpgrade();
         }
 
         return false;
+    }
+
+    public bool CanAffordUpgrade()
+    {
+        if (UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue) return false;
+
+        return InventoryManager.Instance.WanderingSpirits >= GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel+1}"].IntValue && TreasuryManager.Instance.Money >= GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel+1}"].IntValue;
+    }
+
+    public void UpgradeBuilding()
+    {
+        if (UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue) return;
+
+        TreasuryManager.Instance.SpendMoney(GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue);
+        UpgradeLevel++;
+        BuildRelationship(ThankYouType.UPGRADE, 10);
+        SaveDataManager.Instance.SaveGame();
+        GameManager.Instance.ReloadLevel();
     }
 
     public virtual float SetButtonTimer(string actionName)
@@ -1401,6 +1435,7 @@ public class InteractableHouse : InteractableObject
         {
             BuildingState = data.BuildingState;
         }
+        UpgradeLevel = data.UpgradeLevel;
         FPBonus = data.FPBonus;
         RelationshipBonus = data.RelationshipBonus;
         RelationshipPoints = data.RelationshipPoints;
@@ -1437,7 +1472,8 @@ public class InteractableHouse : InteractableObject
             EnvironmentalHazardDestructionCountdown = EnvironmentalHazardDestructionCountdown,
             HazardCounter = HazardCounter,
             HasBeenDestroyed = HasBeenDestroyed,
-            MyStoryEvents = MyStoryEvents
+            MyStoryEvents = MyStoryEvents,
+            UpgradeLevel = UpgradeLevel
         };
     }
 

@@ -23,7 +23,7 @@ public class EvilSpiritsManager : MonoBehaviour
         {
             yield return new WaitForSeconds(5);
 
-            var allEnemies = GetComponentsInChildren<SacredItem>().Where(c => c.Behaviour == SacredItemBehaviour.CHASE);
+            var allEnemies = GetComponentsInChildren<SacredItem>().Where(c => c.Behaviour == SacredItemBehaviour.CHASE || c.Behaviour == SacredItemBehaviour.WANDER);
             if (allEnemies.Count() > 5) continue;
 
             var distance = 1000000f;

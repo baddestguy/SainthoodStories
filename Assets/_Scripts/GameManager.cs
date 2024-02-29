@@ -267,7 +267,7 @@ public class GameManager : MonoBehaviour
         if (MissionManager.MissionOver) return;
         if (WeatherManager.Instance.IsStormy()) return;
 
-        if (GameClock.Time >= 21 || GameClock.Time < 6)
+        if (GameClock.Time >= 19 || GameClock.Time < 6)
         {
             SoundManager.Instance.PlayAmbience();
         }

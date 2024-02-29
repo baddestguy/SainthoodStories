@@ -79,6 +79,10 @@
         EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_FOOD);
         base.ItemDeliveryThanks();
     }
+    public override void UpgradeThanks()
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_SHELTER);
+    }
 
     private void DeliverDeadlineItem( bool autoDeliver = false)
     {

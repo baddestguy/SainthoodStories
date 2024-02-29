@@ -39,6 +39,11 @@ public class InteractableKitchen : InteractableHouse
         }
     }
 
+    public override void UpgradeThanks()
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_KITCHEN);
+    }
+
     public void Cook()
     {
 

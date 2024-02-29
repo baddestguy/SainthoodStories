@@ -101,7 +101,8 @@ public enum ThankYouType
     ITEM,
     VOLUNTEER,
     BABY,
-    TEACH
+    TEACH,
+    UPGRADE
 }
 
 public enum PlayerStatusEffect
@@ -243,6 +244,13 @@ public enum CustomEventType
     THANKYOU_ITEM_ORPHANAGE,
     THANKYOU_ITEM_FOOD,
     THANKYOU_ITEM_CLOTHES,
+    THANKYOU_UPGRADE_HOSPITAL,
+    THANKYOU_UPGRADE_SCHOOL,
+    THANKYOU_UPGRADE_ORPHANAGE,
+    THANKYOU_UPGRADE_SHELTER,
+    THANKYOU_UPGRADE_CLOTHES,
+    THANKYOU_UPGRADE_CHURCH,
+    THANKYOU_UPGRADE_KITCHEN,
     THANKYOU_MONEY,
     THANKYOU_BABY,
     THANKYOU_TEACH,
@@ -407,6 +415,7 @@ public class HouseSaveData
     public int HazardCounter;
     public bool HasBeenDestroyed;
     public List<CustomEventType> MyStoryEvents;
+    public int UpgradeLevel;
 }
 
 public class TooltipStats
