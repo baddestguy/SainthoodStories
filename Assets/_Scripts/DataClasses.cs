@@ -58,7 +58,8 @@ public enum SacredItemBehaviour
     SPIRAL,
     CONCENTRATION,
     WEATHER_CHANGING,
-    CHASE
+    CHASE,
+    WANDER
 }
 
 public enum CustomEventRewardType
@@ -661,6 +662,7 @@ public class SaveObject
     public bool WeatherActivated;
     public ObjectivesData[] CompletedObjectives;
     public string[] Collectibles;
+    public int WanderingSpirits;
     public int CurrentCollectibleMissionId;
     public int CurrentCollectibleCounter;
     public string[] WorldCollectibles;

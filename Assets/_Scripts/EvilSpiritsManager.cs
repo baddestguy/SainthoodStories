@@ -21,35 +21,23 @@ public class EvilSpiritsManager : MonoBehaviour
 
         while (true)
         {
-            if(EnviroManager.instance.Time.hours > 18 || EnviroManager.instance.Time.hours < 5)
+            yield return new WaitForSeconds(5);
+
+            var allEnemies = GetComponentsInChildren<SacredItem>().Where(c => c.Behaviour == SacredItemBehaviour.CHASE);
+            if (allEnemies.Count() > 5) continue;
+
+            var distance = 1000000f;
+            for (int i = 0; i < EnemyCollection.Length; i++)
             {
-                yield return new WaitForSeconds(30);
-
-                var allEnemies = GetComponentsInChildren<SacredItem>().Where(c => c.Behaviour == SacredItemBehaviour.CHASE);
-                if (allEnemies.Count() > 5) continue;
-
-                var distance = 1000000f;
-                for (int i = 0; i < EnemyCollection.Length; i++)
+                var newDistance = Vector3.Distance(EnemyCollection[i].transform.position, player.transform.position);
+                if(newDistance < distance)
                 {
-                    var newDistance = Vector3.Distance(EnemyCollection[i].transform.position, player.transform.position);
-                    if(newDistance < distance)
-                    {
-                        distance = newDistance;
-                        collectionIndex = i;
-                    }
+                    distance = newDistance;
+                    collectionIndex = i;
                 }
+            }
 
-                EnemyCollection[collectionIndex].SetActive(true);
-            }
-            else
-            {
-                collectionIndex = 0;
-                foreach(var col in EnemyCollection)
-                {
-                    col.SetActive(false);
-                }
-                yield return null;
-            }
+            EnemyCollection[collectionIndex].SetActive(true);
         }
     }
 }

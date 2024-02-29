@@ -1244,7 +1244,7 @@ public class InteractableHouse : InteractableObject
                 return !GameManager.Instance.Player.EnergyDepleted() && CanBuild();
 
             case "PRAY": return true;
-            case "SLEEP": return true;// MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
+            case "SLEEP": return MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
             case "EXIT": return true;
             case "WORLD": return true;
             case "ENTER": return true;

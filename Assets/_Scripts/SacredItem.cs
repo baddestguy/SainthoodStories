@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using Enviro;
 //using FMODUnity;
 using Opsive.UltimateCharacterController.Character;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class SacredItem : MonoBehaviour
 
     private Material RedMaterial;
     private Material GreenMaterial;
+    private Material WhiteMaterial;
     private Renderer MyRenderer;
     private GameObject MyExplosion;
     private GameObject MySphere;
@@ -24,18 +26,27 @@ public class SacredItem : MonoBehaviour
     void Start()
     {
         MyRenderer = transform.GetComponentInChildren<Renderer>();
+        WhiteMaterial = MyRenderer.material;
         RedMaterial = Resources.Load<Material>("Materials/Glow Mat Red");
         GreenMaterial = Resources.Load<Material>("Materials/Glow Mat Green");
         MyExplosion = Resources.Load<GameObject>("MemoryExplodeFx");
+        MyRenderer.material = GreenMaterial;
     //    MySphere = transform.Find("Sphere").gameObject;
         ExhibitBehaviour();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (Behaviour == SacredItemBehaviour.CHASE && other.name == "Nun")
+        if(other.name == "Nun")
         {
-            MissionManager.Instance.UpdateFaithPoints((int)-transform.localScale.x);
+            if (Behaviour == SacredItemBehaviour.CHASE)
+            {
+                MissionManager.Instance.UpdateFaithPoints((int)-transform.localScale.x);
+            }
+            else if (Behaviour == SacredItemBehaviour.WANDER)
+            {
+                InventoryManager.Instance.AddWanderers((int)transform.localScale.x);
+            }
             gameObject.SetActive(false);
         }
     }
@@ -135,6 +146,7 @@ public class SacredItem : MonoBehaviour
 
     IEnumerator ChaseAsync()
     {
+        Behaviour = SacredItemBehaviour.CHASE;
         var size = Random.Range(1, 5);
         transform.localScale = new Vector3(size, size, size);
         var player = FindObjectOfType<WorldPlayer>();
@@ -144,8 +156,51 @@ public class SacredItem : MonoBehaviour
 
         while (true)
         {
+            if (MyRenderer.material != RedMaterial && (EnviroManager.instance.Time.hours > 18 || EnviroManager.instance.Time.hours < 5))
+            {
+                MyRenderer.material = RedMaterial;
+            }
+            else if (MyRenderer.material != WhiteMaterial)
+            {
+                MyRenderer.material = WhiteMaterial;
+                StartCoroutine(WanderAsync());
+                yield break;
+            }
+
             Agent.SetDestination(player.transform.position);
             yield return null;
+        }
+    }
+
+    IEnumerator WanderAsync()
+    {
+        Behaviour = SacredItemBehaviour.WANDER;
+        Agent = GetComponent<NavMeshAgent>();
+        Agent.speed = Random.Range(3.5f, 6);
+        Vector3 boundsCenter = transform.position; 
+        Vector3 boundsSize = new Vector3(500,0,500);
+        MyRenderer.material = WhiteMaterial;
+
+        while (true)
+        {
+            if (MyRenderer.material != RedMaterial && (EnviroManager.instance.Time.hours > 18 || EnviroManager.instance.Time.hours < 5))
+            {
+                MyRenderer.material = RedMaterial;
+                StartCoroutine(ChaseAsync());
+                yield break;
+            }
+            else if (MyRenderer.material != WhiteMaterial)
+            {
+                MyRenderer.material = WhiteMaterial;
+            }
+
+            Vector3 randomPosition = boundsCenter + new Vector3(Random.Range(-boundsSize.x / 2f, boundsSize.x / 2f),
+                                                            0f,
+                                                            Random.Range(-boundsSize.z / 2f, boundsSize.z / 2f));
+
+            Agent.SetDestination(randomPosition);
+
+            yield return new WaitForSeconds (5f);
         }
     }
 

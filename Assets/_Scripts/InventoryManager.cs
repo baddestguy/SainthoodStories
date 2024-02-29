@@ -13,6 +13,7 @@ public class InventoryManager : MonoBehaviour
     public List<string> Collectibles = new List<string>();
     public List<ProvisionData> Provisions = new List<ProvisionData>();
     public Dictionary<ItemType, List<GameClock>> AutoDeliveryItems = new Dictionary<ItemType, List<GameClock>>();
+    public int WanderingSpirits = 0;
 
     public int MaxInventorySlots = 2;
     public int MaxProvisionsSlots = 5;
@@ -36,6 +37,7 @@ public class InventoryManager : MonoBehaviour
             MaxInventorySlots = GetProvision(Provision.EXTRA_INVENTORY).Value;
         }
         Collectibles = save.Collectibles?.ToList() ?? new List<string>();
+        WanderingSpirits = save.WanderingSpirits;
         RefreshInventoryUI?.Invoke();
     }
 
@@ -75,6 +77,11 @@ public class InventoryManager : MonoBehaviour
         Collectibles.Add(newCollectible);
         GameManager.Instance.WorldCollectibles.Remove(newCollectible);
         Debug.Log("COLLECTED: " + newCollectible);
+    }
+
+    public void AddWanderers(int amount)
+    {
+        WanderingSpirits += amount;
     }
 
     public void SwapProvision(ProvisionData provisionFrom, ProvisionData provisionTo)

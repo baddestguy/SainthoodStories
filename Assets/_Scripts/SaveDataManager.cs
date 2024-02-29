@@ -97,6 +97,7 @@ public class SaveDataManager : MonoBehaviour
             WeatherEndDay = WeatherManager.Instance.WeatherEndTime.Day,
             CompletedObjectives = MissionManager.Instance.CompletedObjectives?.ToArray(),
             Collectibles = InventoryManager.Instance.Collectibles?.ToArray(),
+            WanderingSpirits = InventoryManager.Instance.WanderingSpirits,
             CurrentCollectibleMissionId = MissionManager.Instance.CurrentCollectibleMissionId,
             CurrentCollectibleCounter = MissionManager.Instance.CurrentCollectibleCounter,
             WorldCollectibles = GameManager.Instance.WorldCollectibles.ToArray(),
