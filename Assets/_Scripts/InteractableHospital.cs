@@ -118,7 +118,7 @@ public class InteractableHospital : InteractableHouse
         var mission = GetBuildingMission(BuildingEventType.BABY);
         if (mission != null && !DeliveryTimeSet)
         {
-            SetBabyDelivery(mission);
+        //    SetBabyDelivery(mission);
         }
         if (DeliveryTimeSet)
         {
@@ -159,7 +159,7 @@ public class InteractableHospital : InteractableHouse
         var mission = GetBuildingMission(BuildingEventType.BABY);
         if (mission != null || (!SameDayAsMission() && DeadlineCounter < 3 && !DeliveryTimeSet && !DeadlineSet && Random.Range(0, 1.0f) > (e != null ? e.Cost : 0.97f)))
         {
-            SetBabyDelivery(mission);
+        //    SetBabyDelivery(mission);
         }
     }
 

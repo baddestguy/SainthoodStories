@@ -39,15 +39,19 @@ public class SacredItem : MonoBehaviour
     {
         if(other.name == "Nun")
         {
+            var value = 0;
             if (Behaviour == SacredItemBehaviour.CHASE)
             {
-                MissionManager.Instance.UpdateFaithPoints((int)-transform.localScale.x);
+                value = (int)-transform.localScale.x;
+                MissionManager.Instance.UpdateFaithPoints(value);
             }
             else if (Behaviour == SacredItemBehaviour.WANDER)
             {
-                InventoryManager.Instance.AddWanderers((int)transform.localScale.x);
+                value = (int)transform.localScale.x;
+                InventoryManager.Instance.AddWanderers(value);
             }
             gameObject.SetActive(false);
+            FindObjectOfType<WorldTextDisplay>().Display(this, value);
         }
     }
 

@@ -7,6 +7,7 @@ using UnityEngine;
 public class EvilSpiritsManager : MonoBehaviour
 {
     public GameObject[] EnemyCollection;
+    public TextMesh TextDisplay;
   
     // Start is called before the first frame update
     void Start()

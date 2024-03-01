@@ -33,6 +33,7 @@ public class CollectiblesManager : MonoBehaviour
                 collectibleList.Remove(it);
                 item.gameObject.SetActive(true);
                 item.Name = it;
+                item.Description = GameDataManager.Instance.GetCollectibleData(it).Description;
             }
         }
     }

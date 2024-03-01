@@ -348,6 +348,22 @@ public class GameDataManager : MonoBehaviour
         return data;
     }
 
+    public CollectibleData GetCollectibleData(string name)
+    {
+        foreach(var kvp in CollectibleData)
+        {
+            foreach(var c in kvp.Value)
+            {
+                if(c.Name == name)
+                {
+                    return c;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public int GetNextSaintUnlockThreshold()
     {
         var unlockedSaintsCount = GameManager.Instance.SaveData.Saints.Length;
