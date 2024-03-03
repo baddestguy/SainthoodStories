@@ -22,7 +22,7 @@ public class EvilSpiritsManager : MonoBehaviour
 
         while (true)
         {
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(20);
 
             var allEnemies = GetComponentsInChildren<SacredItem>().Where(c => c.Behaviour == SacredItemBehaviour.CHASE || c.Behaviour == SacredItemBehaviour.WANDER);
             if (allEnemies.Count() > 5) continue;

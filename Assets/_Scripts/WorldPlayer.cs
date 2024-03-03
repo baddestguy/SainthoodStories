@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using Opsive.UltimateCharacterController.Camera;
 using Opsive.UltimateCharacterController.Character;
 using Opsive.UltimateCharacterController.Character.Abilities;
+using Opsive.UltimateCharacterController.ThirdPersonController.Camera.ViewTypes;
 using UnityEngine;
 
 public class WorldPlayer : MonoBehaviour
 {
     public UltimateCharacterLocomotion MyLocomotor;
     private AnimatorMonitor MyAnimator;
+    public CameraController MyCamera;
+
     float BoostTimer = 5f;
     float BoostWindowTimer = 1f;
     bool BoostWindow = false;
@@ -60,6 +65,15 @@ public class WorldPlayer : MonoBehaviour
         GameManager.Instance.UpdatePlayerEnergyFromWorld(-1);
         SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
         SoundManager.Instance.PlayOneShotSfx("Crit_Good");
+        DOTween.To(() => (MyCamera.ActiveViewType as ThirdPerson).LookOffset, 
+                    newValue => (MyCamera.ActiveViewType as ThirdPerson).LookOffset = newValue,
+                    new Vector3(0, 0, -7f), 
+                    2f);
+        DOTween.To(() => (MyCamera.ActiveViewType as ThirdPerson).FieldOfView,
+            newValue => (MyCamera.ActiveViewType as ThirdPerson).FieldOfView = newValue,
+            80,
+            2f);
+
     }
 
     IEnumerator BoostAsync()
@@ -77,6 +91,14 @@ public class WorldPlayer : MonoBehaviour
 
     public void EndBoost()
     {
+        DOTween.To(() => (MyCamera.ActiveViewType as ThirdPerson).LookOffset,
+                  newValue => (MyCamera.ActiveViewType as ThirdPerson).LookOffset = newValue,
+                  new Vector3(0, 0, -8.5f),
+                  2f);
+        DOTween.To(() => (MyCamera.ActiveViewType as ThirdPerson).FieldOfView,
+            newValue => (MyCamera.ActiveViewType as ThirdPerson).FieldOfView = newValue,
+            60,
+            2f);
         StopCoroutine("BoostAsync");
         Boosted = false;
         BoostWindow = false;
