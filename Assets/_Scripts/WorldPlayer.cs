@@ -25,6 +25,7 @@ public class WorldPlayer : MonoBehaviour
     {
         MyAnimator = GetComponentInChildren<AnimatorMonitor>();
         StartCoroutine("BoostAsync");
+        StartCoroutine("RestartBoostWindowAsync");
     }
 
     // Update is called once per frame
@@ -76,8 +77,20 @@ public class WorldPlayer : MonoBehaviour
 
     }
 
+    IEnumerator RestartBoostWindowAsync()
+    {
+        yield return new WaitForSeconds(BoostTimer);
+        if (GameManager.Instance.HasPlayerEnergy())
+        {
+            SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
+            BoostWindow = true;
+        }
+    }
+
     IEnumerator BoostAsync()
     {
+        if (!Boosted) yield break;
+
         yield return new WaitForSeconds(BoostTimer);
         if (GameManager.Instance.HasPlayerEnergy())
         {
@@ -102,6 +115,7 @@ public class WorldPlayer : MonoBehaviour
         StopCoroutine("BoostAsync");
         Boosted = false;
         BoostWindow = false;
-        StartCoroutine("BoostAsync");
+        StopCoroutine("RestartBoostWindowAsync");
+        StartCoroutine("RestartBoostWindowAsync");
     }
 }

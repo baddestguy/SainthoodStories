@@ -79,6 +79,7 @@ public enum BuildingEventType
     CONSTRUCT,
     REPAIR,
     RETURN,
+    MASS,
     URGENT,
     DELIVER_ITEM_URGENT,
     BABY_URGENT,
@@ -330,6 +331,22 @@ public enum CustomEventType
     ,MISSION_8
     ,MISSION_9
     ,MISSION_10
+    ,MISSION_11
+    ,MISSION_12
+    ,MISSION_13
+    ,MISSION_14
+    ,MISSION_15
+    ,MISSION_16
+    ,MISSION_17
+    ,MISSION_18
+    ,MISSION_19
+    ,MISSION_20
+    ,MISSION_21
+    ,MISSION_22
+    ,MISSION_23
+    ,MISSION_24
+    ,MISSION_25
+    ,MISSION_26
 }
 
 public enum EventPopupType

@@ -1036,7 +1036,7 @@ public class InteractableHouse : InteractableObject
         if (GameManager.Instance.PreviousSceneID == SceneID.SaintsShowcase_Day) return;
         if (DeadlineSet) return;
         if (GameManager.Instance.Player.StatusEffects.Count > 0) return;
-        if (GameManager.Instance.GameClock.Time > 22.5 || GameManager.Instance.GameClock.Time < 6) return;
+   //     if (GameManager.Instance.GameClock.Time > 22.5 || GameManager.Instance.GameClock.Time < 6) return;
 
         if (Random.Range(0, 100) < 100)
         {

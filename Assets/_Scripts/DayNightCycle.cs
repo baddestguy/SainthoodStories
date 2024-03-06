@@ -128,10 +128,10 @@ public class DayNightCycle : MonoBehaviour
             case 17.5: TargetRotation = new Vector3(125, -30, 0); TargetColor = new Color32(255, 211, 160, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
             case 18: TargetRotation = new Vector3(128, -30, 0); TargetColor = new Color32(255, 211, 160, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
             case 18.5: TargetRotation = new Vector3(131, -30, 0); TargetColor = new Color32(255, 211, 160, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
-            case 19: TargetRotation = new Vector3(135, -30, 0); TargetColor = new Color32(255, 187, 110, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
-            case 19.5: TargetRotation = new Vector3(137, -30, 0); TargetColor = new Color32(255, 187, 110, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
-            case 20: TargetRotation = new Vector3(141, -30, 0); TargetColor = new Color32(255, 187, 110, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
-            case 20.5: TargetRotation = new Vector3(145, -30, 0); TargetColor = new Color32(255, 187, 110, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
+            case 19: TargetRotation = new Vector3(135, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
+            case 19.5: TargetRotation = new Vector3(137, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
+            case 20: TargetRotation = new Vector3(141, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
+            case 20.5: TargetRotation = new Vector3(145, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 21: TargetRotation = new Vector3(148, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 21.5: TargetRotation = new Vector3(151, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 22: TargetRotation = new Vector3(154, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;

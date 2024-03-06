@@ -17,10 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Levels/SummerLevel.unity
     guid: 02ba5bff9b8000a4fb4b1f4433dd5d59
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Levels/FallLevel.unity
     guid: 1b78220b5ad37f0458b3027ea91a63d6
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Levels/WinterLevel.unity
     guid: 49af4553bd67f224090a793131b9d138
   - enabled: 1
@@ -32,7 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/SaintsShowcase_Day.unity
     guid: c536db3534ec8394ea5714f10c34b2d3
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Levels/TutorialLevel.unity
     guid: eba0d73e1a93e9c4aa0d85b74bbfc6fa
   - enabled: 1

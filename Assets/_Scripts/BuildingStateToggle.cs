@@ -48,6 +48,7 @@ public class BuildingStateToggle : MonoBehaviour
         {
             var myPoi = gameObject.AddComponent<CompassProPOI>();
             myPoi.visibility = POIVisibility.AlwaysVisible;
+            myPoi.iconNonVisited = Resources.Load<Sprite>($"Icons/{HouseName}");
         }
     }
 }
