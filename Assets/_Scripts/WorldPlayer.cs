@@ -26,6 +26,7 @@ public class WorldPlayer : MonoBehaviour
         MyAnimator = GetComponentInChildren<AnimatorMonitor>();
         StartCoroutine("BoostAsync");
         StartCoroutine("RestartBoostWindowAsync");
+        FindObjectOfType<WorldTextDisplay>().DisplayEnergy(GameManager.Instance.PlayerEnergy);
     }
 
     // Update is called once per frame
@@ -48,7 +49,13 @@ public class WorldPlayer : MonoBehaviour
 
     public void OnBoost(Ability ability, bool trigger)
     {
-        if (ability is not BoostAbility || !trigger || !GameManager.Instance.HasPlayerEnergy()) return;
+        if (ability is not BoostAbility || !trigger) return;
+        if (!GameManager.Instance.HasPlayerEnergy())
+        {
+            FindObjectOfType<WorldTextDisplay>().DisplayEnergy(GameManager.Instance.PlayerEnergy);
+
+            return;
+        }
 
         if (!BoostWindow)
         {
@@ -64,6 +71,8 @@ public class WorldPlayer : MonoBehaviour
         StartCoroutine("BoostAsync");
 
         GameManager.Instance.UpdatePlayerEnergyFromWorld(-1);
+        FindObjectOfType<WorldTextDisplay>().DisplayEnergy(GameManager.Instance.PlayerEnergy);
+
         SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
         SoundManager.Instance.PlayOneShotSfx("Crit_Good");
         DOTween.To(() => (MyCamera.ActiveViewType as ThirdPerson).LookOffset, 

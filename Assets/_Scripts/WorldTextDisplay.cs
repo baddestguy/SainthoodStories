@@ -10,10 +10,38 @@ public class WorldTextDisplay : MonoBehaviour
     public Image Image;
     public TextMeshProUGUI DisplayCounter;
 
+    public Image EnergyImage;
+    public TextMeshProUGUI EnergyCounter;
+
+
     // Start is called before the first frame update
     void Start()
     {
         
+    }
+
+    public void DisplayEnergy(int energy)
+    {
+        EnergyCounter.DOKill();
+        EnergyImage.DOKill();
+
+        if (energy <= 0)
+        {
+            EnergyCounter.color = Color.red;
+            EnergyImage.color = Color.red;
+            SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
+        }
+        else
+        {
+            EnergyCounter.color = Color.white;
+            EnergyImage.color = Color.white;
+        }
+
+        EnergyCounter.text = energy + "";
+
+        EnergyCounter.DOFade(0, 5);
+        EnergyImage.DOFade(0, 5);
+
     }
 
     public void Display(SacredItem sacredItem, int amount)
