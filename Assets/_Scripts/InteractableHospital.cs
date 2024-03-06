@@ -391,10 +391,10 @@ public class InteractableHospital : InteractableHouse
         switch (actionName)
         {
             case "BABY":
-                return !player.EnergyDepleted() && DeliveryTimeSet;
+                return !player.EnergyDepleted() && DeliveryTimeSet && (DuringOpenHours() || (!DuringOpenHours() && DeliveryCountdown > 0));
 
             case "VOLUNTEER":
-                return !player.EnergyDepleted() && DuringOpenHours() && !DeliveryTimeSet;
+                return !player.EnergyDepleted() && !DeliveryTimeSet && (DuringOpenHours() || (!DuringOpenHours() && VolunteerCountdown > 0));
 
             case "MEDS":
                 return InventoryManager.Instance.CheckItem(ItemType.MEDS);

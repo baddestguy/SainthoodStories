@@ -14,7 +14,7 @@ public class InteractableHouse : InteractableObject
     public GameClock DeadlineTime;
     public int EnergyConsumption;
     public int OpenTime;
-    public int ClosingTime;
+    public double ClosingTime;
     public int ItemDeliveryPoints;
     public int VolunteerPoints;
     public int DeadlineDeliveryBonus;
@@ -221,9 +221,6 @@ public class InteractableHouse : InteractableObject
         //    SetDeadlineTime(time, day);
         }
 
-        if(InteriorPopUI) //TEMP
-            InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
-        ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
 
         if (BuildingState == BuildingState.NORMAL && GameManager.Instance.CurrentHouse == this && DuringOpenHours())
         {
@@ -260,6 +257,10 @@ public class InteractableHouse : InteractableObject
         }
 
         BuildingActivityState = BuildingActivityState.NONE;
+
+        if (InteriorPopUI) //TEMP
+            InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
+        ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
 
         if (CanBuild())
         {
@@ -1258,7 +1259,7 @@ public class InteractableHouse : InteractableObject
             case "BUILD":
                 return !GameManager.Instance.Player.EnergyDepleted() && CanBuild();
 
-            case "PRAY": return true;
+            case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0);
             case "SLEEP": return MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
             case "EXIT": return true;
             case "WORLD": return true;

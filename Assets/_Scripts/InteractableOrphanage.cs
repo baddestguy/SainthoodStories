@@ -52,12 +52,12 @@ public class InteractableOrphanage : InteractableHouse
         if(day > 5)
         {
             OpenTime = 9;
-            ClosingTime = 22;
+            ClosingTime = 23.5;
         }
         else
         {
-            OpenTime = 15;
-            ClosingTime = 22;
+            OpenTime = 16;
+            ClosingTime = 23.5;
         }
 
         base.Tick(time, day);
@@ -173,7 +173,7 @@ public class InteractableOrphanage : InteractableHouse
             UI.Instance.ErrorFlash("Energy");
             return;
         }
-        if (DuringOpenHours())
+        if (DuringOpenHours() || (!DuringOpenHours() && VolunteerCountdown > 0))
         {
             BuildingActivityState = BuildingActivityState.VOLUNTEERING;
             CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.ORPHANAGE_BONUS);
@@ -218,7 +218,7 @@ public class InteractableOrphanage : InteractableHouse
         switch (actionName)
         {
             case "VOLUNTEER":
-                return !player.EnergyDepleted() && DuringOpenHours();
+                return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && VolunteerCountdown > 0));
 
             case "TOYS":
                 return InventoryManager.Instance.CheckItem(ItemType.TOYS);

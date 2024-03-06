@@ -59,9 +59,9 @@ public class InteractableSchool : InteractableHouse
             UI.Instance.ErrorFlash("Energy");
             return;
         }
-        if (DuringOpenHours())
+        if (DuringOpenHours() || (!DuringOpenHours() && TeachCountdown > 0))
         {
-            BuildingActivityState = BuildingActivityState.TEACHING;
+            BuildingActivityState = BuildingActivityState.VOLUNTEERING;
             UI.Instance.DisplayMessage("Taught a Class!!");
             clock.Tick();
         }
@@ -73,7 +73,7 @@ public class InteractableSchool : InteractableHouse
 
     public override void Tick(double time, int day)
     {
-        if(BuildingActivityState == BuildingActivityState.TEACHING)
+        if(BuildingActivityState == BuildingActivityState.VOLUNTEERING)
         {
             TeachSubject();
         }
@@ -254,7 +254,7 @@ public class InteractableSchool : InteractableHouse
 
             case "TEACH":
                 Player player = GameManager.Instance.Player;
-                return !player.EnergyDepleted() && DuringOpenHours();
+                return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && TeachCountdown > 0));
         }
 
         return base.CanDoAction(actionName);

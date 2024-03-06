@@ -93,7 +93,6 @@ public enum BuildingActivityState
 {
     NONE = 0,
     VOLUNTEERING,
-    TEACHING,
     DELIVERING_BABY
 }
 
