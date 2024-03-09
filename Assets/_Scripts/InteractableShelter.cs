@@ -168,4 +168,10 @@
             base.DeliverItem(this, true);
         }
     }
+
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_SHELTER;
+    }
+
 }

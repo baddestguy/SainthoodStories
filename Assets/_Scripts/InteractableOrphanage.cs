@@ -236,4 +236,9 @@ public class InteractableOrphanage : InteractableHouse
             base.DeliverItem(this, true);
         }
     }
+
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_ORPHANAGE;
+    }
 }

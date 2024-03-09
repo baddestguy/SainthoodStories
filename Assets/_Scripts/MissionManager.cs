@@ -55,7 +55,7 @@ public class MissionManager : MonoBehaviour
     {
         var saveData = GameManager.Instance.SaveData;
         CompletedObjectives = saveData.CompletedObjectives?.ToList();
-        for (int i = 1; i < GameDataManager.Instance.ObjectivesData.Count; i++)
+        for (int i = 1; i <= GameDataManager.Instance.ObjectivesData.Count; i++)
         {
             var comp = CompletedObjectives?.Where(x => x.Id == i) ?? Enumerable.Empty<ObjectivesData>();
             if(CompletedObjectives == null || comp.Count() < GameDataManager.Instance.ObjectivesData[i].Count+1)
@@ -135,12 +135,6 @@ public class MissionManager : MonoBehaviour
         {
             UI.Instance.RefreshFP(FaithPointsPool);
         }
-
-        //if (FaithPoints <= 0)
-        //{
-        //    EndMission();
-        //    return;
-        //}
     }
 
     public void UpdateCharityPoints(int amount, InteractableHouse house)
@@ -151,12 +145,6 @@ public class MissionManager : MonoBehaviour
         {
             UI.Instance.RefreshCP(amount, CharityPointsPool);
         }
-
-        //if (CharityPoints <= 0)
-        //{
-        //    EndMission();
-        //    return;
-        //}
 
         if (house == null) return;
         HouseScores[house.TileType] = amount;
@@ -185,59 +173,74 @@ public class MissionManager : MonoBehaviour
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
 
-        //if (FaithPoints <= 0 || CharityPoints <= 0)
-        //{
-        //    missionFailed = true;
-        //    //instant game over
-        //    if (CharityPoints <= 0)
-        //    {
-        //        EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
-        //    }
-        //    if (FaithPoints <= 0)
-        //    {
-        //        EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
-        //    }
-        //    SaveDataManager.Instance.DeleteProgress();
-        //    SoundManager.Instance.EndAllTracks();
-        //    EventsManager.Instance.ExecuteEvents();
+        EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
+        yield return seq.RunSequenceAsync();
 
-        //    while (EventsManager.Instance.HasEventsInQueue()) yield return null;
 
-        //    GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
-        //    yield break;
-        //    //Game Over, Restart Week!
-        //}
-        //else
+        //If we finished the final mission
+        if (CurrentMissionId == 12)
         {
-            EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
-            yield return seq.RunSequenceAsync();
+            FaithPoints += FaithPointsPool;
+            CharityPoints += CharityPointsPool;
 
-            //Check if player meets FP/CP requirement, if any fail, play those endings
-            //If not...
-            //Add First Endgame event; an intro to the death of the player
-            //Grab all houses, check their RP, if at least one house has a high enough RP, play their event, then best ending
-            //Else if no house matches, play regular ending
+            if (FaithPoints < 75 || CharityPoints < 75)
+            {
+                if (FaithPoints < 75)
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
 
+                }
+                if (CharityPoints < 75)
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
+                }
 
+                SaveDataManager.Instance.DeleteProgress();
+                SoundManager.Instance.EndAllTracks();
+                EventsManager.Instance.ExecuteEvents();
 
-            //if (MissionOver) //TODO: Use a different condition to switch seasons
-            //{
-            //    if(CurrentMission.Season == Season.WINTER)
-            //    {
-            //        //BONUS: GIVE THE CHOICE TO ASCEND TO HEAVEN OR STAY AND CONTINUE TO HELP!
+                while (EventsManager.Instance.HasEventsInQueue()) yield return null;
 
-            //        EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
-            //        EventsManager.Instance.ExecuteEvents();
-            //        SaveDataManager.Instance.DeleteProgress();
-            //        while (EventsManager.Instance.HasEventsInQueue()) yield return null;
+                GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+                yield break;
+            }
+            else
+            {
+                EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
+                var houses = GameManager.Instance.Houses;
+                bool hasAtLeastOneEnding = false;
+                foreach (var house in houses)
+                {
+                    if (house.RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD || (house is InteractableChurch && InventoryManager.Instance.Collectibles.Count >= 100))
+                    {
+                        hasAtLeastOneEnding = true;
+                        EventsManager.Instance.AddEventToList(house.GetEndGameStory());
+                    }
+                }
 
-            //        GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
-            //        yield break;
-            //    }
-            //    CurrentMission.CurrentWeek++;
-            //    GameManager.Instance.GameClock.EndTheWeek();
-            //}
+                if (hasAtLeastOneEnding)
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_BEST);
+                }
+                else
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_NORMAL);
+                }
+
+                SaveDataManager.Instance.DeleteProgress();
+                SoundManager.Instance.EndAllTracks();
+                EventsManager.Instance.ExecuteEvents();
+
+                while (EventsManager.Instance.HasEventsInQueue()) yield return null;
+
+                GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+                yield break;
+
+            }
         }
+
+        CompleteObjective(new ObjectivesData() { Id = CurrentMissionId, Event = BuildingEventType.RETURN, House = "InteractableChurch" });
+        CurrentObjectives.Clear();
 
         InteractableHouse.HazardCounter = 0;
         EventsManager.Instance.ExecuteEvents();
@@ -305,6 +308,19 @@ public class MissionManager : MonoBehaviour
         SaveDataManager.Instance.SaveGame();
         MissionsBegin();
         GameManager.Instance.ReloadLevel();
+    }
+
+    public void AutoCompleteObjective()
+    {
+        var list = new List<ObjectivesData>();
+        list.AddRange(CurrentObjectives);
+        foreach(var obj in list)
+        {
+            CompleteObjective(obj);
+            SaveDataManager.Instance.SaveGame();
+            MissionsBegin();
+            GameManager.Instance.ReloadLevel();
+        }
     }
 
     public void OverideCP(int cp)

@@ -141,14 +141,20 @@ public class OverideManagerEditor : Editor
 
         if (overideManager.showMissionUI)
         {
-            EditorGUILayout.PropertyField(MissionId, new GUIContent(nameof(overideManager.MissionId)));
 
             SetColor(canClick);
             EditorGUILayout.BeginHorizontal();
+            
+            EditorGUILayout.PropertyField(MissionId, new GUIContent(nameof(overideManager.MissionId)));
             if (GUILayout.Button("Overide Mission ID") && canClick)
             {
                 overideManager.OverrideMission();
             }
+            if (GUILayout.Button("Auto Complete Mission") && canClick)
+            {
+                overideManager.AutoCompleteMission();
+            }
+
             EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(10);

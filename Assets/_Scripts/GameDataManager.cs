@@ -29,6 +29,9 @@ public class GameDataManager : MonoBehaviour
     public List<CustomEventType> TriggeredDailyEvents;
 
     public const int TOTAL_UNLOCKABLE_SAINTS = 25;
+    public const int MAX_RP_THRESHOLD = 65;
+    public const int MED_RP_THRESHOLD = 30;
+    public const int MIN_RP_THRESHOLD = 5;
 
     void Awake()
     {

@@ -21,11 +21,14 @@ public class PackageSelector : MonoBehaviour
         {
             if(house.MyObjective != null && house.MyObjective.Event == BuildingEventType.DELIVER_ITEM)
             {
-                var item = Instantiate(ItemGO);
-                item.transform.SetParent(Scroller.content);
-                var pItem = item.GetComponent<PackageItem>();
-                pItem.Init(house.MyObjective);
-                instantiatedGos.Add(pItem);
+                for(int i = 0; i < house.MyObjective.RequiredAmount; i++)
+                {
+                    var item = Instantiate(ItemGO);
+                    item.transform.SetParent(Scroller.content);
+                    var pItem = item.GetComponent<PackageItem>();
+                    pItem.Init(house.MyObjective);
+                    instantiatedGos.Add(pItem);
+                }
             }
         }
 

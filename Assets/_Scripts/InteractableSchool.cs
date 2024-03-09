@@ -292,6 +292,11 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_SCHOOL;
+    }
+
     public override HouseSaveData LoadData()
     {
         var data = base.LoadData();

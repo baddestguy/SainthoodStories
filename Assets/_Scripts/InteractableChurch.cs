@@ -312,7 +312,6 @@ public class InteractableChurch : InteractableHouse
 
     public void Sleep()
     {
-        MissionManager.Instance.CompleteObjective(MyObjective);
         MissionManager.Instance.EndDay();
 
         //GameClock clock = GameManager.Instance.GameClock;
@@ -441,6 +440,11 @@ public class InteractableChurch : InteractableHouse
         }
 
         return base.SetButtonTimer(actionName);
+    }
+
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_CHURCH;
     }
 
     public override void SetDeadlineTime(double time, int day)

@@ -136,6 +136,11 @@ public class InteractableKitchen : InteractableHouse
 
     }
 
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_KITCHEN;
+    }
+
     public override void OnDisable()
     {
         base.OnDisable();

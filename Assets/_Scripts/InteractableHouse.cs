@@ -54,8 +54,8 @@ public class InteractableHouse : InteractableObject
     public GameObject BuildingGo;
 
     public int RelationshipPoints;
-    protected int RelationshipBonus = 0;//TODO: SAVE THIS
-    protected int FPBonus = 0;//TODO: SAVE THIS
+    protected int RelationshipBonus = 0;
+    protected int FPBonus = 0;
     protected int VolunteerCountdown = 0;
     protected float MaxVolunteerPoints = 4f;
     public int EventsTriggered;
@@ -1411,6 +1411,11 @@ public class InteractableHouse : InteractableObject
         base.HoverExit();
     }
 
+    public virtual CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.CLOTHES_COMPLETE;
+    }
+
     public virtual HouseSaveData LoadData()
     {
         var data = GameManager.Instance.SaveData.Houses?.Where(h => h.HouseName == GetType().Name).FirstOrDefault();
@@ -1439,7 +1444,7 @@ public class InteractableHouse : InteractableObject
         UpgradeLevel = data.UpgradeLevel;
         FPBonus = data.FPBonus;
         RelationshipBonus = data.RelationshipBonus;
-        RelationshipPoints = data.RelationshipPoints;
+        RelationshipPoints = 100;// data.RelationshipPoints;
         SturdyMaterials = data.SturdyMaterials;
         DeadlineSet = data.DeadlineSet;
         DeadlineCounter = data.DeadlineCounter;

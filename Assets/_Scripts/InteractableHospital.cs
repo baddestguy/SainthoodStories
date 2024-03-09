@@ -207,17 +207,17 @@ public class InteractableHospital : InteractableHouse
 
         //These values are temporary just for the DEMO!!
 
-        if (RelationshipPoints >= 65 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_3))
+        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_3))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_3);
             MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_3);
         }
-        else if (RelationshipPoints >= 30 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_2))
+        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_2))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_2);
             MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_2);
         }
-        else if (RelationshipPoints >= 5 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_1))
+        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_1))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_1);
             MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_1);
@@ -417,6 +417,11 @@ public class InteractableHospital : InteractableHouse
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
+    }
+
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_HOSPITAL;
     }
 
     public override HouseSaveData LoadData()
