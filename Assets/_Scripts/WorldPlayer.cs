@@ -84,7 +84,7 @@ public class WorldPlayer : MonoBehaviour
                     2f);
         DOTween.To(() => (MyCamera.ActiveViewType as ThirdPerson).FieldOfView,
             newValue => (MyCamera.ActiveViewType as ThirdPerson).FieldOfView = newValue,
-            80,
+            90,
             2f);
 
     }
@@ -107,7 +107,7 @@ public class WorldPlayer : MonoBehaviour
             var collectibleItem = CurrentSacredItem.GetComponent<CollectibleItem>();
             if (collectibleItem != null)
             {
-                MissionManager.Instance.Collect(gameObject.name + ":" + collectibleItem.Name);
+                MissionManager.Instance.Collect(CurrentSacredItem.gameObject.name + ":" + collectibleItem.Name);
             }
 
             CurrentSacredItem.gameObject.SetActive(false);
@@ -164,7 +164,7 @@ public class WorldPlayer : MonoBehaviour
                   2f);
         DOTween.To(() => (MyCamera.ActiveViewType as ThirdPerson).FieldOfView,
             newValue => (MyCamera.ActiveViewType as ThirdPerson).FieldOfView = newValue,
-            60,
+            70,
             2f);
         StopCoroutine("BoostAsync");
         Boosted = false;
@@ -181,7 +181,7 @@ public class WorldPlayer : MonoBehaviour
     IEnumerator CaptureItemAsync()
     {
         CaptureTime = true;
-        Time.timeScale = 0.4f;
+        Time.timeScale = 0.2f;
         if (CriticalCircleFX == null)
         {
             CriticalCircleFX = Instantiate(Resources.Load<GameObject>("UI/CriticalCircle"));
@@ -194,7 +194,7 @@ public class WorldPlayer : MonoBehaviour
 
         var critCircle = CriticalCircleFX.transform.GetChild(0);
         critCircle.localScale = new Vector3(5, 5, 5);
-        critCircle.DOScale(new Vector3(0.3f, 0.3f, 0.3f), 0.8f);
+        critCircle.DOScale(new Vector3(0.3f, 0.3f, 0.3f), 0.4f);
 
         yield return new WaitForSecondsRealtime(2f);
 

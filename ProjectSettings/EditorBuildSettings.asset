@@ -35,6 +35,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/Levels/TutorialLevel.unity
     guid: eba0d73e1a93e9c4aa0d85b74bbfc6fa
+  - enabled: 0
+    path: Assets/_Scenes/Levels/WorldMap Retro.unity
+    guid: 7e27d2d48acc4214a988b8e48fa1b274
   - enabled: 1
     path: Assets/_Scenes/Levels/WorldMap.unity
     guid: b6df14c9772737949b2cfe26c07b5f47
