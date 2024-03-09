@@ -31,7 +31,7 @@ public class EvilSpiritsManager : MonoBehaviour
             for (int i = 0; i < EnemyCollection.Length; i++)
             {
                 var newDistance = Vector3.Distance(EnemyCollection[i].transform.position, player.transform.position);
-                if(newDistance < distance)
+                if(newDistance < distance && !EnemyCollection[collectionIndex].activeSelf)
                 {
                     distance = newDistance;
                     collectionIndex = i;

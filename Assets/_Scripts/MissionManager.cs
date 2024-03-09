@@ -211,6 +211,15 @@ public class MissionManager : MonoBehaviour
         {
             EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
             yield return seq.RunSequenceAsync();
+
+            //Check if player meets FP/CP requirement, if any fail, play those endings
+            //If not...
+            //Add First Endgame event; an intro to the death of the player
+            //Grab all houses, check their RP, if at least one house has a high enough RP, play their event, then best ending
+            //Else if no house matches, play regular ending
+
+
+
             //if (MissionOver) //TODO: Use a different condition to switch seasons
             //{
             //    if(CurrentMission.Season == Season.WINTER)

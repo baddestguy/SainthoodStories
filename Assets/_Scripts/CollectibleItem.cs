@@ -10,13 +10,4 @@ public class CollectibleItem : MonoBehaviour
     {
         
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.name == "Nun")
-        {
-            MissionManager.Instance.Collect(gameObject.name + ":" + Name);
-            gameObject.SetActive(false);
-        }
-    }
 }

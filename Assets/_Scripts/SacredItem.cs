@@ -35,26 +35,6 @@ public class SacredItem : MonoBehaviour
         ExhibitBehaviour();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.name == "Nun")
-        {
-            var value = 0;
-            if (Behaviour == SacredItemBehaviour.CHASE)
-            {
-                value = (int)-transform.localScale.x;
-                MissionManager.Instance.UpdateFaithPoints(value);
-            }
-            else if (Behaviour == SacredItemBehaviour.WANDER)
-            {
-                value = (int)transform.localScale.x;
-                InventoryManager.Instance.AddWanderers(value);
-            }
-            gameObject.SetActive(false);
-            FindObjectOfType<WorldTextDisplay>().Display(this, value);
-        }
-    }
-
     public void Triggered()
     {
         if (HasTriggered) return;
@@ -155,7 +135,7 @@ public class SacredItem : MonoBehaviour
         transform.localScale = new Vector3(size, size, size);
         var player = FindObjectOfType<WorldPlayer>();
         Agent = GetComponent<NavMeshAgent>();
-        Agent.speed = Random.Range(3.5f, 6);
+        Agent.speed = Random.Range(6, 9);
         MyRenderer.material = RedMaterial;
 
         while (true)
@@ -180,7 +160,7 @@ public class SacredItem : MonoBehaviour
     {
         Behaviour = SacredItemBehaviour.WANDER;
         Agent = GetComponent<NavMeshAgent>();
-        Agent.speed = Random.Range(3.5f, 6);
+        Agent.speed = Random.Range(5f, 8);
         Vector3 boundsCenter = transform.position; 
         Vector3 boundsSize = new Vector3(500,0,500);
         MyRenderer.material = WhiteMaterial;
@@ -212,7 +192,7 @@ public class SacredItem : MonoBehaviour
     {
         var player = FindObjectOfType<WorldPlayer>();
         Agent = GetComponent<NavMeshAgent>();
-        Agent.speed = 6;
+        Agent.speed = 8.5f;
         var playerMotor = player.GetComponentInChildren<AnimatorMonitor>();
 
         while (true)

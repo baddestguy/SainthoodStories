@@ -12,6 +12,7 @@ public class WorldPlayer : MonoBehaviour
     public UltimateCharacterLocomotion MyLocomotor;
     private AnimatorMonitor MyAnimator;
     public CameraController MyCamera;
+    private GameObject CriticalCircleFX;
 
     float BoostTimer = 5f;
     float BoostWindowTimer = 1f;
@@ -19,6 +20,8 @@ public class WorldPlayer : MonoBehaviour
     bool Boosted = false;
 
     float accelerator = 0f;
+    bool CaptureTime = false;
+    SacredItem CurrentSacredItem = null;
 
     // Start is called before the first frame update
     void Start()
@@ -42,9 +45,9 @@ public class WorldPlayer : MonoBehaviour
         }
 
         if (Boosted)
-            MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 3.2f);
+            MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 5f);
         else
-            MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 1.5f * accelerator);
+            MyLocomotor.MotorAcceleration = new Vector3(MyLocomotor.MotorAcceleration.x, MyLocomotor.MotorAcceleration.y, 3.2f * accelerator);
     }
 
     public void OnBoost(Ability ability, bool trigger)
@@ -84,6 +87,48 @@ public class WorldPlayer : MonoBehaviour
             80,
             2f);
 
+    }
+
+    public void CaptureTimeAction(Ability ability, bool trigger)
+    {
+        if (!CaptureTime || CurrentSacredItem == null || ability is not CaptureAbility || !trigger) return;
+
+        var critCircleScaleX = CriticalCircleFX.transform.GetChild(0).transform.localScale.x;
+        var value = 0;
+        if (critCircleScaleX > 0.65f && critCircleScaleX < 0.85f)
+        {
+            if (CurrentSacredItem.Behaviour == SacredItemBehaviour.WANDER)
+            {
+                value = (int)CurrentSacredItem.transform.localScale.x;
+                InventoryManager.Instance.AddWanderers(value);
+            }
+            FindObjectOfType<WorldTextDisplay>().Display(CurrentSacredItem, value);
+
+            var collectibleItem = CurrentSacredItem.GetComponent<CollectibleItem>();
+            if (collectibleItem != null)
+            {
+                MissionManager.Instance.Collect(gameObject.name + ":" + collectibleItem.Name);
+            }
+
+            CurrentSacredItem.gameObject.SetActive(false);
+            CurrentSacredItem = null;
+        }
+        else
+        {
+            if (CurrentSacredItem.Behaviour == SacredItemBehaviour.CHASE)
+            {
+                value = (int)-CurrentSacredItem.transform.localScale.x;
+                MissionManager.Instance.UpdateFaithPoints(value);
+                FindObjectOfType<WorldTextDisplay>().Display(CurrentSacredItem, value);
+                CurrentSacredItem.gameObject.SetActive(false);
+                CurrentSacredItem = null;
+            }
+        }
+
+        Time.timeScale = 1f;
+        CriticalCircleFX.SetActive(false);
+        CriticalCircleFX.transform.GetChild(0).transform.localScale = new Vector3(5, 5, 5);
+        CaptureTime = false;
     }
 
     IEnumerator RestartBoostWindowAsync()
@@ -126,5 +171,58 @@ public class WorldPlayer : MonoBehaviour
         BoostWindow = false;
         StopCoroutine("RestartBoostWindowAsync");
         StartCoroutine("RestartBoostWindowAsync");
+    }
+
+    public void CaptureItem()
+    {
+        StartCoroutine(CaptureItemAsync());
+    }
+
+    IEnumerator CaptureItemAsync()
+    {
+        CaptureTime = true;
+        Time.timeScale = 0.4f;
+        if (CriticalCircleFX == null)
+        {
+            CriticalCircleFX = Instantiate(Resources.Load<GameObject>("UI/CriticalCircle"));
+        }
+        CriticalCircleFX.SetActive(true);
+        CriticalCircleFX.transform.SetParent(FindObjectOfType<WorldTextDisplay>().transform, true);
+        CriticalCircleFX.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        CriticalCircleFX.transform.position = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+        CriticalCircleFX.transform.localEulerAngles = Vector3.zero;
+
+        var critCircle = CriticalCircleFX.transform.GetChild(0);
+        critCircle.localScale = new Vector3(5, 5, 5);
+        critCircle.DOScale(new Vector3(0.3f, 0.3f, 0.3f), 0.8f);
+
+        yield return new WaitForSecondsRealtime(2f);
+
+        //Play FX
+        Time.timeScale = 1f;
+        CriticalCircleFX.SetActive(false);
+        critCircle.localScale = new Vector3(5, 5, 5);
+        CaptureTime = false;
+
+        if (CurrentSacredItem != null && CurrentSacredItem.Behaviour == SacredItemBehaviour.CHASE)
+        {
+            var value = (int)-CurrentSacredItem.transform.localScale.x;
+            MissionManager.Instance.UpdateFaithPoints(value);
+            FindObjectOfType<WorldTextDisplay>().Display(CurrentSacredItem, value);
+            CurrentSacredItem.gameObject.SetActive(false);
+            CurrentSacredItem = null;
+        }
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var sacredItem = other.GetComponent<SacredItem>();
+
+        if (sacredItem != null)
+        {
+            CurrentSacredItem = sacredItem;
+            CaptureItem();
+        }
     }
 }
