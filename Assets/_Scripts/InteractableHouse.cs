@@ -111,6 +111,11 @@ public class InteractableHouse : InteractableObject
             MyObjective = objectives.FirstOrDefault();
         }
 
+        if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT_URGENT)
+        {
+            BuildingState = BuildingState.RUBBLE;
+        }
+
         switch (MissionManager.Instance.CurrentMission.CurrentWeek)
         {
             case 1: DeadlinePercentChance = 5; break;
@@ -187,7 +192,7 @@ public class InteractableHouse : InteractableObject
             EventsManager.Instance.TriggeredMissionEvents.Add(MyObjective.CustomEventId);
         }
 
-        if(MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+        if(MyObjective.Event == BuildingEventType.DELIVER_ITEM || MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT)
         {
             RequiredItems = MyObjective.RequiredAmount;
             DeadlineSet = true;
@@ -195,7 +200,7 @@ public class InteractableHouse : InteractableObject
             PopMyIcon();
             SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
         }
-        else if(MyObjective.Event == BuildingEventType.REPAIR)
+        else if(MyObjective.Event == BuildingEventType.REPAIR || MyObjective.Event == BuildingEventType.REPAIR_URGENT)
         {
             var clock = GameManager.Instance.GameClock;
             TriggerHazardousMode(clock.Time, clock.Day);
@@ -247,7 +252,7 @@ public class InteractableHouse : InteractableObject
                     player.ConsumeEnergy(EnergyConsumption);
                     UpdateCharityPoints(VolunteerPoints + extraPoints, moddedEnergy);
                     VolunteerCountdown = 0;
-                    if(MyObjective?.Event == BuildingEventType.VOLUNTEER)
+                    if(MyObjective?.Event == BuildingEventType.VOLUNTEER || MyObjective?.Event == BuildingEventType.VOLUNTEER_URGENT)
                     {
                         MissionManager.Instance.CompleteObjective(MyObjective);
                         MyObjective = null;
@@ -538,7 +543,7 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
-            if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM)
+            if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM || MyObjective?.Event == BuildingEventType.DELIVER_ITEM_URGENT)
             {
                 MissionManager.Instance.CompleteObjective(MyObjective);
                 MyObjective = null;
@@ -637,6 +642,11 @@ public class InteractableHouse : InteractableObject
         UI.Instance.DisplayMessage("BUILDING!");
         if(BuildPoints >= MaxBuildPoints)
         {
+            if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT_URGENT)
+            {
+                MissionManager.Instance.CompleteObjective(MyObjective);
+                MyObjective = null;
+            }
             //Play Cool Construction Vfx and Animation!
             BuildingState = BuildingState.NORMAL;
             PopUILocation = OriginalPopUILocation;
@@ -675,11 +685,6 @@ public class InteractableHouse : InteractableObject
             InsideHouse = true;
             GamepadCursor.CursorSpeed = 2000f;
 
-            if(MyObjective?.Event == BuildingEventType.CONSTRUCT)
-            {
-                MissionManager.Instance.CompleteObjective(MyObjective);
-                MyObjective = null;
-            }
         }
         else
         {
@@ -746,7 +751,7 @@ public class InteractableHouse : InteractableObject
                 {
                     foreach (var house in GameManager.Instance.Houses)
                     {
-                        if (house.MyObjective != null && house.MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+                        if (house.MyObjective != null && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT))
                         {
                             UI.Instance.EnablePackageSelector(true, this);
                             return;
@@ -1103,7 +1108,7 @@ public class InteractableHouse : InteractableObject
         BuildingState = BuildingState.NORMAL;
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name + GetHazardIcon());
-        if (MyObjective?.Event == BuildingEventType.REPAIR)
+        if (MyObjective?.Event == BuildingEventType.REPAIR || MyObjective?.Event == BuildingEventType.REPAIR_URGENT)
         {
             MissionManager.Instance.CompleteObjective(MyObjective);
             MyObjective = null;
@@ -1242,7 +1247,7 @@ public class InteractableHouse : InteractableObject
     {
         if (BuildPoints >= MaxBuildPoints || BuildingState != BuildingState.RUBBLE || MyObjective == null) return false;
 
-        if (MyObjective?.Event == BuildingEventType.CONSTRUCT) return true;
+        if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT) return true;
 
         return false;
     }
@@ -1259,7 +1264,7 @@ public class InteractableHouse : InteractableObject
             case "BUILD":
                 return !GameManager.Instance.Player.EnergyDepleted() && CanBuild();
 
-            case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0);
+            case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0) || (!DuringOpenHours() && BuildingState != BuildingState.NORMAL);
             case "SLEEP": return MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
             case "EXIT": return true;
             case "WORLD": return true;
@@ -1444,7 +1449,7 @@ public class InteractableHouse : InteractableObject
         UpgradeLevel = data.UpgradeLevel;
         FPBonus = data.FPBonus;
         RelationshipBonus = data.RelationshipBonus;
-        RelationshipPoints = 100;// data.RelationshipPoints;
+        RelationshipPoints = data.RelationshipPoints;
         SturdyMaterials = data.SturdyMaterials;
         DeadlineSet = data.DeadlineSet;
         DeadlineCounter = data.DeadlineCounter;

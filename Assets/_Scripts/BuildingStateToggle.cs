@@ -26,7 +26,7 @@ public class BuildingStateToggle : MonoBehaviour
         {
             MyObjective = objectives.FirstOrDefault();
         }
-        gameObject.SetActive(myState != BuildingState.RUBBLE || (myState == BuildingState.RUBBLE && MyObjective?.Event == BuildingEventType.CONSTRUCT));
+        gameObject.SetActive(myState != BuildingState.RUBBLE || (myState == BuildingState.RUBBLE && (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT)));
 
         if (GameManager.Instance.HouseStates.ContainsKey(HouseName))
         {

@@ -82,7 +82,6 @@ public enum BuildingEventType
     MASS,
     URGENT,
     DELIVER_ITEM_URGENT,
-    BABY_URGENT,
     VOLUNTEER_URGENT,
     REPAIR_URGENT,
     CONSTRUCT_URGENT,

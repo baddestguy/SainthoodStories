@@ -140,7 +140,7 @@ public class MissionManager : MonoBehaviour
     public void UpdateCharityPoints(int amount, InteractableHouse house)
     {
         if (MissionOver) return;
-        CharityPointsPool = Mathf.Clamp(FaithPointsPool + amount, 0, 5);
+        CharityPointsPool = Mathf.Clamp(CharityPointsPool + amount, 0, 5);
         if(UI.Instance != null)
         {
             UI.Instance.RefreshCP(amount, CharityPointsPool);

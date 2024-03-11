@@ -11,9 +11,10 @@ Id,Event,House,RequiredAmount,CustomEventId,WeatherId
 5,VOLUNTEER,InteractableHospital,0,NONE,10
 6,MASS,InteractableChurch,0,MISSION_6,10
 7,REPAIR_URGENT,InteractableSchool,0,MISSION_7,24
-8,VOLUNTEER,InteractableSchool,0,MISSION_8,24
-9,DELIVER_ITEM,InteractableShelter,4,MISSION_9,24
-9,DELIVER_ITEM,InteractableSchool,2,NONE,24
-10,DELIVER_ITEM,InteractableHospital,2,MISSION_10,24
-11,REPAIR,InteractableOrphanage,0,MISSION_11,24
-12,DELIVER_ITEM,InteractableShelter,1,MISSION_12,24
+8,CONSTRUCT_URGENT,InteractableShelter,0,MISSION_8,24
+8,VOLUNTEER_URGENT,InteractableOrphanage,0,NONE,24
+9,DELIVER_ITEM_URGENT,InteractableShelter,2,MISSION_9,24
+9,DELIVER_ITEM_URGENT,InteractableSchool,2,NONE,24
+10,DELIVER_ITEM_URGENT,InteractableHospital,2,MISSION_10,24
+11,REPAIR_URGENT,InteractableOrphanage,0,MISSION_11,24
+12,DELIVER_ITEM_URGENT,InteractableShelter,4,MISSION_12,24

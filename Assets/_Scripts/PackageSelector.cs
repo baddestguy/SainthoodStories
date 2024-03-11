@@ -19,7 +19,7 @@ public class PackageSelector : MonoBehaviour
         var instantiatedGos = new List<PackageItem>();
         foreach (var house in GameManager.Instance.Houses)
         {
-            if(house.MyObjective != null && house.MyObjective.Event == BuildingEventType.DELIVER_ITEM)
+            if(house.MyObjective != null && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT))
             {
                 for(int i = 0; i < house.MyObjective.RequiredAmount; i++)
                 {

@@ -185,7 +185,6 @@ public class InventoryManager : MonoBehaviour
         //ClearProvisions();
 
         GameClock c = GameManager.Instance.GameClock;
-        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day > 5 && Random.Range(0, 100) < 50) yield break;
 
         //Check to make sure that we dont already have the Provision in our Inventory
         var prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];

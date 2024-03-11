@@ -101,8 +101,12 @@ public class WorldPlayer : MonoBehaviour
             {
                 value = (int)CurrentSacredItem.transform.localScale.x;
                 InventoryManager.Instance.AddWanderers(value);
+                FindObjectOfType<WorldTextDisplay>().Display(CurrentSacredItem, InventoryManager.Instance.WanderingSpirits);
             }
-            FindObjectOfType<WorldTextDisplay>().Display(CurrentSacredItem, value);
+            else
+            {
+                FindObjectOfType<WorldTextDisplay>().Display(CurrentSacredItem, value);
+            }
 
             var collectibleItem = CurrentSacredItem.GetComponent<CollectibleItem>();
             if (collectibleItem != null)
