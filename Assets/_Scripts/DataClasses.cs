@@ -580,6 +580,7 @@ public class CustomEventData
     public string TriggerWeekDay;
     public string ImagePath;
     public string LocalizationKey;
+    public string LinkTo;
 }
 
 [System.Serializable]

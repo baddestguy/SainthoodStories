@@ -1,6 +1,9 @@
 Key,English,French,BrPt,Filipino,LatAmSpanish,Italian,German
 Tutorial_0,"You knock on the convent doors at the crack of dawn, tired from your long journey, with only a backpack and your little lantern.",,,,,,
-Tutorial_1,"The doors swing open to reveal the Prioress. ""Welcome to Purgatorio. Come on in!"" she says, as she grabs your hand, ""You're just in time for Liturgy of the Hours. Come quickly, let us begin.""",,,,,,
+Tutorial_1,The doors swing open to reveal the Prioress.,,,,,,
+Tutorial_1,"""Welcome to Purgatorio. Come on in!"" ",,,,,,
+Tutorial_1,"She grabs your hand, pulls you in gently.",,,,,,
+Tutorial_1,"""You're just in time for morning prayers. Come quickly, let us begin.""",,,,,,
 Tutorial_11,"""Performing activities is straightforward. Simply <b>Press and Hold</b> the Prayer button to partake in Spiritual Activities.""",,,,,,
 Tutorial_2,"Afterwards, the Prioress shows you to your room. ""We have Liturgy of the Hours 3 times a day, and we always post the <b>Start Time</b> of the next session above the Convent, so please try to make it as often as you can.""",,,,,,
 Tutorial_21,"Eltee, the Foreman, visits the Convent. ""Ma'am, please come on down to the hospital at ya earliest convenience, we need all the help we can get.""

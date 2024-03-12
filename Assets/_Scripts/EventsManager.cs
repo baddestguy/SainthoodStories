@@ -83,6 +83,36 @@ public class EventsManager : MonoBehaviour
             {                
                 yield return null;
             }
+            if (!string.IsNullOrEmpty(e.LinkTo))
+            {
+                var split = e.LinkTo.Split('|');
+                foreach(var combo in split)
+                {
+                    var comboSplit = combo.Split(':');
+                    var nextEvent = new CustomEventData() {
+                        Id = e.Id,
+                        EventPopupType = e.EventPopupType,
+                        EventGroup = e.EventGroup,
+                        Weight = e.Weight,
+                        Cost = e.Cost,
+                        Gain = e.Gain,
+                        RewardType = e.RewardType,
+                        RejectionCost = e.RejectionCost,
+                        TriggerWeekDay = e.TriggerWeekDay,
+                        ImagePath = comboSplit[0],
+                        IsOrderedSequence = e.IsOrderedSequence,
+                        LocalizationKey = comboSplit[1],
+                        LinkTo = null                    
+                    };
+                    EventInProgress = true;
+                    UI.Instance.EventAlert(nextEvent);
+                    ExecuteEvent(nextEvent);
+                    while (EventInProgress)
+                    {
+                        yield return null;
+                    }
+                }
+            }
         }
 
         EventList.Clear();
