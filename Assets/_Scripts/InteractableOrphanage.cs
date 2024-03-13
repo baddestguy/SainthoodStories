@@ -227,6 +227,27 @@ public class InteractableOrphanage : InteractableHouse
         return base.CanDoAction(actionName);
     }
 
+    public override void TriggerStory()
+    {
+        if (HasBeenDestroyed) return;
+
+        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.ORPHANAGE_STORY_3))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_STORY_3);
+            MyStoryEvents.Add(CustomEventType.ORPHANAGE_STORY_3);
+        }
+        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.ORPHANAGE_STORY_2))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_STORY_2);
+            MyStoryEvents.Add(CustomEventType.ORPHANAGE_STORY_2);
+        }
+        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.ORPHANAGE_STORY_1))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_STORY_1);
+            MyStoryEvents.Add(CustomEventType.ORPHANAGE_STORY_1);
+        }
+    }
+
     protected override void AutoDeliver(ItemType item)
     {
         if (item == ItemType.TOYS)

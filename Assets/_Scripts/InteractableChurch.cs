@@ -293,6 +293,12 @@ public class InteractableChurch : InteractableHouse
 
                 UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                 PrayerProgress = 0;
+
+                if(MissionManager.Instance.CurrentMissionId == 1 && !(GameManager.Instance.SaveData.MissionEvents?.Contains(CustomEventType.MISSION_1) ?? false))
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.MISSION_1);
+                    EventsManager.Instance.TriggeredMissionEvents.Add(CustomEventType.MISSION_1);
+                }
             }
             clock.Tick();
         }

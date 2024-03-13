@@ -205,8 +205,6 @@ public class InteractableHospital : InteractableHouse
     {
         if (HasBeenDestroyed) return;
 
-        //These values are temporary just for the DEMO!!
-
         if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_3))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_3);

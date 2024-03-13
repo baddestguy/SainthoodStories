@@ -17,6 +17,7 @@ public class CustomEventPopup : MonoBehaviour
     public GameObject YesNoGO;
     public GameObject OKGO;
     public GameObject NextGO;
+    public GameObject SkipGO;
     public CustomEventData EventData;
     public TextMeshProUGUI EventText;
 
@@ -50,6 +51,7 @@ public class CustomEventPopup : MonoBehaviour
         YesNoGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         IconsGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         OKGO.SetActive(customEvent.EventPopupType == EventPopupType.OK);
+        SkipGO.SetActive(customEvent.EventGroup == EventGroup.STORY);
         CameraControls = GetCameraControl();
 
         StoryImage.gameObject.SetActive(true);
@@ -190,6 +192,16 @@ public class CustomEventPopup : MonoBehaviour
         EventsManager.Instance.EventInProgress = false;
         gameObject.SetActive(false);
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+    }
+
+    public void Skip()
+    {
+        if (DOTween.IsTweening(StoryEventText, true))
+        {
+            DOTween.Complete(StoryEventText);
+        }
+
+        OK();
     }
 
     public void Continue()
