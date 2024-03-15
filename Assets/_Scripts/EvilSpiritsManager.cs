@@ -17,7 +17,6 @@ public class EvilSpiritsManager : MonoBehaviour
 
     IEnumerator ActivateNewEnemies()
     {
-        int collectionIndex = 0;
         var player = FindObjectOfType<WorldPlayer>();
 
         while (true)
@@ -25,20 +24,51 @@ public class EvilSpiritsManager : MonoBehaviour
             yield return new WaitForSeconds(20);
 
             var allEnemies = GetComponentsInChildren<SacredItem>().Where(c => c.Behaviour == SacredItemBehaviour.CHASE || c.Behaviour == SacredItemBehaviour.WANDER);
-            if (allEnemies.Count() > 5) continue;
+            var shouldContinue = false;
+            if (allEnemies.Count() > 5)
+            {
+                for (int i = 0; i < EnemyCollection.Length; i++)
+                {
+                    if (!EnemyCollection[i].activeSelf) continue;
+
+                    var newDistance = Vector3.Distance(EnemyCollection[i].transform.position, player.transform.position);
+                    if (newDistance < 200)
+                    {
+                        shouldContinue = true;
+                        break;
+                    }
+                }
+
+                if (shouldContinue) continue;
+            }
 
             var distance = 1000000f;
+            var largerDistance = 0f;
+            int collectionIndex = -1;
+            var furthestAway = -1;
             for (int i = 0; i < EnemyCollection.Length; i++)
             {
                 var newDistance = Vector3.Distance(EnemyCollection[i].transform.position, player.transform.position);
-                if(newDistance < distance && !EnemyCollection[collectionIndex].activeSelf)
+                if(newDistance < distance && !EnemyCollection[i].activeSelf)
                 {
                     distance = newDistance;
                     collectionIndex = i;
                 }
+                if(newDistance > largerDistance && EnemyCollection[i].activeSelf)
+                {
+                    largerDistance = newDistance;
+                    furthestAway = i;
+                }
             }
 
-            EnemyCollection[collectionIndex].SetActive(true);
+            if(collectionIndex != -1)
+            {
+                EnemyCollection[collectionIndex].SetActive(true);
+            }
+            if(furthestAway != -1)
+            {
+                EnemyCollection[furthestAway].SetActive(false);
+            }
         }
     }
 }
