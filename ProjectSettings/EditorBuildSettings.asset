@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Scenes/Levels/ztest.unity
+    guid: e1a6491232a7ef3438be767d47ccbd58
+  - enabled: 1
     path: Assets/_Scenes/Bootloader.unity
     guid: 0a636c8150afe2d44997ae96fd718f21
   - enabled: 1
