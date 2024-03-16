@@ -14,6 +14,8 @@ public class EnterHouseTrigger : MonoBehaviour
         Debug.Log("COLLIDED WITH:" + other.name);
         if (other.name == "Nun")
         {
+            FindObjectOfType<WorldTextDisplay>().CrossFade(1f, 15);
+
             GameManager.Instance.CurrentBuilding = HouseName;
             SaveDataManager.Instance.SaveGame();
             GameManager.Instance.ReloadLevel();

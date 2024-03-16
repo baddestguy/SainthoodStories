@@ -30,6 +30,12 @@ public class WorldPlayer : MonoBehaviour
         StartCoroutine("BoostAsync");
         StartCoroutine("RestartBoostWindowAsync");
         FindObjectOfType<WorldTextDisplay>().DisplayEnergy(GameManager.Instance.PlayerEnergy);
+        Invoke("StartCrossFade", 1f);
+    }
+
+    void StartCrossFade()
+    {
+        FindObjectOfType<WorldTextDisplay>().CrossFade(0f, 1);
     }
 
     // Update is called once per frame

@@ -790,7 +790,10 @@ public class InteractableHouse : InteractableObject
         SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
         InsideHouse = false;
         OnEnterHouse?.Invoke(InsideHouse);
-        yield return StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
+
+        UI.Instance.CrossFade(1f, 15f);
+        while (UI.Instance.CrossFading) yield return null;
+
         GameManager.Instance.ExitHouse();
     }
 
