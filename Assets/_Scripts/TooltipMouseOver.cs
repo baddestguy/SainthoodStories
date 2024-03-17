@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -69,7 +70,15 @@ public class TooltipMouseOver : MonoBehaviour
         }
         else
         {
-            ToolTipManager.Instance.ShowToolTip(Loc_Key);
+            TextMeshProUGUI provisionDescription = GameObject.Find("ProvisionDescription")?.GetComponent<TextMeshProUGUI>();
+            if(provisionDescription != null)
+            {
+                provisionDescription.text = LocalizationManager.Instance.GetText(Loc_Key);
+            }
+            else
+            {
+                ToolTipManager.Instance.ShowToolTip(Loc_Key);
+            }
         }
 
         GamepadCursor.CursorSpeed = 500f;

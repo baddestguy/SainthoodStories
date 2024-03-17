@@ -93,6 +93,9 @@ public class ProvisionsPopup : MonoBehaviour
             return;
         }
 
+        TextMeshProUGUI provisionDescription = GameObject.Find("ProvisionDescription")?.GetComponent<TextMeshProUGUI>();
+        provisionDescription.text = "";
+
         CustomEventPopup.IsDisplaying = false;
         gameObject.SetActive(false);
         UI.Instance.EnableAllUIElements(true);
@@ -106,7 +109,7 @@ public class ProvisionsPopup : MonoBehaviour
         {
             case ProvisionsPopupPhase.ADD_UPGRADE:
                 TitleText.text = "CHOOSE A PROVISION";
-                Title2Text.text = "---------------- OR UPGRADE ----------------";
+                Title2Text.text = "--------- OR UPGRADE ---------";
                 foreach (var provItem in NewProvisionUIItems)
                 {
                     provItem.gameObject.SetActive(true);

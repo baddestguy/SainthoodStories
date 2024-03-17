@@ -10,6 +10,14 @@ public class PackageItem : MonoBehaviour
 
     public ObjectivesData Data;
 
+    private string HeaderColor = "<color=#3B2E1F>";
+    private string SubheaderColor = "<color=#C9A963>";
+    private string DescriptionColor = "<color=#74664B>";
+
+    private string HeaderSize = "<size=15>";
+    private string SubheaderSize = "<size=10>";
+    private string DescriptionSize = "<size=7>";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +50,19 @@ public class PackageItem : MonoBehaviour
                 PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{ItemType.STATIONERY}");
                 break;
         }
+
+
+        TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
+
+        mouseOverBtn.Loc_Key = $"InventoryTooltip_{Item}";
+
+        mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderColor}", HeaderColor);
+        mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{SubheaderColor}", SubheaderColor);
+        mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{DescriptionColor}", DescriptionColor);
+        mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderSize}", HeaderSize);
+        mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{SubheaderSize}", SubheaderSize);
+        mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{DescriptionSize}", DescriptionSize);
+
     }
 
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -75,6 +76,8 @@ public class PackageSelector : MonoBehaviour
 
     public void Cancel()
     {
+        TextMeshProUGUI provisionDescription = GameObject.Find("ProvisionDescription")?.GetComponent<TextMeshProUGUI>();
+        provisionDescription.text = "";
         UI.Instance.EnableAllUIElements(true);
         gameObject.SetActive(false);
     }
