@@ -24,6 +24,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<string, List<CollectibleData>> CollectibleData = new Dictionary<string, List<CollectibleData>>();
     public List<WeatherData> WeatherData = new List<WeatherData>();
     public Dictionary<TooltipStatId, TooltipStats> ToolTips = new Dictionary<TooltipStatId, TooltipStats>();
+    public Dictionary<MinigameType, MinigameData> MinigameData = new Dictionary<MinigameType, MinigameData>();
 
     public int MidnightEventChosenIndex;
     public List<CustomEventType> TriggeredDailyEvents;
@@ -255,6 +256,18 @@ public class GameDataManager : MonoBehaviour
         }
 
         yield return null;
+
+        //Minigames
+        csvFile = Resources.Load<TextAsset>("GameData/Minigames");
+        var games = CSVSerializer.Deserialize<MinigameData>(csvFile.text);
+        foreach (var item in games)
+        {
+            MinigameData.Add(item.Id, item);
+        }
+
+        yield return null;
+
+
 
         SaintsManager.Instance.LoadSaints(GameManager.Instance.SaveData.Saints);
 

@@ -6,6 +6,13 @@ public class DataClasses : MonoBehaviour
 
 }
 
+public enum MinigameType
+{
+    CONSTRUCT,
+    CPR,
+    BIRTH
+}
+
 public enum SaintID
 {
      NONE = 0
@@ -640,6 +647,14 @@ public class SaintData
     public string PatronKey;
     public string BioKey;
     public string IconPath;
+}
+
+[System.Serializable]
+public class MinigameData
+{
+    public MinigameType Id;
+    public string IconPath;
+    public int Sequences;
 }
 
 public class TileData

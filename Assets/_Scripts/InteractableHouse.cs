@@ -625,6 +625,21 @@ public class InteractableHouse : InteractableObject
         //}
     }
 
+    public void MinigameCallback(string action)
+    {
+        switch (action)
+        {
+            case "CONSTRUCT":
+                Build();
+                break;
+        }
+    }
+
+    public void StartBuildMinigame()
+    {
+        UI.Instance.StartMinigame(MinigameType.CONSTRUCT, MinigameCallback);
+    }
+
     public virtual void Build()
     {
         Player player = GameManager.Instance.Player;
@@ -736,7 +751,7 @@ public class InteractableHouse : InteractableObject
         switch (button)
         {
             case "BUILD":
-                Build();
+                StartBuildMinigame();
                 break;
 
             case "EXIT":

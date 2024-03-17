@@ -85,6 +85,8 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI RunAttemptsDisplay;
     public Button ContinueBtn;
 
+    public MinigamePlayer MinigamePlayer;
+
     public bool WasUiHit
     {
         get
@@ -923,6 +925,12 @@ public class UI : MonoBehaviour
         TreasuryAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         CPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         FPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    public void StartMinigame(MinigameType minigame, Action<string> callback)
+    {
+        MinigamePlayer.gameObject.SetActive(true);
+        MinigamePlayer.Init(minigame, callback);
     }
 
     public void GameOver()
