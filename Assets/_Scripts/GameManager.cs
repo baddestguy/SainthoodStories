@@ -107,6 +107,7 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
+        Time.timeScale = 1f;
         bool loadWeekDaysScene = true;
         if (loadSceneMode == LoadSceneMode.Single)
         {
