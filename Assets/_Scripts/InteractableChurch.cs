@@ -98,6 +98,7 @@ public class InteractableChurch : InteractableHouse
     public void CheckParticipation(GameClock clock)
     {
         if (!GameClock.DeltaTime) return;
+        if (MyObjective == null) return;
         if (MyObjective != null && MyObjective.Event != BuildingEventType.MASS) return;
 
         if (clock.Time == MassStartTime)
@@ -249,7 +250,7 @@ public class InteractableChurch : InteractableHouse
             {
             //    player.ConsumeEnergy(PrayEnergy);
                 UI.Instance.DisplayMessage("PRAYED");
-                PrayerProgress++;
+                PrayerProgress+=(int)MaxPrayerProgress;
                 var extraPoints = 0;
                 if (PopUI.CriticalHitCount == MaxPrayerProgress) extraPoints += 1;
                 OnActionProgress?.Invoke(PrayerProgress / MaxPrayerProgress, this, 0);
@@ -268,14 +269,17 @@ public class InteractableChurch : InteractableHouse
                     UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                     PrayerProgress = 0;
                 }
-                clock.Tick();
+                for (int i = 0; i < MaxPrayerProgress; i++)
+                {
+                    clock.Tick();
+                }
             }
         }
         else
         {
         //    player.ConsumeEnergy(PrayEnergy);
             UI.Instance.DisplayMessage("PRAYED");
-            PrayerProgress++;
+            PrayerProgress += (int)MaxPrayerProgress;
             var extraPoints = 0;
             if (PopUI.CriticalHitCount == MaxPrayerProgress) extraPoints += 1;
             OnActionProgress?.Invoke(PrayerProgress / MaxPrayerProgress, this, 0);
@@ -300,7 +304,10 @@ public class InteractableChurch : InteractableHouse
                     EventsManager.Instance.TriggeredMissionEvents.Add(CustomEventType.MISSION_1);
                 }
             }
-            clock.Tick();
+            for (int i = 0; i < MaxPrayerProgress; i++)
+            {
+                clock.Tick();
+            }
         }
     }
 
@@ -346,7 +353,7 @@ public class InteractableChurch : InteractableHouse
 
     public void OpenUnlockedSaints()
     {
-        GameManager.Instance.FadeAndLoadScene("SaintsShowcase_Day");
+        UI.Instance.ToggleSaintsCollection(true);
     }
 
     private IEnumerator ResetActionProgressAsync()
@@ -417,11 +424,6 @@ public class InteractableChurch : InteractableHouse
         }
 
         return base.GetTooltipStatsForButton(button);
-    }
-
-    public override int GetEnergyCostForCustomEvent(int eventCost)
-    {
-        return eventCost;
     }
 
     public override float SetButtonTimer(string actionName)

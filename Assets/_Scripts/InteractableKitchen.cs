@@ -84,7 +84,7 @@ public class InteractableKitchen : InteractableHouse
         }
     }
 
-    public override void BuildRelationship(ThankYouType thanks, int amount = 1)
+    public override void BuildRelationship(ThankYouType thanks, int amount = 3)
     {
         if (thanks == ThankYouType.VOLUNTEER)
         {

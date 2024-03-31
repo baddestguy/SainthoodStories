@@ -57,6 +57,11 @@ public class TreasuryManager : MonoBehaviour
         SaveDataManager.Instance.SaveGame();
     }
 
+    public void LoseTempMoney()
+    {
+        TemporaryMoneyToDonate = 0;
+    }
+
     IEnumerator DepositMoneyAsync()
     {
         var donation = TemporaryMoneyToDonate;

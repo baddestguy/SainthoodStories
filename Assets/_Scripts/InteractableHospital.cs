@@ -54,6 +54,11 @@ public class InteractableHospital : InteractableHouse
         }
     }
 
+    public override float CalculateMaxVolunteerPoints(int amount = 4)
+    {
+        return base.CalculateMaxVolunteerPoints(amount);
+    }
+
     protected override void SetObjectiveParameters()
     {
         if (MyObjective == null) return;
@@ -130,7 +135,7 @@ public class InteractableHospital : InteractableHouse
 
     public override void TriggerHazardousMode(double time, int day)
     {
-        if (HazardCounter > 0) return;
+      //  if (HazardCounter > 0) return;
      //   if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
 
         DeadlineCounter--;
@@ -146,7 +151,7 @@ public class InteractableHospital : InteractableHouse
         if(thanks == ThankYouType.BABY || thanks == ThankYouType.VOLUNTEER)
         {
             var hospitalMaterials = InventoryManager.Instance.GetProvision(Provision.HOSPITAL_RELATIONSHIP_BUILDER);
-            amount += hospitalMaterials?.Value ?? 0;
+            amount += 1 + (hospitalMaterials?.Value ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }
@@ -336,10 +341,13 @@ public class InteractableHospital : InteractableHouse
         }
 
         BuildingActivityState = BuildingActivityState.VOLUNTEERING;
-        var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
         UI.Instance.DisplayMessage("VOLUNTEERED HOSPITAL!");
         base.VolunteerWork(house);
-        clock.Tick();
+        for (int i = 0; i < MaxVolunteerPoints; i++)
+        {
+            BuildingActivityState = BuildingActivityState.VOLUNTEERING;
+            clock.Tick();
+        }
     }
     public override TooltipStats GetTooltipStatsForButton(string button)
     {
@@ -368,6 +376,7 @@ public class InteractableHospital : InteractableHouse
 
     public override void RelationshipReward(ThankYouType thanks)
     {
+        var amount = 0;
         if (RelationshipPoints == 100)
         {
             //One time special reward!
@@ -375,12 +384,24 @@ public class InteractableHospital : InteractableHouse
 
         if (RelationshipPoints >= 65)
         {
-            //Special Item
+            amount = Random.Range(4, 5);
         }
-        else 
+        else if (RelationshipPoints >= 30)
         {
-            base.RelationshipReward(thanks);
+            amount = Random.Range(3, 4);
         }
+        else if (RelationshipPoints >= 10)
+        {
+            amount = Random.Range(2, 3);
+        }
+        else
+        {
+            amount = Random.Range(1, 2);
+        }
+
+        base.RelationshipReward(thanks);
+        MoneyThanks();
+        TreasuryManager.Instance.DonateMoney(amount);
     }
 
     public override bool CanDoAction(string actionName)

@@ -98,7 +98,18 @@ public class InteractableMarket : InteractableHouse
             }
             else
             {
-                InventoryManager.Instance.AddToInventory(item);
+                if(item == ItemType.DRUGS)
+                {
+                    GameManager.Instance.Player.StatusEffects.Clear();
+                }
+                else if(item == ItemType.ENERGY_BOOST)
+                {
+                    GameManager.Instance.Player.ConsumeEnergy(-5);
+                }
+                else
+                {
+                    InventoryManager.Instance.AddToInventory(item);
+                }
             }
             ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
             InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
@@ -118,7 +129,7 @@ public class InteractableMarket : InteractableHouse
             UI.Meditate?.Invoke(this);
             return;
         }
-        if (button == "EXIT" || button == "ENTER")
+        if (button == "EXIT" || button == "ENTER" || button == "WORLD")
         {
             return;
         }
@@ -207,6 +218,10 @@ public class InteractableMarket : InteractableHouse
             case ItemType.TOYS:
                 isHouseAvailable = FindObjectOfType<InteractableOrphanage>()?.BuildingState != BuildingState.RUBBLE;
                 break;
+
+            case ItemType.ENERGY_BOOST:
+            case ItemType.DRUGS:
+                return DuringOpenHours() && TreasuryManager.Instance.CanAfford(moddedPrice);
         }
 
         return DuringOpenHours() && TreasuryManager.Instance.CanAfford(moddedPrice) && isHouseAvailable && !InventoryManager.Instance.IsInventoryFull();

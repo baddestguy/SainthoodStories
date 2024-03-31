@@ -29,16 +29,8 @@ public class Mission
     public Season Season { 
         get 
         {
-            //TODO: This will eventually break once we go past week 18!!
-            var summerArray = new int[] { 1,4,7,10,13,16 };
-            var fallArray = new int[] { 2,5,8,11,14,17 };
-            var winterArray = new int[] {3,6,9,12,15,18 };
-
-            if(summerArray.Contains(CurrentWeek)) return Season.SUMMER;
-            if(fallArray.Contains(CurrentWeek)) return Season.FALL;
-            if(winterArray.Contains(CurrentWeek)) return Season.WINTER;
-
-            return Season.SUMMER;
+            var currentMission = GameDataManager.Instance.GetSingleObjective(MissionManager.Instance.CurrentMissionId);
+            return currentMission.Season;
         } 
     }
 
@@ -58,9 +50,9 @@ public class Mission
             switch (Season)
             {
                 case Season.SPRING: return "SpringLevel";
-                case Season.SUMMER: return "SummerLevel";
+                case Season.SUMMER: return "SummerLevel Large";
                 case Season.FALL: return "FallLevel";
-                case Season.WINTER: return "WinterLevel";
+                case Season.WINTER: return "WinterLevel Large";
             }
 
             return "ERROR Retrieving Season text!";

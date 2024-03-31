@@ -45,6 +45,8 @@ public class Player : MonoBehaviour
     private int FastingCoutndown = 6;
 
     public GameObject Grid;
+
+    public static bool ReadyToLeave = false;
     void Start()
     {
         TargetPosition = transform.position;
@@ -185,10 +187,17 @@ public class Player : MonoBehaviour
          //   EventsManager.Instance.ForceTriggerStoryEvent(filteredEvents);
         }
     }
+    public virtual void OnTriggerEnter(Collider other)
+    {
+        var collectible = other.GetComponent<GridCollectibleItem>();
+        if (collectible == null) return;
+
+        collectible.Collect();
+    }
 
     public bool WeCanMove(MapTile tile)
     {
-        return false;
+        if (!ReadyToLeave) return false;
 
         if (AdjacentTiles == null) return false;
 
@@ -399,6 +408,15 @@ public class Player : MonoBehaviour
             energyAmount += (int)e.Cost;
         }
 
+        if(tile is InteractableHospital)
+        {
+            energyAmount += 1;
+        }
+        else if(tile is InteractableOrphanage)
+        {
+            energyAmount += 1;
+        }
+
         return energyAmount; 
     }
 
@@ -451,11 +469,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ConsumeEnergy(int amount)
+    public void ConsumeEnergy(int amount, MapTile tile = null)
     {
         if(amount >= 0)
         {
-            amount = ModifyEnergyConsumption(amount: amount);
+            amount = ModifyEnergyConsumption(tile, amount: amount);
         }
         Energy.Consume(amount);
 
@@ -573,6 +591,11 @@ public class Player : MonoBehaviour
     public void RefreshGrid()
     {
         Grid.SetActive(GameSettings.Instance.ShowGrid);
+    }
+
+    public MapTile GetCurrentTile()
+    {
+        return CurrentTile;
     }
 
     private void OnDisable()

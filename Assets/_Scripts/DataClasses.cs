@@ -48,7 +48,8 @@ public enum WeatherId
     CLEAR = 6,
     FOG = 10,
     SANDSTORM = 22,
-    RAIN = 24
+    RAIN = 24,
+    BLIZZARD = 17
 }
 
 public enum SacredItemBehaviour
@@ -108,7 +109,8 @@ public enum ThankYouType
     VOLUNTEER,
     BABY,
     TEACH,
-    UPGRADE
+    UPGRADE,
+    IMMEDIATE_ASSISTANCE
 }
 
 public enum PlayerStatusEffect
@@ -175,7 +177,9 @@ public enum ItemType
     TOYS,
     STATIONERY,
     MEDS,
-    MEAL
+    MEAL,
+    ENERGY_BOOST,
+    DRUGS
 }
 
 public enum Provision
@@ -503,6 +507,7 @@ public class ObjectivesData
     public int RequiredAmount;
     public CustomEventType CustomEventId;
     public int WeatherId;
+    public Season Season;
 
     public override bool Equals(object obj)
     {
@@ -514,7 +519,7 @@ public class ObjectivesData
         ObjectivesData other = (ObjectivesData)obj;
         return Id == other.Id && Event == other.Event && House == other.House
             && RequiredAmount == other.RequiredAmount && CustomEventId == other.CustomEventId
-            && WeatherId == other.WeatherId;
+            && WeatherId == other.WeatherId && Season == other.Season;
     }
 
     public override int GetHashCode()

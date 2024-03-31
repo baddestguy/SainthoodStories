@@ -121,6 +121,12 @@ public class PopUI : MonoBehaviour
                 b.SetTimer(house?.SetButtonTimer(b.ButtonName) ?? 1f);
             }
         }
+
+        var canvas = GetComponent<Canvas>();
+        if(canvas != null)
+        {
+            canvas.worldCamera = ExteriorCamera.Instance.UICamera;
+        }
     }
 
     public void OnClick(string button)

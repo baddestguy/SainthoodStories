@@ -254,6 +254,7 @@ public class MissionManager : MonoBehaviour
         CharityPoints += CharityPointsPool;
         FaithPointsPool = 0;
         CharityPointsPool = 0;
+        GameManager.Instance.ScrambleMapTiles();
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);
     }

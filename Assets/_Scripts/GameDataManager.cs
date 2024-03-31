@@ -411,6 +411,11 @@ public class GameDataManager : MonoBehaviour
         }
     }
 
+    public ObjectivesData GetSingleObjective(int id)
+    {
+        return GetObjectivesData(id).FirstOrDefault();
+    }
+
     public TooltipStats GetToolTip(TooltipStatId id, double ticksModifier = 0, int fpModifier = 0, int cpModifier = 0, int energyModifier = 0)
     {
         var tooltip = new TooltipStats() { Id = ToolTips[id].Id, Ticks = ToolTips[id].Ticks, CP = ToolTips[id].CP, FP = ToolTips[id].FP, Energy = ToolTips[id].Energy };

@@ -52,7 +52,7 @@ public class WeatherManager : MonoBehaviour
             WeatherStartTime = new GameClock(data.WeatherStartTime, data.WeatherStartDay);
             WeatherEndTime = new GameClock(data.WeatherEndTime, data.WeatherEndDay);
             GameClock c = GameManager.Instance.GameClock;
-            if(c >= WeatherStartTime && c < WeatherEndTime)
+            if(c >= WeatherStartTime)
             {
                 SetWeatherType();
                 if (CurrentWeatherGO != null)
@@ -233,7 +233,7 @@ public class WeatherManager : MonoBehaviour
                 WeatherType = WeatherType.SNOW;
                 break;
         }
-        DayNightCycle.SetFutureSkyBox(WeatherType);
+        DayNightCycle?.SetFutureSkyBox(WeatherType);
     }
 
     public bool IsStormy()

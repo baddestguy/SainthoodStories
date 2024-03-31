@@ -253,7 +253,6 @@ public class SaveDataManager : MonoBehaviour
                 //callback return
                 //CheckOveride(ref data);
                 callback?.Invoke(data, newGame);
-                SavedDataUiHandler.instance.Close();
             }
         }
         else

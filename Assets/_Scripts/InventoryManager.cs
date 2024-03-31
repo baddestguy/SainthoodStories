@@ -79,6 +79,12 @@ public class InventoryManager : MonoBehaviour
         Debug.Log("COLLECTED: " + newCollectible);
     }
 
+    public void AddGridCollectible(string newCollectible)
+    {
+        Collectibles.Add(newCollectible);
+        Debug.Log("COLLECTED: " + newCollectible);
+    }
+
     public void AddWanderers(int amount)
     {
         WanderingSpirits += amount;

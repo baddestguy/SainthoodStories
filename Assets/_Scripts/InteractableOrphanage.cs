@@ -40,6 +40,11 @@ public class InteractableOrphanage : InteractableHouse
         }
     }
 
+    public override float CalculateMaxVolunteerPoints(int amount = 2)
+    {
+        return base.CalculateMaxVolunteerPoints(amount);
+    }
+
     protected override void SetObjectiveParameters()
     {
         if (MyObjective == null) return;
@@ -135,7 +140,7 @@ public class InteractableOrphanage : InteractableHouse
         if(thanks == ThankYouType.VOLUNTEER)
         {
             var orphanageMaterials = InventoryManager.Instance.GetProvision(Provision.ORPHANAGE_RELATIONSHIP_BUILDER);
-            amount += orphanageMaterials?.Value ?? 0;
+            amount += 2 + (orphanageMaterials?.Value ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }
@@ -154,12 +159,18 @@ public class InteractableOrphanage : InteractableHouse
 
         if (RelationshipPoints >= 65)
         {
-            //Special Item
+        }
+        else if (RelationshipPoints >= 30)
+        {
+        }
+        else if (RelationshipPoints >= 10)
+        {
         }
         else
         {
-            base.RelationshipReward(thanks);
+
         }
+        base.RelationshipReward(thanks);
     }
 
     public override void VolunteerWork(InteractableHouse house)
@@ -179,7 +190,11 @@ public class InteractableOrphanage : InteractableHouse
             CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.ORPHANAGE_BONUS);
             UI.Instance.DisplayMessage("VOLUNTEERED AT ORPHANAGE!");
             base.VolunteerWork(house);
-            clock.Tick();
+            for (int i = 0; i < MaxVolunteerPoints; i++)
+            {
+                BuildingActivityState = BuildingActivityState.VOLUNTEERING;
+                clock.Tick();
+            }
         }
         else
         {

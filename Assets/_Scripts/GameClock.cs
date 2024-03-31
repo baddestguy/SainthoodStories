@@ -57,8 +57,8 @@ public class GameClock
     {
         for(int i = 0; i < ticks; i++)
         {
-            Time += 0.5;
-            if (Time > 23.5)
+            Time += 0.25;
+            if (Time > 23.75)
             {
                 Day++;
                 Time = Time - 24;
@@ -68,8 +68,8 @@ public class GameClock
 
     public void Tick()
     {
-        Time += 0.5;
-        if(Time > 23.5)
+        Time += 0.25;
+        if(Time > 23.75)
         {
             Day++;
             if (Day > 7) Day = 1;

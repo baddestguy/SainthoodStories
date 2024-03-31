@@ -112,6 +112,10 @@
             var shelterMaterials = InventoryManager.Instance.GetProvision(Provision.SHELTER_RELATIONSHIP_BUILDER);
             amount += shelterMaterials?.Value ?? 0;
         }
+        if(thanks == ThankYouType.IMMEDIATE_ASSISTANCE)
+        {
+            amount += 2;
+        }
         base.BuildRelationship(thanks, amount);
     }
 
@@ -122,14 +126,8 @@
             //One time special reward!
         }
 
-        if (RelationshipPoints >= 65)
-        {
-            //Special Item
-        }
-        else
-        {
-            base.RelationshipReward(thanks);
-        }
+        base.RelationshipReward(thanks);
+        
     }
 
     public override void PopUICallback(string button)

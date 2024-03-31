@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,14 +6,24 @@ public class SaintShowcaseHandler : MonoBehaviour
 {
 
     public Image SaintPotrait;
-    public TextMeshProUGUI Bio;
-    public TextMeshProUGUI Title;    
+    public Text Bio;
+    public Text Title;
+    public ScrollRect ScrollRect;
 
     private int CurrentSaintIndex = 0;
 
-    private void Start()
+    private void OnEnable()
     {
+        ToolTipManager.Instance.ShowToolTip("");
+        TooltipMouseOver.IsHovering = false;
+
+        UI.Instance.EnableAllUIElements(false);
         ShowPanel();
+    }
+
+    private void OnDisable()
+    {
+        UI.Instance.EnableAllUIElements(true);
     }
 
     void Update()
@@ -64,6 +73,7 @@ public class SaintShowcaseHandler : MonoBehaviour
             return;
         }
         
+        ScrollRect.verticalNormalizedPosition = 1f;
         SaintData saintData = SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex];
 
         //populate the saint data
@@ -75,15 +85,7 @@ public class SaintShowcaseHandler : MonoBehaviour
 
     public void OnExit()
     {
-        SoundManager.Instance.EndAllTracks();
-        //Load game data after saits scene is exited.. Modify to what is expected
-        SaveDataManager.Instance.LoadGame((data, newgame) => {
-            GameManager.Instance.SaveData = data;
-            GameManager.Instance.CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, data.Energy, data.Time, data.Day, data.Week);
-            TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
-            GameSettings.Instance.FTUE = false;
-        }, false, true);
-        GameManager.Instance.LoadScene(MissionManager.Instance.CurrentMission.SeasonLevel, UnityEngine.SceneManagement.LoadSceneMode.Single);
+        gameObject.SetActive(false);
     }
 
     [System.Serializable]

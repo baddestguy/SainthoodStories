@@ -86,7 +86,7 @@ public class UI : MonoBehaviour
     public Button ContinueBtn;
 
     public MinigamePlayer MinigamePlayer;
-
+    public GameObject SaintsCollectionUI;
     public bool WasUiHit
     {
         get
@@ -145,6 +145,11 @@ public class UI : MonoBehaviour
                 StatusEffectDisplay.gameObject.SetActive(false);
             }
         }
+    }
+
+    public void ToggleSaintsCollection(bool enable)
+    {
+        SaintsCollectionUI.SetActive(enable);
     }
 
     public void InitTimeEnergy(GameClock clock, Energy energy)
@@ -470,7 +475,7 @@ public class UI : MonoBehaviour
             TreasuryAdditionDisplay.text = "";
         }
 
-        int oldAmount = int.Parse(TreasuryAmount.text, System.Globalization.NumberStyles.AllowThousands);
+        int oldAmount = int.Parse(TreasuryAmount.text, System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowThousands);
         TreasuryAmount.DOCounter(oldAmount, (int)TreasuryManager.Instance.Money, 0.5f).SetDelay(2f);
 
         AdditionPoints(TreasuryAdditionDisplay, TreasuryDisplayGlow, (int)delta, 2f);
@@ -478,7 +483,8 @@ public class UI : MonoBehaviour
 
     public void EnablePackageSelector(bool enable, InteractableHouse house = null)
     {
-        EnableAllUIElements(false);
+        EnableAllUIElements(!enable);
+
         PackageSelectorUI.SetActive(enable);
         if(house != null)
         {

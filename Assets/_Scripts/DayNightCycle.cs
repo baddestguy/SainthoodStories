@@ -90,7 +90,10 @@ public class DayNightCycle : MonoBehaviour
 
         switch (clock.Time)
         {
+            //Gotta add times for 15 and 45 mins
+            case 0.25:
             case 0: TargetRotation = new Vector3(10, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
+            case 0.75:
             case 0.5: TargetRotation = new Vector3(13, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 1: TargetRotation = new Vector3(17.5f, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 1.5: TargetRotation = new Vector3(21.5f, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
@@ -154,7 +157,7 @@ public class DayNightCycle : MonoBehaviour
 
         if (Mathf.Abs(Bloom.color.GetValue<Color>().r - TargetBloomColor.r) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().g - TargetBloomColor.g) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().b - TargetBloomColor.b) > 0.001f)
         {
-            Bloom.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
+        //    Bloom.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
             BloomInterior.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
         }
 
