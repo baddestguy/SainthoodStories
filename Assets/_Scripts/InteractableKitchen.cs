@@ -39,6 +39,11 @@ public class InteractableKitchen : InteractableHouse
         }
     }
 
+    public override void UpgradeThanks()
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_KITCHEN);
+    }
+
     public void Cook()
     {
 
@@ -79,7 +84,7 @@ public class InteractableKitchen : InteractableHouse
         }
     }
 
-    public override void BuildRelationship(ThankYouType thanks, int amount = 1)
+    public override void BuildRelationship(ThankYouType thanks, int amount = 3)
     {
         if (thanks == ThankYouType.VOLUNTEER)
         {
@@ -129,6 +134,32 @@ public class InteractableKitchen : InteractableHouse
     protected override void AutoDeliver(ItemType item)
     {
 
+    }
+
+    public override void TriggerStory()
+    {
+        if (HasBeenDestroyed) return;
+
+        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.KITCHEN_STORY_3))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.KITCHEN_STORY_3);
+            MyStoryEvents.Add(CustomEventType.KITCHEN_STORY_3);
+        }
+        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.KITCHEN_STORY_2))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.KITCHEN_STORY_2);
+            MyStoryEvents.Add(CustomEventType.KITCHEN_STORY_2);
+        }
+        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.KITCHEN_STORY_1))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.KITCHEN_STORY_1);
+            MyStoryEvents.Add(CustomEventType.KITCHEN_STORY_1);
+        }
+    }
+
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_KITCHEN;
     }
 
     public override void OnDisable()

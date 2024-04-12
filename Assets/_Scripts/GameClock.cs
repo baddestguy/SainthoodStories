@@ -57,8 +57,8 @@ public class GameClock
     {
         for(int i = 0; i < ticks; i++)
         {
-            Time += 0.5;
-            if (Time > 23.5)
+            Time += 0.25;
+            if (Time > 23.75)
             {
                 Day++;
                 Time = Time - 24;
@@ -68,10 +68,11 @@ public class GameClock
 
     public void Tick()
     {
-        Time += 0.5;
-        if(Time > 23.5)
+        Time += 0.25;
+        if(Time > 23.75)
         {
             Day++;
+            if (Day > 7) Day = 1;
             Time = 0;
             EndofDay = true;
         }
@@ -89,17 +90,14 @@ public class GameClock
         ExecuteEvents?.Invoke();
         SaveDataManager.Instance.SaveGame();
         DeltaTime = false;
+
+        Debug.Log(Day + " : " + Time);
     }
 
     public void Ping()
     {
         Ticked?.Invoke(Time, Day);
         ExecuteEvents?.Invoke();
-    }
-
-    public bool EndofWeek()
-    {
-        return Day > 5;
     }
 
     public void EndTheWeek()
@@ -110,9 +108,12 @@ public class GameClock
 
     public void Reset()
     {
-        double timeDiff = 23.5 - Time;
-        Time += timeDiff;
-        Tick();
+        if(Time > 5)
+        {
+            Day++;
+            if (Day > 7) Day = 1;
+        }
+        Time = 5;
     }
 
     public bool DuringTheDay()

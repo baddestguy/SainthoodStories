@@ -16,10 +16,10 @@ public class MarketPopUI : PopUI
         base.Init(callback, sprite, items, deadline, house, cameraControls);
         BuildingIcon.transform.localPosition = BuildingIconPos;
 
-        SetDisplayPrice(ItemType.GROCERIES, GroceriesDisplayPrice);
+        SetDisplayPrice(ItemType.DRUGS, GroceriesDisplayPrice);
         SetDisplayPrice(ItemType.CLOTHES, ClothesDisplayPrice);
         SetDisplayPrice(ItemType.TOYS, ToysDisplayPrice);
-        SetDisplayPrice(ItemType.STATIONERY, StationeryDisplayPrice);
+        SetDisplayPrice(ItemType.ENERGY_BOOST, StationeryDisplayPrice);
         SetDisplayPrice(ItemType.MEDS, MedsDisplayPrice);
 
         //Tried to hide buttons only if the building has not yet been constructed!

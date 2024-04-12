@@ -11,8 +11,8 @@ public class InteractableChurch : InteractableHouse
 
     public int PrayerPoints;
 
-    private double LiturgyStartTime;
-    private double LiturgyEndTime;
+    private double LiturgyStartTime = -1;
+    private double LiturgyEndTime = -1;
     public double ConfessionTime;
     public double MassStartTime;
     public double MassEndTime;
@@ -49,13 +49,23 @@ public class InteractableChurch : InteractableHouse
         if (tile.GetInstanceID() == GetInstanceID())
         {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
-            SoundManager.Instance.SwitchMusicChannel(true);
+            CheckCollectibleObjectives();
+            TreasuryManager.Instance.DepositMoney();
         }
         else
         {
             ExteriorPopUI.gameObject.SetActive(false);
             PopIcon.UIPopped(false);
-            SoundManager.Instance.SwitchMusicChannel(false);
+        }
+    }
+
+    public void CheckCollectibleObjectives()
+    {
+        if (MissionManager.Instance.CurrentCollectibleCounter == GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount)
+        {
+            EventsManager.Instance.AddEventToList(GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].OnComplete);
+            MissionManager.Instance.CurrentCollectibleMissionId++;
+            MissionManager.Instance.CurrentCollectibleCounter = 0;
         }
     }
 
@@ -82,71 +92,46 @@ public class InteractableChurch : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         CheckParticipation(clock);
 
-        if(clock.Time > 18.5 || clock.Time <= 6.5)
-        {
-            LiturgyStartTime = 6;
-            LiturgyEndTime = 7;
-        }
-        else if(clock.Time > 12.5)
-        {
-            LiturgyStartTime = 18;
-            LiturgyEndTime = 19;
-        }
-        else if(clock.Time > 6.5)
-        {
-            LiturgyStartTime = 12;
-            LiturgyEndTime = 13;
-        }
-
         PopMyIcon();
     }
 
     public void CheckParticipation(GameClock clock)
     {
         if (!GameClock.DeltaTime) return;
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
-        if (clock.Day % 5 == 0 || e != null)
+        if (MyObjective == null) return;
+        if (MyObjective != null && MyObjective.Event != BuildingEventType.MASS) return;
+
+        if (clock.Time == MassStartTime)
         {
-            if (clock.Time == MassStartTime)
+            if (ConfessionProgress == 0) //Did not participate at all
             {
-                if(ConfessionProgress == 0) //Did not participate at all
-                {
-                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
-                    UpdateFaithPoints(-1, 0);
-                }
-                StartCoroutine(ResetActionProgressAsync());
+                SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
+                UpdateFaithPoints(-1, 0);
             }
-            else if (clock.Time == MassEndTime)
-            {
-                if (MassProgress == 0) 
-                {
-                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
-                    UpdateFaithPoints(-3, 0);
-                }
-                StartCoroutine(ResetActionProgressAsync());
-            }
-            else if (clock.Time == LiturgyEndTime)
-            {
-                if (LotHProgress == 0) 
-                {
-                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
-                    UpdateFaithPoints(-2, 0);
-                }
-                StartCoroutine(ResetActionProgressAsync());
-            }
+            StartCoroutine(ResetActionProgressAsync());
         }
-        else
+        else if (clock.Time == MassEndTime)
         {
-            if (clock.Time == LiturgyEndTime)
+            if (MassProgress == 0)
             {
-                if (LotHProgress == 0) //Did not participate at all
-                {
-                    SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
-                    UpdateFaithPoints(-2, 0);
-                }
-                StartCoroutine(ResetActionProgressAsync());
+                SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
+                UpdateFaithPoints(-3, 0);
+                MissionManager.Instance.CompleteObjective(MyObjective);
             }
+            StartCoroutine(ResetActionProgressAsync());
+            UI.Instance.SideNotificationPop(GetType().Name);
         }
+    }
+
+    public override bool CanDoAction(string actionName)
+    {
+        switch (actionName)
+        {
+            case "WORLD":
+                return GameManager.Instance.GameClock.Time < 5 || GameManager.Instance.GameClock.Time >= 6;
+        }
+
+        return base.CanDoAction(actionName);
     }
 
     public override void PopUICallback(string button)
@@ -172,53 +157,37 @@ public class InteractableChurch : InteractableHouse
     {
         TooltipMouseOver mouseOverBtn = InteriorPopUI.GetComponentsInChildren<TooltipMouseOver>(true).Where(b => b.name == "Pray").FirstOrDefault();
 
-        GameClock c = GameManager.Instance.GameClock;
-        if (c.Time < 19)
-            base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, c.Day));
-        else
-        {
-            UI.Instance.SideNotificationPop(GetType().Name);
-            PopIcon.gameObject.SetActive(false);
-        }
+        //GameClock c = GameManager.Instance.GameClock;
+        //if (c.Time < 19)
+        //    base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(LiturgyStartTime, c.Day));
+        //else
+        //{
+        //    UI.Instance.SideNotificationPop(GetType().Name);
+        //    PopIcon.gameObject.SetActive(false);
+        //}
         GameClock clock = GameManager.Instance.GameClock;
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
-        if (clock.Day % 5 == 0 || e!= null)
+        if (MyObjective != null && MyObjective.Event == BuildingEventType.MASS)
         {
             if (clock.Time > ConfessionTime && clock.Time < MassEndTime)
             {
                 base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(MassStartTime, GameManager.Instance.GameClock.Day));
                 mouseOverBtn.Loc_Key = "Tooltip_Mass";
             }
-            else if (clock.Time > 12.5 && clock.Time <= ConfessionTime)
-            {
-                base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(ConfessionTime, GameManager.Instance.GameClock.Day));
-                LiturgyStartTime = ConfessionTime;
-                if(clock.Time == ConfessionTime)
-                    mouseOverBtn.Loc_Key = "Tooltip_Confession";
-
-                if (clock.Time == ConfessionTime && GameClock.DeltaTime)
-                    SoundManager.Instance.PlayOneShotSfx("ChurchBells_SFX", timeToDie: 10f);
-            }
             else
             {
-                if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
-                    mouseOverBtn.Loc_Key = "Tooltip_Liturgy";
+                base.PopMyIcon(GetType().Name, RequiredItems, new GameClock(ConfessionTime, GameManager.Instance.GameClock.Day));
+                if(clock.Time == ConfessionTime)
+                    mouseOverBtn.Loc_Key = "Tooltip_Confession";
                 else
                     mouseOverBtn.Loc_Key = "Tooltip_Pray";
 
-                if (clock.Time == LiturgyStartTime && GameClock.DeltaTime)
+                if (clock.Time == ConfessionTime && GameClock.DeltaTime)
                     SoundManager.Instance.PlayOneShotSfx("ChurchBells_SFX", timeToDie: 10f);
             }
         }
         else
         {
-            if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
-                mouseOverBtn.Loc_Key = "Tooltip_Liturgy";
-            else
-                mouseOverBtn.Loc_Key = "Tooltip_Pray";
-
-            if (clock.Time == LiturgyStartTime && GameClock.DeltaTime)
-                SoundManager.Instance.PlayOneShotSfx("ChurchBells_SFX", timeToDie: 10f);
+            mouseOverBtn.Loc_Key = "Tooltip_Pray";
         }
     }
 
@@ -226,9 +195,8 @@ public class InteractableChurch : InteractableHouse
     {
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
-        CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
 
-        if (clock.Day % 5 == 0 || e != null)
+        if (MyObjective != null && MyObjective.Event == BuildingEventType.MASS)
         {
             if (clock.Time == ConfessionTime)
             {
@@ -239,7 +207,7 @@ public class InteractableChurch : InteractableHouse
             //    player.ConsumeEnergy(ServiceEnergy);
                 UI.Instance.DisplayMessage("ATTENDED CONFESSION!!");
 
-                UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
+                UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                 InteriorPopUI.PlayVFX("Halo");
                 clock.Tick();
             }
@@ -259,6 +227,7 @@ public class InteractableChurch : InteractableHouse
                 }
                 else
                 {
+                    MissionManager.Instance.CompleteObjective(MyObjective);
                     SoundManager.Instance.PlayOneShotSfx("MassEnd_SFX", timeToDie: 6);
                 }
                 if (MassProgress == 2)
@@ -272,33 +241,7 @@ public class InteractableChurch : InteractableHouse
                         }
                     }
 
-                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
-                }
-
-                clock.Tick();
-            }
-            else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
-            {
-                LotHProgress++;
-                var extraPoints = 0;
-                if (PopUI.CriticalHitCount == 2) extraPoints += 1;
-                OnActionProgress?.Invoke(LotHProgress/2f, this, 0);
-            //    player.ConsumeEnergy(ServiceEnergy);
-                UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
-                SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 10f);
-                InteriorPopUI.PlayVFX("Halo");
-                if (LotHProgress == 2)
-                {
-                    var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
-                    if (incense != null)
-                    {
-                        if (Random.Range(0, 100) <= incense.Value)
-                        {
-                            extraPoints += 2;
-                        }
-                    }
-
-                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
+                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                 }
 
                 clock.Tick();
@@ -307,7 +250,7 @@ public class InteractableChurch : InteractableHouse
             {
             //    player.ConsumeEnergy(PrayEnergy);
                 UI.Instance.DisplayMessage("PRAYED");
-                PrayerProgress++;
+                PrayerProgress+=(int)MaxPrayerProgress;
                 var extraPoints = 0;
                 if (PopUI.CriticalHitCount == MaxPrayerProgress) extraPoints += 1;
                 OnActionProgress?.Invoke(PrayerProgress / MaxPrayerProgress, this, 0);
@@ -323,43 +266,20 @@ public class InteractableChurch : InteractableHouse
                         player.ConsumeEnergy(koboko.Value);
                     }
 
-                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
+                    UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                     PrayerProgress = 0;
                 }
-                clock.Tick();
-            }
-        }
-        else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
-        {
-            LotHProgress++;
-            var extraPoints = 0;
-            if (PopUI.CriticalHitCount == 2) extraPoints += 1;
-            OnActionProgress?.Invoke(LotHProgress/2f, this, 0);
-            UI.Instance.DisplayMessage("ATTENDED LITURGY OF HOURS!!");
-            SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 10f);
-        //    player.ConsumeEnergy(ServiceEnergy);
-            InteriorPopUI.PlayVFX("Halo");
-            if (LotHProgress == 2)
-            {
-                var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
-                if(incense != null)
+                for (int i = 0; i < MaxPrayerProgress; i++)
                 {
-                    if (Random.Range(0, 100) <= incense.Value)
-                    {
-                        extraPoints += 2;
-                    }
+                    clock.Tick();
                 }
-
-                UpdateFaithPoints(PrayerPoints +FPBonus + extraPoints, 0);
             }
-
-            clock.Tick();
         }
         else
         {
         //    player.ConsumeEnergy(PrayEnergy);
             UI.Instance.DisplayMessage("PRAYED");
-            PrayerProgress++;
+            PrayerProgress += (int)MaxPrayerProgress;
             var extraPoints = 0;
             if (PopUI.CriticalHitCount == MaxPrayerProgress) extraPoints += 1;
             OnActionProgress?.Invoke(PrayerProgress / MaxPrayerProgress, this, 0);
@@ -375,18 +295,26 @@ public class InteractableChurch : InteractableHouse
                     player.ConsumeEnergy(koboko.Value);
                 }
 
-                UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints, 0);
+                UpdateFaithPoints(PrayerPoints + FPBonus + extraPoints);
                 PrayerProgress = 0;
+
+                if(MissionManager.Instance.CurrentMissionId == 1 && !(GameManager.Instance.SaveData.MissionEvents?.Contains(CustomEventType.MISSION_1) ?? false))
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.MISSION_1);
+                    EventsManager.Instance.TriggeredMissionEvents.Add(CustomEventType.MISSION_1);
+                }
             }
-            clock.Tick();
+            for (int i = 0; i < MaxPrayerProgress; i++)
+            {
+                clock.Tick();
+            }
         }
     }
 
     public override void TriggerCustomEvent()
     {
         GameClock clock = GameManager.Instance.GameClock;
-        if ((clock.Time+1) >= LiturgyStartTime && clock.Time < LiturgyEndTime) return;
-        if (clock.Day % 5 == 0 && (clock.Time+0.5 == ConfessionTime || (clock.Time+0.5 >= MassStartTime && clock.Time < MassEndTime))) return;
+        if (clock.Time+0.5 == ConfessionTime || (clock.Time+0.5 >= MassStartTime && clock.Time < MassEndTime)) return;
         base.TriggerCustomEvent();
     }
 
@@ -397,33 +325,35 @@ public class InteractableChurch : InteractableHouse
 
     public void Sleep()
     {
-        GameClock clock = GameManager.Instance.GameClock;
-        Player player = GameManager.Instance.Player;
+        MissionManager.Instance.EndDay();
 
-        SleepProgress++;
-        var extraPoints = 0;
-        if (PopUI.CriticalHitCount == MaxSleepProgress) extraPoints = 1;
-        OnActionProgress?.Invoke(SleepProgress / MaxSleepProgress, this, 1);
-        if (SleepProgress == MaxSleepProgress)
-        {
-            var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
+        //GameClock clock = GameManager.Instance.GameClock;
+        //Player player = GameManager.Instance.Player;
 
-            player.ConsumeEnergy(SleepEnergy - (mattress?.Value ?? 0) - extraPoints);
-            player.RemoveRandomStatusEffect();
-            PopUIFXIcons("Energy", -SleepEnergy);
-            SleepProgress = 0;
-        }
+        //SleepProgress++;
+        //var extraPoints = 0;
+        //if (PopUI.CriticalHitCount == MaxSleepProgress) extraPoints = 1;
+        //OnActionProgress?.Invoke(SleepProgress / MaxSleepProgress, this, 1);
+        //if (SleepProgress == MaxSleepProgress)
+        //{
+        //    var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
 
-        if(MaxSleepProgress > 0)
-        {
-            clock.Tick();
-        }
-        UI.Instance.DisplayMessage("SLEPT!");
+        //    player.ConsumeEnergy(SleepEnergy - (mattress?.Value ?? 0) - extraPoints);
+        //    player.RemoveRandomStatusEffect();
+        //    PopUIFXIcons("Energy", -SleepEnergy);
+        //    SleepProgress = 0;
+        //}
+
+        //if(MaxSleepProgress > 0)
+        //{
+        //    clock.Tick();
+        //}
+        //UI.Instance.DisplayMessage("SLEPT!");
     }
 
     public void OpenUnlockedSaints()
     {
-        GameManager.Instance.FadeAndLoadScene("SaintsShowcase_Day");
+        UI.Instance.ToggleSaintsCollection(true);
     }
 
     private IEnumerator ResetActionProgressAsync()
@@ -496,21 +426,15 @@ public class InteractableChurch : InteractableHouse
         return base.GetTooltipStatsForButton(button);
     }
 
-    public override int GetEnergyCostForCustomEvent(int eventCost)
-    {
-        return eventCost;
-    }
-
     public override float SetButtonTimer(string actionName)
     {
         switch (actionName)
         {
             case "PRAY":
-                GameClock clock = GameManager.Instance.GameClock;
-                CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
 
-                if (clock.Day % 5 == 0 || e != null)
+                if (MyObjective != null && MyObjective.Event == BuildingEventType.MASS)
                 {
+                    GameClock clock = GameManager.Instance.GameClock;
                     if (clock.Time == ConfessionTime)
                     {
                         return 2f;
@@ -519,19 +443,16 @@ public class InteractableChurch : InteractableHouse
                     {
                         return 4f;
                     }
-                    else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
-                    {
-                        return 2f;
-                    }
-                }
-                else if (clock.Time >= LiturgyStartTime && clock.Time < LiturgyEndTime)
-                {
-                    return 2f;
                 }
                 break;
         }
 
         return base.SetButtonTimer(actionName);
+    }
+
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_CHURCH;
     }
 
     public override void SetDeadlineTime(double time, int day)

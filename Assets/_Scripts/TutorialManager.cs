@@ -234,6 +234,7 @@ public class TutorialManager : MonoBehaviour
 
     private void FinishedTalking(bool started)
     {
+        return;
         FindObjectOfType<TutorialMapArrows>().SetActive(false);
 
         if (!started)

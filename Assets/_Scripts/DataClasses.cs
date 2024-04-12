@@ -6,6 +6,13 @@ public class DataClasses : MonoBehaviour
 
 }
 
+public enum MinigameType
+{
+    CONSTRUCT,
+    CPR,
+    BIRTH
+}
+
 public enum SaintID
 {
      NONE = 0
@@ -36,6 +43,33 @@ public enum SaintID
     ,VICTOR
 }   
 
+public enum WeatherId
+{
+    CLEAR = 6,
+    FOG = 10,
+    SANDSTORM = 22,
+    RAIN = 24,
+    BLIZZARD = 17
+}
+
+public enum SacredItemBehaviour
+{
+    HOVER = 0,
+    BOUNCE,
+    PATROL,
+    RUNAWAY,
+    DECOY,
+    MIRROR_MOVEMENT,
+    TELEPORT,
+    ZIP,
+    BURST,
+    SPIRAL,
+    CONCENTRATION,
+    WEATHER_CHANGING,
+    CHASE,
+    WANDER
+}
+
 public enum CustomEventRewardType
 {
     NONE = 0,
@@ -49,14 +83,23 @@ public enum BuildingEventType
     NONE = 0,
     DELIVER_ITEM,
     BABY,
-    VOLUNTEER
+    VOLUNTEER,
+    CONSTRUCT,
+    REPAIR,
+    RETURN,
+    MASS,
+    URGENT,
+    DELIVER_ITEM_URGENT,
+    VOLUNTEER_URGENT,
+    REPAIR_URGENT,
+    CONSTRUCT_URGENT,
+    RETURN_URGENT
 }
 
 public enum BuildingActivityState
 {
     NONE = 0,
     VOLUNTEERING,
-    TEACHING,
     DELIVERING_BABY
 }
 
@@ -65,7 +108,9 @@ public enum ThankYouType
     ITEM,
     VOLUNTEER,
     BABY,
-    TEACH
+    TEACH,
+    UPGRADE,
+    IMMEDIATE_ASSISTANCE
 }
 
 public enum PlayerStatusEffect
@@ -132,7 +177,9 @@ public enum ItemType
     TOYS,
     STATIONERY,
     MEDS,
-    MEAL
+    MEAL,
+    ENERGY_BOOST,
+    DRUGS
 }
 
 public enum Provision
@@ -207,6 +254,13 @@ public enum CustomEventType
     THANKYOU_ITEM_ORPHANAGE,
     THANKYOU_ITEM_FOOD,
     THANKYOU_ITEM_CLOTHES,
+    THANKYOU_UPGRADE_HOSPITAL,
+    THANKYOU_UPGRADE_SCHOOL,
+    THANKYOU_UPGRADE_ORPHANAGE,
+    THANKYOU_UPGRADE_SHELTER,
+    THANKYOU_UPGRADE_CLOTHES,
+    THANKYOU_UPGRADE_CHURCH,
+    THANKYOU_UPGRADE_KITCHEN,
     THANKYOU_MONEY,
     THANKYOU_BABY,
     THANKYOU_TEACH,
@@ -235,6 +289,8 @@ public enum CustomEventType
     ,SHELTER_BUILDEXTRA
     ,STOCK_SHELVES
     ,REGISTRATION
+    ,HOSPITAL_ARRIVAL
+    ,HOSPITAL_COMPLETE
     ,ORPHANAGE_PRECOMPLETE
     ,ORPHANAGE_COMPLETE
     ,SCHOOL_PRECOMPLETE
@@ -255,13 +311,70 @@ public enum CustomEventType
     ,SAVE_KITCHEN
     ,SAVE_SHELTER
     ,ENDGAME
-    ,AUTO_DELIVER_BEGIN
+    ,ENDGAME_BEST
+    ,ENDGAME_NORMAL
+    ,ENDGAME_HOSPITAL
+    ,ENDGAME_SHELTER
+    ,ENDGAME_SCHOOL
+    ,ENDGAME_CHURCH
+    ,ENDGAME_ORPHANAGE
+    ,ENDGAME_KITCHEN
+    , AUTO_DELIVER_BEGIN
     ,AUTO_DELIVER_COMPLETE
     ,HOSPITAL_STORY_1
     ,HOSPITAL_STORY_2
     ,HOSPITAL_STORY_3
-    ,HOSPITAL_STORY_4
-    ,HOSPITAL_STORY_5
+    ,ORPHANAGE_STORY_1
+    ,ORPHANAGE_STORY_2
+    ,ORPHANAGE_STORY_3
+    ,SCHOOL_STORY_1
+    ,SCHOOL_STORY_2
+    ,SCHOOL_STORY_3
+    ,SHELTER_STORY_1
+    ,SHELTER_STORY_2
+    ,SHELTER_STORY_3
+    ,KITCHEN_STORY_1
+    ,KITCHEN_STORY_2
+    ,KITCHEN_STORY_3
+    ,COLLECTIBLE_MISSION_1
+    ,COLLECTIBLE_MISSION_2
+    ,COLLECTIBLE_MISSION_3
+    ,COLLECTIBLE_MISSION_4
+    ,COLLECTIBLE_MISSION_5
+    ,COLLECTIBLE_MISSION_6
+    ,COLLECTIBLE_MISSION_7
+    ,COLLECTIBLE_MISSION_8
+    ,COLLECTIBLE_MISSION_9
+    ,COLLECTIBLE_MISSION_10
+    ,COLLECTIBLE_MISSION_11
+    ,COLLECTIBLE_MISSION_12
+    ,INTRO
+    ,MISSION_1
+    ,MISSION_2
+    ,MISSION_3
+    ,MISSION_4
+    ,MISSION_5
+    ,MISSION_6
+    ,MISSION_7
+    ,MISSION_8
+    ,MISSION_9
+    ,MISSION_10
+    ,MISSION_11
+    ,MISSION_12
+    ,MISSION_13
+    ,MISSION_14
+    ,MISSION_15
+    ,MISSION_16
+    ,MISSION_17
+    ,MISSION_18
+    ,MISSION_19
+    ,MISSION_20
+    ,MISSION_21
+    ,MISSION_22
+    ,MISSION_23
+    ,MISSION_24
+    ,MISSION_25
+    ,MISSION_26
 }
 
 public enum EventPopupType
@@ -347,6 +460,7 @@ public class HouseSaveData
     public int HazardCounter;
     public bool HasBeenDestroyed;
     public List<CustomEventType> MyStoryEvents;
+    public int UpgradeLevel;
 }
 
 public class TooltipStats
@@ -366,6 +480,63 @@ public class WeatherData
     public double Time;
     public double StartTime;
     public double Duration;
+}
+
+[System.Serializable]
+public class CollectibleData
+{
+    public string Id;
+    public string Name;
+    public string Description;
+}
+
+[System.Serializable]
+public class CollectibleObjectivesData
+{
+    public int Id;
+    public int Amount;
+    public CustomEventType OnComplete;
+}
+
+[System.Serializable]
+public class ObjectivesData
+{
+    public int Id;
+    public BuildingEventType Event;
+    public string House;
+    public int RequiredAmount;
+    public CustomEventType CustomEventId;
+    public int WeatherId;
+    public Season Season;
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        ObjectivesData other = (ObjectivesData)obj;
+        return Id == other.Id && Event == other.Event && House == other.House
+            && RequiredAmount == other.RequiredAmount && CustomEventId == other.CustomEventId
+            && WeatherId == other.WeatherId && Season == other.Season;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 23 + Id.GetHashCode();
+            hash = hash * 23 + (Event.GetHashCode());
+            hash = hash * 23 + (House != null ? House.GetHashCode() : 0);
+            hash = hash * 23 + RequiredAmount.GetHashCode();
+            hash = hash * 23 + (CustomEventId.GetHashCode());
+            hash = hash * 23 + WeatherId.GetHashCode();
+            return hash;
+        }
+    }
+
 }
 
 [System.Serializable]
@@ -432,6 +603,7 @@ public class CustomEventData
     public string TriggerWeekDay;
     public string ImagePath;
     public string LocalizationKey;
+    public string LinkTo;
 }
 
 [System.Serializable]
@@ -482,6 +654,14 @@ public class SaintData
     public string IconPath;
 }
 
+[System.Serializable]
+public class MinigameData
+{
+    public MinigameType Id;
+    public string IconPath;
+    public int Sequences;
+}
+
 public class TileData
 {
     public int Id { get; }
@@ -519,12 +699,14 @@ public class SaveObject
     public int FP;
     public int FPPool;
     public int CP;
+    public int CPPool;
     public int Energy;
     public int Week;
     public int Day;
     public double Time;
     public int TutorialSteps;
     public double Money;
+    public double TemporaryMoneyToDonate;
     public int RunAttempts;
     public HouseSaveData[] Houses;
     public SaintID[] Saints;
@@ -542,6 +724,14 @@ public class SaveObject
     public double WeatherEndTime;
     public int WeatherEndDay;
     public bool WeatherActivated;
+    public ObjectivesData[] CompletedObjectives;
+    public string[] Collectibles;
+    public int WanderingSpirits;
+    public int CurrentCollectibleMissionId;
+    public int CurrentCollectibleCounter;
+    public string[] WorldCollectibles;
+    public CustomEventType[] MissionEvents;
+    public bool HasChosenProvision;
 }
 
 [System.Serializable]

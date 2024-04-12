@@ -30,7 +30,7 @@ public class DayNightCycle : MonoBehaviour
     public DayNight DayNight
     {
         get { 
-            if (GameManager.Instance.GameClock.Time >= 6 && GameManager.Instance.GameClock.Time < 21) return DayNight.DAY;
+            if (GameManager.Instance.GameClock.Time >= 6 && GameManager.Instance.GameClock.Time < 19) return DayNight.DAY;
             else return DayNight.NIGHT; 
         }
     }
@@ -49,7 +49,7 @@ public class DayNightCycle : MonoBehaviour
     private void StartingSkybox()
     {
         GameClock clock = GameManager.Instance.GameClock;
-        if (clock.Time >= 21 || clock.Time < 6)
+        if (clock.Time >= 19 || clock.Time < 6)
         {
             OverrideSkybox(NightSkyboxTextures);
         }
@@ -90,7 +90,10 @@ public class DayNightCycle : MonoBehaviour
 
         switch (clock.Time)
         {
+            //Gotta add times for 15 and 45 mins
+            case 0.25:
             case 0: TargetRotation = new Vector3(10, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
+            case 0.75:
             case 0.5: TargetRotation = new Vector3(13, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 1: TargetRotation = new Vector3(17.5f, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 1.5: TargetRotation = new Vector3(21.5f, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
@@ -128,10 +131,10 @@ public class DayNightCycle : MonoBehaviour
             case 17.5: TargetRotation = new Vector3(125, -30, 0); TargetColor = new Color32(255, 211, 160, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
             case 18: TargetRotation = new Vector3(128, -30, 0); TargetColor = new Color32(255, 211, 160, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
             case 18.5: TargetRotation = new Vector3(131, -30, 0); TargetColor = new Color32(255, 211, 160, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
-            case 19: TargetRotation = new Vector3(135, -30, 0); TargetColor = new Color32(255, 187, 110, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
-            case 19.5: TargetRotation = new Vector3(137, -30, 0); TargetColor = new Color32(255, 187, 110, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
-            case 20: TargetRotation = new Vector3(141, -30, 0); TargetColor = new Color32(255, 187, 110, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
-            case 20.5: TargetRotation = new Vector3(145, -30, 0); TargetColor = new Color32(255, 187, 110, 255); TargetBloomColor = Color.red; SetFutureSkybox(EveningSkyboxTextures); break;
+            case 19: TargetRotation = new Vector3(135, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
+            case 19.5: TargetRotation = new Vector3(137, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
+            case 20: TargetRotation = new Vector3(141, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
+            case 20.5: TargetRotation = new Vector3(145, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 21: TargetRotation = new Vector3(148, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 21.5: TargetRotation = new Vector3(151, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
             case 22: TargetRotation = new Vector3(154, -30, 0); TargetColor = new Color32(104, 222, 211, 255); TargetBloomColor = Color.blue; SetFutureSkybox(NightSkyboxTextures); break;
@@ -154,7 +157,7 @@ public class DayNightCycle : MonoBehaviour
 
         if (Mathf.Abs(Bloom.color.GetValue<Color>().r - TargetBloomColor.r) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().g - TargetBloomColor.g) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().b - TargetBloomColor.b) > 0.001f)
         {
-            Bloom.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
+        //    Bloom.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
             BloomInterior.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
         }
 

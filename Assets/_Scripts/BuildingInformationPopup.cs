@@ -16,7 +16,7 @@ public class BuildingInformationPopup : MonoBehaviour
         CamTransform = ExteriorCamera.Instance.Camera.transform;
     }
 
-    public void Init(string iconName, int openTime, int closingTime, int hearts, bool isOpen)
+    public void Init(string iconName, int openTime, double closingTime, int hearts, bool isOpen)
     {
         BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{iconName}");
         OpenHours.text = $"{openTime}:{(openTime % 1 == 0 ? "00" : "30")} - {closingTime}:{(closingTime % 1 == 0 ? "00" : "30")}";

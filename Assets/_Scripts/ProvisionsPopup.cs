@@ -15,10 +15,12 @@ public class ProvisionsPopup : MonoBehaviour
     public ScrollRect UpgradeProvisionScroller;
     public ProvisionUIItem[] NewProvisionUIItems = new ProvisionUIItem[2];
     public ProvisionUIItem[] UpgradeProvisionUIItems = new ProvisionUIItem[5];
+    public InteractableHouse House;
 
     public void Init(ProvisionData prov1, ProvisionData prov2)
     {
         StartCoroutine(WaitThenHideUI());
+        XButton.SetActive(true);
 
         SwitchPhase(ProvisionsPopupPhase.ADD_UPGRADE);
         CustomEventPopup.IsDisplaying = true;
@@ -85,11 +87,19 @@ public class ProvisionsPopup : MonoBehaviour
 
     public void OnClick(string item)
     {
-        if(item == "X")
+        if(item == "X" && PopupPhase == ProvisionsPopupPhase.REPLACE)
         {
             SwitchPhase(ProvisionsPopupPhase.ADD_UPGRADE);
             return;
         }
+
+        TextMeshProUGUI provisionDescription = GameObject.Find("ProvisionDescription")?.GetComponent<TextMeshProUGUI>();
+        provisionDescription.text = "";
+
+        CustomEventPopup.IsDisplaying = false;
+        gameObject.SetActive(false);
+        UI.Instance.EnableAllUIElements(true);
+        GamepadCursor.CursorSpeed = 2000f;
     }
 
     private void SwitchPhase(ProvisionsPopupPhase phase)
@@ -98,9 +108,8 @@ public class ProvisionsPopup : MonoBehaviour
         switch (phase)
         {
             case ProvisionsPopupPhase.ADD_UPGRADE:
-                TitleText.text = "CHOOSE ONE";
-                Title2Text.text = "---------------- OR UPGRADE ----------------";
-                XButton.SetActive(false);
+                TitleText.text = "CHOOSE A PROVISION";
+                Title2Text.text = "--------- OR UPGRADE ---------";
                 foreach (var provItem in NewProvisionUIItems)
                 {
                     provItem.gameObject.SetActive(true);
@@ -110,7 +119,6 @@ public class ProvisionsPopup : MonoBehaviour
             case ProvisionsPopupPhase.REPLACE:
                 TitleText.text = "";
                 Title2Text.text = "-- REPLACE EXISTING PROVISION? --";
-                XButton.SetActive(true);
                 foreach(var provItem in NewProvisionUIItems)
                 {
                     provItem.gameObject.SetActive(false);
@@ -130,5 +138,8 @@ public class ProvisionsPopup : MonoBehaviour
         UI.Instance.EnableAllUIElements(true);
         GamepadCursor.CursorSpeed = 2000f;
 
+        if (House == null) return;
+
+        House.GoToWorldMap();
     }
 }

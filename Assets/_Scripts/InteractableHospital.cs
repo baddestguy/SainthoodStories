@@ -43,12 +43,31 @@ public class InteractableHospital : InteractableHouse
                 ExteriorPopUI.gameObject.SetActive(true);
                 ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
                 PopIcon.UIPopped(true);
+                if (!EventsManager.Instance.TriggeredMissionEvents.Contains(CustomEventType.HOSPITAL_ARRIVAL))
+                    EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_ARRIVAL);
             }
         }
         else
         {
             ExteriorPopUI.gameObject.SetActive(false);
             PopIcon.UIPopped(false);
+        }
+    }
+
+    public override float CalculateMaxVolunteerPoints(int amount = 4)
+    {
+        return base.CalculateMaxVolunteerPoints(amount);
+    }
+
+    protected override void SetObjectiveParameters()
+    {
+        if (MyObjective == null) return;
+   
+        base.SetObjectiveParameters();
+
+        if(MyObjective.Event == BuildingEventType.BABY)
+        {
+            SetBabyDelivery(null);
         }
     }
 
@@ -91,6 +110,12 @@ public class InteractableHospital : InteractableHouse
                     EndDelivery.SetClock(clock.Time - 1, clock.Day);
                     BuildRelationship(ThankYouType.BABY, 2);
                     OnActionProgress?.Invoke(1f, this, 2);
+                    if (MyObjective?.Event == BuildingEventType.BABY)
+                    {
+                        MissionManager.Instance.CompleteObjective(MyObjective);
+                        MyObjective = null;
+                    }
+
                 }
             }
         }
@@ -98,7 +123,7 @@ public class InteractableHospital : InteractableHouse
         var mission = GetBuildingMission(BuildingEventType.BABY);
         if (mission != null && !DeliveryTimeSet)
         {
-            SetBabyDelivery(mission);
+        //    SetBabyDelivery(mission);
         }
         if (DeliveryTimeSet)
         {
@@ -110,8 +135,8 @@ public class InteractableHospital : InteractableHouse
 
     public override void TriggerHazardousMode(double time, int day)
     {
-        if (HazardCounter > 0) return;
-        if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
+      //  if (HazardCounter > 0) return;
+     //   if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
 
         DeadlineCounter--;
         DeliveryTimeSet = false;
@@ -126,7 +151,7 @@ public class InteractableHospital : InteractableHouse
         if(thanks == ThankYouType.BABY || thanks == ThankYouType.VOLUNTEER)
         {
             var hospitalMaterials = InventoryManager.Instance.GetProvision(Provision.HOSPITAL_RELATIONSHIP_BUILDER);
-            amount += hospitalMaterials?.Value ?? 0;
+            amount += 1 + (hospitalMaterials?.Value ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }
@@ -139,7 +164,7 @@ public class InteractableHospital : InteractableHouse
         var mission = GetBuildingMission(BuildingEventType.BABY);
         if (mission != null || (!SameDayAsMission() && DeadlineCounter < 3 && !DeliveryTimeSet && !DeadlineSet && Random.Range(0, 1.0f) > (e != null ? e.Cost : 0.97f)))
         {
-            SetBabyDelivery(mission);
+        //    SetBabyDelivery(mission);
         }
     }
 
@@ -185,19 +210,17 @@ public class InteractableHospital : InteractableHouse
     {
         if (HasBeenDestroyed) return;
 
-        //These values are temporary just for the DEMO!!
-
-        if (RelationshipPoints >= 65 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_3))
+        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_3))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_3);
             MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_3);
         }
-        else if (RelationshipPoints >= 30 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_2))
+        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_2))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_2);
             MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_2);
         }
-        else if (RelationshipPoints >= 5 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_1))
+        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_1))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_1);
             MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_1);
@@ -287,6 +310,11 @@ public class InteractableHospital : InteractableHouse
         base.ItemDeliveryThanks();
     }
 
+    public override void UpgradeThanks()
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_HOSPITAL);
+    }
+
     public override void SetDeadlineTime(double time, int day)
     {
         if (DeliveryTimeSet) return;
@@ -313,10 +341,13 @@ public class InteractableHospital : InteractableHouse
         }
 
         BuildingActivityState = BuildingActivityState.VOLUNTEERING;
-        var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
         UI.Instance.DisplayMessage("VOLUNTEERED HOSPITAL!");
         base.VolunteerWork(house);
-        clock.Tick();
+        for (int i = 0; i < MaxVolunteerPoints; i++)
+        {
+            BuildingActivityState = BuildingActivityState.VOLUNTEERING;
+            clock.Tick();
+        }
     }
     public override TooltipStats GetTooltipStatsForButton(string button)
     {
@@ -345,6 +376,7 @@ public class InteractableHospital : InteractableHouse
 
     public override void RelationshipReward(ThankYouType thanks)
     {
+        var amount = 0;
         if (RelationshipPoints == 100)
         {
             //One time special reward!
@@ -352,12 +384,24 @@ public class InteractableHospital : InteractableHouse
 
         if (RelationshipPoints >= 65)
         {
-            //Special Item
+            amount = Random.Range(4, 5);
         }
-        else 
+        else if (RelationshipPoints >= 30)
         {
-            base.RelationshipReward(thanks);
+            amount = Random.Range(3, 4);
         }
+        else if (RelationshipPoints >= 10)
+        {
+            amount = Random.Range(2, 3);
+        }
+        else
+        {
+            amount = Random.Range(1, 2);
+        }
+
+        base.RelationshipReward(thanks);
+        MoneyThanks();
+        TreasuryManager.Instance.DonateMoney(amount);
     }
 
     public override bool CanDoAction(string actionName)
@@ -366,10 +410,10 @@ public class InteractableHospital : InteractableHouse
         switch (actionName)
         {
             case "BABY":
-                return !player.EnergyDepleted() && DeliveryTimeSet;
+                return !player.EnergyDepleted() && DeliveryTimeSet && (DuringOpenHours() || (!DuringOpenHours() && DeliveryCountdown > 0));
 
             case "VOLUNTEER":
-                return !player.EnergyDepleted() && DuringOpenHours() && !DeliveryTimeSet;
+                return !player.EnergyDepleted() && !DeliveryTimeSet && (DuringOpenHours() || (!DuringOpenHours() && VolunteerCountdown > 0));
 
             case "MEDS":
                 return InventoryManager.Instance.CheckItem(ItemType.MEDS);
@@ -392,6 +436,11 @@ public class InteractableHospital : InteractableHouse
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
+    }
+
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_HOSPITAL;
     }
 
     public override HouseSaveData LoadData()

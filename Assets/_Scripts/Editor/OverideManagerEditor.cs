@@ -50,16 +50,17 @@ public class OverideManagerEditor : Editor
         DrawTimeDay_Override(canClick);
         DrawFPCPEnergy_Override(canClick);
         DrawProvisionIventory(canClick);
+        DrawMissionIdOverride(canClick);
 
 
 
-        bool skip = canClick && EventsManager.Instance != null && EventsManager.Instance.EventInProgress;
-        SetColor(skip);
-        if (GUILayout.Button("Skip >>>>") && skip)
-        {
-            overideManager.SkipEvent();
-        }
-        SetColor(true);
+        //bool skip = canClick && EventsManager.Instance != null && EventsManager.Instance.EventInProgress;
+        //SetColor(skip);
+        //if (GUILayout.Button("Skip >>>>") && skip)
+        //{
+        //    overideManager.SkipEvent();
+        //}
+        //SetColor(true);
         this.serializedObject.ApplyModifiedProperties();
     }
 
@@ -129,6 +130,36 @@ public class OverideManagerEditor : Editor
         }
         SetColor(true);
 
+    }
+
+    private void DrawMissionIdOverride(bool canClick)
+    {
+        SerializedProperty MissionId = serializedObject.FindProperty(nameof(overideManager.MissionId));
+
+        if (EditorGUILayout.DropdownButton(new GUIContent("Override Mission ID"), FocusType.Keyboard, uIStyle))
+            overideManager.showMissionUI = !overideManager.showMissionUI;
+
+        if (overideManager.showMissionUI)
+        {
+
+            SetColor(canClick);
+            EditorGUILayout.BeginHorizontal();
+            
+            EditorGUILayout.PropertyField(MissionId, new GUIContent(nameof(overideManager.MissionId)));
+            if (GUILayout.Button("Overide Mission ID") && canClick)
+            {
+                overideManager.OverrideMission();
+            }
+            if (GUILayout.Button("Auto Complete Mission") && canClick)
+            {
+                overideManager.AutoCompleteMission();
+            }
+
+            EditorGUILayout.EndHorizontal();
+
+            GUILayout.Space(10);
+        }
+        SetColor(true);
     }
 
     private void DrawFPCPEnergy_Override(bool canClick)

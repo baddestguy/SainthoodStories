@@ -5,3 +5,5 @@ TOYS,4,Item_ToysName,Item_ToysDescription
 STATIONERY,5,Item_StationeryName,Item_StationeryDescription
 MEDS,3,Item_MedsName,Item_MedsDescription
 MEAL,0,Item_MealName,Item_MealDescription
+ENERGY_BOOST,5,Item_EnergyBoostName,Item_EnergyBoostDescription
+DRUGS,5,Item_DrugsName,Item_DrugsDescription

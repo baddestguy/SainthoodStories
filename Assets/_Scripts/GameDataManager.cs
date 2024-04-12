@@ -19,11 +19,20 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<SaintID, SaintData> Saints = new Dictionary<SaintID, SaintData>();
     public Dictionary<string, StoryEventData> StoryEventData = new Dictionary<string, StoryEventData>();
     public Dictionary<string, List<BuildingMissionData>> BuildingMissionData = new Dictionary<string, List<BuildingMissionData>>();
+    public Dictionary<int, List<ObjectivesData>> ObjectivesData = new Dictionary<int, List<ObjectivesData>>();
+    public Dictionary<int, CollectibleObjectivesData> CollectibleObjectivesData = new Dictionary<int, CollectibleObjectivesData>();
+    public Dictionary<string, List<CollectibleData>> CollectibleData = new Dictionary<string, List<CollectibleData>>();
     public List<WeatherData> WeatherData = new List<WeatherData>();
     public Dictionary<TooltipStatId, TooltipStats> ToolTips = new Dictionary<TooltipStatId, TooltipStats>();
+    public Dictionary<MinigameType, MinigameData> MinigameData = new Dictionary<MinigameType, MinigameData>();
 
     public int MidnightEventChosenIndex;
     public List<CustomEventType> TriggeredDailyEvents;
+
+    public const int TOTAL_UNLOCKABLE_SAINTS = 25;
+    public const int MAX_RP_THRESHOLD = 65;
+    public const int MED_RP_THRESHOLD = 30;
+    public const int MIN_RP_THRESHOLD = 5;
 
     void Awake()
     {
@@ -150,6 +159,57 @@ public class GameDataManager : MonoBehaviour
 
         yield return null;
 
+        //Objectives
+        csvFile = Resources.Load<TextAsset>("GameData/Objectives");
+        var objData = CSVSerializer.Deserialize<ObjectivesData>(csvFile.text);
+        foreach (var item in objData)
+        {
+            if (ObjectivesData.ContainsKey(item.Id))
+            {
+                ObjectivesData[item.Id].Add(item);
+            }
+            else
+            {
+                ObjectivesData.Add(item.Id, new List<ObjectivesData>() { item });
+            }
+        }
+
+        yield return null;
+
+        //Collectible Objectives
+        csvFile = Resources.Load<TextAsset>("GameData/CollectibleObjectives");
+        var colObjData = CSVSerializer.Deserialize<CollectibleObjectivesData>(csvFile.text);
+        foreach (var item in colObjData)
+        {
+            if (CollectibleObjectivesData.ContainsKey(item.Id))
+            {
+                CollectibleObjectivesData[item.Id] = item;
+            }
+            else
+            {
+                CollectibleObjectivesData.Add(item.Id, item);
+            }
+        }
+
+        yield return null;
+
+        //Collectibles
+        csvFile = Resources.Load<TextAsset>("GameData/Collectibles");
+        var colData = CSVSerializer.Deserialize<CollectibleData>(csvFile.text);
+        foreach (var item in colData)
+        {
+            if (CollectibleData.ContainsKey(item.Id))
+            {
+                CollectibleData[item.Id].Add(item);
+            }
+            else
+            {
+                CollectibleData.Add(item.Id, new List<CollectibleData>() { item });
+            }
+        }
+
+        yield return null;
+
         //Weather Data
         csvFile = Resources.Load<TextAsset>("GameData/WeatherData");
         var weatherData = CSVSerializer.Deserialize<WeatherData>(csvFile.text);
@@ -196,6 +256,18 @@ public class GameDataManager : MonoBehaviour
         }
 
         yield return null;
+
+        //Minigames
+        csvFile = Resources.Load<TextAsset>("GameData/Minigames");
+        var games = CSVSerializer.Deserialize<MinigameData>(csvFile.text);
+        foreach (var item in games)
+        {
+            MinigameData.Add(item.Id, item);
+        }
+
+        yield return null;
+
+
 
         SaintsManager.Instance.LoadSaints(GameManager.Instance.SaveData.Saints);
 
@@ -292,6 +364,31 @@ public class GameDataManager : MonoBehaviour
         return data;
     }
 
+    public CollectibleData GetCollectibleData(string name)
+    {
+        foreach(var kvp in CollectibleData)
+        {
+            foreach(var c in kvp.Value)
+            {
+                if(c.Name == name)
+                {
+                    return c;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public int GetNextSaintUnlockThreshold()
+    {
+        var unlockedSaintsCount = GameManager.Instance.SaveData.Saints.Length;
+
+        if(unlockedSaintsCount == TOTAL_UNLOCKABLE_SAINTS) return Constants[$"SAINTS_UNLOCK_THRESHOLD_25"].IntValue;
+
+        return Constants[$"SAINTS_UNLOCK_THRESHOLD_{ unlockedSaintsCount + 1 }"].IntValue;
+    }
+
     public bool IsSpritualEvent(CustomEventType e)
     {
         return e == CustomEventType.SPIRITUAL_RETREAT ||
@@ -301,6 +398,22 @@ public class GameDataManager : MonoBehaviour
     public IEnumerable<BuildingMissionData> GetBuildingMissionData(string houseName)
     {
         return BuildingMissionData.ContainsKey(houseName) ? BuildingMissionData[houseName] : new List<BuildingMissionData>();
+    }
+
+    public IEnumerable<ObjectivesData> GetObjectivesData(int id)
+    {
+        if (ObjectivesData.ContainsKey(id))
+            return ObjectivesData[id];
+        else
+        {
+            Debug.Log("COULD NOT FIND OBJECTIVE WITH ID: " + id);
+            return Enumerable.Empty<ObjectivesData>();
+        }
+    }
+
+    public ObjectivesData GetSingleObjective(int id)
+    {
+        return GetObjectivesData(id).FirstOrDefault();
     }
 
     public TooltipStats GetToolTip(TooltipStatId id, double ticksModifier = 0, int fpModifier = 0, int cpModifier = 0, int energyModifier = 0)

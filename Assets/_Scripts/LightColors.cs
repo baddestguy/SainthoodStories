@@ -15,7 +15,7 @@ public class LightColors : MonoBehaviour
 
     private void OnTick(double time, int day)
     {
-        if(time >= 21 || time < 6)
+        if(time >= 19 || time < 6)
         {
             if(Light)
                 Light.color = Color.cyan;

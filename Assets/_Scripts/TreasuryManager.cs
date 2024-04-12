@@ -44,10 +44,29 @@ public class TreasuryManager : MonoBehaviour
     {
         if (donation == 0) return;
 
-        TemporaryMoneyToDonate = donation;
-        Money += Mathf.Clamp(float.Parse(donation+""), 0, 100);
+        TemporaryMoneyToDonate += donation;
         DonatedMoney?.Invoke(donation);
         SaveDataManager.Instance.SaveGame();
+    }
+
+    public void DepositMoney()
+    {
+        StartCoroutine(DepositMoneyAsync());
+        Money += Mathf.Clamp(float.Parse(TemporaryMoneyToDonate + ""), 0, 100);
+        TemporaryMoneyToDonate = 0;
+        SaveDataManager.Instance.SaveGame();
+    }
+
+    public void LoseTempMoney()
+    {
+        TemporaryMoneyToDonate = 0;
+    }
+
+    IEnumerator DepositMoneyAsync()
+    {
+        var donation = TemporaryMoneyToDonate;
+        yield return new WaitForSeconds(3f);
+        DonatedMoney?.Invoke(donation);
     }
 
     public void SpendMoney(double amount)

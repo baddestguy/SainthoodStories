@@ -27,7 +27,7 @@ public class InteractableSchool : InteractableHouse
             if (BuildingState != BuildingState.RUBBLE)
             {
                 StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
-                MaxTeachPoints = CalculateMaxVolunteerPoints();
+                MaxVolunteerPoints = CalculateMaxVolunteerPoints();
             }
             else
             {
@@ -43,6 +43,18 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
+    public override float CalculateMaxVolunteerPoints(int amount = 6)
+    {
+        return base.CalculateMaxVolunteerPoints(amount);
+    }
+
+    protected override void SetObjectiveParameters()
+    {
+        if (MyObjective == null) return;
+
+        base.SetObjectiveParameters();
+    }
+
     public void Teach()
     {
         GameClock clock = GameManager.Instance.GameClock;
@@ -52,11 +64,15 @@ public class InteractableSchool : InteractableHouse
             UI.Instance.ErrorFlash("Energy");
             return;
         }
-        if (DuringOpenHours())
+        if (DuringOpenHours() || (!DuringOpenHours() && TeachCountdown > 0))
         {
-            BuildingActivityState = BuildingActivityState.TEACHING;
+            BuildingActivityState = BuildingActivityState.VOLUNTEERING;
             UI.Instance.DisplayMessage("Taught a Class!!");
-            clock.Tick();
+            for (int i = 0; i < MaxVolunteerPoints; i++)
+            {
+                BuildingActivityState = BuildingActivityState.VOLUNTEERING;
+                clock.Tick();
+            }
         }
         else
         {
@@ -66,47 +82,21 @@ public class InteractableSchool : InteractableHouse
 
     public override void Tick(double time, int day)
     {
-        if(BuildingActivityState == BuildingActivityState.TEACHING)
-        {
-            TeachSubject();
-        }
-
         base.Tick(time, day);
     }
 
     public override void TriggerHazardousMode(double time, int day)
     {
-        if (HazardCounter > 0) return;
-        if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
+     //   if (HazardCounter > 0) return;
+     //   if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
 
         TeachCountdown = 0;
         base.TriggerHazardousMode(time, day);
     }
 
-    public void TeachSubject()
-    {
-        TeachCountdown++;
-        var extraPoints = 0;
-        if (PopUI.CriticalHitCount == MaxTeachPoints) extraPoints = 1;
-        OnActionProgress?.Invoke(TeachCountdown / MaxTeachPoints, this, 1);
-
-        if (TeachCountdown >= MaxTeachPoints)
-        {
-            Player player = GameManager.Instance.Player;
-            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
-            moddedEnergy += schoolMaterials?.Value ?? 0;
-            player.ConsumeEnergy(EnergyConsumption);
-
-            UpdateCharityPoints(TeachPoints+ extraPoints, moddedEnergy);
-            BuildRelationship(ThankYouType.TEACH);
-            TeachCountdown = 0;
-        }
-    }
-
     public override void BuildRelationship(ThankYouType thanks, int amount = 1)
     {
-        if(thanks == ThankYouType.TEACH)
+        if(thanks == ThankYouType.VOLUNTEER)
         {
             var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
             amount += schoolMaterials?.Value ?? 0;
@@ -136,6 +126,11 @@ public class InteractableSchool : InteractableHouse
     {
         EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_SCHOOL);
         base.ItemDeliveryThanks();
+    }
+
+    public override void UpgradeThanks()
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_SCHOOL);
     }
 
     public override bool DuringOpenHours(GameClock newClock = null)
@@ -204,6 +199,7 @@ public class InteractableSchool : InteractableHouse
 
     public override void RelationshipReward(ThankYouType thanks)
     {
+        var amount = 0;
         if (RelationshipPoints == 100)
         {
             //One time special reward!
@@ -211,12 +207,29 @@ public class InteractableSchool : InteractableHouse
 
         if (RelationshipPoints >= 65)
         {
-            //Special Item
+            amount = Random.Range(9, 10);
+        }
+        else if (RelationshipPoints >= 30)
+        {
+            amount = Random.Range(7, 8);
+        }
+        else if (RelationshipPoints >= 10)
+        {
+            amount = Random.Range(5, 6);
         }
         else
         {
-            base.RelationshipReward(thanks);
+            amount = Random.Range(4, 5);
         }
+
+        TreasuryManager.Instance.DonateMoney(amount);
+        base.RelationshipReward(thanks);
+        MoneyThanks();
+    }
+
+    public override void VolunteerThanks()
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_TEACH);
     }
 
     public override TooltipStats GetTooltipStatsForButton(string button)
@@ -242,7 +255,7 @@ public class InteractableSchool : InteractableHouse
 
             case "TEACH":
                 Player player = GameManager.Instance.Player;
-                return !player.EnergyDepleted() && DuringOpenHours();
+                return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && TeachCountdown > 0));
         }
 
         return base.CanDoAction(actionName);
@@ -278,6 +291,32 @@ public class InteractableSchool : InteractableHouse
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
+    }
+
+    public override void TriggerStory()
+    {
+        if (HasBeenDestroyed) return;
+
+        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_3))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_STORY_3);
+            MyStoryEvents.Add(CustomEventType.SCHOOL_STORY_3);
+        }
+        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_2))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_STORY_2);
+            MyStoryEvents.Add(CustomEventType.SCHOOL_STORY_2);
+        }
+        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_1))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_STORY_1);
+            MyStoryEvents.Add(CustomEventType.SCHOOL_STORY_1);
+        }
+    }
+
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_SCHOOL;
     }
 
     public override HouseSaveData LoadData()

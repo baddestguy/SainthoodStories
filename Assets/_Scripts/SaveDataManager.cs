@@ -70,12 +70,14 @@ public class SaveDataManager : MonoBehaviour
             FP = MissionManager.Instance.FaithPoints,
             FPPool = MissionManager.Instance.FaithPointsPool,
             CP = MissionManager.Instance.CharityPoints,
+            CPPool = MissionManager.Instance.CharityPointsPool,
             Energy = GameManager.Instance.Player.GetEnergyAmount(),
             Week = MissionManager.Instance.CurrentMission.CurrentWeek,
             Day = GameManager.Instance.GameClock.Day,
             Time = GameManager.Instance.GameClock.Time,
             TutorialSteps = TutorialManager.Instance.CurrentTutorialStep,
             Money = TreasuryManager.Instance.Money,
+            TemporaryMoneyToDonate = TreasuryManager.Instance.TemporaryMoneyToDonate,
             Houses = GetSavedHouses(),
             Saints = SaintsManager.Instance.UnlockedSaints.Select(s => s.Id).ToArray(),
             InventoryItems = InventoryManager.Instance.Items.ToArray(),
@@ -84,7 +86,7 @@ public class SaveDataManager : MonoBehaviour
             DailyEvent = EventsManager.Instance.DailyEvent,
             RunAttempts = GameManager.Instance.RunAttempts,
             Maptiles = GameManager.Instance.MaptileIndexes,
-            CurrentHouse = GameManager.Instance.Player.CurrentBuilding.GetType().Name,
+            CurrentHouse = GameManager.Instance.CurrentBuilding,
             StatusEffects = GameManager.Instance.Player.StatusEffects.ToArray(),
             HouseTriggeredEvent = InteractableHouse.HouseTriggeredEvent,
             CurrentDailyEvent = EventsManager.Instance.CurrentEvents.Find(e => e.EventGroup == EventGroup.DAILY),
@@ -92,13 +94,21 @@ public class SaveDataManager : MonoBehaviour
             WeatherStartTime = WeatherManager.Instance.WeatherStartTime.Time,
             WeatherStartDay = WeatherManager.Instance.WeatherStartTime.Day,
             WeatherEndTime = WeatherManager.Instance.WeatherEndTime.Time,
-            WeatherEndDay = WeatherManager.Instance.WeatherEndTime.Day
+            WeatherEndDay = WeatherManager.Instance.WeatherEndTime.Day,
+            CompletedObjectives = MissionManager.Instance.CompletedObjectives?.ToArray(),
+            Collectibles = InventoryManager.Instance.Collectibles?.ToArray(),
+            WanderingSpirits = InventoryManager.Instance.WanderingSpirits,
+            CurrentCollectibleMissionId = MissionManager.Instance.CurrentCollectibleMissionId,
+            CurrentCollectibleCounter = MissionManager.Instance.CurrentCollectibleCounter,
+            WorldCollectibles = GameManager.Instance.WorldCollectibles.ToArray(),
+            MissionEvents = EventsManager.Instance.TriggeredMissionEvents.ToArray(),
+            HasChosenProvision = InventoryManager.HasChosenProvision
         };
     }    
 
     public HouseSaveData[] GetSavedHouses()
     {
-        var houses = FindObjectsOfType<InteractableHouse>().Select(h => h.GetHouseSave());
+        var houses = GameManager.Instance.Houses.Select(h => h.GetHouseSave());
         return houses.ToArray();
     }
 
@@ -108,29 +118,31 @@ public class SaveDataManager : MonoBehaviour
         {
             return new SaveObject()
             {
-                FP = 3,
+                FP = 0,
                 FPPool = 0,
-                CP = 3,
+                CP = 0,
+                CPPool = 0,
                 Energy = 3,
                 Week = 1,
                 Day = 1,
-                Time = 6,
+                Time = 5,
                 TutorialSteps = 40,
-                Money = 10
+                Money = 0
             };
         }
 
         return new SaveObject()
         {
-            FP = 1,
+            FP = 0,
             FPPool = 0,
-            CP = 3,
+            CP = 0,
+            CPPool = 0,
             Energy = 1,
             Week = 1,
             Day = 1,
-            Time = 6,
+            Time = 5,
             TutorialSteps = 0,
-            Money = 10
+            Money = 0
         };
     }
 
@@ -157,43 +169,10 @@ public class SaveDataManager : MonoBehaviour
 
     private void DoSequentialSave()
     {
-        SaveObject saveObject = CurrentSaveData();
+        SaveObject save = CurrentSaveData();
+        SaveObject[] saves = new SaveObject[1] { save };
 
-        Dictionary<Days, SaveObject> keyVal = GetSavedDataSet();
-
-        if(keyVal == null)
-        {
-            FirstSave();
-            return;
-        }
-
-        //Compare the saved week with the current
-        
-        if (IsNewWeek(keyVal.Values.ToArray(), saveObject))
-        {
-            SaveObject save = CurrentSaveData();
-            SaveObject[] saves = new SaveObject[1] { save };
-
-            Save(saves);
-            return;
-        }
-
-
-        if (keyVal.ContainsKey((Days)saveObject.Day))
-        {
-            keyVal[(Days)saveObject.Day] = saveObject;
-        }
-        else
-        {
-            keyVal.Add((Days)saveObject.Day, saveObject);
-        }
-
-        SaveObject[] saveObjects = keyVal.Values.ToArray().OrderBy(x => x.Day).ToArray();
-
-
-        Save(saveObjects);
-
-        
+        Save(saves);
     }
 
     private void Save(params SaveObject[] data)
@@ -202,21 +181,12 @@ public class SaveDataManager : MonoBehaviour
         FileStream file = File.Create(GetPath(FILENAME));
         bf.Serialize(file, data);
         file.Close();
+        GameManager.Instance.SaveData = data[0];
         Debug.Log("SAVED!");
-    }
-
-    private void Save(object data)
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(GetPath(FILENAME));
-        bf.Serialize(file, data);
-        file.Close();
     }
 
     private Dictionary<Days, SaveObject> GetSavedDataSet()
     {
-
-        
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
@@ -283,7 +253,6 @@ public class SaveDataManager : MonoBehaviour
                 //callback return
                 //CheckOveride(ref data);
                 callback?.Invoke(data, newGame);
-                SavedDataUiHandler.instance.Close();
             }
         }
         else

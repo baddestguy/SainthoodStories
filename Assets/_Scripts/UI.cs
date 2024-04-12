@@ -49,6 +49,7 @@ public class UI : MonoBehaviour
     private Dictionary<string, GameObject> InstantiatedBuildingAlerts = new Dictionary<string, GameObject>();
 
     public GameObject InventoryUI;
+    public GameObject PackageSelectorUI;
     public GameObject TreasuryUI;
     public TextMeshProUGUI TreasuryAmount;
     public Image TreasuryDisplayGlow;
@@ -84,6 +85,8 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI RunAttemptsDisplay;
     public Button ContinueBtn;
 
+    public MinigamePlayer MinigamePlayer;
+    public GameObject SaintsCollectionUI;
     public bool WasUiHit
     {
         get
@@ -142,6 +145,11 @@ public class UI : MonoBehaviour
                 StatusEffectDisplay.gameObject.SetActive(false);
             }
         }
+    }
+
+    public void ToggleSaintsCollection(bool enable)
+    {
+        SaintsCollectionUI.SetActive(enable);
     }
 
     public void InitTimeEnergy(GameClock clock, Energy energy)
@@ -229,6 +237,7 @@ public class UI : MonoBehaviour
     {
         ProvisionPopup.gameObject.SetActive(true);
         ProvisionPopup.Init(prov1, prov2);
+        ProvisionPopup.House = GameManager.Instance.CurrentHouse;
     }
 
     public void BuildingAlertPush(string sprite)
@@ -336,9 +345,9 @@ public class UI : MonoBehaviour
                 case Season.SPRING:
                     WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Hail");
                     break;
+                    //WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Heatwave");
+                    //break;
                 case Season.SUMMER:
-                    WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Heatwave");
-                    break;
                 case Season.FALL:
                     WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Rain");
                     break;
@@ -355,7 +364,10 @@ public class UI : MonoBehaviour
 
     public void UpdateDayNightIcon(DayNight dayNight)
     {
-        DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{dayNight}");
+        if(DayNightIcon != null)
+        {
+            DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{dayNight}");
+        }
     }
 
     public void EventAlert(CustomEventData customEvent)
@@ -463,10 +475,21 @@ public class UI : MonoBehaviour
             TreasuryAdditionDisplay.text = "";
         }
 
-        int oldAmount = int.Parse(TreasuryAmount.text, System.Globalization.NumberStyles.AllowThousands);
+        int oldAmount = int.Parse(TreasuryAmount.text, System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowThousands);
         TreasuryAmount.DOCounter(oldAmount, (int)TreasuryManager.Instance.Money, 0.5f).SetDelay(2f);
 
         AdditionPoints(TreasuryAdditionDisplay, TreasuryDisplayGlow, (int)delta, 2f);
+    }
+
+    public void EnablePackageSelector(bool enable, InteractableHouse house = null)
+    {
+        EnableAllUIElements(!enable);
+
+        PackageSelectorUI.SetActive(enable);
+        if(house != null)
+        {
+            PackageSelectorUI.GetComponent<PackageSelector>().House = house;
+        }
     }
 
     public void EnableInventoryUI(bool enable)
@@ -908,6 +931,12 @@ public class UI : MonoBehaviour
         TreasuryAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         CPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         FPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
+    }
+
+    public void StartMinigame(MinigameType minigame, Action<string> callback)
+    {
+        MinigamePlayer.gameObject.SetActive(true);
+        MinigamePlayer.Init(minigame, callback);
     }
 
     public void GameOver()

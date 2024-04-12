@@ -1,99 +1,99 @@
 Id,Level,Value,NameKey,DescriptionKey,Tooltips
-UMBRELLA,1,1,Provision_UmbrellaName,Provision_UmbrellaDescription,"Chance of preventing status ailments: <color=""green""> 100%"
-WINTER_CLOAK,1,1,Provision_WinterCloakName,Provision_WinterCloakDescription,"Chance of preventing status ailments: <color=""green""> 100%"
-SHADES,1,1,Provision_ShadesName,Provision_ShadesDescription,"Chance of preventing status ailments: <color=""green""> 100%"
-EXTRA_INVENTORY,1,2,Provision_ExtraInventoryName,Provision_ExtraInventoryDescription,"Inventory size <color=""green""> +1"
-EXTRA_INVENTORY,2,3,Provision_ExtraInventoryName,Provision_ExtraInventoryDescription,"Inventory size <color=""green""> +2"
-ENERGY_DRINK,1,1,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,"Daily starting En <color=""green"">+1"
-ENERGY_DRINK,2,2,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,"Daily starting En <color=""green"">+2"
-ENERGY_DRINK,3,3,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,"Daily starting En <color=""green"">+3"
-ENERGY_DRINK,4,4,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,"Daily starting En <color=""green"">+4"
-ENERGY_DRINK,5,5,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,"Daily starting En <color=""green"">+5"
-ENERGY_DRINK,6,6,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,"Daily starting En <color=""green"">+6"
-SOFT_MATTRESS,1,1,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+0.5hrs<color=""white"">
-En <color=""green"">+1"
-SOFT_MATTRESS,2,3,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1hr<color=""white"">
-En <color=""green"">+3"
-SOFT_MATTRESS,3,4,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1.5hrs<color=""white"">
-En <color=""green"">+4"
-REDUCE_SLEEP_TIME,1,1,Provision_SleepEnergyName,Provision_SleepEnergyDescription,"Sleep Time <color=""green"">-0.5hrs"
+UMBRELLA,1,1,Provision_UmbrellaName,Provision_UmbrellaDescription,Chance of preventing status ailments: {SubheaderColor}{SubheaderSize} 100%
+WINTER_CLOAK,1,1,Provision_WinterCloakName,Provision_WinterCloakDescription,Chance of preventing status ailments: {SubheaderColor}{SubheaderSize} 100%
+SHADES,1,1,Provision_ShadesName,Provision_ShadesDescription,Chance of preventing status ailments: {SubheaderColor}{SubheaderSize} 100%
+EXTRA_INVENTORY,1,2,Provision_ExtraInventoryName,Provision_ExtraInventoryDescription,Inventory size {SubheaderColor}{SubheaderSize} +1
+EXTRA_INVENTORY,2,3,Provision_ExtraInventoryName,Provision_ExtraInventoryDescription,Inventory size {SubheaderColor}{SubheaderSize} +2
+ENERGY_DRINK,1,1,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+1
+ENERGY_DRINK,2,2,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+2
+ENERGY_DRINK,3,3,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+3
+ENERGY_DRINK,4,4,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+4
+ENERGY_DRINK,5,5,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+5
+ENERGY_DRINK,6,6,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+6
+SOFT_MATTRESS,1,1,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+0.5hrs{DescriptionColor}{DescriptionSize}
+En {SubheaderColor}{SubheaderSize}+1"
+SOFT_MATTRESS,2,3,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1hr{DescriptionColor}{DescriptionSize}
+En {SubheaderColor}{SubheaderSize}+3"
+SOFT_MATTRESS,3,4,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1.5hrs{DescriptionColor}{DescriptionSize}
+En {SubheaderColor}{SubheaderSize}+4"
+REDUCE_SLEEP_TIME,1,1,Provision_SleepEnergyName,Provision_SleepEnergyDescription,Sleep Time {SubheaderColor}{SubheaderSize}-0.5hrs
 ROSARY,1,1,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP <color=""green"">+1<color=""white"">
+FP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
 Time <color=""red"">+0.5hrs"
 ROSARY,2,2,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP <color=""green"">+2<color=""white"">
+FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize}
 Time <color=""red"">+0.5hrs"
 ROSARY,3,3,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP <color=""green"">+3<color=""white"">
+FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
 Time <color=""red"">+0.5hrs"
-COOKING_UTENSILS,1,1,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +1<color=""white"">
-Relationship Point Bonus: <color=""green"">+1"
-COOKING_UTENSILS,2,2,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +2<color=""white"">
-Relationship Point Bonus: <color=""green"">+2"
-COOKING_UTENSILS,3,3,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +3<color=""white"">
-Relationship Point Bonus: <color=""green"">+3"
-DISCOUNT_CARD,1,20,Provision_DiscountCardName,Provision_DiscountCardDescription,"Shop item discount <color=""green"">20%"
-DISCOUNT_CARD,2,30,Provision_DiscountCardName,Provision_DiscountCardDescription,"Shop item discount <color=""green"">30%"
-DISCOUNT_CARD,3,50,Provision_DiscountCardName,Provision_DiscountCardDescription,"Shop item discount <color=""green"">50%"
-ALLOWANCE,1,1,Provision_AllowanceName,Provision_AllowanceDescription,"Daily Coin <color=""green"">+1"
-ALLOWANCE,2,2,Provision_AllowanceName,Provision_AllowanceDescription,"Daily Coin <color=""green"">+2"
-ALLOWANCE,3,3,Provision_AllowanceName,Provision_AllowanceDescription,"Daily Coin <color=""green"">+3"
-ALLOWANCE,4,4,Provision_AllowanceName,Provision_AllowanceDescription,"Daily Coin <color=""green"">+4"
-ALLOWANCE,5,5,Provision_AllowanceName,Provision_AllowanceDescription,"Daily Coin <color=""green"">+5"
-ALLOWANCE,6,6,Provision_AllowanceName,Provision_AllowanceDescription,"Daily Coin <color=""green"">+6"
-CONSTRUCTION_TOOLS,1,3,Provision_ConstructionName,Provision_ConstructionDescription,"Construction Time <color=""green"">1.5hrs"
-CONSTRUCTION_TOOLS,2,2,Provision_ConstructionName,Provision_ConstructionDescription,"Construction Time <color=""green"">1hr"
-CONSTRUCTION_TOOLS,3,1,Provision_ConstructionName,Provision_ConstructionDescription,"Construction Time <color=""green"">0.5hrs"
-STURDY_BUILDING_MATERIALS,1,3,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,"Hazard Immunity <color=""green"">3hrs"
-STURDY_BUILDING_MATERIALS,2,5,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,"Hazard Immunity <color=""green"">5hrs"
-STURDY_BUILDING_MATERIALS,3,7,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,"Hazard Immunity <color=""green"">7hrs"
-CONSTRUCTION_TENTS,1,1,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building completion: CP <color=""green"">+1"
-CONSTRUCTION_TENTS,2,2,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building completion: CP <color=""green"">+2"
-CONSTRUCTION_TENTS,3,3,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building completion: CP <color=""green"">+3"
-CHAPEL_BLUEPRINT,1,1,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"When praying: FP <color=""green"">+1"
-CHAPEL_BLUEPRINT,2,2,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"When praying: FP <color=""green"">+2"
-CHAPEL_BLUEPRINT,3,3,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"When praying: FP <color=""green"">+3"
-BUILDING_BLUEPRINT,1,1,Provision_BlueprintName,Provision_BlueprintDescription,"Relationship Point Bonus: <color=""green""> +1"
-BUILDING_BLUEPRINT,2,2,Provision_BlueprintName,Provision_BlueprintDescription,"Relationship Point Bonus: <color=""green""> +2"
-BUILDING_BLUEPRINT,3,3,Provision_BlueprintName,Provision_BlueprintDescription,"Relationship Point Bonus: <color=""green""> +3"
-HOSPITAL_RELATIONSHIP_BUILDER,1,1,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,"Relationship Point Bonus: <color=""green""> +1"
-HOSPITAL_RELATIONSHIP_BUILDER,2,2,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,"Relationship Point Bonus: <color=""green""> +2"
-HOSPITAL_RELATIONSHIP_BUILDER,3,3,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,"Relationship Point Bonus: <color=""green""> +3"
-SCHOOL_RELATIONSHIP_BUILDER,1,1,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,"Relationship Point Bonus: <color=""green""> +1"
-SCHOOL_RELATIONSHIP_BUILDER,2,2,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,"Relationship Point Bonus: <color=""green""> +2"
-SCHOOL_RELATIONSHIP_BUILDER,3,3,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,"Relationship Point Bonus: <color=""green""> +3"
-ORPHANAGE_RELATIONSHIP_BUILDER,1,1,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,"Relationship Point Bonus: <color=""green""> +1"
-ORPHANAGE_RELATIONSHIP_BUILDER,2,2,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,"Relationship Point Bonus: <color=""green""> +2"
-ORPHANAGE_RELATIONSHIP_BUILDER,3,3,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,"Relationship Point Bonus: <color=""green""> +3"
-KITCHEN_RELATIONSHIP_BUILDER,1,1,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,"Relationship Point Bonus: <color=""green""> +1"
-KITCHEN_RELATIONSHIP_BUILDER,2,2,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,"Relationship Point Bonus: <color=""green""> +2"
-KITCHEN_RELATIONSHIP_BUILDER,3,3,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,"Relationship Point Bonus: <color=""green""> +3"
-SHELTER_RELATIONSHIP_BUILDER,1,1,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,"Relationship Point Bonus: <color=""green""> +1"
-SHELTER_RELATIONSHIP_BUILDER,2,2,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,"Relationship Point Bonus: <color=""green""> +2"
-SHELTER_RELATIONSHIP_BUILDER,3,3,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,"Relationship Point Bonus: <color=""green""> +3"
-AUTO_DELIVER,1,1,Provision_AutoDeliverName,Provision_AutoDeliverDescription,"Auto deliver <color=""green""> 1 item"
-AUTO_DELIVER,2,2,Provision_AutoDeliverName,Provision_AutoDeliverDescription,"Auto deliver <color=""green""> 2 items"
-AUTO_DELIVER,3,3,Provision_AutoDeliverName,Provision_AutoDeliverDescription,"Auto deliver <color=""green""> 3 items"
+COOKING_UTENSILS,1,1,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +1{DescriptionColor}{DescriptionSize}
+Relationship Point Bonus: {SubheaderColor}{SubheaderSize}+1"
+COOKING_UTENSILS,2,2,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +2{DescriptionColor}{DescriptionSize}
+Relationship Point Bonus: {SubheaderColor}{SubheaderSize}+2"
+COOKING_UTENSILS,3,3,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +3{DescriptionColor}{DescriptionSize}
+Relationship Point Bonus: {SubheaderColor}{SubheaderSize}+3"
+DISCOUNT_CARD,1,20,Provision_DiscountCardName,Provision_DiscountCardDescription,Shop item discount {SubheaderColor}{SubheaderSize}20%
+DISCOUNT_CARD,2,30,Provision_DiscountCardName,Provision_DiscountCardDescription,Shop item discount {SubheaderColor}{SubheaderSize}30%
+DISCOUNT_CARD,3,50,Provision_DiscountCardName,Provision_DiscountCardDescription,Shop item discount {SubheaderColor}{SubheaderSize}50%
+ALLOWANCE,1,1,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+1
+ALLOWANCE,2,2,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+2
+ALLOWANCE,3,3,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+3
+ALLOWANCE,4,4,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+4
+ALLOWANCE,5,5,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+5
+ALLOWANCE,6,6,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+6
+CONSTRUCTION_TOOLS,1,3,Provision_ConstructionName,Provision_ConstructionDescription,Construction Time {SubheaderColor}{SubheaderSize}1.5hrs
+CONSTRUCTION_TOOLS,2,2,Provision_ConstructionName,Provision_ConstructionDescription,Construction Time {SubheaderColor}{SubheaderSize}1hr
+CONSTRUCTION_TOOLS,3,1,Provision_ConstructionName,Provision_ConstructionDescription,Construction Time {SubheaderColor}{SubheaderSize}0.5hrs
+STURDY_BUILDING_MATERIALS,1,3,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Hazard Immunity {SubheaderColor}{SubheaderSize}3hrs
+STURDY_BUILDING_MATERIALS,2,5,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Hazard Immunity {SubheaderColor}{SubheaderSize}5hrs
+STURDY_BUILDING_MATERIALS,3,7,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Hazard Immunity {SubheaderColor}{SubheaderSize}7hrs
+CONSTRUCTION_TENTS,1,1,Provision_ConstructionTentName,Provision_ConstructionTentDescription,On building completion: CP {SubheaderColor}{SubheaderSize}+1
+CONSTRUCTION_TENTS,2,2,Provision_ConstructionTentName,Provision_ConstructionTentDescription,On building completion: CP {SubheaderColor}{SubheaderSize}+2
+CONSTRUCTION_TENTS,3,3,Provision_ConstructionTentName,Provision_ConstructionTentDescription,On building completion: CP {SubheaderColor}{SubheaderSize}+3
+CHAPEL_BLUEPRINT,1,1,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,When praying: FP {SubheaderColor}{SubheaderSize}+1
+CHAPEL_BLUEPRINT,2,2,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,When praying: FP {SubheaderColor}{SubheaderSize}+2
+CHAPEL_BLUEPRINT,3,3,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,When praying: FP {SubheaderColor}{SubheaderSize}+3
+BUILDING_BLUEPRINT,1,1,Provision_BlueprintName,Provision_BlueprintDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +1
+BUILDING_BLUEPRINT,2,2,Provision_BlueprintName,Provision_BlueprintDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +2
+BUILDING_BLUEPRINT,3,3,Provision_BlueprintName,Provision_BlueprintDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +3
+HOSPITAL_RELATIONSHIP_BUILDER,1,1,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +1
+HOSPITAL_RELATIONSHIP_BUILDER,2,2,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +2
+HOSPITAL_RELATIONSHIP_BUILDER,3,3,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +3
+SCHOOL_RELATIONSHIP_BUILDER,1,1,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +1
+SCHOOL_RELATIONSHIP_BUILDER,2,2,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +2
+SCHOOL_RELATIONSHIP_BUILDER,3,3,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +3
+ORPHANAGE_RELATIONSHIP_BUILDER,1,1,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +1
+ORPHANAGE_RELATIONSHIP_BUILDER,2,2,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +2
+ORPHANAGE_RELATIONSHIP_BUILDER,3,3,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +3
+KITCHEN_RELATIONSHIP_BUILDER,1,1,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +1
+KITCHEN_RELATIONSHIP_BUILDER,2,2,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +2
+KITCHEN_RELATIONSHIP_BUILDER,3,3,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +3
+SHELTER_RELATIONSHIP_BUILDER,1,1,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +1
+SHELTER_RELATIONSHIP_BUILDER,2,2,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +2
+SHELTER_RELATIONSHIP_BUILDER,3,3,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Relationship Point Bonus: {SubheaderColor}{SubheaderSize} +3
+AUTO_DELIVER,1,1,Provision_AutoDeliverName,Provision_AutoDeliverDescription,Auto deliver {SubheaderColor}{SubheaderSize} 1 item
+AUTO_DELIVER,2,2,Provision_AutoDeliverName,Provision_AutoDeliverDescription,Auto deliver {SubheaderColor}{SubheaderSize} 2 items
+AUTO_DELIVER,3,3,Provision_AutoDeliverName,Provision_AutoDeliverDescription,Auto deliver {SubheaderColor}{SubheaderSize} 3 items
 FASTING,1,1,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
-FP <color=""green"">+1<color=""white""> 
+FP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize} 
 En <color=""red"">-1"
 FASTING,2,2,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
-FP <color=""green"">+2<color=""white""> 
+FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize} 
 En <color=""red"">-2"
 FASTING,3,3,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
-FP <color=""green"">+3<color=""white""> 
+FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize} 
 En <color=""red"">-3"
 KOBOKO,1,1,Provision_KobokoName,Provision_KobokoDescription,"When praying:
-FP <color=""green"">+1<color=""white""> 
+FP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize} 
 En <color=""red""> -1"
 KOBOKO,2,2,Provision_KobokoName,Provision_KobokoDescription,"When praying:
-FP <color=""green"">+2<color=""white""> 
+FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize} 
 En <color=""red""> -2"
 KOBOKO,3,3,Provision_KobokoName,Provision_KobokoDescription,"When praying:
-FP <color=""green"">+3<color=""white""> 
+FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize} 
 En <color=""red""> -3"
-INCENSE,1,10,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">10%"
-INCENSE,2,15,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">15%"
-INCENSE,3,20,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">20%"
-INCENSE,4,25,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance during a Liturgy <color=""green"">25%"
-SECURITY_GUARDS,1,1,Provision_SecurityGuardsName,Provision_SecurityGuardsDescription,"Chance of preventing robberies <color=""green"">100%"
+INCENSE,1,10,Provision_IncenseName,Provision_IncenseDescription,Bonus FP chance during a Liturgy {SubheaderColor}{SubheaderSize}10%
+INCENSE,2,15,Provision_IncenseName,Provision_IncenseDescription,Bonus FP chance during a Liturgy {SubheaderColor}{SubheaderSize}15%
+INCENSE,3,20,Provision_IncenseName,Provision_IncenseDescription,Bonus FP chance during a Liturgy {SubheaderColor}{SubheaderSize}20%
+INCENSE,4,25,Provision_IncenseName,Provision_IncenseDescription,Bonus FP chance during a Liturgy {SubheaderColor}{SubheaderSize}25%
+SECURITY_GUARDS,1,1,Provision_SecurityGuardsName,Provision_SecurityGuardsDescription,Chance of preventing robberies {SubheaderColor}{SubheaderSize}100%

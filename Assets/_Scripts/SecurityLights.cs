@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class SecurityLights : MonoBehaviour
 {
@@ -13,12 +14,18 @@ public class SecurityLights : MonoBehaviour
     {
         if(time >= 21 || time < 6)
         {
-            Light.SetActive(true);
+            StartCoroutine(LightSwitch(true));
         }
         else
         {
-            Light.SetActive(false);
+            StartCoroutine(LightSwitch(false));
         }
+    }
+
+    IEnumerator LightSwitch(bool enable)
+    {
+        yield return new WaitForSeconds(Random.Range(0, 3f));
+        Light.SetActive(enable);
     }
 
     private void OnDisable()

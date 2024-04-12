@@ -45,6 +45,8 @@ public class Player : MonoBehaviour
     private int FastingCoutndown = 6;
 
     public GameObject Grid;
+
+    public static bool ReadyToLeave = false;
     void Start()
     {
         TargetPosition = transform.position;
@@ -182,12 +184,21 @@ public class Player : MonoBehaviour
                 EventsManager.Instance.ExecuteEvents();
             }
 
-            EventsManager.Instance.ForceTriggerStoryEvent(filteredEvents);
+         //   EventsManager.Instance.ForceTriggerStoryEvent(filteredEvents);
         }
+    }
+    public virtual void OnTriggerEnter(Collider other)
+    {
+        var collectible = other.GetComponent<GridCollectibleItem>();
+        if (collectible == null) return;
+
+        collectible.Collect();
     }
 
     public bool WeCanMove(MapTile tile)
     {
+        if (!ReadyToLeave) return false;
+
         if (AdjacentTiles == null) return false;
 
         if (GameSettings.Instance.FTUE)
@@ -240,21 +251,21 @@ public class Player : MonoBehaviour
 
         switch (MissionManager.Instance.CurrentMission.Season)
         {
-            case Season.SUMMER:
-                if (!InventoryManager.Instance.HasProvision(Provision.SHADES))
-                {
-                    WeatherStatusCounter++;
-                    if (WeatherStatusCounter >= 3)
-                    {
-                        if (Random.Range(0, 100) < 50)
-                        {
-                            WeatherStatusCounter = 0;
-                            AddRandomAilment();
-                        }
-                    }
-                }
-                break;
+                //if (!InventoryManager.Instance.HasProvision(Provision.SHADES))
+                //{
+                //    WeatherStatusCounter++;
+                //    if (WeatherStatusCounter >= 3)
+                //    {
+                //        if (Random.Range(0, 100) < 50)
+                //        {
+                //            WeatherStatusCounter = 0;
+                //            AddRandomAilment();
+                //        }
+                //    }
+                //}
+                //break;
 
+            case Season.SUMMER:
             case Season.FALL:
                 if (!InventoryManager.Instance.HasProvision(Provision.UMBRELLA))
                 {
@@ -397,6 +408,15 @@ public class Player : MonoBehaviour
             energyAmount += (int)e.Cost;
         }
 
+        if(tile is InteractableHospital)
+        {
+            energyAmount += 1;
+        }
+        else if(tile is InteractableOrphanage)
+        {
+            energyAmount += 1;
+        }
+
         return energyAmount; 
     }
 
@@ -449,11 +469,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ConsumeEnergy(int amount)
+    public void ConsumeEnergy(int amount, MapTile tile = null)
     {
         if(amount >= 0)
         {
-            amount = ModifyEnergyConsumption(amount: amount);
+            amount = ModifyEnergyConsumption(tile, amount: amount);
         }
         Energy.Consume(amount);
 
@@ -571,6 +591,11 @@ public class Player : MonoBehaviour
     public void RefreshGrid()
     {
         Grid.SetActive(GameSettings.Instance.ShowGrid);
+    }
+
+    public MapTile GetCurrentTile()
+    {
+        return CurrentTile;
     }
 
     private void OnDisable()

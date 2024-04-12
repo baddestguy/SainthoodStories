@@ -6,8 +6,15 @@ public class GameMap : MonoBehaviour
 {
     public int Columns;
     public int Rows;
+    public GameObject MapTilesParent;
     public List<MapTile> MapTiles = new List<MapTile>();
     public List<InteractableObject> Interactables = new List<InteractableObject>();
+
+    private void Start()
+    {
+    //    MapTiles.Clear();
+    //    var tiles = MapTilesParent.GetComponentsInChildren<MapTile>();
+    }
 
     public Dictionary<PlayerFacingDirection, MapTile> GetAdjacentTiles(MapTile mapTile)
     {

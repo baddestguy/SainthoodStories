@@ -13,6 +13,7 @@ public class EventsManager : MonoBehaviour
     private List<CustomEventData> EventList = new List<CustomEventData>();
     private List<StoryEventData> StoryEvents = new List<StoryEventData>();
     public List<CustomEventData> CurrentEvents = new List<CustomEventData>();
+    public List<CustomEventType> TriggeredMissionEvents = new List<CustomEventType>();
     public bool EventInProgress;
 
     private Coroutine eventRoutine;
@@ -22,8 +23,13 @@ public class EventsManager : MonoBehaviour
     {
         Instance = this;
         GameClock.ExecuteEvents += ExecuteEvents;
-        GameClock.Ticked += TryEventTrigger;
+    //    GameClock.Ticked += TryEventTrigger;
         GameClock.StartNewDay += StartNewDay;
+    }
+
+    public void LoadTriggeredMissionEvents(CustomEventType[] missions)
+    {
+        TriggeredMissionEvents = missions?.ToList() ?? new List<CustomEventType>();
     }
 
     public void AddEventToList(CustomEventType newEvent)
@@ -31,6 +37,8 @@ public class EventsManager : MonoBehaviour
         if (EventInProgress) return;
 
         var e = GameDataManager.Instance.CustomEventData[newEvent][0]; //Grab based on weight
+        
+        if (EventList.Contains(e)) return;
 
         EventList.Add(e);
         CurrentEvents.Add(e);
@@ -38,6 +46,8 @@ public class EventsManager : MonoBehaviour
 
     public void ExecuteEvents()
     {
+        if (FindObjectOfType<WorldMapManager>() != null) return;
+
         if (!GameSettings.Instance.CustomEventsToggle)
         {
             EventList.Clear();
@@ -45,7 +55,7 @@ public class EventsManager : MonoBehaviour
         }
 
         GameClock c = GameManager.Instance.GameClock;
-        if (c.EndofWeek())
+        if (MissionManager.MissionOver)
         {
             EventList.RemoveAll(e => e.EventGroup != EventGroup.ENDWEEK);
         }
@@ -72,6 +82,36 @@ public class EventsManager : MonoBehaviour
             while (EventInProgress)
             {                
                 yield return null;
+            }
+            if (!string.IsNullOrEmpty(e.LinkTo))
+            {
+                var split = e.LinkTo.Split('|');
+                foreach(var combo in split)
+                {
+                    var comboSplit = combo.Split(':');
+                    var nextEvent = new CustomEventData() {
+                        Id = e.Id,
+                        EventPopupType = e.EventPopupType,
+                        EventGroup = e.EventGroup,
+                        Weight = e.Weight,
+                        Cost = e.Cost,
+                        Gain = e.Gain,
+                        RewardType = e.RewardType,
+                        RejectionCost = e.RejectionCost,
+                        TriggerWeekDay = e.TriggerWeekDay,
+                        ImagePath = comboSplit[0],
+                        IsOrderedSequence = e.IsOrderedSequence,
+                        LocalizationKey = comboSplit[1],
+                        LinkTo = null                    
+                    };
+                    EventInProgress = true;
+                    UI.Instance.EventAlert(nextEvent);
+                    ExecuteEvent(nextEvent);
+                    while (EventInProgress)
+                    {
+                        yield return null;
+                    }
+                }
             }
         }
 
@@ -125,26 +165,26 @@ public class EventsManager : MonoBehaviour
         CurrentEvents.Clear();
         GameClock c = GameManager.Instance.GameClock;
 
-        if (c.EndofWeek()) return;
+        if (MissionManager.MissionOver) return;
         if (GameSettings.Instance.FTUE && GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
 
-        if (c.Day % 5 == 0)
-        {
-            AddEventToList(CustomEventType.SUNDAY_MASS);
-            GameDataManager.Instance.TriggeredDailyEvents.Clear();
-        }
-        else
-        {
-            var randomEvent = GameManager.Instance.SaveData.DailyEvent == CustomEventType.NONE ? GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY) : GameDataManager.Instance.GetEvent(GameManager.Instance.SaveData.DailyEvent);
-            var security = InventoryManager.Instance.GetProvision(Provision.SECURITY_GUARDS);
-            if(security != null && randomEvent.Id == CustomEventType.VANDALISM)
-            {
-                randomEvent = GameDataManager.Instance.GetEvent(CustomEventType.VANDALISM_STOPPED);
-            }
-            randomEvent = GameDataManager.Instance.RemixEventBySeason(randomEvent);
-            DailyEvent = randomEvent.Id;
-            AddEventToList(randomEvent.Id);
-        }
+        //if (c.Day % 5 == 0)
+        //{
+        //    AddEventToList(CustomEventType.SUNDAY_MASS);
+        //    GameDataManager.Instance.TriggeredDailyEvents.Clear();
+        //}
+        //else
+        //{
+        //    var randomEvent = GameManager.Instance.SaveData.DailyEvent == CustomEventType.NONE ? GameDataManager.Instance.GetRandomEvent(EventGroup.DAILY) : GameDataManager.Instance.GetEvent(GameManager.Instance.SaveData.DailyEvent);
+        //    var security = InventoryManager.Instance.GetProvision(Provision.SECURITY_GUARDS);
+        //    if(security != null && randomEvent.Id == CustomEventType.VANDALISM)
+        //    {
+        //        randomEvent = GameDataManager.Instance.GetEvent(CustomEventType.VANDALISM_STOPPED);
+        //    }
+        //    randomEvent = GameDataManager.Instance.RemixEventBySeason(randomEvent);
+        //    DailyEvent = randomEvent.Id;
+        //    AddEventToList(randomEvent.Id);
+        //}
 
         if(GameSettings.Instance.DEMO_MODE && c.Day == 1)
         {
@@ -225,7 +265,7 @@ public class EventsManager : MonoBehaviour
     private void OnDisable()
     {
         GameClock.ExecuteEvents -= ExecuteEvents;
-        GameClock.Ticked -= TryEventTrigger;
+    //    GameClock.Ticked -= TryEventTrigger;
         GameClock.StartNewDay -= StartNewDay;
     }
 }

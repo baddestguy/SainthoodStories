@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Enviro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -18,7 +19,8 @@ public enum SceneID
     NormalLevelAjust,
     WeekDaysUI,
     PauseMenu,
-    SaintsShowcase_Day
+    SaintsShowcase_Day,
+    WorldMap
 }
 
 public class GameManager : MonoBehaviour
@@ -32,12 +34,14 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public GameMap Map;
     public Player Player;
+    public int PlayerEnergy;
     public GameClock GameClock;
     public static MissionDifficulty MissionDifficulty;
     public SaveObject SaveData;
 
     public Mission CurrentMission;
     public InteractableHouse CurrentHouse;
+    public string CurrentBuilding;
     private Scene activeScene;
     public SceneID CurrentSceneID;
     public SceneID PreviousSceneID;
@@ -45,7 +49,11 @@ public class GameManager : MonoBehaviour
     public bool SceneLoaded;
 
     public int RunAttempts;
-    public int[] MaptileIndexes = new int[7] {0, 3, 6, 9, 19, 15, 21};
+    public int[] MaptileIndexes;// = new int[14] {0, 4, 7, 9, 13, 16, 23, 40, 47, 50, 53, 56, 60, 63};
+
+    public InteractableHouse[] Houses;
+    public Dictionary<string,BuildingState> HouseStates = new Dictionary<string, BuildingState>();
+    public List<string> WorldCollectibles = new List<string>();
 
     private void Awake()
     {
@@ -54,16 +62,24 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        MaptileIndexes = new int[14] { 0, 4, 7, 9, 13, 16, 23, 40, 47, 50, 53, 56, 60, 63 };
         SceneManager.sceneLoaded += OnLevelLoaded;
         MapTile.OnClickEvent += OnTap;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
-        GameClock.Ticked += PlayAmbience;
+        GameClock.Ticked += OnTick;
         LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
 
     private void Update()
     {
+    }
+
+    public void ExitHouse()
+    {
+        GetBuildingStates();
+        PlayerEnergy = Player.Energy.Amount;
+        //LoadScene("WorldMap", LoadSceneMode.Single);
     }
 
     public void LoadScene(string sceneName, LoadSceneMode mode = LoadSceneMode.Additive)
@@ -92,7 +108,7 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-        bool loadWeekDaysScene = true;
+        Time.timeScale = 1f;
         if (loadSceneMode == LoadSceneMode.Single)
         {
             activeScene = scene;
@@ -103,35 +119,23 @@ public class GameManager : MonoBehaviour
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = CurrentMission.SeasonSceneId;
             Instantiate(Resources.Load("UI/UI"));
+            EventsManager.Instance.LoadTriggeredMissionEvents(SaveData.MissionEvents);
             MissionManager.MissionOver = false;
             Player = FindObjectOfType<Player>();
             Map = FindObjectOfType<GameMap>();
             MissionManager.LoadAllMissions(CurrentMission);
-            if (SaveData.Time < 6)
-            {
-                SaveData.Time = 6;
-            }
-            if(SaveData.Day > 5)
-            {
-                SaveData.Day = 1;
-            }
             GameClock = new GameClock(SaveData.Time, SaveData.Day);
 
-            if(PreviousSceneID == SceneID.SaintsShowcase_Day)
+            if(PreviousSceneID == SceneID.SaintsShowcase_Day || PreviousSceneID == SceneID.WorldMap)
             {
                 UI.Instance.ShowWeekBeginText("");
             }
             else
             {
-                if (Player.OnEnergyDepleted)
-                    UI.Instance.ShowWeekBeginText(LocalizationManager.Instance.GetText("WeekIntroEnergyDepleted"));
-                else if (PreviousSceneID == SceneID.MainMenu || (GameClock.Day == 1 && PreviousSceneID != SceneID.SaintsShowcase_Day))
-                    UI.Instance.ShowWeekBeginText($"{LocalizationManager.Instance.GetText(CurrentMission.SeasonLevel.Replace("Level", "_Splash"))}");
-                else
                     UI.Instance.ShowDayBeginText("");
             }
 
-            if(SaveData.Maptiles == null)
+            if (SaveData.Maptiles == null)
             {
                 ScrambleMapTiles();
             }
@@ -147,10 +151,15 @@ public class GameManager : MonoBehaviour
             PlayAmbience(GameClock.Time, GameClock.Day);
             TreasuryManager.Instance.Money = SaveData.Money;
             InventoryManager.Instance.LoadInventory(SaveData);
-            SoundManager.Instance.SongSelection();
-            if(GameClock.Time == 6)
+            Houses = FindObjectsOfType<InteractableHouse>();
+            if (GameClock.Time == 5)
             {
                 GameClock.StartNewDay?.Invoke();
+            }
+            var obj = MissionManager.Instance.CurrentObjectives.FirstOrDefault();
+            if (obj != null && (obj.WeatherId == (int)WeatherId.RAIN || obj.WeatherId == (int)WeatherId.BLIZZARD))
+            {
+                WeatherManager.Instance.OverrideWeatherActivation(0, 1);
             }
         }
         else if (scene.name.Contains("MainMenu"))
@@ -178,7 +187,7 @@ public class GameManager : MonoBehaviour
                     UI.Instance.DisableMainMenuContinueBtn();
                 }
 
-                EventsManager.Instance.CurrentEvents.Add(data.CurrentDailyEvent);
+            //    EventsManager.Instance.CurrentEvents.Add(data.CurrentDailyEvent);
             }, false, true);
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
@@ -187,21 +196,37 @@ public class GameManager : MonoBehaviour
         }
         else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))
         {
-            loadWeekDaysScene = false;
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.SaintsShowcase_Day;
         }else if (scene.name.Contains(SceneID.PauseMenu.ToString()))
         {
-            loadWeekDaysScene = false;
+        }
+        else if (scene.name.Contains(SceneID.WorldMap.ToString()))
+        {
+            PreviousSceneID = CurrentSceneID;
+            CurrentSceneID = SceneID.WorldMap;
+            var obj = MissionManager.Instance.CurrentObjectives.FirstOrDefault();
+            if(obj != null)
+            {
+                WeatherManager.Instance.ChangeWeather(obj.WeatherId);
+            }
+            else
+            {
+                int[] randomWeather = new int[] {6, 10, 22, 24};
+                WeatherManager.Instance.ChangeWeather(randomWeather[Random.Range(0, randomWeather.Length-1)]);
+            }
         }
 
-        if (loadWeekDaysScene)
-        {
-            LoadScene("WeekDaysUI");
-        }
         SceneLoaded = true;
     }
 
+    public void GetBuildingStates()
+    {
+        foreach (var h in Houses)
+        {
+            HouseStates[h.GetType().Name] = h.BuildingState;
+        }
+    }
     private void OnTap(MapTile tile)
     {
         if (Player == null) return;
@@ -220,12 +245,24 @@ public class GameManager : MonoBehaviour
         GameClock.Tick();
     }
 
+    private void OnTick(double time, int day)
+    {
+        PlayAmbience(time, day);
+        if(GameClock.DeltaTime && time % 2 == 0)
+        {
+            if(MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event > BuildingEventType.URGENT))
+            {
+                MissionManager.Instance.UpdateCharityPoints(-1, null);
+            }
+        }
+    }
+
     public void PlayAmbience(double time, int day)
     {
         if (MissionManager.MissionOver) return;
         if (WeatherManager.Instance.IsStormy()) return;
 
-        if (GameClock.Time >= 21 || GameClock.Time < 6)
+        if (GameClock.Time >= 19 || GameClock.Time < 6)
         {
             SoundManager.Instance.PlayAmbience();
         }
@@ -249,13 +286,13 @@ public class GameManager : MonoBehaviour
                         RunAttempts++;
                         SaveDataManager.Instance.DeleteProgress();
                         TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
-                        GameSettings.Instance.FTUE = !TutorialManager.Instance.SkipTutorial;
                     }
                     SaveData = data;
                     Debug.Log("Run Attempts: " + RunAttempts);
-                    CurrentMission = new Mission(SaveData.FP, SaveData.FPPool, SaveData.CP, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
+                    CurrentMission = new Mission(SaveData.FP, SaveData.FPPool, SaveData.CP, SaveData.CPPool, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
                     SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 
+                    MissionManager.MissionsBegin();
                     if (GameSettings.Instance.FTUE)
                     {
                         StartCoroutine(WaitAndLoadScene("TutorialLevel"));
@@ -271,6 +308,7 @@ public class GameManager : MonoBehaviour
                     }
 
                     UI.Instance.DisplayRunAttempts();
+                    SoundManager.Instance.StartPlaylist();
                 }, newGame, false, !activeScene.name.Contains("MainMenu"), showUI: showUI);
                 break;
         }
@@ -288,6 +326,9 @@ public class GameManager : MonoBehaviour
             case "InteractableShelter": return Player.Map.MapTiles[MaptileIndexes[3]];
             case "InteractableKitchen": return Player.Map.MapTiles[MaptileIndexes[4]];
             case "InteractableMarket": return Player.Map.MapTiles[MaptileIndexes[5]];
+            //case "InteractableChurch": 
+            //    var 
+
         }
 
         return null;
@@ -302,15 +343,27 @@ public class GameManager : MonoBehaviour
     {
 
         SaveDataManager.Instance.LoadGame((data, newGame) => {
-            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.Energy, data.Time, 7, data.Week);
+            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, PlayerEnergy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
-        },false, true);
+            SaveData = data;
+        }, false, true);
 
+    }
+
+    public bool HasPlayerEnergy()
+    {
+        return PlayerEnergy > 0 || GameSettings.Instance.InfiniteBoost;
+    }
+
+    public void UpdatePlayerEnergyFromWorld(int amount)
+    {
+        PlayerEnergy = Mathf.Clamp(PlayerEnergy + amount, 0, 100);
     }
 
     private IEnumerator WaitAndLoadScene(string sceneName)
     {
-        UI.Instance.CrossFade(1f);
+        if(UI.Instance != null)
+            UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
         SceneLoaded = false;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
@@ -333,6 +386,6 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnLevelLoaded;
         MapTile.OnClickEvent -= OnTap;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
-        GameClock.Ticked -= PlayAmbience;
+        GameClock.Ticked -= OnTick;
     }
 }

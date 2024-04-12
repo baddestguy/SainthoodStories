@@ -85,13 +85,13 @@ public class CameraControls : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, CamTarget, Time.deltaTime*3);
     }
 
-    public void SetCameraTarget(Vector3 newTarget, bool modifyPostProcess = false)
+    public void SetCameraTarget(Vector3 newTarget, bool modifyPostProcess = true)
     {
         CamTarget = newTarget.magnitude != 0 ? newTarget : OriginalCamTarget;
 
         if(newTarget.magnitude == 0)
         {
-            SetZoomTarget(6f);
+            SetZoomTarget(11f);
             if (modifyPostProcess)
             {
                 DepthOfField.active = false;
@@ -104,7 +104,7 @@ public class CameraControls : MonoBehaviour
             if (modifyPostProcess)
             {
                 DepthOfField.active = true;
-                Bloom.active = false;
+                Bloom.active = true;
             }
         }
     }

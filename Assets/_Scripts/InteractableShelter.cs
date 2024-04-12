@@ -35,6 +35,13 @@
         }
     }
 
+    protected override void SetObjectiveParameters()
+    {
+        if (MyObjective == null) return;
+
+        base.SetObjectiveParameters();
+    }
+
     public override void DeliverItem(InteractableHouse house, bool autoDeliver = false)
     {
         if (house != this) return;
@@ -72,6 +79,10 @@
         EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_FOOD);
         base.ItemDeliveryThanks();
     }
+    public override void UpgradeThanks()
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_SHELTER);
+    }
 
     private void DeliverDeadlineItem( bool autoDeliver = false)
     {
@@ -101,6 +112,10 @@
             var shelterMaterials = InventoryManager.Instance.GetProvision(Provision.SHELTER_RELATIONSHIP_BUILDER);
             amount += shelterMaterials?.Value ?? 0;
         }
+        if(thanks == ThankYouType.IMMEDIATE_ASSISTANCE)
+        {
+            amount += 2;
+        }
         base.BuildRelationship(thanks, amount);
     }
 
@@ -111,14 +126,8 @@
             //One time special reward!
         }
 
-        if (RelationshipPoints >= 65)
-        {
-            //Special Item
-        }
-        else
-        {
-            base.RelationshipReward(thanks);
-        }
+        base.RelationshipReward(thanks);
+        
     }
 
     public override void PopUICallback(string button)
@@ -157,4 +166,31 @@
             base.DeliverItem(this, true);
         }
     }
+
+    public override void TriggerStory()
+    {
+        if (HasBeenDestroyed) return;
+
+        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_3))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_STORY_3);
+            MyStoryEvents.Add(CustomEventType.SHELTER_STORY_3);
+        }
+        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_2))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_STORY_2);
+            MyStoryEvents.Add(CustomEventType.SHELTER_STORY_2);
+        }
+        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_1))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_STORY_1);
+            MyStoryEvents.Add(CustomEventType.SHELTER_STORY_1);
+        }
+    }
+
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_SHELTER;
+    }
+
 }

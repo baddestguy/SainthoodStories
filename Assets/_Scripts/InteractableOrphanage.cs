@@ -39,17 +39,30 @@ public class InteractableOrphanage : InteractableHouse
             PopIcon.UIPopped(false);
         }
     }
+
+    public override float CalculateMaxVolunteerPoints(int amount = 2)
+    {
+        return base.CalculateMaxVolunteerPoints(amount);
+    }
+
+    protected override void SetObjectiveParameters()
+    {
+        if (MyObjective == null) return;
+
+        base.SetObjectiveParameters();
+    }
+
     public override void Tick(double time, int day)
     {
         if(day > 5)
         {
             OpenTime = 9;
-            ClosingTime = 22;
+            ClosingTime = 23.5;
         }
         else
         {
-            OpenTime = 15;
-            ClosingTime = 22;
+            OpenTime = 16;
+            ClosingTime = 23.5;
         }
 
         base.Tick(time, day);
@@ -77,6 +90,11 @@ public class InteractableOrphanage : InteractableHouse
     {
         EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_ORPHANAGE);
         base.ItemDeliveryThanks();
+    }
+
+    public override void UpgradeThanks()
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_ORPHANAGE);
     }
 
     public override void SetDeadlineTime(double time, int day)
@@ -122,7 +140,7 @@ public class InteractableOrphanage : InteractableHouse
         if(thanks == ThankYouType.VOLUNTEER)
         {
             var orphanageMaterials = InventoryManager.Instance.GetProvision(Provision.ORPHANAGE_RELATIONSHIP_BUILDER);
-            amount += orphanageMaterials?.Value ?? 0;
+            amount += 2 + (orphanageMaterials?.Value ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }
@@ -141,12 +159,18 @@ public class InteractableOrphanage : InteractableHouse
 
         if (RelationshipPoints >= 65)
         {
-            //Special Item
+        }
+        else if (RelationshipPoints >= 30)
+        {
+        }
+        else if (RelationshipPoints >= 10)
+        {
         }
         else
         {
-            base.RelationshipReward(thanks);
+
         }
+        base.RelationshipReward(thanks);
     }
 
     public override void VolunteerWork(InteractableHouse house)
@@ -160,13 +184,17 @@ public class InteractableOrphanage : InteractableHouse
             UI.Instance.ErrorFlash("Energy");
             return;
         }
-        if (DuringOpenHours())
+        if (DuringOpenHours() || (!DuringOpenHours() && VolunteerCountdown > 0))
         {
             BuildingActivityState = BuildingActivityState.VOLUNTEERING;
             CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.ORPHANAGE_BONUS);
             UI.Instance.DisplayMessage("VOLUNTEERED AT ORPHANAGE!");
             base.VolunteerWork(house);
-            clock.Tick();
+            for (int i = 0; i < MaxVolunteerPoints; i++)
+            {
+                BuildingActivityState = BuildingActivityState.VOLUNTEERING;
+                clock.Tick();
+            }
         }
         else
         {
@@ -205,13 +233,34 @@ public class InteractableOrphanage : InteractableHouse
         switch (actionName)
         {
             case "VOLUNTEER":
-                return !player.EnergyDepleted() && DuringOpenHours();
+                return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && VolunteerCountdown > 0));
 
             case "TOYS":
                 return InventoryManager.Instance.CheckItem(ItemType.TOYS);
         }
 
         return base.CanDoAction(actionName);
+    }
+
+    public override void TriggerStory()
+    {
+        if (HasBeenDestroyed) return;
+
+        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.ORPHANAGE_STORY_3))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_STORY_3);
+            MyStoryEvents.Add(CustomEventType.ORPHANAGE_STORY_3);
+        }
+        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.ORPHANAGE_STORY_2))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_STORY_2);
+            MyStoryEvents.Add(CustomEventType.ORPHANAGE_STORY_2);
+        }
+        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.ORPHANAGE_STORY_1))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.ORPHANAGE_STORY_1);
+            MyStoryEvents.Add(CustomEventType.ORPHANAGE_STORY_1);
+        }
     }
 
     protected override void AutoDeliver(ItemType item)
@@ -222,5 +271,10 @@ public class InteractableOrphanage : InteractableHouse
             UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
+    }
+
+    public override CustomEventType GetEndGameStory()
+    {
+        return CustomEventType.ENDGAME_ORPHANAGE;
     }
 }

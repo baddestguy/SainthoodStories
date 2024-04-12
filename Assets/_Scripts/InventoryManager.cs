@@ -10,28 +10,34 @@ public class InventoryManager : MonoBehaviour
     public static UnityAction RefreshInventoryUI;
 
     public List<ItemType> Items = new List<ItemType>();
+    public List<string> Collectibles = new List<string>();
     public List<ProvisionData> Provisions = new List<ProvisionData>();
     public Dictionary<ItemType, List<GameClock>> AutoDeliveryItems = new Dictionary<ItemType, List<GameClock>>();
+    public int WanderingSpirits = 0;
 
     public int MaxInventorySlots = 2;
     public int MaxProvisionsSlots = 5;
 
     public List<ProvisionData> GeneratedProvisions = new List<ProvisionData>();
+    public static bool HasChosenProvision;
 
     private void Awake()
     {
         Instance = this;
-        GameClock.StartNewDay += GenerateProvisionsForNewDay;
+    //    GameClock.StartNewDay += GenerateProvisionsForNewDay;
     }
 
     public void LoadInventory(SaveObject save)
     {
         Items = save.InventoryItems?.ToList() ?? new List<ItemType>();
         Provisions = save.Provisions?.ToList() ?? new List<ProvisionData>();
+        HasChosenProvision = save.HasChosenProvision;
         if (HasProvision(Provision.EXTRA_INVENTORY))
         {
             MaxInventorySlots = GetProvision(Provision.EXTRA_INVENTORY).Value;
         }
+        Collectibles = save.Collectibles?.ToList() ?? new List<string>();
+        WanderingSpirits = save.WanderingSpirits;
         RefreshInventoryUI?.Invoke();
     }
 
@@ -41,15 +47,47 @@ public class InventoryManager : MonoBehaviour
         return (Items.Count >= MaxInventorySlots && autodelivery == null) || (Items.Count >= MaxInventorySlots && autodelivery != null && AutoDeliveryItems.Sum(x => x.Value.Count) == autodelivery.Value);
     }
 
-    public void AddToInventory(ItemType item)
+    public void AddToInventory(ItemType item, int amount = 1)
     {
-        if (Items.Count == MaxInventorySlots)
+        for(int i = 0; i < amount; i++)
         {
-            UI.Instance.DisplayMessage("INVENTORY FULL!");
-            return;
+            if (Items.Count == MaxInventorySlots)
+            {
+                UI.Instance.DisplayMessage("INVENTORY FULL!");
+                return;
+            }
+            Items.Add(item);
+            RefreshInventoryUI?.Invoke();
         }
-        Items.Add(item);
+    }
+
+    public void RemoveFromInventory(ItemType item)
+    {
+        Items.Remove(item);
+    }
+
+    public void ClearInventory()
+    {
+        Items.Clear();
         RefreshInventoryUI?.Invoke();
+    }
+
+    public void AddCollectible(string newCollectible)
+    {
+        Collectibles.Add(newCollectible);
+        GameManager.Instance.WorldCollectibles.Remove(newCollectible);
+        Debug.Log("COLLECTED: " + newCollectible);
+    }
+
+    public void AddGridCollectible(string newCollectible)
+    {
+        Collectibles.Add(newCollectible);
+        Debug.Log("COLLECTED: " + newCollectible);
+    }
+
+    public void AddWanderers(int amount)
+    {
+        WanderingSpirits += amount;
     }
 
     public void SwapProvision(ProvisionData provisionFrom, ProvisionData provisionTo)
@@ -73,7 +111,7 @@ public class InventoryManager : MonoBehaviour
                 MaxInventorySlots = provision.Value;
                 break;
         }
-
+        HasChosenProvision = true;
         RefreshInventoryUI?.Invoke();
     }
 
@@ -91,6 +129,7 @@ public class InventoryManager : MonoBehaviour
                 AddProvision(upgradedProv);
             }
         }
+        HasChosenProvision = true;
         RefreshInventoryUI?.Invoke();
     }
 
@@ -134,7 +173,7 @@ public class InventoryManager : MonoBehaviour
         if (!GameSettings.Instance.ProvisionsToggle) return;
         GameClock c = GameManager.Instance.GameClock;
 
-        if (c.EndofWeek()) return;
+        if (MissionManager.MissionOver) return;
         if (GameSettings.Instance.FTUE && GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
 
         StartCoroutine(WaitAndEnableProvisionPopupAsync());
@@ -152,7 +191,6 @@ public class InventoryManager : MonoBehaviour
         //ClearProvisions();
 
         GameClock c = GameManager.Instance.GameClock;
-        if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day > 5 && Random.Range(0, 100) < 50) yield break;
 
         //Check to make sure that we dont already have the Provision in our Inventory
         var prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
@@ -191,13 +229,13 @@ public class InventoryManager : MonoBehaviour
     {
         switch (MissionManager.Instance.CurrentMission.Season)
         {
-            case Season.SUMMER:
-                if (prov.Id == Provision.WINTER_CLOAK || prov.Id == Provision.UMBRELLA)
-                {
-                    return GameDataManager.Instance.ProvisionData[Provision.SHADES][0];
-                }
-                break;
+                //if (prov.Id == Provision.WINTER_CLOAK || prov.Id == Provision.UMBRELLA)
+                //{
+                //    return GameDataManager.Instance.ProvisionData[Provision.SHADES][0];
+                //}
+                //break;
 
+            case Season.SUMMER:
             case Season.FALL:
                 if(prov.Id == Provision.WINTER_CLOAK || prov.Id == Provision.SHADES)
                 {
@@ -242,6 +280,6 @@ public class InventoryManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameClock.StartNewDay -= GenerateProvisionsForNewDay;
+    //    GameClock.StartNewDay -= GenerateProvisionsForNewDay;
     }
 }
