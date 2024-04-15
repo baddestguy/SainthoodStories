@@ -45,7 +45,7 @@
 1. Clean Solution
 1. Run
    
-### 2b. Run UWP remotely
+### 2c. Run UWP remotely
 1. Set Target machine to `Remote Machine`
 1. Set Configuration to `Master`
 1. Set platform to `x64
