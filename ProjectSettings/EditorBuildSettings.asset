@@ -18,11 +18,14 @@ EditorBuildSettings:
     path: Assets/_Scenes/Levels/SummerLevel Large.unity
     guid: 5ac0cdb7978d0ec47b1f0418596244c6
   - enabled: 1
-    path: Assets/_Scenes/Levels/FallLevel.unity
-    guid: 1b78220b5ad37f0458b3027ea91a63d6
+    path: Assets/_Scenes/Levels/FallLevel Large.unity
+    guid: 50669bc875ac2754a99b08e97e4bd81c
   - enabled: 1
     path: Assets/_Scenes/Levels/WinterLevel Large.unity
     guid: be2c16ef08c46594dad41da36cbfa93e
+  - enabled: 0
+    path: Assets/_Scenes/Levels/FallLevel.unity
+    guid: 1b78220b5ad37f0458b3027ea91a63d6
   - enabled: 0
     path: Assets/_Scenes/Levels/SummerLevel.unity
     guid: 02ba5bff9b8000a4fb4b1f4433dd5d59
@@ -50,7 +53,4 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/Levels/WorldMap.unity
     guid: b6df14c9772737949b2cfe26c07b5f47
-  - enabled: 0
-    path: Assets/_Scenes/Levels/_SimpleScene.unity
-    guid: 9c151c67cbdab184b8aa9feef0c10fa9
   m_configObjects: {}
