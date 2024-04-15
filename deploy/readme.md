@@ -44,6 +44,7 @@
 1. Set platform to `x64
 1. Clean Solution
 1. Run
+    1. Note, you will get an exception on first cursor move, that has so far proven to be ignorable
    
 ### 2c. Run UWP remotely
 1. Set Target machine to `Remote Machine`
@@ -52,10 +53,11 @@
 2. Right click on Universal Windows Project
 3. Navigate to Configuration Properties -> Debugging
 4. Click Machine Name Drop Down and select Locate
-    5. If xbox does not show up here see [these steps (first 3 only)](#3a-deploy-uwp-package-to-xbox) to ensure it's been configured properly
+    1. If xbox does not show up here see [these steps (first 3 only)](#3a-deploy-uwp-package-to-xbox) to ensure it's been configured properly
 6. If your xbox is currently running in dev mode it should show up here in the auto detected section
 1. Clean Solution
 1. Run
+    1. Note, you will get an exception on first cursor move, that has so far proven to be ignorable 
    
 ### 4. Running the Game
 1. With the xbox running in dev mode change the App Type from App to Game
