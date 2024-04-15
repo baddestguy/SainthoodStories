@@ -8,8 +8,9 @@
     1. In my case that is `C:\Users\lytai\Repos\Sainthood-Builds\3`
         1. Where the `3` at the end is typically incremented to separate builds. In theory, I could also use the version number from above to keep things consistent.
 1. Open the `Sainthood.sln` file in visual studio
-    1. To Deploy to xbox see [here](#2a-create-uwp-package)
-    2. To run it locally see [here](#2b-run-uwp-locally)
+    1. To Deploy to standalone xbox see [here](#2a-create-uwp-package)
+    2. To run it locally on your windows device see [here](#2b-run-uwp-locally)
+    3. To run it remotely on the xbox see [here](#2c-run-uwp-remotely)
 
 
 ### 2a. Create UWP Package
@@ -37,13 +38,25 @@
 1. For dependencies, navigate to the `x64` dependency directory and upload all files that are there `C:\Users\lytai\Repos\Sainthood-Builds\3\AppPackages\Sainthood\Sainthood_2.0.5.0_x64_Debug_Test\Dependencies\x64`
 1. Click next. Hopefully it all works
 
-### 4. Running the Game
-1. With the xbox running in dev mode change the App Type from App to Game
-1. Run and enjoy
-
 ### 2b. Run UWP Locally
 1. Set Target machine to `Local Machine`
 1. Set Configuratino to `Master`
 1. Set platform to `x64
 1. Clean Solution
 1. Run
+   
+### 2b. Run UWP remotely
+1. Set Target machine to `Remote Machine`
+1. Set Configuration to `Master`
+1. Set platform to `x64
+2. Right click on Universal Windows Project
+3. Navigate to Configuration Properties -> Debugging
+4. Click Machine Name Drop Down and select Locate
+    5. If xbox does not show up here see [these steps (first 3 only)](#3a-deploy-uwp-package-to-xbox) to ensure it's been configured properly
+6. If your xbox is currently running in dev mode it should show up here in the auto detected section
+1. Clean Solution
+1. Run
+   
+### 4. Running the Game
+1. With the xbox running in dev mode change the App Type from App to Game
+1. Run and enjoy
