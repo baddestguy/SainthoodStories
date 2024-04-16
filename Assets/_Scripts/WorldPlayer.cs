@@ -83,7 +83,7 @@ public class WorldPlayer : MonoBehaviour
         FindObjectOfType<WorldTextDisplay>().DisplayEnergy(GameManager.Instance.PlayerEnergy);
 
         SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
-        SoundManager.Instance.PlayOneShotSfx("Crit_Good");
+    //    SoundManager.Instance.PlayOneShotSfx("Crit_Good");
         DOTween.To(() => (MyCamera.ActiveViewType as ThirdPerson).LookOffset, 
                     newValue => (MyCamera.ActiveViewType as ThirdPerson).LookOffset = newValue,
                     new Vector3(0, 0, -7f), 

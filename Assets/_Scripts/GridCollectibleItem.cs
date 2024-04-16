@@ -32,8 +32,8 @@ public class GridCollectibleItem : MonoBehaviour
 
     public virtual void Delete()
     {
-        gameObject.SetActive(false);
         GridCollectibleManager.Instance.SpawnedTiles.Remove(MyTile);
+        Destroy(gameObject);
     }
 
     private void OnDisable()

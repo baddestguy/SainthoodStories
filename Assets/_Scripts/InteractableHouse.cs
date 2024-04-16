@@ -186,7 +186,7 @@ public class InteractableHouse : InteractableObject
     {
         if (MyObjective == null) return;
 
-        if(MyObjective.CustomEventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(MyObjective.CustomEventId) ?? false))
+        if (MyObjective.CustomEventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(MyObjective.CustomEventId) ?? false))
         {
             EventsManager.Instance.AddEventToList(MyObjective.CustomEventId);
             EventsManager.Instance.TriggeredMissionEvents.Add(MyObjective.CustomEventId);
@@ -205,6 +205,7 @@ public class InteractableHouse : InteractableObject
             var clock = GameManager.Instance.GameClock;
             TriggerHazardousMode(clock.Time, clock.Day);
         }
+
     }
 
     public virtual void GetInteriorPopUI()
@@ -999,6 +1000,7 @@ public class InteractableHouse : InteractableObject
                 }
             }
 
+            GameManager.Instance.Player.ResetWeatherCount();
             GameManager.Instance.CurrentHouse = this;
             GameManager.Instance.CurrentBuilding = GameManager.Instance.CurrentHouse.GetType().Name;
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
@@ -1051,6 +1053,7 @@ public class InteractableHouse : InteractableObject
             OnEnterHouse?.Invoke(InsideHouse);
             ResetActionProgress();
             GameManager.Instance.CurrentHouse = null;
+            GridCollectibleManager.Instance.GenerateCollectibles();
         }
 
         InfoPopup.gameObject.SetActive(false);
@@ -1064,16 +1067,18 @@ public class InteractableHouse : InteractableObject
 
     public virtual void TriggerCustomEvent()
     {
-        if (GameSettings.Instance.FTUE) return;
-        if (EventsTriggered > 0) return;
-        if (EventsManager.Instance.EventInProgress) return;
-        if (BuildingState != BuildingState.NORMAL) return;
-        if (!DuringOpenHours()) return;
+        if (MyObjective?.Event != BuildingEventType.VOLUNTEER && MyObjective?.Event != BuildingEventType.VOLUNTEER_URGENT) return;
+        //if (GameSettings.Instance.FTUE) return;
+        //if (EventsTriggered > 0) return;
+        //if (EventsManager.Instance.EventInProgress) return;
+        //if (BuildingState != BuildingState.NORMAL) return;
+        //if (!DuringOpenHours()) return;
+        //if (UI.Instance.WeekBeginCrossFade) return;
+        //if (GameManager.Instance.PreviousSceneID == SceneID.SaintsShowcase_Day) return;
+        //if (DeadlineSet) return;
+
      //   if (EventsManager.Instance.CurrentEvents.Count > 3) return;
-        if (UI.Instance.WeekBeginCrossFade) return;
-        if (GameManager.Instance.PreviousSceneID == SceneID.SaintsShowcase_Day) return;
-        if (DeadlineSet) return;
-        if (GameManager.Instance.Player.StatusEffects.Count > 0) return;
+    //    if (GameManager.Instance.Player.StatusEffects.Count > 0) return;
    //     if (GameManager.Instance.GameClock.Time > 22.5 || GameManager.Instance.GameClock.Time < 6) return;
 
         if (Random.Range(0, 100) < 100)

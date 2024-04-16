@@ -33,6 +33,7 @@ public class WanderingSpiritCollectible : GridCollectibleItem
         }
         else if (Behaviour == SacredItemBehaviour.CHASE)
         {
+            MissionManager.Instance.FaithPointsPermanentlyLost += 1;
             MissionManager.Instance.UpdateFaithPoints(-1);
             TreasuryManager.Instance.LoseTempMoney();
         }
@@ -70,7 +71,7 @@ public class WanderingSpiritCollectible : GridCollectibleItem
         {
             case SacredItemBehaviour.HOVER:
                 CountdownTimer--;
-                Debug.Log("DISSAPEARING IN " + CountdownTimer);
+               // Debug.Log("DISSAPEARING IN " + CountdownTimer);
                 if (CountdownTimer <= 0)
                 {
                     Delete();

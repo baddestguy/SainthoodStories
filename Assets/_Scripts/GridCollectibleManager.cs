@@ -62,19 +62,32 @@ public class GridCollectibleManager : MonoBehaviour
         SpawnedTiles.Add(tile);
     }
 
+    public void GenerateCollectibles()
+    {
+        if (SpawnedTiles.Count > 0) return;
+
+        for (int i = 0; i < 10; i++)
+        {
+            StartCoroutine(SpawnCollectible(WanderingSpiritResource));
+        }
+    }
+
     public void OnTick(double time, int day)
     {
         if (!GameClock.DeltaTime) return;
-        if (SpawnedTiles.Count > 10) return;
 
         var random = Random.Range(0, 100);
         if (random > 30) return;
 
-        StartCoroutine(SpawnCollectible(WanderingSpiritResource));
 
         if (time > 19 || time < 5)
         {
             StartCoroutine(SpawnSacredItemAsync());
+
+            if (SpawnedTiles.Count < 5)
+            {
+                GenerateCollectibles();
+            }
         }
     }
 

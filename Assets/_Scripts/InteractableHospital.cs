@@ -54,7 +54,7 @@ public class InteractableHospital : InteractableHouse
         }
     }
 
-    public override float CalculateMaxVolunteerPoints(int amount = 4)
+    public override float CalculateMaxVolunteerPoints(int amount = 6)
     {
         return base.CalculateMaxVolunteerPoints(amount);
     }

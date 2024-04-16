@@ -286,7 +286,7 @@ public class PopUI : MonoBehaviour
             {
                 //Regular HIT!
                 Debug.LogWarning("Regular HIT!");
-                if(CriticalHitCount >= 1) SoundManager.Instance.PlayOneShotSfx("Crit_Bad");
+              //  if(CriticalHitCount >= 1) SoundManager.Instance.PlayOneShotSfx("Crit_Bad");
                 PointerDown = false;
                 ButtonTimer = 0f;
                 CriticalHitCount = -1;
@@ -367,7 +367,7 @@ public class PopUI : MonoBehaviour
         {
             if (CriticalHitCount > 0)
             {
-                SoundManager.Instance.PlayOneShotSfx("Crit_Good");
+            //    SoundManager.Instance.PlayOneShotSfx("Crit_Good");
             }
         }
     }

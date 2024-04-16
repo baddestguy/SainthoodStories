@@ -26,6 +26,8 @@ public class MissionManager : MonoBehaviour
     public int FaithPoints { get; private set; }
     public int FaithPointsPool { get; private set; }
 
+    public int FaithPointsPermanentlyLost;
+
     private void Awake()
     {
         Instance = this;
@@ -78,7 +80,7 @@ public class MissionManager : MonoBehaviour
 
         CurrentCollectibleMissionId = saveData.CurrentCollectibleMissionId == 0 ? 1 : saveData.CurrentCollectibleMissionId;
         CurrentCollectibleCounter = saveData.CurrentCollectibleCounter;
-
+        FaithPointsPermanentlyLost = saveData.FaithPointsPermanentlyLost;
         //if (!GameClock.DeltaTime) return;
 
         //SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
@@ -129,7 +131,7 @@ public class MissionManager : MonoBehaviour
     public void UpdateFaithPoints(int amount)
     {
         if (MissionOver) return;
-        FaithPointsPool = Mathf.Clamp(FaithPointsPool + amount, 0, 5);
+        FaithPointsPool = Mathf.Clamp(FaithPointsPool + amount, -100, 5 - FaithPointsPermanentlyLost);
 
         if(UI.Instance != null)
         {
@@ -140,7 +142,7 @@ public class MissionManager : MonoBehaviour
     public void UpdateCharityPoints(int amount, InteractableHouse house)
     {
         if (MissionOver) return;
-        CharityPointsPool = Mathf.Clamp(CharityPointsPool + amount, 0, 5);
+        CharityPointsPool = Mathf.Clamp(CharityPointsPool + amount, -100, 5); 
         if(UI.Instance != null)
         {
             UI.Instance.RefreshCP(amount, CharityPointsPool);
@@ -178,7 +180,7 @@ public class MissionManager : MonoBehaviour
 
 
         //If we finished the final mission
-        if (CurrentMissionId == 12)
+        if (CurrentMissionId == 36)
         {
             FaithPoints += FaithPointsPool;
             CharityPoints += CharityPointsPool;
@@ -254,6 +256,7 @@ public class MissionManager : MonoBehaviour
         CharityPoints += CharityPointsPool;
         FaithPointsPool = 0;
         CharityPointsPool = 0;
+        FaithPointsPermanentlyLost = 0;
         GameManager.Instance.ScrambleMapTiles();
         SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);

@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                    UI.Instance.ShowDayBeginText("");
+                UI.Instance.ShowDayBeginText("");
             }
 
             if (SaveData.Maptiles == null)
@@ -156,11 +156,27 @@ public class GameManager : MonoBehaviour
             {
                 GameClock.StartNewDay?.Invoke();
             }
-            var obj = MissionManager.Instance.CurrentObjectives.FirstOrDefault();
+
+            var obj = GameDataManager.Instance.GetSingleObjective(MissionManager.Instance.CurrentMissionId);
             if (obj != null && (obj.WeatherId == (int)WeatherId.RAIN || obj.WeatherId == (int)WeatherId.BLIZZARD))
             {
                 WeatherManager.Instance.OverrideWeatherActivation(0, 1);
             }
+
+            if(obj != null && obj.DailyEvent != CustomEventType.NONE)
+            {
+                var security = InventoryManager.Instance.GetProvision(Provision.SECURITY_GUARDS);
+                if (security != null && obj.DailyEvent == CustomEventType.VANDALISM)
+                {
+                    obj.DailyEvent = CustomEventType.VANDALISM_STOPPED;
+                }
+                EventsManager.Instance.DailyEvent = obj.DailyEvent;
+                EventsManager.Instance.AddEventToList(obj.DailyEvent);
+                EventsManager.Instance.TriggeredMissionEvents.Add(obj.DailyEvent);
+            }
+            GridCollectibleManager.Instance.SpawnedTiles.Clear();
+            GridCollectibleManager.Instance.SacredItemSpawned = false;
+
         }
         else if (scene.name.Contains("MainMenu"))
         {
@@ -254,6 +270,10 @@ public class GameManager : MonoBehaviour
             {
                 MissionManager.Instance.UpdateCharityPoints(-1, null);
             }
+        }
+        if (GameClock.DeltaTime && GameClock.EndofDay)
+        {
+            MissionManager.Instance.UpdateCharityPoints(-1, null);
         }
     }
 
