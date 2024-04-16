@@ -272,11 +272,11 @@ public class Player : MonoBehaviour
                     WeatherStatusCounter++;
                     if (WeatherStatusCounter >= 3)
                     {
-                        if (Random.Range(0, 100) < 50)
+                        if (Random.Range(0, 100) < 30)
                         {
-                            WeatherStatusCounter = 0;
                             AddRandomAilment();
                         }
+                        WeatherStatusCounter = 0;
                     }
                 }
                 break;
@@ -287,7 +287,7 @@ public class Player : MonoBehaviour
                     WeatherStatusCounter++;
                     if (WeatherStatusCounter >= 3)
                     {
-                        if (Random.Range(0, 100) < 50)
+                        if (Random.Range(0, 100) < 30)
                         {
                             WeatherStatusCounter = 0;
                             StatusEffects.Add(PlayerStatusEffect.FROZEN);
@@ -481,7 +481,7 @@ public class Player : MonoBehaviour
         {
             AddRandomAilment();
         }
-        else if(Energy.Amount <= 0 && Random.Range(0,100) < 50 && (MissionManager.Instance.CurrentMission.CurrentWeek > 1 || GameManager.Instance.GameClock.Day >= 3))
+        else if(GameManager.Instance.CurrentMission.Season > Season.FALL && (Energy.Amount <= 0 && Random.Range(0,100) < 50 && (MissionManager.Instance.CurrentMission.CurrentWeek > 1 || GameManager.Instance.GameClock.Day >= 3)))
         {
             StatusEffects.Add(PlayerStatusEffect.VULNERABLE);
         }
@@ -517,6 +517,10 @@ public class Player : MonoBehaviour
 
     public void AddRandomAilment()
     {
+        var season = GameManager.Instance.CurrentMission.Season;
+        if (season < Season.FALL && StatusEffects.Any()) return;
+        if (season == Season.FALL && StatusEffects.Count >= 2) return;
+
         if (StatusEffects.Contains(PlayerStatusEffect.VULNERABLE))
         {
             StatusEffects.Add((PlayerStatusEffect)Random.Range(2, 5));
@@ -524,7 +528,18 @@ public class Player : MonoBehaviour
         }
         else
         {
-            StatusEffects.Add((PlayerStatusEffect)Random.Range(1, 5));
+            switch (season)
+            {
+                case Season.SUMMER:
+                    StatusEffects.Add(PlayerStatusEffect.FATIGUED);
+                    break;
+                case Season.FALL:
+                    StatusEffects.Add((PlayerStatusEffect)Random.Range(2, 2));
+                    break;
+                case Season.WINTER:
+                    StatusEffects.Add((PlayerStatusEffect)Random.Range(1, 5));
+                    break;
+            }
         }
         StatusEffectTrigger?.Invoke();
         Debug.LogWarning("ADDED AILMENT!");
@@ -596,6 +611,11 @@ public class Player : MonoBehaviour
     public MapTile GetCurrentTile()
     {
         return CurrentTile;
+    }
+
+    public void ResetWeatherCount()
+    {
+        WeatherStatusCounter = 0;
     }
 
     private void OnDisable()

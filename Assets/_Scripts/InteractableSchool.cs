@@ -43,7 +43,7 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
-    public override float CalculateMaxVolunteerPoints(int amount = 6)
+    public override float CalculateMaxVolunteerPoints(int amount = 8)
     {
         return base.CalculateMaxVolunteerPoints(amount);
     }

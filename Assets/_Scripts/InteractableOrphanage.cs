@@ -40,7 +40,7 @@ public class InteractableOrphanage : InteractableHouse
         }
     }
 
-    public override float CalculateMaxVolunteerPoints(int amount = 2)
+    public override float CalculateMaxVolunteerPoints(int amount = 4)
     {
         return base.CalculateMaxVolunteerPoints(amount);
     }

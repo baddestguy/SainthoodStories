@@ -151,6 +151,11 @@ public class CustomEventPopup : MonoBehaviour
 
         player.CurrentBuilding.ClearHazard();
         player.CurrentBuilding.BuildRelationship(ThankYouType.IMMEDIATE_ASSISTANCE);
+        if (player.CurrentBuilding.MyObjective?.Event == BuildingEventType.VOLUNTEER || player.CurrentBuilding.MyObjective?.Event == BuildingEventType.VOLUNTEER_URGENT)
+        {
+            MissionManager.Instance.CompleteObjective(player.CurrentBuilding.MyObjective);
+            player.CurrentBuilding.MyObjective = null;
+        }
 
         var timeCost = Mathf.Abs(EventData.Cost);
         for (int i = 0; i < timeCost; i++)

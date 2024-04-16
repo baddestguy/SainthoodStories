@@ -102,7 +102,8 @@ public class SaveDataManager : MonoBehaviour
             CurrentCollectibleCounter = MissionManager.Instance.CurrentCollectibleCounter,
             WorldCollectibles = GameManager.Instance.WorldCollectibles.ToArray(),
             MissionEvents = EventsManager.Instance.TriggeredMissionEvents.ToArray(),
-            HasChosenProvision = InventoryManager.HasChosenProvision
+            HasChosenProvision = InventoryManager.HasChosenProvision,
+            FaithPointsPermanentlyLost = MissionManager.Instance.FaithPointsPermanentlyLost
         };
     }    
 
