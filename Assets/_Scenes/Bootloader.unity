@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414738, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1437,6 +1437,8 @@ MonoBehaviour:
   DEMO_MODE: 0
   ShowGrid: 0
   InfiniteBoost: 1
+  IsXboxMode: 1
+  ShowFPSCounter: 1
   fullScreenMode: 0
   currentQualityLevel: 0
   brightnessPercent: 0
@@ -5495,6 +5497,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846d859079c3ddc4cbd58ccf8afa8ef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpawnedTiles: []
+  SacredItemSpawned: 0
 --- !u!1 &521719812
 GameObject:
   m_ObjectHideFlags: 0
@@ -5924,6 +5928,7 @@ MonoBehaviour:
   CurrentCollectibleCounter: 0
   CurrentCollectibleMissionId: 0
   CurrentMissionId: 0
+  FaithPointsPermanentlyLost: 0
 --- !u!1 &583654964
 GameObject:
   m_ObjectHideFlags: 0
@@ -13241,6 +13246,7 @@ MonoBehaviour:
     WorldCollectibles: []
     MissionEvents: 
     HasChosenProvision: 0
+    FaithPointsPermanentlyLost: 0
   CurrentHouse: {fileID: 0}
   CurrentBuilding: 
   CurrentSceneID: 0

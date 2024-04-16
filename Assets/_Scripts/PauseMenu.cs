@@ -86,6 +86,7 @@ public class PauseMenu : MonoBehaviour
 
                 if (GameSettings.Instance.IsXboxMode)
                 {
+                    // There is no graphics tab on xbox so set the sound tab to be the default
                     ToggleSound();
                     var soundToggle = soundToggleTransform.GetComponent<Toggle>();
                     soundToggle.isOn = true;

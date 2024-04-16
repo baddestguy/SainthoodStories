@@ -19,6 +19,7 @@ public class GameSettings : MonoBehaviour
     public bool ShowGrid;
     public bool InfiniteBoost;
     public bool IsXboxMode;
+    public bool ShowFPSCounter;
 
     [HideInInspector] public bool fullScreenMode;
     [HideInInspector] public QualityLevel currentQualityLevel;
