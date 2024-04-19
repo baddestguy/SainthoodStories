@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public static event UnityAction<Energy, MapTile> OnMoveSuccessEvent;
     public static UnityAction StatusEffectTrigger;
     public GameMap Map;
+    public Dictionary<PlayerFacingDirection, MapTile> AdjacentTiles;
 
     public Energy Energy;
     private int EnergyConsumption;
@@ -18,7 +19,6 @@ public class Player : MonoBehaviour
     public InteractableHouse CurrentBuilding;
     private MapTile StartTile;
     private int StartingEnergy;
-    private Dictionary<PlayerFacingDirection, MapTile> AdjacentTiles;
     private List<PlayerItem> Inventory = new List<PlayerItem>();
     private Vector3 TargetPosition;
     public static bool LockMovement;

@@ -11,6 +11,9 @@ public class GameSettings : MonoBehaviour
     public bool StoryToggle;
     public bool CustomEventsToggle;
     public bool ProvisionsToggle;
+    /// <summary>
+    /// First Time User Experience
+    /// </summary>
     public bool FTUE; //First Time User Experience!
     public bool TutorialToggle;
     public bool SkipSplashScreens;
