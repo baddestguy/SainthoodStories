@@ -19,9 +19,15 @@ public class TooltipMouseOver : MonoBehaviour
     {
         transform.DOComplete();
         transform.DOPunchScale(transform.localScale * 0.15f, 0.5f, elasticity: 0f);
+        
+        DoToolTip();
+    }
+
+    private void DoToolTip()
+    {
         IsHovering = true;
 
-        switch (HouseName) 
+        switch (HouseName)
         {
             case "House":
                 House = transform.GetComponentInParent<InteractableHouse>();
@@ -53,25 +59,25 @@ public class TooltipMouseOver : MonoBehaviour
                     Loc_Key = "Building will be destroyed";
                 }
                 var customEvent = FindObjectOfType<CustomEventPopup>().EventData;
-                if(customEvent.RewardType == CustomEventRewardType.FP)
+                if (customEvent.RewardType == CustomEventRewardType.FP)
                     CustomToolStats = new TooltipStats() { CP = 0, Energy = 0, FP = -(int)customEvent.RejectionCost, Ticks = 0 };
                 else
                     CustomToolStats = new TooltipStats() { CP = -(int)customEvent.RejectionCost, Energy = 0, FP = 0, Ticks = 0 };
                 break;
         }
 
-        if(House != null)
+        if (House != null)
         {
             ToolTipManager.Instance.ShowToolTip(Loc_Key, House.GetTooltipStatsForButton(ButtonName));
         }
-        else if(CustomToolStats != null)
+        else if (CustomToolStats != null)
         {
             ToolTipManager.Instance.ShowToolTip(Loc_Key, CustomToolStats);
         }
         else
         {
             TextMeshProUGUI provisionDescription = GameObject.Find("ProvisionDescription")?.GetComponent<TextMeshProUGUI>();
-            if(provisionDescription != null)
+            if (provisionDescription != null)
             {
                 provisionDescription.text = LocalizationManager.Instance.GetText(Loc_Key);
             }
@@ -92,4 +98,23 @@ public class TooltipMouseOver : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(null);
         GamepadCursor.CursorSpeed = 2000f;
     }
+
+    #region XboxSupport
+
+    public void HandleControllerTooltip()
+    {
+        transform.DOComplete();
+        transform.DOScale(transform.localScale * 1.15f, 0.5f);
+
+        DoToolTip();
+    }
+
+    public void EndControllerTooltip()
+    {
+        transform.DOComplete();
+        transform.DOScale(transform.localScale / 1.15f, 0.5f);
+        HideToolTip();
+    }
+
+    #endregion
 }

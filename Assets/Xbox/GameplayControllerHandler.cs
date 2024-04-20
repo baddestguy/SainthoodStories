@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.UI;
 
 namespace Assets.Xbox
 {
@@ -13,6 +14,10 @@ namespace Assets.Xbox
         private bool _popUIFirstActionButtonAcknowledged;
         private PopUI _currentPopUI;
         private int _buildingActionButtonIndex;
+
+        private CustomEventPopup _currentCustomEventPopup;
+        private bool _customEventPopupFirstActionButtonAcknowledged;
+        private int _customEventPopupButtonIndex;
 
         private static DpadControl DPad => Gamepad.current.dpad;
         private static GameManager GameManager => GameManager.Instance;
@@ -41,7 +46,11 @@ namespace Assets.Xbox
         {
             if (Gamepad.current == null || Player == null) return;
 
-            if (IsInBuilding)
+            if (CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null)
+            {
+                HandleConversationEventPopup();
+            }
+            else if (IsInBuilding)
             {
                 HandlePlayerActions();
             }
@@ -51,11 +60,6 @@ namespace Assets.Xbox
             }
 
             HandleZoom();
-
-            if (_currentPopUI != null && !_popUIFirstActionButtonAcknowledged && _currentPopUI.Buttons.Any())
-            {
-                AcknowledgeFirstPopUIButton();
-            }
         }
 
         /// <summary>
@@ -73,6 +77,13 @@ namespace Assets.Xbox
             if (!_currentPopUI.Buttons.Any()) return;
 
             AcknowledgeFirstPopUIButton();
+        }
+
+        public void SetCurrentCustomEventPopup(CustomEventPopup customEventPopup)
+        {
+            _currentCustomEventPopup = customEventPopup;
+            _customEventPopupFirstActionButtonAcknowledged = false;
+            Debug.Log($"New Custom Event Popup: {customEventPopup?.name}");
         }
 
         private void HandlePlayerMovement()
@@ -109,6 +120,11 @@ namespace Assets.Xbox
 
         private void HandlePlayerActions()
         {
+            if (!_popUIFirstActionButtonAcknowledged && _currentPopUI.Buttons.Any())
+            {
+                AcknowledgeFirstPopUIButton();
+            }
+
             if (DPad.left.wasPressedThisFrame)
             {
                 HandleActionButtonNavigate(-1);
@@ -118,7 +134,6 @@ namespace Assets.Xbox
                 HandleActionButtonNavigate(1);
             }
 
-            //todo: Check if WORLD or EXIST button
             if (Gamepad.current.buttonSouth.wasPressedThisFrame)
             {
                 CurrentPopUIButton.HandleControllerExit();
@@ -161,6 +176,46 @@ namespace Assets.Xbox
             else if (Gamepad.current.leftShoulder.wasPressedThisFrame || Gamepad.current.leftTrigger.wasPressedThisFrame)
             {
                 GameControlsManager.TryZoom?.Invoke(-1);
+            }
+        }
+
+        private void HandleConversationEventPopup()
+        {
+            if (_currentCustomEventPopup.EventData.EventPopupType == EventPopupType.OK)
+            {
+                var tooltipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false);
+                if (!_customEventPopupFirstActionButtonAcknowledged)
+                {
+                    tooltipMouseOvers[_customEventPopupButtonIndex].HandleControllerTooltip();
+                    _customEventPopupFirstActionButtonAcknowledged = true;
+                }
+                else
+                {
+                    if (DPad.left.wasPressedThisFrame)
+                    {
+                        HandleEventPopupButtonNavigate(-1);
+                    }
+                    else if (DPad.right.wasPressedThisFrame)
+                    {
+                        HandleEventPopupButtonNavigate(1);
+                    }
+                    else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                    {
+                        tooltipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>().onClick.Invoke();
+                        _customEventPopupFirstActionButtonAcknowledged = false;
+                        _customEventPopupButtonIndex = 0;
+                    }
+
+
+                    void HandleEventPopupButtonNavigate(int increment)
+                    {
+                        tooltipMouseOvers[_customEventPopupButtonIndex].EndControllerTooltip();
+                        _customEventPopupButtonIndex = (_customEventPopupButtonIndex + increment + tooltipMouseOvers.Length) % tooltipMouseOvers.Length;
+                        tooltipMouseOvers[_customEventPopupButtonIndex].HandleControllerTooltip();
+                        Debug.Log($"Current Event Popup Button is: {tooltipMouseOvers[_customEventPopupButtonIndex].name}");
+                    }
+                }
+                
             }
         }
 
