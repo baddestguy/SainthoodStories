@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Assets.Xbox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +34,8 @@ public class ProvisionsPopup : MonoBehaviour
         {
             UpgradeProvisionUIItems[i].Init(InventoryManager.Instance.Provisions[i], ProvisionUIItemType.UPGRADE);
         }
+
+        GameplayControllerHandler.Instance.SetCurrentProvisionsPopUp(this);
     }
 
     public void AddProvisionUIItem(ProvisionData prov, ScrollRect scroller, ProvisionUIItemType type)
@@ -100,6 +103,8 @@ public class ProvisionsPopup : MonoBehaviour
         gameObject.SetActive(false);
         UI.Instance.EnableAllUIElements(true);
         GamepadCursor.CursorSpeed = 2000f;
+
+        GameplayControllerHandler.Instance.SetCurrentProvisionsPopUp(null);
     }
 
     private void SwitchPhase(ProvisionsPopupPhase phase)
@@ -138,6 +143,7 @@ public class ProvisionsPopup : MonoBehaviour
         UI.Instance.EnableAllUIElements(true);
         GamepadCursor.CursorSpeed = 2000f;
 
+        GameplayControllerHandler.Instance.SetCurrentProvisionsPopUp(null);
         if (House == null) return;
 
         House.GoToWorldMap();

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -18,6 +19,13 @@ namespace Assets.Xbox
         private CustomEventPopup _currentCustomEventPopup;
         private bool _customEventPopupFirstActionButtonAcknowledged;
         private int _customEventPopupButtonIndex;
+        private bool IsInBuilding => _currentPopUI != null;
+        private ActionButton CurrentPopUIButton => _currentPopUI.Buttons[_buildingActionButtonIndex];
+
+        private ProvisionsPopup _provisionsPopUp;
+        private int _provisionPopupButtonIndex;
+        private ProvisionUIItem[] _provisionItems;
+        private ProvisionUIItem CurrentProvisionUIItem => _provisionItems[_provisionPopupButtonIndex];
 
         private static DpadControl DPad => Gamepad.current.dpad;
         private static GameManager GameManager => GameManager.Instance;
@@ -26,8 +34,6 @@ namespace Assets.Xbox
             FindObjectsByType<InteractableObject>(FindObjectsSortMode.None)
                 .Where(x => x.transform.Cast<Transform>().Any(child => child.gameObject.activeInHierarchy))
                 .ToArray();
-        private bool IsInBuilding => _currentPopUI != null;
-        private ActionButton CurrentPopUIButton => _currentPopUI.Buttons[_buildingActionButtonIndex];
 
 
         private void Awake()
@@ -49,6 +55,10 @@ namespace Assets.Xbox
             if (CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null)
             {
                 HandleConversationEventPopup();
+            }
+            else if (_provisionsPopUp != null)
+            {
+                HandleProvisionSelectPopup();
             }
             else if (IsInBuilding)
             {
@@ -79,11 +89,31 @@ namespace Assets.Xbox
             AcknowledgeFirstPopUIButton();
         }
 
+        /// <summary>
+        /// Sets the current Custom Event Popup to handle conversations
+        /// </summary>
+        /// <param name="customEventPopup">The displayed Custom Event Pop Up</param>
         public void SetCurrentCustomEventPopup(CustomEventPopup customEventPopup)
         {
             _currentCustomEventPopup = customEventPopup;
             _customEventPopupFirstActionButtonAcknowledged = false;
             Debug.Log($"New Custom Event Popup: {customEventPopup?.name}");
+        }
+
+        /// <summary>
+        /// Sets the current Provision Popup to handle adding or upgrading 
+        /// </summary>
+        /// <param name="provisionsPopup"></param>
+        public void SetCurrentProvisionsPopUp(ProvisionsPopup provisionsPopup)
+        {
+            _provisionsPopUp = provisionsPopup;
+            Debug.Log($"New Provisions Popup: {provisionsPopup?.name}");
+            
+            if(provisionsPopup == null) return;
+
+            _provisionItems = provisionsPopup.NewProvisionUIItems.Concat(provisionsPopup.UpgradeProvisionUIItems).Where(x => x.HasProvision).ToArray();
+            _provisionPopupButtonIndex = 0;
+            _provisionItems[_provisionPopupButtonIndex].HandleControllerHover();
         }
 
         private void HandlePlayerMovement()
@@ -186,6 +216,7 @@ namespace Assets.Xbox
                 var tooltipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false);
                 if (!_customEventPopupFirstActionButtonAcknowledged)
                 {
+                    _customEventPopupButtonIndex = 0;
                     tooltipMouseOvers[_customEventPopupButtonIndex].HandleControllerTooltip();
                     _customEventPopupFirstActionButtonAcknowledged = true;
                 }
@@ -216,6 +247,34 @@ namespace Assets.Xbox
                     }
                 }
                 
+            }
+        }
+
+        private void HandleProvisionSelectPopup()
+        {
+            if (DPad.left.wasPressedThisFrame)
+            {
+                HandleProvisionButtonNavigate(-1);
+            }
+            else if (DPad.right.wasPressedThisFrame)
+            {
+                HandleProvisionButtonNavigate(1);
+            }
+            else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+            {
+                CurrentProvisionUIItem.OnClick();
+                //tooltipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>().onClick.Invoke();
+                //_customEventPopupFirstActionButtonAcknowledged = false;
+                _provisionPopupButtonIndex = 0;
+            }
+
+            void HandleProvisionButtonNavigate(int increment)
+            {
+                CurrentProvisionUIItem.HandleControllerExit();
+                _provisionPopupButtonIndex = (_provisionPopupButtonIndex + increment + _provisionItems.Length) % _provisionItems.Length;
+                CurrentProvisionUIItem.HandleControllerHover();
+                Debug.Log($"Current Provision Button is: {CurrentProvisionUIItem.name}" +
+                          $" [{Enum.GetName(typeof(ProvisionUIItemType),CurrentProvisionUIItem.Type)}]");
             }
         }
 
