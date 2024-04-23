@@ -11,6 +11,9 @@ public class GameSettings : MonoBehaviour
     public bool StoryToggle;
     public bool CustomEventsToggle;
     public bool ProvisionsToggle;
+    /// <summary>
+    /// First Time User Experience
+    /// </summary>
     public bool FTUE; //First Time User Experience!
     public bool TutorialToggle;
     public bool SkipSplashScreens;
@@ -18,6 +21,8 @@ public class GameSettings : MonoBehaviour
     public bool DEMO_MODE;
     public bool ShowGrid;
     public bool InfiniteBoost;
+    public bool IsXboxMode;
+    public bool ShowFPSCounter;
 
     [HideInInspector] public bool fullScreenMode;
     [HideInInspector] public QualityLevel currentQualityLevel;
@@ -163,6 +168,12 @@ public class GameSettings : MonoBehaviour
 
     public Resolution GetResolution(string value)
     {
+        if (IsXboxMode)
+        {
+            var bestResolution = resolutions.OrderByDescending(r => r.height * r.width).ThenByDescending(r => r.refreshRate).FirstOrDefault();
+            return bestResolution;
+        }
+
         string[] val = value.Replace(" ", "").Split('x');
         Resolution? res = resolutions.Where(x => x.width.ToString() == val[0] && x.height.ToString() == val[1]).FirstOrDefault();
         if(res == null)
@@ -177,7 +188,13 @@ public class GameSettings : MonoBehaviour
         currentResolution = GetResolution(resolution);
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
     }
-    public void SetQuality(QualityLevel quality) {
+    public void SetQuality(QualityLevel quality)
+    {
+        if (IsXboxMode)
+        {
+            QualitySettings.SetQualityLevel((int)QualityLevel.QUALITY_SETTING_ULTRA);
+            return;
+        }
 
         currentQualityLevel = quality;
         QualitySettings.SetQualityLevel((int)quality);

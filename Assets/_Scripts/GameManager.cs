@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets._Scripts.Extensions;
 using Enviro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -64,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         MaptileIndexes = new int[14] { 0, 4, 7, 9, 13, 16, 23, 40, 47, 50, 53, 56, 60, 63 };
         SceneManager.sceneLoaded += OnLevelLoaded;
-        MapTile.OnClickEvent += OnTap;
+        MapTile.OnClickEvent += OnMapTileTap;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
         GameClock.Ticked += OnTick;
         LoadScene("MainMenu", LoadSceneMode.Single);
@@ -114,7 +115,7 @@ public class GameManager : MonoBehaviour
             activeScene = scene;
         }
 
-        if (scene.name.Contains("Level"))
+        if (scene.IsGameLevel())
         {
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = CurrentMission.SeasonSceneId;
@@ -178,7 +179,7 @@ public class GameManager : MonoBehaviour
             GridCollectibleManager.Instance.SacredItemSpawned = false;
 
         }
-        else if (scene.name.Contains("MainMenu"))
+        else if (scene.IsMenu())
         {
             GamepadCursor.CursorSpeed = 2000f;
 
@@ -210,14 +211,14 @@ public class GameManager : MonoBehaviour
             SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay:70);
 
         }
-        else if (scene.name.Contains(SceneID.SaintsShowcase_Day.ToString()))
+        else if (scene.IsSaintShowcase())
         {
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.SaintsShowcase_Day;
-        }else if (scene.name.Contains(SceneID.PauseMenu.ToString()))
+        }else if (scene.IsPauseMenu())
         {
         }
-        else if (scene.name.Contains(SceneID.WorldMap.ToString()))
+        else if (scene.IsWorldMap())
         {
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.WorldMap;
@@ -243,7 +244,8 @@ public class GameManager : MonoBehaviour
             HouseStates[h.GetType().Name] = h.BuildingState;
         }
     }
-    private void OnTap(MapTile tile)
+
+    public  void OnMapTileTap(MapTile tile)
     {
         if (Player == null) return;
 
@@ -404,7 +406,7 @@ public class GameManager : MonoBehaviour
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnLevelLoaded;
-        MapTile.OnClickEvent -= OnTap;
+        MapTile.OnClickEvent -= OnMapTileTap;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
         GameClock.Ticked -= OnTick;
     }

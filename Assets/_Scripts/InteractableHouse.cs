@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Xbox;
 using CompassNavigatorPro;
 using DG.Tweening;
 using UnityEngine;
@@ -390,12 +391,18 @@ public class InteractableHouse : InteractableObject
             ExteriorPopUI.gameObject.SetActive(true);
             HouseUIActive = true;
             PopIcon.gameObject.SetActive(false);
+
+            if (!InsideHouse)
+            {
+                GameplayControllerHandler.Instance.SetCurrentPopUI(ExteriorPopUI); //Make the Enter button clickable by controller
+            }
         }
         else
         {
             if (InteriorCam && InsideHouse)
             {
                 PopUICallback("EXIT");
+                GameplayControllerHandler.Instance.SetCurrentPopUI(ExteriorPopUI); //Make the Enter button clickable by controller
             }
             else
             {
@@ -403,6 +410,7 @@ public class InteractableHouse : InteractableObject
                 ExteriorPopUI.gameObject.SetActive(false);
                 HouseUIActive = false;
                 PopIcon.UIPopped(false);
+                GameplayControllerHandler.Instance.SetCurrentPopUI(null); //Enter button is no longer clickable
             }
         }
         var clock = GameManager.Instance.GameClock;
@@ -702,7 +710,7 @@ public class InteractableHouse : InteractableObject
             UI.Instance.SideNotificationPop(GetType().Name);
             InsideHouse = true;
             GamepadCursor.CursorSpeed = 2000f;
-
+            GameplayControllerHandler.Instance.SetCurrentPopUI(InteriorPopUI);
         }
         else
         {
@@ -801,6 +809,7 @@ public class InteractableHouse : InteractableObject
 
     public void GoToWorldMap()
     {
+        GameplayControllerHandler.Instance.SetCurrentPopUI(null);
         StartCoroutine(GoToWorldMapAsync());
     }
 
@@ -1031,6 +1040,8 @@ public class InteractableHouse : InteractableObject
             {
                 GameManager.Instance.Player.StatusEffects.Remove(PlayerStatusEffect.FROZEN);
             }
+
+            GameplayControllerHandler.Instance.SetCurrentPopUI(BuildingState == BuildingState.RUBBLE ? ExteriorPopUI : InteriorPopUI);
         }
         else if(CameraLockOnMe)
         {

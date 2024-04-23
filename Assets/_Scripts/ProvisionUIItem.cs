@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class ProvisionUIItem : MonoBehaviour
     public Image ProvisionIcon;
     public TextMeshProUGUI ProvisionDescription;
     public ProvisionUIItemType Type;
+    public bool HasProvision => Provision != null;
 
     private string HeaderColor = "<color=#3B2E1F>";
     private string SubheaderColor = "<color=#C9A963>";
@@ -63,4 +65,25 @@ public class ProvisionUIItem : MonoBehaviour
 
         ToolTipManager.Instance.ShowToolTip("");
     }
+
+    #region XboxSupport
+
+    private Vector3? _preHoverScale;
+
+
+    /// <summary>
+    /// Enlarge an action button to visibly show a user that it is the current action button that will be triggered by the controller
+    /// </summary>
+    public void HandleControllerHover()
+    {
+        GetComponent<TooltipMouseOver>().HandleControllerTooltip();
+    }
+    /// <summary>
+    /// Reset an action button to visibly show a user that it is no longer the current action button that will be triggered by the controller
+    /// </summary>
+    public void EndControllerHover()
+    {
+        GetComponent<TooltipMouseOver>().EndControllerTooltip();
+    }
+    #endregion
 }

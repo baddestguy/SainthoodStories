@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Xbox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,7 @@ public class PopUI : MonoBehaviour
     public Slider[] ProgressBars;
     public Slider ProgressBar;
 
-    protected List<ActionButton> Buttons;
+    public List<ActionButton> Buttons;
     public CameraControls CameraControls;
 
     private InteractableHouse MyHouse;

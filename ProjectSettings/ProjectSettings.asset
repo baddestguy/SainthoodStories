@@ -136,7 +136,7 @@ PlayerSettings:
   vulkanEnableLateAcquireNextImage: 0
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
-  bundleVersion: 1.0
+  bundleVersion: 2.3.0
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 0}
@@ -739,7 +739,7 @@ PlayerSettings:
     Standalone: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;GAIA_2_PRESENT;GAIA_MESH_PRESENT;CROSS_PLATFORM_INPUT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT
     VisionOS: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
     WebGL: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
-    Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2;MOBILE_INPUT
+    Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2;MOBILE_INPUT;GAIA_2_PRESENT;GAIA_MESH_PRESENT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT
     XboxOne: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
     iPhone: UNITY_POST_PROCESSING_STACK_V2;CROSS_PLATFORM_INPUT;MOBILE_INPUT
     tvOS: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
@@ -774,16 +774,16 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Template_Lightweight
-  metroPackageVersion: 
+  metroPackageName: TaiwoTech.SaintHood
+  metroPackageVersion: 2.3.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: Template_Lightweight
+  metroApplicationDescription: A relaxing adventure game about serving your community.
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: Sainthood
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0
@@ -797,7 +797,9 @@ PlayerSettings:
     a: 1}
   metroSplashScreenUseBackgroundColor: 0
   platformCapabilities: {}
-  metroTargetDeviceFamilies: {}
+  metroTargetDeviceFamilies:
+    Desktop: True
+    Xbox: True
   metroFTAName: 
   metroFTAFileTypes: []
   metroProtocolName: 

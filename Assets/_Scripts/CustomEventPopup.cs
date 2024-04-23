@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using Assets.Xbox;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -114,6 +115,7 @@ public class CustomEventPopup : MonoBehaviour
 
         ButtonTimerTarget = 1f;
         SoundManager.Instance.PlayOneShotSfx("DialogOpen_SFX");
+        GameplayControllerHandler.Instance.SetCurrentCustomEventPopup(this);
     }
 
     public void Yes()
@@ -336,5 +338,6 @@ public class CustomEventPopup : MonoBehaviour
         Coins.gameObject.SetActive(false);
         EventSystem.current?.SetSelectedGameObject(null);
         GamepadCursor.CursorSpeed = 2000f;
+        GameplayControllerHandler.Instance.SetCurrentCustomEventPopup(null);
     }
 }
