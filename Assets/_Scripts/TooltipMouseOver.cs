@@ -101,10 +101,13 @@ public class TooltipMouseOver : MonoBehaviour
 
     #region XboxSupport
 
+
+    private Vector3? _preHoverScale;
     public void HandleControllerTooltip()
     {
         transform.DOComplete();
-        transform.DOScale(transform.localScale * 1.15f, 0.5f);
+        _preHoverScale ??= transform.localScale;
+        transform.DOScale(_preHoverScale!.Value * 1.25f, 0.5f);
 
         DoToolTip();
     }
@@ -112,7 +115,7 @@ public class TooltipMouseOver : MonoBehaviour
     public void EndControllerTooltip()
     {
         transform.DOComplete();
-        transform.DOScale(transform.localScale / 1.15f, 0.5f);
+        transform.DOScale(_preHoverScale!.Value, 0.5f);
         HideToolTip();
     }
 

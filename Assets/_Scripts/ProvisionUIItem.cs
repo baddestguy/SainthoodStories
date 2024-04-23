@@ -76,18 +76,14 @@ public class ProvisionUIItem : MonoBehaviour
     /// </summary>
     public void HandleControllerHover()
     {
-        transform.DOComplete();
-        _preHoverScale ??= transform.localScale;
-        transform.DOScale(_preHoverScale.Value * 1.5f, 0.5f);
+        GetComponent<TooltipMouseOver>().HandleControllerTooltip();
     }
     /// <summary>
     /// Reset an action button to visibly show a user that it is no longer the current action button that will be triggered by the controller
     /// </summary>
-    public void HandleControllerExit()
+    public void EndControllerHover()
     {
-        transform.DOComplete();
-        transform.DOScale(_preHoverScale!.Value, 0.5f);
-        _preHoverScale = null;
+        GetComponent<TooltipMouseOver>().EndControllerTooltip();
     }
     #endregion
 }

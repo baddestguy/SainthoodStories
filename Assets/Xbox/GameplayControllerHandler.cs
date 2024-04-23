@@ -21,6 +21,7 @@ namespace Assets.Xbox
         private int _customEventPopupButtonIndex;
         private bool IsInBuilding => _currentPopUI != null;
         private ActionButton CurrentPopUIButton => _currentPopUI.Buttons[_buildingActionButtonIndex];
+        //private TooltipMouseOver[] ConversationToolTipMouseOvers => _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false);
 
         private ProvisionsPopup _provisionsPopUp;
         private int _provisionPopupButtonIndex;
@@ -95,9 +96,19 @@ namespace Assets.Xbox
         /// <param name="customEventPopup">The displayed Custom Event Pop Up</param>
         public void SetCurrentCustomEventPopup(CustomEventPopup customEventPopup)
         {
+            if (_currentCustomEventPopup != null)
+            {
+                var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
+                    .OrderBy(x => x.name)
+                    .ToArray();
+                toolTipMouseOvers[_customEventPopupButtonIndex].EndControllerTooltip();
+            }
+
             _currentCustomEventPopup = customEventPopup;
             _customEventPopupFirstActionButtonAcknowledged = false;
-            Debug.Log($"New Custom Event Popup: {customEventPopup?.name}");
+            HandleConversationEventPopup();
+
+            Debug.Log($"New Custom Event Popup: {_currentCustomEventPopup?.name}");
         }
 
         /// <summary>
@@ -211,13 +222,19 @@ namespace Assets.Xbox
 
         private void HandleConversationEventPopup()
         {
+            if (_currentCustomEventPopup == null) return;
+
             if (_currentCustomEventPopup.EventData.EventPopupType == EventPopupType.OK)
             {
-                var tooltipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false);
+                //ordering by name because while Ok shows up before skip, skip shows up before continue in the array
+                var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
+                    .OrderBy(x => x.name)
+                    .ToArray();
+
                 if (!_customEventPopupFirstActionButtonAcknowledged)
                 {
                     _customEventPopupButtonIndex = 0;
-                    tooltipMouseOvers[_customEventPopupButtonIndex].HandleControllerTooltip();
+                    toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerTooltip();
                     _customEventPopupFirstActionButtonAcknowledged = true;
                 }
                 else
@@ -232,18 +249,16 @@ namespace Assets.Xbox
                     }
                     else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
                     {
-                        tooltipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>().onClick.Invoke();
-                        _customEventPopupFirstActionButtonAcknowledged = false;
-                        _customEventPopupButtonIndex = 0;
+                        toolTipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>().onClick.Invoke();
                     }
 
 
                     void HandleEventPopupButtonNavigate(int increment)
                     {
-                        tooltipMouseOvers[_customEventPopupButtonIndex].EndControllerTooltip();
-                        _customEventPopupButtonIndex = (_customEventPopupButtonIndex + increment + tooltipMouseOvers.Length) % tooltipMouseOvers.Length;
-                        tooltipMouseOvers[_customEventPopupButtonIndex].HandleControllerTooltip();
-                        Debug.Log($"Current Event Popup Button is: {tooltipMouseOvers[_customEventPopupButtonIndex].name}");
+                        toolTipMouseOvers[_customEventPopupButtonIndex].EndControllerTooltip();
+                        _customEventPopupButtonIndex = (_customEventPopupButtonIndex + increment + toolTipMouseOvers.Length) % toolTipMouseOvers.Length;
+                        toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerTooltip();
+                        Debug.Log($"Current Event Popup Button is: {toolTipMouseOvers[_customEventPopupButtonIndex].name}");
                     }
                 }
                 
@@ -270,7 +285,7 @@ namespace Assets.Xbox
 
             void HandleProvisionButtonNavigate(int increment)
             {
-                CurrentProvisionUIItem.HandleControllerExit();
+                CurrentProvisionUIItem.EndControllerHover();
                 _provisionPopupButtonIndex = (_provisionPopupButtonIndex + increment + _provisionItems.Length) % _provisionItems.Length;
                 CurrentProvisionUIItem.HandleControllerHover();
                 Debug.Log($"Current Provision Button is: {CurrentProvisionUIItem.name}" +
