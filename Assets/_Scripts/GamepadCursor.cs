@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Xbox;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Users;
@@ -49,6 +50,7 @@ public class GamepadCursor : MonoBehaviour
         }
 
         InputSystem.onAfterUpdate += UpdateMotion;
+
         PlayerInput.actions["Click"].performed += ActionButton;
         PlayerInput.actions["ScrollWheel"].performed += Scroll;
         Invoke("Init", 0.1f);
@@ -190,11 +192,15 @@ public class GamepadCursor : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handle Scroll movements. When running in Xbox mode, zoom controls are specifically handled in <see cref="GameplayControllerHandler.HandleZoom"/>
+    /// </summary>
+    /// <param name="ctx"></param>
     private void Scroll(CallbackContext ctx)
     {
-        if (PlayerInput.currentControlScheme == MouseScheme) return;
+        if (PlayerInput.currentControlScheme == MouseScheme || GameSettings.Instance.IsXboxMode) return;
 
-        if ((PauseMenu.Instance == null || !PauseMenu.Instance.active))
+        if (PauseMenu.Instance == null || !PauseMenu.Instance.active)
         {
             var scrollDirection = (Vector2)ctx.control.ReadValueAsObject();
             GameControlsManager.TryZoom?.Invoke(scrollDirection.y);
