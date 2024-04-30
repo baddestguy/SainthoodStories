@@ -16,12 +16,15 @@ public class UI : MonoBehaviour
     public static UI Instance { get; private set; }
 
     public TextMeshProUGUI EnergyDisplay;
+    public Image EnFillBar;
     public TextMeshProUGUI TimeDisplay;
     public TextMeshProUGUI DayDisplay;
     public TextMeshProUGUI MessageDisplay;
     public TextMeshProUGUI ReportDisplay;
     public TextMeshProUGUI CPDisplay;
+    public Image CPFillBar;
     public TextMeshProUGUI FPDisplay;
+    public Image FPFillBar;
     public TextMeshProUGUI WeatherDisplay;
     public Image CPDisplayGlow;
     public Image FPDisplayGlow;
@@ -87,6 +90,8 @@ public class UI : MonoBehaviour
 
     public MinigamePlayer MinigamePlayer;
     public GameObject SaintsCollectionUI;
+
+    public GameObject LoadingScreen;
     public bool WasUiHit
     {
         get
@@ -147,8 +152,14 @@ public class UI : MonoBehaviour
         }
     }
 
+    public void LoadingScreenEnable(bool enable)
+    {
+        LoadingScreen.SetActive(enable);
+    }
+
     public void ToggleSaintsCollection(bool enable)
     {
+        BroadcastMessage("HideInfoPanel", SendMessageOptions.DontRequireReceiver);
         SaintsCollectionUI.SetActive(enable);
     }
 
@@ -173,7 +184,10 @@ public class UI : MonoBehaviour
 
         int oldEnergy = int.Parse(EnergyDisplay.text);
         EnergyDisplay.DOCounter(oldEnergy, energy.Amount, 0.5f).SetDelay(2f);
-        if (energy.Amount <= 1)
+        var bonusEnergy = InventoryManager.Instance.GetProvision(Provision.ENERGY_DRINK)?.Value ?? 0;
+        EnFillBar.DOFillAmount(energy.Amount / (3f + bonusEnergy), 1f).SetDelay(2f);
+
+        if (energy.Amount < 1)
         {
             EnergyDisplay.color = Color.red;
             EnergyDisplayGlow.color = Color.red;
@@ -181,7 +195,7 @@ public class UI : MonoBehaviour
         }
         else
         {
-            EnergyDisplay.color = Color.white;
+            EnergyDisplay.color = new Color32(0xFF, 0xFB, 0xE7, 0xFF);
             EnergyDisplayGlow.color = Color.white;
         }
 
@@ -276,6 +290,7 @@ public class UI : MonoBehaviour
 
     public void SideNotificationPush(string sprite, int items, GameClock deadline, string owner)
     {
+        return;
         if (IsDuplicateSideNotification(owner, items, deadline)) return;
 
         GameObject SideNotifGO = Instantiate(SideNotificationResource);
@@ -338,7 +353,7 @@ public class UI : MonoBehaviour
         GameClock clock = GameManager.Instance.GameClock;
         if(weather != WeatherType.NONE)
         {
-            WeatherGO.SetActive(true);
+        //    WeatherGO.SetActive(true);
             WeatherDisplay.text = clock >= start ? "" : $"{(int)start.Time}:{(start.Time % 1 == 0 ? "00" : "30")}";
             
             switch (MissionManager.Instance.CurrentMission.Season) {
@@ -364,6 +379,7 @@ public class UI : MonoBehaviour
 
     public void UpdateDayNightIcon(DayNight dayNight)
     {
+        if (WeatherManager.Instance.IsStormy()) return;
         if(DayNightIcon != null)
         {
             DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{dayNight}");
@@ -524,10 +540,11 @@ public class UI : MonoBehaviour
         }
 
         CPDisplay.DOCounter(oldCP, newCp, 0.5f).SetDelay(2f);
+        CPFillBar.DOFillAmount(newCp / 5f, 1f).SetDelay(2f);
 
         if (Mathf.Abs(newCp - oldCP) > 0)
         {
-            if (newCp <= 2)
+            if (newCp < 1)
 
             {
                 CPDisplayGlow.color = Color.red;
@@ -541,18 +558,22 @@ public class UI : MonoBehaviour
         
         if (Mathf.Abs(newCp - oldCP) > 0) AdditionPoints(CPAdditionDisplay, CPDisplayGlow, CachedCpAddition, 2f);
         
-        if (newCp < 2)
+        if (newCp < 1)
         {
             CPDisplay.color = Color.red;
         }
-        else if (newCp < 4)
-        {
-            CPDisplay.color = Color.yellow;
-        }
         else
         {
-            CPDisplay.color = Color.green;
+            CPDisplay.color = new Color32(0xFF, 0xFB, 0xE7, 0xFF);
         }
+        //else if (newCp < 4)
+        //{
+        //    CPDisplay.color = Color.yellow;
+        //}
+        //else
+        //{
+        //    CPDisplay.color = Color.green;
+        //}
 
         StartCoroutine(ResetCachedCP());
     }
@@ -575,10 +596,10 @@ public class UI : MonoBehaviour
         }
 
         FPDisplay.DOCounter(oldFP, fp, 0.5f).SetDelay(2f);
-
+        FPFillBar.DOFillAmount(fp/5f, 1f).SetDelay(2f);
         if (Mathf.Abs(fp - oldFP) > 0)
         {
-            if (fp <= 2)
+            if (fp < 1)
             {
                 FPDisplayGlow.color = Color.red;
                 SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
@@ -591,18 +612,22 @@ public class UI : MonoBehaviour
 
         if (Mathf.Abs(fp - oldFP) > 0) AdditionPoints(FPAdditionDisplay, FPDisplayGlow, fpAmount, 2f);
 
-        if (fp < 2)
+        if (fp < 1)
         {
             FPDisplay.color = Color.red;
         }
-        else if (fp < 4)
-        {
-            FPDisplay.color = Color.yellow;
-        }
         else
         {
-            FPDisplay.color = Color.green;
+            FPDisplay.color = new Color32(0xFF, 0xFB, 0xE7, 0xFF);
         }
+        //else if (fp < 4)
+        //{
+        //    FPDisplay.color = Color.yellow;
+        //}
+        //else
+        //{
+        //    FPDisplay.color = Color.green;
+        //}
     }
 
     public void AdditionPoints(TextMeshProUGUI display, Image glow, int amount, float delay)

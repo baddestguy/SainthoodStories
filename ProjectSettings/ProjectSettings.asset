@@ -739,7 +739,7 @@ PlayerSettings:
     Standalone: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;GAIA_2_PRESENT;GAIA_MESH_PRESENT;CROSS_PLATFORM_INPUT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT
     VisionOS: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
     WebGL: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
-    Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2;MOBILE_INPUT;GAIA_2_PRESENT;GAIA_MESH_PRESENT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT
+    Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2;MOBILE_INPUT;GAIA_2_PRESENT;GAIA_MESH_PRESENT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT;MICROSOFT_GAME_CORE
     XboxOne: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
     iPhone: UNITY_POST_PROCESSING_STACK_V2;CROSS_PLATFORM_INPUT;MOBILE_INPUT
     tvOS: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
@@ -776,11 +776,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: TaiwoTech.SaintHood
   metroPackageVersion: 2.3.0.0
-  metroCertificatePath: 
+  metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: BisongTaiwo
+  metroCertificateIssuer: BisongTaiwo
+  metroCertificateNotAfter: 00d84aa239b0db01
   metroApplicationDescription: A relaxing adventure game about serving your community.
   wsaImages: {}
   metroTileShortName: Sainthood

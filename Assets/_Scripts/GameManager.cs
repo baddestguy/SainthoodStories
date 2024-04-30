@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour
     public Dictionary<string,BuildingState> HouseStates = new Dictionary<string, BuildingState>();
     public List<string> WorldCollectibles = new List<string>();
 
+    public AsyncOperation LoadingOperation;
+
     private void Awake()
     {
         Instance = this;
@@ -89,7 +91,7 @@ public class GameManager : MonoBehaviour
         Scene scene = SceneManager.GetSceneByName(sceneName);
         if (!scene.isLoaded)
         {
-            SceneManager.LoadScene(sceneName, mode);
+            StartCoroutine(WaitAndLoadScene(sceneName));
         }
     }
 
@@ -388,7 +390,21 @@ public class GameManager : MonoBehaviour
             UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
         SceneLoaded = false;
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        LoadingOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+
+        if(UI.Instance != null) UI.Instance.LoadingScreenEnable(true);
+        LoadingScreen loadingScreen = null;
+        if (UI.Instance != null) loadingScreen = UI.Instance.LoadingScreen.GetComponent<LoadingScreen>();
+        while(!LoadingOperation.isDone)
+        {
+            float progressValue = Mathf.Clamp01(LoadingOperation.progress / 0.9f);
+
+            if (loadingScreen != null)
+                loadingScreen.LoadingBarFill.fillAmount = progressValue;
+
+            yield return null;
+        }
+        if (UI.Instance != null) UI.Instance.LoadingScreenEnable(false);
     }
 
     public void ClearData()
