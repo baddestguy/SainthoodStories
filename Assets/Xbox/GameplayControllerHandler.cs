@@ -79,6 +79,8 @@ namespace Assets.Xbox
         /// <param name="popUI">The PopUI with the action buttons</param>
         public void SetCurrentPopUI([CanBeNull] PopUI popUI)
         {
+            if (!GameSettings.Instance.IsXboxMode) return;
+
             _currentPopUI = popUI;
             _popUIFirstActionButtonAcknowledged = false;
             Debug.Log($"New Gameplay POP UI: {popUI?.name}");
@@ -96,6 +98,7 @@ namespace Assets.Xbox
         /// <param name="customEventPopup">The displayed Custom Event Pop Up</param>
         public void SetCurrentCustomEventPopup(CustomEventPopup customEventPopup)
         {
+            if (!GameSettings.Instance.IsXboxMode) return;
             if (_currentCustomEventPopup != null)
             {
                 var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)

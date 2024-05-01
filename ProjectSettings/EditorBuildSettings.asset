@@ -53,4 +53,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/Levels/WorldMap.unity
     guid: b6df14c9772737949b2cfe26c07b5f47
+  - enabled: 0
+    path: Assets/GDK-Tools/Examples/Sign-in/SignIn.unity
+    guid: 1efec6cf7fd44774991ad3f96429abb5
   m_configObjects: {}

@@ -1362,6 +1362,9 @@ public class InteractableHouse : InteractableObject
                 }
                 else
                     return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
+
+            case "UPGRADE":
+                return new TooltipStats() { Ticks = GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel + 1}"].IntValue, Energy = -GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue, CP = 10 };
         }
 
         return new TooltipStats() { Ticks = 0, FP = 0, CP = 0, Energy = 0 };

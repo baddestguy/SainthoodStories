@@ -29,9 +29,9 @@ public class PopIcon : MonoBehaviour
         ItemsRequiredDisplay.text = $"{items}";
         DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
 
-        ItemsRequiredDisplay.gameObject.SetActive(items > 0);
-        DeadlineDisplay.gameObject.SetActive(deadline.Time >= 0);
-        ClockIcon.SetActive(deadline.Time >= 0);
+    //    ItemsRequiredDisplay.gameObject.SetActive(items > 0);
+   //     DeadlineDisplay.gameObject.SetActive(deadline.Time >= 0);
+    //    ClockIcon.SetActive(deadline.Time >= 0);
 
         GameClock clock = GameManager.Instance.GameClock;
         if (clock.TimeDifference(deadline) <= 1.5)

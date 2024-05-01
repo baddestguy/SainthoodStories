@@ -161,6 +161,7 @@ public class Player : MonoBehaviour
         OnMoveSuccessEvent?.Invoke(Energy, CurrentBuilding);
         GameManager.Instance.GameClock.Ping();
         ToolTipManager.Instance.ShowToolTip("");
+        ConsumeEnergy(0); //Used to refresh UI
         GameClock.Ticked += OnTick;
 
         if (GameSettings.Instance.StoryToggle)

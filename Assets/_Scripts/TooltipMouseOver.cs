@@ -15,6 +15,11 @@ public class TooltipMouseOver : MonoBehaviour
     public static bool IsHovering;
     public TooltipStats CustomToolStats = null;
 
+    public TextMeshProUGUI TimeStatsDisplay;
+    public TextMeshProUGUI EnergyStatsDisplay;
+    public TextMeshProUGUI FPCPStatsDisplay;
+    public GameObject InfoPanel;
+
     public void ShowToolTip()
     {
         transform.DOComplete();
@@ -68,10 +73,12 @@ public class TooltipMouseOver : MonoBehaviour
 
         if (House != null)
         {
-            ToolTipManager.Instance.ShowToolTip(Loc_Key, House.GetTooltipStatsForButton(ButtonName));
+            ShowInfoPanel(House.GetTooltipStatsForButton(ButtonName));
+         //   ToolTipManager.Instance.ShowToolTip(Loc_Key, House.GetTooltipStatsForButton(ButtonName));
         }
         else if (CustomToolStats != null)
         {
+            //ShowInfoPanel(CustomToolStats);
             ToolTipManager.Instance.ShowToolTip(Loc_Key, CustomToolStats);
         }
         else
@@ -83,6 +90,7 @@ public class TooltipMouseOver : MonoBehaviour
             }
             else
             {
+                ShowInfoPanel(CustomToolStats);
                 ToolTipManager.Instance.ShowToolTip(Loc_Key);
             }
         }
@@ -97,7 +105,37 @@ public class TooltipMouseOver : MonoBehaviour
         transform.DOComplete();
         EventSystem.current.SetSelectedGameObject(null);
         GamepadCursor.CursorSpeed = 2000f;
+        HideInfoPanel();
     }
+
+    public void ShowInfoPanel(TooltipStats stats)
+    {
+        if (InfoPanel == null) return;
+
+        InfoPanel.SetActive(true);
+
+        if (stats == null) return;
+
+        TimeStatsDisplay.text = stats.Energy >= 0 ? $"+{stats.Ticks / 2}hrs" : $"{stats.Ticks}";
+        EnergyStatsDisplay.text = stats.Energy >= 0 ? $"<color=#74664B>+{stats.Energy}" : $" <color=\"red\">{stats.Energy}";
+
+        if (stats.FP != 0)
+        {
+            FPCPStatsDisplay.text = stats.FP >= 0 ? $"<color=#74664B>+{stats.FP}" : $" <color=\"red\">{stats.FP}";
+        }
+        else if (stats.CP != 0)
+        {
+            FPCPStatsDisplay.text = stats.CP >= 0 ? $"<color=#74664B>+{stats.CP}" : $" <color=\"red\">{stats.CP}";
+        }
+    }
+
+    public void HideInfoPanel()
+    {
+        if (InfoPanel == null) return;
+
+        InfoPanel.SetActive(false);
+    }
+
 
     #region XboxSupport
 
