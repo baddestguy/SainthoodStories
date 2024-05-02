@@ -169,7 +169,7 @@ public class GamepadCursor : MonoBehaviour
         }
         else
         {
-            TooltipMouseOver.OnHover?.Invoke();
+       //     TooltipMouseOver.OnHover?.Invoke();
         }
 
     }

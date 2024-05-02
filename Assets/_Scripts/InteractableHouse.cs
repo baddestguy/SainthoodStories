@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Xbox;
-using CompassNavigatorPro;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
