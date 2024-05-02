@@ -170,12 +170,19 @@ public class GameSettings : MonoBehaviour
     {
         if (IsXboxMode)
         {
-            var bestResolution = resolutions.OrderByDescending(r => r.height * r.width).ThenByDescending(r => r.refreshRate).FirstOrDefault();
+            const int best2KResolutionPixels = 2_211_840;
+            var bestResolution = resolutions.Select(x => new { Resolution = x, Pixels = x.height * x.width })
+                .Where(x => x.Pixels < best2KResolutionPixels)
+                .OrderByDescending(x => x.Pixels)
+                .ThenByDescending(x => x.Resolution.refreshRateRatio.value)
+                .First()
+                .Resolution;
+                
             return bestResolution;
         }
 
         string[] val = value.Replace(" ", "").Split('x');
-        Resolution? res = resolutions.Where(x => x.width.ToString() == val[0] && x.height.ToString() == val[1]).FirstOrDefault();
+        Resolution? res = resolutions.FirstOrDefault(x => x.width.ToString() == val[0] && x.height.ToString() == val[1]);
         if(res == null)
         {
             return Screen.currentResolution;
