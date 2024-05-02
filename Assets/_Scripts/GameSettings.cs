@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class GameSettings : MonoBehaviour
@@ -22,7 +23,16 @@ public class GameSettings : MonoBehaviour
     public bool ShowGrid;
     public bool InfiniteBoost;
     public bool IsXboxMode;
+    public XboxResolution MaxXboxResolution;
     public bool ShowFPSCounter;
+
+    public enum XboxResolution
+    {
+        [UsedImplicitly] _1080P = 2_073_600,
+        [UsedImplicitly] _2k = 2_211_840,
+        [UsedImplicitly] _1440P = 3_686_400,
+        [UsedImplicitly] _4k = 8_294_400
+    }
 
     [HideInInspector] public bool fullScreenMode;
     [HideInInspector] public QualityLevel currentQualityLevel;
@@ -170,9 +180,8 @@ public class GameSettings : MonoBehaviour
     {
         if (IsXboxMode)
         {
-            const int best2KResolutionPixels = 2_073_600;
             var bestResolution = resolutions.Select(x => new { Resolution = x, Pixels = x.height * x.width })
-                .Where(x => x.Pixels < best2KResolutionPixels)
+                .Where(x => x.Pixels < (int)MaxXboxResolution)
                 .OrderByDescending(x => x.Pixels)
                 .ThenByDescending(x => x.Resolution.refreshRateRatio.value)
                 .First()

@@ -51,7 +51,7 @@ namespace Assets.Xbox
         // Update is called once per frame
         void Update()
         {
-            if (Gamepad.current == null || Player == null) return;
+            if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsXboxMode) return;
 
             if (CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null)
             {
@@ -99,6 +99,7 @@ namespace Assets.Xbox
         public void SetCurrentCustomEventPopup(CustomEventPopup customEventPopup)
         {
             if (!GameSettings.Instance.IsXboxMode) return;
+
             if (_currentCustomEventPopup != null)
             {
                 var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)

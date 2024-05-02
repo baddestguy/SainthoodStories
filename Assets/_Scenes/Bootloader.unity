@@ -1439,6 +1439,7 @@ MonoBehaviour:
   InfiniteBoost: 1
   IsXboxMode: 0
   ShowFPSCounter: 0
+  MaxXboxResolution: 2211840
   fullScreenMode: 0
   currentQualityLevel: 0
   brightnessPercent: 0
