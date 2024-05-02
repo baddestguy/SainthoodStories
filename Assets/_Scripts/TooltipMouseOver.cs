@@ -24,7 +24,7 @@ public class TooltipMouseOver : MonoBehaviour
     {
         transform.DOComplete();
         transform.DOPunchScale(transform.localScale * 0.15f, 0.5f, elasticity: 0f);
-        
+
         DoToolTip();
     }
 
@@ -74,7 +74,7 @@ public class TooltipMouseOver : MonoBehaviour
         if (House != null)
         {
             ShowInfoPanel(House.GetTooltipStatsForButton(ButtonName));
-         //   ToolTipManager.Instance.ShowToolTip(Loc_Key, House.GetTooltipStatsForButton(ButtonName));
+            //   ToolTipManager.Instance.ShowToolTip(Loc_Key, House.GetTooltipStatsForButton(ButtonName));
         }
         else if (CustomToolStats != null)
         {

@@ -49,6 +49,7 @@ public class GamepadCursor : MonoBehaviour
             InputState.Change(VirtualMouse.position, position);
         }
 
+        if (GameSettings.Instance.IsXboxMode) return;
         InputSystem.onAfterUpdate += UpdateMotion;
 
         PlayerInput.actions["Click"].performed += ActionButton;

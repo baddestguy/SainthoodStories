@@ -24,6 +24,9 @@ namespace Assets.Xbox
         {
             if (!GameSettings.Instance.IsXboxMode) return;
 
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
             _activeMainMenuButton = NewGameGameObject.GetComponent<Button>();
             _defaultMainMenuColorBlock = _activeMainMenuButton.colors;
             _activeMainMenuColorBlock = _defaultMainMenuColorBlock;

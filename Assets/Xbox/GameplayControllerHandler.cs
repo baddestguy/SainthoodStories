@@ -20,8 +20,7 @@ namespace Assets.Xbox
         private bool _customEventPopupFirstActionButtonAcknowledged;
         private int _customEventPopupButtonIndex;
         private bool IsInBuilding => _currentPopUI != null;
-        private ActionButton CurrentPopUIButton => _currentPopUI.Buttons[_buildingActionButtonIndex];
-        //private TooltipMouseOver[] ConversationToolTipMouseOvers => _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false);
+        [CanBeNull] private ActionButton CurrentPopUIButton => _buildingActionButtonIndex < 0 ? null : _currentPopUI.Buttons[_buildingActionButtonIndex];
 
         private ProvisionsPopup _provisionsPopUp;
         private int _provisionPopupButtonIndex;
@@ -77,7 +76,8 @@ namespace Assets.Xbox
         /// Sets the current PopUI when entering/exiting a building to enable/disable movement controls and enable/disable action button cycling.
         /// </summary>
         /// <param name="popUI">The PopUI with the action buttons</param>
-        public void SetCurrentPopUI([CanBeNull] PopUI popUI)
+        /// <param name="forceButtonIndex">Set to the 0th based index of a button you want to force to be active</param>
+        public void SetCurrentPopUI([CanBeNull] PopUI popUI, int forceButtonIndex = -1)
         {
             if (!GameSettings.Instance.IsXboxMode) return;
 
@@ -89,7 +89,7 @@ namespace Assets.Xbox
             //I have this as separate for now in case I want to do something between the two if statements
             if (!_currentPopUI.Buttons.Any()) return;
 
-            AcknowledgeFirstPopUIButton();
+            AcknowledgeFirstPopUIButton(forceButtonIndex);
         }
 
         /// <summary>
@@ -123,8 +123,8 @@ namespace Assets.Xbox
         {
             _provisionsPopUp = provisionsPopup;
             Debug.Log($"New Provisions Popup: {provisionsPopup?.name}");
-            
-            if(provisionsPopup == null) return;
+
+            if (provisionsPopup == null) return;
 
             _provisionItems = provisionsPopup.NewProvisionUIItems.Concat(provisionsPopup.UpgradeProvisionUIItems).Where(x => x.HasProvision).ToArray();
             _provisionPopupButtonIndex = 0;
@@ -179,22 +179,30 @@ namespace Assets.Xbox
                 HandleActionButtonNavigate(1);
             }
 
-            if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+            if (CurrentPopUIButton != null)
             {
-                CurrentPopUIButton.HandleControllerExit();
-                if (CurrentPopUIButton.HasCriticalCircle)
+                if (Gamepad.current.buttonSouth.wasPressedThisFrame)
                 {
-                    _currentPopUI.OnPointerDown(CurrentPopUIButton.ButtonName);
+                    CurrentPopUIButton.HandleControllerExit();
+                    if (CurrentPopUIButton.HasCriticalCircle)
+                    {
+                        _currentPopUI.OnPointerDown(CurrentPopUIButton.ButtonName);
+                    }
+                    else
+                    {
+                        _currentPopUI.OnClick(CurrentPopUIButton.ButtonName);
+                    }
                 }
-                else
+                else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
                 {
-                    _currentPopUI.OnClick(CurrentPopUIButton.ButtonName);
+                    CurrentPopUIButton.HandleControllerHover();
+                    if (CurrentPopUIButton.HasCriticalCircle) _currentPopUI.OnPointerUp();
                 }
-            }
-            else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
-            {
-                CurrentPopUIButton.HandleControllerHover();
-                if (CurrentPopUIButton.HasCriticalCircle) _currentPopUI.OnPointerUp();
+
+                if (Gamepad.current.buttonEast.wasPressedThisFrame)
+                {
+                    CurrentPopUIButton.HandleControllerExit();
+                }
             }
 
             return;
@@ -202,13 +210,22 @@ namespace Assets.Xbox
 
             void HandleActionButtonNavigate(int indexIncrement)
             {
-                CurrentPopUIButton.HandleControllerExit();
+                if (CurrentPopUIButton == null)
+                {
+                    //First time navigating in this building
+                    //Add the increment but keep the index within the range of action button count using the mod factor
+                    _buildingActionButtonIndex = (indexIncrement + _currentPopUI.Buttons.Count) % _currentPopUI.Buttons.Count; //forward or backward...for now
+                }
+                else
+                {
+                    CurrentPopUIButton.HandleControllerExit();
+                    //Add the increment but keep the index within the range of action button count using the mod factor
+                    _buildingActionButtonIndex = (_buildingActionButtonIndex + indexIncrement + _currentPopUI.Buttons.Count) % _currentPopUI.Buttons.Count;
+                }
 
-                //Add the increment but keep the index within the range of action button count using the mod factor
-                _buildingActionButtonIndex = (_buildingActionButtonIndex + indexIncrement + _currentPopUI.Buttons.Count) % _currentPopUI.Buttons.Count;
 
-                Debug.Log($"Current Pop Action is: {CurrentPopUIButton.ButtonName}");
-                CurrentPopUIButton.HandleControllerHover();
+                Debug.Log($"Current Pop Action is: {CurrentPopUIButton?.ButtonName}");
+                CurrentPopUIButton?.HandleControllerHover();
             }
         }
 
@@ -220,6 +237,7 @@ namespace Assets.Xbox
             }
             else if (Gamepad.current.leftShoulder.wasPressedThisFrame || Gamepad.current.leftTrigger.wasPressedThisFrame)
             {
+                CurrentPopUIButton?.HandleControllerExit();
                 GameControlsManager.TryZoom?.Invoke(-1);
             }
         }
@@ -265,7 +283,7 @@ namespace Assets.Xbox
                         Debug.Log($"Current Event Popup Button is: {toolTipMouseOvers[_customEventPopupButtonIndex].name}");
                     }
                 }
-                
+
             }
         }
 
@@ -282,8 +300,6 @@ namespace Assets.Xbox
             else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
             {
                 CurrentProvisionUIItem.OnClick();
-                //tooltipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>().onClick.Invoke();
-                //_customEventPopupFirstActionButtonAcknowledged = false;
                 _provisionPopupButtonIndex = 0;
             }
 
@@ -293,15 +309,14 @@ namespace Assets.Xbox
                 _provisionPopupButtonIndex = (_provisionPopupButtonIndex + increment + _provisionItems.Length) % _provisionItems.Length;
                 CurrentProvisionUIItem.HandleControllerHover();
                 Debug.Log($"Current Provision Button is: {CurrentProvisionUIItem.name}" +
-                          $" [{Enum.GetName(typeof(ProvisionUIItemType),CurrentProvisionUIItem.Type)}]");
+                          $" [{Enum.GetName(typeof(ProvisionUIItemType), CurrentProvisionUIItem.Type)}]");
             }
         }
 
-        private void AcknowledgeFirstPopUIButton()
+        private void AcknowledgeFirstPopUIButton(int forceButtonIndex = -1)
         {
             _popUIFirstActionButtonAcknowledged = true;
-            _buildingActionButtonIndex = 0;
-            CurrentPopUIButton.HandleControllerHover();
+            _buildingActionButtonIndex = forceButtonIndex;
         }
     }
 }
