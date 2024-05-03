@@ -170,7 +170,7 @@ public class GameSettings : MonoBehaviour
     {
         if (IsXboxMode)
         {
-            const int best2KResolutionPixels = 2_211_840;
+            const int best2KResolutionPixels = 2_073_600;
             var bestResolution = resolutions.Select(x => new { Resolution = x, Pixels = x.height * x.width })
                 .Where(x => x.Pixels < best2KResolutionPixels)
                 .OrderByDescending(x => x.Pixels)

@@ -41,6 +41,7 @@ namespace Assets.Xbox
         // Update is called once per frame
         void Update()
         {
+            if (!GameSettings.Instance.IsXboxMode) return;
             if (Gamepad.current == null) return;
 
             HandleControllerNavigation();

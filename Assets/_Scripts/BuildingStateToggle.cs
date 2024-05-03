@@ -1,6 +1,4 @@
 using System.Linq;
-using CompassNavigatorPro;
-using Opsive.UltimateCharacterController.Character;
 using UnityEngine;
 
 public class BuildingStateToggle : MonoBehaviour
@@ -38,17 +36,17 @@ public class BuildingStateToggle : MonoBehaviour
             }
         }
         
-        if(GameManager.Instance.CurrentBuilding != null && GameManager.Instance.CurrentBuilding == HouseName)
-        {
-            var player = FindObjectOfType<UltimateCharacterLocomotion>();
-            player.SetPosition(PlayerAnchorPoint.position);
-        }
+        //if(GameManager.Instance.CurrentBuilding != null && GameManager.Instance.CurrentBuilding == HouseName)
+        //{
+        //    var player = FindObjectOfType<UltimateCharacterLocomotion>();
+        //    player.SetPosition(PlayerAnchorPoint.position);
+        //}
 
         if(MyObjective != null)
         {
-            var myPoi = gameObject.AddComponent<CompassProPOI>();
-            myPoi.visibility = POIVisibility.AlwaysVisible;
-            myPoi.iconNonVisited = Resources.Load<Sprite>($"Icons/{HouseName}");
+            //var myPoi = gameObject.AddComponent<CompassProPOI>();
+            //myPoi.visibility = POIVisibility.AlwaysVisible;
+            //myPoi.iconNonVisited = Resources.Load<Sprite>($"Icons/{HouseName}");
         }
     }
 }
