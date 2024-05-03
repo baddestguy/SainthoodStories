@@ -58,18 +58,20 @@ namespace Assets.Xbox
         private void HandleControllerNavigation()
         {
             var continueGameAvailable = UI.Instance.ContinueBtn.interactable;
+            var dPad = Gamepad.current.dpad;
 
-            if (continueGameAvailable && (Gamepad.current.dpad.up.wasPressedThisFrame || Gamepad.current.dpad.down.wasPressedThisFrame))
+            if (continueGameAvailable && dPad.IsVerticalPress())
             {
                 SetNewActiveMainMenuButton(IsNewGameButtonActive ? ContinueGameObject : NewGameGameObject);
             }
 
-            if (Gamepad.current.dpad.left.wasPressedThisFrame || Gamepad.current.dpad.right.wasPressedThisFrame)
+            if (dPad.IsHorizontalPress())
             {
                 SetNewActiveMainMenuButton(IsSettingsButtonActive ? NewGameGameObject : SettingsButtonGameObject);
             }
 
             _activeMainMenuButton.colors = _activeMainMenuColorBlock;
+
             return;
 
             void SetNewActiveMainMenuButton(GameObject gameObjectHoldingMenuButton)

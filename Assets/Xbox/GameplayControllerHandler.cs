@@ -12,15 +12,14 @@ namespace Assets.Xbox
     {
         public static GameplayControllerHandler Instance { get; private set; }
 
-        private bool _popUIFirstActionButtonAcknowledged;
         private PopUI _currentPopUI;
-        private int _buildingActionButtonIndex;
 
         private CustomEventPopup _currentCustomEventPopup;
         private bool _customEventPopupFirstActionButtonAcknowledged;
         private int _customEventPopupButtonIndex;
+        
+        [CanBeNull] private ActionButton _currentPopUIButton;
         private bool IsInBuilding => _currentPopUI != null;
-        [CanBeNull] private ActionButton CurrentPopUIButton => _buildingActionButtonIndex < 0 ? null : _currentPopUI.Buttons[_buildingActionButtonIndex];
 
         private ProvisionsPopup _provisionsPopUp;
         private int _provisionPopupButtonIndex;
@@ -82,14 +81,7 @@ namespace Assets.Xbox
             if (!GameSettings.Instance.IsXboxMode) return;
 
             _currentPopUI = popUI;
-            _popUIFirstActionButtonAcknowledged = false;
             Debug.Log($"New Gameplay POP UI: {popUI?.name}");
-            if (_currentPopUI == null) return;
-
-            //I have this as separate for now in case I want to do something between the two if statements
-            if (!_currentPopUI.Buttons.Any()) return;
-
-            AcknowledgeFirstPopUIButton(forceButtonIndex);
         }
 
         /// <summary>
@@ -165,67 +157,86 @@ namespace Assets.Xbox
 
         private void HandlePlayerActions()
         {
-            if (!_popUIFirstActionButtonAcknowledged && _currentPopUI.Buttons.Any())
+            var directionPressed = DPad.GetDirection();
+            if (directionPressed != null)
             {
-                AcknowledgeFirstPopUIButton();
+                HandleActionButtonNavigateWithDirection(directionPressed.Value);
             }
 
-            if (DPad.left.wasPressedThisFrame)
-            {
-                HandleActionButtonNavigate(-1);
-            }
-            else if (DPad.right.wasPressedThisFrame)
-            {
-                HandleActionButtonNavigate(1);
-            }
-
-            if (CurrentPopUIButton != null)
+            if (_currentPopUIButton != null)
             {
                 if (Gamepad.current.buttonSouth.wasPressedThisFrame)
                 {
-                    CurrentPopUIButton.HandleControllerExit();
-                    if (CurrentPopUIButton.HasCriticalCircle)
+                    _currentPopUIButton.HandleControllerExit();
+                    if (_currentPopUIButton.HasCriticalCircle)
                     {
-                        _currentPopUI.OnPointerDown(CurrentPopUIButton.ButtonName);
+                        _currentPopUI.OnPointerDown(_currentPopUIButton.ButtonName);
                     }
                     else
                     {
-                        _currentPopUI.OnClick(CurrentPopUIButton.ButtonName);
+                        _currentPopUI.OnClick(_currentPopUIButton.ButtonName);
                     }
                 }
                 else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
                 {
-                    CurrentPopUIButton.HandleControllerHover();
-                    if (CurrentPopUIButton.HasCriticalCircle) _currentPopUI.OnPointerUp();
+                    _currentPopUIButton.HandleControllerHover();
+                    if (_currentPopUIButton.HasCriticalCircle) _currentPopUI.OnPointerUp();
                 }
 
                 if (Gamepad.current.buttonEast.wasPressedThisFrame)
                 {
-                    CurrentPopUIButton.HandleControllerExit();
+                    _currentPopUIButton.HandleControllerExit();
                 }
             }
 
             return;
 
-
-            void HandleActionButtonNavigate(int indexIncrement)
+            void HandleActionButtonNavigateWithDirection(DPadDirection direction)
             {
-                if (CurrentPopUIButton == null)
+                var closestObjectDistance = double.MaxValue;
+                ActionButton selectedActionButton = null;
+
+                foreach (var actionButton in _currentPopUI.Buttons)
                 {
-                    //First time navigating in this building
-                    //Add the increment but keep the index within the range of action button count using the mod factor
-                    _buildingActionButtonIndex = (indexIncrement + _currentPopUI.Buttons.Count) % _currentPopUI.Buttons.Count; //forward or backward...for now
-                }
-                else
-                {
-                    CurrentPopUIButton.HandleControllerExit();
-                    //Add the increment but keep the index within the range of action button count using the mod factor
-                    _buildingActionButtonIndex = (_buildingActionButtonIndex + indexIncrement + _currentPopUI.Buttons.Count) % _currentPopUI.Buttons.Count;
+                    if(actionButton == _currentPopUIButton) continue;
+
+                    var currentPosition = _currentPopUIButton == null ? new Vector3(0,0,0) : _currentPopUIButton.transform.localPosition;
+                    var vectorToTarget = actionButton.transform.localPosition - currentPosition;
+
+                    var isDesiredDirection = direction switch
+                    {
+                        DPadDirection.Up => vectorToTarget.y > 0,
+                        DPadDirection.Down => vectorToTarget.y < 0,
+                        DPadDirection.Left => vectorToTarget.x < 0,
+                        DPadDirection.Right => vectorToTarget.x > 0,
+                        _ => false
+                    };
+
+                    if (!isDesiredDirection) continue;
+
+                    var weight = direction switch
+                    {
+                        DPadDirection.Up or DPadDirection.Down => new Vector3(1, 0.8f, 1),
+                        DPadDirection.Left or DPadDirection.Right => new Vector3(0.8f, 1, 1),
+                        _ => new Vector3(1, 1, 1)
+                    };
+
+                    // Apply direction weight to vectorToTarget and square it to calculate distance of vector.
+                    var distance = Math.Pow(vectorToTarget.x * weight.x, 2) + Math.Pow(vectorToTarget.y * weight.y, 2) + Math.Pow(vectorToTarget.z * weight.z, 2);
+                    if (!(distance < closestObjectDistance)) continue;
+
+                    closestObjectDistance = distance;
+                    selectedActionButton = actionButton;
                 }
 
+                if (selectedActionButton != null)
+                {
+                    _currentPopUIButton?.HandleControllerExit();
+                    _currentPopUIButton = selectedActionButton;
+                }
 
-                Debug.Log($"Current Pop Action is: {CurrentPopUIButton?.ButtonName}");
-                CurrentPopUIButton?.HandleControllerHover();
+                Debug.Log($"Current Pop Action is: {_currentPopUIButton?.ButtonName}");
+                _currentPopUIButton?.HandleControllerHover();
             }
         }
 
@@ -237,7 +248,7 @@ namespace Assets.Xbox
             }
             else if (Gamepad.current.leftShoulder.wasPressedThisFrame || Gamepad.current.leftTrigger.wasPressedThisFrame)
             {
-                CurrentPopUIButton?.HandleControllerExit();
+                _currentPopUIButton?.HandleControllerExit();
                 GameControlsManager.TryZoom?.Invoke(-1);
             }
         }
@@ -313,10 +324,5 @@ namespace Assets.Xbox
             }
         }
 
-        private void AcknowledgeFirstPopUIButton(int forceButtonIndex = -1)
-        {
-            _popUIFirstActionButtonAcknowledged = true;
-            _buildingActionButtonIndex = forceButtonIndex;
-        }
     }
 }
