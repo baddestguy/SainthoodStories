@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using Assets._Scripts.Extensions;
+using DG.Tweening;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,6 +12,8 @@ namespace Assets.Xbox
 {
     public class GameplayControllerHandler : MonoBehaviour
     {
+        public float ButtonAxisWeight = 0.05f;
+
         public static GameplayControllerHandler Instance { get; private set; }
 
         private PopUI _currentPopUI;
@@ -17,7 +21,7 @@ namespace Assets.Xbox
         private CustomEventPopup _currentCustomEventPopup;
         private bool _customEventPopupFirstActionButtonAcknowledged;
         private int _customEventPopupButtonIndex;
-        
+
         [CanBeNull] private ActionButton _currentPopUIButton;
         private bool IsInBuilding => _currentPopUI != null;
 
@@ -25,6 +29,9 @@ namespace Assets.Xbox
         private int _provisionPopupButtonIndex;
         private ProvisionUIItem[] _provisionItems;
         private ProvisionUIItem CurrentProvisionUIItem => _provisionItems[_provisionPopupButtonIndex];
+
+        private bool _hasHoveredFirstSaintButton;
+        private bool _saintNextOptionHasHover;
 
         private static DpadControl DPad => Gamepad.current.dpad;
         private static GameManager GameManager => GameManager.Instance;
@@ -51,7 +58,11 @@ namespace Assets.Xbox
         {
             if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsXboxMode) return;
 
-            if (CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null)
+            if (SaintShowcaseHandler.Instance != null && SaintShowcaseHandler.Instance.isActiveAndEnabled)
+            {
+                HandleSaintCollectionPopup();
+            }
+            else if (CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null)
             {
                 HandleConversationEventPopup();
             }
@@ -75,12 +86,12 @@ namespace Assets.Xbox
         /// Sets the current PopUI when entering/exiting a building to enable/disable movement controls and enable/disable action button cycling.
         /// </summary>
         /// <param name="popUI">The PopUI with the action buttons</param>
-        /// <param name="forceButtonIndex">Set to the 0th based index of a button you want to force to be active</param>
-        public void SetCurrentPopUI([CanBeNull] PopUI popUI, int forceButtonIndex = -1)
+        public void SetCurrentPopUI([CanBeNull] PopUI popUI)
         {
             if (!GameSettings.Instance.IsXboxMode) return;
 
             _currentPopUI = popUI;
+            _currentPopUIButton = null;
             Debug.Log($"New Gameplay POP UI: {popUI?.name}");
         }
 
@@ -167,7 +178,6 @@ namespace Assets.Xbox
             {
                 if (Gamepad.current.buttonSouth.wasPressedThisFrame)
                 {
-                    _currentPopUIButton.HandleControllerExit();
                     if (_currentPopUIButton.HasCriticalCircle)
                     {
                         _currentPopUI.OnPointerDown(_currentPopUIButton.ButtonName);
@@ -176,6 +186,7 @@ namespace Assets.Xbox
                     {
                         _currentPopUI.OnClick(_currentPopUIButton.ButtonName);
                     }
+                    _currentPopUIButton.HandleControllerExit();
                 }
                 else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
                 {
@@ -198,9 +209,9 @@ namespace Assets.Xbox
 
                 foreach (var actionButton in _currentPopUI.Buttons)
                 {
-                    if(actionButton == _currentPopUIButton) continue;
+                    if (actionButton == _currentPopUIButton) continue;
 
-                    var currentPosition = _currentPopUIButton == null ? new Vector3(0,0,0) : _currentPopUIButton.transform.localPosition;
+                    var currentPosition = _currentPopUIButton == null ? new Vector3(0, 0, 0) : _currentPopUIButton.transform.localPosition;
                     var vectorToTarget = actionButton.transform.localPosition - currentPosition;
 
                     var isDesiredDirection = direction switch
@@ -216,8 +227,8 @@ namespace Assets.Xbox
 
                     var weight = direction switch
                     {
-                        DPadDirection.Up or DPadDirection.Down => new Vector3(1, 0.8f, 1),
-                        DPadDirection.Left or DPadDirection.Right => new Vector3(0.8f, 1, 1),
+                        DPadDirection.Up or DPadDirection.Down => new Vector3(1, ButtonAxisWeight, 1),
+                        DPadDirection.Left or DPadDirection.Right => new Vector3(ButtonAxisWeight, 1, 1),
                         _ => new Vector3(1, 1, 1)
                     };
 
@@ -233,6 +244,11 @@ namespace Assets.Xbox
                 {
                     _currentPopUIButton?.HandleControllerExit();
                     _currentPopUIButton = selectedActionButton;
+                }
+
+                if (_currentPopUIButton == null)
+                {
+                    _currentPopUIButton = _currentPopUI.Buttons.FirstOrDefault();
                 }
 
                 Debug.Log($"Current Pop Action is: {_currentPopUIButton?.ButtonName}");
@@ -324,5 +340,79 @@ namespace Assets.Xbox
             }
         }
 
+        private void HandleSaintCollectionPopup()
+        {
+            var saintPopup = SaintShowcaseHandler.Instance;
+            if (Gamepad.current.buttonEast.wasPressedThisFrame)
+            {
+                saintPopup.OnExit();
+                _hasHoveredFirstSaintButton = false;
+                return;
+            }
+
+            if (!SaintsManager.Instance.UnlockedSaints.Any()) return;
+
+            var nextOptionTransform = saintPopup.gameObject.FindDeepChild("No").transform;
+            var previousOptionTransform = saintPopup.gameObject.FindDeepChild("Yes").transform;
+
+            if (!_hasHoveredFirstSaintButton)
+            {
+                HoverButton(nextOptionTransform, null);
+                _hasHoveredFirstSaintButton = true;
+                _saintNextOptionHasHover = true;
+                return;
+            }
+
+            if (DPad.GetDirection() == DPadDirection.Right && !_saintNextOptionHasHover)
+            {
+                _saintNextOptionHasHover = true;
+                HoverButton(nextOptionTransform, previousOptionTransform);
+            }
+            else if (DPad.GetDirection() == DPadDirection.Left && _saintNextOptionHasHover)
+            {
+                _saintNextOptionHasHover = false;
+                HoverButton(previousOptionTransform, nextOptionTransform);
+            }
+
+            if (DPad.IsVerticalPress(false))
+            {
+                const float scrollFactor = 0.02f;
+                var scrollView = saintPopup.gameObject.FindDeepChild("Scroll View");
+                var scrollRect = scrollView.GetComponent<ScrollRect>();
+
+                if (DPad.GetDirection(false) == DPadDirection.Up)
+                {
+                    scrollRect.verticalNormalizedPosition = Math.Min(scrollRect.verticalNormalizedPosition + scrollFactor, 1f);
+                }
+                else if (DPad.GetDirection(false) == DPadDirection.Down)
+                {
+                    scrollRect.verticalNormalizedPosition = Math.Max(scrollRect.verticalNormalizedPosition - scrollFactor, 0f);
+                }
+            }
+
+            if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+            {
+                if (_saintNextOptionHasHover)
+                {
+                    saintPopup.ShowNextSaint();
+                }
+                else
+                {
+                    saintPopup.ShowPreviusSaint();
+                }
+            }
+
+            return;
+
+            void HoverButton(Transform newHoveredOption, [CanBeNull] Transform oldHoveredOption)
+            {
+                const float transformScale = 1.25f;
+                oldHoveredOption?.DOComplete();
+                oldHoveredOption?.DOScale(oldHoveredOption.localScale / transformScale, 0.5f);
+
+                newHoveredOption.DOComplete();
+                newHoveredOption.DOScale(newHoveredOption.localScale * transformScale, 0.5f);
+            }
+        }
     }
 }

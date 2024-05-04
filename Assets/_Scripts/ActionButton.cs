@@ -59,9 +59,6 @@ public class ActionButton : MonoBehaviour
 
     #region XboxSupport
 
-    private Vector3? _preHoverScale;
-
-
     /// <summary>
     /// Enlarge an action button to visibly show a user that it is the current action button that will be triggered by the controller
     /// </summary>
@@ -81,8 +78,11 @@ public class ActionButton : MonoBehaviour
         tooltip.HideToolTip();
     }
 
+    //There has to be a better way to do this.
     public bool HasCriticalCircle => !ButtonName.Equals("WORLD", StringComparison.InvariantCultureIgnoreCase) &&
                                      !ButtonName.Equals("ENTER", StringComparison.InvariantCultureIgnoreCase) &&
+                                     !ButtonName.Equals("SAINTS", StringComparison.InvariantCultureIgnoreCase) &&
+                                     !ButtonName.Equals("SLEEP", StringComparison.InvariantCultureIgnoreCase) &&
                                      !ButtonName.Equals("EXIT", StringComparison.InvariantCultureIgnoreCase);
 
     #endregion
