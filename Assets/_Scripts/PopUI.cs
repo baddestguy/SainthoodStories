@@ -177,7 +177,7 @@ public class PopUI : MonoBehaviour
             BroadcastMessage("RefreshTutorialButton", SendMessageOptions.DontRequireReceiver);
         }
 
-        if (myButton.ButtonName == "EXIT" || myButton.ButtonName == "ENTER")
+        if (myButton.ButtonName == "EXIT" || myButton.ButtonName == "ENTER" || myButton.ButtonName == "WORLD")
             myButton.SendMessage("HideToolTip", SendMessageOptions.DontRequireReceiver);
 
         Callback?.Invoke(button);

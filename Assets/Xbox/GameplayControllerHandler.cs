@@ -59,7 +59,7 @@ namespace Assets.Xbox
         // Update is called once per frame
         void Update()
         {
-            if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsXboxMode) return;
+            if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsXboxMode || MissionManager.MissionOver) return;
 
             if (PauseMenu.Instance.active)
             {
@@ -99,7 +99,6 @@ namespace Assets.Xbox
             if (!GameSettings.Instance.IsXboxMode) return;
 
             _currentPopUI = popUI;
-            _currentPopUIButton?.HandleControllerExit();
             _currentPopUIButton = null;
         }
 
