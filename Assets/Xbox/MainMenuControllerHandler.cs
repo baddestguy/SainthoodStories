@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 namespace Assets.Xbox
 {
+    /// <summary>
+    /// Responsible for managing game pad input on the main menu
+    /// </summary>
     public class MainMenuControllerHandler : MonoBehaviour
     {
         public GameObject NewGameGameObject;

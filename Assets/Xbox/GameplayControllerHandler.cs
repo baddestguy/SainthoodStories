@@ -10,6 +10,9 @@ using UnityEngine.UI;
 
 namespace Assets.Xbox
 {
+    /// <summary>
+    /// Responsible for managing game pad input during game play,
+    /// </summary>
     public class GameplayControllerHandler : MonoBehaviour
     {
         public float ButtonAxisWeight = 0.05f;
@@ -58,7 +61,12 @@ namespace Assets.Xbox
         {
             if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsXboxMode) return;
 
-            if (SaintShowcaseHandler.Instance != null && SaintShowcaseHandler.Instance.isActiveAndEnabled)
+            if (PauseMenu.Instance.active)
+            {
+                _currentPopUIButton?.HandleControllerExit();
+                _currentPopUIButton = null;
+            }
+            else if (SaintShowcaseHandler.Instance != null && SaintShowcaseHandler.Instance.isActiveAndEnabled)
             {
                 HandleSaintCollectionPopup();
             }
@@ -91,8 +99,8 @@ namespace Assets.Xbox
             if (!GameSettings.Instance.IsXboxMode) return;
 
             _currentPopUI = popUI;
+            _currentPopUIButton?.HandleControllerExit();
             _currentPopUIButton = null;
-            Debug.Log($"New Gameplay POP UI: {popUI?.name}");
         }
 
         /// <summary>
@@ -186,7 +194,6 @@ namespace Assets.Xbox
                     {
                         _currentPopUI.OnClick(_currentPopUIButton.ButtonName);
                     }
-                    _currentPopUIButton.HandleControllerExit();
                 }
                 else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
                 {
@@ -251,7 +258,6 @@ namespace Assets.Xbox
                     _currentPopUIButton = _currentPopUI.Buttons.FirstOrDefault();
                 }
 
-                Debug.Log($"Current Pop Action is: {_currentPopUIButton?.ButtonName}");
                 _currentPopUIButton?.HandleControllerHover();
             }
         }
