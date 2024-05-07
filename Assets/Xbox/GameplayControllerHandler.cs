@@ -75,7 +75,7 @@ namespace Assets.Xbox
             {
                 HandleConversationEventPopup();
             }
-            else if (_packageSelector?.isActiveAndEnabled ?? false)
+            else if (_packageSelector != null && _packageSelector.isActiveAndEnabled)
             {
                 HandlePackageItemSelection();
             }
@@ -192,7 +192,7 @@ namespace Assets.Xbox
                 HandleActionButtonNavigateWithDirection(directionPressed.Value);
             }
 
-            if (_currentPopUIButton != null)
+            if (_currentPopUIButton != null && _currentPopUIButton.HasControllerHover)
             {
                 if (Gamepad.current.buttonSouth.wasPressedThisFrame)
                 {
@@ -203,7 +203,7 @@ namespace Assets.Xbox
                     else
                     {
                         _currentPopUI.OnClick(_currentPopUIButton.ButtonName);
-                        _currentPopUIButton.HandleControllerExit();
+                        _currentPopUIButton?.HandleControllerExit();
                     }
                 }
                 else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
@@ -385,27 +385,32 @@ namespace Assets.Xbox
 
             if (!SaintsManager.Instance.UnlockedSaints.Any()) return;
 
-            var nextOptionTransform = saintPopup.gameObject.FindDeepChild("No").transform;
-            var previousOptionTransform = saintPopup.gameObject.FindDeepChild("Yes").transform;
+            if (SaintsManager.Instance.UnlockedSaints.Count > 1)
+            {
 
-            if (!_hasHoveredFirstSaintButton)
-            {
-                HoverButton(nextOptionTransform, null);
-                _hasHoveredFirstSaintButton = true;
-                _saintNextOptionHasHover = true;
-                return;
+                var nextOptionTransform = saintPopup.gameObject.FindDeepChild("No").transform;
+                var previousOptionTransform = saintPopup.gameObject.FindDeepChild("Yes").transform;
+
+                if (!_hasHoveredFirstSaintButton)
+                {
+                    HoverButton(nextOptionTransform, null);
+                    _hasHoveredFirstSaintButton = true;
+                    _saintNextOptionHasHover = true;
+                    return;
+                }
+
+                if (DPad.GetDirection() == DPadDirection.Right && !_saintNextOptionHasHover)
+                {
+                    _saintNextOptionHasHover = true;
+                    HoverButton(nextOptionTransform, previousOptionTransform);
+                }
+                else if (DPad.GetDirection() == DPadDirection.Left && _saintNextOptionHasHover)
+                {
+                    _saintNextOptionHasHover = false;
+                    HoverButton(previousOptionTransform, nextOptionTransform);
+                }
             }
 
-            if (DPad.GetDirection() == DPadDirection.Right && !_saintNextOptionHasHover)
-            {
-                _saintNextOptionHasHover = true;
-                HoverButton(nextOptionTransform, previousOptionTransform);
-            }
-            else if (DPad.GetDirection() == DPadDirection.Left && _saintNextOptionHasHover)
-            {
-                _saintNextOptionHasHover = false;
-                HoverButton(previousOptionTransform, nextOptionTransform);
-            }
 
             if (DPad.IsVerticalPress(false))
             {

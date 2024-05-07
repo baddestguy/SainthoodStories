@@ -59,23 +59,29 @@ public class ActionButton : MonoBehaviour
 
     #region XboxSupport
 
+    public bool HasControllerHover => GetComponent<TooltipMouseOver>().HasControllerHover;
+
     /// <summary>
     /// Enlarge an action button to visibly show a user that it is the current action button that will be triggered by the controller
     /// </summary>
     public void HandleControllerHover()
     {
+        if (HasControllerHover) return;
+
         transform.DOComplete();
         var tooltip = GetComponent<TooltipMouseOver>();
-        tooltip.ShowToolTip();
+        tooltip.HandleControllerHover();
     }
     /// <summary>
     /// Reset an action button to visibly show a user that it is no longer the current action button that will be triggered by the controller
     /// </summary>
     public void HandleControllerExit()
     {
+        if (!HasControllerHover) return;
+
         transform.DOComplete();
         var tooltip = GetComponent<TooltipMouseOver>();
-        tooltip.HideToolTip();
+        tooltip.HandleControllerExit();
     }
 
     //There has to be a better way to do this.
