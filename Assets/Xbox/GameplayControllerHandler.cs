@@ -21,6 +21,7 @@ namespace Assets.Xbox
         private CustomEventPopup _currentCustomEventPopup;
         private bool _customEventPopupFirstActionButtonAcknowledged;
         private int _customEventPopupButtonIndex;
+        private bool _customEventLowerTooltips;
 
         private ActionButton _currentPopUIButton;
         private bool IsInBuilding => _currentPopUI != null;
@@ -124,6 +125,7 @@ namespace Assets.Xbox
 
             _currentCustomEventPopup = customEventPopup;
             _customEventPopupFirstActionButtonAcknowledged = false;
+            _customEventLowerTooltips = _currentCustomEventPopup != null && _currentCustomEventPopup.EventData.EventPopupType == EventPopupType.YESNO;
             HandleConversationEventPopup();
 
             Debug.Log($"New Custom Event Popup: {_currentCustomEventPopup?.name}");
@@ -255,45 +257,83 @@ namespace Assets.Xbox
         private void HandleConversationEventPopup()
         {
             if (_currentCustomEventPopup == null) return;
+            TooltipMouseOver[] toolTipMouseOvers;
 
             if (_currentCustomEventPopup.EventData.EventPopupType == EventPopupType.OK)
             {
                 //ordering by name because while Ok shows up before skip, skip shows up before continue in the array
-                var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
+                toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
                     .OrderBy(x => x.name)
                     .ToArray();
-
-                if (!_customEventPopupFirstActionButtonAcknowledged)
+            }
+            else
+            {
+                if (_customEventLowerTooltips)
                 {
-                    _customEventPopupButtonIndex = 0;
-                    toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerHover();
-                    _customEventPopupFirstActionButtonAcknowledged = true;
+                    toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
+                    .Where(x => x.name.Equals("YES", StringComparison.InvariantCultureIgnoreCase) || x.name.Equals("NO", StringComparison.InvariantCultureIgnoreCase))
+                    .ToArray();
                 }
                 else
                 {
-                    if (DPad.left.wasPressedThisFrame)
+                    toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
+                        .Where(x => !x.name.Equals("YES", StringComparison.InvariantCultureIgnoreCase) && !x.name.Equals("NO", StringComparison.InvariantCultureIgnoreCase))
+                        .ToArray();
+                }
+            }
+
+            if (!toolTipMouseOvers.Any()) return;
+
+            if (!_customEventPopupFirstActionButtonAcknowledged)
+            {
+                _customEventPopupButtonIndex = 0;
+                toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerHover();
+                _customEventPopupFirstActionButtonAcknowledged = true;
+            }
+            else
+            {
+                if (DPad.left.wasPressedThisFrame)
+                {
+                    HandleEventPopupButtonNavigate(-1);
+                }
+                else if (DPad.right.wasPressedThisFrame)
+                {
+                    HandleEventPopupButtonNavigate(1);
+                }
+                else if (DPad.IsVerticalPress() && _currentCustomEventPopup.EventData.EventPopupType == EventPopupType.YESNO)
+                {
+                    toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
+                    _customEventLowerTooltips = !_customEventLowerTooltips;
+                    _customEventPopupFirstActionButtonAcknowledged = false;
+                }
+                else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                {
+                    if (_customEventLowerTooltips && _customEventPopupButtonIndex == 0)
                     {
-                        HandleEventPopupButtonNavigate(-1);
+                        _currentCustomEventPopup.OnPointerDown();
                     }
-                    else if (DPad.right.wasPressedThisFrame)
-                    {
-                        HandleEventPopupButtonNavigate(1);
-                    }
-                    else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                    else
                     {
                         toolTipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>().onClick.Invoke();
                     }
-
-
-                    void HandleEventPopupButtonNavigate(int increment)
+                }
+                else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
+                {
+                    if (_customEventLowerTooltips)
                     {
-                        toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
-                        _customEventPopupButtonIndex = (_customEventPopupButtonIndex + increment + toolTipMouseOvers.Length) % toolTipMouseOvers.Length;
-                        toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerHover();
-                        Debug.Log($"Current Event Popup Button is: {toolTipMouseOvers[_customEventPopupButtonIndex].name}");
+                        _currentCustomEventPopup.OnPointerUp();
                     }
                 }
 
+            }
+
+            return;
+            void HandleEventPopupButtonNavigate(int increment)
+            {
+                toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
+                _customEventPopupButtonIndex = (_customEventPopupButtonIndex + increment + toolTipMouseOvers.Length) % toolTipMouseOvers.Length;
+                toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerHover();
+                Debug.Log($"Current Event Popup Button is: {toolTipMouseOvers[_customEventPopupButtonIndex].name}");
             }
         }
 
