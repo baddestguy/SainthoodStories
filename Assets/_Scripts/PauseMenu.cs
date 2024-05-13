@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Assets.Xbox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -70,33 +71,20 @@ public class PauseMenu : MonoBehaviour
                 TutorialEnabled.SetIsOnWithoutNotify(GameSettings.Instance.TutorialToggle);
             }
 
-            var graphicsToggleTransform = MenuToggleGroup.transform.Find("Graphics");
-            var soundToggleTransform = MenuToggleGroup.transform.Find("SoundTab");
+
             if (GameSettings.Instance.IsXboxMode)
             {
-                //We don't allow changes to graphics settings when running in xbox mode.
-                graphicsToggleTransform.gameObject.SetActive(false);
-                soundToggleTransform.localPosition = new Vector3(graphicsToggleTransform.localPosition.x, soundToggleTransform.localPosition.y);
+                PauseMenuControllerHandler.Instance.Activate(MenuToggleGroup);
             }
 
             if (!GameManager.Instance.InGameSession)
             {
                 PauseToggleObj.SetActive(false);
 
-
-                if (GameSettings.Instance.IsXboxMode)
-                {
-                    // There is no graphics tab on xbox so set the sound tab to be the default
-                    ToggleSound();
-                    var soundToggle = soundToggleTransform.GetComponent<Toggle>();
-                    soundToggle.isOn = true;
-                }
-                else
-                {
-                    ToggleGraphics();
-                    var graphicsToggle = graphicsToggleTransform.GetComponent<Toggle>();
-                    graphicsToggle.isOn = true;
-                }
+                ToggleGraphics();
+                var graphicsToggleTransform = MenuToggleGroup.transform.Find("Graphics");
+                var graphicsToggle = graphicsToggleTransform.GetComponent<Toggle>();
+                graphicsToggle.isOn = true;
             }
             else
             {
@@ -112,6 +100,10 @@ public class PauseMenu : MonoBehaviour
                 TutorialEnabled.transform.parent.gameObject.SetActive(false);
             else
                 TutorialEnabled.transform.parent.gameObject.SetActive(true);
+        }
+        else if (GameSettings.Instance.IsXboxMode)
+        {
+            PauseMenuControllerHandler.Instance.Deactivate();
         }
     }
 
@@ -197,7 +189,8 @@ public class PauseMenu : MonoBehaviour
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
         Activate();
         GameManager.Instance.ClearData();
-        StartCoroutine(ScheduleCallback(() => {
+        StartCoroutine(ScheduleCallback(() =>
+        {
             SoundManager.Instance.EndAllTracks();
             GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
         }, 1));
@@ -207,7 +200,8 @@ public class PauseMenu : MonoBehaviour
     {
         //maybe do check before quit
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
-        StartCoroutine(ScheduleCallback(() => {
+        StartCoroutine(ScheduleCallback(() =>
+        {
             Application.Quit();
         }, 1));
     }

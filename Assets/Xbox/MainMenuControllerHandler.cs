@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 namespace Assets.Xbox
 {
+    /// <summary>
+    /// Responsible for managing game pad input on the main menu
+    /// </summary>
     public class MainMenuControllerHandler : MonoBehaviour
     {
         public GameObject NewGameGameObject;
@@ -14,6 +17,7 @@ namespace Assets.Xbox
         public GameObject DiscordGameObject;
 
         private bool IsNewGameButtonActive => _activeMainMenuButton.gameObject.Equals(NewGameGameObject);
+        private bool IsSettingsButtonActive => _activeMainMenuButton.gameObject.Equals(SettingsButtonGameObject);
         private Button _activeMainMenuButton;
         private ColorBlock _defaultMainMenuColorBlock;
         private ColorBlock _activeMainMenuColorBlock;
@@ -22,6 +26,9 @@ namespace Assets.Xbox
         void Start()
         {
             if (!GameSettings.Instance.IsXboxMode) return;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
 
             _activeMainMenuButton = NewGameGameObject.GetComponent<Button>();
             _defaultMainMenuColorBlock = _activeMainMenuButton.colors;
@@ -41,8 +48,7 @@ namespace Assets.Xbox
         // Update is called once per frame
         void Update()
         {
-            if (!GameSettings.Instance.IsXboxMode) return;
-            if (Gamepad.current == null) return;
+            if (Gamepad.current == null || !GameSettings.Instance.IsXboxMode) return;
 
             HandleControllerNavigation();
 
@@ -50,28 +56,30 @@ namespace Assets.Xbox
             {
                 _activeMainMenuButton.onClick.Invoke();
             }
-            else if(Gamepad.current.buttonWest.wasPressedThisFrame)
-            {
-                SettingsButtonGameObject.GetComponent<Button>().onClick.Invoke();
-            }
         }
 
         private void HandleControllerNavigation()
         {
-            if (IsNewGameButtonActive && (Gamepad.current.dpad.down.wasPressedThisFrame || Gamepad.current.dpad.up.wasPressedThisFrame))
+            var continueGameAvailable = UI.Instance.ContinueBtn.interactable;
+            var dPad = Gamepad.current.dpad;
+
+            if (continueGameAvailable && dPad.IsVerticalPress())
             {
-                SetNewActiveMainMenuButton(ContinueGameObject);
+                SetNewActiveMainMenuButton(IsNewGameButtonActive ? ContinueGameObject : NewGameGameObject);
             }
-            else if (!IsNewGameButtonActive && (Gamepad.current.dpad.up.wasPressedThisFrame || Gamepad.current.dpad.down.wasPressedThisFrame))
+
+            if (dPad.IsHorizontalPress())
             {
-                SetNewActiveMainMenuButton(NewGameGameObject);
+                SetNewActiveMainMenuButton(IsSettingsButtonActive ? NewGameGameObject : SettingsButtonGameObject);
             }
 
             _activeMainMenuButton.colors = _activeMainMenuColorBlock;
+
             return;
 
             void SetNewActiveMainMenuButton(GameObject gameObjectHoldingMenuButton)
             {
+
                 _activeMainMenuButton.colors = _defaultMainMenuColorBlock;
                 _activeMainMenuButton = gameObjectHoldingMenuButton.GetComponent<Button>();
             }

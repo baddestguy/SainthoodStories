@@ -76,14 +76,14 @@ public class ProvisionUIItem : MonoBehaviour
     /// </summary>
     public void HandleControllerHover()
     {
-        GetComponent<TooltipMouseOver>().HandleControllerTooltip();
+        GetComponent<TooltipMouseOver>().HandleControllerHover();
     }
     /// <summary>
     /// Reset an action button to visibly show a user that it is no longer the current action button that will be triggered by the controller
     /// </summary>
     public void EndControllerHover()
     {
-        GetComponent<TooltipMouseOver>().EndControllerTooltip();
+        GetComponent<TooltipMouseOver>().HandleControllerExit();
     }
     #endregion
 }

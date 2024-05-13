@@ -233,6 +233,12 @@ public class CustomEventPopup : MonoBehaviour
             YesNoGO.SetActive(EventData.EventPopupType == EventPopupType.YESNO);
             OKGO.SetActive(EventData.EventPopupType == EventPopupType.OK);
             NextGO.SetActive(false);
+
+            if (GameSettings.Instance.IsXboxMode)
+            {
+                if(EventData.EventPopupType == EventPopupType.YESNO) YesNoGO.GetComponentsInChildren<TooltipMouseOver>()[0].HandleControllerHover();
+                if(EventData.EventPopupType == EventPopupType.OK) OKGO.GetComponent<TooltipMouseOver>().HandleControllerHover();
+            }
         }
 
         var text = LocalizationManager.Instance.GetText(EventData.LocalizationKey, CurrentSequenceNumber);

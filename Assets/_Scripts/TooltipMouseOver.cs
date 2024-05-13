@@ -24,7 +24,7 @@ public class TooltipMouseOver : MonoBehaviour
     {
         transform.DOComplete();
         transform.DOPunchScale(transform.localScale * 0.15f, 0.5f, elasticity: 0f);
-        
+
         DoToolTip();
     }
 
@@ -74,7 +74,7 @@ public class TooltipMouseOver : MonoBehaviour
         if (House != null)
         {
             ShowInfoPanel(House.GetTooltipStatsForButton(ButtonName));
-         //   ToolTipManager.Instance.ShowToolTip(Loc_Key, House.GetTooltipStatsForButton(ButtonName));
+            //   ToolTipManager.Instance.ShowToolTip(Loc_Key, House.GetTooltipStatsForButton(ButtonName));
         }
         else if (CustomToolStats != null)
         {
@@ -139,22 +139,28 @@ public class TooltipMouseOver : MonoBehaviour
 
     #region XboxSupport
 
+    private const float ScaleValue = 1.25f;
+    public bool HasControllerHover;
 
-    private Vector3? _preHoverScale;
-    public void HandleControllerTooltip()
+    public void HandleControllerHover()
     {
+        if (HasControllerHover) return;
+
         transform.DOComplete();
-        _preHoverScale ??= transform.localScale;
-        transform.DOScale(_preHoverScale!.Value * 1.25f, 0.5f);
+        transform.DOScale(transform.localScale * ScaleValue, 0.5f);
 
         DoToolTip();
+        HasControllerHover = true;
     }
 
-    public void EndControllerTooltip()
+    public void HandleControllerExit()
     {
+        if (!HasControllerHover) return;
+
         transform.DOComplete();
-        transform.DOScale(_preHoverScale!.Value, 0.5f);
+        transform.DOScale(transform.localScale / ScaleValue, 0.5f);
         HideToolTip();
+        HasControllerHover = false;
     }
 
     #endregion

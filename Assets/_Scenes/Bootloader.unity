@@ -1439,6 +1439,7 @@ MonoBehaviour:
   InfiniteBoost: 1
   IsXboxMode: 0
   ShowFPSCounter: 0
+  MaxXboxResolution: 2073600
   fullScreenMode: 0
   currentQualityLevel: 0
   brightnessPercent: 0
@@ -6582,6 +6583,11 @@ PrefabInstance:
       propertyPath: GameManager
       value: 
       objectReference: {fileID: 1152669275}
+    - target: {fileID: 4721904407027892204, guid: a9a30e14f69b1c44cb3851a65741daf2,
+        type: 3}
+      propertyPath: ButtonAxisWeight
+      value: 0.05
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18467,6 +18473,7 @@ GameObject:
   - component: {fileID: 1539138722}
   - component: {fileID: 1539138721}
   - component: {fileID: 1539138720}
+  - component: {fileID: 1539138724}
   m_Layer: 5
   m_Name: Pause Menu
   m_TagString: Untagged
@@ -18582,6 +18589,22 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 2
   m_TargetDisplay: 0
+--- !u!114 &1539138724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1539138718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7c644449f5ca3e47983aff843d13aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Buttons:
+  - {fileID: 1495196491}
+  - {fileID: 178695149}
+  - {fileID: 155028590}
 --- !u!1 &1540468935
 GameObject:
   m_ObjectHideFlags: 0

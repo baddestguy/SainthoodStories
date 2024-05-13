@@ -59,30 +59,35 @@ public class ActionButton : MonoBehaviour
 
     #region XboxSupport
 
-    private Vector3? _preHoverScale;
-
+    public bool HasControllerHover => GetComponent<TooltipMouseOver>().HasControllerHover;
 
     /// <summary>
     /// Enlarge an action button to visibly show a user that it is the current action button that will be triggered by the controller
     /// </summary>
     public void HandleControllerHover()
     {
+        if (HasControllerHover) return;
+
         transform.DOComplete();
-        _preHoverScale ??= transform.localScale;
-        transform.DOScale(_preHoverScale.Value * 1.5f, 0.5f);
+        var tooltip = GetComponent<TooltipMouseOver>();
+        tooltip.HandleControllerHover();
     }
     /// <summary>
     /// Reset an action button to visibly show a user that it is no longer the current action button that will be triggered by the controller
     /// </summary>
     public void HandleControllerExit()
     {
+        if (!HasControllerHover) return;
+
         transform.DOComplete();
-        transform.DOScale(_preHoverScale!.Value, 0.5f);
-        _preHoverScale = null;
+        var tooltip = GetComponent<TooltipMouseOver>();
+        tooltip.HandleControllerExit();
     }
 
+    //There has to be a better way to do this.
     public bool HasCriticalCircle => !ButtonName.Equals("WORLD", StringComparison.InvariantCultureIgnoreCase) &&
                                      !ButtonName.Equals("ENTER", StringComparison.InvariantCultureIgnoreCase) &&
+                                     !ButtonName.Equals("SAINTS", StringComparison.InvariantCultureIgnoreCase) &&
                                      !ButtonName.Equals("EXIT", StringComparison.InvariantCultureIgnoreCase);
 
     #endregion

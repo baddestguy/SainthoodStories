@@ -22,7 +22,16 @@ public class GameSettings : MonoBehaviour
     public bool ShowGrid;
     public bool InfiniteBoost;
     public bool IsXboxMode;
+    public XboxResolution MaxXboxResolution;
     public bool ShowFPSCounter;
+
+    public enum XboxResolution
+    {
+        _1080P = 2_073_600,
+        _2k = 2_211_840,
+        _1440P = 3_686_400,
+        _4k = 8_294_400
+    }
 
     [HideInInspector] public bool fullScreenMode;
     [HideInInspector] public QualityLevel currentQualityLevel;
@@ -58,9 +67,9 @@ public class GameSettings : MonoBehaviour
 
     public void Load()
     {
-       
+
         SaveSettingsData data = GetSavedDataSet();
-        if(data != null)
+        if (data != null)
         {
             fullScreenMode = data.fullscreen;
             SetQuality(data.qualityLevel);
@@ -97,7 +106,7 @@ public class GameSettings : MonoBehaviour
             SetVolume("Ambiance", 1);
 
             SetLanguage(Language.ENGLISH);
-            
+
         }
 
 
@@ -145,7 +154,7 @@ public class GameSettings : MonoBehaviour
             FileStream file = File.Open(GetPath(), FileMode.Open);
             SaveSettingsData saveObjects = (SaveSettingsData)bf.Deserialize(file);
             file.Close();
-            
+
             return saveObjects;
         }
         catch (Exception e)
@@ -170,20 +179,19 @@ public class GameSettings : MonoBehaviour
     {
         if (IsXboxMode)
         {
-            const int best2KResolutionPixels = 2_073_600;
             var bestResolution = resolutions.Select(x => new { Resolution = x, Pixels = x.height * x.width })
-                .Where(x => x.Pixels < best2KResolutionPixels)
+                .Where(x => x.Pixels < (int)MaxXboxResolution)
                 .OrderByDescending(x => x.Pixels)
                 .ThenByDescending(x => x.Resolution.refreshRateRatio.value)
                 .First()
                 .Resolution;
-                
+
             return bestResolution;
         }
 
         string[] val = value.Replace(" ", "").Split('x');
         Resolution? res = resolutions.FirstOrDefault(x => x.width.ToString() == val[0] && x.height.ToString() == val[1]);
-        if(res == null)
+        if (res == null)
         {
             return Screen.currentResolution;
         }
@@ -241,8 +249,8 @@ public class GameSettings : MonoBehaviour
                 SoundManager.Instance.EnableAmbiance(ambianceEnabled, ambianceVolume);
                 break;
         }
-        
-        
+
+
     }
 
     public void EnableSound(string target, bool value)
@@ -270,8 +278,8 @@ public class GameSettings : MonoBehaviour
                 SoundManager.Instance.EnableAmbiance(ambianceEnabled, ambianceVolume);
                 break;
         }
-       
-        
+
+
     }
 
     public void SetLanguage(Language lang)

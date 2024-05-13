@@ -4,13 +4,18 @@ using UnityEngine.UI;
 
 public class SaintShowcaseHandler : MonoBehaviour
 {
-
+    public static SaintShowcaseHandler Instance { get; private set; }
     public Image SaintPotrait;
     public Text Bio;
     public Text Title;
     public ScrollRect ScrollRect;
 
     private int CurrentSaintIndex = 0;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void OnEnable()
     {

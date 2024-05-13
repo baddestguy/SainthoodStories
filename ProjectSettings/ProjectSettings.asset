@@ -136,7 +136,7 @@ PlayerSettings:
   vulkanEnableLateAcquireNextImage: 0
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
-  bundleVersion: 2.3.0
+  bundleVersion: 2.5.0.6
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 0}
@@ -778,7 +778,7 @@ PlayerSettings:
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: TaiwoTech.SaintHood
-  metroPackageVersion: 2.3.0.0
+  metroPackageVersion: 2.5.0.6
   metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
   metroCertificateSubject: BisongTaiwo

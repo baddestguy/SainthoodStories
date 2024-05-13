@@ -4,6 +4,7 @@ using DG.Tweening;
 using Michsky.UI.ModernUIPack;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class EndWeekSequence : MonoBehaviour
 {
@@ -54,6 +55,8 @@ public class EndWeekSequence : MonoBehaviour
         ContinueObj.SetActive(true);
         while (!Continue)
         {
+            if (GameSettings.Instance.IsXboxMode && Gamepad.current.buttonSouth.wasPressedThisFrame) ContinueSequence();
+            
             yield return null;
         }
 
@@ -98,6 +101,7 @@ public class EndWeekSequence : MonoBehaviour
             ContinueObj.SetActive(true);
             while (!Continue)
             {
+                if (GameSettings.Instance.IsXboxMode && Gamepad.current.buttonSouth.wasPressedThisFrame) ContinueSequence();
                 yield return null;
             }
         }

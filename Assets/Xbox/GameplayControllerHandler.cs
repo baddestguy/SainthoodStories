@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
-using JetBrains.Annotations;
+using Assets._Scripts.Extensions;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -8,25 +9,33 @@ using UnityEngine.UI;
 
 namespace Assets.Xbox
 {
+    /// <summary>
+    /// Responsible for managing game pad input during game play,
+    /// </summary>
     public class GameplayControllerHandler : MonoBehaviour
     {
         public static GameplayControllerHandler Instance { get; private set; }
 
-        private bool _popUIFirstActionButtonAcknowledged;
         private PopUI _currentPopUI;
-        private int _buildingActionButtonIndex;
 
         private CustomEventPopup _currentCustomEventPopup;
         private bool _customEventPopupFirstActionButtonAcknowledged;
         private int _customEventPopupButtonIndex;
+        private bool _customEventLowerTooltips;
+
+        private ActionButton _currentPopUIButton;
         private bool IsInBuilding => _currentPopUI != null;
-        private ActionButton CurrentPopUIButton => _currentPopUI.Buttons[_buildingActionButtonIndex];
-        //private TooltipMouseOver[] ConversationToolTipMouseOvers => _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false);
 
         private ProvisionsPopup _provisionsPopUp;
-        private int _provisionPopupButtonIndex;
         private ProvisionUIItem[] _provisionItems;
-        private ProvisionUIItem CurrentProvisionUIItem => _provisionItems[_provisionPopupButtonIndex];
+        private ProvisionUIItem _currentProvisionUIItem;
+
+        private bool _hasHoveredFirstSaintButton;
+        private bool _saintNextOptionHasHover;
+
+        private PackageItem _currentPackageItem;
+        private PackageSelector _packageSelector;
+        private bool _selectedPackageSelectorItemIsPackage;
 
         private static DpadControl DPad => Gamepad.current.dpad;
         private static GameManager GameManager => GameManager.Instance;
@@ -51,11 +60,24 @@ namespace Assets.Xbox
         // Update is called once per frame
         void Update()
         {
-            if (Gamepad.current == null || Player == null) return;
+            if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsXboxMode || MissionManager.MissionOver) return;
 
-            if (CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null)
+            if (PauseMenu.Instance.active)
+            {
+                _currentPopUIButton?.HandleControllerExit();
+                _currentPopUIButton = null;
+            }
+            else if (SaintShowcaseHandler.Instance != null && SaintShowcaseHandler.Instance.isActiveAndEnabled)
+            {
+                HandleSaintCollectionPopup();
+            }
+            else if (CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null)
             {
                 HandleConversationEventPopup();
+            }
+            else if (_packageSelector != null && _packageSelector.isActiveAndEnabled)
+            {
+                HandlePackageItemSelection();
             }
             else if (_provisionsPopUp != null)
             {
@@ -77,19 +99,12 @@ namespace Assets.Xbox
         /// Sets the current PopUI when entering/exiting a building to enable/disable movement controls and enable/disable action button cycling.
         /// </summary>
         /// <param name="popUI">The PopUI with the action buttons</param>
-        public void SetCurrentPopUI([CanBeNull] PopUI popUI)
+        public void SetCurrentPopUI(PopUI popUI)
         {
             if (!GameSettings.Instance.IsXboxMode) return;
 
             _currentPopUI = popUI;
-            _popUIFirstActionButtonAcknowledged = false;
-            Debug.Log($"New Gameplay POP UI: {popUI?.name}");
-            if (_currentPopUI == null) return;
-
-            //I have this as separate for now in case I want to do something between the two if statements
-            if (!_currentPopUI.Buttons.Any()) return;
-
-            AcknowledgeFirstPopUIButton();
+            _currentPopUIButton = null;
         }
 
         /// <summary>
@@ -99,16 +114,18 @@ namespace Assets.Xbox
         public void SetCurrentCustomEventPopup(CustomEventPopup customEventPopup)
         {
             if (!GameSettings.Instance.IsXboxMode) return;
+
             if (_currentCustomEventPopup != null)
             {
                 var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
                     .OrderBy(x => x.name)
                     .ToArray();
-                toolTipMouseOvers[_customEventPopupButtonIndex].EndControllerTooltip();
+                toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
             }
 
             _currentCustomEventPopup = customEventPopup;
             _customEventPopupFirstActionButtonAcknowledged = false;
+            _customEventLowerTooltips = _currentCustomEventPopup != null && _currentCustomEventPopup.EventData.EventPopupType == EventPopupType.YESNO;
             HandleConversationEventPopup();
 
             Debug.Log($"New Custom Event Popup: {_currentCustomEventPopup?.name}");
@@ -121,13 +138,18 @@ namespace Assets.Xbox
         public void SetCurrentProvisionsPopUp(ProvisionsPopup provisionsPopup)
         {
             _provisionsPopUp = provisionsPopup;
-            Debug.Log($"New Provisions Popup: {provisionsPopup?.name}");
-            
-            if(provisionsPopup == null) return;
+            if (_provisionsPopUp == null) return;
 
             _provisionItems = provisionsPopup.NewProvisionUIItems.Concat(provisionsPopup.UpgradeProvisionUIItems).Where(x => x.HasProvision).ToArray();
-            _provisionPopupButtonIndex = 0;
-            _provisionItems[_provisionPopupButtonIndex].HandleControllerHover();
+        }
+
+        /// <summary>
+        /// Set a reference to the package selector when it's enabled so we can track selected and available items.
+        /// </summary>
+        /// <param name="packageSelector"></param>
+        public void SetPackageSelector(PackageSelector packageSelector)
+        {
+            _packageSelector = packageSelector;
         }
 
         private void HandlePlayerMovement()
@@ -164,50 +186,58 @@ namespace Assets.Xbox
 
         private void HandlePlayerActions()
         {
-            if (!_popUIFirstActionButtonAcknowledged && _currentPopUI.Buttons.Any())
+            var directionPressed = DPad.GetDirection();
+            if (directionPressed != null)
             {
-                AcknowledgeFirstPopUIButton();
+                HandleActionButtonNavigateWithDirection(directionPressed.Value);
             }
 
-            if (DPad.left.wasPressedThisFrame)
+            if (_currentPopUIButton != null && _currentPopUIButton.HasControllerHover)
             {
-                HandleActionButtonNavigate(-1);
-            }
-            else if (DPad.right.wasPressedThisFrame)
-            {
-                HandleActionButtonNavigate(1);
-            }
+                if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                {
+                    if (_currentPopUIButton.HasCriticalCircle)
+                    {
+                        _currentPopUI.OnPointerDown(_currentPopUIButton.ButtonName);
+                    }
+                    else
+                    {
+                        _currentPopUI.OnClick(_currentPopUIButton.ButtonName);
+                        _currentPopUIButton?.HandleControllerExit();
+                    }
+                }
+                else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
+                {
+                    _currentPopUIButton.HandleControllerHover();
+                    if (_currentPopUIButton.HasCriticalCircle) _currentPopUI.OnPointerUp();
+                }
 
-            if (Gamepad.current.buttonSouth.wasPressedThisFrame)
-            {
-                CurrentPopUIButton.HandleControllerExit();
-                if (CurrentPopUIButton.HasCriticalCircle)
+                if (Gamepad.current.buttonEast.wasPressedThisFrame)
                 {
-                    _currentPopUI.OnPointerDown(CurrentPopUIButton.ButtonName);
+                    _currentPopUIButton.HandleControllerExit();
                 }
-                else
-                {
-                    _currentPopUI.OnClick(CurrentPopUIButton.ButtonName);
-                }
-            }
-            else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
-            {
-                CurrentPopUIButton.HandleControllerHover();
-                if (CurrentPopUIButton.HasCriticalCircle) _currentPopUI.OnPointerUp();
             }
 
             return;
 
-
-            void HandleActionButtonNavigate(int indexIncrement)
+            void HandleActionButtonNavigateWithDirection(DPadDirection direction)
             {
-                CurrentPopUIButton.HandleControllerExit();
+                var closestButtonGameObject = direction.GetClosestGameObjectOnCanvasInDirection(
+                    _currentPopUIButton?.gameObject,
+                    _currentPopUI.Buttons.Select(x => x.gameObject).ToArray());
 
-                //Add the increment but keep the index within the range of action button count using the mod factor
-                _buildingActionButtonIndex = (_buildingActionButtonIndex + indexIncrement + _currentPopUI.Buttons.Count) % _currentPopUI.Buttons.Count;
+                if (closestButtonGameObject != null)
+                {
+                    _currentPopUIButton?.HandleControllerExit();
+                    _currentPopUIButton = closestButtonGameObject.GetComponent<ActionButton>();
+                }
 
-                Debug.Log($"Current Pop Action is: {CurrentPopUIButton.ButtonName}");
-                CurrentPopUIButton.HandleControllerHover();
+                if (_currentPopUIButton == null)
+                {
+                    _currentPopUIButton = _currentPopUI.Buttons.FirstOrDefault();
+                }
+
+                _currentPopUIButton?.HandleControllerHover();
             }
         }
 
@@ -219,6 +249,7 @@ namespace Assets.Xbox
             }
             else if (Gamepad.current.leftShoulder.wasPressedThisFrame || Gamepad.current.leftTrigger.wasPressedThisFrame)
             {
+                _currentPopUIButton?.HandleControllerExit();
                 GameControlsManager.TryZoom?.Invoke(-1);
             }
         }
@@ -226,81 +257,275 @@ namespace Assets.Xbox
         private void HandleConversationEventPopup()
         {
             if (_currentCustomEventPopup == null) return;
+            TooltipMouseOver[] toolTipMouseOvers;
 
             if (_currentCustomEventPopup.EventData.EventPopupType == EventPopupType.OK)
             {
                 //ordering by name because while Ok shows up before skip, skip shows up before continue in the array
-                var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
+                toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
                     .OrderBy(x => x.name)
                     .ToArray();
-
-                if (!_customEventPopupFirstActionButtonAcknowledged)
+            }
+            else
+            {
+                if (_customEventLowerTooltips)
                 {
-                    _customEventPopupButtonIndex = 0;
-                    toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerTooltip();
-                    _customEventPopupFirstActionButtonAcknowledged = true;
+                    toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
+                    .Where(x => x.name.Equals("YES", StringComparison.InvariantCultureIgnoreCase) || x.name.Equals("NO", StringComparison.InvariantCultureIgnoreCase))
+                    .ToArray();
                 }
                 else
                 {
-                    if (DPad.left.wasPressedThisFrame)
+                    toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
+                        .Where(x => !x.name.Equals("YES", StringComparison.InvariantCultureIgnoreCase) && !x.name.Equals("NO", StringComparison.InvariantCultureIgnoreCase))
+                        .ToArray();
+                }
+            }
+
+            if (!toolTipMouseOvers.Any()) return;
+
+            if (!_customEventPopupFirstActionButtonAcknowledged)
+            {
+                _customEventPopupButtonIndex = 0;
+                toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerHover();
+                _customEventPopupFirstActionButtonAcknowledged = true;
+            }
+            else
+            {
+                if (DPad.left.wasPressedThisFrame)
+                {
+                    HandleEventPopupButtonNavigate(-1);
+                }
+                else if (DPad.right.wasPressedThisFrame)
+                {
+                    HandleEventPopupButtonNavigate(1);
+                }
+                else if (DPad.IsVerticalPress() && _currentCustomEventPopup.EventData.EventPopupType == EventPopupType.YESNO)
+                {
+                    toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
+                    _customEventLowerTooltips = !_customEventLowerTooltips;
+                    _customEventPopupFirstActionButtonAcknowledged = false;
+                }
+                else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                {
+                    if (_customEventLowerTooltips && _customEventPopupButtonIndex == 0)
                     {
-                        HandleEventPopupButtonNavigate(-1);
+                        _currentCustomEventPopup.OnPointerDown();
                     }
-                    else if (DPad.right.wasPressedThisFrame)
-                    {
-                        HandleEventPopupButtonNavigate(1);
-                    }
-                    else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                    else
                     {
                         toolTipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>().onClick.Invoke();
                     }
-
-
-                    void HandleEventPopupButtonNavigate(int increment)
+                }
+                else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
+                {
+                    if (_customEventLowerTooltips)
                     {
-                        toolTipMouseOvers[_customEventPopupButtonIndex].EndControllerTooltip();
-                        _customEventPopupButtonIndex = (_customEventPopupButtonIndex + increment + toolTipMouseOvers.Length) % toolTipMouseOvers.Length;
-                        toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerTooltip();
-                        Debug.Log($"Current Event Popup Button is: {toolTipMouseOvers[_customEventPopupButtonIndex].name}");
+                        _currentCustomEventPopup.OnPointerUp();
                     }
                 }
-                
+
+            }
+
+            return;
+            void HandleEventPopupButtonNavigate(int increment)
+            {
+                toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
+                _customEventPopupButtonIndex = (_customEventPopupButtonIndex + increment + toolTipMouseOvers.Length) % toolTipMouseOvers.Length;
+                toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerHover();
+                Debug.Log($"Current Event Popup Button is: {toolTipMouseOvers[_customEventPopupButtonIndex].name}");
             }
         }
 
         private void HandleProvisionSelectPopup()
         {
-            if (DPad.left.wasPressedThisFrame)
+            var direction = DPad.GetDirection();
+            if (direction != null)
             {
-                HandleProvisionButtonNavigate(-1);
+                _currentProvisionUIItem?.EndControllerHover();
+                var closestProvisionGameObject = direction.Value.GetClosestGameObjectOnCanvasInDirection(
+                    _currentProvisionUIItem?.gameObject,
+                    _provisionItems.Select(x => x.gameObject).ToArray());
+
+                if (closestProvisionGameObject != null)
+                {
+                    _currentProvisionUIItem = closestProvisionGameObject.GetComponentInChildren<ProvisionUIItem>();
+                }
+
+                if (_currentProvisionUIItem == null)
+                {
+                    _currentProvisionUIItem = _provisionItems.FirstOrDefault();
+                }
+
+                _currentProvisionUIItem?.HandleControllerHover();
             }
-            else if (DPad.right.wasPressedThisFrame)
+            else if (Gamepad.current.buttonEast.wasPressedThisFrame)
             {
-                HandleProvisionButtonNavigate(1);
+                _currentProvisionUIItem?.EndControllerHover();
+                _currentProvisionUIItem = null;
+                _provisionsPopUp.OnClick("X");
             }
             else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
             {
-                CurrentProvisionUIItem.OnClick();
-                //tooltipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>().onClick.Invoke();
-                //_customEventPopupFirstActionButtonAcknowledged = false;
-                _provisionPopupButtonIndex = 0;
-            }
-
-            void HandleProvisionButtonNavigate(int increment)
-            {
-                CurrentProvisionUIItem.EndControllerHover();
-                _provisionPopupButtonIndex = (_provisionPopupButtonIndex + increment + _provisionItems.Length) % _provisionItems.Length;
-                CurrentProvisionUIItem.HandleControllerHover();
-                Debug.Log($"Current Provision Button is: {CurrentProvisionUIItem.name}" +
-                          $" [{Enum.GetName(typeof(ProvisionUIItemType),CurrentProvisionUIItem.Type)}]");
+                _currentProvisionUIItem?.OnClick();
+                _currentProvisionUIItem?.EndControllerHover();
+                _currentProvisionUIItem = null;
             }
         }
 
-        private void AcknowledgeFirstPopUIButton()
+        private void HandleSaintCollectionPopup()
         {
-            _popUIFirstActionButtonAcknowledged = true;
-            _buildingActionButtonIndex = 0;
-            CurrentPopUIButton.HandleControllerHover();
+            var saintPopup = SaintShowcaseHandler.Instance;
+            if (Gamepad.current.buttonEast.wasPressedThisFrame)
+            {
+                saintPopup.OnExit();
+                _hasHoveredFirstSaintButton = false;
+                return;
+            }
+
+            if (!SaintsManager.Instance.UnlockedSaints.Any()) return;
+
+            if (SaintsManager.Instance.UnlockedSaints.Count > 1)
+            {
+
+                var nextOptionTransform = saintPopup.gameObject.FindDeepChild("No").transform;
+                var previousOptionTransform = saintPopup.gameObject.FindDeepChild("Yes").transform;
+
+                if (!_hasHoveredFirstSaintButton)
+                {
+                    HoverButton(nextOptionTransform, null);
+                    _hasHoveredFirstSaintButton = true;
+                    _saintNextOptionHasHover = true;
+                    return;
+                }
+
+                if (DPad.GetDirection() == DPadDirection.Right && !_saintNextOptionHasHover)
+                {
+                    _saintNextOptionHasHover = true;
+                    HoverButton(nextOptionTransform, previousOptionTransform);
+                }
+                else if (DPad.GetDirection() == DPadDirection.Left && _saintNextOptionHasHover)
+                {
+                    _saintNextOptionHasHover = false;
+                    HoverButton(previousOptionTransform, nextOptionTransform);
+                }
+            }
+
+
+            if (DPad.IsVerticalPress(false))
+            {
+                const float scrollFactor = 0.02f;
+                var scrollView = saintPopup.gameObject.FindDeepChild("Scroll View");
+                var scrollRect = scrollView.GetComponent<ScrollRect>();
+
+                if (DPad.GetDirection(false) == DPadDirection.Up)
+                {
+                    scrollRect.verticalNormalizedPosition = Math.Min(scrollRect.verticalNormalizedPosition + scrollFactor, 1f);
+                }
+                else if (DPad.GetDirection(false) == DPadDirection.Down)
+                {
+                    scrollRect.verticalNormalizedPosition = Math.Max(scrollRect.verticalNormalizedPosition - scrollFactor, 0f);
+                }
+            }
+
+            if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+            {
+                if (_saintNextOptionHasHover)
+                {
+                    saintPopup.ShowNextSaint();
+                }
+                else
+                {
+                    saintPopup.ShowPreviusSaint();
+                }
+            }
+
+            return;
+
+            void HoverButton(Transform newHoveredOption, Transform oldHoveredOption)
+            {
+                const float transformScale = 1.25f;
+                oldHoveredOption?.DOComplete();
+                oldHoveredOption?.DOScale(oldHoveredOption.localScale / transformScale, 0.5f);
+
+                newHoveredOption.DOComplete();
+                newHoveredOption.DOScale(newHoveredOption.localScale * transformScale, 0.5f);
+            }
+        }
+
+        private void HandlePackageItemSelection()
+        {
+            const float scaleValue = 1.25f;
+            var direction = DPad.GetDirection();
+
+            if (direction != null)
+            {
+                if (_selectedPackageSelectorItemIsPackage)
+                {
+                    _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
+                }
+                else
+                {
+                    _packageSelector.ExitGameObject.transform.DOComplete();
+                    _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale / scaleValue, 0.5f);
+                }
+
+                var gameObjects = _packageSelector.ItemList.Concat(_packageSelector.AvailableItems)
+                    .Select(x => x.gameObject).ToList();
+                gameObjects.Add(_packageSelector.ExitGameObject);
+
+                var closestPackageItemGameObject = direction.Value.GetClosestGameObjectOnCanvasInDirection(_currentPackageItem?.gameObject, gameObjects.ToArray());
+
+                if (closestPackageItemGameObject != null)
+                {
+                    _selectedPackageSelectorItemIsPackage = closestPackageItemGameObject.TryGetComponent(out _currentPackageItem);
+                }
+                else if (_currentPackageItem == null)
+                {
+                    _currentPackageItem = _packageSelector.ItemList[0];
+                }
+
+                if (_selectedPackageSelectorItemIsPackage)
+                {
+                    _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerHover();
+                }
+                else
+                {
+                    _packageSelector.ExitGameObject.transform.DOComplete();
+                    _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale * scaleValue, 0.5f);
+                }
+            }
+            else if (Gamepad.current.buttonEast.wasPressedThisFrame)
+            {
+                _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
+                _currentPackageItem = null;
+                _packageSelector.Cancel();
+            }
+            else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+            {
+                _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
+
+                if (_selectedPackageSelectorItemIsPackage)
+                {
+
+                    if (_packageSelector.ItemList.Contains(_currentPackageItem))
+                    {
+                        _packageSelector.PackageDeselected(_currentPackageItem);
+                    }
+                    else
+                    {
+                        _packageSelector.PackageSelected(_currentPackageItem);
+                    }
+
+                    _currentPackageItem = _packageSelector.ItemList[0];
+                    _currentPackageItem.GetComponent<TooltipMouseOver>().HandleControllerHover();
+                }
+                else
+                {
+                    _packageSelector.GoToWorld();
+                }
+            }
+
         }
     }
 }
