@@ -85,6 +85,8 @@ public class MissionManager : MonoBehaviour
 
         //SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
         //StartCoroutine(NewDayAsync());
+
+        Debug.Log("CURRENT MISSION: " + CurrentMissionId);
     }
 
     public void CompleteObjective(ObjectivesData obj)

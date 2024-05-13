@@ -40,6 +40,7 @@ public class PopUI : MonoBehaviour
     public static int CriticalHitCount = 0;
 
     public TextMeshProUGUI RPDisplay;
+    public Image GlowImage;
 
     void Start()
     {
@@ -181,6 +182,9 @@ public class PopUI : MonoBehaviour
             myButton.SendMessage("HideToolTip", SendMessageOptions.DontRequireReceiver);
 
         Callback?.Invoke(button);
+
+        FlashIconOnCompletedAction(GlowImage);
+
         if (RPDisplay != null && MyHouse != null)
         {
             RPDisplay.text = $"{MyHouse?.RelationshipPoints ?? 0}";
@@ -336,6 +340,7 @@ public class PopUI : MonoBehaviour
 
     private void UpdateProgressBar(float progress, InteractableHouse house, int progressBar = 0)
     {
+        return;
         if (ProgressBars.Length < progressBar + 1) return;
         ProgressBar = ProgressBars[progressBar];
         if (ProgressBar == null || MyHouse != house) return;
@@ -403,6 +408,17 @@ public class PopUI : MonoBehaviour
         {
             SoundManager.Instance.PlayOneShotSfx("Cheer_SFX", 1f, 5f);
         }
+    }
+
+    public void FlashIconOnCompletedAction(Image glow)
+    {
+        if (glow == null) return;
+
+        glow.DOKill(true);
+        glow.color = new Color(glow.color.r, glow.color.g, glow.color.b, 1f);
+        glow.transform.localScale = Vector3.one;
+        glow.transform.DOScale(new Vector3(3f, 3f, 3f), 0.75f);
+        glow.DOFade(0, 1f);
     }
 
     private void OnEnable()
