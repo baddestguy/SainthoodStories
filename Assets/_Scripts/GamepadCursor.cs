@@ -216,7 +216,7 @@ public class GamepadCursor : MonoBehaviour
 #else
         screenPosition.Set(Screen.width, Screen.height, screenPosition.z);
 #endif
-        Debug.Log(screenPosition);
+    //    Debug.Log(screenPosition);
     //    CurrentMouse.WarpCursorPosition(screenPosition);
     }
 }

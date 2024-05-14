@@ -146,7 +146,7 @@ public class SoundManager : MonoBehaviour
 
         AmbientAudioSource = gameObject.AddComponent<AudioSource>();
         AmbientAudioSource.outputAudioMixerGroup = audioMixerGroup["Ambience"];
-        print(gameObject.name);
+    //    print(gameObject.name);
 
         AmbientTrackName = ambience;
         AmbientAudioSource.clip = Resources.Load("Audio/" + ambience, typeof(AudioClip)) as AudioClip;

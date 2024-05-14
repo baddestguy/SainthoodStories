@@ -91,7 +91,7 @@ public class GameClock
         SaveDataManager.Instance.SaveGame();
         DeltaTime = false;
 
-        Debug.Log(Day + " : " + Time);
+    //    Debug.Log(Day + " : " + Time);
     }
 
     public void Ping()

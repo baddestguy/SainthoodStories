@@ -35,9 +35,14 @@ public class MissionManager : MonoBehaviour
 
     private void Start()
     {
-     //   GameClock.EndDay += NewDay;
+        GameClock.EndDay += EndDay;
 
         HouseScores = new Dictionary<TileType, int>();
+    }
+
+    void OnDisable()
+    {
+        GameClock.EndDay -= EndDay;
     }
 
     public void LoadAllMissions(Mission mission)
@@ -117,8 +122,27 @@ public class MissionManager : MonoBehaviour
         InventoryManager.Instance.AddCollectible(item);
     }
 
+    public void RestartMission()
+    {
+        UI.Instance.TriggerGameOver();
+        SaveDataManager.Instance.LoadDaySave();
+        MissionsBegin();
+        GameManager.Instance.ReloadLevel();
+    }
+
     public void EndDay()
     {
+        if(!CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN))
+        {
+            ToolTipManager.Instance.ShowToolTip("");
+            Player.LockMovement = true;
+            MissionOver = true;
+            UI.Instance.EnableAllUIElements(false);
+            UI.Instance.GameOver();
+            UI.Instance.TriggerGameOver();
+            return;
+        }
+
         CurrentObjectives.Clear();
         StartCoroutine(NewDayAsync());
     }
@@ -127,7 +151,7 @@ public class MissionManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         EndOfDay?.Invoke();
-        Instance.EndMission();
+        EndMission();
     }
 
     public void UpdateFaithPoints(int amount)
@@ -261,6 +285,7 @@ public class MissionManager : MonoBehaviour
         FaithPointsPermanentlyLost = 0;
         GameManager.Instance.ScrambleMapTiles();
         SaveDataManager.Instance.SaveGame();
+        SaveDataManager.Instance.DaySave();
         MissionComplete?.Invoke(missionFailed);
     }
 
@@ -282,10 +307,6 @@ public class MissionManager : MonoBehaviour
         }
 
         return saintsUnlocked;
-    }
-
-    private void OnDisable()
-    {
     }
 
     public void OverrideMission(int missionId)

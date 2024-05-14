@@ -92,6 +92,8 @@ public class UI : MonoBehaviour
     public GameObject SaintsCollectionUI;
 
     public GameObject LoadingScreen;
+    public GameObject GameOverPopup;
+
     public bool WasUiHit
     {
         get
@@ -967,6 +969,11 @@ public class UI : MonoBehaviour
     public void GameOver()
     {
         StatusEffectDisplay.gameObject.SetActive(false);
+    }
+
+    public void TriggerGameOver()
+    {
+        GameOverPopup.gameObject.SetActive(!GameOverPopup.gameObject.activeSelf);
     }
 
     public void QuitGame()
