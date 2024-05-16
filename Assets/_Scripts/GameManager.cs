@@ -276,7 +276,7 @@ public class GameManager : MonoBehaviour
         }
         if (GameClock.DeltaTime && GameClock.EndofDay)
         {
-            MissionManager.Instance.UpdateCharityPoints(-1, null);
+        //    MissionManager.Instance.UpdateCharityPoints(-1, null);
         }
     }
 

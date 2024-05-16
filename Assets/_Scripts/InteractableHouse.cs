@@ -1286,7 +1286,8 @@ public class InteractableHouse : InteractableObject
             case "BUILD":
                 return CanBuild();
 
-            case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0) || (!DuringOpenHours() && BuildingState != BuildingState.NORMAL);
+            //case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0) || (!DuringOpenHours() && BuildingState != BuildingState.NORMAL);
+            case "PRAY": return true;
             case "SLEEP": return MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
             case "EXIT": return true;
             case "WORLD": return true;

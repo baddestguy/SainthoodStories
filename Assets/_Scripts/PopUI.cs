@@ -89,8 +89,8 @@ public class PopUI : MonoBehaviour
         }
         else
         {
-            ItemsRequiredDisplay.gameObject.SetActive(true);
-            ClockIcon.gameObject.SetActive(true);
+            ItemsRequiredDisplay.gameObject.SetActive(false);
+            ClockIcon.gameObject.SetActive(false);
             //    BuildingIcon.transform.localPosition = new Vector3(0, 2, 0);
             IsCurrentlyOpen.text = "";
         }

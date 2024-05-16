@@ -634,11 +634,11 @@ public class UI : MonoBehaviour
 
     public void AdditionPoints(TextMeshProUGUI display, Image glow, int amount, float delay)
     {
-        if (amount == 0) return;
-
         glow.transform.localScale = Vector3.one;
         glow.transform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
         glow.DOFade(0, 1f);
+
+        if (amount == 0) return;
 
         display.text = amount > 0 ? $"+{amount}" : $"{amount}";
         display.color = amount > 0 ? Color.green : Color.red;
