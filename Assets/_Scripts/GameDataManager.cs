@@ -432,26 +432,38 @@ public class GameDataManager : MonoBehaviour
         return GetObjectivesData(id).FirstOrDefault();
     }
 
-    public TooltipStats GetToolTip(TooltipStatId id, double ticksModifier = 0, int fpModifier = 0, int cpModifier = 0, int energyModifier = 0)
+    public TooltipStats GetToolTip(TooltipStatId id, double ticksModifier = 0, double ticksOverride = 0, int fpModifier = 0, int fpOverride = 0, int cpModifier = 0, int cpOverride = 0, int energyModifier = 0)
     {
         var tooltip = new TooltipStats() { Id = ToolTips[id].Id, Ticks = ToolTips[id].Ticks, CP = ToolTips[id].CP, FP = ToolTips[id].FP, Energy = ToolTips[id].Energy };
 
-        if(ticksModifier != 0)
+        if (ticksOverride != 0)
+        {
+            tooltip.Ticks = ticksOverride;
+        }
+        if (ticksModifier != 0)
         {
             tooltip.Ticks += ticksModifier;
         }
 
-        if(fpModifier != 0)
+        if (fpOverride != 0)
+        {
+            tooltip.FP = fpOverride;
+        }
+        if (fpModifier != 0)
         {
             tooltip.FP += fpModifier;
         }
 
-        if(cpModifier != 0)
+        if (cpOverride != 0)
+        {
+            tooltip.CP = cpOverride;
+        }
+        if (cpModifier != 0)
         {
             tooltip.CP += cpModifier;
         }
 
-        if(energyModifier != 0)
+        if (energyModifier != 0)
         {
             tooltip.Energy += energyModifier;
         }

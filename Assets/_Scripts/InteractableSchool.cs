@@ -233,15 +233,6 @@ public class InteractableSchool : InteractableHouse
 
     public override TooltipStats GetTooltipStatsForButton(string button)
     {
-        switch (button)
-        {
-            case "VOLUNTEER":
-                if (MaxTeachPoints - TeachCountdown == 1)
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
-                else
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
-        }
-
         return base.GetTooltipStatsForButton(button);
     }
 

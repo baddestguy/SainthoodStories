@@ -93,6 +93,8 @@ namespace Assets.Xbox
             }
 
             HandleZoom();
+
+            HandleInventoryPopup();
         }
 
         /// <summary>
@@ -251,6 +253,14 @@ namespace Assets.Xbox
             {
                 _currentPopUIButton?.HandleControllerExit();
                 GameControlsManager.TryZoom?.Invoke(-1);
+            }
+        }
+
+        private void HandleInventoryPopup()
+        {
+            if (Gamepad.current.yButton.wasPressedThisFrame || Gamepad.current.yButton.wasPressedThisFrame)
+            {
+                UI.Instance.InventoryPopupEnable();
             }
         }
 

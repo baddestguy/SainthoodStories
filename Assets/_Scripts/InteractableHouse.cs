@@ -1043,7 +1043,7 @@ public class InteractableHouse : InteractableObject
 
             MaxVolunteerPoints = CalculateMaxVolunteerPoints();
             var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-            MaxPrayerProgress = rosary != null ? 5f : 4f;
+            MaxPrayerProgress = rosary != null ? 6f : 4f;
 
             if (GameManager.Instance.CurrentHouse != this) //Entered a new building
             {
@@ -1332,7 +1332,7 @@ public class InteractableHouse : InteractableObject
         switch (actionName)
         {
             case "BUILD":
-                return GameManager.Instance.Player.EnergyDepleted() && CanBuild();
+                return !GameManager.Instance.Player.EnergyDepleted() && CanBuild();
 
             //case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0) || (!DuringOpenHours() && BuildingState != BuildingState.NORMAL);
             case "PRAY": return true;
@@ -1388,31 +1388,49 @@ public class InteractableHouse : InteractableObject
         switch (button)
         {
             case "PRAY":
-                if (MaxPrayerProgress - PrayersProgress == 1)
+                var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+                var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+                var bonusFp = (koboko?.Value ?? 0) + (rosary?.Value ?? 0);
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, ticksModifier: rosary != null ? 2 : 0, energyModifier: -koboko?.Value ?? 0, fpModifier: FPBonus + bonusFp);
+            case "VOLUNTEER":
+                var maxCP = 0;
+                if (MyObjective?.Event == BuildingEventType.VOLUNTEER || MyObjective?.Event == BuildingEventType.VOLUNTEER_URGENT)
                 {
-                    var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-                    var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, fpModifier: FPBonus + rosary?.Value ?? 0);
+                    maxCP = MyObjective.Reward;
                 }
                 else
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
-            case "VOLUNTEER":
-                if (4 - VolunteerCountdown == 1)
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
+                {
+                    return new TooltipStats();
+                }
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, cpOverride: maxCP, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
+
+            case "DELIVER":
+                var maxdCP = 0;
+                if (MyObjective?.Event == BuildingEventType.DELIVER_ITEM || MyObjective?.Event == BuildingEventType.DELIVER_ITEM_URGENT
+                    || MyObjective?.Event == BuildingEventType.DELIVER_MEAL
+                    || MyObjective?.Event == BuildingEventType.DELIVER_MEAL_URGENT)
+                {
+                    maxdCP = MyObjective.Reward;
+                }
                 else
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
+                {
+                    return new TooltipStats();
+                }
+
+                return new TooltipStats() { CP = maxdCP };
 
             case "CONSTRUCT":
-                if (MaxBuildPoints - BuildPoints == 1)
+                var tools = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TOOLS);
+                var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
+                var maxPP = 0;
+                if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT_URGENT)
                 {
-                    var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, cpModifier: tents?.Value ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
+                    maxPP = MyObjective.Reward;
                 }
-                else
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, ticksOverride: tools?.Value ?? 0, cpOverride: maxPP, cpModifier: tents?.Value ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: 0));
 
             case "UPGRADE":
-                return new TooltipStats() { Ticks = GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel + 1}"].IntValue, Energy = -GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue, CP = 10 };
+                return new TooltipStats() { Spirits = GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel + 1}"].IntValue, Coin = -GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue, RP = 10 };
         }
 
         return new TooltipStats() { Ticks = 0, FP = 0, CP = 0, Energy = 0 };

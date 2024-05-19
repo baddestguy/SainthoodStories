@@ -200,9 +200,7 @@ public enum Provision
     COOKING_UTENSILS,
     DISCOUNT_CARD,
     ALLOWANCE,
-    REDUCE_SLEEP_TIME,
     CONSTRUCTION_TOOLS
-    ,STURDY_BUILDING_MATERIALS
     ,CONSTRUCTION_TENTS
     ,CHAPEL_BLUEPRINT
     ,BUILDING_BLUEPRINT,
@@ -212,11 +210,13 @@ public enum Provision
     KITCHEN_RELATIONSHIP_BUILDER,
     SHELTER_RELATIONSHIP_BUILDER
     ,SOFT_MATTRESS
+    ,REDUCE_SLEEP_TIME
     ,FASTING
     ,KOBOKO
     ,INCENSE
     ,SECURITY_GUARDS
     ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
+    ,STURDY_BUILDING_MATERIALS
     ,EXTRA_INVENTORY 
     ,AUTO_DELIVER
 }
@@ -324,6 +324,9 @@ public class TooltipStats
     public int FP;
     public int CP;
     public int Energy;
+    public int Spirits;
+    public int Coin;
+    public int RP;
 }
 
 [System.Serializable]
@@ -754,6 +757,7 @@ public enum CustomEventType
     , SAVE_ORPHANAGE
     , SAVE_KITCHEN
     , SAVE_SHELTER
+    , ENDGAME_DEMO
     , ENDGAME
     , ENDGAME_BEST
     , ENDGAME_NORMAL

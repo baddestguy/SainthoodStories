@@ -72,6 +72,7 @@ public class UI : MonoBehaviour
 
     public GameObject PanelToActivateOnLoadUiEvent;
     public static UnityAction<bool> UIHidden;
+    public bool FullUIVisible = true;
 
     [Header("UI Elements")]
     public GameObject LeftItems;
@@ -93,7 +94,7 @@ public class UI : MonoBehaviour
 
     public GameObject LoadingScreen;
     public GameObject GameOverPopup;
-
+    public GameObject InventoryPopup;
     public bool WasUiHit
     {
         get
@@ -152,6 +153,12 @@ public class UI : MonoBehaviour
                 StatusEffectDisplay.gameObject.SetActive(false);
             }
         }
+    }
+
+    public void InventoryPopupEnable()
+    {
+        if (!FullUIVisible && !InventoryPopup.activeSelf) return;
+        InventoryPopup.SetActive(!InventoryPopup.activeSelf);
     }
 
     public void LoadingScreenEnable(bool enable)
@@ -936,6 +943,7 @@ public class UI : MonoBehaviour
         CrossFading = false;
     }
 
+
     public void EnableAllUIElements(bool enable)
     {
         if (LeftItems == null) return;
@@ -958,6 +966,7 @@ public class UI : MonoBehaviour
         TreasuryAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         CPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         FPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
+        FullUIVisible = enable;
     }
 
     public void StartMinigame(MinigameType minigame, Action<string> callback)

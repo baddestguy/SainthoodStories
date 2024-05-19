@@ -116,7 +116,15 @@ public class TooltipMouseOver : MonoBehaviour
 
         if (stats == null) return;
 
-        TimeStatsDisplay.text = stats.Energy >= 0 ? $"+{stats.Ticks / 2}hrs" : $"{stats.Ticks}";
+        if(stats.Ticks / 4 == 1)
+        {
+            TimeStatsDisplay.text = $"+{stats.Ticks / 4}hr";
+        }
+        else
+        {
+            TimeStatsDisplay.text = $"+{stats.Ticks / 4}hrs";
+        }
+
         EnergyStatsDisplay.text = stats.Energy >= 0 ? $"<color=#74664B>+{stats.Energy}" : $" <color=\"red\">{stats.Energy}";
 
         if (stats.FP != 0)
@@ -126,6 +134,23 @@ public class TooltipMouseOver : MonoBehaviour
         else if (stats.CP != 0)
         {
             FPCPStatsDisplay.text = stats.CP >= 0 ? $"<color=#74664B>+{stats.CP}" : $" <color=\"red\">{stats.CP}";
+        }
+        else
+        {
+            FPCPStatsDisplay.text = $"<color=#74664B>+0";
+        }
+
+        if (stats.Spirits != 0)
+        {
+            TimeStatsDisplay.text = $"{stats.Spirits}";
+        }
+        if(stats.Coin != 0)
+        {
+            EnergyStatsDisplay.text = stats.Coin >= 0 ? $"<color=#74664B>+{stats.Coin}" : $" <color=\"red\">{stats.Coin}";
+        }
+        if (stats.RP != 0) 
+        {
+            FPCPStatsDisplay.text = stats.RP >= 0 ? $"<color=#74664B>+{stats.RP}" : $" <color=\"red\">{stats.RP}";
         }
     }
 

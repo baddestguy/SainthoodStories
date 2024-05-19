@@ -18,7 +18,9 @@ public class GameSettings : MonoBehaviour
     public bool TutorialToggle;
     public bool SkipSplashScreens;
     public bool IgnoreHouseBuildingAtEndofDay;
+    [HideInInspector]
     public bool DEMO_MODE;
+    public bool DEMO_MODE_2;
     public bool ShowGrid;
     public bool InfiniteBoost;
     public bool IsXboxMode;

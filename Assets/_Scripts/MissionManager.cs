@@ -195,6 +195,19 @@ public class MissionManager : MonoBehaviour
         yield return seq.RunSequenceAsync();
 
 
+        if (GameSettings.Instance.DEMO_MODE_2 && CurrentMissionId == 3)
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
+            SaveDataManager.Instance.DeleteProgress();
+            SoundManager.Instance.EndAllTracks();
+            EventsManager.Instance.ExecuteEvents();
+
+            while (EventsManager.Instance.HasEventsInQueue()) yield return null;
+
+            GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+            yield break;
+        }
+
         //If we finished the final mission
         if (CurrentMissionId == 40)
         {

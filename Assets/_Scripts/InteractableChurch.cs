@@ -88,13 +88,7 @@ public class InteractableChurch : InteractableHouse
     public void CheckProvisions()
     {
         var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-        MaxPrayerProgress = rosary != null ? 5f : 4f;
-
-        var ac = InventoryManager.Instance.GetProvision(Provision.REDUCE_SLEEP_TIME);
-        MaxSleepProgress = ac?.Value ?? 2f;
-
-        var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
-        MaxSleepProgress += mattress?.Value ?? 0;
+        MaxPrayerProgress = rosary != null ? 6f : 4f;
     }
 
     public override void Tick(double time, int day)
@@ -296,7 +290,14 @@ public class InteractableChurch : InteractableHouse
             PrayerProgress += (int)MaxPrayerProgress;
             var extraPoints = 0;
             if (PopUI.CriticalHitCount == MaxPrayerProgress) extraPoints += 1;
-            if(PrayerProgress == MaxPrayerProgress)
+
+            var maxPP = MaxPrayerProgress;
+            if (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT)
+            {
+                maxPP = 12; //3hrs minimum to complete prayer objective
+            }
+
+            if (PrayerProgress == MaxPrayerProgress)
             {
                 var provData = InventoryManager.Instance.GetProvision(Provision.ROSARY);
                 extraPoints += provData?.Value ?? 0;
@@ -334,7 +335,7 @@ public class InteractableChurch : InteractableHouse
                     }
                 }
             }
-            for (int i = 0; i < MaxPrayerProgress; i++)
+            for (int i = 0; i < maxPP; i++)
             {
                 clock.Tick();
             }
@@ -416,32 +417,17 @@ public class InteractableChurch : InteractableHouse
                 GameClock clock = GameManager.Instance.GameClock;
                 CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
 
-                if (clock.Day % 5 == 0 || e != null)
+                var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+                var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+                var bonusFp = (koboko?.Value ?? 0) + (rosary?.Value ?? 0);
+                var maxPP = 0;
+                if (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT)
                 {
-                    if (clock.Time == ConfessionTime || 2-MassProgress == 1 || 2-LotHProgress == 1 || MaxPrayerProgress - PrayerProgress == 1)
-                    {
-                        var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-                        var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
-                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, fpModifier: FPBonus + rosary?.Value ?? 0);
-                    }
-                    else
-                    {
-                        return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
-                    }
+                    maxPP = 12;
                 }
-                else 
-                {
-                    if (2-LotHProgress == 1 || MaxPrayerProgress - PrayerProgress == 1)
-                    {
-                        var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-                        var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
-                        return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, energyModifier: koboko?.Value ?? 0, fpModifier: FPBonus + rosary?.Value ?? 0);
-                    }
-                    else
-                    {
-                        return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
-                    }
-                }
+
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, ticksOverride:maxPP, ticksModifier: rosary != null ? 2 : 0, energyModifier: -koboko?.Value ?? 0, fpModifier: FPBonus + bonusFp, fpOverride:MyObjective?.Reward ?? 0);
+
             case "SLEEP":
                 if (MaxSleepProgress - SleepProgress == 1)
                 {
