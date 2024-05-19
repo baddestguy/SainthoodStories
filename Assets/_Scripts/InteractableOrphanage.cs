@@ -45,7 +45,7 @@ public class InteractableOrphanage : InteractableHouse
         return base.CalculateMaxVolunteerPoints(amount);
     }
 
-    protected override void SetObjectiveParameters()
+    public override void SetObjectiveParameters()
     {
         if (MyObjective == null) return;
 
@@ -77,7 +77,6 @@ public class InteractableOrphanage : InteractableHouse
         if (item != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("GAVE TOYS TO THE KIDS!");
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(house, autoDeliver);
         }
         else
@@ -126,7 +125,6 @@ public class InteractableOrphanage : InteractableHouse
                         DeadlineDeliveryBonus = 1;
                         DeadlineSet = true;
                         DeadlineTriggeredForTheDay = true;
-                        PopMyIcon();
                         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
@@ -233,7 +231,8 @@ public class InteractableOrphanage : InteractableHouse
         switch (actionName)
         {
             case "VOLUNTEER":
-                return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && VolunteerCountdown > 0));
+                return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && VolunteerCountdown > 0))
+                    && MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT);
 
             case "TOYS":
                 return InventoryManager.Instance.CheckItem(ItemType.TOYS);
@@ -268,7 +267,6 @@ public class InteractableOrphanage : InteractableHouse
         if (item == ItemType.TOYS)
         {
             EventsManager.Instance.AddEventToList(CustomEventType.AUTO_DELIVER_COMPLETE);
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
     }

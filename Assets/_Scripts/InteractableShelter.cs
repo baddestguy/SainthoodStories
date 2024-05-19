@@ -35,7 +35,7 @@
         }
     }
 
-    protected override void SetObjectiveParameters()
+    public override void SetObjectiveParameters()
     {
         if (MyObjective == null) return;
 
@@ -57,7 +57,6 @@
         if (groceries != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED GROCERIES!");
-            UpdateCharityPoints(ItemDeliveryPoints, 0);
             base.DeliverItem(house, autoDeliver);
             return;
         }
@@ -66,7 +65,6 @@
         if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateCharityPoints(ItemDeliveryPoints*2, 0);
             base.DeliverItem(house, autoDeliver);
             return;
         }
@@ -90,7 +88,6 @@
         if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateCharityPoints(ItemDeliveryPoints * 2 * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, autoDeliver);
         }
         else
@@ -99,7 +96,6 @@
             if (grocery != ItemType.NONE)
             {
                 UI.Instance.DisplayMessage("FED THE HUNGRY!");
-                UpdateCharityPoints(ItemDeliveryPoints * 1 * DeadlineDeliveryBonus, 0);
                 base.DeliverItem(this, autoDeliver);
             }
         }
@@ -162,7 +158,6 @@
         if (item == ItemType.GROCERIES)
         {
             EventsManager.Instance.AddEventToList(CustomEventType.AUTO_DELIVER_COMPLETE);
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
     }

@@ -20,6 +20,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<string, StoryEventData> StoryEventData = new Dictionary<string, StoryEventData>();
     public Dictionary<string, List<BuildingMissionData>> BuildingMissionData = new Dictionary<string, List<BuildingMissionData>>();
     public Dictionary<int, List<ObjectivesData>> ObjectivesData = new Dictionary<int, List<ObjectivesData>>();
+    public Dictionary<string, List<HouseObjectivesData>> HouseObjectivesData = new Dictionary<string, List<HouseObjectivesData>>();
     public Dictionary<int, CollectibleObjectivesData> CollectibleObjectivesData = new Dictionary<int, CollectibleObjectivesData>();
     public Dictionary<string, List<CollectibleData>> CollectibleData = new Dictionary<string, List<CollectibleData>>();
     public List<WeatherData> WeatherData = new List<WeatherData>();
@@ -171,6 +172,21 @@ public class GameDataManager : MonoBehaviour
             else
             {
                 ObjectivesData.Add(item.Id, new List<ObjectivesData>() { item });
+            }
+        }
+
+        //House Objectives
+        csvFile = Resources.Load<TextAsset>("GameData/HouseObjectives");
+        var houseObjData = CSVSerializer.Deserialize<HouseObjectivesData>(csvFile.text);
+        foreach (var item in houseObjData)
+        {
+            if (HouseObjectivesData.ContainsKey(item.House))
+            {
+                HouseObjectivesData[item.House].Add(item);
+            }
+            else
+            {
+                HouseObjectivesData.Add(item.House, new List<HouseObjectivesData>() { item });
             }
         }
 

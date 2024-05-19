@@ -269,9 +269,13 @@ public class GameManager : MonoBehaviour
         PlayAmbience(time, day);
         if(GameClock.DeltaTime && time % 2 == 0)
         {
-            if(MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event > BuildingEventType.URGENT))
+            foreach(var h in Houses)
             {
-                MissionManager.Instance.UpdateCharityPoints(-1, null);
+                if (h.MyObjective == null) continue;
+                if(h.MyObjective.Event > BuildingEventType.URGENT)
+                {
+                    MissionManager.Instance.UpdateCharityPoints(-1, null);
+                }
             }
         }
         if (GameClock.DeltaTime && GameClock.EndofDay)

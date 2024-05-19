@@ -65,18 +65,13 @@ public class MissionManager : MonoBehaviour
         for (int i = 1; i <= GameDataManager.Instance.ObjectivesData.Count; i++)
         {
             var comp = CompletedObjectives?.Where(x => x.Id == i) ?? Enumerable.Empty<ObjectivesData>();
-            if(CompletedObjectives == null || comp.Count() < GameDataManager.Instance.ObjectivesData[i].Count+1)
+            if(CompletedObjectives == null || comp.Count() < GameDataManager.Instance.ObjectivesData[i].Count)
             {
                 CurrentMissionId = i;
                 CurrentObjectives = GameDataManager.Instance.GetObjectivesData(i).ToList();
                 foreach(var c in comp)
                 {
                     var done = CurrentObjectives.Remove(c);
-                }
-                if (!CurrentObjectives.Any())
-                {
-                    //TODO: SHOW POPUP TO END DAY
-                    CurrentObjectives.Add(new ObjectivesData() { Id = CurrentMissionId, Event = BuildingEventType.RETURN, House = "InteractableChurch" });
                 }
 
                 break;
@@ -108,12 +103,6 @@ public class MissionManager : MonoBehaviour
         {
             CompletedObjectives.Add(obj);
         }
-
-        if (!CurrentObjectives.Any())
-        {
-            //TODO: SHOW POPUP TO END DAY
-            CurrentObjectives.Add(new ObjectivesData() { Id = CurrentMissionId, Event = BuildingEventType.RETURN, House = "InteractableChurch" });
-        }
     }
 
     public void Collect(string item)
@@ -132,16 +121,17 @@ public class MissionManager : MonoBehaviour
 
     public void EndDay()
     {
-        if(!CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN))
-        {
-            ToolTipManager.Instance.ShowToolTip("");
-            Player.LockMovement = true;
-            MissionOver = true;
-            UI.Instance.EnableAllUIElements(false);
-            UI.Instance.GameOver();
-            UI.Instance.TriggerGameOver();
-            return;
-        }
+        //if(!CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN))
+        //{
+        //    ToolTipManager.Instance.ShowToolTip("");
+        //    Player.LockMovement = true;
+        //    MissionOver = true;
+        //    UI.Instance.EnableAllUIElements(false);
+        //    UI.Instance.GameOver();
+        //    UI.Instance.TriggerGameOver();
+        //    return;
+        //}
+        AutoCompleteObjective();
 
         CurrentObjectives.Clear();
         StartCoroutine(NewDayAsync());
@@ -206,7 +196,7 @@ public class MissionManager : MonoBehaviour
 
 
         //If we finished the final mission
-        if (CurrentMissionId == 36)
+        if (CurrentMissionId == 40)
         {
             FaithPoints += FaithPointsPool;
             CharityPoints += CharityPointsPool;
@@ -267,7 +257,7 @@ public class MissionManager : MonoBehaviour
             }
         }
 
-        CompleteObjective(new ObjectivesData() { Id = CurrentMissionId, Event = BuildingEventType.RETURN, House = "InteractableChurch" });
+        //CompleteObjective(new ObjectivesData() { Id = CurrentMissionId, Event = BuildingEventType.RETURN, House = "InteractableChurch" });
         CurrentObjectives.Clear();
 
         InteractableHouse.HazardCounter = 0;
@@ -311,30 +301,30 @@ public class MissionManager : MonoBehaviour
 
     public void OverrideMission(int missionId)
     {
-        if(CompletedObjectives != null)
-        {
-            CompletedObjectives.Clear();
-        }
+        //if(CompletedObjectives != null)
+        //{
+        //    CompletedObjectives.Clear();
+        //}
 
-        for (int i = 1; i < missionId; i++)
-        {
-            for(int j = 0; j < GameDataManager.Instance.ObjectivesData[i].Count; j++)
-            {
-                CompleteObjective(GameDataManager.Instance.ObjectivesData[i][j]);
-            }
-            CurrentMissionId = i;
-            CurrentObjectives = GameDataManager.Instance.GetObjectivesData(i).ToList();
-            CompleteObjective(new ObjectivesData() { Id = CurrentMissionId, Event = BuildingEventType.RETURN, House = "InteractableChurch" });
-        }
+        //for (int i = 1; i < missionId; i++)
+        //{
+        //    for(int j = 0; j < GameDataManager.Instance.ObjectivesData[i].Count; j++)
+        //    {
+        //        CompleteObjective(GameDataManager.Instance.ObjectivesData[i][j]);
+        //    }
+        //    CurrentMissionId = i;
+        //    CurrentObjectives = GameDataManager.Instance.GetObjectivesData(i).ToList();
+        //    CompleteObjective(new ObjectivesData() { Id = CurrentMissionId, Event = BuildingEventType.RETURN, House = "InteractableChurch" });
+        //}
 
-        foreach(var house in GameManager.Instance.Houses)
-        {
-            house.OverrideState(CurrentMissionId);
-        }
+        //foreach(var house in GameManager.Instance.Houses)
+        //{
+        //    house.OverrideState(CurrentMissionId);
+        //}
 
-        SaveDataManager.Instance.SaveGame();
-        MissionsBegin();
-        GameManager.Instance.ReloadLevel();
+        //SaveDataManager.Instance.SaveGame();
+        //MissionsBegin();
+        //GameManager.Instance.ReloadLevel();
     }
 
     public void AutoCompleteObjective()
@@ -344,9 +334,6 @@ public class MissionManager : MonoBehaviour
         foreach(var obj in list)
         {
             CompleteObjective(obj);
-            SaveDataManager.Instance.SaveGame();
-            MissionsBegin();
-            GameManager.Instance.ReloadLevel();
         }
     }
 

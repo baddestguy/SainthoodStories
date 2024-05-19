@@ -42,7 +42,7 @@ public class PopUI : MonoBehaviour
     public TextMeshProUGUI RPDisplay;
     public Image GlowImage;
 
-    void Start()
+    void Awake()
     {
         CamTransform = ExteriorCamera.Instance.Camera.transform;
         InteractableHouse.OnActionProgress += UpdateProgressBar;
@@ -340,7 +340,6 @@ public class PopUI : MonoBehaviour
 
     private void UpdateProgressBar(float progress, InteractableHouse house, int progressBar = 0)
     {
-        return;
         if (ProgressBars.Length < progressBar + 1) return;
         ProgressBar = ProgressBars[progressBar];
         if (ProgressBar == null || MyHouse != house) return;
@@ -422,6 +421,11 @@ public class PopUI : MonoBehaviour
     }
 
     private void OnEnable()
+    {
+        UpdateProgressBars();
+    }
+
+    private void UpdateProgressBars()
     {
         for (int i = 0; i < ProgressBars.Length; i++)
         {

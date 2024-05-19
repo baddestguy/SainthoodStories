@@ -48,7 +48,7 @@ public class InteractableSchool : InteractableHouse
         return base.CalculateMaxVolunteerPoints(amount);
     }
 
-    protected override void SetObjectiveParameters()
+    public override void SetObjectiveParameters()
     {
         if (MyObjective == null) return;
 
@@ -113,7 +113,6 @@ public class InteractableSchool : InteractableHouse
         if (item != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED STATIONERY!");
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(house, autoDeliver);
         }
         else
@@ -135,8 +134,9 @@ public class InteractableSchool : InteractableHouse
 
     public override bool DuringOpenHours(GameClock newClock = null)
     {
-        GameClock clock = newClock ?? GameManager.Instance.GameClock;
-        return base.DuringOpenHours() && clock.Day <= 5;
+        return true;
+        //GameClock clock = newClock ?? GameManager.Instance.GameClock;
+        //return base.DuringOpenHours() && clock.Day <= 5;
     }
 
     public override void PopUICallback(string button)
@@ -188,7 +188,6 @@ public class InteractableSchool : InteractableHouse
                         DeadlineDeliveryBonus = 1;
                         DeadlineSet = true;
                         DeadlineTriggeredForTheDay = true;
-                        PopMyIcon();
                         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
@@ -255,7 +254,8 @@ public class InteractableSchool : InteractableHouse
 
             case "TEACH":
                 Player player = GameManager.Instance.Player;
-                return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && TeachCountdown > 0));
+                return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && TeachCountdown > 0))
+                    && MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT);
         }
 
         return base.CanDoAction(actionName);
@@ -288,7 +288,6 @@ public class InteractableSchool : InteractableHouse
         if (item == ItemType.STATIONERY)
         {
             EventsManager.Instance.AddEventToList(CustomEventType.AUTO_DELIVER_COMPLETE);
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
     }

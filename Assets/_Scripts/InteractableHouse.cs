@@ -7,6 +7,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using static Rewired.InputMapper;
 using Random = UnityEngine.Random;
 
 public class InteractableHouse : InteractableObject
@@ -82,7 +83,11 @@ public class InteractableHouse : InteractableObject
     public bool HasBeenDestroyed;
 
     protected List<CustomEventType> MyStoryEvents = new List<CustomEventType>();
-    public ObjectivesData MyObjective;
+    public HouseObjectivesData MyObjective;
+    public int CurrentMissionId = 0;
+    public string HouseName;
+
+    public int VolunteerProgress = 0;
 
     protected virtual void Start()
     {
@@ -101,14 +106,15 @@ public class InteractableHouse : InteractableObject
 
     public void Initialize()
     {
-        var objectives = MissionManager.Instance.CurrentObjectives.Where(obj => obj.House == GetType().Name || (obj.House == "Any" && GetType().Name != "InteractableChurch"));
-        if(objectives.Count() > 1)
+        HouseName = GetType().Name;
+
+        if(HouseName.Contains("Market") || HouseName.Contains("Clothes") || CurrentMissionId > 14)
         {
-            MyObjective = objectives.Where(obj => obj.House == GetType().Name).FirstOrDefault();
+            MyObjective = null;
         }
         else
         {
-            MyObjective = objectives.FirstOrDefault();
+            MyObjective = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
         }
 
         if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT_URGENT)
@@ -144,7 +150,7 @@ public class InteractableHouse : InteractableObject
         BuildingGo.SetActive(BuildingState == BuildingState.NORMAL || BuildingState == BuildingState.HAZARDOUS);
 
         PopIcon.transform.SetParent(transform);
-        PopIcon.transform.localPosition = new Vector3(0, 1, 0);
+        PopIcon.transform.localPosition = new Vector3(0, 0, 0);
         PopIcon.gameObject.SetActive(false);
 
         InfoPopup.transform.SetParent(transform);
@@ -179,10 +185,14 @@ public class InteractableHouse : InteractableObject
             transform.position = new Vector3(newPos.x, newPos.y + 1.2f, newPos.z);
         }
 
-        SetObjectiveParameters();
+        if (HouseName.Contains("Church") || CurrentMissionId != 0)
+        {
+            SetObjectiveParameters();
+        }
+
     }
 
-    protected virtual void SetObjectiveParameters()
+    public virtual void SetObjectiveParameters()
     {
         if (MyObjective == null) return;
 
@@ -194,16 +204,19 @@ public class InteractableHouse : InteractableObject
 
         if(MyObjective.Event == BuildingEventType.DELIVER_ITEM || MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT)
         {
-            RequiredItems = MyObjective.RequiredAmount;
+            RequiredItems = RequiredItems != 0 && RequiredItems < MyObjective.RequiredAmount ? RequiredItems : MyObjective.RequiredAmount;
             DeadlineSet = true;
             DeadlineTriggeredForTheDay = true;
-            PopMyIcon();
             SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
         }
         else if(MyObjective.Event == BuildingEventType.REPAIR || MyObjective.Event == BuildingEventType.REPAIR_URGENT)
         {
             var clock = GameManager.Instance.GameClock;
             TriggerHazardousMode(clock.Time, clock.Day);
+        }
+        else if(MyObjective.Event == BuildingEventType.SPECIAL_EVENT)
+        {
+            TriggerCustomEvent();
         }
 
     }
@@ -243,21 +256,27 @@ public class InteractableHouse : InteractableObject
                 VolunteerCountdown++;
                 var extraPoints = 0;
                 if (PopUI.CriticalHitCount == 1) extraPoints = 1;
-                OnActionProgress?.Invoke(VolunteerCountdown / MaxVolunteerPoints, this, 1);
+                Player player = GameManager.Instance.Player;
                 if (VolunteerCountdown >= MaxVolunteerPoints)
                 {
-                    BuildRelationship(ThankYouType.VOLUNTEER);
-                    Player player = GameManager.Instance.Player;
-                    var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption);
-                    moddedEnergy += ModVolunteerEnergyWithProvisions();
-                    player.ConsumeEnergy(EnergyConsumption, this);
-                    UpdateCharityPoints(VolunteerPoints + extraPoints, moddedEnergy);
-                    VolunteerCountdown = 0;
                     if(MyObjective?.Event == BuildingEventType.VOLUNTEER || MyObjective?.Event == BuildingEventType.VOLUNTEER_URGENT)
                     {
-                        MissionManager.Instance.CompleteObjective(MyObjective);
-                        MyObjective = null;
+                        VolunteerProgress++;
+                        OnActionProgress?.Invoke(VolunteerProgress / (float)MyObjective.RequiredAmount, this, 1);
+                        if (VolunteerProgress >= MyObjective.RequiredAmount)
+                        {
+                            BuildRelationship(ThankYouType.VOLUNTEER);
+                            var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption);
+                            moddedEnergy += ModVolunteerEnergyWithProvisions();
+                            UpdateCharityPoints(MyObjective.Reward + extraPoints, moddedEnergy);
+                            CurrentMissionId++;
+                            MyObjective = null;
+                            VolunteerProgress = 0;
+
+                        }
                     }
+                    player.ConsumeEnergy(EnergyConsumption, this);
+                    VolunteerCountdown = 0;
                 }
                 break;
         }
@@ -270,7 +289,6 @@ public class InteractableHouse : InteractableObject
 
         if (CanBuild())
         {
-            PopMyIcon("Rubble", 0, new GameClock(0, GameManager.Instance.GameClock.Day+1));
             RubbleGo.SetActive(true);
             GetComponent<BoxCollider>().enabled = true;
         }
@@ -303,7 +321,7 @@ public class InteractableHouse : InteractableObject
                 }
             }
         }
-        if (BuildingState == BuildingState.HAZARDOUS)
+        if (MyObjective != null || BuildingState == BuildingState.HAZARDOUS)
         {
             PopMyIcon();
         }
@@ -325,7 +343,6 @@ public class InteractableHouse : InteractableObject
         {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
         }
-        UpdateCharityPoints(-5, 0);
      
         SaveDataManager.Instance.SaveGame();
     }
@@ -467,7 +484,6 @@ public class InteractableHouse : InteractableObject
                         DeadlineDeliveryBonus = 1;
                         DeadlineSet = true;
                         DeadlineTriggeredForTheDay = true;
-                        PopMyIcon();
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : DAY  {DeadlineTime.Day} : {RequiredItems} Items!");
                     }
                 }
@@ -513,7 +529,7 @@ public class InteractableHouse : InteractableObject
         PrayersProgress += (int)MaxPrayerProgress;
         var extraPoints = 0;
         extraPoints += PopUI.CriticalHitCount == MaxPrayerProgress ? 1 : 0;
-        OnActionProgress?.Invoke(PrayersProgress / MaxPrayerProgress, this, 0);
+        OnActionProgress?.Invoke(PrayersProgress / (float)MaxPrayerProgress, this, 0);
         if (PrayersProgress == MaxPrayerProgress)
         {
             var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
@@ -540,8 +556,9 @@ public class InteractableHouse : InteractableObject
         if (house != this) return;
 
         RequiredItems--;
-        PopMyIcon();
-        if(InteriorPopUI)
+        var amt = MyObjective.RequiredAmount - RequiredItems;
+        OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 2);
+        if (InteriorPopUI)
             InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
         ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
 
@@ -556,7 +573,13 @@ public class InteractableHouse : InteractableObject
             UI.Instance.SideNotificationPop(GetType().Name);
             if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM || MyObjective?.Event == BuildingEventType.DELIVER_ITEM_URGENT)
             {
-                MissionManager.Instance.CompleteObjective(MyObjective);
+                CurrentMissionId++;
+                UpdateCharityPoints(MyObjective.Reward, 0);
+                var obj = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
+                if (obj.Event == BuildingEventType.DELIVER_ITEM || MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT)
+                {
+                    RequiredItems = obj.RequiredAmount;
+                }
                 MyObjective = null;
             }
 
@@ -670,7 +693,12 @@ public class InteractableHouse : InteractableObject
         {
             if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT_URGENT)
             {
-                MissionManager.Instance.CompleteObjective(MyObjective);
+                CurrentMissionId++;
+                var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+                var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
+                var moddedCPReward = extraPoints + (tents?.Value ?? 0);
+                player.ConsumeEnergy(moddedEnergy);
+                UpdateCharityPoints(MyObjective.Reward + moddedCPReward, moddedEnergy);
                 MyObjective = null;
             }
             //Play Cool Construction Vfx and Animation!
@@ -689,12 +717,8 @@ public class InteractableHouse : InteractableObject
             }
             if (!HasBeenDestroyed)
             {
-                BuildingCompleteDialog();
+            //    BuildingCompleteDialog();
             }
-            var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
-            var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
-            var moddedCPReward = extraPoints + (tents?.Value ?? 0);
-            UpdateCharityPoints(1 + moddedCPReward, moddedEnergy);
 
             var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
             RelationshipBonus= buildingBlueprint?.Value ?? 0;
@@ -860,6 +884,31 @@ public class InteractableHouse : InteractableObject
         ExteriorCamera.Instance.Camera.enabled = false;
         ExteriorCamera.Instance.UICamera.enabled = false;
         InteriorSpaces[UpgradeLevel].SetActive(true);
+
+        if(MyObjective != null)
+        {
+            switch (MyObjective.Event)
+            {
+                case BuildingEventType.PRAY:
+                case BuildingEventType.PRAY_URGENT:
+                    OnActionProgress?.Invoke(VolunteerProgress / (float)MyObjective.RequiredAmount, this, 0);
+                    break;
+
+                case BuildingEventType.VOLUNTEER:
+                case BuildingEventType.VOLUNTEER_URGENT:
+                    OnActionProgress?.Invoke(VolunteerProgress / (float)MyObjective.RequiredAmount, this, 1);
+                    break;
+
+                case BuildingEventType.DELIVER_ITEM:
+                case BuildingEventType.DELIVER_ITEM_URGENT:
+                case BuildingEventType.DELIVER_MEAL:
+                case BuildingEventType.DELIVER_MEAL_URGENT:
+                    var amt = MyObjective.RequiredAmount - RequiredItems;
+                    OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 2);
+                    break;
+
+            }
+        }
     }
 
     public virtual void VolunteerWork(InteractableHouse house)
@@ -911,18 +960,18 @@ public class InteractableHouse : InteractableObject
 
     public virtual void ReportScores()
     {
-        if (DeadlineSet) UpdateCharityPoints(-1, 0);
     }
 
     public virtual bool DuringOpenHours(GameClock newClock = null)
     {
-        GameClock clock = newClock ?? GameManager.Instance.GameClock;
-        return clock.Time >= OpenTime && clock.Time < ClosingTime;
+        return true;
+        //GameClock clock = newClock ?? GameManager.Instance.GameClock;
+        //return clock.Time >= OpenTime && clock.Time < ClosingTime;
     }
 
     public virtual void PopMyIcon(string name = "", int items = -1, GameClock time = null)
     {
-        if (string.IsNullOrEmpty(name)) name = GetType().Name;
+        if (string.IsNullOrEmpty(name)) name = HouseName;
         if (items < 0) items = RequiredItems;
         if (time == null) time = DeadlineTime;
 
@@ -930,19 +979,19 @@ public class InteractableHouse : InteractableObject
         {
             if (BuildingState == BuildingState.HAZARDOUS)
             {
-                UI.Instance.SideNotificationPush(GetHazardIcon(), 0, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown/2d, GameManager.Instance.GameClock.Day), GetType().Name + GetHazardIcon());
+                UI.Instance.SideNotificationPush(GetHazardIcon(), 0, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown/2d, GameManager.Instance.GameClock.Day), HouseName + GetHazardIcon());
             }
             else
             {
-                UI.Instance.SideNotificationPush(name, items, time, GetType().Name);
+                UI.Instance.SideNotificationPush(name, items, time, HouseName);
             }
             PopIcon.gameObject.SetActive(false);
             return;
         }
         else
         {
-            UI.Instance.SideNotificationPop(GetType().Name);
-            UI.Instance.SideNotificationPop(GetType().Name+GetHazardIcon());
+            UI.Instance.SideNotificationPop(HouseName);
+            UI.Instance.SideNotificationPop(HouseName + GetHazardIcon());
         }
 
         PopIcon.gameObject.SetActive(true);
@@ -1004,7 +1053,8 @@ public class InteractableHouse : InteractableObject
                 }
                 else
                 {
-                    TriggerCustomEvent();
+                    //SetObjectiveParameters();
+                    //TriggerCustomEvent();
                 }
             }
 
@@ -1077,7 +1127,6 @@ public class InteractableHouse : InteractableObject
 
     public virtual void TriggerCustomEvent()
     {
-        if (MyObjective?.Event != BuildingEventType.VOLUNTEER && MyObjective?.Event != BuildingEventType.VOLUNTEER_URGENT) return;
         //if (GameSettings.Instance.FTUE) return;
         //if (EventsTriggered > 0) return;
         //if (EventsManager.Instance.EventInProgress) return;
@@ -1157,7 +1206,7 @@ public class InteractableHouse : InteractableObject
         UI.Instance.SideNotificationPop(GetType().Name + GetHazardIcon());
         if (MyObjective?.Event == BuildingEventType.REPAIR || MyObjective?.Event == BuildingEventType.REPAIR_URGENT)
         {
-            MissionManager.Instance.CompleteObjective(MyObjective);
+            CurrentMissionId++;
             MyObjective = null;
         }
     }
@@ -1170,7 +1219,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual bool HasResetActionProgress()
     {
-        return VolunteerCountdown == 0 && PrayersProgress == 0 || (BuildingState == BuildingState.RUBBLE && BuildPoints == 0);
+        return (BuildingState == BuildingState.RUBBLE && BuildPoints == 0);
     }
 
     private void OnUIEnabled(bool enabled)
@@ -1182,13 +1231,12 @@ public class InteractableHouse : InteractableObject
             InteriorPopUI.gameObject.SetActive(enabled);
         }
 
-        if(CanBuild() || DeadlineSet || GetType().Name == "InteractableChurch") //Only reason to have popicons displaying
+        if(MyObjective != null) //Only reason to have popicons displaying
         {
             if(enabled && !HouseUIActive)
                 PopIcon.gameObject.SetActive(true);            
             PopIcon.UIPopped(!enabled);
-            if (CanBuild()) PopIcon.Init("Rubble", 0, new GameClock(-1));
-            else PopMyIcon();
+            PopMyIcon();
         }
     }
 
@@ -1269,7 +1317,7 @@ public class InteractableHouse : InteractableObject
     {
         if (BuildPoints >= MaxBuildPoints || BuildingState != BuildingState.RUBBLE || MyObjective == null) return false;
 
-        if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT) return true;
+        if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT_URGENT) return true;
 
         return false;
     }
@@ -1284,11 +1332,11 @@ public class InteractableHouse : InteractableObject
         switch (actionName)
         {
             case "BUILD":
-                return CanBuild();
+                return GameManager.Instance.Player.EnergyDepleted() && CanBuild();
 
             //case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0) || (!DuringOpenHours() && BuildingState != BuildingState.NORMAL);
             case "PRAY": return true;
-            case "SLEEP": return MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
+            case "SLEEP": return MissionManager.Instance.CurrentMissionId != 1 || GameManager.Instance.GameClock.Time != 5;// MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
             case "EXIT": return true;
             case "WORLD": return true;
             case "ENTER": return true;
@@ -1494,6 +1542,8 @@ public class InteractableHouse : InteractableObject
         HasBeenDestroyed = data.HasBeenDestroyed;
         DeadlineTriggeredForTheDay = data.DeadlineTriggeredForTheDay;
         MyStoryEvents = data.MyStoryEvents;
+        CurrentMissionId = data.CurrentMissionId;
+        VolunteerProgress = data.VolunteerProgress;
 
         return data;
     }
@@ -1518,7 +1568,9 @@ public class InteractableHouse : InteractableObject
             HazardCounter = HazardCounter,
             HasBeenDestroyed = HasBeenDestroyed,
             MyStoryEvents = MyStoryEvents,
-            UpgradeLevel = UpgradeLevel
+            UpgradeLevel = UpgradeLevel,
+            CurrentMissionId = CurrentMissionId,
+            VolunteerProgress = VolunteerProgress
         };
     }
 

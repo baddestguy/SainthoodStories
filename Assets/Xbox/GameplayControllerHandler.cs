@@ -470,7 +470,7 @@ namespace Assets.Xbox
                     _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale / scaleValue, 0.5f);
                 }
 
-                var gameObjects = _packageSelector.ItemList.Concat(_packageSelector.AvailableItems)
+                var gameObjects = _packageSelector.ItemList.Concat(_packageSelector.InstantiatedGos)
                     .Select(x => x.gameObject).ToList();
                 gameObjects.Add(_packageSelector.ExitGameObject);
 

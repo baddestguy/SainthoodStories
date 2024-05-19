@@ -8,7 +8,7 @@ public class PackageItem : MonoBehaviour
     public ItemType Item;
     public Image PackageIcon;
 
-    public ObjectivesData Data;
+    public HouseObjectivesData Data;
 
     private string HeaderColor = "<color=#3B2E1F>";
     private string SubheaderColor = "<color=#C9A963>";
@@ -24,7 +24,7 @@ public class PackageItem : MonoBehaviour
         
     }
 
-    public void Init(ObjectivesData data)
+    public void Init(HouseObjectivesData data)
     {
         Data = data;
         switch (data.House)

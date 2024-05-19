@@ -153,9 +153,9 @@ public class CustomEventPopup : MonoBehaviour
 
         player.CurrentBuilding.ClearHazard();
         player.CurrentBuilding.BuildRelationship(ThankYouType.IMMEDIATE_ASSISTANCE);
-        if (player.CurrentBuilding.MyObjective?.Event == BuildingEventType.VOLUNTEER || player.CurrentBuilding.MyObjective?.Event == BuildingEventType.VOLUNTEER_URGENT)
+        if (player.CurrentBuilding.MyObjective?.Event == BuildingEventType.SPECIAL_EVENT || player.CurrentBuilding.MyObjective?.Event == BuildingEventType.SPECIAL_EVENT_URGENT)
         {
-            MissionManager.Instance.CompleteObjective(player.CurrentBuilding.MyObjective);
+            player.CurrentBuilding.CurrentMissionId++;
             player.CurrentBuilding.MyObjective = null;
         }
 

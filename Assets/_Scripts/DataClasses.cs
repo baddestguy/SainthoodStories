@@ -88,11 +88,19 @@ public enum BuildingEventType
     REPAIR,
     RETURN,
     MASS,
+    SPECIAL_EVENT,
+    DELIVER_MEAL,
+    COOK,
+    PRAY,
     URGENT,
     DELIVER_ITEM_URGENT,
+    DELIVER_MEAL_URGENT,
     VOLUNTEER_URGENT,
     REPAIR_URGENT,
     CONSTRUCT_URGENT,
+    COOK_URGENT,
+    PRAY_URGENT,
+    SPECIAL_EVENT_URGENT,
     RETURN_URGENT
 }
 
@@ -305,6 +313,8 @@ public class HouseSaveData
     public bool HasBeenDestroyed;
     public List<CustomEventType> MyStoryEvents;
     public int UpgradeLevel;
+    public int CurrentMissionId;
+    public int VolunteerProgress;
 }
 
 public class TooltipStats
@@ -343,14 +353,50 @@ public class CollectibleObjectivesData
 }
 
 [System.Serializable]
+public class HouseObjectivesData
+{
+    public string House;
+    public int MissionId;
+    public BuildingEventType Event;
+    public int RequiredAmount;
+    public CustomEventType CustomEventId;
+    public int Reward;
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        HouseObjectivesData other = (HouseObjectivesData)obj;
+        return House == other.House && MissionId == other.MissionId && CustomEventId == other.CustomEventId
+            && Event == other.Event && RequiredAmount == other.RequiredAmount && Reward == other.Reward;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 23 + House.GetHashCode();
+            hash = hash * 23 + MissionId.GetHashCode();
+            hash = hash * 23 + (Event.GetHashCode());
+            hash = hash * 23 + (RequiredAmount.GetHashCode());
+            hash = hash * 23 + (CustomEventId.GetHashCode());
+            hash = hash * 23 + Reward.GetHashCode();
+            return hash;
+        }
+    }
+}
+
+
+[System.Serializable]
 public class ObjectivesData
 {
     public int Id;
-    public BuildingEventType Event;
-    public CustomEventType DailyEvent;
-    public string House;
-    public int RequiredAmount;
     public CustomEventType CustomEventId;
+    public CustomEventType DailyEvent;
     public int WeatherId;
     public Season Season;
 
@@ -362,8 +408,7 @@ public class ObjectivesData
         }
 
         ObjectivesData other = (ObjectivesData)obj;
-        return Id == other.Id && Event == other.Event && House == other.House
-            && RequiredAmount == other.RequiredAmount && CustomEventId == other.CustomEventId
+        return Id == other.Id && CustomEventId == other.CustomEventId
             && WeatherId == other.WeatherId && Season == other.Season;
     }
 
@@ -373,9 +418,6 @@ public class ObjectivesData
         {
             int hash = 17;
             hash = hash * 23 + Id.GetHashCode();
-            hash = hash * 23 + (Event.GetHashCode());
-            hash = hash * 23 + (House != null ? House.GetHashCode() : 0);
-            hash = hash * 23 + RequiredAmount.GetHashCode();
             hash = hash * 23 + (CustomEventId.GetHashCode());
             hash = hash * 23 + WeatherId.GetHashCode();
             return hash;
@@ -787,4 +829,98 @@ public enum CustomEventType
     ,MISSION_34
     ,MISSION_35
     ,MISSION_36
+    ,MISSION_37
+    ,MISSION_38
+    ,MISSION_39
+    ,MISSION_40
+    ,HOSPITAL_MISSION_1
+    ,HOSPITAL_MISSION_2
+    ,HOSPITAL_MISSION_3
+    ,HOSPITAL_MISSION_4
+    ,HOSPITAL_MISSION_5
+    ,HOSPITAL_MISSION_6
+    ,HOSPITAL_MISSION_7
+    ,HOSPITAL_MISSION_8
+    ,HOSPITAL_MISSION_9
+    ,HOSPITAL_MISSION_10
+    ,HOSPITAL_MISSION_11
+    ,HOSPITAL_MISSION_12
+    ,HOSPITAL_MISSION_13
+    ,HOSPITAL_MISSION_14
+    ,HOSPITAL_MISSION_15
+    ,ORPHANAGE_MISSION_1
+    ,ORPHANAGE_MISSION_2
+    ,ORPHANAGE_MISSION_3
+    ,ORPHANAGE_MISSION_4
+    ,ORPHANAGE_MISSION_5
+    ,ORPHANAGE_MISSION_6
+    ,ORPHANAGE_MISSION_7
+    ,ORPHANAGE_MISSION_8
+    ,ORPHANAGE_MISSION_9
+    ,ORPHANAGE_MISSION_10
+    ,ORPHANAGE_MISSION_11
+    ,ORPHANAGE_MISSION_12
+    ,ORPHANAGE_MISSION_13
+    ,ORPHANAGE_MISSION_14
+    ,ORPHANAGE_MISSION_15
+    ,SCHOOL_MISSION_1
+    ,SCHOOL_MISSION_2
+    ,SCHOOL_MISSION_3
+    ,SCHOOL_MISSION_4
+    ,SCHOOL_MISSION_5
+    ,SCHOOL_MISSION_6
+    ,SCHOOL_MISSION_7
+    ,SCHOOL_MISSION_8
+    ,SCHOOL_MISSION_9
+    ,SCHOOL_MISSION_10
+    ,SCHOOL_MISSION_11
+    ,SCHOOL_MISSION_12
+    ,SCHOOL_MISSION_13
+    ,SCHOOL_MISSION_14
+    ,SCHOOL_MISSION_15
+    ,SHELTER_MISSION_1
+    ,SHELTER_MISSION_2
+    ,SHELTER_MISSION_3
+    ,SHELTER_MISSION_4
+    ,SHELTER_MISSION_5
+    ,SHELTER_MISSION_6
+    ,SHELTER_MISSION_7
+    ,SHELTER_MISSION_8
+    ,SHELTER_MISSION_9
+    ,SHELTER_MISSION_10
+    ,SHELTER_MISSION_11
+    ,SHELTER_MISSION_12
+    ,SHELTER_MISSION_13
+    ,SHELTER_MISSION_14
+    ,SHELTER_MISSION_15
+    ,KITCHEN_MISSION_1
+    ,KITCHEN_MISSION_2
+    ,KITCHEN_MISSION_3
+    ,KITCHEN_MISSION_4
+    ,KITCHEN_MISSION_5
+    ,KITCHEN_MISSION_6
+    ,KITCHEN_MISSION_7
+    ,KITCHEN_MISSION_8
+    ,KITCHEN_MISSION_9
+    ,KITCHEN_MISSION_10
+    ,KITCHEN_MISSION_11
+    ,KITCHEN_MISSION_12
+    ,KITCHEN_MISSION_13
+    ,KITCHEN_MISSION_14
+    ,KITCHEN_MISSION_15
+    ,CHURCH_MISSION_1
+    ,CHURCH_MISSION_2
+    ,CHURCH_MISSION_3
+    ,CHURCH_MISSION_4
+    ,CHURCH_MISSION_5
+    ,CHURCH_MISSION_6
+    ,CHURCH_MISSION_7
+    ,CHURCH_MISSION_8
+    ,CHURCH_MISSION_9
+    ,CHURCH_MISSION_10
+    ,CHURCH_MISSION_11
+    ,CHURCH_MISSION_12
+    ,CHURCH_MISSION_13
+    ,CHURCH_MISSION_14
+    ,CHURCH_MISSION_15
 }

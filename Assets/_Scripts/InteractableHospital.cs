@@ -59,7 +59,7 @@ public class InteractableHospital : InteractableHouse
         return base.CalculateMaxVolunteerPoints(amount);
     }
 
-    protected override void SetObjectiveParameters()
+    public override void SetObjectiveParameters()
     {
         if (MyObjective == null) return;
    
@@ -101,7 +101,6 @@ public class InteractableHospital : InteractableHouse
                     var extraPoints = 0;
                     if (PopUI.CriticalHitCount == MaxDeliveryPoints) extraPoints = 1;
 
-                    UpdateCharityPoints(BabyPoints + (e != null ? (int)e.Gain : 0) + extraPoints, moddedEnergy);
                     PopIcon.gameObject.SetActive(false);
                     UI.Instance.SideNotificationPop(GetType().Name);
                     DeadlineCounter--;
@@ -112,7 +111,7 @@ public class InteractableHospital : InteractableHouse
                     OnActionProgress?.Invoke(1f, this, 2);
                     if (MyObjective?.Event == BuildingEventType.BABY)
                     {
-                        MissionManager.Instance.CompleteObjective(MyObjective);
+                        CurrentMissionId++;
                         MyObjective = null;
                     }
 
@@ -127,7 +126,6 @@ public class InteractableHospital : InteractableHouse
         }
         if (DeliveryTimeSet)
         {
-            PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
         }
 
         base.Tick(time, day);
@@ -180,7 +178,6 @@ public class InteractableHospital : InteractableHouse
         EndDelivery = new GameClock(clock.Time, clock.Day);
         EndDelivery.AddTime(bMission != null ? bMission.DeadlineHours : 9);
         RandomBabyIcon = "Baby" + Random.Range(1, 3);
-        PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
         //    UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
     }
@@ -191,7 +188,6 @@ public class InteractableHospital : InteractableHouse
         GameClock clock = GameManager.Instance.GameClock;
         if (DeliveryTimeSet)
         {
-            PopMyIcon(RandomBabyIcon, RequiredItems, EndDelivery);
             if (clock >= EndDelivery)
             {
                 DeliveryTimeSet = false;
@@ -199,7 +195,6 @@ public class InteractableHospital : InteractableHouse
                 FailedDelivery = true;
                 PopIcon.gameObject.SetActive(false);
                 UI.Instance.SideNotificationPop(GetType().Name);
-                UpdateCharityPoints(-FailedDeliveryPoints, 0);
                 UI.Instance.DisplayMessage($"FAILED TO DELIVER BABY!");
                 SoundManager.Instance.PlayOneShotSfx("FailedDeadline_SFX");
             }
@@ -290,7 +285,6 @@ public class InteractableHospital : InteractableHouse
         if (item != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED MEDS!");
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(house, autoDeliver);
         }
         else
@@ -323,7 +317,6 @@ public class InteractableHospital : InteractableHouse
 
     public override void ReportScores()
     {
-        if (DeliveryTimeSet) UpdateCharityPoints(-2, 0);
         base.ReportScores();
     }
 
@@ -410,10 +403,10 @@ public class InteractableHospital : InteractableHouse
         switch (actionName)
         {
             case "BABY":
-                return !player.EnergyDepleted() && DeliveryTimeSet && (DuringOpenHours() || (!DuringOpenHours() && DeliveryCountdown > 0));
+                return !player.EnergyDepleted() && MyObjective != null && MyObjective.Event == BuildingEventType.BABY;
 
             case "VOLUNTEER":
-                return !player.EnergyDepleted() && !DeliveryTimeSet && (DuringOpenHours() || (!DuringOpenHours() && VolunteerCountdown > 0));
+                return !player.EnergyDepleted() && MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT);
 
             case "MEDS":
                 return InventoryManager.Instance.CheckItem(ItemType.MEDS);
@@ -433,7 +426,6 @@ public class InteractableHospital : InteractableHouse
         if(item == ItemType.MEDS)
         {
             EventsManager.Instance.AddEventToList(CustomEventType.AUTO_DELIVER_COMPLETE);
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
     }
