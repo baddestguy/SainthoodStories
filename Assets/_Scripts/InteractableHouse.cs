@@ -88,6 +88,7 @@ public class InteractableHouse : InteractableObject
     public string HouseName;
 
     public int VolunteerProgress = 0;
+    public GameObject LeaveArrows;
 
     protected virtual void Start()
     {
@@ -402,15 +403,22 @@ public class InteractableHouse : InteractableObject
 
         if (zoom > 0) //Zoom in
         {
-            ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
-            ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
-            ExteriorPopUI.gameObject.SetActive(true);
-            HouseUIActive = true;
-            PopIcon.gameObject.SetActive(false);
-
             if (!InsideHouse)
             {
-                GameplayControllerHandler.Instance.SetCurrentPopUI(ExteriorPopUI); //Make the Enter button clickable by controller
+                PopUICallback("ENTER");
+            }
+            else
+            {
+                ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
+                ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+                ExteriorPopUI.gameObject.SetActive(true);
+                HouseUIActive = true;
+                PopIcon.gameObject.SetActive(false);
+
+                if (!InsideHouse)
+                {
+                    GameplayControllerHandler.Instance.SetCurrentPopUI(ExteriorPopUI); //Make the Enter button clickable by controller
+                }
             }
         }
         else
@@ -845,6 +853,10 @@ public class InteractableHouse : InteractableObject
         OnEnterHouse?.Invoke(InsideHouse);
 
         Player.ReadyToLeave = true;
+        if (LeaveArrows != null)
+        {
+            LeaveArrows.SetActive(true);
+        }
         StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
 
         yield return null;
@@ -1122,6 +1134,11 @@ public class InteractableHouse : InteractableObject
         if (CameraLockOnMe && BuildingState == BuildingState.RUBBLE && InsideHouse)
         {
             PopUICallback("EXIT");
+        }
+
+        if (LeaveArrows != null)
+        {
+            LeaveArrows.SetActive(false);
         }
     }
 

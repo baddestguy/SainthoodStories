@@ -402,6 +402,10 @@ public class GameDataManager : MonoBehaviour
 
         if(unlockedSaintsCount == TOTAL_UNLOCKABLE_SAINTS) return Constants[$"SAINTS_UNLOCK_THRESHOLD_25"].IntValue;
 
+        if (GameSettings.Instance.DEMO_MODE_2)
+        {
+            return 15;
+        }
         return Constants[$"SAINTS_UNLOCK_THRESHOLD_{ unlockedSaintsCount + 1 }"].IntValue;
     }
 

@@ -43,8 +43,8 @@ public class InteractableHospital : InteractableHouse
                 ExteriorPopUI.gameObject.SetActive(true);
                 ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
                 PopIcon.UIPopped(true);
-                if (!EventsManager.Instance.TriggeredMissionEvents.Contains(CustomEventType.HOSPITAL_ARRIVAL))
-                    EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_ARRIVAL);
+                //if (!EventsManager.Instance.TriggeredMissionEvents.Contains(CustomEventType.HOSPITAL_ARRIVAL))
+                //    EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_ARRIVAL);
             }
         }
         else

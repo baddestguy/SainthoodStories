@@ -223,6 +223,7 @@ public class GameManager : MonoBehaviour
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
             SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay:70);
+            GameSettings.Instance.IdleMode();
 
         }
         else if (scene.IsSaintShowcase())
@@ -314,6 +315,7 @@ public class GameManager : MonoBehaviour
 
     public void SetMissionParameters(MissionDifficulty missionDifficulty, bool newGame = false, bool showUI = true)
     {
+        GameSettings.Instance.StopIdleMode();
 
         switch (missionDifficulty)
         {

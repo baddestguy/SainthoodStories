@@ -3,6 +3,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class CustomEventPopup : MonoBehaviour
@@ -292,6 +293,20 @@ public class CustomEventPopup : MonoBehaviour
             if (ButtonTimer <= 0)
             {
                 ButtonTimer = 0;
+            }
+        }
+
+        if (EventData.Id == CustomEventType.ENDGAME_DEMO && GameSettings.Instance.IsXboxMode && Gamepad.current.buttonSouth.wasPressedThisFrame)
+        {
+            int sequences = LocalizationManager.Instance.GetTotalSequences(EventData.LocalizationKey);
+
+            if (CurrentSequenceNumber >= sequences || sequences - CurrentSequenceNumber == 1)
+            {
+                OK();
+            }
+            else
+            {
+                Continue();
             }
         }
     }

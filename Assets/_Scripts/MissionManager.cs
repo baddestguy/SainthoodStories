@@ -197,7 +197,7 @@ public class MissionManager : MonoBehaviour
 
         if (GameSettings.Instance.DEMO_MODE_2 && CurrentMissionId == 3)
         {
-            EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
+            EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_DEMO);
             SaveDataManager.Instance.DeleteProgress();
             SoundManager.Instance.EndAllTracks();
             EventsManager.Instance.ExecuteEvents();

@@ -37,10 +37,10 @@ public class EndWeekSequence : MonoBehaviour
         BG.SetActive(true);
         CPFPObj.SetActive(true);
         Title.text = LocalizationManager.Instance.GetText("CP_ENDGAME_TITLE");
-        Score.DOCounter(MissionManager.Instance.CharityPoints, MissionManager.Instance.CharityPoints + MissionManager.Instance.CharityPointsPool, 3f);
-        SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie:5f);
+        Score.DOCounter(MissionManager.Instance.CharityPoints, MissionManager.Instance.CharityPoints + MissionManager.Instance.CharityPointsPool, 2f);
+        //SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie:5f);
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
 
         Score.text = "";
         Title.text = "";
@@ -65,17 +65,17 @@ public class EndWeekSequence : MonoBehaviour
             ContinueObj.SetActive(false);
             Continue = false;
 
-            SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie: 5f);
-            SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
+        //    SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie: 5f);
+         //   SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
             CashUnlockObj.SetActive(false);
             Title.text = LocalizationManager.Instance.GetText("FP_ENDGAME_TITLE");
-            SaintScore.DOCounter(MissionManager.Instance.FaithPoints, MissionManager.Instance.FaithPoints + MissionManager.Instance.FaithPointsPool, 3f);
+            SaintScore.DOCounter(MissionManager.Instance.FaithPoints, MissionManager.Instance.FaithPoints + MissionManager.Instance.FaithPointsPool, 2f);
             SaintsUnlockObj.SetActive(true);
             SaintProgressBar.gameObject.SetActive(true);
             SaintProgressBar.isOn = true;
             SaintProgressBar.speed = 1;
 
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(2f);
 
             var sp = SaintPortraits[1];
             if(saintsUnlocked.Count() > 0)
