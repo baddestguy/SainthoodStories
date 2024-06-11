@@ -201,21 +201,21 @@ public class InteractableHospital : InteractableHouse
         }
     }
 
-    public override void TriggerStory()
+    public override void TriggerUpgradeStory()
     {
         if (HasBeenDestroyed) return;
 
-        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_3))
+        if (UpgradeLevel == 3 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_3))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_3);
             MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_3);
         }
-        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_2))
+        else if (UpgradeLevel == 2 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_2))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_2);
             MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_2);
         }
-        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_1))
+        else if (UpgradeLevel == 1 && !MyStoryEvents.Contains(CustomEventType.HOSPITAL_STORY_1))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.HOSPITAL_STORY_1);
             MyStoryEvents.Add(CustomEventType.HOSPITAL_STORY_1);
@@ -370,22 +370,18 @@ public class InteractableHospital : InteractableHouse
     public override void RelationshipReward(ThankYouType thanks)
     {
         var amount = 0;
-        if (RelationshipPoints == 100)
-        {
-            //One time special reward!
-        }
 
-        if (RelationshipPoints >= 65)
+        if (UpgradeLevel == 3)
         {
-            amount = Random.Range(4, 5);
+            amount = Random.Range(7, 8);
         }
-        else if (RelationshipPoints >= 30)
+        else if (UpgradeLevel == 2)
+        {
+            amount = Random.Range(5, 6);
+        }
+        else if (UpgradeLevel == 1)
         {
             amount = Random.Range(3, 4);
-        }
-        else if (RelationshipPoints >= 10)
-        {
-            amount = Random.Range(2, 3);
         }
         else
         {

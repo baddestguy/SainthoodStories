@@ -1,7 +1,7 @@
 Key,English,French,BrPt,Filipino,LatAmSpanish,Italian,German
 Tutorial_0,"You knock on the convent doors at the crack of dawn, tired from your long journey, with only a backpack and your little lantern.",,,,,,
 Tutorial_1,"The doors swing open to reveal the Prioress, beaming with joy.",,,,,,
-Tutorial_1,"""Welcome to Purgatorio. Come on in!"" ",,,,,,
+Tutorial_1,"""Welcome to Santa Maria Island. Come on in!"" ",,,,,,
 Tutorial_1,"She grabs your hand, pulls you in gently.",,,,,,
 Tutorial_1,"""You're just in time for morning prayers. Come quickly, let us begin.""",,,,,,
 Tutorial_11,"""Performing activities is straightforward. Simply <b>Press and Hold</b> the Prayer button to partake in Spiritual Activities.""",,,,,,
@@ -160,7 +160,7 @@ Provision_IncenseDescription,A thurible charged with burning sticks of red hot c
 Provision_SecurityGuardsDescription,Hire a security man to prevent robbers from stealing from the Treasury,,,,,,
 Event_Donation,Someone left a package at the Convent doors. You open it to reveal an anonymous donation!,,,,,,
 Event_IconUnlock,You received a Spiritual Revelation!,,,,,,
-Event_Endgame,"Your time in Purgatorio has come to an end. The people gather around you, chanting prayers in a circle as you commit your spirit to the Great Ascension.",,,,,,
+Event_Endgame,"Your time in Santa Maria has come to an end. The people gather around you, chanting prayers in a circle as you commit your spirit to the Great Ascension.",,,,,,
 Event_EndgameHospital,Anna says a prayer for you.,,,,,,
 Event_EndgameShelter,Slow Man says a prayer for you.,,,,,,
 Event_EndgameSchool,Gabriel says a prayer for you.,,,,,,
@@ -762,7 +762,7 @@ KitchenStory3,"This is the point where I reveal more about myself to you, but al
 Mission_2,"""Good morning dear! I hope you slept well. Big first day, eh?""",,,,,,
 Mission_2,"""I'm glad you're up bright and early and ready to tackle the new day with such vigour!""",,,,,,
 Mission_3,"""Good morning dear! I hope you slept well. Ready to take on the day?""",,,,,,
-Mission_3,"""By the way, did you notice that the locations of the building change every day?""",,,,,,
+Mission_3,"""By the way, did you notice that the locations of the buildings change every day?""",,,,,,
 Mission_3,"""Just one of the many mysteries of this little island!""",,,,,,
 Mission_4,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
 Mission_5,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
@@ -803,30 +803,167 @@ Mission_39,"""Wow, you made it this far in the demo! Congrats! However, you have
 Mission_40,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
 Hospital_1,"""Hi! I'm Anna. I'm the Custodian of the Hospital. I can't wait to meet you!
 
--Love, Anna.""",,,,,,
+Love, 
+- Anna.""",,,,,,
 Hospital_2,"""Hi!""",,,,,,
 Hospital_3,"""Got mail from the Hospital.""",,,,,,
-Hospital_3,"""Hi! Those syringes you delivered yesterday where a big help! Now we just need a volunteer to help us sort and distribute. Could you give us a hand?
+Hospital_3,"""Hi dear, those syringes you delivered yesterday where a big help! Now we just need a volunteer to help us sort and distribute. Could you give us a hand?
 
-- Love, Anna.""",,,,,,
+Love, 
+- Anna.""",,,,,,
 Hospital_4,"""Got mail from the Hospital.""",,,,,,
-Hospital_4,"""Hi! I'm afraid we're going to need more of those syringes. The blood donation event is coming up soon. Please deliver them as soon as you can.
+Hospital_4,"""Hi dear, I'm afraid we're going to need more of those syringes. The blood donation event is coming up soon. Please deliver them as soon as you can.
 
-- Love, Anna.""",,,,,,
+Love, 
+- Anna.""",,,,,,
 Hospital_5,"""Got mail from the Hospital.""",,,,,,
 Hospital_5,"Now it's time for the big event! It's going to be super busy and we're going to need all the help we can get! Please come on over at your earliest convenience!
 
-- Love, Anna.""",,,,,,
-Hospital_6,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
-Hospital_7,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
-Hospital_8,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
-Hospital_9,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
-Hospital_10,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
+Love, 
+- Anna.""",,,,,,
+Hospital_6,"""Got mail from the Hospital.""",,,,,,
+Hospital_6,"""Hello dear, 
+
+I hope you've been well. I must ask for your help once again.""",,,,,,
+Hospital_6,"""We have a very important health inspection coming up soon, and we need to prepare!""",,,,,,
+Hospital_6,"""The health inspection is a rigorous process by which our hospital will be graded on everything from our equipment, to our processes, and everything in between.""",,,,,,
+Hospital_6,"""It's vital we not only pass the inspection, but pass with an excellent grade, as this will allow us to apply for funding in the future.""",,,,,,
+Hospital_6,"""For now, we have ordered antibiotics for the ICU, sterile gloves for the surgery department, and IV fluids for the ER, and we need them delivered ASAP!""",,,,,,
+Hospital_6,"""I hope you can help with the deliveries!
+
+Love, 
+- Anna.""",,,,,,
+Hospital_7,"""Got mail from the Hospital.""",,,,,,
+Hospital_7,"""Hi dear,
+
+Thank you so much for the deliveries. Those departments are all stacked up and ready to go!""",,,,,,
+Hospital_7,"""Our hygiene standards are going to be tested to their limits during the inspection, so we must make sure we are on point in this regard.""",,,,,,
+Hospital_7,"""Patient rooms, operating theaters, and common areas need to be disinfected.""",,,,,,
+Hospital_7,"""Medical waste needs to be properly disposed.""",,,,,,
+Hospital_7,"""We also need to restock sanitation supplies and update our hygiene logs.""",,,,,,
+Hospital_7,"""Could you assist the cleaning staff in these tasks?
+
+Love,
+- Anna.""",,,,,,
+Hospital_8,"""Got mail from the Hospital.""",,,,,,
+Hospital_8,"""Hi dear,
+
+Thank you so much for the assistance! We are inching ever closer to the inspection, but still have a couple of tasks to complete.""",,,,,,
+Hospital_8,"""One of the main components of the health inspection is patient satisfaction.""",,,,,,
+Hospital_8,"""The Health Inspector is going to survey the patients to get their opinions on our quality of service.""",,,,,,
+Hospital_8,"""We need to conduct our own internal surveys and report feedback to the hospital administration for steps to improve.""",,,,,,
+Hospital_8,"""I trust you will volunteer your time with us to help with this.
+
+Love,
+- Anna.""",,,,,,
+Hospital_9,"""Got mail from the Hospital.""",,,,,,
+Hospital_9,"""Hello dear,
+
+Another job well done!""",,,,,,
+Hospital_9,"""Final delivery before the big day! We ordered a brand new EKG machine and I can't wait to set it up!""",,,,,,
+Hospital_9,"""Unfortunately, the pieces come in a few different packages, so you might have to make multiple trips.""",,,,,,
+Hospital_9,"""Once we have this set up, we will be ready for the inspection! I'm counting on you!
+
+Love,
+- Anna.""",,,,,,
+Hospital_10,"""Got mail from the Hospital.""",,,,,,
+Hospital_10,"""Hi dear,
+
+This is it! The health inspector will be arriving soon, and we're going to need all the help we can get.",,,,,,
+Hospital_10,"""Please come on down as soon as you can!
+
+Love,
+- Anna.""",,,,,,
 Hospital_11,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
 Hospital_12,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
 Hospital_13,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
 Hospital_14,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
 Hospital_15,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
+Hospital_ThankYou_1,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_2,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_3,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_4,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_5,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_6,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_7,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_8,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_9,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_10,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_11,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_12,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_13,"""Thank you so much!""",,,,,,
+Hospital_ThankYou_14,"""Thank you so much!""",,,,,,
+School_ThankYou_1,"""Thank you so much!""",,,,,,
+School_ThankYou_2,"""Thank you so much!""",,,,,,
+School_ThankYou_3,"""Thank you so much!""",,,,,,
+School_ThankYou_4,"""Thank you so much!""",,,,,,
+School_ThankYou_5,"""Thank you so much!""",,,,,,
+School_ThankYou_6,"""Thank you so much!""",,,,,,
+School_ThankYou_7,"""Thank you so much!""",,,,,,
+School_ThankYou_8,"""Thank you so much!""",,,,,,
+School_ThankYou_9,"""Thank you so much!""",,,,,,
+School_ThankYou_10,"""Thank you so much!""",,,,,,
+School_ThankYou_11,"""Thank you so much!""",,,,,,
+School_ThankYou_12,"""Thank you so much!""",,,,,,
+School_ThankYou_13,"""Thank you so much!""",,,,,,
+School_ThankYou_14,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_1,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_2,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_3,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_4,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_5,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_6,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_7,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_8,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_9,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_10,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_11,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_12,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_13,"""Thank you so much!""",,,,,,
+Orphanage_ThankYou_14,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_1,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_2,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_3,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_4,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_5,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_6,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_7,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_8,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_9,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_10,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_11,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_12,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_13,"""Thank you so much!""",,,,,,
+Shelter_ThankYou_14,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_1,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_2,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_3,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_4,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_5,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_6,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_7,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_8,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_9,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_10,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_11,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_12,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_13,"""Thank you so much!""",,,,,,
+Kitchen_ThankYou_14,"""Thank you so much!""",,,,,,
+Church_ThankYou_1,"""Thank you so much!""",,,,,,
+Church_ThankYou_2,"""Thank you so much!""",,,,,,
+Church_ThankYou_3,"""Thank you so much!""",,,,,,
+Church_ThankYou_4,"""Thank you so much!""",,,,,,
+Church_ThankYou_5,"""Thank you so much!""",,,,,,
+Church_ThankYou_6,"""Thank you so much!""",,,,,,
+Church_ThankYou_7,"""Thank you so much!""",,,,,,
+Church_ThankYou_8,"""Thank you so much!""",,,,,,
+Church_ThankYou_9,"""Thank you so much!""",,,,,,
+Church_ThankYou_10,"""Thank you so much!""",,,,,,
+Church_ThankYou_11,"""Thank you so much!""",,,,,,
+Church_ThankYou_12,"""Thank you so much!""",,,,,,
+Church_ThankYou_13,"""Thank you so much!""",,,,,,
+Church_ThankYou_14,"""Thank you so much!""",,,,,,
+Church_ThankYou_15,"""Thank you so much!""",,,,,,
 Orphanage_1,"""Dear friend,
 
 My name is Emelia, Custodian of the Orphanage. I hope you come by soon.
@@ -863,13 +1000,13 @@ Orphanage_14,"""Wow, you made it this far in the demo! Congrats! However, you ha
 Orphanage_15,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
 School_1,"""Gabriel here. Headmaster at the School. Pleasure to meet you.""",,,,,,
 School_2,"""Hi""",,,,,,
-School_3,"""Got mail from the Orphanage.""",,,,,,
+School_3,"""Got mail from the School.""",,,,,,
 School_3,"""Gabriel here. Appreciate the materials. Unfortunately our teacher has decided to skip town. Can you be the sub?""",,,,,,
-School_4,"""Got mail from the Orphanage.""",,,,,,
+School_4,"""Got mail from the School.""",,,,,,
 School_4,"""Gabriel here. Great class yesterday. Appreciate it. We've got a big math test coming up and the kids need their Maths Set.
 
 Please deliver at your earliest convenience.""",,,,,,
-School_5,"""Got mail from the Orphanage.""",,,,,,
+School_5,"""Got mail from the School.""",,,,,,
 School_5,"""Today's the day. The big test is here. Hopefully these kids are well prepared. We need help with marking the papers though. You up for it?""",,,,,,
 School_6,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
 School_7,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
@@ -884,19 +1021,19 @@ School_15,"""Wow, you made it this far in the demo! Congrats! However, you have 
 Shelter_1,"""Hi there. I'm Thomas. Shelter Custodian. Glad to have you around.
 
 - T""",,,,,,
-Shelter_2,"""Got mail from the Orphanage.""",,,,,,
+Shelter_2,"""Got mail from the Shelter.""",,,,,,
 Shelter_2,"""Hi there. Need Veggies. Lots.
 
 - T""",,,,,,
-Shelter_3,"""Got mail from the Orphanage.""",,,,,,
+Shelter_3,"""Got mail from the Shelter.""",,,,,,
 Shelter_3,"""Hi there. Need 30lbs of Chicken.
 
 - T""",,,,,,
-Shelter_4,"""Got mail from the Orphanage.""",,,,,,
+Shelter_4,"""Got mail from the Shelter.""",,,,,,
 Shelter_4,"""Hi there. Ice cream needed.
 
 - T""",,,,,,
-Shelter_5,"""Got mail from the Orphanage.""",,,,,,
+Shelter_5,"""Got mail from the Shelter.""",,,,,,
 Shelter_5,"""Big day. We're serving lunch for the whole community. Please help.
 
 - T""",,,,,,
@@ -913,15 +1050,19 @@ Shelter_15,"""Wow, you made it this far in the demo! Congrats! However, you have
 Kitchen_1,"""The name's Jeff, and I'm a Chef! Come on down and let's make the best meals in town!
 
 - Jeff 'D' Chef""",,,,,,
+Kitchen_2,"""Got mail from the Kitchen.""",,,,,,
 Kitchen_2,"""Hey! I'm looking to test out the stove. Bring some groceries to cook will you?
 
 - Jeff 'D' Chef""",,,,,,
+Kitchen_3,"""Got mail from the Kitchen.""",,,,,,
 Kitchen_3,"""Hey! I'd like to try out the grill. Bring whatever groceries you can!
 
 - Jeff 'D' Chef""",,,,,,
+Kitchen_4,"""Got mail from the Kitchen.""",,,,,,
 Kitchen_4,"""Hey! Just got a new spatula. Time to get a'frying!
 
 - Jeff 'D' Chef""",,,,,,
+Kitchen_5,"""Got mail from the Kitchen.""",,,,,,
 Kitchen_5,"""Alrighty! Big day today! I'm going to prepare a massive dish for the town. Come on down and give me a hand!
 
 - Jeff 'D' Chef""",,,,,,
@@ -950,3 +1091,4 @@ Church_12,"""Wow, you made it this far in the demo! Congrats! However, you have 
 Church_13,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
 Church_14,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
 Church_15,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,
+Demo_End,"""Wow, you made it this far in the demo! Congrats! However, you have to purchase the full game to continue the convent objectives.""",,,,,,

@@ -199,22 +199,17 @@ public class InteractableSchool : InteractableHouse
     public override void RelationshipReward(ThankYouType thanks)
     {
         var amount = 0;
-        if (RelationshipPoints == 100)
+        if (UpgradeLevel == 3)
         {
-            //One time special reward!
+            amount = Random.Range(10, 11);
         }
-
-        if (RelationshipPoints >= 65)
+        else if (UpgradeLevel == 2)
         {
-            amount = Random.Range(9, 10);
+            amount = Random.Range(8, 9);
         }
-        else if (RelationshipPoints >= 30)
+        else if (UpgradeLevel == 1)
         {
-            amount = Random.Range(7, 8);
-        }
-        else if (RelationshipPoints >= 10)
-        {
-            amount = Random.Range(5, 6);
+            amount = Random.Range(6, 7);
         }
         else
         {
@@ -283,21 +278,21 @@ public class InteractableSchool : InteractableHouse
         }
     }
 
-    public override void TriggerStory()
+    public override void TriggerUpgradeStory()
     {
         if (HasBeenDestroyed) return;
 
-        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_3))
+        if (UpgradeLevel == 3 && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_3))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_STORY_3);
             MyStoryEvents.Add(CustomEventType.SCHOOL_STORY_3);
         }
-        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_2))
+        else if (UpgradeLevel == 2 && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_2))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_STORY_2);
             MyStoryEvents.Add(CustomEventType.SCHOOL_STORY_2);
         }
-        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_1))
+        else if (UpgradeLevel == 1 && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_1))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_STORY_1);
             MyStoryEvents.Add(CustomEventType.SCHOOL_STORY_1);

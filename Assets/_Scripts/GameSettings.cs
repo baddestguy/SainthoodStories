@@ -243,7 +243,7 @@ public class GameSettings : MonoBehaviour
         if (IsXboxMode)
         {
             var bestResolution = resolutions.Select(x => new { Resolution = x, Pixels = x.height * x.width })
-                .Where(x => x.Pixels < (int)MaxXboxResolution)
+                .Where(x => x.Pixels <= (int)MaxXboxResolution)
                 .OrderByDescending(x => x.Pixels)
                 .ThenByDescending(x => x.Resolution.refreshRateRatio.value)
                 .First()

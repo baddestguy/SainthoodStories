@@ -581,6 +581,7 @@ public class InteractableHouse : InteractableObject
             UI.Instance.SideNotificationPop(GetType().Name);
             if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM || MyObjective?.Event == BuildingEventType.DELIVER_ITEM_URGENT)
             {
+                BuildRelationship(ThankYouType.ITEM);
                 CurrentMissionId++;
                 UpdateCharityPoints(MyObjective.Reward, 0);
                 var obj = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
@@ -591,7 +592,6 @@ public class InteractableHouse : InteractableObject
                 MyObjective = null;
             }
 
-            BuildRelationship(ThankYouType.ITEM);
             if (!autoDeliver)
             {
                 GameClock.ExecuteEvents?.Invoke();
@@ -604,19 +604,14 @@ public class InteractableHouse : InteractableObject
         switch (thanks)
         {
             case ThankYouType.ITEM: 
-                ItemDeliveryThanks(); 
-                break;
-
             case ThankYouType.BABY:
-                EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_BABY);
-                break;
-
             case ThankYouType.TEACH:
-                EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_TEACH);
-                break;
-
             case ThankYouType.VOLUNTEER:
-                VolunteerThanks();
+                if(MyObjective != null)
+                {
+                    if(!EventsManager.Instance.TriggeredMissionEvents.Contains(MyObjective.ThankYouEvent))
+                        EventsManager.Instance.AddEventToList(MyObjective.ThankYouEvent);
+                }
                 break;
 
             case ThankYouType.UPGRADE:
@@ -625,7 +620,7 @@ public class InteractableHouse : InteractableObject
         }
     }
 
-    public virtual void TriggerStory()
+    public virtual void TriggerUpgradeStory()
     {
         if (HasBeenDestroyed) return;
 
@@ -641,7 +636,9 @@ public class InteractableHouse : InteractableObject
 
     public virtual void UpgradeThanks()
     {
-        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_CHURCH);
+        TriggerUpgradeStory();
+
+    //    EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_CHURCH);
     }
 
     public virtual void MoneyThanks()
@@ -1259,15 +1256,15 @@ public class InteractableHouse : InteractableObject
 
     public virtual float CalculateMaxVolunteerPoints(int amount = 4)
     {
-        if (RelationshipPoints >= 65)
+        if (UpgradeLevel == 3)
         {
             return amount-3;
         }
-        else if (RelationshipPoints >= 30)
+        else if (UpgradeLevel == 2)
         {
             return amount-2;
         }
-        else if (RelationshipPoints >= 10)
+        else if (UpgradeLevel == 1)
         {
             return amount-1;
         }
@@ -1304,29 +1301,7 @@ public class InteractableHouse : InteractableObject
 
     public virtual void RelationshipReward(ThankYouType thanks)
     {
-        //Add (or subtract) a Season Bonus
-        if(RelationshipPoints >= 65)
-        {
-            //Special Item
-            ThankYouMessage(thanks);
-        }
-        else if (RelationshipPoints >= 30)
-        {
-            ThankYouMessage(thanks);
-        }
-        else if (RelationshipPoints >= 10)
-        {
-            ThankYouMessage(thanks);
-        }
-        else if (RelationshipPoints > 1)
-        {
-            ThankYouMessage(thanks);
-        }
-        else if (RelationshipPoints == 1)
-        {
-            ThankYouMessage(thanks);
-        }
-        TriggerStory();
+        ThankYouMessage(thanks);
         SaveDataManager.Instance.SaveGame();
     }
 

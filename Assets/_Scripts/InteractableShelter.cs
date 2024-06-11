@@ -162,21 +162,21 @@
         }
     }
 
-    public override void TriggerStory()
+    public override void TriggerUpgradeStory()
     {
         if (HasBeenDestroyed) return;
 
-        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_3))
+        if (UpgradeLevel == 3 && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_3))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_STORY_3);
             MyStoryEvents.Add(CustomEventType.SHELTER_STORY_3);
         }
-        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_2))
+        else if (UpgradeLevel == 2 && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_2))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_STORY_2);
             MyStoryEvents.Add(CustomEventType.SHELTER_STORY_2);
         }
-        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_1))
+        else if (UpgradeLevel == 1 && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_1))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_STORY_1);
             MyStoryEvents.Add(CustomEventType.SHELTER_STORY_1);
