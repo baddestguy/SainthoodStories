@@ -104,6 +104,12 @@ Event_Vandalism,"The Town Crier announces: ""The Convent Treasury has been robbe
 Event_SpiritualRetreat,"One of the other novices runs up to you. ""We are having a little spiritual retreat and would love for you to join us.""",,,,,,
 Event_PrayerRequest,"One of the patients catches up to you. ""Would you please pray for my boy, he's not feeling so well.""",,,,,,
 Event_TownHelp,"While walking through the town, some women call for you to help them with cooking. ""An extra helping hand would be great!"".",,,,,,
+Hospital_SpecialEvent_Blood,"The line of patients extends all the way around the block. You can tell that this is going to take a while, and a lot of energy.
+
+Anna meets up with you. ""Thank you for coming,"" she says, ""I hope you're ready!""",,,,,,
+Hospital_SpecialEvent_Inspection,"You are greeted by a burly man with a notepad and a stern expression. Anna stands behind him looking nervous, but relaxes as soon as she sees you.
+
+""All right then,"" the large man says, ""Let's begin.""",,,,,,
 Provision_UmbrellaName,Umbrella,,,,,,
 Provision_ExtraInventoryName,Extra Inventory,,,,,,
 Provision_EnergyDrinkName,Energy Drink,,,,,,
@@ -805,7 +811,14 @@ Hospital_1,"""Hi! I'm Anna. I'm the Custodian of the Hospital. I can't wait to m
 
 Love, 
 - Anna.""",,,,,,
-Hospital_2,"""Hi!""",,,,,,
+Hospital_2,"""Got mail from the Hospital.""",,,,,,
+Hospital_2,"""Hello dear, I just wanted to send a gentle reminder that we need those syringes.
+
+The packages should have arrived at the convent this morning.""",,,,,,
+Hospital_2,"""Please have them delivered at the Hospital as soon as you can.
+
+Love,
+- Anna.""",,,,,,
 Hospital_3,"""Got mail from the Hospital.""",,,,,,
 Hospital_3,"""Hi dear, those syringes you delivered yesterday where a big help! Now we just need a volunteer to help us sort and distribute. Could you give us a hand?
 

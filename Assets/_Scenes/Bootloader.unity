@@ -13306,6 +13306,7 @@ MonoBehaviour:
       EventGroup: 0
       Weight: 0
       Cost: 0
+      EnergyCost: 0
       Gain: 0
       RewardType: 0
       RejectionCost: 0

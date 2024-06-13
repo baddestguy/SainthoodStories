@@ -113,6 +113,7 @@ public class InteractableHospital : InteractableHouse
                     {
                         CurrentMissionId++;
                         MyObjective = null;
+                        CurrentMissionCompleteToday = true;
                     }
 
                 }
@@ -302,11 +303,6 @@ public class InteractableHospital : InteractableHouse
         }
 
         base.ItemDeliveryThanks();
-    }
-
-    public override void UpgradeThanks()
-    {
-        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_HOSPITAL);
     }
 
     public override void SetDeadlineTime(double time, int day)

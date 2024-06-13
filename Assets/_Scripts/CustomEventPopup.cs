@@ -1,4 +1,6 @@
-﻿using Assets.Xbox;
+﻿using System.Collections;
+using System.Linq;
+using Assets.Xbox;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -70,7 +72,7 @@ public class CustomEventPopup : MonoBehaviour
                 c.AddTicks(Mathf.Abs((int)customEvent.Cost));
                 TimeDisplay.text = $"{(int)c.Time}:{(c.Time % 1 == 0 ? "00" : "30")}";
 
-                var moddedEnergy = player.ModifyEnergyConsumption(amount: player.CurrentBuilding.GetEnergyCostForCustomEvent(EventData));
+                var moddedEnergy = player.ModifyEnergyConsumption(amount: EventData.EnergyCost);
                 EnergyDisplay.text = moddedEnergy == 0 ? "0" : moddedEnergy > 0 ? $"-{moddedEnergy}" : $"+{-moddedEnergy}";
 
                 FPIcon.SetActive(customEvent.RewardType == CustomEventRewardType.FP);
@@ -129,7 +131,7 @@ public class CustomEventPopup : MonoBehaviour
         InteractableHouse.HouseTriggeredEvent = CustomEventType.NONE;
         GameClock clock = GameManager.Instance.GameClock;
         Player player = GameManager.Instance.Player;
-        var moddedEnergy = player.ModifyEnergyConsumption(amount: player.CurrentBuilding.GetEnergyCostForCustomEvent(EventData));
+        var moddedEnergy = player.ModifyEnergyConsumption(amount: EventData.EnergyCost);
         if (player.CanUseEnergy(moddedEnergy)) return;
 
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
@@ -137,7 +139,7 @@ public class CustomEventPopup : MonoBehaviour
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(true);
 
-        player.ConsumeEnergy(player.CurrentBuilding.GetEnergyCostForCustomEvent(EventData));
+        player.ConsumeEnergy(EventData.EnergyCost);
         switch (EventData.RewardType) {
             case CustomEventRewardType.FP:
                 player.CurrentBuilding.UpdateFaithPoints((int)EventData.Gain, -moddedEnergy);
@@ -156,6 +158,7 @@ public class CustomEventPopup : MonoBehaviour
         player.CurrentBuilding.BuildRelationship(ThankYouType.IMMEDIATE_ASSISTANCE);
         if (player.CurrentBuilding.MyObjective?.Event == BuildingEventType.SPECIAL_EVENT || player.CurrentBuilding.MyObjective?.Event == BuildingEventType.SPECIAL_EVENT_URGENT)
         {
+            player.CurrentBuilding.CurrentMissionCompleteToday = true;
             player.CurrentBuilding.CurrentMissionId++;
             player.CurrentBuilding.MyObjective = null;
         }
@@ -256,7 +259,7 @@ public class CustomEventPopup : MonoBehaviour
             return;
         }
         Player player = GameManager.Instance.Player;
-        var moddedEnergy = player.ModifyEnergyConsumption(amount: player.CurrentBuilding.GetEnergyCostForCustomEvent(EventData));
+        var moddedEnergy = player.ModifyEnergyConsumption(amount: EventData.EnergyCost);
         if (player.CanUseEnergy(moddedEnergy) || player.CurrentBuilding.BuildingState == BuildingState.RUBBLE) return;
 
         PointerDown = true;

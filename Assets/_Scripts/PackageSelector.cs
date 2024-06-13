@@ -24,7 +24,10 @@ public class PackageSelector : MonoBehaviour
         ItemGO = Resources.Load<GameObject>("UI/PackageUIItem");
         foreach (var house in GameManager.Instance.Houses)
         {
-            if (house.MyObjective != null && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT))
+            if (house.MyObjective != null &&
+                (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT
+                || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT
+                || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT))
             {
                 for (int i = 0; i < house.RequiredItems; i++)
                 {

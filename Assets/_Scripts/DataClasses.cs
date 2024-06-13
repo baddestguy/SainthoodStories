@@ -364,6 +364,7 @@ public class HouseObjectivesData
     public int RequiredAmount;
     public CustomEventType CustomEventId;
     public CustomEventType ThankYouEvent;
+    public CustomEventType SpecialEventId;
     public int Reward;
 
     public override bool Equals(object obj)
@@ -487,6 +488,7 @@ public class CustomEventData
     public EventGroup EventGroup;
     public int Weight;
     public float Cost;
+    public int EnergyCost;
     public float Gain;
     public CustomEventRewardType RewardType;
     public float RejectionCost;
@@ -1013,4 +1015,6 @@ public enum CustomEventType
     ,THANKYOU_CHURCH_13
     ,THANKYOU_CHURCH_14
     ,THANKYOU_CHURCH_15
+    ,BLOOD_DONATION
+    ,HEALTH_INSPECTION
 }

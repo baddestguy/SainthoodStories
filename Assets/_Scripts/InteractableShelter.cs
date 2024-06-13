@@ -65,6 +65,7 @@
         if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
+            UpdateCharityPoints(1, 0);
             base.DeliverItem(house, autoDeliver);
             return;
         }
@@ -77,10 +78,6 @@
         EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_FOOD);
         base.ItemDeliveryThanks();
     }
-    public override void UpgradeThanks()
-    {
-        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_SHELTER);
-    }
 
     private void DeliverDeadlineItem( bool autoDeliver = false)
     {
@@ -88,6 +85,7 @@
         if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
+            UpdateCharityPoints(1, 0);
             base.DeliverItem(this, autoDeliver);
         }
         else

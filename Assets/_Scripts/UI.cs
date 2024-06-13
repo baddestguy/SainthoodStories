@@ -798,6 +798,8 @@ public class UI : MonoBehaviour
 
     private string DayofTheWeek(int Day)
     {
+        return "Day " + MissionManager.Instance.CurrentMissionId;
+
         switch (Day)
         {
             case 1: return "Mon";

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class InteractableKitchen : InteractableHouse
 {
@@ -39,11 +40,6 @@ public class InteractableKitchen : InteractableHouse
         }
     }
 
-    public override void UpgradeThanks()
-    {
-        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_KITCHEN);
-    }
-
     public void Cook()
     {
 
@@ -60,22 +56,74 @@ public class InteractableKitchen : InteractableHouse
         if (item != ItemType.NONE)
         {
             var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
-            
-            if (RelationshipPoints >= 15)
+
+            if (MyObjective != null)
             {
-                player.ConsumeEnergy(EnergyConsumption + utensils?.Value ?? 0);
+                RequiredItems--;
+                var amt = MyObjective.RequiredAmount - RequiredItems;
+                OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 2);
+
+                var extraPoints = 0;
+                if (PopUI.CriticalHitCount == 1) extraPoints = 1;
+
+                if (RequiredItems <= 0)
+                {
+                    RequiredItems = 0;
+
+                    if (MyObjective?.Event == BuildingEventType.COOK || MyObjective?.Event == BuildingEventType.COOK_URGENT)
+                    {
+                        BuildRelationship(ThankYouType.VOLUNTEER);
+                        CurrentMissionId++;
+                        var moddedCPReward = extraPoints;
+                        UpdateCharityPoints(MyObjective.Reward + moddedCPReward, 0);
+                        MyObjective = null;
+                        CurrentMissionCompleteToday = true;
+                    
+                        var obj = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
+                        RequiredItems = obj.RequiredAmount;
+                    }
+                }            
             }
             else
             {
-                player.ConsumeEnergy(EnergyConsumption + utensils?.Value ?? 0);
+                var shelter = GameManager.Instance.Houses.Where(h => h is InteractableShelter).FirstOrDefault();
+                if (shelter != null && shelter.MyObjective != null)
+                {
+                    if(InventoryManager.Instance.CountItem(ItemType.MEAL) < shelter.RequiredItems)
+                    {
+                        InventoryManager.Instance.AddToInventory(ItemType.MEAL);
+                    }
+                }
+            }
+
+            TreasuryManager.Instance.DonateMoney(2);
+            CookFX.Play();
+
+            var moddedEnergy = EnergyConsumption + utensils?.Value ?? 0;
+            var ticks = 0;
+            if (UpgradeLevel == 3)
+            {
+                ticks = 4;
+            }
+            else if (UpgradeLevel == 2)
+            {
+                ticks = 8;
+            }
+            else if (UpgradeLevel == 1)
+            {
+                ticks = 12;
+            }
+            else
+            {
+                ticks = 14;
+            }
+
+            player.ConsumeEnergy(moddedEnergy);
+            for(int i = 0; i < ticks; i++)
+            {
                 clock.Tick();
             }
 
-            BuildRelationship(ThankYouType.VOLUNTEER);
-            TreasuryManager.Instance.DonateMoney(2);
-
-            InventoryManager.Instance.AddToInventory(ItemType.MEAL);
-            CookFX.Play();
             UI.Instance.DisplayMessage("COOKED MEAL!");
         }
         else

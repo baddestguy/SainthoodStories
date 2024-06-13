@@ -49,12 +49,19 @@ public class InventoryPopup : MonoBehaviour
                 Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
             }
 
+            if (houses[i].MyObjective.Event == BuildingEventType.COOK || houses[i].MyObjective.Event == BuildingEventType.COOK_URGENT)
+            {
+                Objs[i].gameObject.SetActive(true);
+                Objs[i].Text.text = $"Cook meals at the {houses[i].HouseName.Replace("Interactable", "")}: {houses[i].MyObjective.RequiredAmount - houses[i].RequiredItems}/{houses[i].MyObjective.RequiredAmount}";
+                Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
+            }
+
             if (houses[i].MyObjective.Event == BuildingEventType.DELIVER_ITEM || houses[i].MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT
                 || houses[i].MyObjective.Event == BuildingEventType.DELIVER_MEAL
                 || houses[i].MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)
             {
                 Objs[i].gameObject.SetActive(true);
-                Objs[i].Text.text = $"Deliver supply packages to the {houses[i].HouseName.Replace("Interactable", "")}: {houses[i].MyObjective.RequiredAmount - houses[i].RequiredItems}/{houses[i].MyObjective.RequiredAmount}";
+                Objs[i].Text.text = $"Deliver packages to the {houses[i].HouseName.Replace("Interactable", "")}: {houses[i].MyObjective.RequiredAmount - houses[i].RequiredItems}/{houses[i].MyObjective.RequiredAmount}";
                 Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
             }
 
@@ -69,6 +76,12 @@ public class InventoryPopup : MonoBehaviour
             {
                 Objs[i].gameObject.SetActive(true);
                 Objs[i].Text.text = $"Pray at the Convent: {houses[i].VolunteerProgress}/{houses[i].MyObjective.RequiredAmount}";
+                Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
+            }
+            if (houses[i].MyObjective.Event == BuildingEventType.SPECIAL_EVENT || houses[i].MyObjective.Event == BuildingEventType.SPECIAL_EVENT_URGENT)
+            {
+                Objs[i].gameObject.SetActive(true);
+                Objs[i].Text.text = $"Special event at the {houses[i].HouseName.Replace("Interactable", "")}";
                 Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
             }
         }

@@ -38,8 +38,8 @@ public class PackageItem : MonoBehaviour
                 PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{ItemType.TOYS}");
                 break;
             case "InteractableKitchen":
-                Item = ItemType.MEAL;
-                PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{ItemType.MEAL}");
+                Item = ItemType.GROCERIES;
+                PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{ItemType.GROCERIES}");
                 break;
             case "InteractableShelter":
                 Item = ItemType.GROCERIES;

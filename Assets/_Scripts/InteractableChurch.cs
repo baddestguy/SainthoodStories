@@ -332,7 +332,12 @@ public class InteractableChurch : InteractableHouse
                         UpdateFaithPoints(MyObjective.Reward, 0);
                         MyObjective = null;
                         VolunteerProgress = 0;
+                        CurrentMissionCompleteToday = true;
                     }
+                }
+                else
+                {
+                    UpdateFaithPoints(MeditationPoints + FPBonus + extraPoints);
                 }
             }
             for (int i = 0; i < maxPP; i++)

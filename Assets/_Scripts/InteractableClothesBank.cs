@@ -69,11 +69,6 @@
         base.ItemDeliveryThanks();
     }
 
-    public override void UpgradeThanks()
-    {
-        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_CLOTHES);
-    }
-
     public override void PopUICallback(string button)
     {
         base.PopUICallback(button);
