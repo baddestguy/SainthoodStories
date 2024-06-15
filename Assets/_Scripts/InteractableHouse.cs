@@ -735,9 +735,6 @@ public class InteractableHouse : InteractableObject
             //    BuildingCompleteDialog();
             }
 
-            var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
-            RelationshipBonus= buildingBlueprint?.Value ?? 0;
-
             var chapelBlueprint = InventoryManager.Instance.GetProvision(Provision.CHAPEL_BLUEPRINT);
             FPBonus = chapelBlueprint?.Value ?? 0;
 
@@ -1368,7 +1365,10 @@ public class InteractableHouse : InteractableObject
     {
         if (UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue) return;
 
-        TreasuryManager.Instance.SpendMoney(GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue);
+        double cost = GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue;
+        var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
+        cost -= cost * (buildingBlueprint?.Value / 100d ?? 0);
+        TreasuryManager.Instance.SpendMoney(cost);
         UpgradeLevel++;
         BuildRelationship(ThankYouType.UPGRADE, 10);
         SaveDataManager.Instance.SaveGame();

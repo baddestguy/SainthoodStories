@@ -287,6 +287,7 @@ public class MissionManager : MonoBehaviour
         CharityPointsPool = 0;
         FaithPointsPermanentlyLost = 0;
         GameManager.Instance.ScrambleMapTiles();
+        GameManager.Instance.CurrentBuilding = "InteractableChurch";
         SaveDataManager.Instance.SaveGame();
         SaveDataManager.Instance.DaySave();
         MissionComplete?.Invoke(missionFailed);

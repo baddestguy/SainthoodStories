@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets._Scripts.Extensions;
+using Rewired;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -187,6 +188,7 @@ public class GameManager : MonoBehaviour
             if (mattress != null)
             {
                 GameClock.SetClock(GameClock.Time + mattress.Value, GameClock.Day);
+                Player.ConsumeEnergy(-mattress.Value);
             }
 
             GridCollectibleManager.Instance.SpawnedTiles.Clear();

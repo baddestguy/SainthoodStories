@@ -105,8 +105,9 @@
         {
             var shelterMaterials = InventoryManager.Instance.GetProvision(Provision.SHELTER_RELATIONSHIP_BUILDER);
             amount += shelterMaterials?.Value ?? 0;
+            TreasuryManager.Instance.DonateMoney(shelterMaterials?.Value ?? 0);
         }
-        if(thanks == ThankYouType.IMMEDIATE_ASSISTANCE)
+        if (thanks == ThankYouType.IMMEDIATE_ASSISTANCE)
         {
             amount += 2;
         }

@@ -99,7 +99,7 @@ public class InteractableKitchen : InteractableHouse
             TreasuryManager.Instance.DonateMoney(2);
             CookFX.Play();
 
-            var moddedEnergy = EnergyConsumption + utensils?.Value ?? 0;
+            var moddedEnergy = EnergyConsumption - utensils?.Value ?? 0;
             var ticks = 0;
             if (UpgradeLevel == 3)
             {
@@ -137,7 +137,7 @@ public class InteractableKitchen : InteractableHouse
         if (thanks == ThankYouType.VOLUNTEER)
         {
             var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
-            amount += utensils?.Value ?? 0;
+            TreasuryManager.Instance.DonateMoney(utensils?.Value ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }

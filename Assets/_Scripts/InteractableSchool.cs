@@ -100,6 +100,7 @@ public class InteractableSchool : InteractableHouse
         {
             var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
             amount += schoolMaterials?.Value ?? 0;
+            TreasuryManager.Instance.DonateMoney(schoolMaterials?.Value ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }

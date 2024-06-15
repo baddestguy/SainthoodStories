@@ -132,6 +132,7 @@ public class InteractableOrphanage : InteractableHouse
         {
             var orphanageMaterials = InventoryManager.Instance.GetProvision(Provision.ORPHANAGE_RELATIONSHIP_BUILDER);
             amount += 2 + (orphanageMaterials?.Value ?? 0);
+            TreasuryManager.Instance.DonateMoney(orphanageMaterials?.Value ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }

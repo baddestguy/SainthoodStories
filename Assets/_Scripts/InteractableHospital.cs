@@ -151,6 +151,7 @@ public class InteractableHospital : InteractableHouse
         {
             var hospitalMaterials = InventoryManager.Instance.GetProvision(Provision.HOSPITAL_RELATIONSHIP_BUILDER);
             amount += 1 + (hospitalMaterials?.Value ?? 0);
+            TreasuryManager.Instance.DonateMoney(hospitalMaterials?.Value ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }
