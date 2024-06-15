@@ -623,6 +623,8 @@ public class InteractableHouse : InteractableObject
 
     IEnumerator SpecialThankYouAsync(CustomEventType thankYouEvent)
     {
+        if (!GameSettings.Instance.CustomEventsToggle) yield break;
+
         yield return null;
         yield return null;
         UI.Instance.EnableAllUIElements(false);

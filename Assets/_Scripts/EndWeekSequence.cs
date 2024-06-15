@@ -13,12 +13,15 @@ public class EndWeekSequence : MonoBehaviour
     public GameObject SaintsUnlockObj;
     public GameObject CashUnlockObj;
     public GameObject ContinueObj;
+    public GameObject DaysLeftObj;
 
     public TextMeshProUGUI Title;
     public TextMeshProUGUI SaintUnlockedTitle;
     public TextMeshProUGUI Score;
     public TextMeshProUGUI SaintScore;
     public TextMeshProUGUI CashAmount;
+    public TextMeshProUGUI OldDaysleft;
+    public TextMeshProUGUI NewDaysleft;
 
     public EndgameSaintPortrait[] SaintPortraits;
     public ProgressBar SaintProgressBar;
@@ -106,6 +109,26 @@ public class EndWeekSequence : MonoBehaviour
             }
         }
 
+        ContinueObj.SetActive(false);
+        CashUnlockObj.SetActive(false);
+        SaintsUnlockObj.SetActive(false);
+        CPFPObj.SetActive(false);
+        SaintProgressBar.gameObject.SetActive(false);
+
+        DaysLeftObj.SetActive(true);
+        OldDaysleft.text = $"{40 - MissionManager.Instance.CurrentMissionId+1}";
+        NewDaysleft.text = $"{40 - MissionManager.Instance.CurrentMissionId}";
+
+        yield return new WaitForSeconds(1f);
+
+        OldDaysleft.transform.DOMoveX(OldDaysleft.transform.position.x+100, 5);
+        NewDaysleft.transform.DOMoveX(OldDaysleft.transform.position.x, 5);
+        OldDaysleft.DOFade(0, 5f);
+        NewDaysleft.DOFade(1, 5f);
+
+        yield return new WaitForSeconds(6f);
+
+        DaysLeftObj.SetActive(false);
         gameObject.SetActive(false);
     }
 

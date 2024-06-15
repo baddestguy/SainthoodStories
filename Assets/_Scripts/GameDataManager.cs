@@ -283,10 +283,6 @@ public class GameDataManager : MonoBehaviour
 
         yield return null;
 
-
-
-        SaintsManager.Instance.LoadSaints(GameManager.Instance.SaveData.Saints);
-
     }
 
     public StatusEffectData GetStatusEffectData(PlayerStatusEffect id)
