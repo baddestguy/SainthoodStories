@@ -40,8 +40,9 @@ public class PopUI : MonoBehaviour
     public static int CriticalHitCount = 0;
 
     public TextMeshProUGUI RPDisplay;
+    public Image GlowImage;
 
-    void Start()
+    void Awake()
     {
         CamTransform = ExteriorCamera.Instance.Camera.transform;
         InteractableHouse.OnActionProgress += UpdateProgressBar;
@@ -88,8 +89,8 @@ public class PopUI : MonoBehaviour
         }
         else
         {
-            ItemsRequiredDisplay.gameObject.SetActive(true);
-            ClockIcon.gameObject.SetActive(true);
+            ItemsRequiredDisplay.gameObject.SetActive(false);
+            ClockIcon.gameObject.SetActive(false);
             //    BuildingIcon.transform.localPosition = new Vector3(0, 2, 0);
             IsCurrentlyOpen.text = "";
         }
@@ -181,6 +182,9 @@ public class PopUI : MonoBehaviour
             myButton.SendMessage("HideToolTip", SendMessageOptions.DontRequireReceiver);
 
         Callback?.Invoke(button);
+
+        FlashIconOnCompletedAction(GlowImage);
+
         if (RPDisplay != null && MyHouse != null)
         {
             RPDisplay.text = $"{MyHouse?.RelationshipPoints ?? 0}";
@@ -405,7 +409,23 @@ public class PopUI : MonoBehaviour
         }
     }
 
+    public void FlashIconOnCompletedAction(Image glow)
+    {
+        if (glow == null) return;
+
+        glow.DOKill(true);
+        glow.color = new Color(glow.color.r, glow.color.g, glow.color.b, 1f);
+        glow.transform.localScale = Vector3.one;
+        glow.transform.DOScale(new Vector3(3f, 3f, 3f), 0.75f);
+        glow.DOFade(0, 1f);
+    }
+
     private void OnEnable()
+    {
+        UpdateProgressBars();
+    }
+
+    private void UpdateProgressBars()
     {
         for (int i = 0; i < ProgressBars.Length; i++)
         {

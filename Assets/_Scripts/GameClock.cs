@@ -91,7 +91,7 @@ public class GameClock
         SaveDataManager.Instance.SaveGame();
         DeltaTime = false;
 
-        Debug.Log(Day + " : " + Time);
+    //    Debug.Log(Day + " : " + Time);
     }
 
     public void Ping()
@@ -108,12 +108,21 @@ public class GameClock
 
     public void Reset()
     {
-        if(Time > 5)
-        {
-            Day++;
-            if (Day > 7) Day = 1;
-        }
+        Day++;
         Time = 5;
+
+        var ac = InventoryManager.Instance.GetProvision(Provision.REDUCE_SLEEP_TIME);
+        if (ac != null)
+        {
+            Time += ac.Value;
+        }
+
+        var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
+        if (mattress != null)
+        {
+            Time += mattress.Value;
+            GameManager.Instance.Player.ConsumeEnergy(-mattress.Value);
+        }
     }
 
     public bool DuringTheDay()

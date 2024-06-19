@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameSettings : MonoBehaviour
 {
@@ -18,13 +21,15 @@ public class GameSettings : MonoBehaviour
     public bool TutorialToggle;
     public bool SkipSplashScreens;
     public bool IgnoreHouseBuildingAtEndofDay;
+    [HideInInspector]
     public bool DEMO_MODE;
+    public bool DEMO_MODE_2;
     public bool ShowGrid;
     public bool InfiniteBoost;
     public bool IsXboxMode;
     public XboxResolution MaxXboxResolution;
     public bool ShowFPSCounter;
-
+    public bool PlayingTrailer;
     public enum XboxResolution
     {
         _1080P = 2_073_600,
@@ -111,6 +116,64 @@ public class GameSettings : MonoBehaviour
 
 
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
+
+    }
+
+    public void IdleMode()
+    {
+        if (!DEMO_MODE_2) return;
+
+    //    StartCoroutine("IdleModeAsync");
+    }
+
+    IEnumerator IdleModeAsync()
+    {
+        if (!DEMO_MODE_2) yield break;
+        if(GameManager.Instance.CurrentSceneID != SceneID.MainMenu) yield break;
+
+        while (true)
+        {
+            yield return new WaitForSeconds(30f);
+            PlayingTrailer = true;
+            GameManager.Instance.LoadScene("Trailer", LoadSceneMode.Single);
+            yield break;
+        }
+    }
+
+    private void Update()
+    {
+        //if (GameManager.Instance.CurrentSceneID != SceneID.MainMenu) return;
+        //if (DEMO_MODE_2 && IsXboxMode 
+        //    && (Gamepad.current.buttonNorth.wasPressedThisFrame
+        //    || Gamepad.current.buttonSouth.wasPressedThisFrame
+        //    || Gamepad.current.buttonEast.wasPressedThisFrame
+        //    || Gamepad.current.buttonWest.wasPressedThisFrame
+        //    || Gamepad.current.startButton.wasPressedThisFrame
+        //    || Gamepad.current.leftShoulder.wasPressedThisFrame
+        //    || Gamepad.current.rightShoulder.wasPressedThisFrame
+        //    || Gamepad.current.leftTrigger.wasPressedThisFrame
+        //    || Gamepad.current.rightTrigger.wasPressedThisFrame
+        //    || Gamepad.current.dpad.up.wasPressedThisFrame 
+        //    || Gamepad.current.dpad.down.wasPressedThisFrame 
+        //    || Gamepad.current.dpad.left.wasPressedThisFrame 
+        //    || Gamepad.current.dpad.right.wasPressedThisFrame)) 
+        //{
+        //    if (PlayingTrailer)
+        //    {
+        //        PlayingTrailer = false;
+        //        GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+        //    }
+        //    else
+        //    {
+        //        StopCoroutine("IdleModeAsync");
+        //        StartCoroutine("IdleModeAsync");
+        //    }
+        //}
+    }
+
+    public void StopIdleMode()
+    {
+        StopCoroutine("IdleModeAsync");
     }
 
     public void Save()
@@ -180,7 +243,7 @@ public class GameSettings : MonoBehaviour
         if (IsXboxMode)
         {
             var bestResolution = resolutions.Select(x => new { Resolution = x, Pixels = x.height * x.width })
-                .Where(x => x.Pixels < (int)MaxXboxResolution)
+                .Where(x => x.Pixels <= (int)MaxXboxResolution)
                 .OrderByDescending(x => x.Pixels)
                 .ThenByDescending(x => x.Resolution.refreshRateRatio.value)
                 .First()

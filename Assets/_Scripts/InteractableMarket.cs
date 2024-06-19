@@ -187,11 +187,8 @@ public class InteractableMarket : InteractableHouse
         switch (actionName)
         {
             case "PRAY":
-                return base.CanDoAction(actionName);
             case "EXIT":
-                return base.CanDoAction(actionName);
             case "ENTER":
-                return base.CanDoAction(actionName);
             case "WORLD":
                 return base.CanDoAction(actionName);
         }

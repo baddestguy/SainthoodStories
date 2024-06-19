@@ -35,7 +35,7 @@
         }
     }
 
-    protected override void SetObjectiveParameters()
+    public override void SetObjectiveParameters()
     {
         if (MyObjective == null) return;
 
@@ -57,7 +57,6 @@
         if (groceries != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED GROCERIES!");
-            UpdateCharityPoints(ItemDeliveryPoints, 0);
             base.DeliverItem(house, autoDeliver);
             return;
         }
@@ -66,7 +65,7 @@
         if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateCharityPoints(ItemDeliveryPoints*2, 0);
+            UpdateCharityPoints(1, 0);
             base.DeliverItem(house, autoDeliver);
             return;
         }
@@ -79,10 +78,6 @@
         EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_FOOD);
         base.ItemDeliveryThanks();
     }
-    public override void UpgradeThanks()
-    {
-        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_SHELTER);
-    }
 
     private void DeliverDeadlineItem( bool autoDeliver = false)
     {
@@ -90,7 +85,7 @@
         if (meal != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("FED THE HUNGRY!");
-            UpdateCharityPoints(ItemDeliveryPoints * 2 * DeadlineDeliveryBonus, 0);
+            UpdateCharityPoints(1, 0);
             base.DeliverItem(this, autoDeliver);
         }
         else
@@ -99,7 +94,6 @@
             if (grocery != ItemType.NONE)
             {
                 UI.Instance.DisplayMessage("FED THE HUNGRY!");
-                UpdateCharityPoints(ItemDeliveryPoints * 1 * DeadlineDeliveryBonus, 0);
                 base.DeliverItem(this, autoDeliver);
             }
         }
@@ -111,8 +105,9 @@
         {
             var shelterMaterials = InventoryManager.Instance.GetProvision(Provision.SHELTER_RELATIONSHIP_BUILDER);
             amount += shelterMaterials?.Value ?? 0;
+            TreasuryManager.Instance.DonateMoney(shelterMaterials?.Value ?? 0);
         }
-        if(thanks == ThankYouType.IMMEDIATE_ASSISTANCE)
+        if (thanks == ThankYouType.IMMEDIATE_ASSISTANCE)
         {
             amount += 2;
         }
@@ -162,26 +157,25 @@
         if (item == ItemType.GROCERIES)
         {
             EventsManager.Instance.AddEventToList(CustomEventType.AUTO_DELIVER_COMPLETE);
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
     }
 
-    public override void TriggerStory()
+    public override void TriggerUpgradeStory()
     {
         if (HasBeenDestroyed) return;
 
-        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_3))
+        if (UpgradeLevel == 3 && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_3))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_STORY_3);
             MyStoryEvents.Add(CustomEventType.SHELTER_STORY_3);
         }
-        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_2))
+        else if (UpgradeLevel == 2 && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_2))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_STORY_2);
             MyStoryEvents.Add(CustomEventType.SHELTER_STORY_2);
         }
-        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_1))
+        else if (UpgradeLevel == 1 && !MyStoryEvents.Contains(CustomEventType.SHELTER_STORY_1))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SHELTER_STORY_1);
             MyStoryEvents.Add(CustomEventType.SHELTER_STORY_1);

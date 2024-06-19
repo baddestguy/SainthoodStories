@@ -88,11 +88,19 @@ public enum BuildingEventType
     REPAIR,
     RETURN,
     MASS,
+    SPECIAL_EVENT,
+    DELIVER_MEAL,
+    COOK,
+    PRAY,
     URGENT,
     DELIVER_ITEM_URGENT,
+    DELIVER_MEAL_URGENT,
     VOLUNTEER_URGENT,
     REPAIR_URGENT,
     CONSTRUCT_URGENT,
+    COOK_URGENT,
+    PRAY_URGENT,
+    SPECIAL_EVENT_URGENT,
     RETURN_URGENT
 }
 
@@ -192,9 +200,7 @@ public enum Provision
     COOKING_UTENSILS,
     DISCOUNT_CARD,
     ALLOWANCE,
-    REDUCE_SLEEP_TIME,
     CONSTRUCTION_TOOLS
-    ,STURDY_BUILDING_MATERIALS
     ,CONSTRUCTION_TENTS
     ,CHAPEL_BLUEPRINT
     ,BUILDING_BLUEPRINT,
@@ -204,11 +210,13 @@ public enum Provision
     KITCHEN_RELATIONSHIP_BUILDER,
     SHELTER_RELATIONSHIP_BUILDER
     ,SOFT_MATTRESS
+    ,REDUCE_SLEEP_TIME
     ,FASTING
     ,KOBOKO
     ,INCENSE
     ,SECURITY_GUARDS
     ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
+    ,STURDY_BUILDING_MATERIALS
     ,EXTRA_INVENTORY 
     ,AUTO_DELIVER
 }
@@ -305,6 +313,9 @@ public class HouseSaveData
     public bool HasBeenDestroyed;
     public List<CustomEventType> MyStoryEvents;
     public int UpgradeLevel;
+    public int CurrentMissionId;
+    public int VolunteerProgress;
+    public bool AllObjectivesComplete;
 }
 
 public class TooltipStats
@@ -314,6 +325,9 @@ public class TooltipStats
     public int FP;
     public int CP;
     public int Energy;
+    public int Spirits;
+    public int Coin;
+    public int RP;
 }
 
 [System.Serializable]
@@ -343,14 +357,53 @@ public class CollectibleObjectivesData
 }
 
 [System.Serializable]
+public class HouseObjectivesData
+{
+    public string House;
+    public int MissionId;
+    public BuildingEventType Event;
+    public int RequiredAmount;
+    public CustomEventType CustomEventId;
+    public CustomEventType ThankYouEvent;
+    public CustomEventType SpecialEventId;
+    public int Reward;
+    public string MissionDescription;
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        HouseObjectivesData other = (HouseObjectivesData)obj;
+        return House == other.House && MissionId == other.MissionId && CustomEventId == other.CustomEventId
+            && Event == other.Event && RequiredAmount == other.RequiredAmount && Reward == other.Reward;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 23 + House.GetHashCode();
+            hash = hash * 23 + MissionId.GetHashCode();
+            hash = hash * 23 + (Event.GetHashCode());
+            hash = hash * 23 + (RequiredAmount.GetHashCode());
+            hash = hash * 23 + (CustomEventId.GetHashCode());
+            hash = hash * 23 + Reward.GetHashCode();
+            return hash;
+        }
+    }
+}
+
+
+[System.Serializable]
 public class ObjectivesData
 {
     public int Id;
-    public BuildingEventType Event;
-    public CustomEventType DailyEvent;
-    public string House;
-    public int RequiredAmount;
     public CustomEventType CustomEventId;
+    public CustomEventType DailyEvent;
     public int WeatherId;
     public Season Season;
 
@@ -362,8 +415,7 @@ public class ObjectivesData
         }
 
         ObjectivesData other = (ObjectivesData)obj;
-        return Id == other.Id && Event == other.Event && House == other.House
-            && RequiredAmount == other.RequiredAmount && CustomEventId == other.CustomEventId
+        return Id == other.Id && CustomEventId == other.CustomEventId
             && WeatherId == other.WeatherId && Season == other.Season;
     }
 
@@ -373,9 +425,6 @@ public class ObjectivesData
         {
             int hash = 17;
             hash = hash * 23 + Id.GetHashCode();
-            hash = hash * 23 + (Event.GetHashCode());
-            hash = hash * 23 + (House != null ? House.GetHashCode() : 0);
-            hash = hash * 23 + RequiredAmount.GetHashCode();
             hash = hash * 23 + (CustomEventId.GetHashCode());
             hash = hash * 23 + WeatherId.GetHashCode();
             return hash;
@@ -441,6 +490,7 @@ public class CustomEventData
     public EventGroup EventGroup;
     public int Weight;
     public float Cost;
+    public int EnergyCost;
     public float Gain;
     public CustomEventRewardType RewardType;
     public float RejectionCost;
@@ -712,6 +762,7 @@ public enum CustomEventType
     , SAVE_ORPHANAGE
     , SAVE_KITCHEN
     , SAVE_SHELTER
+    , ENDGAME_DEMO
     , ENDGAME
     , ENDGAME_BEST
     , ENDGAME_NORMAL
@@ -787,4 +838,185 @@ public enum CustomEventType
     ,MISSION_34
     ,MISSION_35
     ,MISSION_36
+    ,MISSION_37
+    ,MISSION_38
+    ,MISSION_39
+    ,MISSION_40
+    ,HOSPITAL_MISSION_1
+    ,HOSPITAL_MISSION_2
+    ,HOSPITAL_MISSION_3
+    ,HOSPITAL_MISSION_4
+    ,HOSPITAL_MISSION_5
+    ,HOSPITAL_MISSION_6
+    ,HOSPITAL_MISSION_7
+    ,HOSPITAL_MISSION_8
+    ,HOSPITAL_MISSION_9
+    ,HOSPITAL_MISSION_10
+    ,HOSPITAL_MISSION_11
+    ,HOSPITAL_MISSION_12
+    ,HOSPITAL_MISSION_13
+    ,HOSPITAL_MISSION_14
+    ,HOSPITAL_MISSION_15
+    ,ORPHANAGE_MISSION_1
+    ,ORPHANAGE_MISSION_2
+    ,ORPHANAGE_MISSION_3
+    ,ORPHANAGE_MISSION_4
+    ,ORPHANAGE_MISSION_5
+    ,ORPHANAGE_MISSION_6
+    ,ORPHANAGE_MISSION_7
+    ,ORPHANAGE_MISSION_8
+    ,ORPHANAGE_MISSION_9
+    ,ORPHANAGE_MISSION_10
+    ,ORPHANAGE_MISSION_11
+    ,ORPHANAGE_MISSION_12
+    ,ORPHANAGE_MISSION_13
+    ,ORPHANAGE_MISSION_14
+    ,ORPHANAGE_MISSION_15
+    ,SCHOOL_MISSION_1
+    ,SCHOOL_MISSION_2
+    ,SCHOOL_MISSION_3
+    ,SCHOOL_MISSION_4
+    ,SCHOOL_MISSION_5
+    ,SCHOOL_MISSION_6
+    ,SCHOOL_MISSION_7
+    ,SCHOOL_MISSION_8
+    ,SCHOOL_MISSION_9
+    ,SCHOOL_MISSION_10
+    ,SCHOOL_MISSION_11
+    ,SCHOOL_MISSION_12
+    ,SCHOOL_MISSION_13
+    ,SCHOOL_MISSION_14
+    ,SCHOOL_MISSION_15
+    ,SHELTER_MISSION_1
+    ,SHELTER_MISSION_2
+    ,SHELTER_MISSION_3
+    ,SHELTER_MISSION_4
+    ,SHELTER_MISSION_5
+    ,SHELTER_MISSION_6
+    ,SHELTER_MISSION_7
+    ,SHELTER_MISSION_8
+    ,SHELTER_MISSION_9
+    ,SHELTER_MISSION_10
+    ,SHELTER_MISSION_11
+    ,SHELTER_MISSION_12
+    ,SHELTER_MISSION_13
+    ,SHELTER_MISSION_14
+    ,SHELTER_MISSION_15
+    ,KITCHEN_MISSION_1
+    ,KITCHEN_MISSION_2
+    ,KITCHEN_MISSION_3
+    ,KITCHEN_MISSION_4
+    ,KITCHEN_MISSION_5
+    ,KITCHEN_MISSION_6
+    ,KITCHEN_MISSION_7
+    ,KITCHEN_MISSION_8
+    ,KITCHEN_MISSION_9
+    ,KITCHEN_MISSION_10
+    ,KITCHEN_MISSION_11
+    ,KITCHEN_MISSION_12
+    ,KITCHEN_MISSION_13
+    ,KITCHEN_MISSION_14
+    ,KITCHEN_MISSION_15
+    ,CHURCH_MISSION_1
+    ,CHURCH_MISSION_2
+    ,CHURCH_MISSION_3
+    ,CHURCH_MISSION_4
+    ,CHURCH_MISSION_5
+    ,CHURCH_MISSION_6
+    ,CHURCH_MISSION_7
+    ,CHURCH_MISSION_8
+    ,CHURCH_MISSION_9
+    ,CHURCH_MISSION_10
+    ,CHURCH_MISSION_11
+    ,CHURCH_MISSION_12
+    ,CHURCH_MISSION_13
+    ,CHURCH_MISSION_14
+    ,CHURCH_MISSION_15
+    ,THANKYOU_HOSPITAL_1
+    ,THANKYOU_HOSPITAL_2
+    ,THANKYOU_HOSPITAL_3
+    ,THANKYOU_HOSPITAL_4
+    ,THANKYOU_HOSPITAL_5
+    ,THANKYOU_HOSPITAL_6
+    ,THANKYOU_HOSPITAL_7
+    ,THANKYOU_HOSPITAL_8
+    ,THANKYOU_HOSPITAL_9
+    ,THANKYOU_HOSPITAL_10
+    ,THANKYOU_HOSPITAL_11
+    ,THANKYOU_HOSPITAL_12
+    ,THANKYOU_HOSPITAL_13
+    ,THANKYOU_HOSPITAL_14
+    ,THANKYOU_ORPHANAGE_1
+    ,THANKYOU_ORPHANAGE_2
+    ,THANKYOU_ORPHANAGE_3
+    ,THANKYOU_ORPHANAGE_4
+    ,THANKYOU_ORPHANAGE_5
+    ,THANKYOU_ORPHANAGE_6
+    ,THANKYOU_ORPHANAGE_7
+    ,THANKYOU_ORPHANAGE_8
+    ,THANKYOU_ORPHANAGE_9
+    ,THANKYOU_ORPHANAGE_10
+    ,THANKYOU_ORPHANAGE_11
+    ,THANKYOU_ORPHANAGE_12
+    ,THANKYOU_ORPHANAGE_13
+    ,THANKYOU_ORPHANAGE_14
+    ,THANKYOU_SCHOOL_1
+    ,THANKYOU_SCHOOL_2
+    ,THANKYOU_SCHOOL_3
+    ,THANKYOU_SCHOOL_4
+    ,THANKYOU_SCHOOL_5
+    ,THANKYOU_SCHOOL_6
+    ,THANKYOU_SCHOOL_7
+    ,THANKYOU_SCHOOL_8
+    ,THANKYOU_SCHOOL_9
+    ,THANKYOU_SCHOOL_10
+    ,THANKYOU_SCHOOL_11
+    ,THANKYOU_SCHOOL_12
+    ,THANKYOU_SCHOOL_13
+    ,THANKYOU_SCHOOL_14
+    ,THANKYOU_SHELTER_1
+    ,THANKYOU_SHELTER_2
+    ,THANKYOU_SHELTER_3
+    ,THANKYOU_SHELTER_4
+    ,THANKYOU_SHELTER_5
+    ,THANKYOU_SHELTER_6
+    ,THANKYOU_SHELTER_7
+    ,THANKYOU_SHELTER_8
+    ,THANKYOU_SHELTER_9
+    ,THANKYOU_SHELTER_10
+    ,THANKYOU_SHELTER_11
+    ,THANKYOU_SHELTER_12
+    ,THANKYOU_SHELTER_13
+    ,THANKYOU_SHELTER_14
+    ,THANKYOU_COOK_1
+    ,THANKYOU_COOK_2
+    ,THANKYOU_COOK_3
+    ,THANKYOU_COOK_4
+    ,THANKYOU_COOK_5
+    ,THANKYOU_COOK_6
+    ,THANKYOU_COOK_7
+    ,THANKYOU_COOK_8
+    ,THANKYOU_COOK_9
+    ,THANKYOU_COOK_10
+    ,THANKYOU_COOK_11
+    ,THANKYOU_COOK_12
+    ,THANKYOU_COOK_13
+    ,THANKYOU_COOK_14
+    ,THANKYOU_CHURCH_1
+    ,THANKYOU_CHURCH_2
+    ,THANKYOU_CHURCH_3
+    ,THANKYOU_CHURCH_4
+    ,THANKYOU_CHURCH_5
+    ,THANKYOU_CHURCH_6
+    ,THANKYOU_CHURCH_7
+    ,THANKYOU_CHURCH_8
+    ,THANKYOU_CHURCH_9
+    ,THANKYOU_CHURCH_10
+    ,THANKYOU_CHURCH_11
+    ,THANKYOU_CHURCH_12
+    ,THANKYOU_CHURCH_13
+    ,THANKYOU_CHURCH_14
+    ,THANKYOU_CHURCH_15
+    ,BLOOD_DONATION
+    ,HEALTH_INSPECTION
 }

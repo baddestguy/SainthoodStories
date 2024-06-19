@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets._Scripts.Extensions;
+using Rewired;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -176,6 +177,7 @@ public class GameManager : MonoBehaviour
                 EventsManager.Instance.AddEventToList(obj.DailyEvent);
                 EventsManager.Instance.TriggeredMissionEvents.Add(obj.DailyEvent);
             }
+
             GridCollectibleManager.Instance.SpawnedTiles.Clear();
             GridCollectibleManager.Instance.SacredItemSpawned = false;
 
@@ -205,11 +207,14 @@ public class GameManager : MonoBehaviour
                     UI.Instance.DisableMainMenuContinueBtn();
                 }
 
-            //    EventsManager.Instance.CurrentEvents.Add(data.CurrentDailyEvent);
+                SaintsManager.Instance.LoadSaints(SaveData.Saints);
+
+                //    EventsManager.Instance.CurrentEvents.Add(data.CurrentDailyEvent);
             }, false, true);
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
             SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay:70);
+            GameSettings.Instance.IdleMode();
 
         }
         else if (scene.IsSaintShowcase())
@@ -269,14 +274,18 @@ public class GameManager : MonoBehaviour
         PlayAmbience(time, day);
         if(GameClock.DeltaTime && time % 2 == 0)
         {
-            if(MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event > BuildingEventType.URGENT))
+            foreach(var h in Houses)
             {
-                MissionManager.Instance.UpdateCharityPoints(-1, null);
+                if (h.MyObjective == null) continue;
+                if(h.MyObjective.Event > BuildingEventType.URGENT)
+                {
+                    MissionManager.Instance.UpdateCharityPoints(-1, null);
+                }
             }
         }
         if (GameClock.DeltaTime && GameClock.EndofDay)
         {
-            MissionManager.Instance.UpdateCharityPoints(-1, null);
+        //    MissionManager.Instance.UpdateCharityPoints(-1, null);
         }
     }
 
@@ -297,6 +306,7 @@ public class GameManager : MonoBehaviour
 
     public void SetMissionParameters(MissionDifficulty missionDifficulty, bool newGame = false, bool showUI = true)
     {
+        GameSettings.Instance.StopIdleMode();
 
         switch (missionDifficulty)
         {
@@ -366,7 +376,7 @@ public class GameManager : MonoBehaviour
     {
 
         SaveDataManager.Instance.LoadGame((data, newGame) => {
-            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, PlayerEnergy, data.Time, 7, data.Week);
+            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, data.Energy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
             SaveData = data;
         }, false, true);

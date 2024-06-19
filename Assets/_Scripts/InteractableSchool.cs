@@ -48,7 +48,7 @@ public class InteractableSchool : InteractableHouse
         return base.CalculateMaxVolunteerPoints(amount);
     }
 
-    protected override void SetObjectiveParameters()
+    public override void SetObjectiveParameters()
     {
         if (MyObjective == null) return;
 
@@ -100,6 +100,7 @@ public class InteractableSchool : InteractableHouse
         {
             var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
             amount += schoolMaterials?.Value ?? 0;
+            TreasuryManager.Instance.DonateMoney(schoolMaterials?.Value ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }
@@ -113,7 +114,6 @@ public class InteractableSchool : InteractableHouse
         if (item != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("DELIVERED STATIONERY!");
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(house, autoDeliver);
         }
         else
@@ -128,15 +128,11 @@ public class InteractableSchool : InteractableHouse
         base.ItemDeliveryThanks();
     }
 
-    public override void UpgradeThanks()
-    {
-        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_SCHOOL);
-    }
-
     public override bool DuringOpenHours(GameClock newClock = null)
     {
-        GameClock clock = newClock ?? GameManager.Instance.GameClock;
-        return base.DuringOpenHours() && clock.Day <= 5;
+        return true;
+        //GameClock clock = newClock ?? GameManager.Instance.GameClock;
+        //return base.DuringOpenHours() && clock.Day <= 5;
     }
 
     public override void PopUICallback(string button)
@@ -166,7 +162,6 @@ public class InteractableSchool : InteractableHouse
 
     //    if (!DuringOpenHours()) return;
         if ((DeadlineTime.Time != -1)) return;
-        if (DeadlineTriggeredForTheDay) return;
 
         double futureTime = time + RandomFutureTimeByDifficulty();
    //     if (futureTime > ClosingTime) return;
@@ -187,8 +182,6 @@ public class InteractableSchool : InteractableHouse
                             RequiredItems = mission != null ? mission.RequiredItems : 1; //Depending on Season
                         DeadlineDeliveryBonus = 1;
                         DeadlineSet = true;
-                        DeadlineTriggeredForTheDay = true;
-                        PopMyIcon();
                         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
                         Debug.LogWarning($"{name}: DEADLINE SET FOR {DeadlineTime.Time} : {DeadlineTime.Day}!");
                     }
@@ -200,22 +193,17 @@ public class InteractableSchool : InteractableHouse
     public override void RelationshipReward(ThankYouType thanks)
     {
         var amount = 0;
-        if (RelationshipPoints == 100)
+        if (UpgradeLevel == 3)
         {
-            //One time special reward!
+            amount = Random.Range(10, 11);
         }
-
-        if (RelationshipPoints >= 65)
+        else if (UpgradeLevel == 2)
         {
-            amount = Random.Range(9, 10);
+            amount = Random.Range(8, 9);
         }
-        else if (RelationshipPoints >= 30)
+        else if (UpgradeLevel == 1)
         {
-            amount = Random.Range(7, 8);
-        }
-        else if (RelationshipPoints >= 10)
-        {
-            amount = Random.Range(5, 6);
+            amount = Random.Range(6, 7);
         }
         else
         {
@@ -234,15 +222,6 @@ public class InteractableSchool : InteractableHouse
 
     public override TooltipStats GetTooltipStatsForButton(string button)
     {
-        switch (button)
-        {
-            case "VOLUNTEER":
-                if (MaxTeachPoints - TeachCountdown == 1)
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption));
-                else
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.TIME);
-        }
-
         return base.GetTooltipStatsForButton(button);
     }
 
@@ -255,7 +234,8 @@ public class InteractableSchool : InteractableHouse
 
             case "TEACH":
                 Player player = GameManager.Instance.Player;
-                return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && TeachCountdown > 0));
+                return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && TeachCountdown > 0))
+                    && AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT));
         }
 
         return base.CanDoAction(actionName);
@@ -288,26 +268,25 @@ public class InteractableSchool : InteractableHouse
         if (item == ItemType.STATIONERY)
         {
             EventsManager.Instance.AddEventToList(CustomEventType.AUTO_DELIVER_COMPLETE);
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(this, true);
         }
     }
 
-    public override void TriggerStory()
+    public override void TriggerUpgradeStory()
     {
         if (HasBeenDestroyed) return;
 
-        if (RelationshipPoints >= GameDataManager.MAX_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_3))
+        if (UpgradeLevel == 3 && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_3))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_STORY_3);
             MyStoryEvents.Add(CustomEventType.SCHOOL_STORY_3);
         }
-        else if (RelationshipPoints >= GameDataManager.MED_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_2))
+        else if (UpgradeLevel == 2 && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_2))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_STORY_2);
             MyStoryEvents.Add(CustomEventType.SCHOOL_STORY_2);
         }
-        else if (RelationshipPoints >= GameDataManager.MIN_RP_THRESHOLD && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_1))
+        else if (UpgradeLevel == 1 && !MyStoryEvents.Contains(CustomEventType.SCHOOL_STORY_1))
         {
             EventsManager.Instance.AddEventToList(CustomEventType.SCHOOL_STORY_1);
             MyStoryEvents.Add(CustomEventType.SCHOOL_STORY_1);

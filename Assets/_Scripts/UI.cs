@@ -72,6 +72,7 @@ public class UI : MonoBehaviour
 
     public GameObject PanelToActivateOnLoadUiEvent;
     public static UnityAction<bool> UIHidden;
+    public bool FullUIVisible = true;
 
     [Header("UI Elements")]
     public GameObject LeftItems;
@@ -92,6 +93,8 @@ public class UI : MonoBehaviour
     public GameObject SaintsCollectionUI;
 
     public GameObject LoadingScreen;
+    public GameObject GameOverPopup;
+    public GameObject InventoryPopup;
     public bool WasUiHit
     {
         get
@@ -150,6 +153,12 @@ public class UI : MonoBehaviour
                 StatusEffectDisplay.gameObject.SetActive(false);
             }
         }
+    }
+
+    public void InventoryPopupEnable()
+    {
+        if (!FullUIVisible && !InventoryPopup.activeSelf) return;
+        InventoryPopup.SetActive(!InventoryPopup.activeSelf);
     }
 
     public void LoadingScreenEnable(bool enable)
@@ -632,11 +641,11 @@ public class UI : MonoBehaviour
 
     public void AdditionPoints(TextMeshProUGUI display, Image glow, int amount, float delay)
     {
-        if (amount == 0) return;
-
         glow.transform.localScale = Vector3.one;
         glow.transform.DOScale(new Vector3(2f, 2f, 2f), 0.5f);
         glow.DOFade(0, 1f);
+
+        if (amount == 0) return;
 
         display.text = amount > 0 ? $"+{amount}" : $"{amount}";
         display.color = amount > 0 ? Color.green : Color.red;
@@ -789,6 +798,8 @@ public class UI : MonoBehaviour
 
     private string DayofTheWeek(int Day)
     {
+        return "Day " + MissionManager.Instance.CurrentMissionId;
+
         switch (Day)
         {
             case 1: return "Mon";
@@ -934,6 +945,7 @@ public class UI : MonoBehaviour
         CrossFading = false;
     }
 
+
     public void EnableAllUIElements(bool enable)
     {
         if (LeftItems == null) return;
@@ -956,6 +968,7 @@ public class UI : MonoBehaviour
         TreasuryAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         CPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         FPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
+        FullUIVisible = enable;
     }
 
     public void StartMinigame(MinigameType minigame, Action<string> callback)
@@ -967,6 +980,11 @@ public class UI : MonoBehaviour
     public void GameOver()
     {
         StatusEffectDisplay.gameObject.SetActive(false);
+    }
+
+    public void TriggerGameOver()
+    {
+        GameOverPopup.gameObject.SetActive(!GameOverPopup.gameObject.activeSelf);
     }
 
     public void QuitGame()

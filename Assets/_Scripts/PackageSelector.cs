@@ -12,45 +12,61 @@ public class PackageSelector : MonoBehaviour
     public ScrollRect Scroller;
     public InteractableHouse House;
 
-    public List<PackageItem> AvailableItems { get; set; }
+    public List<ItemType> AvailableItems { get; set; }
     public GameObject ExitGameObject { get; set; }
 
     private GameObject ItemGO;
+    public List<PackageItem> InstantiatedGos;
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         ItemGO = Resources.Load<GameObject>("UI/PackageUIItem");
-        var instantiatedGos = new List<PackageItem>();
         foreach (var house in GameManager.Instance.Houses)
         {
-            if (house.MyObjective != null && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT))
+            if (house.MyObjective != null &&
+                (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT
+                || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT
+                || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT))
             {
-                for (int i = 0; i < house.MyObjective.RequiredAmount; i++)
+                for (int i = 0; i < house.RequiredItems; i++)
                 {
                     var item = Instantiate(ItemGO);
                     item.transform.SetParent(Scroller.content);
                     var pItem = item.GetComponent<PackageItem>();
                     pItem.Init(house.MyObjective);
-                    instantiatedGos.Add(pItem);
+                    InstantiatedGos.Add(pItem);
+                }
+            }
+            else if(house.AllObjectivesComplete && house.HouseName.Contains("Shelter"))
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    var item = Instantiate(ItemGO);
+                    item.transform.SetParent(Scroller.content);
+                    var pItem = item.GetComponent<PackageItem>();
+                    pItem.Init(new HouseObjectivesData() { House = "InteractableShelter" });
+                    InstantiatedGos.Add(pItem);
                 }
             }
         }
 
         var items = InventoryManager.Instance.Items;
 
+        AvailableItems = InstantiatedGos.Select(x=>x.Item).ToList();
         for (int i = 0; i < items.Count; i++)
         {
-            PackageSelected(instantiatedGos.FirstOrDefault(go => go.Item == items[i]));
+            PackageSelected(InstantiatedGos.FirstOrDefault(go => go.Item == items[i]));
         }
 
-        AvailableItems = instantiatedGos.ToList();
         ExitGameObject = gameObject.FindDeepChild("Exit");
         GameplayControllerHandler.Instance.SetPackageSelector(this);
     }
 
     public void PackageSelected(PackageItem item)
     {
+        if (item == null) return;
+
         for (int i = 0; i < ItemList.Length; i++)
         {
             if (!ItemList[i].PackageIcon.gameObject.activeSelf)
@@ -60,9 +76,10 @@ public class PackageSelector : MonoBehaviour
                 break;
             }
         }
-        InventoryManager.Instance.AddToInventory(item.Item);
+        if(item.PackageSelectorIsNew) InventoryManager.Instance.AddToInventory(item.Item);
+        AvailableItems.Remove(item.Item);
+        InstantiatedGos.Remove(item);
         Destroy(item.gameObject);
-        AvailableItems.Remove(item);
     }
 
     public void PackageDeselected(PackageItem item)
@@ -84,7 +101,25 @@ public class PackageSelector : MonoBehaviour
         returnedItem.transform.SetParent(Scroller.content);
         var packageItem = returnedItem.GetComponent<PackageItem>();
         packageItem.Init(item.Data);
-        AvailableItems.Add(packageItem);
+        AvailableItems.Add(packageItem.Item);
+        InstantiatedGos.Add(packageItem);
+    }
+
+    private void OnDisable()
+    {
+        foreach(var item in InstantiatedGos)
+        {
+            Destroy(item.gameObject);
+        }
+        for (int i = 0; i < ItemList.Length; i++)
+        {
+            ItemList[i].PackageIcon.gameObject.SetActive(false);
+            var toolTip = ItemList[i].GetComponent<TooltipMouseOver>();
+            toolTip.Loc_Key = string.Empty;
+        }
+
+        AvailableItems.Clear();
+        InstantiatedGos.Clear();
     }
 
     public void Cancel()

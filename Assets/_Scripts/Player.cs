@@ -125,8 +125,6 @@ public class Player : MonoBehaviour
 
     private InteractableHouse GetCurrentBuilding()
     {        
-        if(GameManager.Instance.GameClock.Time == 6) return FindObjectOfType<InteractableChurch>();
-
         switch (GameManager.Instance.SaveData.CurrentHouse)
         {
             case "InteractableChurch":

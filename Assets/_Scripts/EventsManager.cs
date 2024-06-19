@@ -50,8 +50,17 @@ public class EventsManager : MonoBehaviour
 
         if (!GameSettings.Instance.CustomEventsToggle)
         {
-            EventList.Clear();
-            return;
+            EventList.RemoveAll(e => e.EventGroup != EventGroup.CHURCH
+            && e.EventGroup != EventGroup.HOSPITAL
+            && e.EventGroup != EventGroup.ORPHANAGE
+            && e.EventGroup != EventGroup.SCHOOL
+            && e.EventGroup != EventGroup.KITCHEN
+            && e.EventGroup != EventGroup.SHELTER);
+
+            if (!EventList.Any())
+            {
+                return;
+            }
         }
 
         GameClock c = GameManager.Instance.GameClock;

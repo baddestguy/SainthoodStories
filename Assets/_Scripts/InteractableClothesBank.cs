@@ -38,7 +38,6 @@
         if (item != ItemType.NONE)
         {
             UI.Instance.DisplayMessage("CLOTHED THE NAKED!");
-            UpdateCharityPoints(ItemDeliveryPoints * DeadlineDeliveryBonus, 0);
             base.DeliverItem(house, autoDeliver);
         }
         else
@@ -68,11 +67,6 @@
     {
         EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_ITEM_CLOTHES);
         base.ItemDeliveryThanks();
-    }
-
-    public override void UpgradeThanks()
-    {
-        EventsManager.Instance.AddEventToList(CustomEventType.THANKYOU_UPGRADE_CLOTHES);
     }
 
     public override void PopUICallback(string button)

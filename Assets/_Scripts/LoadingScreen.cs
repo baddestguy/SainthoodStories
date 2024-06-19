@@ -22,6 +22,7 @@ public class LoadingScreen : MonoBehaviour
             if (count == 4)
             {
                 LoadingText.text = "LOADING";
+                count = 0;
             }
             yield return new WaitForSeconds(0.5f);
             count++;

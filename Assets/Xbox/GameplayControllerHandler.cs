@@ -93,6 +93,8 @@ namespace Assets.Xbox
             }
 
             HandleZoom();
+
+            HandleInventoryPopup();
         }
 
         /// <summary>
@@ -251,6 +253,14 @@ namespace Assets.Xbox
             {
                 _currentPopUIButton?.HandleControllerExit();
                 GameControlsManager.TryZoom?.Invoke(-1);
+            }
+        }
+
+        private void HandleInventoryPopup()
+        {
+            if (Gamepad.current.yButton.wasPressedThisFrame || Gamepad.current.yButton.wasPressedThisFrame)
+            {
+                UI.Instance.InventoryPopupEnable();
             }
         }
 
@@ -470,7 +480,7 @@ namespace Assets.Xbox
                     _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale / scaleValue, 0.5f);
                 }
 
-                var gameObjects = _packageSelector.ItemList.Concat(_packageSelector.AvailableItems)
+                var gameObjects = _packageSelector.ItemList.Concat(_packageSelector.InstantiatedGos)
                     .Select(x => x.gameObject).ToList();
                 gameObjects.Add(_packageSelector.ExitGameObject);
 

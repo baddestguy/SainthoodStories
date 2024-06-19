@@ -20,6 +20,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<string, StoryEventData> StoryEventData = new Dictionary<string, StoryEventData>();
     public Dictionary<string, List<BuildingMissionData>> BuildingMissionData = new Dictionary<string, List<BuildingMissionData>>();
     public Dictionary<int, List<ObjectivesData>> ObjectivesData = new Dictionary<int, List<ObjectivesData>>();
+    public Dictionary<string, List<HouseObjectivesData>> HouseObjectivesData = new Dictionary<string, List<HouseObjectivesData>>();
     public Dictionary<int, CollectibleObjectivesData> CollectibleObjectivesData = new Dictionary<int, CollectibleObjectivesData>();
     public Dictionary<string, List<CollectibleData>> CollectibleData = new Dictionary<string, List<CollectibleData>>();
     public List<WeatherData> WeatherData = new List<WeatherData>();
@@ -174,6 +175,21 @@ public class GameDataManager : MonoBehaviour
             }
         }
 
+        //House Objectives
+        csvFile = Resources.Load<TextAsset>("GameData/HouseObjectives");
+        var houseObjData = CSVSerializer.Deserialize<HouseObjectivesData>(csvFile.text);
+        foreach (var item in houseObjData)
+        {
+            if (HouseObjectivesData.ContainsKey(item.House))
+            {
+                HouseObjectivesData[item.House].Add(item);
+            }
+            else
+            {
+                HouseObjectivesData.Add(item.House, new List<HouseObjectivesData>() { item });
+            }
+        }
+
         yield return null;
 
         //Collectible Objectives
@@ -266,10 +282,6 @@ public class GameDataManager : MonoBehaviour
         }
 
         yield return null;
-
-
-
-        SaintsManager.Instance.LoadSaints(GameManager.Instance.SaveData.Saints);
 
     }
 
@@ -386,6 +398,10 @@ public class GameDataManager : MonoBehaviour
 
         if(unlockedSaintsCount == TOTAL_UNLOCKABLE_SAINTS) return Constants[$"SAINTS_UNLOCK_THRESHOLD_25"].IntValue;
 
+        if (GameSettings.Instance.DEMO_MODE_2)
+        {
+            return 15;
+        }
         return Constants[$"SAINTS_UNLOCK_THRESHOLD_{ unlockedSaintsCount + 1 }"].IntValue;
     }
 
@@ -416,26 +432,38 @@ public class GameDataManager : MonoBehaviour
         return GetObjectivesData(id).FirstOrDefault();
     }
 
-    public TooltipStats GetToolTip(TooltipStatId id, double ticksModifier = 0, int fpModifier = 0, int cpModifier = 0, int energyModifier = 0)
+    public TooltipStats GetToolTip(TooltipStatId id, double ticksModifier = 0, double ticksOverride = 0, int fpModifier = 0, int fpOverride = 0, int cpModifier = 0, int cpOverride = 0, int energyModifier = 0)
     {
         var tooltip = new TooltipStats() { Id = ToolTips[id].Id, Ticks = ToolTips[id].Ticks, CP = ToolTips[id].CP, FP = ToolTips[id].FP, Energy = ToolTips[id].Energy };
 
-        if(ticksModifier != 0)
+        if (ticksOverride != 0)
+        {
+            tooltip.Ticks = ticksOverride;
+        }
+        if (ticksModifier != 0)
         {
             tooltip.Ticks += ticksModifier;
         }
 
-        if(fpModifier != 0)
+        if (fpOverride != 0)
+        {
+            tooltip.FP = fpOverride;
+        }
+        if (fpModifier != 0)
         {
             tooltip.FP += fpModifier;
         }
 
-        if(cpModifier != 0)
+        if (cpOverride != 0)
+        {
+            tooltip.CP = cpOverride;
+        }
+        if (cpModifier != 0)
         {
             tooltip.CP += cpModifier;
         }
 
-        if(energyModifier != 0)
+        if (energyModifier != 0)
         {
             tooltip.Energy += energyModifier;
         }

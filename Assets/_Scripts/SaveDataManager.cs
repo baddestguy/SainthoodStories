@@ -31,7 +31,8 @@ public class SaveDataManager : MonoBehaviour
     [HideInInspector]public SavedDataUiHandler savedDataUiHandler;
 
     private const string FILENAME = "Sainthood.save";
-    
+    private const string SPARE_FILENAME = "Sainthood_DayCheckpoint.save";
+
     string GetPath(string fileName) => Path.Combine(Application.persistentDataPath , fileName);
     private bool FileExixst(string fileName) => File.Exists(GetPath(FILENAME));
 
@@ -45,6 +46,26 @@ public class SaveDataManager : MonoBehaviour
     {
         
         Debug.Log("SAVE PATH: " + Application.persistentDataPath);
+    }
+
+    public void DaySave()
+    {
+        SaveObject save = CurrentSaveData();
+        SaveObject[] data = new SaveObject[1] { save };
+
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(GetPath(SPARE_FILENAME));
+        bf.Serialize(file, data);
+        file.Close();
+        GameManager.Instance.SaveData = data[0];
+    }
+
+    public void LoadDaySave()
+    {
+        var data = GetSavedDataSet(SPARE_FILENAME);
+        var saveObjects = data.Values.ToArray();
+        var save = saveObjects.OrderBy(x => x.Day).LastOrDefault(); 
+        Save(new SaveObject[1] { save });
     }
 
     public void SaveGame()
@@ -183,15 +204,15 @@ public class SaveDataManager : MonoBehaviour
         bf.Serialize(file, data);
         file.Close();
         GameManager.Instance.SaveData = data[0];
-        Debug.Log("SAVED!");
+     //   Debug.Log("SAVED!");
     }
 
-    private Dictionary<Days, SaveObject> GetSavedDataSet()
+    private Dictionary<Days, SaveObject> GetSavedDataSet(string fileName = FILENAME)
     {
         try
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(GetPath(FILENAME), FileMode.Open);
+            FileStream file = File.Open(GetPath(fileName), FileMode.Open);
             SaveObject[] saveObjects = (SaveObject[])bf.Deserialize(file);
             file.Close();
             Dictionary<Days, SaveObject> keyVal = saveObjects.ToDictionary(x => (Days)x.Day, x => x);
@@ -271,6 +292,10 @@ public class SaveDataManager : MonoBehaviour
         }
     }
 
+    public void ReloadDaySave()
+    {
+
+    }
 
     public void DeleteProgress()
     {

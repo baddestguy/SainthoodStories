@@ -201,8 +201,7 @@ QualitySettings:
     terrainBillboardStart: 50
     terrainFadeLength: 5
     terrainMaxTrees: 50
-    excludedTargetPlatforms:
-    - Windows Store Apps
+    excludedTargetPlatforms: []
   - serializedVersion: 3
     name: Very High
     pixelLightCount: 3
@@ -251,8 +250,7 @@ QualitySettings:
     terrainBillboardStart: 50
     terrainFadeLength: 5
     terrainMaxTrees: 50
-    excludedTargetPlatforms:
-    - Windows Store Apps
+    excludedTargetPlatforms: []
   - serializedVersion: 3
     name: Ultra
     pixelLightCount: 4
@@ -301,12 +299,11 @@ QualitySettings:
     terrainBillboardStart: 50
     terrainFadeLength: 5
     terrainMaxTrees: 50
-    excludedTargetPlatforms:
-    - Windows Store Apps
+    excludedTargetPlatforms: []
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
     Android: 5
     Server: 5
     Standalone: 5
     WebGL: 5
-    Windows Store Apps: 2
+    Windows Store Apps: 5

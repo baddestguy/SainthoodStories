@@ -8,7 +8,7 @@ public class PackageItem : MonoBehaviour
     public ItemType Item;
     public Image PackageIcon;
 
-    public ObjectivesData Data;
+    public HouseObjectivesData Data;
 
     private string HeaderColor = "<color=#3B2E1F>";
     private string SubheaderColor = "<color=#C9A963>";
@@ -18,13 +18,15 @@ public class PackageItem : MonoBehaviour
     private string SubheaderSize = "<size=10>";
     private string DescriptionSize = "<size=7>";
 
+    public bool PackageSelectorIsNew = false;
+
     // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    public void Init(ObjectivesData data)
+    public void Init(HouseObjectivesData data)
     {
         Data = data;
         switch (data.House)
@@ -38,8 +40,8 @@ public class PackageItem : MonoBehaviour
                 PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{ItemType.TOYS}");
                 break;
             case "InteractableKitchen":
-                Item = ItemType.MEAL;
-                PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{ItemType.MEAL}");
+                Item = ItemType.GROCERIES;
+                PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{ItemType.GROCERIES}");
                 break;
             case "InteractableShelter":
                 Item = ItemType.GROCERIES;
@@ -68,11 +70,13 @@ public class PackageItem : MonoBehaviour
 
     public void Select()
     {
+        PackageSelectorIsNew = true;
         SendMessageUpwards("PackageSelected", this);
     }
 
     public void Deselect()
     {
+        PackageSelectorIsNew = false;
         SendMessageUpwards("PackageDeselected", this);
     }
 }

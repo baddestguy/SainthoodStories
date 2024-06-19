@@ -13,12 +13,15 @@ public class EndWeekSequence : MonoBehaviour
     public GameObject SaintsUnlockObj;
     public GameObject CashUnlockObj;
     public GameObject ContinueObj;
+    public GameObject DaysLeftObj;
 
     public TextMeshProUGUI Title;
     public TextMeshProUGUI SaintUnlockedTitle;
     public TextMeshProUGUI Score;
     public TextMeshProUGUI SaintScore;
     public TextMeshProUGUI CashAmount;
+    public TextMeshProUGUI OldDaysleft;
+    public TextMeshProUGUI NewDaysleft;
 
     public EndgameSaintPortrait[] SaintPortraits;
     public ProgressBar SaintProgressBar;
@@ -37,10 +40,10 @@ public class EndWeekSequence : MonoBehaviour
         BG.SetActive(true);
         CPFPObj.SetActive(true);
         Title.text = LocalizationManager.Instance.GetText("CP_ENDGAME_TITLE");
-        Score.DOCounter(MissionManager.Instance.CharityPoints, MissionManager.Instance.CharityPoints + MissionManager.Instance.CharityPointsPool, 3f);
-        SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie:5f);
+        Score.DOCounter(MissionManager.Instance.CharityPoints, MissionManager.Instance.CharityPoints + MissionManager.Instance.CharityPointsPool, 2f);
+        //SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie:5f);
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
 
         Score.text = "";
         Title.text = "";
@@ -65,17 +68,17 @@ public class EndWeekSequence : MonoBehaviour
             ContinueObj.SetActive(false);
             Continue = false;
 
-            SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie: 5f);
-            SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
+        //    SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie: 5f);
+         //   SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
             CashUnlockObj.SetActive(false);
             Title.text = LocalizationManager.Instance.GetText("FP_ENDGAME_TITLE");
-            SaintScore.DOCounter(MissionManager.Instance.FaithPoints, MissionManager.Instance.FaithPoints + MissionManager.Instance.FaithPointsPool, 3f);
+            SaintScore.DOCounter(MissionManager.Instance.FaithPoints, MissionManager.Instance.FaithPoints + MissionManager.Instance.FaithPointsPool, 2f);
             SaintsUnlockObj.SetActive(true);
             SaintProgressBar.gameObject.SetActive(true);
             SaintProgressBar.isOn = true;
             SaintProgressBar.speed = 1;
 
-            yield return new WaitForSeconds(4f);
+            yield return new WaitForSeconds(2f);
 
             var sp = SaintPortraits[1];
             if(saintsUnlocked.Count() > 0)
@@ -106,6 +109,26 @@ public class EndWeekSequence : MonoBehaviour
             }
         }
 
+        ContinueObj.SetActive(false);
+        CashUnlockObj.SetActive(false);
+        SaintsUnlockObj.SetActive(false);
+        CPFPObj.SetActive(false);
+        SaintProgressBar.gameObject.SetActive(false);
+
+        DaysLeftObj.SetActive(true);
+        OldDaysleft.text = $"{40 - MissionManager.Instance.CurrentMissionId+1}";
+        NewDaysleft.text = $"{40 - MissionManager.Instance.CurrentMissionId}";
+
+        yield return new WaitForSeconds(1f);
+
+        OldDaysleft.transform.DOMoveX(OldDaysleft.transform.position.x+100, 5);
+        NewDaysleft.transform.DOMoveX(OldDaysleft.transform.position.x, 5);
+        OldDaysleft.DOFade(0, 5f);
+        NewDaysleft.DOFade(1, 5f);
+
+        yield return new WaitForSeconds(6f);
+
+        DaysLeftObj.SetActive(false);
         gameObject.SetActive(false);
     }
 

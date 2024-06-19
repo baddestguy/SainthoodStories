@@ -1435,11 +1435,13 @@ MonoBehaviour:
   SkipSplashScreens: 0
   IgnoreHouseBuildingAtEndofDay: 0
   DEMO_MODE: 0
+  DEMO_MODE_2: 0
   ShowGrid: 0
   InfiniteBoost: 1
   IsXboxMode: 0
-  ShowFPSCounter: 0
   MaxXboxResolution: 2073600
+  ShowFPSCounter: 0
+  PlayingTrailer: 0
   fullScreenMode: 0
   currentQualityLevel: 0
   brightnessPercent: 0
@@ -13304,6 +13306,7 @@ MonoBehaviour:
       EventGroup: 0
       Weight: 0
       Cost: 0
+      EnergyCost: 0
       Gain: 0
       RewardType: 0
       RejectionCost: 0

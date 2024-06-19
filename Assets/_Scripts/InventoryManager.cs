@@ -168,6 +168,11 @@ public class InventoryManager : MonoBehaviour
         return index >= 0;
     }
 
+    public int CountItem(ItemType itemType)
+    {
+        return Items.FindAll(i => i == itemType).Count();
+    }
+
     public void GenerateProvisionsForNewDay()
     {
         if (!GameSettings.Instance.ProvisionsToggle) return;
