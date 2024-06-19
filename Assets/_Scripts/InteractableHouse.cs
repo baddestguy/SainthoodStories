@@ -574,13 +574,15 @@ public class InteractableHouse : InteractableObject
             RequiredItems = 0;
             PopIcon.gameObject.SetActive(false);
             UI.Instance.SideNotificationPop(GetType().Name);
-            if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM || MyObjective?.Event == BuildingEventType.DELIVER_ITEM_URGENT)
+            if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM || MyObjective?.Event == BuildingEventType.DELIVER_ITEM_URGENT
+                || MyObjective?.Event == BuildingEventType.DELIVER_MEAL || MyObjective?.Event == BuildingEventType.DELIVER_MEAL_URGENT)
             {
                 BuildRelationship(ThankYouType.ITEM);
                 CurrentMissionId++;
                 UpdateCharityPoints(MyObjective.Reward, 0);
                 var obj = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
-                if (obj.Event == BuildingEventType.DELIVER_ITEM || MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT)
+                if (obj.Event == BuildingEventType.DELIVER_ITEM || obj.Event == BuildingEventType.DELIVER_ITEM_URGENT
+                    || obj.Event == BuildingEventType.DELIVER_MEAL || obj.Event == BuildingEventType.DELIVER_MEAL_URGENT)
                 {
                     RequiredItems = obj.RequiredAmount;
                 }
@@ -819,7 +821,8 @@ public class InteractableHouse : InteractableObject
                     {
                         if (house.MyObjective != null 
                             && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT 
-                            || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT))
+                            || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT
+                            || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT))
                         {
                             UI.Instance.EnablePackageSelector(true, this);
                             return;

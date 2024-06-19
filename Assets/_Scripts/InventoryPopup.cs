@@ -42,47 +42,25 @@ public class InventoryPopup : MonoBehaviour
         {
             if (houses[i].MyObjective == null) continue;
 
-            if (houses[i].MyObjective.Event == BuildingEventType.CONSTRUCT || houses[i].MyObjective.Event == BuildingEventType.CONSTRUCT_URGENT)
-            {
-                Objs[i].gameObject.SetActive(true);
-                Objs[i].Text.text = $"Help with construction of the {houses[i].HouseName.Replace("Interactable", "")}";
-                Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
-            }
+            Objs[i].gameObject.SetActive(true);
+            Objs[i].Text.text = $"{LocalizationManager.Instance.GetText(houses[i].MyObjective.MissionDescription)}";
+            Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
 
-            if (houses[i].MyObjective.Event == BuildingEventType.COOK || houses[i].MyObjective.Event == BuildingEventType.COOK_URGENT)
-            {
-                Objs[i].gameObject.SetActive(true);
-                Objs[i].Text.text = $"Cook meals at the {houses[i].HouseName.Replace("Interactable", "")}: {houses[i].MyObjective.RequiredAmount - houses[i].RequiredItems}/{houses[i].MyObjective.RequiredAmount}";
-                Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
-            }
-
-            if (houses[i].MyObjective.Event == BuildingEventType.DELIVER_ITEM || houses[i].MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT
+            if (houses[i].MyObjective.Event == BuildingEventType.COOK || houses[i].MyObjective.Event == BuildingEventType.COOK_URGENT
+                || houses[i].MyObjective.Event == BuildingEventType.DELIVER_ITEM 
+                || houses[i].MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT
                 || houses[i].MyObjective.Event == BuildingEventType.DELIVER_MEAL
                 || houses[i].MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)
             {
-                Objs[i].gameObject.SetActive(true);
-                Objs[i].Text.text = $"Deliver packages to the {houses[i].HouseName.Replace("Interactable", "")}: {houses[i].MyObjective.RequiredAmount - houses[i].RequiredItems}/{houses[i].MyObjective.RequiredAmount}";
-                Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
+                Objs[i].Text.text = $"{LocalizationManager.Instance.GetText(houses[i].MyObjective.MissionDescription)}: {houses[i].MyObjective.RequiredAmount - houses[i].RequiredItems}/{houses[i].MyObjective.RequiredAmount}";
             }
 
-            if (houses[i].MyObjective.Event == BuildingEventType.VOLUNTEER || houses[i].MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT)
+            if (houses[i].MyObjective.Event == BuildingEventType.VOLUNTEER 
+                || houses[i].MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT
+                || houses[i].MyObjective.Event == BuildingEventType.PRAY 
+                || houses[i].MyObjective.Event == BuildingEventType.PRAY_URGENT)
             {
-                Objs[i].gameObject.SetActive(true);
-                Objs[i].Text.text = $"Volunteer at the {houses[i].HouseName.Replace("Interactable", "")}: {houses[i].VolunteerProgress}/{houses[i].MyObjective.RequiredAmount}";
-                Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
-            }
-
-            if (houses[i].MyObjective.Event == BuildingEventType.PRAY || houses[i].MyObjective.Event == BuildingEventType.PRAY_URGENT)
-            {
-                Objs[i].gameObject.SetActive(true);
-                Objs[i].Text.text = $"Pray at the Convent: {houses[i].VolunteerProgress}/{houses[i].MyObjective.RequiredAmount}";
-                Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
-            }
-            if (houses[i].MyObjective.Event == BuildingEventType.SPECIAL_EVENT || houses[i].MyObjective.Event == BuildingEventType.SPECIAL_EVENT_URGENT)
-            {
-                Objs[i].gameObject.SetActive(true);
-                Objs[i].Text.text = $"Special event at the {houses[i].HouseName.Replace("Interactable", "")}";
-                Objs[i].Image.sprite = Resources.Load<Sprite>($"Icons/{houses[i].HouseName}");
+                Objs[i].Text.text = $"{LocalizationManager.Instance.GetText(houses[i].MyObjective.MissionDescription)}: {houses[i].VolunteerProgress}/{houses[i].MyObjective.RequiredAmount}";
             }
         }
     }

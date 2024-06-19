@@ -366,6 +366,7 @@ public class HouseObjectivesData
     public CustomEventType ThankYouEvent;
     public CustomEventType SpecialEventId;
     public int Reward;
+    public string MissionDescription;
 
     public override bool Equals(object obj)
     {

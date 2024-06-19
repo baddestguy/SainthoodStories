@@ -178,19 +178,6 @@ public class GameManager : MonoBehaviour
                 EventsManager.Instance.TriggeredMissionEvents.Add(obj.DailyEvent);
             }
 
-            var ac = InventoryManager.Instance.GetProvision(Provision.REDUCE_SLEEP_TIME);
-            if(ac != null)
-            {
-                GameClock.SetClock(GameClock.Time + ac.Value, GameClock.Day);
-            }
-
-            var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
-            if (mattress != null)
-            {
-                GameClock.SetClock(GameClock.Time + mattress.Value, GameClock.Day);
-                Player.ConsumeEnergy(-mattress.Value);
-            }
-
             GridCollectibleManager.Instance.SpawnedTiles.Clear();
             GridCollectibleManager.Instance.SacredItemSpawned = false;
 
