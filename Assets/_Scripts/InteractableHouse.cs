@@ -86,6 +86,7 @@ public class InteractableHouse : InteractableObject
     public HouseObjectivesData MyObjective;
     public int CurrentMissionId = 0;
     public string HouseName;
+    public bool AllObjectivesComplete;
 
     public int VolunteerProgress = 0;
     public GameObject LeaveArrows;
@@ -112,6 +113,10 @@ public class InteractableHouse : InteractableObject
         if(CurrentMissionCompleteToday || HouseName.Contains("Market") || HouseName.Contains("Clothes") || CurrentMissionId > 14)
         {
             MyObjective = null;
+            if(CurrentMissionId > 14)
+            {
+                AllObjectivesComplete = true;
+            }
         }
         else
         {
@@ -273,6 +278,12 @@ public class InteractableHouse : InteractableObject
                             CurrentMissionCompleteToday = true;
                         }
                     }
+                    else if (AllObjectivesComplete)
+                    {
+                        TreasuryManager.Instance.DonateMoney(10);
+                        UpdateCharityPoints(1, 0);
+                    }
+
                     player.ConsumeEnergy(EnergyConsumption, this);
                     VolunteerCountdown = 0;
                 }
@@ -559,8 +570,11 @@ public class InteractableHouse : InteractableObject
         if (house != this) return;
 
         RequiredItems--;
-        var amt = MyObjective.RequiredAmount - RequiredItems;
-        OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 2);
+        if(MyObjective != null)
+        {
+            var amt = MyObjective.RequiredAmount - RequiredItems;
+            OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 2);
+        }
         if (InteriorPopUI)
             InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
         ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this);
@@ -588,6 +602,11 @@ public class InteractableHouse : InteractableObject
                 }
                 MyObjective = null;
                 CurrentMissionCompleteToday = true;
+            }
+            else if (AllObjectivesComplete)
+            {
+                TreasuryManager.Instance.DonateMoney(10);
+                UpdateCharityPoints(1, 0);
             }
 
             if (!autoDeliver)
@@ -819,10 +838,11 @@ public class InteractableHouse : InteractableObject
                 {
                     foreach (var house in GameManager.Instance.Houses)
                     {
-                        if (house.MyObjective != null 
+                        if (house.AllObjectivesComplete && house.HouseName.Contains("Shelter") ||
+                            (house.MyObjective != null 
                             && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT 
                             || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT
-                            || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT))
+                            || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)))
                         {
                             UI.Instance.EnablePackageSelector(true, this);
                             return;
@@ -1445,7 +1465,10 @@ public class InteractableHouse : InteractableObject
                 return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, ticksOverride: tools?.Value ?? 0, cpOverride: maxPP, cpModifier: tents?.Value ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: 0));
 
             case "UPGRADE":
-                return new TooltipStats() { Spirits = GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel + 1}"].IntValue, Coin = -GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue, RP = 10 };
+                if(UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue)
+                    return new TooltipStats();
+                else
+                    return new TooltipStats() { Spirits = GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel + 1}"].IntValue, Coin = -GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue, RP = 10 };
         }
 
         return new TooltipStats() { Ticks = 0, FP = 0, CP = 0, Energy = 0 };
@@ -1577,6 +1600,7 @@ public class InteractableHouse : InteractableObject
         MyStoryEvents = data.MyStoryEvents;
         CurrentMissionId = data.CurrentMissionId;
         VolunteerProgress = data.VolunteerProgress;
+        AllObjectivesComplete = data.AllObjectivesComplete;
 
         return data;
     }
@@ -1603,7 +1627,8 @@ public class InteractableHouse : InteractableObject
             MyStoryEvents = MyStoryEvents,
             UpgradeLevel = UpgradeLevel,
             CurrentMissionId = CurrentMissionId,
-            VolunteerProgress = VolunteerProgress
+            VolunteerProgress = VolunteerProgress,
+            AllObjectivesComplete = AllObjectivesComplete
         };
     }
 

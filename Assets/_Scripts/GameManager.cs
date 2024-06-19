@@ -376,7 +376,7 @@ public class GameManager : MonoBehaviour
     {
 
         SaveDataManager.Instance.LoadGame((data, newGame) => {
-            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, PlayerEnergy, data.Time, 7, data.Week);
+            CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, data.Energy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
             SaveData = data;
         }, false, true);

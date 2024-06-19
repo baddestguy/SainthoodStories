@@ -38,6 +38,17 @@ public class PackageSelector : MonoBehaviour
                     InstantiatedGos.Add(pItem);
                 }
             }
+            else if(house.AllObjectivesComplete && house.HouseName.Contains("Shelter"))
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    var item = Instantiate(ItemGO);
+                    item.transform.SetParent(Scroller.content);
+                    var pItem = item.GetComponent<PackageItem>();
+                    pItem.Init(new HouseObjectivesData() { House = "InteractableShelter" });
+                    InstantiatedGos.Add(pItem);
+                }
+            }
         }
 
         var items = InventoryManager.Instance.Items;
@@ -45,14 +56,14 @@ public class PackageSelector : MonoBehaviour
         AvailableItems = InstantiatedGos.Select(x=>x.Item).ToList();
         for (int i = 0; i < items.Count; i++)
         {
-            PackageSelected(InstantiatedGos.FirstOrDefault(go => go.Item == items[i]), false);
+            PackageSelected(InstantiatedGos.FirstOrDefault(go => go.Item == items[i]));
         }
 
         ExitGameObject = gameObject.FindDeepChild("Exit");
         GameplayControllerHandler.Instance.SetPackageSelector(this);
     }
 
-    public void PackageSelected(PackageItem item, bool isNew = true)
+    public void PackageSelected(PackageItem item)
     {
         if (item == null) return;
 
@@ -65,7 +76,7 @@ public class PackageSelector : MonoBehaviour
                 break;
             }
         }
-        if(isNew) InventoryManager.Instance.AddToInventory(item.Item);
+        if(item.PackageSelectorIsNew) InventoryManager.Instance.AddToInventory(item.Item);
         AvailableItems.Remove(item.Item);
         InstantiatedGos.Remove(item);
         Destroy(item.gameObject);

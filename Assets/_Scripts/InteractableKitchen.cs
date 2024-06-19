@@ -87,9 +87,16 @@ public class InteractableKitchen : InteractableHouse
             else
             {
                 var shelter = GameManager.Instance.Houses.Where(h => h is InteractableShelter).FirstOrDefault();
-                if (shelter != null && shelter.MyObjective != null)
+                if (shelter != null)
                 {
-                    if(InventoryManager.Instance.CountItem(ItemType.MEAL) < shelter.RequiredItems)
+                    if (shelter.MyObjective != null)
+                    {
+                        if (InventoryManager.Instance.CountItem(ItemType.MEAL) < shelter.RequiredItems)
+                        {
+                            InventoryManager.Instance.AddToInventory(ItemType.MEAL);
+                        }
+                    }
+                    else if(shelter.AllObjectivesComplete)
                     {
                         InventoryManager.Instance.AddToInventory(ItemType.MEAL);
                     }
@@ -99,7 +106,7 @@ public class InteractableKitchen : InteractableHouse
             TreasuryManager.Instance.DonateMoney(2);
             CookFX.Play();
 
-            var moddedEnergy = EnergyConsumption - utensils?.Value ?? 0;
+            var moddedEnergy = EnergyConsumption - (utensils?.Value ?? 0);
             var ticks = 0;
             if (UpgradeLevel == 3)
             {

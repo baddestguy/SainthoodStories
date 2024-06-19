@@ -1438,7 +1438,7 @@ MonoBehaviour:
   DEMO_MODE_2: 0
   ShowGrid: 0
   InfiniteBoost: 1
-  IsXboxMode: 1
+  IsXboxMode: 0
   MaxXboxResolution: 2073600
   ShowFPSCounter: 0
   PlayingTrailer: 0

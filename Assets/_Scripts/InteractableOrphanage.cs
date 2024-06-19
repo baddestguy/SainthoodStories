@@ -226,7 +226,7 @@ public class InteractableOrphanage : InteractableHouse
         {
             case "VOLUNTEER":
                 return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && VolunteerCountdown > 0))
-                    && MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT);
+                    && AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT));
 
             case "TOYS":
                 return InventoryManager.Instance.CheckItem(ItemType.TOYS);

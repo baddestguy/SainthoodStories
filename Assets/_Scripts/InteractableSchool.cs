@@ -235,7 +235,7 @@ public class InteractableSchool : InteractableHouse
             case "TEACH":
                 Player player = GameManager.Instance.Player;
                 return !player.EnergyDepleted() && (DuringOpenHours() || (!DuringOpenHours() && TeachCountdown > 0))
-                    && MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT);
+                    && AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT));
         }
 
         return base.CanDoAction(actionName);

@@ -399,7 +399,7 @@ public class InteractableHospital : InteractableHouse
                 return !player.EnergyDepleted() && MyObjective != null && MyObjective.Event == BuildingEventType.BABY;
 
             case "VOLUNTEER":
-                return !player.EnergyDepleted() && MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT);
+                return !player.EnergyDepleted() && AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT));
 
             case "MEDS":
                 return InventoryManager.Instance.CheckItem(ItemType.MEDS);

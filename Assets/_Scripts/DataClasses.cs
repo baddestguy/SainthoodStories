@@ -315,6 +315,7 @@ public class HouseSaveData
     public int UpgradeLevel;
     public int CurrentMissionId;
     public int VolunteerProgress;
+    public bool AllObjectivesComplete;
 }
 
 public class TooltipStats

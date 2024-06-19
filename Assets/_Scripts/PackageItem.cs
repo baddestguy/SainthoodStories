@@ -18,6 +18,8 @@ public class PackageItem : MonoBehaviour
     private string SubheaderSize = "<size=10>";
     private string DescriptionSize = "<size=7>";
 
+    public bool PackageSelectorIsNew = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -68,11 +70,13 @@ public class PackageItem : MonoBehaviour
 
     public void Select()
     {
+        PackageSelectorIsNew = true;
         SendMessageUpwards("PackageSelected", this);
     }
 
     public void Deselect()
     {
+        PackageSelectorIsNew = false;
         SendMessageUpwards("PackageDeselected", this);
     }
 }
