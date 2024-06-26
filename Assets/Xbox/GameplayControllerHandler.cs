@@ -160,7 +160,14 @@ namespace Assets.Xbox
         private void HandlePlayerMovement()
         {
             var direction = GamePadController.GetDirection();
-            if (!direction.Control.wasPressedThisFrame) return;
+            var pressedButton = GamePadController.GetButton();
+            if (!direction.Control.wasPressedThisFrame && !pressedButton.Control.wasPressedThisFrame) return;
+
+            if (pressedButton.Button == GamePadButton.South)
+            {
+                ProcessTileAction(Player.GetCurrentTile());
+                return;
+            }
 
             switch (direction.Input)
             {
@@ -198,7 +205,7 @@ namespace Assets.Xbox
             {
                 HandleActionButtonNavigateWithDirection(direction.Input);
             }
-            
+
             if (_currentPopUIButton == null || !_currentPopUIButton.HasControllerHover) return;
 
             var pressedButton = GamePadController.GetButton();
@@ -367,7 +374,7 @@ namespace Assets.Xbox
             var pressedDirection = GamePadController.GetDirection();
             var pressedButton = GamePadController.GetButton();
 
-            if (pressedDirection.Input != DirectionInput.Void)
+            if (pressedDirection.Input != DirectionInput.Void && pressedDirection.Control.wasPressedThisFrame)
             {
                 _currentProvisionUIItem?.EndControllerHover();
                 var closestProvisionGameObject = pressedDirection.Input.GetClosestGameObjectOnCanvasInDirection(
@@ -494,7 +501,7 @@ namespace Assets.Xbox
             var pressedDirection = GamePadController.GetDirection();
             var pressedButton = GamePadController.GetButton();
 
-            if (pressedDirection.Input != DirectionInput.Void)
+            if (pressedDirection.Input != DirectionInput.Void && pressedDirection.Control.wasPressedThisFrame)
             {
                 if (_selectedPackageSelectorItemIsPackage)
                 {
