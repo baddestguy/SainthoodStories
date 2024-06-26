@@ -18,6 +18,7 @@ namespace Assets.Xbox
 
         private bool IsNewGameButtonActive => _activeMainMenuButton.gameObject.Equals(NewGameGameObject);
         private bool IsSettingsButtonActive => _activeMainMenuButton.gameObject.Equals(SettingsButtonGameObject);
+
         private Button _activeMainMenuButton;
         private ColorBlock _defaultMainMenuColorBlock;
         private ColorBlock _activeMainMenuColorBlock;
@@ -52,7 +53,8 @@ namespace Assets.Xbox
 
             HandleControllerNavigation();
 
-            if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+            var pressedButton = GamePadController.GetButton();
+            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)
             {
                 _activeMainMenuButton.onClick.Invoke();
             }
@@ -61,14 +63,16 @@ namespace Assets.Xbox
         private void HandleControllerNavigation()
         {
             var continueGameAvailable = UI.Instance.ContinueBtn.interactable;
-            var dPad = Gamepad.current.dpad;
+            var pressedDirection = GamePadController.GetDirection();
+            if (!pressedDirection.Control.wasPressedThisFrame) return;
 
-            if (continueGameAvailable && dPad.IsVerticalPress())
+
+            if (continueGameAvailable && pressedDirection.Input is DirectionInput.Up or DirectionInput.Down)
             {
                 SetNewActiveMainMenuButton(IsNewGameButtonActive ? ContinueGameObject : NewGameGameObject);
             }
 
-            if (dPad.IsHorizontalPress())
+            if (pressedDirection.Input is DirectionInput.Left or DirectionInput.Right)
             {
                 SetNewActiveMainMenuButton(IsSettingsButtonActive ? NewGameGameObject : SettingsButtonGameObject);
             }

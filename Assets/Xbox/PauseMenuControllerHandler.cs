@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 
 namespace Assets.Xbox
@@ -17,7 +15,6 @@ namespace Assets.Xbox
         private ColorBlock _defaultMainMenuColorBlock;
         private ColorBlock _activeMainMenuColorBlock;
 
-        private static DpadControl DPad => Gamepad.current.dpad;
         private Button ActiveButton => Buttons[_selectedButtonIndex].GetComponent<Button>();
 
         private void Awake()
@@ -28,7 +25,6 @@ namespace Assets.Xbox
         private void Update()
         {
             if (!GameSettings.Instance.IsXboxMode || !PauseMenu.Instance.active) return;
-
 
             HandleNavigation();
             HandleAction();
@@ -67,18 +63,20 @@ namespace Assets.Xbox
 
         private void HandleNavigation()
         {
-            if (!DPad.IsVerticalPress()) return;
+            var pressedDirection = GamePadController.GetDirection();
+            if (!pressedDirection.Control.wasPressedThisFrame || pressedDirection.Input is not (DirectionInput.Up or DirectionInput.Down)) return;
 
             ActiveButton.colors = _defaultMainMenuColorBlock;
 
-            var increment = DPad.GetDirection() == DPadDirection.Up ? -1 : 1 ;
+            var increment = pressedDirection.Input is DirectionInput.Up ? -1 : 1;
             _selectedButtonIndex = (_selectedButtonIndex + increment + Buttons.Length) % Buttons.Length;
             ActiveButton.colors = _activeMainMenuColorBlock;
         }
 
         private void HandleAction()
         {
-            if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+            var pressedButton = GamePadController.GetButton();
+            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)
             {
                 ActiveButton.onClick.Invoke();
             }

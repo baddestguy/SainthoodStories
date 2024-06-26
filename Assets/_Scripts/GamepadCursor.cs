@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Users;
 using static UnityEngine.InputSystem.InputAction;
+using PlayerInput = UnityEngine.InputSystem.PlayerInput;
 
 public class GamepadCursor : MonoBehaviour
 {

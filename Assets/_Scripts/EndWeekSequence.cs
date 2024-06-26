@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Linq;
+using Assets.Xbox;
 using DG.Tweening;
 using Michsky.UI.ModernUIPack;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class EndWeekSequence : MonoBehaviour
 {
@@ -58,7 +58,11 @@ public class EndWeekSequence : MonoBehaviour
         ContinueObj.SetActive(true);
         while (!Continue)
         {
-            if (GameSettings.Instance.IsXboxMode && Gamepad.current.buttonSouth.wasPressedThisFrame) ContinueSequence();
+            if (GameSettings.Instance.IsXboxMode)
+            {
+                var pressedButton = GamePadController.GetButton();
+                if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame) ContinueSequence();
+            }
             
             yield return null;
         }
@@ -81,7 +85,7 @@ public class EndWeekSequence : MonoBehaviour
             yield return new WaitForSeconds(2f);
 
             var sp = SaintPortraits[1];
-            if(saintsUnlocked.Count() > 0)
+            if(saintsUnlocked.Any())
             {
                 Title.text = "";
                 Score.text = "";
@@ -104,7 +108,11 @@ public class EndWeekSequence : MonoBehaviour
             ContinueObj.SetActive(true);
             while (!Continue)
             {
-                if (GameSettings.Instance.IsXboxMode && Gamepad.current.buttonSouth.wasPressedThisFrame) ContinueSequence();
+                if (GameSettings.Instance.IsXboxMode)
+                {
+                    var pressedButton = GamePadController.GetButton();
+                    if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame) ContinueSequence();
+                }
                 yield return null;
             }
         }

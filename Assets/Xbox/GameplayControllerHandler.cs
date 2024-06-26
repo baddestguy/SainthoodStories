@@ -4,7 +4,6 @@ using Assets._Scripts.Extensions;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 
 namespace Assets.Xbox
@@ -37,13 +36,13 @@ namespace Assets.Xbox
         private PackageSelector _packageSelector;
         private bool _selectedPackageSelectorItemIsPackage;
 
-        private static DpadControl DPad => Gamepad.current.dpad;
         private static GameManager GameManager => GameManager.Instance;
         private static Player Player => GameManager.Player;
         private static InteractableObject[] InteractableObjectsOnMap =>
             FindObjectsByType<InteractableObject>(FindObjectsSortMode.None)
                 .Where(x => x.transform.Cast<Transform>().Any(child => child.gameObject.activeInHierarchy))
                 .ToArray();
+
 
 
         private void Awake()
@@ -62,6 +61,7 @@ namespace Assets.Xbox
         {
             if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsXboxMode || MissionManager.MissionOver) return;
 
+            var pressedButton = GamePadController.GetButton();
             if (PauseMenu.Instance.active)
             {
                 _currentPopUIButton?.HandleControllerExit();
@@ -83,6 +83,10 @@ namespace Assets.Xbox
             {
                 HandleProvisionSelectPopup();
             }
+            else if (pressedButton.Button == GamePadButton.North)
+            {
+                HandleInventoryPopup();
+            }
             else if (IsInBuilding)
             {
                 HandlePlayerActions();
@@ -94,7 +98,6 @@ namespace Assets.Xbox
 
             HandleZoom();
 
-            HandleInventoryPopup();
         }
 
         /// <summary>
@@ -156,23 +159,25 @@ namespace Assets.Xbox
 
         private void HandlePlayerMovement()
         {
-            // Direction is rotated clockwise once because play facing direction is defined with Top left as up and bottom right as down
-            // I guess we could support the option to have players choose.
-            if (DPad.up.wasPressedThisFrame && Player.AdjacentTiles.TryGetValue(PlayerFacingDirection.RIGHT, out var rightMapTile))
+            var direction = GamePadController.GetDirection();
+            if (!direction.Control.wasPressedThisFrame) return;
+
+            switch (direction.Input)
             {
-                ProcessTileAction(rightMapTile);
-            }
-            else if (DPad.right.wasPressedThisFrame && Player.AdjacentTiles.TryGetValue(PlayerFacingDirection.DOWN, out var downMapTile))
-            {
-                ProcessTileAction(downMapTile);
-            }
-            else if (DPad.down.wasPressedThisFrame && Player.AdjacentTiles.TryGetValue(PlayerFacingDirection.LEFT, out var leftMapTile))
-            {
-                ProcessTileAction(leftMapTile);
-            }
-            else if (DPad.left.wasPressedThisFrame && Player.AdjacentTiles.TryGetValue(PlayerFacingDirection.UP, out var upMapTile))
-            {
-                ProcessTileAction(upMapTile);
+                // Direction is rotated clockwise once because play facing direction is defined with Top left as up and bottom right as down
+                // I guess we could support the option to have players choose.
+                case DirectionInput.Up when Player.AdjacentTiles.TryGetValue(PlayerFacingDirection.RIGHT, out var rightMapTile):
+                    ProcessTileAction(rightMapTile);
+                    break;
+                case DirectionInput.Right when Player.AdjacentTiles.TryGetValue(PlayerFacingDirection.DOWN, out var downMapTile):
+                    ProcessTileAction(downMapTile);
+                    break;
+                case DirectionInput.Down when Player.AdjacentTiles.TryGetValue(PlayerFacingDirection.LEFT, out var leftMapTile):
+                    ProcessTileAction(leftMapTile);
+                    break;
+                case DirectionInput.Left when Player.AdjacentTiles.TryGetValue(PlayerFacingDirection.UP, out var upMapTile):
+                    ProcessTileAction(upMapTile);
+                    break;
             }
 
             return;
@@ -188,43 +193,42 @@ namespace Assets.Xbox
 
         private void HandlePlayerActions()
         {
-            var directionPressed = DPad.GetDirection();
-            if (directionPressed != null)
+            var direction = GamePadController.GetDirection();
+            if (direction.Control.wasPressedThisFrame)
             {
-                HandleActionButtonNavigateWithDirection(directionPressed.Value);
+                HandleActionButtonNavigateWithDirection(direction.Input);
             }
+            
+            if (_currentPopUIButton == null || !_currentPopUIButton.HasControllerHover) return;
 
-            if (_currentPopUIButton != null && _currentPopUIButton.HasControllerHover)
+            var pressedButton = GamePadController.GetButton();
+            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)
             {
-                if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+                if (_currentPopUIButton.HasCriticalCircle)
                 {
-                    if (_currentPopUIButton.HasCriticalCircle)
-                    {
-                        _currentPopUI.OnPointerDown(_currentPopUIButton.ButtonName);
-                    }
-                    else
-                    {
-                        _currentPopUI.OnClick(_currentPopUIButton.ButtonName);
-                        _currentPopUIButton?.HandleControllerExit();
-                    }
+                    _currentPopUI.OnPointerDown(_currentPopUIButton.ButtonName);
                 }
-                else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
+                else
                 {
-                    _currentPopUIButton.HandleControllerHover();
-                    if (_currentPopUIButton.HasCriticalCircle) _currentPopUI.OnPointerUp();
+                    _currentPopUI.OnClick(_currentPopUIButton.ButtonName);
+                    _currentPopUIButton?.HandleControllerExit();
                 }
-
-                if (Gamepad.current.buttonEast.wasPressedThisFrame)
-                {
-                    _currentPopUIButton.HandleControllerExit();
-                }
+            }
+            else if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasReleasedThisFrame)
+            {
+                _currentPopUIButton.HandleControllerHover();
+                if (_currentPopUIButton.HasCriticalCircle) _currentPopUI.OnPointerUp();
+            }
+            else if (pressedButton.Button == GamePadButton.East && pressedButton.Control.wasPressedThisFrame)
+            {
+                _currentPopUIButton.HandleControllerExit();
             }
 
             return;
 
-            void HandleActionButtonNavigateWithDirection(DPadDirection direction)
+            void HandleActionButtonNavigateWithDirection(DirectionInput directionInput)
             {
-                var closestButtonGameObject = direction.GetClosestGameObjectOnCanvasInDirection(
+                var closestButtonGameObject = directionInput.GetClosestGameObjectOnCanvasInDirection(
                     _currentPopUIButton?.gameObject,
                     _currentPopUI.Buttons.Select(x => x.gameObject).ToArray());
 
@@ -245,11 +249,14 @@ namespace Assets.Xbox
 
         private void HandleZoom()
         {
-            if (Gamepad.current.rightShoulder.wasPressedThisFrame || Gamepad.current.rightTrigger.wasPressedThisFrame)
+            var pressedButton = GamePadController.GetButton();
+            if (!pressedButton.Control.wasPressedThisFrame) return;
+
+            if (pressedButton.Button == GamePadButton.RightShoulder)
             {
                 GameControlsManager.TryZoom?.Invoke(1);
             }
-            else if (Gamepad.current.leftShoulder.wasPressedThisFrame || Gamepad.current.leftTrigger.wasPressedThisFrame)
+            else if (pressedButton.Button == GamePadButton.LeftShoulder)
             {
                 _currentPopUIButton?.HandleControllerExit();
                 GameControlsManager.TryZoom?.Invoke(-1);
@@ -258,10 +265,8 @@ namespace Assets.Xbox
 
         private void HandleInventoryPopup()
         {
-            if (Gamepad.current.yButton.wasPressedThisFrame || Gamepad.current.yButton.wasPressedThisFrame)
-            {
-                UI.Instance.InventoryPopupEnable();
-            }
+            //todo: Eltee fix this.
+            UI.Instance.InventoryPopupEnable();
         }
 
         private void HandleConversationEventPopup()
@@ -302,39 +307,49 @@ namespace Assets.Xbox
             }
             else
             {
-                if (DPad.left.wasPressedThisFrame)
-                {
-                    HandleEventPopupButtonNavigate(-1);
-                }
-                else if (DPad.right.wasPressedThisFrame)
-                {
-                    HandleEventPopupButtonNavigate(1);
-                }
-                else if (DPad.IsVerticalPress() && _currentCustomEventPopup.EventData.EventPopupType == EventPopupType.YESNO)
-                {
-                    toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
-                    _customEventLowerTooltips = !_customEventLowerTooltips;
-                    _customEventPopupFirstActionButtonAcknowledged = false;
-                }
-                else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
-                {
-                    if (_customEventLowerTooltips && _customEventPopupButtonIndex == 0)
-                    {
-                        _currentCustomEventPopup.OnPointerDown();
-                    }
-                    else
-                    {
-                        toolTipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>().onClick.Invoke();
-                    }
-                }
-                else if (Gamepad.current.buttonSouth.wasReleasedThisFrame)
-                {
-                    if (_customEventLowerTooltips)
-                    {
-                        _currentCustomEventPopup.OnPointerUp();
-                    }
-                }
+                var pressedDirection = GamePadController.GetDirection();
+                var pressedButton = GamePadController.GetButton();
 
+                if (pressedDirection.Control.wasPressedThisFrame)
+                {
+                    if (pressedDirection.Input == DirectionInput.Left)
+                    {
+                        HandleEventPopupButtonNavigate(-1);
+                    }
+                    else if (pressedDirection.Input == DirectionInput.Right)
+                    {
+                        HandleEventPopupButtonNavigate(1);
+                    }
+                    else if (_currentCustomEventPopup.EventData.EventPopupType == EventPopupType.YESNO)
+                    {
+                        toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
+                        _customEventLowerTooltips = !_customEventLowerTooltips;
+                        _customEventPopupFirstActionButtonAcknowledged = false;
+                    }
+                }
+                else if (pressedButton.Button == GamePadButton.South)
+                {
+                    if (pressedButton.Control.wasPressedThisFrame)
+                    {
+                        if (_customEventLowerTooltips && _customEventPopupButtonIndex == 0)
+                        {
+                            _currentCustomEventPopup.OnPointerDown();
+                        }
+                        else
+                        {
+                            toolTipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>()
+                                .onClick.Invoke();
+                        }
+                    }
+                    else if (pressedButton.Control.wasReleasedThisFrame)
+                    {
+                        if (_customEventLowerTooltips)
+                        {
+                            _currentCustomEventPopup.OnPointerUp();
+                        }
+                    }
+
+                }
             }
 
             return;
@@ -349,11 +364,13 @@ namespace Assets.Xbox
 
         private void HandleProvisionSelectPopup()
         {
-            var direction = DPad.GetDirection();
-            if (direction != null)
+            var pressedDirection = GamePadController.GetDirection();
+            var pressedButton = GamePadController.GetButton();
+
+            if (pressedDirection.Input != DirectionInput.Void)
             {
                 _currentProvisionUIItem?.EndControllerHover();
-                var closestProvisionGameObject = direction.Value.GetClosestGameObjectOnCanvasInDirection(
+                var closestProvisionGameObject = pressedDirection.Input.GetClosestGameObjectOnCanvasInDirection(
                     _currentProvisionUIItem?.gameObject,
                     _provisionItems.Select(x => x.gameObject).ToArray());
 
@@ -369,24 +386,30 @@ namespace Assets.Xbox
 
                 _currentProvisionUIItem?.HandleControllerHover();
             }
-            else if (Gamepad.current.buttonEast.wasPressedThisFrame)
+            else if (pressedButton.Control.wasPressedThisFrame)
             {
-                _currentProvisionUIItem?.EndControllerHover();
-                _currentProvisionUIItem = null;
-                _provisionsPopUp.OnClick("X");
-            }
-            else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
-            {
-                _currentProvisionUIItem?.OnClick();
-                _currentProvisionUIItem?.EndControllerHover();
-                _currentProvisionUIItem = null;
+                if (pressedButton.Button == GamePadButton.East)
+                {
+                    _currentProvisionUIItem?.EndControllerHover();
+                    _currentProvisionUIItem = null;
+                    _provisionsPopUp.OnClick("X");
+                }
+                else if (pressedButton.Button == GamePadButton.South)
+                {
+                    _currentProvisionUIItem?.OnClick();
+                    _currentProvisionUIItem?.EndControllerHover();
+                    _currentProvisionUIItem = null;
+                }
             }
         }
 
         private void HandleSaintCollectionPopup()
         {
             var saintPopup = SaintShowcaseHandler.Instance;
-            if (Gamepad.current.buttonEast.wasPressedThisFrame)
+            var pressedDirection = GamePadController.GetDirection();
+            var pressedButton = GamePadController.GetButton();
+
+            if (pressedButton.Button == GamePadButton.East && pressedButton.Control.wasPressedThisFrame)
             {
                 saintPopup.OnExit();
                 _hasHoveredFirstSaintButton = false;
@@ -409,36 +432,38 @@ namespace Assets.Xbox
                     return;
                 }
 
-                if (DPad.GetDirection() == DPadDirection.Right && !_saintNextOptionHasHover)
+                if (pressedDirection.Control.wasPressedThisFrame)
                 {
-                    _saintNextOptionHasHover = true;
-                    HoverButton(nextOptionTransform, previousOptionTransform);
-                }
-                else if (DPad.GetDirection() == DPadDirection.Left && _saintNextOptionHasHover)
-                {
-                    _saintNextOptionHasHover = false;
-                    HoverButton(previousOptionTransform, nextOptionTransform);
+                    if (pressedDirection.Input == DirectionInput.Right && !_saintNextOptionHasHover)
+                    {
+                        _saintNextOptionHasHover = true;
+                        HoverButton(nextOptionTransform, previousOptionTransform);
+                    }
+                    else if (pressedDirection.Input == DirectionInput.Left && _saintNextOptionHasHover)
+                    {
+                        _saintNextOptionHasHover = false;
+                        HoverButton(previousOptionTransform, nextOptionTransform);
+                    }
                 }
             }
 
-
-            if (DPad.IsVerticalPress(false))
+            if (pressedDirection.Input is DirectionInput.Up or DirectionInput.Down)
             {
                 const float scrollFactor = 0.02f;
                 var scrollView = saintPopup.gameObject.FindDeepChild("Scroll View");
                 var scrollRect = scrollView.GetComponent<ScrollRect>();
 
-                if (DPad.GetDirection(false) == DPadDirection.Up)
+                if (pressedDirection.Input == DirectionInput.Up)
                 {
                     scrollRect.verticalNormalizedPosition = Math.Min(scrollRect.verticalNormalizedPosition + scrollFactor, 1f);
                 }
-                else if (DPad.GetDirection(false) == DPadDirection.Down)
+                else if (pressedDirection.Input == DirectionInput.Down)
                 {
                     scrollRect.verticalNormalizedPosition = Math.Max(scrollRect.verticalNormalizedPosition - scrollFactor, 0f);
                 }
             }
 
-            if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)
             {
                 if (_saintNextOptionHasHover)
                 {
@@ -466,9 +491,10 @@ namespace Assets.Xbox
         private void HandlePackageItemSelection()
         {
             const float scaleValue = 1.25f;
-            var direction = DPad.GetDirection();
+            var pressedDirection = GamePadController.GetDirection();
+            var pressedButton = GamePadController.GetButton();
 
-            if (direction != null)
+            if (pressedDirection.Input != DirectionInput.Void)
             {
                 if (_selectedPackageSelectorItemIsPackage)
                 {
@@ -484,7 +510,7 @@ namespace Assets.Xbox
                     .Select(x => x.gameObject).ToList();
                 gameObjects.Add(_packageSelector.ExitGameObject);
 
-                var closestPackageItemGameObject = direction.Value.GetClosestGameObjectOnCanvasInDirection(_currentPackageItem?.gameObject, gameObjects.ToArray());
+                var closestPackageItemGameObject = pressedDirection.Input.GetClosestGameObjectOnCanvasInDirection(_currentPackageItem?.gameObject, gameObjects.ToArray());
 
                 if (closestPackageItemGameObject != null)
                 {
@@ -505,34 +531,38 @@ namespace Assets.Xbox
                     _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale * scaleValue, 0.5f);
                 }
             }
-            else if (Gamepad.current.buttonEast.wasPressedThisFrame)
+            else if (pressedButton.Control.wasPressedThisFrame)
             {
-                _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
-                _currentPackageItem = null;
-                _packageSelector.Cancel();
-            }
-            else if (Gamepad.current.buttonSouth.wasPressedThisFrame)
-            {
-                _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
 
-                if (_selectedPackageSelectorItemIsPackage)
+                if (pressedButton.Button == GamePadButton.East)
                 {
+                    _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
+                    _currentPackageItem = null;
+                    _packageSelector.Cancel();
+                }
+                else if (pressedButton.Button == GamePadButton.South)
+                {
+                    _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
 
-                    if (_packageSelector.ItemList.Contains(_currentPackageItem))
+                    if (_selectedPackageSelectorItemIsPackage)
                     {
-                        _packageSelector.PackageDeselected(_currentPackageItem);
+
+                        if (_packageSelector.ItemList.Contains(_currentPackageItem))
+                        {
+                            _packageSelector.PackageDeselected(_currentPackageItem);
+                        }
+                        else
+                        {
+                            _packageSelector.PackageSelected(_currentPackageItem);
+                        }
+
+                        _currentPackageItem = _packageSelector.ItemList[0];
+                        _currentPackageItem.GetComponent<TooltipMouseOver>().HandleControllerHover();
                     }
                     else
                     {
-                        _packageSelector.PackageSelected(_currentPackageItem);
+                        _packageSelector.GoToWorld();
                     }
-
-                    _currentPackageItem = _packageSelector.ItemList[0];
-                    _currentPackageItem.GetComponent<TooltipMouseOver>().HandleControllerHover();
-                }
-                else
-                {
-                    _packageSelector.GoToWorld();
                 }
             }
 
