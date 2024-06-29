@@ -30,6 +30,33 @@ public class GameSettings : MonoBehaviour
     public XboxResolution MaxXboxResolution;
     public bool ShowFPSCounter;
     public bool PlayingTrailer;
+
+    [HideInInspector]
+    public bool IsUsingController
+    {
+        get => _isUsingController;
+        set
+        {
+            if (value)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+
+            if (value != _isUsingController)
+            {
+                Debug.Log($"Input method switched to <b>{(value ? "Controller" : "Mouse")}</b>");
+            }
+            _isUsingController = value;
+        }
+    }
+
+    private bool _isUsingController;
     public enum XboxResolution
     {
         _1080P = 2_073_600,

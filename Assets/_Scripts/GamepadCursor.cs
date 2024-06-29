@@ -36,31 +36,32 @@ public class GamepadCursor : MonoBehaviour
     [SerializeField]
     private float padding = 35;
 
+    //todo: We don't need this shit anymore.
     private void OnEnable()
     {
-        MainCamera = PlayerInput.camera;
+        //MainCamera = PlayerInput.camera;
 
-        VirtualMouse = GameControlsManager.Instance.VirtualMouse;
+        //VirtualMouse = GameControlsManager.Instance.VirtualMouse;
 
-        InputUser.PerformPairingWithDevice(VirtualMouse, PlayerInput.user);
+        //InputUser.PerformPairingWithDevice(VirtualMouse, PlayerInput.user);
 
-        if (CursorTransform != null)
-        {
-            Vector2 position = new Vector2(Screen.width/2, Screen.height/2);
-            InputState.Change(VirtualMouse.position, position);
-        }
+        //if (CursorTransform != null)
+        //{
+        //    Vector2 position = new Vector2(Screen.width/2, Screen.height/2);
+        //    InputState.Change(VirtualMouse.position, position);
+        //}
 
-        if (GameSettings.Instance.IsXboxMode) return;
-        InputSystem.onAfterUpdate += UpdateMotion;
+        //if (GameSettings.Instance.IsUsingController) return;
+        //InputSystem.onAfterUpdate += UpdateMotion;
 
-        PlayerInput.actions["Click"].performed += ActionButton;
-        PlayerInput.actions["ScrollWheel"].performed += Scroll;
-        Invoke("Init", 0.1f);
+        //PlayerInput.actions["Click"].performed += ActionButton;
+        //PlayerInput.actions["ScrollWheel"].performed += Scroll;
+        //Invoke("Init", 0.1f);
     }
 
     private void Init()
     {
-        HasInitialized = true;
+        //HasInitialized = true;
     }
 
     private void OnDisable()
@@ -98,13 +99,13 @@ public class GamepadCursor : MonoBehaviour
 
     private void Update()
     {
-        if (!HasInitialized) return;
+        //if (!HasInitialized) return;
 
-        if (PlayerInput.currentControlScheme != PreviousControlScheme)
-        {
-            OnControlsChanged();
-            PreviousControlScheme = PlayerInput.currentControlScheme;
-        }
+        //if (PlayerInput.currentControlScheme != PreviousControlScheme)
+        //{
+        //    OnControlsChanged();
+        //    PreviousControlScheme = PlayerInput.currentControlScheme;
+        //}
     }
 
     private void UpdateMotion()
@@ -200,7 +201,7 @@ public class GamepadCursor : MonoBehaviour
     /// <param name="ctx"></param>
     private void Scroll(CallbackContext ctx)
     {
-        if (PlayerInput.currentControlScheme == MouseScheme || GameSettings.Instance.IsXboxMode) return;
+        if (PlayerInput.currentControlScheme == MouseScheme || GameSettings.Instance.IsUsingController) return;
 
         if (PauseMenu.Instance == null || !PauseMenu.Instance.active)
         {

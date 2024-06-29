@@ -4,6 +4,7 @@ using Assets._Scripts.Extensions;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 using UnityEngine.UI;
 
 namespace Assets.Xbox
@@ -31,6 +32,7 @@ namespace Assets.Xbox
 
         private bool _hasHoveredFirstSaintButton;
         private bool _saintNextOptionHasHover;
+        private Vector2 _lastMousePosition;
 
         private PackageItem _currentPackageItem;
         private PackageSelector _packageSelector;
@@ -48,6 +50,22 @@ namespace Assets.Xbox
         private void Awake()
         {
             Instance = this;
+
+
+            if (GameSettings.Instance.IsXboxMode)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                GameSettings.Instance.IsUsingController = true;
+            }
+            else
+            {
+                InputSystem.onAnyButtonPress.Call(control =>
+                {
+                    GameSettings.Instance.IsUsingController = control.device.name.Equals(Gamepad.current.name);
+                });
+                _lastMousePosition = Mouse.current.position.ReadValue();
+            }
         }
 
         // Start is called before the first frame update
@@ -59,7 +77,19 @@ namespace Assets.Xbox
         // Update is called once per frame
         void Update()
         {
-            if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsXboxMode || MissionManager.MissionOver) return;
+            if (GameSettings.Instance.IsUsingController && !GameSettings.Instance.IsXboxMode)
+            {
+                var currentMousePosition = Mouse.current.position.ReadValue();
+                if (currentMousePosition != _lastMousePosition)
+                {
+                    GameSettings.Instance.IsUsingController = false;
+                    _lastMousePosition = Mouse.current.position.ReadValue();
+                    return;
+                }
+            }
+            _lastMousePosition = Mouse.current.position.ReadValue();
+
+            if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsUsingController || MissionManager.MissionOver) return;
 
             var pressedButton = GamePadController.GetButton();
             if (PauseMenu.Instance.active)
