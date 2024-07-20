@@ -11,7 +11,9 @@ public class GridCollectibleManager : MonoBehaviour
     public List<MapTile> SpawnedTiles = new List<MapTile>();
 
     private GridCollectibleItem NewCollectibleSpawned;
-    public bool SacredItemSpawned;
+    public int SacredItemSpawned = 0;
+
+    bool Spawning;
 
     private void Awake()
     {
@@ -64,47 +66,48 @@ public class GridCollectibleManager : MonoBehaviour
 
     public void GenerateCollectibles()
     {
-        if (SpawnedTiles.Count > 0) return;
+        StartCoroutine(GenerateCollectiblesAsync());
+    }
 
-        for (int i = 0; i < 10; i++)
+    IEnumerator GenerateCollectiblesAsync()
+    {
+        while (Spawning)
+            yield return null;
+        
+        Spawning = true;
+        var count = 15 - SpawnedTiles.Count;
+        for (int i = 0; i < count; i++)
         {
-            StartCoroutine(SpawnCollectible(WanderingSpiritResource));
+            yield return StartCoroutine(SpawnCollectible(WanderingSpiritResource));
         }
+        Spawning = false;
     }
 
     public void OnTick(double time, int day)
     {
         if (!GameClock.DeltaTime) return;
 
-        var random = Random.Range(0, 100);
-        if (random > 30) return;
-
-
         if (time > 19 || time < 5)
         {
             StartCoroutine(SpawnSacredItemAsync());
-
-            if (SpawnedTiles.Count < 5)
-            {
-                GenerateCollectibles();
-            }
+            GenerateCollectibles();
         }
     }
 
     IEnumerator SpawnSacredItemAsync()
     {
-        if (SacredItemSpawned) yield break;
+        if (SacredItemSpawned > 5) yield break;
         if (MissionManager.Instance.CurrentCollectibleCounter >= GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount) yield break;
 
         var collectibleList = new List<string>();
         collectibleList.AddRange(GetCollectibleList());
 
         if (collectibleList.Count == 0) yield break; //Player has collected all collectibles
+        SacredItemSpawned++;
 
         yield return new WaitForSeconds(2f);
         yield return StartCoroutine(SpawnCollectible(SacredItemResource));
         
-        SacredItemSpawned = true;
         var it = collectibleList[Random.Range(0, collectibleList.Count - 1)];
         collectibleList.Remove(it);
         (NewCollectibleSpawned as SacredItemCollectible).SacredName = it;

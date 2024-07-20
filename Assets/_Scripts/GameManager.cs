@@ -179,7 +179,7 @@ public class GameManager : MonoBehaviour
             }
 
             GridCollectibleManager.Instance.SpawnedTiles.Clear();
-            GridCollectibleManager.Instance.SacredItemSpawned = false;
+            GridCollectibleManager.Instance.SacredItemSpawned = 0;
 
         }
         else if (scene.IsMenu())
