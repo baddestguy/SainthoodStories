@@ -24,7 +24,7 @@ namespace Assets.Xbox
 
         private void Update()
         {
-            if (!GameSettings.Instance.IsXboxMode || !PauseMenu.Instance.active) return;
+            if (!GameSettings.Instance.IsUsingController || !PauseMenu.Instance.active) return;
 
             HandleNavigation();
             HandleAction();
@@ -32,7 +32,7 @@ namespace Assets.Xbox
 
         public void Activate(ToggleGroup menuToggleGroup)
         {
-            if (!GameSettings.Instance.IsXboxMode) return;
+            if (!GameSettings.Instance.IsUsingController) return;
 
             _selectedButtonIndex = 0;
             _defaultMainMenuColorBlock = ActiveButton.colors;

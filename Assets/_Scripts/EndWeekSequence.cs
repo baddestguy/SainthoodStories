@@ -58,7 +58,7 @@ public class EndWeekSequence : MonoBehaviour
         ContinueObj.SetActive(true);
         while (!Continue)
         {
-            if (GameSettings.Instance.IsXboxMode)
+            if (GameSettings.Instance.IsUsingController)
             {
                 var pressedButton = GamePadController.GetButton();
                 if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame) ContinueSequence();
@@ -108,7 +108,7 @@ public class EndWeekSequence : MonoBehaviour
             ContinueObj.SetActive(true);
             while (!Continue)
             {
-                if (GameSettings.Instance.IsXboxMode)
+                if (GameSettings.Instance.IsUsingController)
                 {
                     var pressedButton = GamePadController.GetButton();
                     if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame) ContinueSequence();

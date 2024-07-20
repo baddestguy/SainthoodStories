@@ -235,7 +235,7 @@ public class CustomEventPopup : MonoBehaviour
             OKGO.SetActive(EventData.EventPopupType == EventPopupType.OK);
             NextGO.SetActive(false);
 
-            if (GameSettings.Instance.IsXboxMode)
+            if (GameSettings.Instance.IsUsingController)
             {
                 if(EventData.EventPopupType == EventPopupType.YESNO) YesNoGO.GetComponentsInChildren<TooltipMouseOver>()[0].HandleControllerHover();
                 if(EventData.EventPopupType == EventPopupType.OK) OKGO.GetComponent<TooltipMouseOver>().HandleControllerHover();
@@ -296,7 +296,7 @@ public class CustomEventPopup : MonoBehaviour
             }
         }
 
-        if (GameSettings.Instance.IsXboxMode && EventData.Id == CustomEventType.ENDGAME_DEMO)
+        if (GameSettings.Instance.IsUsingController && EventData.Id == CustomEventType.ENDGAME_DEMO)
         {
             var pressedButton = GamePadController.GetButton();
             if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)

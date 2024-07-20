@@ -28,16 +28,16 @@ namespace Assets.Xbox
         private bool _hasConfiguredForController;
         private int _currentVerticalButtonIndex = -1;
         private int _currentHorizontalButtonIndex = -1;
-        private int _veticalButtonMaxIndex;
+        private int _verticalButtonsLength;
         private int _horizontalButtonCount;
 
         // Start is called before the first frame update
         void Start()
         {
-            _veticalButtonMaxIndex = GameSettings.Instance.IsXboxMode ? 2 : VerticalButtons.Length;
-            _horizontalButtonCount = GameSettings.Instance.IsXboxMode ? 1 : HorizontalButtons.Length;
+            _verticalButtonsLength = GameSettings.Instance.IsUsingController ? 2 : VerticalButtons.Length;
+            _horizontalButtonCount = GameSettings.Instance.IsUsingController ? 1 : HorizontalButtons.Length;
 
-            if (GameSettings.Instance.IsXboxMode)
+            if (GameSettings.Instance.IsUsingController)
             {
                 _currentVerticalButtonIndex = 0;
                 ExitGameObject.SetActive(false);
@@ -104,10 +104,10 @@ namespace Assets.Xbox
                 };
 
                 _currentHorizontalButtonIndex = -1;
-                _currentVerticalButtonIndex = buttonIndex % _veticalButtonMaxIndex;
+                _currentVerticalButtonIndex = buttonIndex % _verticalButtonsLength;
                 if (_currentVerticalButtonIndex < 0)
                 {
-                    _currentVerticalButtonIndex = _veticalButtonMaxIndex - 1;
+                    _currentVerticalButtonIndex = _verticalButtonsLength - 1;
                 }
 
                 SetNewActiveMainMenuButton(VerticalButtons[_currentVerticalButtonIndex]);

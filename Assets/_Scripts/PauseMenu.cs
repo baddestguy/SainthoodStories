@@ -50,7 +50,7 @@ public class PauseMenu : MonoBehaviour
             Activate();
         }
 
-        if (GameSettings.Instance.IsXboxMode)
+        if (GameSettings.Instance.IsUsingController)
         {
             var pressedButton = GamePadController.GetButton();
             if (pressedButton.Control.wasPressedThisFrame)
@@ -78,7 +78,7 @@ public class PauseMenu : MonoBehaviour
                 TutorialEnabled.SetIsOnWithoutNotify(GameSettings.Instance.TutorialToggle);
             }
 
-            if (GameSettings.Instance.IsXboxMode)
+            if (GameSettings.Instance.IsUsingController)
             {
                 PauseMenuControllerHandler.Instance.Activate(MenuToggleGroup);
             }
@@ -107,7 +107,7 @@ public class PauseMenu : MonoBehaviour
             else
                 TutorialEnabled.transform.parent.gameObject.SetActive(true);
         }
-        else if (GameSettings.Instance.IsXboxMode)
+        else if (GameSettings.Instance.IsUsingController)
         {
             PauseMenuControllerHandler.Instance.Deactivate();
         }

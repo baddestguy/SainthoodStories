@@ -47,12 +47,13 @@ namespace Assets.Xbox
 
 
 
-        private void Awake()
+        // Start is called before the first frame update
+        void Start()
         {
             Instance = this;
 
 
-            if (GameSettings.Instance.IsXboxMode)
+            if (GameSettings.Instance.IsUsingController)
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
@@ -66,11 +67,6 @@ namespace Assets.Xbox
                 });
                 _lastMousePosition = Mouse.current.position.ReadValue();
             }
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
         }
 
 
@@ -136,8 +132,6 @@ namespace Assets.Xbox
         /// <param name="popUI">The PopUI with the action buttons</param>
         public void SetCurrentPopUI(PopUI popUI)
         {
-            if (!GameSettings.Instance.IsXboxMode) return;
-
             _currentPopUI = popUI;
             _currentPopUIButton = null;
         }
@@ -148,8 +142,6 @@ namespace Assets.Xbox
         /// <param name="customEventPopup">The displayed Custom Event Pop Up</param>
         public void SetCurrentCustomEventPopup(CustomEventPopup customEventPopup)
         {
-            if (!GameSettings.Instance.IsXboxMode) return;
-
             if (_currentCustomEventPopup != null)
             {
                 var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
