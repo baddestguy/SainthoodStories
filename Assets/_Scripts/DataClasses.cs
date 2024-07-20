@@ -215,8 +215,8 @@ public enum Provision
     ,KOBOKO
     ,INCENSE
     ,SECURITY_GUARDS
-    ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
     ,STURDY_BUILDING_MATERIALS
+    ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
     ,EXTRA_INVENTORY 
     ,AUTO_DELIVER
 }

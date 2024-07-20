@@ -110,10 +110,10 @@ public class InteractableHouse : InteractableObject
     {
         HouseName = GetType().Name;
 
-        if(CurrentMissionCompleteToday || HouseName.Contains("Market") || HouseName.Contains("Clothes") || CurrentMissionId > 14)
+        if(CurrentMissionCompleteToday || HouseName.Contains("Market") || HouseName.Contains("Clothes") || CurrentMissionId > GameDataManager.MAX_MISSION_ID)
         {
             MyObjective = null;
-            if(CurrentMissionId > 14)
+            if(CurrentMissionId > GameDataManager.MAX_MISSION_ID)
             {
                 AllObjectivesComplete = true;
             }
@@ -312,7 +312,7 @@ public class InteractableHouse : InteractableObject
                     {
                         if (BuildingState == BuildingState.NORMAL && Random.Range(0, 100) < EnvironmentalHazardDestructionChance)
                         {
-                            //TriggerHazardousMode(time, day);
+                            TriggerHazardousMode(time, day);
                         }
                     }
                     else
@@ -364,10 +364,10 @@ public class InteractableHouse : InteractableObject
 
     public virtual void TriggerHazardousMode(double time, int day)
     {
-     //   if (HazardCounter > 0) return;
+        if (HazardCounter > 0) return;
      //   if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
         if (InsideHouse && CameraLockOnMe) return;
-     //   if (time >= 21) return;
+        if (time >= 19) return;
 
         BuildingState = BuildingState.HAZARDOUS;
         EnvironmentalHazardDestructionCountdown = 13;

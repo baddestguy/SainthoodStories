@@ -34,6 +34,7 @@ public class GameDataManager : MonoBehaviour
     public const int MAX_RP_THRESHOLD = 65;
     public const int MED_RP_THRESHOLD = 30;
     public const int MIN_RP_THRESHOLD = 5;
+    public const int MAX_MISSION_ID = 14;
 
     void Awake()
     {
