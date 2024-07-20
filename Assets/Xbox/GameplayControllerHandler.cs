@@ -45,6 +45,11 @@ namespace Assets.Xbox
                 .Where(x => x.transform.Cast<Transform>().Any(child => child.gameObject.activeInHierarchy))
                 .ToArray();
 
+        private bool ShouldHandleSaintCollection => SaintShowcaseHandler.Instance != null && SaintShowcaseHandler.Instance.isActiveAndEnabled;
+        private bool ShouldHandleConversation => CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null;
+        private bool ShouldHandlePackageSelector => _packageSelector != null && _packageSelector.isActiveAndEnabled;
+        private bool ShouldHandleProvisionsSelector => _provisionsPopUp != null;
+
 
 
         // Start is called before the first frame update
@@ -76,10 +81,19 @@ namespace Assets.Xbox
             if (GameSettings.Instance.IsUsingController && !GameSettings.Instance.IsXboxMode)
             {
                 var currentMousePosition = Mouse.current.position.ReadValue();
-                if (currentMousePosition != _lastMousePosition)
+                if (currentMousePosition != _lastMousePosition) // We are switching from controller to mouse
                 {
                     GameSettings.Instance.IsUsingController = false;
                     _lastMousePosition = Mouse.current.position.ReadValue();
+                    if (ShouldHandlePackageSelector)
+                    {
+                        DeselectSelectedPackage();
+                    }
+                    else if (IsInBuilding)
+                    {
+                        DeselectBuildingButton();
+                    }
+                    //todo: Eltee disable hovers
                     return;
                 }
             }
@@ -90,22 +104,22 @@ namespace Assets.Xbox
             var pressedButton = GamePadController.GetButton();
             if (PauseMenu.Instance.active)
             {
-                _currentPopUIButton?.HandleControllerExit();
+                DeselectBuildingButton();
                 _currentPopUIButton = null;
             }
-            else if (SaintShowcaseHandler.Instance != null && SaintShowcaseHandler.Instance.isActiveAndEnabled)
+            else if (ShouldHandleSaintCollection)
             {
                 HandleSaintCollectionPopup();
             }
-            else if (CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null)
+            else if (ShouldHandleConversation)
             {
                 HandleConversationEventPopup();
             }
-            else if (_packageSelector != null && _packageSelector.isActiveAndEnabled)
+            else if (ShouldHandlePackageSelector)
             {
                 HandlePackageItemSelection();
             }
-            else if (_provisionsPopUp != null)
+            else if (ShouldHandleProvisionsSelector)
             {
                 HandleProvisionSelectPopup();
             }
@@ -240,7 +254,7 @@ namespace Assets.Xbox
                 else
                 {
                     _currentPopUI.OnClick(_currentPopUIButton.ButtonName);
-                    _currentPopUIButton?.HandleControllerExit();
+                    DeselectBuildingButton();
                 }
             }
             else if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasReleasedThisFrame)
@@ -250,7 +264,7 @@ namespace Assets.Xbox
             }
             else if (pressedButton.Button == GamePadButton.East && pressedButton.Control.wasPressedThisFrame)
             {
-                _currentPopUIButton.HandleControllerExit();
+                DeselectBuildingButton();
             }
 
             return;
@@ -263,7 +277,7 @@ namespace Assets.Xbox
 
                 if (closestButtonGameObject != null)
                 {
-                    _currentPopUIButton?.HandleControllerExit();
+                    DeselectBuildingButton();
                     _currentPopUIButton = closestButtonGameObject.GetComponent<ActionButton>();
                 }
 
@@ -274,6 +288,11 @@ namespace Assets.Xbox
 
                 _currentPopUIButton?.HandleControllerHover();
             }
+        }
+
+        private void DeselectBuildingButton()
+        {
+            _currentPopUIButton?.HandleControllerExit();
         }
 
         private void HandleZoom()
@@ -287,7 +306,7 @@ namespace Assets.Xbox
             }
             else if (pressedButton.Button == GamePadButton.LeftShoulder)
             {
-                _currentPopUIButton?.HandleControllerExit();
+                DeselectBuildingButton();
                 GameControlsManager.TryZoom?.Invoke(-1);
             }
         }
@@ -517,23 +536,15 @@ namespace Assets.Xbox
             }
         }
 
+        private const float PackageScaleValue = 1.25f;
         private void HandlePackageItemSelection()
         {
-            const float scaleValue = 1.25f;
             var pressedDirection = GamePadController.GetDirection();
             var pressedButton = GamePadController.GetButton();
 
             if (pressedDirection.Input != DirectionInput.Void && pressedDirection.Control.wasPressedThisFrame)
             {
-                if (_selectedPackageSelectorItemIsPackage)
-                {
-                    _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
-                }
-                else
-                {
-                    _packageSelector.ExitGameObject.transform.DOComplete();
-                    _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale / scaleValue, 0.5f);
-                }
+                DeselectSelectedPackage();
 
                 var gameObjects = _packageSelector.ItemList.Concat(_packageSelector.InstantiatedGos)
                     .Select(x => x.gameObject).ToList();
@@ -557,7 +568,7 @@ namespace Assets.Xbox
                 else
                 {
                     _packageSelector.ExitGameObject.transform.DOComplete();
-                    _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale * scaleValue, 0.5f);
+                    _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale * PackageScaleValue, 0.5f);
                 }
             }
             else if (pressedButton.Control.wasPressedThisFrame)
@@ -595,6 +606,19 @@ namespace Assets.Xbox
                 }
             }
 
+        }
+
+        private void DeselectSelectedPackage()
+        {
+            if (_selectedPackageSelectorItemIsPackage)
+            {
+                _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
+            }
+            else
+            {
+                _packageSelector.ExitGameObject.transform.DOComplete();
+                _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale / PackageScaleValue, 0.5f);
+            }
         }
     }
 }
