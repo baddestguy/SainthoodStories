@@ -110,10 +110,10 @@ public class InteractableHouse : InteractableObject
     {
         HouseName = GetType().Name;
 
-        if(CurrentMissionCompleteToday || HouseName.Contains("Market") || HouseName.Contains("Clothes") || CurrentMissionId > GameDataManager.MAX_MISSION_ID)
+        if(CurrentMissionCompleteToday || HouseName.Contains("Market") || HouseName.Contains("Clothes") || CurrentMissionId > GameDataManager.MAX_HOUSE_MISSION_ID)
         {
             MyObjective = null;
-            if(CurrentMissionId > GameDataManager.MAX_MISSION_ID)
+            if(CurrentMissionId > GameDataManager.MAX_HOUSE_MISSION_ID)
             {
                 AllObjectivesComplete = true;
             }

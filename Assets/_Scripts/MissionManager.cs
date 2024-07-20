@@ -209,7 +209,7 @@ public class MissionManager : MonoBehaviour
         }
 
         //If we finished the final mission
-        if (CurrentMissionId == 40)
+        if (CurrentMissionId == GameDataManager.MAX_MISSION_ID)
         {
             FaithPoints += FaithPointsPool;
             CharityPoints += CharityPointsPool;

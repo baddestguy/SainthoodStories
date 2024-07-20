@@ -124,8 +124,8 @@ public class EndWeekSequence : MonoBehaviour
         SaintProgressBar.gameObject.SetActive(false);
 
         DaysLeftObj.SetActive(true);
-        OldDaysleft.text = $"{40 - MissionManager.Instance.CurrentMissionId+1}";
-        NewDaysleft.text = $"{40 - MissionManager.Instance.CurrentMissionId}";
+        OldDaysleft.text = $"{GameDataManager.MAX_MISSION_ID - MissionManager.Instance.CurrentMissionId+1}";
+        NewDaysleft.text = $"{GameDataManager.MAX_MISSION_ID - MissionManager.Instance.CurrentMissionId}";
 
         yield return new WaitForSeconds(1f);
 
