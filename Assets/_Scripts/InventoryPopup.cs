@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,10 +8,16 @@ public class InventoryPopup : MonoBehaviour
     public ScrollRect Scroller;
     public HouseObjectiveUIItem[] Objs;
 
+    public GameObject[] Tabs;
+    private int TabIndex;
+
+    public static bool Open;
 
     // Start is called before the first frame update
     void OnEnable()
     {
+        Open = true;
+        UI.Instance.EnableAllUIElements(false);
         Player.LockMovement = true;
         for (int i = 0; i < InventoryManager.Instance.Items.Count; i++)
         {
@@ -65,8 +70,28 @@ public class InventoryPopup : MonoBehaviour
         }
     }
 
+    public void NextTab()
+    {
+        if (TabIndex+1 >= Tabs.Length) return;
+
+        Tabs[TabIndex].SetActive(false);
+        TabIndex++;
+        Tabs[TabIndex].SetActive(true);
+    }
+
+    public void PrevTab()
+    {
+        if (TabIndex-1 < 0) return;
+
+        Tabs[TabIndex].SetActive(false);
+        TabIndex--;
+        Tabs[TabIndex].SetActive(true);
+    }
+
     private void OnDisable()
     {
+        Open = false;
+
         for (int i = 0; i < InventoryManager.Instance.Items.Count; i++)
         {
             ItemList[i].PackageIcon.gameObject.SetActive(false);
@@ -77,5 +102,6 @@ public class InventoryPopup : MonoBehaviour
         }
 
         Player.LockMovement = false;
+        UI.Instance.EnableAllUIElements(true);
     }
 }

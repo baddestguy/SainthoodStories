@@ -70,12 +70,14 @@ public class PackageItem : MonoBehaviour
 
     public void Select()
     {
+        if (InventoryPopup.Open) return;
         PackageSelectorIsNew = true;
         SendMessageUpwards("PackageSelected", this);
     }
 
     public void Deselect()
     {
+        if (InventoryPopup.Open) return;
         PackageSelectorIsNew = false;
         SendMessageUpwards("PackageDeselected", this);
     }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +19,6 @@ public class StatusEffectDisplayItem : MonoBehaviour
         StatusEffectIcon.sprite = Resources.Load<Sprite>($"Icons/Ailment");
 
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
-        mouseOverBtn.Loc_Key = $"<b>{LocalizationManager.Instance.GetText(StatusEffectData.NameKey)}</b>\n{LocalizationManager.Instance.GetText(StatusEffectData.DescriptionKey)}\n\n<i>{StatusEffectData.Tooltips}";
+        mouseOverBtn.Loc_Key = $"<color=#3B2E1F><b><u>{LocalizationManager.Instance.GetText(StatusEffectData.NameKey)}</b></u><color=#74664B>\n{LocalizationManager.Instance.GetText(StatusEffectData.DescriptionKey)}\n\n<i>{StatusEffectData.Tooltips}";
     }
 }
