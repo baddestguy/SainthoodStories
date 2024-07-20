@@ -9,12 +9,15 @@ using UnityEngine.UI;
 
 namespace Assets.Xbox
 {
+
     /// <summary>
     /// Responsible for managing game pad input during game play,
     /// </summary>
     public class GameplayControllerHandler : MonoBehaviour
     {
         public static GameplayControllerHandler Instance { get; private set; }
+        public delegate void InputMethodChanged(bool isUsingController);
+        public event InputMethodChanged OnInputMethodChanged;
 
         private PopUI _currentPopUI;
 
@@ -56,21 +59,41 @@ namespace Assets.Xbox
         void Start()
         {
             Instance = this;
+            OnInputMethodChanged += HandleInputMethodChanged;
 
-
-            if (GameSettings.Instance.IsUsingController)
+            if (GameSettings.Instance.IsXboxMode)
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-                GameSettings.Instance.IsUsingController = true;
+                OnInputMethodChanged?.Invoke(true);
             }
             else
             {
+                //If any controller button is pressed, we switch to controller mode
                 InputSystem.onAnyButtonPress.Call(control =>
                 {
-                    GameSettings.Instance.IsUsingController = control.device.name.Equals(Gamepad.current.name);
+                    if(GameSettings.Instance.IsUsingController || GameSettings.Instance.IsXboxMode) return;
+                    OnInputMethodChanged?.Invoke(control.device.name.Equals(Gamepad.current.name));
                 });
                 _lastMousePosition = Mouse.current.position.ReadValue();
+            }
+        }
+
+        public void HandleInputMethodChanged(bool isUsingController)
+        {
+            //todo: Eltee disable or enable hovers
+            if (isUsingController)
+            {
+
+            }
+            else
+            {
+                if (ShouldHandlePackageSelector)
+                {
+                    DeselectSelectedPackage();
+                }
+                else if (IsInBuilding)
+                {
+                    DeselectBuildingButton();
+                }
             }
         }
 
@@ -78,22 +101,16 @@ namespace Assets.Xbox
         // Update is called once per frame
         void Update()
         {
+            // Check if mouse has moved, so we can switch to mouse mode
             if (GameSettings.Instance.IsUsingController && !GameSettings.Instance.IsXboxMode)
             {
                 var currentMousePosition = Mouse.current.position.ReadValue();
                 if (currentMousePosition != _lastMousePosition) // We are switching from controller to mouse
                 {
-                    GameSettings.Instance.IsUsingController = false;
+                    OnInputMethodChanged?.Invoke(false);
+
                     _lastMousePosition = Mouse.current.position.ReadValue();
-                    if (ShouldHandlePackageSelector)
-                    {
-                        DeselectSelectedPackage();
-                    }
-                    else if (IsInBuilding)
-                    {
-                        DeselectBuildingButton();
-                    }
-                    //todo: Eltee disable hovers
+                    
                     return;
                 }
             }

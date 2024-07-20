@@ -22,12 +22,22 @@ namespace Assets.Xbox
             Instance = this;
         }
 
+        void Start()
+        {
+            GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
+        }
+
         private void Update()
         {
             if (!GameSettings.Instance.IsUsingController || !PauseMenu.Instance.active) return;
 
             HandleNavigation();
             HandleAction();
+        }
+
+        private void HandleInputMethodChanged(bool isUsingController)
+        {
+
         }
 
         public void Activate(ToggleGroup menuToggleGroup)

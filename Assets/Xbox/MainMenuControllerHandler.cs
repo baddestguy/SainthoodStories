@@ -25,6 +25,7 @@ namespace Assets.Xbox
         private Button _activeMainMenuButton;
         private ColorBlock _defaultMainMenuColorBlock;
         private ColorBlock _activeMainMenuColorBlock;
+        private bool _skipFrame;
         private bool _hasConfiguredForController;
         private int _currentVerticalButtonIndex = -1;
         private int _currentHorizontalButtonIndex = -1;
@@ -34,10 +35,12 @@ namespace Assets.Xbox
         // Start is called before the first frame update
         void Start()
         {
+            GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
+
             _verticalButtonsLength = GameSettings.Instance.IsUsingController ? 2 : VerticalButtons.Length;
             _horizontalButtonCount = GameSettings.Instance.IsUsingController ? 1 : HorizontalButtons.Length;
 
-            if (GameSettings.Instance.IsUsingController)
+            if (GameSettings.Instance.IsXboxMode)
             {
                 _currentVerticalButtonIndex = 0;
                 ExitGameObject.SetActive(false);
@@ -47,6 +50,18 @@ namespace Assets.Xbox
                 SettingsButtonGameObject.transform.localPosition = new Vector3(
                     DiscordGameObject.transform.localPosition.x,
                     DiscordGameObject.transform.localPosition.y);
+            }
+        }
+
+        private void HandleInputMethodChanged(bool isUsingController)
+        {
+            if(isUsingController)
+            {
+                _skipFrame = true;
+                _currentVerticalButtonIndex = 0;
+            }
+            else
+            {
             }
         }
 
@@ -76,6 +91,12 @@ namespace Assets.Xbox
             TryApplyControllerHover();
 
             if (Gamepad.current == null || !GameSettings.Instance.IsUsingController) return;
+
+            if(_skipFrame)
+            {
+                _skipFrame = false;
+                return;
+            }
 
             var pressedButton = GamePadController.GetButton();
             if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)

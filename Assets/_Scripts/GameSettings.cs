@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using Assets.Xbox;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -37,16 +38,7 @@ public class GameSettings : MonoBehaviour
         get => _isUsingController;
         set
         {
-            if (value)
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
+            Cursor.visible = !value;
 
             if (value != _isUsingController)
             {
@@ -94,8 +86,14 @@ public class GameSettings : MonoBehaviour
     private void Start()
     {
         Load();
+        GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
     }
 
+
+    private void HandleInputMethodChanged(bool isUsingController)
+    {
+        IsUsingController = isUsingController;
+    }
 
     public void Load()
     {
