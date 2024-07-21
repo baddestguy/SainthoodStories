@@ -189,6 +189,7 @@ public class InteractableHouse : InteractableObject
             CurrentGroundTile = tile;
             var newPos = CurrentGroundTile.transform.position;
             transform.position = new Vector3(newPos.x, newPos.y + 1.2f, newPos.z);
+            CurrentGroundTile.TileType = TileType.BUILDING;
         }
 
         if (HouseName.Contains("Church") || CurrentMissionId != 0)
@@ -1161,7 +1162,8 @@ public class InteractableHouse : InteractableObject
             OnEnterHouse?.Invoke(InsideHouse);
             ResetActionProgress();
             GameManager.Instance.CurrentHouse = null;
-            GridCollectibleManager.Instance.GenerateCollectibles();
+            if(GameManager.Instance.GameClock.Time >= 2 && GameManager.Instance.GameClock.Time < 19)
+                GridCollectibleManager.Instance.GenerateCollectibles();
         }
 
         InfoPopup.gameObject.SetActive(false);

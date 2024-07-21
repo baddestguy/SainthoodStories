@@ -302,7 +302,17 @@ public class Player : MonoBehaviour
     {
         StormyWeatherEffect();
 
+        if(CurrentTile != null && CurrentTile.TileType != TileType.BUILDING)
+        {
+            CurrentTile.TileType = TileType.ROAD;
+        }
+        
         CurrentTile = newTile;
+        
+        if(CurrentTile.TileType != TileType.BUILDING)
+        {
+            CurrentTile.TileType = TileType.PLAYER;
+        }
 
         EnergyConsumption = ModifyEnergyConsumption(CurrentTile);
     //    Energy.Consume(EnergyConsumption);

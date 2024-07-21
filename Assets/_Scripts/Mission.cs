@@ -29,7 +29,7 @@ public class Mission
     public Season Season { 
         get 
         {
-            var currentMission = GameDataManager.Instance.GetSingleObjective(MissionManager.Instance.CurrentMissionId);
+            var currentMission = MissionManager.Instance.CurrentObjective;
             return currentMission.Season;
         } 
     }

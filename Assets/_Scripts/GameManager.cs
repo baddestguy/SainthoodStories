@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
                 GameClock.StartNewDay?.Invoke();
             }
 
-            var obj = GameDataManager.Instance.GetSingleObjective(MissionManager.Instance.CurrentMissionId);
+            var obj = MissionManager.Instance.CurrentObjective;
             if (obj != null && (obj.WeatherId == (int)WeatherId.RAIN || obj.WeatherId == (int)WeatherId.BLIZZARD))
             {
                 WeatherManager.Instance.OverrideWeatherActivation(0, 1);
@@ -228,7 +228,7 @@ public class GameManager : MonoBehaviour
         {
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.WorldMap;
-            var obj = MissionManager.Instance.CurrentObjectives.FirstOrDefault();
+            var obj = MissionManager.Instance.CurrentObjective;
             if(obj != null)
             {
                 WeatherManager.Instance.ChangeWeather(obj.WeatherId);

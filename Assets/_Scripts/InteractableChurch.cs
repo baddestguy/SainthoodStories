@@ -42,7 +42,7 @@ public class InteractableChurch : InteractableHouse
         var missionId = MissionManager.Instance.CurrentMissionId;
         if(missionId <= GameDataManager.MAX_MISSION_ID)
         {
-            var eventId = GameDataManager.Instance.ObjectivesData[missionId][0].CustomEventId;
+            var eventId = GameDataManager.Instance.ObjectivesData[missionId].CustomEventId;
             if (eventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(eventId) ?? false))
             {
                 EventsManager.Instance.AddEventToList(eventId);
