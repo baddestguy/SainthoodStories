@@ -86,6 +86,7 @@ public class MissionManager : MonoBehaviour
 
     public void EndDay()
     {
+        GridCollectibleManager.Instance.ClearAll();
         StartCoroutine(NewDayAsync());
     }
 
@@ -93,7 +94,6 @@ public class MissionManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         EndOfDay?.Invoke();
-        GridCollectibleManager.Instance.ClearAll();
         EndMission();
     }
 
@@ -267,6 +267,8 @@ public class MissionManager : MonoBehaviour
     public void OverrideMission(int missionId)
     {
         CurrentMissionId = missionId;
+        WeatherManager.Instance.ResetWeather();
+        GameManager.Instance.GameClock.Reset();
         SaveDataManager.Instance.SaveGame();
         MissionsBegin();
         GameManager.Instance.ReloadLevel();

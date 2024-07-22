@@ -32,6 +32,8 @@ public class WeatherManager : MonoBehaviour
         InteractableHouse.OnEnterHouse += OnEnterHouse;
         WeatherStartTime = new GameClock(0);
         WeatherEndTime = new GameClock(0);
+        RainResource = Resources.Load("Weather/Rain");
+
     }
 
     private void MissionBegin(Mission mission)
@@ -41,37 +43,8 @@ public class WeatherManager : MonoBehaviour
 
     private IEnumerator MissionBeginAsync(Mission mission) 
     {
-        yield return new WaitForSeconds(1f);
-        RainResource = Resources.Load("Weather/Rain");
         DayNightCycle = FindObjectOfType<DayNightCycle>();
-        var data = GameManager.Instance.SaveData;
-        WeatherForecastTriggered = data.WeatherActivated;
-        if (data.WeatherActivated)
-        {
-            WeatherStartTime = new GameClock(data.WeatherStartTime, data.WeatherStartDay);
-            WeatherEndTime = new GameClock(data.WeatherEndTime, data.WeatherEndDay);
-            GameClock c = GameManager.Instance.GameClock;
-            if(c >= WeatherStartTime)
-            {
-                SetWeatherType();
-                if (CurrentWeatherGO != null)
-                {
-                    CurrentWeatherGO?.SetActive(true);
-                    CurrentWeatherGO?.GetComponent<StormyWeather>()?.StartStorm();
-                }
-            }
-            else
-            {
-                SetPreStormWeather();
-            }
-        }
-        else
-        {
-            WeatherStartTime = new GameClock(0);
-            WeatherEndTime = new GameClock(0);
-        }
-        BroadcastWeather();
-        UI.Instance.WeatherAlert(WeatherType, WeatherStartTime, WeatherEndTime);
+        yield return new WaitForSeconds(1f);
     }
 
     public void ChangeWeather(int weatherId)
@@ -87,6 +60,7 @@ public class WeatherManager : MonoBehaviour
     private void TriggerWeatherForecast(double time, int day)
     {
         if (!GameClock.DeltaTime) return;
+        DayNightCycle?.SetFutureSkyBox(WeatherType);
 
         if (WeatherForecastTriggered)
         {
@@ -153,7 +127,20 @@ public class WeatherManager : MonoBehaviour
         WeatherForecastTriggered = true;
         WeatherStartTime.SetClock(clock.Time + futureStartTime, clock.Day);
         WeatherEndTime.SetClock(WeatherStartTime.Time + futureEndTime, WeatherStartTime.Day);
-        SetStormyWeather();
+        UI.Instance.WeatherAlert(WeatherType, WeatherStartTime, WeatherEndTime);
+
+        SetWeatherType();
+        if(!IsNormal()) { 
+            if (CurrentWeatherGO != null)
+            {
+                CurrentWeatherGO?.SetActive(true);
+                CurrentWeatherGO?.GetComponent<StormyWeather>()?.StartStorm();
+            }
+            SoundManager.Instance.PlayWeatherAmbience(true);
+            WeatherForecastActive?.Invoke(WeatherType, WeatherStartTime, WeatherEndTime);
+        }
+        BroadcastWeather();
+
         Debug.LogWarning($"INCOMING STORM AT {WeatherStartTime.Time}!! Ends AT {WeatherEndTime.Time}");
     }
 

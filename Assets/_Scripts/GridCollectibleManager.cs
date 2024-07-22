@@ -99,7 +99,7 @@ public class GridCollectibleManager : MonoBehaviour
             BroadcastMessage("DeleteCollectible", SendMessageOptions.DontRequireReceiver);
         }
 
-        if (time > 19 || time < 5)
+        if (time > 19 || time < 2)
         {
             StartCoroutine(SpawnSacredItemAsync());
 
@@ -361,6 +361,7 @@ public class GridCollectibleManager : MonoBehaviour
 
     public void ClearAll()
     {
+        Behaviours.Clear();
         SpawnedTiles.Clear();
         BroadcastMessage("DeleteCollectible", SendMessageOptions.DontRequireReceiver);
     }
