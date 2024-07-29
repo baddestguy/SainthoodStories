@@ -77,12 +77,13 @@ namespace Assets.Xbox
             var closestObjectDistance = double.MaxValue;
             GameObject closestGameObject = null;
 
+            var currentPosition = currentGameObject == null ? new Vector3(0, 0) : currentGameObject.GetComponent<RectTransform>().position;
             foreach (var gameObjectToEvaluate in gameObjects)
             {
                 if (gameObjectToEvaluate == currentGameObject) continue;
 
-                var currentPosition = currentGameObject == null ? new Vector2(0, 0) : currentGameObject.GetComponent<RectTransform>().anchoredPosition;
-                var vectorToTarget = gameObjectToEvaluate.GetComponent<RectTransform>().anchoredPosition - currentPosition;
+                var evaluatePosition = gameObjectToEvaluate.GetComponent<RectTransform>().position;
+                var vectorToTarget = evaluatePosition - currentPosition;
 
                 var isDesiredDirection = direction switch
                 {

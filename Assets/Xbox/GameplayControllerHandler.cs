@@ -27,8 +27,6 @@ namespace Assets.Xbox
         private bool _customEventLowerTooltips;
 
         private ActionButton _currentPopUIButton;
-        private bool IsInBuilding => _currentPopUI != null;
-
         private ProvisionsPopup _provisionsPopUp;
         private ProvisionUIItem[] _provisionItems;
         private ProvisionUIItem _currentProvisionUIItem;
@@ -41,6 +39,7 @@ namespace Assets.Xbox
         private PackageSelector _packageSelector;
         private bool _selectedPackageSelectorItemIsPackage;
 
+        private bool IsInBuilding => _currentPopUI != null;
         private static GameManager GameManager => GameManager.Instance;
         private static Player Player => GameManager.Player;
         private static InteractableObject[] InteractableObjectsOnMap =>
@@ -52,6 +51,7 @@ namespace Assets.Xbox
         private bool ShouldHandleConversation => CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null;
         private bool ShouldHandlePackageSelector => _packageSelector != null && _packageSelector.isActiveAndEnabled;
         private bool ShouldHandleProvisionsSelector => _provisionsPopUp != null;
+        private bool IsShowingInventoryPopup => UI.Instance?.InventoryPopup?.activeSelf ?? false;
 
 
 
@@ -70,7 +70,7 @@ namespace Assets.Xbox
                 //If any controller button is pressed, we switch to controller mode
                 InputSystem.onAnyButtonPress.Call(control =>
                 {
-                    if(GameSettings.Instance.IsUsingController || GameSettings.Instance.IsXboxMode) return;
+                    if(GameSettings.Instance.IsUsingController || GameSettings.Instance.IsXboxMode || control.device.name.Equals("Mouse", StringComparison.InvariantCultureIgnoreCase)) return;
                     OnInputMethodChanged?.Invoke(control.device.name.Equals(Gamepad.current.name));
                 });
                 _lastMousePosition = Mouse.current.position.ReadValue();
@@ -79,7 +79,7 @@ namespace Assets.Xbox
 
         public void HandleInputMethodChanged(bool isUsingController)
         {
-            //todo: Eltee disable or enable hovers
+            //todo: pause menu buttons, etc.
             if (isUsingController)
             {
 
@@ -90,9 +90,21 @@ namespace Assets.Xbox
                 {
                     DeselectSelectedPackage();
                 }
+
+                else if (ShouldHandleProvisionsSelector)
+                {
+                    //todo - Eltee: Something weird was happening where dpad -> mouse -dpad would cause the provision to not be deselected
+                    DeselectProvisionSelect();
+                }
+
                 else if (IsInBuilding)
                 {
                     DeselectBuildingButton();
+                }
+
+                else if (IsShowingInventoryPopup)
+                {
+                    //todo: Remove hover
                 }
             }
         }
@@ -140,9 +152,14 @@ namespace Assets.Xbox
             {
                 HandleProvisionSelectPopup();
             }
-            else if (pressedButton.Button == GamePadButton.North)
+            else if (pressedButton.Control.wasPressedThisFrame &&
+                     (pressedButton.Button == GamePadButton.North || (pressedButton.Button == GamePadButton.East && IsShowingInventoryPopup)))
             {
-                HandleInventoryPopup();
+                UI.Instance.InventoryPopupEnable();
+            }
+            else if(IsShowingInventoryPopup)
+            {
+                //todo: Navigate inventory
             }
             else if (IsInBuilding)
             {
@@ -328,12 +345,6 @@ namespace Assets.Xbox
             }
         }
 
-        private void HandleInventoryPopup()
-        {
-            //todo: Eltee fix this.
-            UI.Instance.InventoryPopupEnable();
-        }
-
         private void HandleConversationEventPopup()
         {
             if (_currentCustomEventPopup == null) return;
@@ -434,7 +445,8 @@ namespace Assets.Xbox
 
             if (pressedDirection.Input != DirectionInput.Void && pressedDirection.Control.wasPressedThisFrame)
             {
-                _currentProvisionUIItem?.EndControllerHover();
+                DeselectProvisionSelect();
+
                 var closestProvisionGameObject = pressedDirection.Input.GetClosestGameObjectOnCanvasInDirection(
                     _currentProvisionUIItem?.gameObject,
                     _provisionItems.Select(x => x.gameObject).ToArray());
@@ -455,17 +467,22 @@ namespace Assets.Xbox
             {
                 if (pressedButton.Button == GamePadButton.East)
                 {
-                    _currentProvisionUIItem?.EndControllerHover();
+                    DeselectProvisionSelect();
                     _currentProvisionUIItem = null;
                     _provisionsPopUp.OnClick("X");
                 }
                 else if (pressedButton.Button == GamePadButton.South)
                 {
                     _currentProvisionUIItem?.OnClick();
-                    _currentProvisionUIItem?.EndControllerHover();
+                    DeselectProvisionSelect();
                     _currentProvisionUIItem = null;
                 }
             }
+        }
+
+        private void DeselectProvisionSelect()
+        {
+            _currentProvisionUIItem?.EndControllerHover();
         }
 
         private void HandleSaintCollectionPopup()
@@ -567,7 +584,8 @@ namespace Assets.Xbox
                     .Select(x => x.gameObject).ToList();
                 gameObjects.Add(_packageSelector.ExitGameObject);
 
-                var closestPackageItemGameObject = pressedDirection.Input.GetClosestGameObjectOnCanvasInDirection(_currentPackageItem?.gameObject, gameObjects.ToArray());
+                var referenceGameObject = _currentPackageItem == null ? null : _currentPackageItem.gameObject;
+                var closestPackageItemGameObject = pressedDirection.Input.GetClosestGameObjectOnCanvasInDirection(referenceGameObject, gameObjects.ToArray());
 
                 if (closestPackageItemGameObject != null)
                 {
@@ -576,6 +594,7 @@ namespace Assets.Xbox
                 else if (_currentPackageItem == null)
                 {
                     _currentPackageItem = _packageSelector.ItemList[0];
+                    _selectedPackageSelectorItemIsPackage = true;
                 }
 
                 if (_selectedPackageSelectorItemIsPackage)
@@ -593,13 +612,13 @@ namespace Assets.Xbox
 
                 if (pressedButton.Button == GamePadButton.East)
                 {
-                    _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
+                    DeselectSelectedPackage();
                     _currentPackageItem = null;
                     _packageSelector.Cancel();
                 }
                 else if (pressedButton.Button == GamePadButton.South)
                 {
-                    _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
+                    DeselectSelectedPackage();
 
                     if (_selectedPackageSelectorItemIsPackage)
                     {
@@ -627,12 +646,16 @@ namespace Assets.Xbox
 
         private void DeselectSelectedPackage()
         {
-            if (_selectedPackageSelectorItemIsPackage)
+            if (_selectedPackageSelectorItemIsPackage )
             {
-                _currentPackageItem?.GetComponent<TooltipMouseOver>().HandleControllerExit();
+                if (_currentPackageItem != null)
+                {
+                    _currentPackageItem.GetComponent<TooltipMouseOver>().HandleControllerExit();
+                }
             }
             else
             {
+                // Exit button does not wiggle on mouse hover, so this will shrink the button if it's active on switch to controller
                 _packageSelector.ExitGameObject.transform.DOComplete();
                 _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale / PackageScaleValue, 0.5f);
             }

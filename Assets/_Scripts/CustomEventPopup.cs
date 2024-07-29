@@ -110,8 +110,6 @@ public class CustomEventPopup : MonoBehaviour
                 Coins.gameObject.SetActive(true);
             }
         }
-        
-        FindObjectOfType<GamepadCursor>().SnapToLocation(OKGO.transform.position);
 
         ButtonTimerTarget = 1f;
         SoundManager.Instance.PlayOneShotSfx("DialogOpen_SFX");

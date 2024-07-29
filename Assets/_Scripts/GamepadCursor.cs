@@ -210,17 +210,4 @@ public class GamepadCursor : MonoBehaviour
         }
     }
 
-    public void SnapToLocation(Vector2 newPosition)
-    {
-        if(GameSettings.Instance.IsUsingController) return;
-
-        var screenPosition = UI.Instance.GetComponent<Canvas>().worldCamera.WorldToScreenPoint(newPosition);
-        InputState.Change(VirtualMouse.position, screenPosition);
-#if UNITY_EDITOR
-#else
-        screenPosition.Set(Screen.width, Screen.height, screenPosition.z);
-#endif
-    //    Debug.Log(screenPosition);
-    //    CurrentMouse.WarpCursorPosition(screenPosition);
-    }
 }

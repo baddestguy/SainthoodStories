@@ -37,7 +37,10 @@ namespace Assets.Xbox
 
         private void HandleInputMethodChanged(bool isUsingController)
         {
-
+            if (!isUsingController)
+            {
+                Deactivate();
+            }
         }
 
         public void Activate(ToggleGroup menuToggleGroup)
