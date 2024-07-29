@@ -4,7 +4,6 @@ using Assets._Scripts.Extensions;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 using UnityEngine.UI;
 
 namespace Assets.Xbox
@@ -33,7 +32,7 @@ namespace Assets.Xbox
 
         private bool _hasHoveredFirstSaintButton;
         private bool _saintNextOptionHasHover;
-        private Vector2 _lastMousePosition;
+        //private Vector2 _lastMousePosition;
 
         private PackageItem _currentPackageItem;
         private PackageSelector _packageSelector;
@@ -59,22 +58,17 @@ namespace Assets.Xbox
         void Start()
         {
             Instance = this;
+
+            if (GameSettings.Instance.IsXboxMode) return;
             OnInputMethodChanged += HandleInputMethodChanged;
 
-            if (GameSettings.Instance.IsXboxMode)
-            {
-                OnInputMethodChanged?.Invoke(true);
-            }
-            else
-            {
-                //If any controller button is pressed, we switch to controller mode
-                InputSystem.onAnyButtonPress.Call(control =>
-                {
-                    if(GameSettings.Instance.IsUsingController || GameSettings.Instance.IsXboxMode || control.device.name.Equals("Mouse", StringComparison.InvariantCultureIgnoreCase)) return;
-                    OnInputMethodChanged?.Invoke(control.device.name.Equals(Gamepad.current.name));
-                });
-                _lastMousePosition = Mouse.current.position.ReadValue();
-            }
+            //If any controller button is pressed, we switch to controller mode
+            //InputSystem.onAnyButtonPress.Call(control =>
+            //{
+            //    if(GameSettings.Instance.IsUsingController || GameSettings.Instance.IsXboxMode || control.device.name.Equals("Mouse", StringComparison.InvariantCultureIgnoreCase)) return;
+            //    OnInputMethodChanged?.Invoke(control.device.name.Equals(Gamepad.current.name));
+            //});
+            //_lastMousePosition = Mouse.current.position.ReadValue();
         }
 
         public void HandleInputMethodChanged(bool isUsingController)
@@ -90,22 +84,20 @@ namespace Assets.Xbox
                 {
                     DeselectSelectedPackage();
                 }
-
                 else if (ShouldHandleProvisionsSelector)
                 {
-                    //todo - Eltee: Something weird was happening where dpad -> mouse -dpad would cause the provision to not be deselected
                     DeselectProvisionSelect();
                 }
-
                 else if (IsInBuilding)
                 {
                     DeselectBuildingButton();
                 }
-
                 else if (IsShowingInventoryPopup)
                 {
                     //todo: Remove hover
                 }
+
+                //todo: Hide button prompts
             }
         }
 
@@ -116,17 +108,34 @@ namespace Assets.Xbox
             // Check if mouse has moved, so we can switch to mouse mode
             if (GameSettings.Instance.IsUsingController && !GameSettings.Instance.IsXboxMode)
             {
-                var currentMousePosition = Mouse.current.position.ReadValue();
-                if (currentMousePosition != _lastMousePosition) // We are switching from controller to mouse
+                //var currentMousePosition = Mouse.current.position.ReadValue();
+                var mouseX = Input.GetAxis("Mouse X");
+                var mouseY = Input.GetAxis("Mouse Y");
+                if (mouseX != 0 || mouseY != 0)
                 {
                     OnInputMethodChanged?.Invoke(false);
 
-                    _lastMousePosition = Mouse.current.position.ReadValue();
+                    //_lastMousePosition = Mouse.current.position.ReadValue();
                     
                     return;
                 }
             }
-            _lastMousePosition = Mouse.current.position.ReadValue();
+            //else check if any controller button is pressed, so we can switch to controller mode
+            else if(!GameSettings.Instance.IsUsingController)
+            {
+                var button = GamePadController.GetButton();
+                var direction = GamePadController.GetDirection();
+
+                if (button.Button != GamePadButton.Void || direction.Input != DirectionInput.Void ) 
+                {
+                    OnInputMethodChanged?.Invoke(true);
+
+                    //_lastMousePosition = Mouse.current.position.ReadValue();
+                    
+                    return;
+                }
+            }
+            //_lastMousePosition = Mouse.current.position.ReadValue();
 
             if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsUsingController || MissionManager.MissionOver) return;
 

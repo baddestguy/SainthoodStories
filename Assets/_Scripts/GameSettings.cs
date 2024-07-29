@@ -39,6 +39,7 @@ public class GameSettings : MonoBehaviour
         set
         {
             Cursor.visible = !value;
+            Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
 
             if (value != _isUsingController)
             {
@@ -86,7 +87,14 @@ public class GameSettings : MonoBehaviour
     private void Start()
     {
         Load();
-        GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
+        if (IsXboxMode)
+        {
+            IsUsingController = true;
+        }
+        else
+        {
+            GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
+        }
     }
 
 
