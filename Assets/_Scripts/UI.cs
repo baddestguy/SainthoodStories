@@ -10,6 +10,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.UI.CanvasScaler;
 
 public class UI : MonoBehaviour
 {
@@ -99,6 +100,7 @@ public class UI : MonoBehaviour
     public GameObject LoadingScreen;
     public GameObject GameOverPopup;
     public GameObject InventoryPopup;
+    public GameObject SacredItemPopup;
     public bool WasUiHit
     {
         get
@@ -163,6 +165,14 @@ public class UI : MonoBehaviour
     {
         if (!FullUIVisible && !InventoryPopup.activeSelf) return;
         InventoryPopup.SetActive(!InventoryPopup.activeSelf);
+    }
+
+    public void SacredItemPopupEnable(string item)
+    {
+        if (!FullUIVisible && !SacredItemPopup.activeSelf) return;
+        EnableAllUIElements(false);
+        SacredItemPopup.SetActive(!SacredItemPopup.activeSelf);
+        SacredItemPopup.GetComponent<SacredItemPopup>().Init(item);
     }
 
     public void LoadingScreenEnable(bool enable)

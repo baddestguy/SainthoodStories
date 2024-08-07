@@ -77,6 +77,7 @@ public class InventoryManager : MonoBehaviour
     {
         Collectibles.Add(newCollectible);
         GameManager.Instance.WorldCollectibles.Remove(newCollectible);
+        UI.Instance.SacredItemPopupEnable(newCollectible); 
         Debug.Log("COLLECTED: " + newCollectible);
     }
 
