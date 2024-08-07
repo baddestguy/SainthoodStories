@@ -133,6 +133,16 @@ public class MissionManager : MonoBehaviour
 
     private IEnumerator EndMissionAsync()
     {
+        //if any unresolved building hazards exist, penalize the player
+        foreach(var house in GameManager.Instance.Houses)
+        {
+            if(house.BuildingState == BuildingState.HAZARDOUS)
+            {
+                UpdateCharityPoints(-3, null);
+                house.BuildingState = BuildingState.NORMAL;
+            }
+        }
+
         ToolTipManager.Instance.ShowToolTip("");
         bool missionFailed = false;
         Player.LockMovement = true;
