@@ -36,7 +36,9 @@ namespace Assets.Xbox
         /// <returns>The direction being pressed and the button control</returns>
         public static (DirectionInput Input, ButtonControl Control) GetDirection()
         {
-            if(DPad.up.isPressed || DPad.up.wasReleasedThisFrame) return (DirectionInput.Up, DPad.up);
+            if (Gamepad.current == null) return (DirectionInput.Void, null);
+
+            if (DPad.up.isPressed || DPad.up.wasReleasedThisFrame) return (DirectionInput.Up, DPad.up);
             if (DPad.down.isPressed || DPad.down.wasReleasedThisFrame) return (DirectionInput.Down, DPad.down);
             if (DPad.left.isPressed || DPad.left.wasReleasedThisFrame) return (DirectionInput.Left, DPad.left);
             if (DPad.right.isPressed || DPad.right.wasReleasedThisFrame) return (DirectionInput.Right, DPad.right);
@@ -55,6 +57,8 @@ namespace Assets.Xbox
         /// <returns>The direction being pressed and the button control</returns>
         public static (GamePadButton Button, ButtonControl Control) GetButton()
         {
+            if(Gamepad.current == null) return (GamePadButton.Void, null);
+
             if (Gamepad.current.buttonNorth.isPressed || Gamepad.current.buttonNorth.wasReleasedThisFrame) return (GamePadButton.North, Gamepad.current.buttonNorth);
             if (Gamepad.current.buttonEast.isPressed || Gamepad.current.buttonEast.wasReleasedThisFrame) return (GamePadButton.East, Gamepad.current.buttonEast);
             if (Gamepad.current.buttonSouth.isPressed || Gamepad.current.buttonSouth.wasReleasedThisFrame) return (GamePadButton.South, Gamepad.current.buttonSouth);
