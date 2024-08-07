@@ -57,6 +57,10 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI TreasuryAmount;
     public Image TreasuryDisplayGlow;
     public TextMeshProUGUI TreasuryAdditionDisplay;
+    public TextMeshProUGUI WanderingSpiritsAmount;
+    public Image WanderingSpiritsDisplayGlow;
+    public TextMeshProUGUI WanderingSpiritsAdditionDisplay;
+
     public ProvisionsPopup ProvisionPopup;
     public Image Black;
 
@@ -504,6 +508,22 @@ public class UI : MonoBehaviour
         TreasuryAmount.DOCounter(oldAmount, (int)TreasuryManager.Instance.Money, 0.5f).SetDelay(2f);
 
         AdditionPoints(TreasuryAdditionDisplay, TreasuryDisplayGlow, (int)delta, 2f);
+    }
+
+    public void RefreshWanderingSpiritsBalance(double delta)
+    {
+        if (DOTween.IsTweening(WanderingSpiritsAmount, true))
+        {
+            WanderingSpiritsAmount.DOComplete();
+            StopAllCoroutines();
+            WanderingSpiritsAdditionDisplay.text = "";
+        }
+
+        int oldAmount = int.Parse(WanderingSpiritsAmount.text, System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowThousands);
+        WanderingSpiritsAmount.DOCounter(oldAmount, (int)InventoryManager.Instance.WanderingSpirits, 0.5f).SetDelay(2f);
+
+        AdditionPoints(WanderingSpiritsAdditionDisplay, WanderingSpiritsDisplayGlow, (int)delta, 2f);
+
     }
 
     public void EnablePackageSelector(bool enable, InteractableHouse house = null)

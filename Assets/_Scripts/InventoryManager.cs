@@ -39,6 +39,7 @@ public class InventoryManager : MonoBehaviour
         Collectibles = save.Collectibles?.ToList() ?? new List<string>();
         WanderingSpirits = save.WanderingSpirits;
         RefreshInventoryUI?.Invoke();
+        UI.Instance.RefreshWanderingSpiritsBalance(0);
     }
 
     public bool IsInventoryFull()
@@ -88,6 +89,7 @@ public class InventoryManager : MonoBehaviour
     public void AddWanderers(int amount)
     {
         WanderingSpirits += amount;
+        UI.Instance.RefreshWanderingSpiritsBalance(amount);
     }
 
     public void SwapProvision(ProvisionData provisionFrom, ProvisionData provisionTo)
