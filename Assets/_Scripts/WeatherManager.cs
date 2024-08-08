@@ -15,7 +15,7 @@ public class WeatherManager : MonoBehaviour
     private GameObject CurrentWeatherGO;
     public GameClock WeatherStartTime;
     public GameClock WeatherEndTime;
-    private DayNightCycle DayNightCycle;
+    public DayNightCycle DayNightCycle;
 
     public static UnityAction<WeatherType, GameClock, GameClock> WeatherForecastActive;
 

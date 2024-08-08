@@ -10,6 +10,7 @@ public class WanderingSpiritCollectible : GridCollectibleItem
     private Material GreenMaterial;
     private Material WhiteMaterial;
     private GameObject MyExplosion;
+    private GameObject MyExplosionEvil;
 
     public GameObject EvilAura;
     public Dictionary<PlayerFacingDirection, MapTile> AdjacentTiles;
@@ -20,7 +21,8 @@ public class WanderingSpiritCollectible : GridCollectibleItem
         WhiteMaterial = MyRenderer.material;
         RedMaterial = Resources.Load<Material>("Materials/Glow Mat Red");
         GreenMaterial = Resources.Load<Material>("Materials/Glow Mat Green");
-        MyExplosion = Resources.Load<GameObject>("MemoryExplodeFx");
+        MyExplosion = Resources.Load<GameObject>("Environment/MemoryExplodeFx");
+        MyExplosionEvil = Resources.Load<GameObject>("Environment/MemoryExplodeFxEvil");
     }
 
     public override void Init(MapTile tile, SacredItemBehaviour b)
@@ -64,14 +66,19 @@ public class WanderingSpiritCollectible : GridCollectibleItem
         if(Behaviour == SacredItemBehaviour.HARMLESS)
         {
             InventoryManager.Instance.AddWanderers(TotalAmount);
+            Instantiate(MyExplosion, transform.position, transform.rotation);
+            ExteriorCamera.Instance.GetComponent<CameraControls>()?.MyCamera.DOShakeRotation(1f, 0.25f);
         }
         else
         {
             MissionManager.Instance.FaithPointsPermanentlyLost += 1;
             MissionManager.Instance.UpdateFaithPoints(-1);
             TreasuryManager.Instance.LoseTempMoney();
-        }
 
+            Instantiate(MyExplosionEvil, transform.position, transform.rotation);
+            ExteriorCamera.Instance.GetComponent<CameraControls>()?.MyCamera.DOShakeRotation(1f, 1.5f);
+            WeatherManager.Instance.DayNightCycle.Light.color = Color.red;
+        }
         base.Collect();
     }
 
