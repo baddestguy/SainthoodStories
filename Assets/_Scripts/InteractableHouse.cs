@@ -50,7 +50,7 @@ public class InteractableHouse : InteractableObject
 
     public BuildingState BuildingState;
     protected int BuildPoints = 0;
-    protected float MaxBuildPoints = 4f;
+    protected float MaxBuildPoints = 8f;
     public GameObject RubbleGo;
     public GameObject BuildingGo;
 
@@ -592,7 +592,6 @@ public class InteractableHouse : InteractableObject
             if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM || MyObjective?.Event == BuildingEventType.DELIVER_ITEM_URGENT
                 || MyObjective?.Event == BuildingEventType.DELIVER_MEAL || MyObjective?.Event == BuildingEventType.DELIVER_MEAL_URGENT)
             {
-                BuildRelationship(ThankYouType.ITEM);
                 CurrentMissionId++;
                 UpdateCharityPoints(MyObjective.Reward, 0);
                 var obj = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
@@ -609,6 +608,8 @@ public class InteractableHouse : InteractableObject
                 TreasuryManager.Instance.DonateMoney(10);
                 UpdateCharityPoints(1, 0);
             }
+
+            BuildRelationship(ThankYouType.ITEM);
 
             if (!autoDeliver)
             {
@@ -1439,7 +1440,7 @@ public class InteractableHouse : InteractableObject
                 {
                     return new TooltipStats();
                 }
-                return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, cpOverride: maxCP, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride:CalculateMaxVolunteerPoints(), cpOverride: maxCP, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
 
             case "DELIVER":
                 var maxdCP = 0;
@@ -1474,6 +1475,11 @@ public class InteractableHouse : InteractableObject
         }
 
         return new TooltipStats() { Ticks = 0, FP = 0, CP = 0, Energy = 0 };
+    }
+
+    public virtual int TicksPerUpgradeLevel()
+    {
+        return 0;
     }
 
     public override void Hover()
