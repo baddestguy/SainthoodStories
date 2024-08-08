@@ -289,7 +289,8 @@ public enum TooltipStatId
     SLEEP,
     VOLUNTEER,
     BABY,
-    TIME
+    TIME,
+    PURCHASE
 }
 
 [System.Serializable]
