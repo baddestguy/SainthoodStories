@@ -10,6 +10,8 @@ public class WanderingSpiritCollectible : GridCollectibleItem
     private Material GreenMaterial;
     private Material WhiteMaterial;
     private GameObject MyExplosion;
+
+    public GameObject EvilAura;
     public Dictionary<PlayerFacingDirection, MapTile> AdjacentTiles;
 
     public void Awake()
@@ -50,6 +52,8 @@ public class WanderingSpiritCollectible : GridCollectibleItem
 
             if (MyRenderer.material != RedMaterial)
             {
+                EvilAura.SetActive(true);
+                transform.DOScale(1, 1f);
                 MyRenderer.material = RedMaterial;
             }
         }
