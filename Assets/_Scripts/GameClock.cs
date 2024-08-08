@@ -106,9 +106,9 @@ public class GameClock
         Time = 6;
     }
 
-    public void Reset()
+    public void Reset(int dayOverride = 0)
     {
-        Day++;
+        Day = dayOverride > 0 ? dayOverride : Day++;
         Time = 5;
 
         var ac = InventoryManager.Instance.GetProvision(Provision.REDUCE_SLEEP_TIME);

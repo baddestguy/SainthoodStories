@@ -278,7 +278,7 @@ public class MissionManager : MonoBehaviour
     {
         CurrentMissionId = missionId;
         WeatherManager.Instance.ResetWeather();
-        GameManager.Instance.GameClock.Reset();
+        GameManager.Instance.GameClock.Reset(missionId);
         SaveDataManager.Instance.SaveGame();
         MissionsBegin();
         GameManager.Instance.ReloadLevel();
