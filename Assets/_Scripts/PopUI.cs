@@ -159,7 +159,14 @@ public class PopUI : MonoBehaviour
 
         myButton.Wiggle();
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
-        ChargeFx.transform.position = myButton.transform.position - new Vector3(0, -0.1f, 0.1f);
+        if (MyHouse != null && MyHouse.BuildingState == BuildingState.RUBBLE)
+        {
+            ChargeFx.transform.position = myButton.transform.position;
+        }
+        else
+        {
+            ChargeFx.transform.position = myButton.transform.position + new Vector3(0, 0, -5f);
+        }
         ChargeFx.SetActive(false);
         //  if (myButton.ButtonName == "EXIT" || myButton.ButtonName == "ENTER")
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
@@ -228,7 +235,14 @@ public class PopUI : MonoBehaviour
         ButtonTimerTarget = myButton.Timer;
         ChargeFx.SetActive(true);
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
-        ChargeFx.transform.position = myButton.transform.position - new Vector3(0, -0.1f, 0.1f);
+        if(MyHouse != null && MyHouse.BuildingState == BuildingState.RUBBLE)
+        {
+            ChargeFx.transform.position = myButton.transform.position;
+        }
+        else
+        {
+            ChargeFx.transform.position = myButton.transform.position + new Vector3(0,0, -5f);
+        }
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
         CameraControls?.SetZoomTarget(5.5f);
 
