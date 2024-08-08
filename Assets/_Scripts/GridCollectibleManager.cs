@@ -323,7 +323,7 @@ public class GridCollectibleManager : MonoBehaviour
 
     IEnumerator SpawnSacredItemAsync()
     {
-        if (SacredItemSpawned > 5) yield break;
+        if (SacredItemSpawned >= (GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount - MissionManager.Instance.CurrentCollectibleCounter)) yield break;
         if (MissionManager.Instance.CurrentCollectibleCounter >= GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount) yield break;
 
         var collectibleList = new List<string>();

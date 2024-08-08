@@ -82,6 +82,7 @@ public class InteractableChurch : InteractableHouse
             EventsManager.Instance.AddEventToList(GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].OnComplete);
             MissionManager.Instance.CurrentCollectibleMissionId++;
             MissionManager.Instance.CurrentCollectibleCounter = 0;
+            GridCollectibleManager.Instance.SacredItemSpawned = 0;
         }
     }
 
