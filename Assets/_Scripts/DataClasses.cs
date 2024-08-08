@@ -67,7 +67,8 @@ public enum SacredItemBehaviour
     CONCENTRATION,
     WEATHER_CHANGING,
     CHASE,
-    WANDER
+    WANDER,
+    HARMLESS
 }
 
 public enum CustomEventRewardType
@@ -174,7 +175,8 @@ public enum TileType
     ORPHANAGE,
     KITCHEN,
     BANDIT,
-    CHILD
+    CHILD,
+    BUILDING
 }
 
 public enum ItemType
@@ -215,8 +217,8 @@ public enum Provision
     ,KOBOKO
     ,INCENSE
     ,SECURITY_GUARDS
-    ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
     ,STURDY_BUILDING_MATERIALS
+    ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
     ,EXTRA_INVENTORY 
     ,AUTO_DELIVER
 }
@@ -287,7 +289,8 @@ public enum TooltipStatId
     SLEEP,
     VOLUNTEER,
     BABY,
-    TIME
+    TIME,
+    PURCHASE
 }
 
 [System.Serializable]
@@ -619,7 +622,7 @@ public class SaveObject
     public double WeatherEndTime;
     public int WeatherEndDay;
     public bool WeatherActivated;
-    public ObjectivesData[] CompletedObjectives;
+    public int CurrentMissionId;
     public string[] Collectibles;
     public int WanderingSpirits;
     public int CurrentCollectibleMissionId;

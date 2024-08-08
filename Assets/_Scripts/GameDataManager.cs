@@ -19,7 +19,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<SaintID, SaintData> Saints = new Dictionary<SaintID, SaintData>();
     public Dictionary<string, StoryEventData> StoryEventData = new Dictionary<string, StoryEventData>();
     public Dictionary<string, List<BuildingMissionData>> BuildingMissionData = new Dictionary<string, List<BuildingMissionData>>();
-    public Dictionary<int, List<ObjectivesData>> ObjectivesData = new Dictionary<int, List<ObjectivesData>>();
+    public Dictionary<int, ObjectivesData> ObjectivesData = new Dictionary<int, ObjectivesData>();
     public Dictionary<string, List<HouseObjectivesData>> HouseObjectivesData = new Dictionary<string, List<HouseObjectivesData>>();
     public Dictionary<int, CollectibleObjectivesData> CollectibleObjectivesData = new Dictionary<int, CollectibleObjectivesData>();
     public Dictionary<string, List<CollectibleData>> CollectibleData = new Dictionary<string, List<CollectibleData>>();
@@ -34,6 +34,8 @@ public class GameDataManager : MonoBehaviour
     public const int MAX_RP_THRESHOLD = 65;
     public const int MED_RP_THRESHOLD = 30;
     public const int MIN_RP_THRESHOLD = 5;
+    public const int MAX_HOUSE_MISSION_ID = 11;
+    public const int MAX_MISSION_ID = 33;
 
     void Awake()
     {
@@ -167,11 +169,11 @@ public class GameDataManager : MonoBehaviour
         {
             if (ObjectivesData.ContainsKey(item.Id))
             {
-                ObjectivesData[item.Id].Add(item);
+                ObjectivesData[item.Id] = item;
             }
             else
             {
-                ObjectivesData.Add(item.Id, new List<ObjectivesData>() { item });
+                ObjectivesData.Add(item.Id, item);
             }
         }
 
@@ -414,22 +416,6 @@ public class GameDataManager : MonoBehaviour
     public IEnumerable<BuildingMissionData> GetBuildingMissionData(string houseName)
     {
         return BuildingMissionData.ContainsKey(houseName) ? BuildingMissionData[houseName] : new List<BuildingMissionData>();
-    }
-
-    public IEnumerable<ObjectivesData> GetObjectivesData(int id)
-    {
-        if (ObjectivesData.ContainsKey(id))
-            return ObjectivesData[id];
-        else
-        {
-            Debug.Log("COULD NOT FIND OBJECTIVE WITH ID: " + id);
-            return Enumerable.Empty<ObjectivesData>();
-        }
-    }
-
-    public ObjectivesData GetSingleObjective(int id)
-    {
-        return GetObjectivesData(id).FirstOrDefault();
     }
 
     public TooltipStats GetToolTip(TooltipStatId id, double ticksModifier = 0, double ticksOverride = 0, int fpModifier = 0, int fpOverride = 0, int cpModifier = 0, int cpOverride = 0, int energyModifier = 0)

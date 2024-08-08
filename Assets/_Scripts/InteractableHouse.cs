@@ -50,7 +50,7 @@ public class InteractableHouse : InteractableObject
 
     public BuildingState BuildingState;
     protected int BuildPoints = 0;
-    protected float MaxBuildPoints = 4f;
+    protected float MaxBuildPoints = 8f;
     public GameObject RubbleGo;
     public GameObject BuildingGo;
 
@@ -110,10 +110,10 @@ public class InteractableHouse : InteractableObject
     {
         HouseName = GetType().Name;
 
-        if(CurrentMissionCompleteToday || HouseName.Contains("Market") || HouseName.Contains("Clothes") || CurrentMissionId > 14)
+        if(CurrentMissionCompleteToday || HouseName.Contains("Market") || HouseName.Contains("Clothes") || CurrentMissionId > GameDataManager.MAX_HOUSE_MISSION_ID)
         {
             MyObjective = null;
-            if(CurrentMissionId > 14)
+            if(CurrentMissionId > GameDataManager.MAX_HOUSE_MISSION_ID)
             {
                 AllObjectivesComplete = true;
             }
@@ -189,6 +189,7 @@ public class InteractableHouse : InteractableObject
             CurrentGroundTile = tile;
             var newPos = CurrentGroundTile.transform.position;
             transform.position = new Vector3(newPos.x, newPos.y + 1.2f, newPos.z);
+            CurrentGroundTile.TileType = TileType.BUILDING;
         }
 
         if (HouseName.Contains("Church") || CurrentMissionId != 0)
@@ -312,7 +313,7 @@ public class InteractableHouse : InteractableObject
                     {
                         if (BuildingState == BuildingState.NORMAL && Random.Range(0, 100) < EnvironmentalHazardDestructionChance)
                         {
-                            //TriggerHazardousMode(time, day);
+                            TriggerHazardousMode(time, day);
                         }
                     }
                     else
@@ -364,10 +365,10 @@ public class InteractableHouse : InteractableObject
 
     public virtual void TriggerHazardousMode(double time, int day)
     {
-     //   if (HazardCounter > 0) return;
+        if (HazardCounter > 0) return;
      //   if (MissionManager.Instance.CurrentMission.CurrentWeek < 2) return;
         if (InsideHouse && CameraLockOnMe) return;
-     //   if (time >= 21) return;
+        if (time >= 19) return;
 
         BuildingState = BuildingState.HAZARDOUS;
         EnvironmentalHazardDestructionCountdown = 13;
@@ -591,7 +592,6 @@ public class InteractableHouse : InteractableObject
             if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM || MyObjective?.Event == BuildingEventType.DELIVER_ITEM_URGENT
                 || MyObjective?.Event == BuildingEventType.DELIVER_MEAL || MyObjective?.Event == BuildingEventType.DELIVER_MEAL_URGENT)
             {
-                BuildRelationship(ThankYouType.ITEM);
                 CurrentMissionId++;
                 UpdateCharityPoints(MyObjective.Reward, 0);
                 var obj = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
@@ -608,6 +608,8 @@ public class InteractableHouse : InteractableObject
                 TreasuryManager.Instance.DonateMoney(10);
                 UpdateCharityPoints(1, 0);
             }
+
+            BuildRelationship(ThankYouType.ITEM);
 
             if (!autoDeliver)
             {
@@ -1161,7 +1163,8 @@ public class InteractableHouse : InteractableObject
             OnEnterHouse?.Invoke(InsideHouse);
             ResetActionProgress();
             GameManager.Instance.CurrentHouse = null;
-            GridCollectibleManager.Instance.GenerateCollectibles();
+            if(GameManager.Instance.GameClock.Time >= 2 && GameManager.Instance.GameClock.Time < 19)
+                GridCollectibleManager.Instance.GenerateCollectibles();
         }
 
         InfoPopup.gameObject.SetActive(false);
@@ -1437,7 +1440,7 @@ public class InteractableHouse : InteractableObject
                 {
                     return new TooltipStats();
                 }
-                return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, cpOverride: maxCP, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride:CalculateMaxVolunteerPoints(), cpOverride: maxCP, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
 
             case "DELIVER":
                 var maxdCP = 0;
@@ -1472,6 +1475,11 @@ public class InteractableHouse : InteractableObject
         }
 
         return new TooltipStats() { Ticks = 0, FP = 0, CP = 0, Energy = 0 };
+    }
+
+    public virtual int TicksPerUpgradeLevel()
+    {
+        return 0;
     }
 
     public override void Hover()

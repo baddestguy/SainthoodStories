@@ -1428,7 +1428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StoryToggle: 1
-  CustomEventsToggle: 1
+  CustomEventsToggle: 0
   ProvisionsToggle: 1
   FTUE: 0
   TutorialToggle: 1
@@ -5501,6 +5501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawnedTiles: []
+  Behaviours: 
   SacredItemSpawned: 0
 --- !u!1 &521719812
 GameObject:
@@ -5925,8 +5926,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f1a4ab5e19c73f45a724afcd63277f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CompletedObjectives: []
-  CurrentObjectives: []
   CurrentCollectibleObjectives: []
   CurrentCollectibleCounter: 0
   CurrentCollectibleMissionId: 0
@@ -13320,7 +13319,7 @@ MonoBehaviour:
     WeatherEndTime: 0
     WeatherEndDay: 0
     WeatherActivated: 0
-    CompletedObjectives: []
+    CurrentMissionId: 0
     Collectibles: []
     WanderingSpirits: 0
     CurrentCollectibleMissionId: 0
@@ -18236,8 +18235,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SeasonOverride: 0
-  DayOverride: 5
-  TimeOverride: 23
+  DayOverride: 1
+  TimeOverride: 19
   FP: 100
   CP: 100
   energy: 100

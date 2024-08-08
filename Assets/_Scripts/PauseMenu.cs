@@ -3,7 +3,6 @@ using System.Collections;
 using Assets.Xbox;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -46,13 +45,21 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) || (Gamepad.current != null && Gamepad.current.startButton.wasPressedThisFrame))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Activate();
         }
-        else if (active && (Gamepad.current != null && Gamepad.current.buttonEast.wasPressedThisFrame))
+
+        if (GameSettings.Instance.IsUsingController)
         {
-            Activate();
+            var pressedButton = GamePadController.GetButton();
+            if (pressedButton.Control.wasPressedThisFrame)
+            {
+                if (pressedButton.Button == GamePadButton.Start || (pressedButton.Button == GamePadButton.East && active))
+                {
+                    Activate();
+                }
+            }
         }
     }
 
@@ -71,8 +78,7 @@ public class PauseMenu : MonoBehaviour
                 TutorialEnabled.SetIsOnWithoutNotify(GameSettings.Instance.TutorialToggle);
             }
 
-
-            if (GameSettings.Instance.IsXboxMode)
+            if (GameSettings.Instance.IsUsingController)
             {
                 PauseMenuControllerHandler.Instance.Activate(MenuToggleGroup);
             }
@@ -101,7 +107,7 @@ public class PauseMenu : MonoBehaviour
             else
                 TutorialEnabled.transform.parent.gameObject.SetActive(true);
         }
-        else if (GameSettings.Instance.IsXboxMode)
+        else if (GameSettings.Instance.IsUsingController)
         {
             PauseMenuControllerHandler.Instance.Deactivate();
         }

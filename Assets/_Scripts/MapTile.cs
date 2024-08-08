@@ -84,7 +84,7 @@ public class MapTile : MonoBehaviour
 
     public virtual void OnMouseOver()
     {
-        if (GamepadCursor != null && GamepadCursor.PlayerInput.currentControlScheme == "Gamepad") return;
+        if (GameSettings.Instance.IsUsingController) return;
 
         Hover();
     }
@@ -139,7 +139,7 @@ public class MapTile : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
-        if (InteractableHouse.InsideHouse) return;
+        if (InteractableHouse.InsideHouse || GameSettings.Instance.IsUsingController) return;
 
         Click();
     }

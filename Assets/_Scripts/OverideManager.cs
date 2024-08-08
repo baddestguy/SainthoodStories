@@ -95,11 +95,6 @@ public class OverideManager : MonoBehaviour
         MissionManager.Instance.OverrideMission(MissionId);
     }
 
-    public void AutoCompleteMission()
-    {
-        MissionManager.Instance.AutoCompleteObjective();
-    }
-
     public void OverrideProvitionInventory(bool provision, bool inventory, bool adding)
     {
         if(inventory)

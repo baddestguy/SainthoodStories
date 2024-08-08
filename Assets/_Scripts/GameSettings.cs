@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using Assets.Xbox;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -30,6 +31,25 @@ public class GameSettings : MonoBehaviour
     public XboxResolution MaxXboxResolution;
     public bool ShowFPSCounter;
     public bool PlayingTrailer;
+
+    [HideInInspector]
+    public bool IsUsingController
+    {
+        get => _isUsingController;
+        set
+        {
+            Cursor.visible = !value;
+            Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
+
+            if (value != _isUsingController)
+            {
+                Debug.Log($"Input method switched to <b>{(value ? "Controller" : "Mouse")}</b>");
+            }
+            _isUsingController = value;
+        }
+    }
+
+    private bool _isUsingController;
     public enum XboxResolution
     {
         _1080P = 2_073_600,
@@ -67,8 +87,21 @@ public class GameSettings : MonoBehaviour
     private void Start()
     {
         Load();
+        if (IsXboxMode)
+        {
+            IsUsingController = true;
+        }
+        else
+        {
+            GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
+        }
     }
 
+
+    private void HandleInputMethodChanged(bool isUsingController)
+    {
+        IsUsingController = isUsingController;
+    }
 
     public void Load()
     {

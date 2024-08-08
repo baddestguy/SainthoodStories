@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class InteractableMarket : InteractableHouse
 {
     public static UnityAction<ItemType> AutoDeliverToHouse;
+    public static int ENERGY_BOOST_AMOUNT = -5;
 
     protected override void Start()
     {
@@ -104,7 +105,7 @@ public class InteractableMarket : InteractableHouse
                 }
                 else if(item == ItemType.ENERGY_BOOST)
                 {
-                    GameManager.Instance.Player.ConsumeEnergy(-5);
+                    GameManager.Instance.Player.ConsumeEnergy(ENERGY_BOOST_AMOUNT);
                 }
                 else
                 {
@@ -222,6 +223,24 @@ public class InteractableMarket : InteractableHouse
         }
 
         return DuringOpenHours() && TreasuryManager.Instance.CanAfford(moddedPrice) && isHouseAvailable && !InventoryManager.Instance.IsInventoryFull();
+    }
+
+    public override TooltipStats GetTooltipStatsForButton(string button)
+    {
+        switch(button)
+        {
+            case "DRUGS":
+                var drug = GameDataManager.Instance.ShopItemData[ItemType.ENERGY_BOOST];
+                var drugPrice = ApplyDiscount(drug.Price);
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.PURCHASE, cpOverride: (int)-drugPrice);
+
+            case "ENERGY_BOOST":
+                var itemData = GameDataManager.Instance.ShopItemData[ItemType.ENERGY_BOOST];
+                var moddedPrice = ApplyDiscount(itemData.Price);
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.PURCHASE, cpOverride: (int)-moddedPrice, energyModifier: -1*ENERGY_BOOST_AMOUNT);
+        }
+
+        return base.GetTooltipStatsForButton(button);
     }
 
     public override void ReportScores()

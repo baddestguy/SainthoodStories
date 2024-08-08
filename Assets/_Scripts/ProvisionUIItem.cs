@@ -1,5 +1,4 @@
-﻿using DG.Tweening;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,7 +19,6 @@ public class ProvisionUIItem : MonoBehaviour
     private string SubheaderSize = "<size=10>";
     private string DescriptionSize = "<size=7>";
 
-
     public void Init(ProvisionData prov, ProvisionUIItemType itemType)
     {
         Provision = prov;
@@ -32,7 +30,11 @@ public class ProvisionUIItem : MonoBehaviour
 
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
 
-        if(Type == ProvisionUIItemType.NEW)
+        if (InventoryPopup.Open)
+        {
+            mouseOverBtn.Loc_Key = $"<b>{HeaderSize}{HeaderColor}{LocalizationManager.Instance.GetText(prov.NameKey)}{SubheaderSize}</b>{SubheaderColor}\n<i>LV.{prov.Level}\n{DescriptionSize}{DescriptionColor}{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n<i> {prov.Tooltips}";
+        }
+        else if(Type == ProvisionUIItemType.NEW)
         {
             mouseOverBtn.Loc_Key = $"<b>{HeaderSize}{HeaderColor}{LocalizationManager.Instance.GetText(prov.NameKey)}{SubheaderSize}</b>{SubheaderColor}\n<b>NEW</b>\n{DescriptionSize}{DescriptionColor}{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n<i> {prov.Tooltips}";
         }
@@ -58,7 +60,9 @@ public class ProvisionUIItem : MonoBehaviour
 
     public void OnClick()
     {
+        if (InventoryPopup.Open) return;
         if (Provision == null) return;
+
         if (Type == ProvisionUIItemType.NEW) SendMessageUpwards("AddNewProvision", Provision, SendMessageOptions.RequireReceiver);
 
         if (Type == ProvisionUIItemType.UPGRADE) SendMessageUpwards("UpgradeProvision", Provision, SendMessageOptions.RequireReceiver);

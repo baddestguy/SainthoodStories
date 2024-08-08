@@ -10,6 +10,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.UI.CanvasScaler;
 
 public class UI : MonoBehaviour
 {
@@ -57,6 +58,10 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI TreasuryAmount;
     public Image TreasuryDisplayGlow;
     public TextMeshProUGUI TreasuryAdditionDisplay;
+    public TextMeshProUGUI WanderingSpiritsAmount;
+    public Image WanderingSpiritsDisplayGlow;
+    public TextMeshProUGUI WanderingSpiritsAdditionDisplay;
+
     public ProvisionsPopup ProvisionPopup;
     public Image Black;
 
@@ -95,6 +100,7 @@ public class UI : MonoBehaviour
     public GameObject LoadingScreen;
     public GameObject GameOverPopup;
     public GameObject InventoryPopup;
+    public GameObject SacredItemPopup;
     public bool WasUiHit
     {
         get
@@ -159,6 +165,14 @@ public class UI : MonoBehaviour
     {
         if (!FullUIVisible && !InventoryPopup.activeSelf) return;
         InventoryPopup.SetActive(!InventoryPopup.activeSelf);
+    }
+
+    public void SacredItemPopupEnable(string item)
+    {
+        if (!FullUIVisible && !SacredItemPopup.activeSelf) return;
+        EnableAllUIElements(false);
+        SacredItemPopup.SetActive(!SacredItemPopup.activeSelf);
+        SacredItemPopup.GetComponent<SacredItemPopup>().Init(item);
     }
 
     public void LoadingScreenEnable(bool enable)
@@ -504,6 +518,22 @@ public class UI : MonoBehaviour
         TreasuryAmount.DOCounter(oldAmount, (int)TreasuryManager.Instance.Money, 0.5f).SetDelay(2f);
 
         AdditionPoints(TreasuryAdditionDisplay, TreasuryDisplayGlow, (int)delta, 2f);
+    }
+
+    public void RefreshWanderingSpiritsBalance(double delta)
+    {
+        if (DOTween.IsTweening(WanderingSpiritsAmount, true))
+        {
+            WanderingSpiritsAmount.DOComplete();
+            StopAllCoroutines();
+            WanderingSpiritsAdditionDisplay.text = "";
+        }
+
+        int oldAmount = int.Parse(WanderingSpiritsAmount.text, System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowThousands);
+        WanderingSpiritsAmount.DOCounter(oldAmount, (int)InventoryManager.Instance.WanderingSpirits, 0.5f).SetDelay(2f);
+
+        AdditionPoints(WanderingSpiritsAdditionDisplay, WanderingSpiritsDisplayGlow, (int)delta, 2f);
+
     }
 
     public void EnablePackageSelector(bool enable, InteractableHouse house = null)

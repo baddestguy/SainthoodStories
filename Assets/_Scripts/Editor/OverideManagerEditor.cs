@@ -150,10 +150,6 @@ public class OverideManagerEditor : Editor
             {
                 overideManager.OverrideMission();
             }
-            if (GUILayout.Button("Auto Complete Mission") && canClick)
-            {
-                overideManager.AutoCompleteMission();
-            }
 
             EditorGUILayout.EndHorizontal();
 

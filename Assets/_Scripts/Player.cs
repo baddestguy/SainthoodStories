@@ -159,7 +159,7 @@ public class Player : MonoBehaviour
         OnMoveSuccessEvent?.Invoke(Energy, CurrentBuilding);
         GameManager.Instance.GameClock.Ping();
         ToolTipManager.Instance.ShowToolTip("");
-        ConsumeEnergy(0); //Used to refresh UI
+        ConsumeEnergy(0, overrideZero: true); //Used to refresh UI
         GameClock.Ticked += OnTick;
 
         if (GameSettings.Instance.StoryToggle)
@@ -302,7 +302,17 @@ public class Player : MonoBehaviour
     {
         StormyWeatherEffect();
 
+        if(CurrentTile != null && CurrentTile.TileType != TileType.BUILDING)
+        {
+            CurrentTile.TileType = TileType.ROAD;
+        }
+        
         CurrentTile = newTile;
+        
+        if(CurrentTile.TileType != TileType.BUILDING)
+        {
+            CurrentTile.TileType = TileType.PLAYER;
+        }
 
         EnergyConsumption = ModifyEnergyConsumption(CurrentTile);
     //    Energy.Consume(EnergyConsumption);
@@ -468,13 +478,14 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ConsumeEnergy(int amount, MapTile tile = null)
+    public void ConsumeEnergy(int amount, MapTile tile = null, bool overrideZero = false)
     {
         if(amount >= 0)
         {
             amount = ModifyEnergyConsumption(tile, amount: amount);
         }
-        Energy.Consume(amount);
+
+        Energy.Consume(overrideZero ? 0 : amount);
 
         if (amount > 0 && StatusEffects.Contains(PlayerStatusEffect.VULNERABLE))
         {

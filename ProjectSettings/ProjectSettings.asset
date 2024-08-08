@@ -136,7 +136,7 @@ PlayerSettings:
   vulkanEnableLateAcquireNextImage: 0
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
-  bundleVersion: 2.5.0.6
+  bundleVersion: 2.6.1.4
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 0}
@@ -742,7 +742,7 @@ PlayerSettings:
     Standalone: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;GAIA_2_PRESENT;GAIA_MESH_PRESENT;CROSS_PLATFORM_INPUT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT
     VisionOS: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
     WebGL: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
-    Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2;MOBILE_INPUT;GAIA_MESH_PRESENT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT;MICROSOFT_GAME_CORE
+    Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2;MOBILE_INPUT;GAIA_MESH_PRESENT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT;MICROSOFT_GAME_CORE;GAIA_2_PRESENT
     XboxOne: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
     iPhone: UNITY_POST_PROCESSING_STACK_V2;CROSS_PLATFORM_INPUT;MOBILE_INPUT
     tvOS: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
@@ -778,7 +778,7 @@ PlayerSettings:
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
   metroPackageName: TaiwoTech.SaintHood
-  metroPackageVersion: 2.5.0.6
+  metroPackageVersion: 2.6.1.4
   metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
   metroCertificateSubject: BisongTaiwo

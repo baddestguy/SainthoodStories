@@ -13,6 +13,7 @@ public class StatusEffectDisplay : MonoBehaviour
     private void OnEnable()
     {
         Player.StatusEffectTrigger += Init;
+        Init();
     }
 
     public void Init()
@@ -25,7 +26,7 @@ public class StatusEffectDisplay : MonoBehaviour
 
         var statusFx = GameManager.Instance.Player.StatusEffects;
 
-        StatusEffectDescription.gameObject.SetActive(statusFx.Count == 0);
+        StatusEffectDescription.text = "Status ailment descriptions will show up here";
 
         var statusEffectDisplayItemResource = Resources.Load<GameObject>("UI/StatusEffectItem");
         foreach(var fx in statusFx)

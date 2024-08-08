@@ -58,6 +58,9 @@ public class TooltipMouseOver : MonoBehaviour
             case "Clothes":
                 House = FindObjectOfType<InteractableClothesBank>();
                 break;
+            case "Market":
+                House = FindObjectOfType<InteractableMarket>();
+                break;
             case "RejectEvent":
                 if (GameManager.Instance.Player.CurrentBuilding.BuildingState == BuildingState.HAZARDOUS)
                 {

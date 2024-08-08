@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,11 +9,23 @@ public class InventoryPopup : MonoBehaviour
     public ProvisionUIItem[] UpgradeProvisionUIItems;
     public ScrollRect Scroller;
     public HouseObjectiveUIItem[] Objs;
+    public List<SacredItemUIItem> ArtifactObjs = new List<SacredItemUIItem>();
 
+    public TextMeshProUGUI ArtifactTitle;
+    public TextMeshProUGUI ArtifactDescription;
+    public ScrollRect ArtifactScroller;
+    public GameObject ArtifactObj;
+
+    public GameObject[] Tabs;
+    private int TabIndex;
+
+    public static bool Open;
 
     // Start is called before the first frame update
     void OnEnable()
     {
+        Open = true;
+        UI.Instance.EnableAllUIElements(false);
         Player.LockMovement = true;
         for (int i = 0; i < InventoryManager.Instance.Items.Count; i++)
         {
@@ -63,10 +76,46 @@ public class InventoryPopup : MonoBehaviour
                 Objs[i].Text.text = $"{LocalizationManager.Instance.GetText(houses[i].MyObjective.MissionDescription)}: {houses[i].VolunteerProgress}/{houses[i].MyObjective.RequiredAmount}";
             }
         }
+
+        foreach(var col in InventoryManager.Instance.Collectibles)
+        {
+            var artifact = Instantiate(ArtifactObj);
+            artifact.transform.SetParent(ArtifactObj.transform.parent);
+            artifact.SetActive(true);
+            artifact.GetComponent<SacredItemUIItem>().Init(col.Split(':')[1]);
+            ArtifactObjs.Add(artifact.GetComponent<SacredItemUIItem>());
+        }
+    }
+
+    public void NextTab()
+    {
+        if (TabIndex+1 >= Tabs.Length) return;
+
+        Tabs[TabIndex].SetActive(false);
+        TabIndex++;
+        Tabs[TabIndex].SetActive(true);
+    }
+
+    public void PrevTab()
+    {
+        if (TabIndex-1 < 0) return;
+
+        Tabs[TabIndex].SetActive(false);
+        TabIndex--;
+        Tabs[TabIndex].SetActive(true);
+    }
+
+    public void ShowArtifact(string itemName)
+    {
+        var item = GameDataManager.Instance.GetCollectibleData(itemName);
+        ArtifactTitle.text = item.Name;
+        ArtifactDescription.text = item.Description;
     }
 
     private void OnDisable()
     {
+        Open = false;
+
         for (int i = 0; i < InventoryManager.Instance.Items.Count; i++)
         {
             ItemList[i].PackageIcon.gameObject.SetActive(false);
@@ -76,6 +125,13 @@ public class InventoryPopup : MonoBehaviour
             Objs[i].gameObject.SetActive(false);
         }
 
+        for (int i = 0; i < ArtifactObjs.Count; i++)
+        {
+            ArtifactObjs[i].Remove();
+        }
+        ArtifactObjs.Clear();
+
         Player.LockMovement = false;
+        UI.Instance.EnableAllUIElements(true);
     }
 }

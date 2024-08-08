@@ -6,7 +6,7 @@ public class SacredItemCollectible : GridCollectibleItem
     public override void Collect()
     {
         MissionManager.Instance.Collect(gameObject.name + ":" + SacredName);
-        GridCollectibleManager.Instance.SacredItemSpawned = false;
-        Delete();
+        //Trigger fancy VFX+UI
+        DeleteCollectible();
     }
 }

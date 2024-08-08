@@ -146,7 +146,7 @@
         switch (actionName)
         {
             case "FOOD":
-                return (InventoryManager.Instance.CheckItem(ItemType.GROCERIES) || InventoryManager.Instance.CheckItem(ItemType.MEAL));
+                return MyObjective != null && (InventoryManager.Instance.CheckItem(ItemType.GROCERIES) || InventoryManager.Instance.CheckItem(ItemType.MEAL));
         }
 
         return base.CanDoAction(actionName);

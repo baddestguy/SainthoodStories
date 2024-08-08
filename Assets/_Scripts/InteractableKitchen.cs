@@ -107,23 +107,7 @@ public class InteractableKitchen : InteractableHouse
             CookFX.Play();
 
             var moddedEnergy = EnergyConsumption - (utensils?.Value ?? 0);
-            var ticks = 0;
-            if (UpgradeLevel == 3)
-            {
-                ticks = 4;
-            }
-            else if (UpgradeLevel == 2)
-            {
-                ticks = 8;
-            }
-            else if (UpgradeLevel == 1)
-            {
-                ticks = 12;
-            }
-            else
-            {
-                ticks = 14;
-            }
+            var ticks = TicksPerUpgradeLevel();
 
             player.ConsumeEnergy(moddedEnergy);
             for(int i = 0; i < ticks; i++)
@@ -137,6 +121,26 @@ public class InteractableKitchen : InteractableHouse
         {
             UI.Instance.DisplayMessage("YOU HAVE NO FOOD TO COOK!");
         }
+    }
+
+    public override TooltipStats GetTooltipStatsForButton(string button)
+    {
+        switch (button)
+        {
+            case "COOK":
+                if (MyObjective?.Event == BuildingEventType.COOK || MyObjective?.Event == BuildingEventType.COOK_URGENT)
+                {
+                    var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
+                    var moddedEnergy = -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: EnergyConsumption - (utensils?.Value ?? 0));
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride: TicksPerUpgradeLevel(), energyModifier: moddedEnergy, cpOverride: MyObjective.Reward);
+                }
+                else
+                {
+                    return new TooltipStats();
+                }
+        }
+
+        return base.GetTooltipStatsForButton(button);
     }
 
     public override void BuildRelationship(ThankYouType thanks, int amount = 3)
@@ -173,6 +177,24 @@ public class InteractableKitchen : InteractableHouse
                 UI.Meditate?.Invoke(this);
                 break;
         }
+    }
+
+    public override int TicksPerUpgradeLevel()
+    {
+        if (UpgradeLevel == 3)
+        {
+            return 4;
+        }
+        else if (UpgradeLevel == 2)
+        {
+            return 8;
+        }
+        else if (UpgradeLevel == 1)
+        {
+            return 12;
+        }
+
+        return 14;
     }
 
     public override bool CanDoAction(string actionName)
