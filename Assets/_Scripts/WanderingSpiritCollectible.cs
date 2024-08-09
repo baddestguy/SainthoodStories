@@ -104,12 +104,15 @@ public class WanderingSpiritCollectible : GridCollectibleItem
                 break;
 
             case SacredItemBehaviour.CHASE:
-                path = PathToTile(GameManager.Instance.Player.GetCurrentTile());
-                if(path.Count > 0)
+                if (!MyTween.IsPlaying())
                 {
-                    MyTile.TileType = TileType.ROAD;
-                    MyTile = path[0];
-                    transform.DOMove(MyTile.transform.position, 1f);
+                    path = PathToTile(GameManager.Instance.Player.GetCurrentTile());
+                    if (path.Count > 0)
+                    {
+                        MyTile.TileType = TileType.ROAD;
+                        MyTile = path[0];
+                        MyTween = transform.DOMove(MyTile.transform.position, 2f);
+                    }
                 }
                 break;
 
@@ -120,13 +123,13 @@ public class WanderingSpiritCollectible : GridCollectibleItem
                     {
                         MyTile.TileType = TileType.ROAD;
                         MyTile = TargetTile;
-                        MyTween = transform.DOMove(MyTile.transform.position, 2f);
+                        MyTween = transform.DOMove(MyTile.transform.position, 5f);
                     }
                     else
                     {
                         MyTile.TileType = TileType.ROAD;
                         MyTile = SpawnedTile;
-                        MyTween = transform.DOMove(SpawnedTile.transform.position, 2f);
+                        MyTween = transform.DOMove(SpawnedTile.transform.position, 5f);
                     }
                 }
                 break;
@@ -138,13 +141,13 @@ public class WanderingSpiritCollectible : GridCollectibleItem
                     {
                         MyTile.TileType = TileType.ROAD;
                         MyTile = GameManager.Instance.Player.GetCurrentTile();
-                        MyTween = transform.DOJump(MyTile.transform.position, 5f, 1, 2f);
+                        MyTween = transform.DOJump(MyTile.transform.position, 5f, 1, 5f);
                     }
                     else
                     {
                         MyTile.TileType = TileType.ROAD;
                         MyTile = SpawnedTile;
-                        MyTween = transform.DOJump(MyTile.transform.position, 5f, 1, 2f);
+                        MyTween = transform.DOJump(MyTile.transform.position, 5f, 1, 5f);
                     }
                 }
                 break;
@@ -160,7 +163,7 @@ public class WanderingSpiritCollectible : GridCollectibleItem
                         MyTile = path[path.Count-1];
                         transform.DOKill(true);
                         var tweenPath = path.Select(x => x.transform.position).ToArray();
-                        transform.DOPath(tweenPath, 1f);
+                        transform.DOPath(tweenPath, 5f);
                     }
                 }
                 else
@@ -172,7 +175,7 @@ public class WanderingSpiritCollectible : GridCollectibleItem
                         MyTile = path[path.Count-1];
                         transform.DOKill(true);
                         var tweenPath = path.Select(x => x.transform.position).ToArray();
-                        transform.DOPath(tweenPath, 1f);
+                        transform.DOPath(tweenPath, 5f);
                     }
                 }
                 break;

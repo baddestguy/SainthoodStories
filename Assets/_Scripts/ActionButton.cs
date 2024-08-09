@@ -88,6 +88,12 @@ public class ActionButton : MonoBehaviour
     public bool HasCriticalCircle => !ButtonName.Equals("WORLD", StringComparison.InvariantCultureIgnoreCase) &&
                                      !ButtonName.Equals("ENTER", StringComparison.InvariantCultureIgnoreCase) &&
                                      !ButtonName.Equals("SAINTS", StringComparison.InvariantCultureIgnoreCase) &&
+                                     !ButtonName.Equals("STATIONERY", StringComparison.InvariantCultureIgnoreCase) &&
+                                     !ButtonName.Equals("MEDS", StringComparison.InvariantCultureIgnoreCase) &&
+                                     !ButtonName.Equals("TOYS", StringComparison.InvariantCultureIgnoreCase) &&
+                                     !ButtonName.Equals("FOOD", StringComparison.InvariantCultureIgnoreCase) &&
+                                     !ButtonName.Equals("DRUGS", StringComparison.InvariantCultureIgnoreCase) &&
+                                     !ButtonName.Equals("ENERGY_BOOST", StringComparison.InvariantCultureIgnoreCase) &&
                                      !ButtonName.Equals("EXIT", StringComparison.InvariantCultureIgnoreCase);
 
     #endregion
