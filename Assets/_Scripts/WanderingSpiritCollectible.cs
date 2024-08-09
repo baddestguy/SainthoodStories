@@ -97,10 +97,10 @@ public class WanderingSpiritCollectible : GridCollectibleItem
             case SacredItemBehaviour.HARMLESS:
                 CountdownTimer--;
                // Debug.Log("DISSAPEARING IN " + CountdownTimer);
-                if (CountdownTimer <= 0)
-                {
-                    DeleteCollectible();
-                }
+                //if (CountdownTimer <= 0)
+                //{
+                //    DeleteCollectible();
+                //}
                 break;
 
             case SacredItemBehaviour.CHASE:
