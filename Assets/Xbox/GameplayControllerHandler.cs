@@ -32,7 +32,6 @@ namespace Assets.Xbox
 
         private bool _hasHoveredFirstSaintButton;
         private bool _saintNextOptionHasHover;
-        //private Vector2 _lastMousePosition;
 
         private PackageItem _currentPackageItem;
         private PackageSelector _packageSelector;
@@ -61,14 +60,6 @@ namespace Assets.Xbox
 
             if (GameSettings.Instance.IsXboxMode) return;
             OnInputMethodChanged += HandleInputMethodChanged;
-
-            //If any controller button is pressed, we switch to controller mode
-            //InputSystem.onAnyButtonPress.Call(control =>
-            //{
-            //    if(GameSettings.Instance.IsUsingController || GameSettings.Instance.IsXboxMode || control.device.name.Equals("Mouse", StringComparison.InvariantCultureIgnoreCase)) return;
-            //    OnInputMethodChanged?.Invoke(control.device.name.Equals(Gamepad.current.name));
-            //});
-            //_lastMousePosition = Mouse.current.position.ReadValue();
         }
 
         public void HandleInputMethodChanged(bool isUsingController)
@@ -114,9 +105,6 @@ namespace Assets.Xbox
                 if (mouseX != 0 || mouseY != 0)
                 {
                     OnInputMethodChanged?.Invoke(false);
-
-                    //_lastMousePosition = Mouse.current.position.ReadValue();
-                    
                     return;
                 }
             }
@@ -129,15 +117,16 @@ namespace Assets.Xbox
                 if (button.Button != GamePadButton.Void || direction.Input != DirectionInput.Void ) 
                 {
                     OnInputMethodChanged?.Invoke(true);
-
-                    //_lastMousePosition = Mouse.current.position.ReadValue();
-                    
                     return;
                 }
             }
-            //_lastMousePosition = Mouse.current.position.ReadValue();
 
             if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsUsingController || MissionManager.MissionOver) return;
+
+            if (Player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Equals("Jump", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return;
+            }
 
             var pressedButton = GamePadController.GetButton();
             if (PauseMenu.Instance.active)
@@ -277,6 +266,7 @@ namespace Assets.Xbox
             }
         }
 
+        #region BuildingMovementAndAction
         private void HandlePlayerActions()
         {
             var direction = GamePadController.GetDirection();
@@ -316,7 +306,8 @@ namespace Assets.Xbox
             {
                 var closestButtonGameObject = directionInput.GetClosestGameObjectOnCanvasInDirection(
                     _currentPopUIButton?.gameObject,
-                    _currentPopUI.Buttons.Select(x => x.gameObject).ToArray());
+                    _currentPopUI.Buttons.Select(x => x.gameObject).ToArray(),
+                    useAnchoredPosition: false);
 
                 if (closestButtonGameObject != null)
                 {
@@ -338,21 +329,9 @@ namespace Assets.Xbox
             _currentPopUIButton?.HandleControllerExit();
         }
 
-        private void HandleZoom()
-        {
-            var pressedButton = GamePadController.GetButton();
-            if (!pressedButton.Control.wasPressedThisFrame) return;
+        #endregion
 
-            if (pressedButton.Button == GamePadButton.RightShoulder)
-            {
-                GameControlsManager.TryZoom?.Invoke(1);
-            }
-            else if (pressedButton.Button == GamePadButton.LeftShoulder)
-            {
-                DeselectBuildingButton();
-                GameControlsManager.TryZoom?.Invoke(-1);
-            }
-        }
+        #region Conversations
 
         private void HandleConversationEventPopup()
         {
@@ -446,6 +425,9 @@ namespace Assets.Xbox
                 Debug.Log($"Current Event Popup Button is: {toolTipMouseOvers[_customEventPopupButtonIndex].name}");
             }
         }
+        #endregion
+
+        #region Provisions
 
         private void HandleProvisionSelectPopup()
         {
@@ -459,7 +441,6 @@ namespace Assets.Xbox
                 var closestProvisionGameObject = pressedDirection.Input.GetClosestGameObjectOnCanvasInDirection(
                     _currentProvisionUIItem?.gameObject,
                     _provisionItems.Select(x => x.gameObject).ToArray());
-
                 if (closestProvisionGameObject != null)
                 {
                     _currentProvisionUIItem = closestProvisionGameObject.GetComponentInChildren<ProvisionUIItem>();
@@ -476,15 +457,33 @@ namespace Assets.Xbox
             {
                 if (pressedButton.Button == GamePadButton.East)
                 {
+                    var wasReplacePhase = _provisionsPopUp.PopupPhase == ProvisionsPopupPhase.REPLACE;
                     DeselectProvisionSelect();
                     _currentProvisionUIItem = null;
                     _provisionsPopUp.OnClick("X");
+
+                    //If we are going back from the replace phase, set first available provision to hover
+                    if (wasReplacePhase)
+                    {
+                        _currentProvisionUIItem = _provisionItems.FirstOrDefault(x => x.gameObject.activeInHierarchy);
+                        _currentProvisionUIItem?.HandleControllerHover();
+                    }
                 }
-                else if (pressedButton.Button == GamePadButton.South)
+                else if (pressedButton.Button == GamePadButton.South && _currentProvisionUIItem != null)
                 {
-                    _currentProvisionUIItem?.OnClick();
+                    _currentProvisionUIItem.OnClick();
                     DeselectProvisionSelect();
-                    _currentProvisionUIItem = null;
+
+                    //If we are at the limit and have to replace a provision, hover over the first existing provision
+                    if(_currentProvisionUIItem.Type == ProvisionUIItemType.NEW && _provisionsPopUp.PopupPhase == ProvisionsPopupPhase.REPLACE)
+                    {
+                        _currentProvisionUIItem = _provisionItems.FirstOrDefault(x => x.gameObject.activeInHierarchy);
+                        _currentProvisionUIItem?.HandleControllerHover();
+                    }
+                    else
+                    {
+                        _currentProvisionUIItem = null;
+                    }
                 }
             }
         }
@@ -493,6 +492,12 @@ namespace Assets.Xbox
         {
             _currentProvisionUIItem?.EndControllerHover();
         }
+
+
+        #endregion
+
+        #region SaintCollection
+
 
         private void HandleSaintCollectionPopup()
         {
@@ -578,7 +583,9 @@ namespace Assets.Xbox
                 newHoveredOption.DOScale(newHoveredOption.localScale * transformScale, 0.5f);
             }
         }
+        #endregion
 
+        #region PackageSelection
         private const float PackageScaleValue = 1.25f;
         private void HandlePackageItemSelection()
         {
@@ -634,11 +641,11 @@ namespace Assets.Xbox
 
                         if (_packageSelector.ItemList.Contains(_currentPackageItem))
                         {
-                            _packageSelector.PackageDeselected(_currentPackageItem);
+                            _currentPackageItem.Deselect();
                         }
                         else
                         {
-                            _packageSelector.PackageSelected(_currentPackageItem);
+                            _currentPackageItem.Select();
                         }
 
                         _currentPackageItem = _packageSelector.ItemList[0];
@@ -655,7 +662,7 @@ namespace Assets.Xbox
 
         private void DeselectSelectedPackage()
         {
-            if (_selectedPackageSelectorItemIsPackage )
+            if (_selectedPackageSelectorItemIsPackage)
             {
                 if (_currentPackageItem != null)
                 {
@@ -667,6 +674,23 @@ namespace Assets.Xbox
                 // Exit button does not wiggle on mouse hover, so this will shrink the button if it's active on switch to controller
                 _packageSelector.ExitGameObject.transform.DOComplete();
                 _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale / PackageScaleValue, 0.5f);
+            }
+        }
+        #endregion
+
+        private void HandleZoom()
+        {
+            var pressedButton = GamePadController.GetButton();
+            if (!pressedButton.Control.wasPressedThisFrame) return;
+
+            if (pressedButton.Button == GamePadButton.RightShoulder)
+            {
+                GameControlsManager.TryZoom?.Invoke(1);
+            }
+            else if (pressedButton.Button == GamePadButton.LeftShoulder)
+            {
+                DeselectBuildingButton();
+                GameControlsManager.TryZoom?.Invoke(-1);
             }
         }
     }
