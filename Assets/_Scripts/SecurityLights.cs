@@ -12,7 +12,7 @@ public class SecurityLights : MonoBehaviour
 
     public void CheckSecurityLights(double time, int day)
     {
-        if(time >= 21 || time < 6)
+        if(time >= 19 || time < 6)
         {
             StartCoroutine(LightSwitch(true));
         }

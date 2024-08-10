@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Xbox;
 using DG.Tweening;
@@ -27,20 +28,19 @@ public class EndWeekSequence : MonoBehaviour
     public ProgressBar SaintProgressBar;
     private bool Continue = false;
 
-    public IEnumerator RunSequenceAsync()
+    public IEnumerator RunSequenceAsync(int fp, int fpPool, int cp, int cpPool, IEnumerable<SaintData> saintsUnlocked)
     {
-        int cashAmount = MissionManager.Instance.CharityPointsPool;
+        int cashAmount = Mathf.Clamp(cpPool, 0, 100000000);
         var donation = InventoryManager.Instance.GetProvision(Provision.ALLOWANCE);
         cashAmount += donation?.Value ?? 0;
         TreasuryManager.Instance.DonateMoney(cashAmount);
-        SaintProgressBar.currentPercent = MissionManager.Instance.FaithPoints * 100f / GameDataManager.Instance.GetNextSaintUnlockThreshold();
-        SaintProgressBar.endPercent = (MissionManager.Instance.FaithPointsPool + MissionManager.Instance.FaithPoints) * 100f / GameDataManager.Instance.GetNextSaintUnlockThreshold();
-        var saintsUnlocked = MissionManager.Instance.UnlockSaints();
+        SaintProgressBar.currentPercent = fp * 100f / GameDataManager.Instance.GetNextSaintUnlockThreshold();
+        SaintProgressBar.endPercent = (fpPool + fp) * 100f / GameDataManager.Instance.GetNextSaintUnlockThreshold();
 
         BG.SetActive(true);
         CPFPObj.SetActive(true);
         Title.text = LocalizationManager.Instance.GetText("CP_ENDGAME_TITLE");
-        Score.DOCounter(MissionManager.Instance.CharityPoints, MissionManager.Instance.CharityPoints + MissionManager.Instance.CharityPointsPool, 2f);
+        Score.DOCounter(cp, cp + cpPool, 2f);
         //SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie:5f);
 
         yield return new WaitForSeconds(2f);
@@ -76,7 +76,7 @@ public class EndWeekSequence : MonoBehaviour
          //   SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 5f);
             CashUnlockObj.SetActive(false);
             Title.text = LocalizationManager.Instance.GetText("FP_ENDGAME_TITLE");
-            SaintScore.DOCounter(MissionManager.Instance.FaithPoints, MissionManager.Instance.FaithPoints + MissionManager.Instance.FaithPointsPool, 2f);
+            SaintScore.DOCounter(fp, fp + fpPool, 2f);
             SaintsUnlockObj.SetActive(true);
             SaintProgressBar.gameObject.SetActive(true);
             SaintProgressBar.isOn = true;

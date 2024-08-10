@@ -133,29 +133,54 @@ public class MissionManager : MonoBehaviour
 
     private IEnumerator EndMissionAsync()
     {
+        int fp = FaithPoints;
+        int fpPool = FaithPointsPool;
+        int cp = CharityPoints;
+        int cpPool = CharityPointsPool;
+        var newSaint = UnlockSaints();
+
+        CurrentMissionId++;
+        InteractableHouse.HazardCounter = 0;
+        EventsManager.Instance.ExecuteEvents();
+        GameManager.Instance.Player.ResetEnergy();
+        GameManager.Instance.Player.StatusEffects.Clear();
+        InventoryManager.Instance.GeneratedProvisions.Clear();
+        EventsManager.Instance.DailyEvent = CustomEventType.NONE;
+        GameManager.Instance.GameClock.Reset();
+        InventoryManager.HasChosenProvision = false;
+        FaithPoints += FaithPointsPool;
+        CharityPoints += CharityPointsPool;
+        FaithPointsPool = 0;
+        CharityPointsPool = 0;
+        FaithPointsPermanentlyLost = 0;
+        GameManager.Instance.ScrambleMapTiles();
+        GameManager.Instance.CurrentBuilding = "InteractableChurch";
+        SaveDataManager.Instance.SaveGame();
+        SaveDataManager.Instance.DaySave();
+
+        ToolTipManager.Instance.ShowToolTip("");
+        bool missionFailed = false;
+        Player.LockMovement = true;
+        while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress) yield return null;
+
         //if any unresolved building hazards exist, penalize the player
-        foreach(var house in GameManager.Instance.Houses)
+        foreach (var house in GameManager.Instance.Houses)
         {
-            if(house.BuildingState == BuildingState.HAZARDOUS)
+            if (house.BuildingState == BuildingState.HAZARDOUS)
             {
                 UpdateCharityPoints(-3, null);
                 house.BuildingState = BuildingState.NORMAL;
             }
         }
-
-        ToolTipManager.Instance.ShowToolTip("");
-        bool missionFailed = false;
-        Player.LockMovement = true;
         MissionOver = true;
         UI.Instance.EnableAllUIElements(false);
         UI.Instance.GameOver();
-        while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress) yield return null;
         UI.Instance.CrossFade(1, 1f);
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
 
         EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
-        yield return seq.RunSequenceAsync();
+        yield return seq.RunSequenceAsync(fp, fpPool, cp, cpPool, newSaint);
 
 
         if (GameSettings.Instance.DEMO_MODE_2 && CurrentMissionId == 3)
@@ -233,24 +258,6 @@ public class MissionManager : MonoBehaviour
             }
         }
 
-        CurrentMissionId++;
-        InteractableHouse.HazardCounter = 0;
-        EventsManager.Instance.ExecuteEvents();
-        GameManager.Instance.Player.ResetEnergy();
-        GameManager.Instance.Player.StatusEffects.Clear();
-        InventoryManager.Instance.GeneratedProvisions.Clear();
-        EventsManager.Instance.DailyEvent = CustomEventType.NONE;
-        GameManager.Instance.GameClock.Reset();
-        InventoryManager.HasChosenProvision = false;
-        FaithPoints += FaithPointsPool;
-        CharityPoints += CharityPointsPool;
-        FaithPointsPool = 0;
-        CharityPointsPool = 0;
-        FaithPointsPermanentlyLost = 0;
-        GameManager.Instance.ScrambleMapTiles();
-        GameManager.Instance.CurrentBuilding = "InteractableChurch";
-        SaveDataManager.Instance.SaveGame();
-        SaveDataManager.Instance.DaySave();
         MissionComplete?.Invoke(missionFailed);
     }
 
@@ -278,7 +285,7 @@ public class MissionManager : MonoBehaviour
     {
         CurrentMissionId = missionId;
         WeatherManager.Instance.ResetWeather();
-        GameManager.Instance.GameClock.Reset();
+        GameManager.Instance.GameClock.Reset(missionId);
         SaveDataManager.Instance.SaveGame();
         MissionsBegin();
         GameManager.Instance.ReloadLevel();

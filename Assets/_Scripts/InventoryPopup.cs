@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,7 @@ public class InventoryPopup : MonoBehaviour
     public TextMeshProUGUI ArtifactTitle;
     public TextMeshProUGUI ArtifactDescription;
     public ScrollRect ArtifactScroller;
+    public float ArtifactScrollerContentVSize;
     public GameObject ArtifactObj;
 
     public GameObject[] Tabs;
@@ -77,13 +79,22 @@ public class InventoryPopup : MonoBehaviour
             }
         }
 
-        foreach(var col in InventoryManager.Instance.Collectibles)
+        int counter = 0;
+        var scrollerContentRect = ArtifactScroller.content.GetComponent<RectTransform>();
+        ArtifactScrollerContentVSize = scrollerContentRect.sizeDelta.y;
+        foreach (var col in InventoryManager.Instance.Collectibles)
         {
             var artifact = Instantiate(ArtifactObj);
             artifact.transform.SetParent(ArtifactObj.transform.parent);
             artifact.SetActive(true);
             artifact.GetComponent<SacredItemUIItem>().Init(col.Split(':')[1]);
+            if (counter > 6) //Expand scroll view if items spawned go beyond the current single-page view
+            {
+                scrollerContentRect.sizeDelta = new Vector2(scrollerContentRect.sizeDelta.x, scrollerContentRect.sizeDelta.y + 41);
+            }
+            ArtifactScroller.GetComponent<ScrollRect>().verticalNormalizedPosition = 1f;
             ArtifactObjs.Add(artifact.GetComponent<SacredItemUIItem>());
+            counter++;
         }
     }
 
@@ -130,6 +141,9 @@ public class InventoryPopup : MonoBehaviour
             ArtifactObjs[i].Remove();
         }
         ArtifactObjs.Clear();
+
+        var scrollerContentRect = ArtifactScroller.content.GetComponent<RectTransform>();
+        scrollerContentRect.sizeDelta = new Vector2(scrollerContentRect.sizeDelta.x, ArtifactScrollerContentVSize);
 
         Player.LockMovement = false;
         UI.Instance.EnableAllUIElements(true);

@@ -12,18 +12,18 @@ public class GridTile : MonoBehaviour
 
     private void UpdateGrid(double time, int day)
     {
-        if(time < 6 || time >= 16)
-        {
-            var c = GridImage.color;
-            c.a = 0.025f;
-            GridImage.color = c;
-        }
-        else
-        {
-            var c = GridImage.color;
-            c.a = 0.1f;
-            GridImage.color = c;
-        }
+        //if(time < 6 || time >= 16)
+        //{
+        //    var c = GridImage.color;
+        //    c.a = 0.025f;
+        //    GridImage.color = c;
+        //}
+        //else
+        //{
+        //    var c = GridImage.color;
+        //    c.a = 0.1f;
+        //    GridImage.color = c;
+        //}
     }
 
     private void OnDisable()

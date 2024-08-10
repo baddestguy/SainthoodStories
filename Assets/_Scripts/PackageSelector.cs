@@ -63,6 +63,10 @@ public class PackageSelector : MonoBehaviour
         GameplayControllerHandler.Instance.SetPackageSelector(this);
     }
 
+    /// <summary>
+    /// Note, this is called from <see cref="PackageItem.Select"/>> via the SendMessageUpwards system
+    /// </summary>
+    /// <param name="item"></param>
     public void PackageSelected(PackageItem item)
     {
         if (item == null) return;
@@ -82,6 +86,10 @@ public class PackageSelector : MonoBehaviour
         Destroy(item.gameObject);
     }
 
+    /// <summary>
+    /// Note, this is called from <see cref="PackageItem.Deselect"/>> via the SendMessageUpwards system
+    /// </summary>
+    /// <param name="item"></param>
     public void PackageDeselected(PackageItem item)
     {
         for (int i = 0; i < ItemList.Length; i++)

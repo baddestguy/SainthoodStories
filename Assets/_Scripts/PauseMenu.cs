@@ -102,10 +102,10 @@ public class PauseMenu : MonoBehaviour
 
             ShowGridToggle.SetIsOnWithoutNotify(GameSettings.Instance.ShowGrid);
 
-            if (GameManager.Instance.InGameSession)
-                TutorialEnabled.transform.parent.gameObject.SetActive(false);
-            else
-                TutorialEnabled.transform.parent.gameObject.SetActive(true);
+            //if (GameManager.Instance.InGameSession)
+            //    TutorialEnabled.transform.parent.gameObject.SetActive(false);
+            //else
+            //    TutorialEnabled.transform.parent.gameObject.SetActive(true);
         }
         else if (GameSettings.Instance.IsUsingController)
         {

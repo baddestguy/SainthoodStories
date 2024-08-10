@@ -8,7 +8,7 @@ public class ProvisionsPopup : MonoBehaviour
 {
     public TextMeshProUGUI TitleText;
     public TextMeshProUGUI Title2Text;
-    private ProvisionsPopupPhase PopupPhase;
+    public ProvisionsPopupPhase PopupPhase;
     private ProvisionData ProvisionToReplace;
     public GameObject XButton;
     public GameObject ProvisionItemResource;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
@@ -72,21 +73,42 @@ namespace Assets.Xbox
             return (GamePadButton.Void, Gamepad.current.selectButton);
         }
 
-        public static GameObject GetClosestGameObjectOnCanvasInDirection(this DirectionInput direction, GameObject currentGameObject, GameObject[] gameObjects)
+        /// <summary>
+        /// Get the closest game object in a direction on the canvas.
+        /// <br />
+        /// 2D objects have proven to work better with anchored position.
+        /// </summary>
+        /// <param name="direction">The direction to check in</param>
+        /// <param name="currentGameObject">The reference game object</param>
+        /// <param name="gameObjects">The list of game objects to evaluate</param>
+        /// <param name="useAnchoredPosition">Optional. Set to true if using well anchored 2d objects.</param>
+        /// <returns></returns>
+        public static GameObject GetClosestGameObjectOnCanvasInDirection(this DirectionInput direction,
+            GameObject currentGameObject,
+            GameObject[] gameObjects,
+            bool useAnchoredPosition = true)
         {
-            const float axisWeight = 0.05f;
+            const float axisWeight = 0.3f;
 
             if(direction == DirectionInput.Void) return null;
 
             var closestObjectDistance = double.MaxValue;
             GameObject closestGameObject = null;
 
-            var currentPosition = currentGameObject == null ? new Vector3(0, 0) : currentGameObject.GetComponent<RectTransform>().position;
-            foreach (var gameObjectToEvaluate in gameObjects)
+            var currentPosition = new Vector3(0, 0);
+            if(currentGameObject != null)
+            {
+                var currentGameObjectRectTransform = currentGameObject.GetComponent<RectTransform>();
+                currentPosition = useAnchoredPosition ? currentGameObjectRectTransform.anchoredPosition3D : currentGameObjectRectTransform.position;
+            }
+
+            foreach (var gameObjectToEvaluate in gameObjects.Where(x => x.activeInHierarchy))
             {
                 if (gameObjectToEvaluate == currentGameObject) continue;
 
-                var evaluatePosition = gameObjectToEvaluate.GetComponent<RectTransform>().position;
+                var evaluateRectTransform = gameObjectToEvaluate.GetComponent<RectTransform>();
+                var evaluatePosition = useAnchoredPosition ? evaluateRectTransform.anchoredPosition3D : evaluateRectTransform.position;
+
                 var vectorToTarget = evaluatePosition - currentPosition;
 
                 var isDesiredDirection = direction switch
