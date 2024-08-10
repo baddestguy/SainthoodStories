@@ -396,15 +396,17 @@ public class GameDataManager : MonoBehaviour
 
     public int GetNextSaintUnlockThreshold()
     {
-        var unlockedSaintsCount = GameManager.Instance.SaveData.Saints.Length;
-
-        if(unlockedSaintsCount == TOTAL_UNLOCKABLE_SAINTS) return Constants[$"SAINTS_UNLOCK_THRESHOLD_25"].IntValue;
-
-        if (GameSettings.Instance.DEMO_MODE_2)
+        int threshold = 15;
+        switch (SaintsManager.Instance.UnlockedSaints.Count)
         {
-            return 15;
+            case 0:
+                threshold = 3;
+                break;
         }
-        return Constants[$"SAINTS_UNLOCK_THRESHOLD_{ unlockedSaintsCount + 1 }"].IntValue;
+        int currentFP = MissionManager.Instance.FaithPoints;
+        int currentLevel = Mathf.FloorToInt((float)currentFP / threshold);
+
+        return (currentLevel + 1) * threshold;
     }
 
     public bool IsSpritualEvent(CustomEventType e)

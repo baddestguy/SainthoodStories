@@ -67,7 +67,7 @@ public class CustomEventPopup : MonoBehaviour
 
                 GameClock c = new GameClock(clock.Time);
                 c.AddTicks(Mathf.Abs((int)customEvent.Cost));
-                TimeDisplay.text = $"{(int)c.Time}:{(c.Time % 1 == 0 ? "00" : "30")}";
+                TimeDisplay.text = c.TimeDisplay();
 
                 var moddedEnergy = player.ModifyEnergyConsumption(amount: EventData.EnergyCost);
                 EnergyDisplay.text = moddedEnergy == 0 ? "0" : moddedEnergy > 0 ? $"-{moddedEnergy}" : $"+{-moddedEnergy}";
