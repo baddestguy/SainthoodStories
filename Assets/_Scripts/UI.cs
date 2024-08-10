@@ -101,6 +101,7 @@ public class UI : MonoBehaviour
     public GameObject GameOverPopup;
     public GameObject InventoryPopup;
     public GameObject SacredItemPopup;
+    public GameObject TutorialPopupQuestion;
     public bool WasUiHit
     {
         get
@@ -757,10 +758,37 @@ public class UI : MonoBehaviour
     {
     }
 
+    public void TutorialConfirmation(string response)
+    {
+        switch (response)
+        {
+            case "YES":
+                TutorialPopupQuestion.SetActive(false);
+                GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, true);
+                GameSettings.Instance.TUTORIAL_MODE = true;
+                break;
+
+            case "NO":
+                TutorialPopupQuestion.SetActive(false);
+                GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, true);
+                break;
+
+            case "CLOSE":
+                TutorialPopupQuestion.SetActive(false);
+                break;
+        }
+    }
+
     public void HardRun(bool newGame)
     {
-        
-        GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, newGame);
+        if (newGame)
+        {
+            TutorialPopupQuestion.SetActive(true);
+        }
+        else
+        {
+            GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, newGame);
+        }
     }
 
     public void DisableMainMenuContinueBtn()

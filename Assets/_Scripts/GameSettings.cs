@@ -31,6 +31,7 @@ public class GameSettings : MonoBehaviour
     public XboxResolution MaxXboxResolution;
     public bool ShowFPSCounter;
     public bool PlayingTrailer;
+    public bool TUTORIAL_MODE;
 
     [HideInInspector]
     public bool IsUsingController
