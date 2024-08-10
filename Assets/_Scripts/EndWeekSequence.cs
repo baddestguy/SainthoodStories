@@ -29,7 +29,7 @@ public class EndWeekSequence : MonoBehaviour
 
     public IEnumerator RunSequenceAsync()
     {
-        int cashAmount = MissionManager.Instance.CharityPointsPool;
+        int cashAmount = Mathf.Clamp(MissionManager.Instance.CharityPointsPool, 0, 100000000);
         var donation = InventoryManager.Instance.GetProvision(Provision.ALLOWANCE);
         cashAmount += donation?.Value ?? 0;
         TreasuryManager.Instance.DonateMoney(cashAmount);

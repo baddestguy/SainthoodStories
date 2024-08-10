@@ -133,23 +133,24 @@ public class MissionManager : MonoBehaviour
 
     private IEnumerator EndMissionAsync()
     {
+
+        ToolTipManager.Instance.ShowToolTip("");
+        bool missionFailed = false;
+        Player.LockMovement = true;
+        while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress) yield return null;
+
         //if any unresolved building hazards exist, penalize the player
-        foreach(var house in GameManager.Instance.Houses)
+        foreach (var house in GameManager.Instance.Houses)
         {
-            if(house.BuildingState == BuildingState.HAZARDOUS)
+            if (house.BuildingState == BuildingState.HAZARDOUS)
             {
                 UpdateCharityPoints(-3, null);
                 house.BuildingState = BuildingState.NORMAL;
             }
         }
-
-        ToolTipManager.Instance.ShowToolTip("");
-        bool missionFailed = false;
-        Player.LockMovement = true;
         MissionOver = true;
         UI.Instance.EnableAllUIElements(false);
         UI.Instance.GameOver();
-        while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress) yield return null;
         UI.Instance.CrossFade(1, 1f);
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
