@@ -133,6 +133,30 @@ public class MissionManager : MonoBehaviour
 
     private IEnumerator EndMissionAsync()
     {
+        int fp = FaithPoints;
+        int fpPool = FaithPointsPool;
+        int cp = CharityPoints;
+        int cpPool = CharityPointsPool;
+        var newSaint = UnlockSaints();
+
+        CurrentMissionId++;
+        InteractableHouse.HazardCounter = 0;
+        EventsManager.Instance.ExecuteEvents();
+        GameManager.Instance.Player.ResetEnergy();
+        GameManager.Instance.Player.StatusEffects.Clear();
+        InventoryManager.Instance.GeneratedProvisions.Clear();
+        EventsManager.Instance.DailyEvent = CustomEventType.NONE;
+        GameManager.Instance.GameClock.Reset();
+        InventoryManager.HasChosenProvision = false;
+        FaithPoints += FaithPointsPool;
+        CharityPoints += CharityPointsPool;
+        FaithPointsPool = 0;
+        CharityPointsPool = 0;
+        FaithPointsPermanentlyLost = 0;
+        GameManager.Instance.ScrambleMapTiles();
+        GameManager.Instance.CurrentBuilding = "InteractableChurch";
+        SaveDataManager.Instance.SaveGame();
+        SaveDataManager.Instance.DaySave();
 
         ToolTipManager.Instance.ShowToolTip("");
         bool missionFailed = false;
@@ -156,7 +180,7 @@ public class MissionManager : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
         EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
-        yield return seq.RunSequenceAsync();
+        yield return seq.RunSequenceAsync(fp, fpPool, cp, cpPool, newSaint);
 
 
         if (GameSettings.Instance.DEMO_MODE_2 && CurrentMissionId == 3)
@@ -234,24 +258,6 @@ public class MissionManager : MonoBehaviour
             }
         }
 
-        CurrentMissionId++;
-        InteractableHouse.HazardCounter = 0;
-        EventsManager.Instance.ExecuteEvents();
-        GameManager.Instance.Player.ResetEnergy();
-        GameManager.Instance.Player.StatusEffects.Clear();
-        InventoryManager.Instance.GeneratedProvisions.Clear();
-        EventsManager.Instance.DailyEvent = CustomEventType.NONE;
-        GameManager.Instance.GameClock.Reset();
-        InventoryManager.HasChosenProvision = false;
-        FaithPoints += FaithPointsPool;
-        CharityPoints += CharityPointsPool;
-        FaithPointsPool = 0;
-        CharityPointsPool = 0;
-        FaithPointsPermanentlyLost = 0;
-        GameManager.Instance.ScrambleMapTiles();
-        GameManager.Instance.CurrentBuilding = "InteractableChurch";
-        SaveDataManager.Instance.SaveGame();
-        SaveDataManager.Instance.DaySave();
         MissionComplete?.Invoke(missionFailed);
     }
 
