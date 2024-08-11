@@ -18,6 +18,13 @@ public class InteractableHospital : InteractableHouse
     {
         PopUILocation = "UI/ExternalUI";
         base.Start();
+        if (GameSettings.Instance.TUTORIAL_MODE)
+        {
+            BuildingState = BuildingState.NORMAL;
+            PopUILocation = OriginalPopUILocation;
+            Destroy(ExteriorPopUI.gameObject);
+            Initialize();
+        }
     }
 
     public override void GetInteriorPopUI()
@@ -37,6 +44,10 @@ public class InteractableHospital : InteractableHouse
                 StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
                 MaxDeliveryPoints = CalculateMaxVolunteerPoints();
                 MaxVolunteerPoints = CalculateMaxVolunteerPoints();
+                if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_4))
+                {
+                    MyObjective = GameDataManager.Instance.HouseObjectivesData[HouseName][12];
+                }
             }
             else
             {

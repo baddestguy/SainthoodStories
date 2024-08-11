@@ -118,7 +118,7 @@ public class InteractableHouse : InteractableObject
                 AllObjectivesComplete = true;
             }
         }
-        else
+        else if(!GameSettings.Instance.TUTORIAL_MODE)
         {
             MyObjective = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
         }
@@ -838,22 +838,29 @@ public class InteractableHouse : InteractableObject
             case "WORLD":
                 if(GetType().Name == "InteractableChurch")
                 {
-                    foreach (var house in GameManager.Instance.Houses)
+                    if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_3)) 
                     {
-                        if (house.AllObjectivesComplete && house.HouseName.Contains("Shelter") ||
-                            (house.MyObjective != null 
-                            && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT 
-                            || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT
-                            || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)))
+                        EventsManager.Instance.ExecuteEvents();
+                    }
+                    else
+                    {
+                        foreach (var house in GameManager.Instance.Houses)
                         {
-                            UI.Instance.EnablePackageSelector(true, this);
+                            if (house.AllObjectivesComplete && house.HouseName.Contains("Shelter") ||
+                                (house.MyObjective != null 
+                                && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT 
+                                || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT
+                                || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)))
+                            {
+                                UI.Instance.EnablePackageSelector(true, this);
+                                return;
+                            }
+                        }
+                        if(!InventoryManager.HasChosenProvision)
+                        {
+                            InventoryManager.Instance.GenerateProvisionsForNewDay();
                             return;
                         }
-                    }
-                    if(!InventoryManager.HasChosenProvision)
-                    {
-                        InventoryManager.Instance.GenerateProvisionsForNewDay();
-                        return;
                     }
                 }
 

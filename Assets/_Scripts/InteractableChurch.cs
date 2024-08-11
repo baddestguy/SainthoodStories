@@ -39,18 +39,22 @@ public class InteractableChurch : InteractableHouse
 
     public override void SetObjectiveParameters()
     {
-        var missionId = MissionManager.Instance.CurrentMissionId;
-        if(missionId <= GameDataManager.MAX_MISSION_ID)
+        if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_1)) { }
+        else
         {
-            var eventId = GameDataManager.Instance.ObjectivesData[missionId].CustomEventId;
-            if (eventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(eventId) ?? false))
+            var missionId = MissionManager.Instance.CurrentMissionId;
+            if(missionId <= GameDataManager.MAX_MISSION_ID)
             {
-                EventsManager.Instance.AddEventToList(eventId);
-                EventsManager.Instance.TriggeredMissionEvents.Add(eventId);
+                var eventId = GameDataManager.Instance.ObjectivesData[missionId].CustomEventId;
+                if (eventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(eventId) ?? false))
+                {
+                    EventsManager.Instance.AddEventToList(eventId);
+                    EventsManager.Instance.TriggeredMissionEvents.Add(eventId);
+                }
             }
-        }
 
-        base.SetObjectiveParameters();
+            base.SetObjectiveParameters();
+        }
     }
 
     public override void GetInteriorPopUI()
@@ -312,7 +316,8 @@ public class InteractableChurch : InteractableHouse
 
                 PrayerProgress = 0;
 
-                if(MissionManager.Instance.CurrentMissionId == 1 && !(GameManager.Instance.SaveData.MissionEvents?.Contains(CustomEventType.MISSION_1) ?? false))
+                if(TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_2)) { }
+                else if(MissionManager.Instance.CurrentMissionId == 1 && !(GameManager.Instance.SaveData.MissionEvents?.Contains(CustomEventType.MISSION_1) ?? false))
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.MISSION_1);
                     EventsManager.Instance.TriggeredMissionEvents.Add(CustomEventType.MISSION_1);

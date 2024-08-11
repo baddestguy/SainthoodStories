@@ -10,6 +10,8 @@ public class TutorialManager : MonoBehaviour
     public List<string> TutorialStrings = new List<string>();
     public bool SkipTutorial;
 
+    public List<CustomEventType> Steps = new List<CustomEventType>();
+
     private void Awake()
     {
         Instance = this;
@@ -235,20 +237,19 @@ public class TutorialManager : MonoBehaviour
     private void FinishedTalking(bool started)
     {
         return;
-        FindObjectOfType<TutorialMapArrows>().SetActive(false);
+    }
 
-        if (!started)
+    public bool CheckTutorialStepDialog(CustomEventType step)
+    {
+        if (!GameSettings.Instance.TUTORIAL_MODE) return false;
+
+        if (!Steps.Contains(step))
         {
-            ShowTutorialPopup(Resources.FindObjectsOfTypeAll<CustomEventPopup>()[0].EventData.LocalizationKey);
-
-            if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 16)
-            {
-                GameSettings.Instance.FTUE = false;
-                GameSettings.Instance.TutorialToggle = false;
-                GameSettings.Instance.Save();
-                SwapHospitalMapTileIndex();
-            }
+            EventsManager.Instance.AddEventToList(step);
+            Steps.Add(step);
         }
+
+        return true;
     }
 
     private void SwapHospitalMapTileIndex()

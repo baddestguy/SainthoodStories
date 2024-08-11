@@ -214,8 +214,8 @@ public class GameManager : MonoBehaviour
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
             SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay:70);
-            GameSettings.Instance.IdleMode();
-
+            GameSettings.Instance.TUTORIAL_MODE = false;
+            TutorialManager.Instance.Steps.Clear();
         }
         else if (scene.IsSaintShowcase())
         {
