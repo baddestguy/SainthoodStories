@@ -122,6 +122,10 @@ public class InteractableHouse : InteractableObject
         {
             MyObjective = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
         }
+        else
+        {
+            MyObjective = null;
+        }
 
         if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT_URGENT)
         {
