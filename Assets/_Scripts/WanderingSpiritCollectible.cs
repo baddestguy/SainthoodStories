@@ -78,6 +78,11 @@ public class WanderingSpiritCollectible : GridCollectibleItem
             Instantiate(MyExplosionEvil, transform.position, transform.rotation);
             ExteriorCamera.Instance.GetComponent<CameraControls>()?.MyCamera.DOShakeRotation(1f, 1.5f);
             WeatherManager.Instance.DayNightCycle.Light.color = Color.red;
+
+            if (GameSettings.Instance.TUTORIAL_MODE)
+            {
+                GameManager.Instance.ReloadLevel();
+            }
         }
         base.Collect();
     }

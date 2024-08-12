@@ -87,6 +87,11 @@ public class MissionManager : MonoBehaviour
     public void EndDay()
     {
         GridCollectibleManager.Instance.ClearAll();
+        if (GameSettings.Instance.TUTORIAL_MODE)
+        {
+            GameManager.Instance.ReloadLevel();
+            return;
+        }
         StartCoroutine(NewDayAsync());
     }
 
@@ -258,6 +263,7 @@ public class MissionManager : MonoBehaviour
             }
         }
 
+        SaveDataManager.Instance.SaveGame();
         MissionComplete?.Invoke(missionFailed);
     }
 

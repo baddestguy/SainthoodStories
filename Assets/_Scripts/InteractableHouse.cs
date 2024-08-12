@@ -628,7 +628,8 @@ public class InteractableHouse : InteractableObject
             case ThankYouType.VOLUNTEER:
                 if(MyObjective != null)
                 {
-                    if(!EventsManager.Instance.TriggeredMissionEvents.Contains(MyObjective.ThankYouEvent))
+                    TutorialManager.Instance.Steps.Add(CustomEventType.NEW_TUTORIAL_5);
+                    if (!EventsManager.Instance.TriggeredMissionEvents.Contains(MyObjective.ThankYouEvent))
                         EventsManager.Instance.AddEventToList(MyObjective.ThankYouEvent);
                 }
                 break;

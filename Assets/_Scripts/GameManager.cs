@@ -178,9 +178,7 @@ public class GameManager : MonoBehaviour
                 EventsManager.Instance.TriggeredMissionEvents.Add(obj.DailyEvent);
             }
 
-            GridCollectibleManager.Instance.SpawnedTiles.Clear();
-            GridCollectibleManager.Instance.SacredItemSpawned = 0;
-
+            GridCollectibleManager.Instance.ClearAll();
         }
         else if (scene.IsMenu())
         {
@@ -374,7 +372,6 @@ public class GameManager : MonoBehaviour
 
     public void ReloadLevel()
     {
-
         SaveDataManager.Instance.LoadGame((data, newGame) => {
             CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, data.Energy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));

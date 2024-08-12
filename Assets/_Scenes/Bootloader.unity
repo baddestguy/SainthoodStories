@@ -1428,7 +1428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StoryToggle: 1
-  CustomEventsToggle: 0
+  CustomEventsToggle: 1
   ProvisionsToggle: 1
   FTUE: 0
   TutorialToggle: 1
@@ -1442,6 +1442,7 @@ MonoBehaviour:
   MaxXboxResolution: 2073600
   ShowFPSCounter: 0
   PlayingTrailer: 0
+  TUTORIAL_MODE: 0
   fullScreenMode: 0
   currentQualityLevel: 0
   brightnessPercent: 0
@@ -17505,6 +17506,7 @@ MonoBehaviour:
   CurrentTutorialStep: 0
   TutorialStrings: []
   SkipTutorial: 0
+  Steps: 
 --- !u!1 &1460590385
 GameObject:
   m_ObjectHideFlags: 0

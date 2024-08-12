@@ -39,11 +39,29 @@ public class InteractableChurch : InteractableHouse
 
     public override void SetObjectiveParameters()
     {
-        if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_1)) { }
+        if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_1))
+        {
+            if (TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_6))
+            {
+                if(MissionManager.Instance.FaithPointsPermanentlyLost > 0)
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_2);
+                    MissionManager.Instance.FaithPointsPermanentlyLost = 0;
+                }
+                else
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_3);
+                }
+            }
+            else if (TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_3))
+            {
+                EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_1);
+            }
+        }
         else
         {
             var missionId = MissionManager.Instance.CurrentMissionId;
-            if(missionId <= GameDataManager.MAX_MISSION_ID)
+            if (missionId <= GameDataManager.MAX_MISSION_ID)
             {
                 var eventId = GameDataManager.Instance.ObjectivesData[missionId].CustomEventId;
                 if (eventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(eventId) ?? false))
@@ -71,6 +89,10 @@ public class InteractableChurch : InteractableHouse
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
             CheckCollectibleObjectives();
             TreasuryManager.Instance.DepositMoney();
+            if(GameSettings.Instance.TUTORIAL_MODE && TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_6))
+            {
+                TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_7);
+            }
         }
         else
         {
