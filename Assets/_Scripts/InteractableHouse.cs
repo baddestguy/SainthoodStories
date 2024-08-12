@@ -1381,16 +1381,28 @@ public class InteractableHouse : InteractableObject
                 return !GameManager.Instance.Player.EnergyDepleted() && CanBuild();
 
             //case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0) || (!DuringOpenHours() && BuildingState != BuildingState.NORMAL);
-            case "PRAY": return true;
-            case "SLEEP": return MissionManager.Instance.CurrentMissionId != 1 || GameManager.Instance.GameClock.Time != 5;// MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
+            case "PRAY": return TutorialCanDoAction(actionName);
+            case "SLEEP": return !GameSettings.Instance.TUTORIAL_MODE && (MissionManager.Instance.CurrentMissionId != 1 || GameManager.Instance.GameClock.Time != 5);// MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
             case "EXIT": return true;
-            case "WORLD": return true;
+            case "WORLD": return TutorialCanDoAction(actionName);
             case "ENTER": return true;
-            case "SAINTS": return true;
+            case "SAINTS": return !GameSettings.Instance.TUTORIAL_MODE;
             case "UPGRADE": return CanAffordUpgrade();
         }
 
         return false;
+    }
+
+    public bool TutorialCanDoAction(string actionName)
+    {
+        if(!GameSettings.Instance.TUTORIAL_MODE) return true;
+
+        switch(actionName) {
+            case "PRAY":
+                return !TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_2);
+        }
+
+        return true;
     }
 
     public bool CanAffordUpgrade()
