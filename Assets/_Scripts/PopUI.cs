@@ -172,21 +172,12 @@ public class PopUI : MonoBehaviour
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
         //else
 
-        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
         CameraControls?.SetZoomTarget(6f);
 
-        if (GameSettings.Instance.FTUE)
-        {
-            if (myButton.ButtonName != "EXIT" && myButton.ButtonName != "ENTER")
-                TutorialManager.Instance.NextTutorialStep();
-            else
-                TutorialManager.Instance.EnterExitHouse(myButton.ButtonName);
-
-            BroadcastMessage("RefreshTutorialButton", SendMessageOptions.DontRequireReceiver);
-        }
-
         if (myButton.ButtonName == "EXIT" || myButton.ButtonName == "ENTER" || myButton.ButtonName == "WORLD")
+        {
             myButton.SendMessage("HideToolTip", SendMessageOptions.DontRequireReceiver);
+        }
 
         Callback?.Invoke(button);
 

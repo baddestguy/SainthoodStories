@@ -393,6 +393,7 @@ public class InteractableHouse : InteractableObject
     protected virtual void TryZoom(float zoom)
     {
         if (EventsManager.Instance.EventInProgress || CustomEventPopup.IsDisplaying) return;
+        if (GameSettings.Instance.TUTORIAL_MODE && !TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_35)) return;
         StartCoroutine("TryZoomAsync", zoom);
     }
 
@@ -833,6 +834,7 @@ public class InteractableHouse : InteractableObject
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
                 InsideHouse = false;
                 OnEnterHouse?.Invoke(InsideHouse);
+                ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
                 StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
                 break;
 
@@ -891,6 +893,9 @@ public class InteractableHouse : InteractableObject
 
         SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
         InsideHouse = false;
+        ExteriorPopUI.gameObject.SetActive(false);
+        HouseUIActive = false;
+        PopIcon.UIPopped(false);
         OnEnterHouse?.Invoke(InsideHouse);
 
         Player.ReadyToLeave = true;
@@ -898,10 +903,12 @@ public class InteractableHouse : InteractableObject
         {
             LeaveArrows.SetActive(true);
         }
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
         StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
 
         yield return null;
 
+        GameManager.Instance.GameClock.Ping();
         ToolTipManager.Instance.ShowToolTip("");
         TooltipMouseOver.IsHovering = false;
         //UI.Instance.CrossFade(1f, 15f);
@@ -912,17 +919,13 @@ public class InteractableHouse : InteractableObject
 
     public void InteriorLightsOff()
     {
-        ExteriorPopUI.gameObject.SetActive(true);
-        ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
-
         InteriorPopUI.gameObject.SetActive(false);
         InteriorCam.enabled = false;
         InteriorUICamera.enabled = false;
-        ExteriorCamera.Instance.Camera.enabled = true;
-        ExteriorCamera.Instance.UICamera.enabled = true;
-        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
         InteriorCam.GetComponent<CameraControls>().SetZoomTarget(7f);
         InteriorSpaces[UpgradeLevel].SetActive(false);
+        ExteriorCamera.Instance.Camera.enabled = true;
+        ExteriorCamera.Instance.UICamera.enabled = true;
     }
 
     public void InteriorLightsOn()
