@@ -225,7 +225,8 @@ public class InteractableOrphanage : InteractableHouse
         switch (actionName)
         {
             case "VOLUNTEER":
-                return !player.EnergyDepleted() && (AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT)));
+                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption + ModVolunteerEnergyWithProvisions());
+                return !player.CanUseEnergy(moddedEnergy) && (AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT)));
 
             case "TOYS":
                 return InventoryManager.Instance.CheckItem(ItemType.TOYS);

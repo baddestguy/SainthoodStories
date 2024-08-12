@@ -67,6 +67,7 @@ public class InteractableHospital : InteractableHouse
 
     public override float CalculateMaxVolunteerPoints(int amount = 6)
     {
+        amount = 6;
         return base.CalculateMaxVolunteerPoints(amount);
     }
 
@@ -410,7 +411,8 @@ public class InteractableHospital : InteractableHouse
                 return !player.EnergyDepleted() && MyObjective != null && MyObjective.Event == BuildingEventType.BABY;
 
             case "VOLUNTEER":
-                return !player.EnergyDepleted() && (AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT)));
+                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption + ModVolunteerEnergyWithProvisions());
+                return !player.CanUseEnergy(moddedEnergy) && (AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT)));
 
             case "MEDS":
                 return InventoryManager.Instance.CheckItem(ItemType.MEDS);

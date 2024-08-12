@@ -1375,10 +1375,12 @@ public class InteractableHouse : InteractableObject
 
     public virtual bool CanDoAction(string actionName)
     {
+        Player player = GameManager.Instance.Player;
         switch (actionName)
         {
             case "BUILD":
-                return !GameManager.Instance.Player.EnergyDepleted() && CanBuild();
+                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption);
+                return !player.CanUseEnergy(moddedEnergy) && CanBuild();
 
             //case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0) || (!DuringOpenHours() && BuildingState != BuildingState.NORMAL);
             case "PRAY": return TutorialCanDoAction(actionName);

@@ -45,6 +45,7 @@ public class InteractableSchool : InteractableHouse
 
     public override float CalculateMaxVolunteerPoints(int amount = 8)
     {
+        amount = 8;
         return base.CalculateMaxVolunteerPoints(amount);
     }
 
@@ -234,7 +235,8 @@ public class InteractableSchool : InteractableHouse
 
             case "TEACH":
                 Player player = GameManager.Instance.Player;
-                return !player.EnergyDepleted() && (AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT)));
+                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption + ModVolunteerEnergyWithProvisions());
+                return !player.CanUseEnergy(moddedEnergy) && (AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT)));
         }
 
         return base.CanDoAction(actionName);

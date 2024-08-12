@@ -179,6 +179,10 @@ public class GameManager : MonoBehaviour
             }
 
             GridCollectibleManager.Instance.ClearAll();
+            if (GameSettings.Instance.TUTORIAL_MODE)
+            {
+                Player.Energy.OnOveride(4);
+            }
         }
         else if (scene.IsMenu())
         {
