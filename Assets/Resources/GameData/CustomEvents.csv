@@ -364,12 +364,12 @@ CHURCH_MISSION_12,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,Church_12,
 CHURCH_MISSION_13,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,Church_13,
 CHURCH_MISSION_14,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,Church_14,
 CHURCH_MISSION_15,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,Church_15,
-NEW_TUTORIAL_1,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_1,StoryArt/PrayIcon:NewTutorial_15
-NEW_TUTORIAL_2,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_2,
-NEW_TUTORIAL_3,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_3,
+NEW_TUTORIAL_1,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_1,StoryArt/Tut_Time:NewTutorial_11|StoryArt/Convent:NewTutorial_12|StoryArt/Tut_InfoPanel1:NewTutorial_15
+NEW_TUTORIAL_2,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_2,StoryArt/Tut_Exit:NewTutorial_25
+NEW_TUTORIAL_3,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Tut_Grid,TRUE,NewTutorial_3,StoryArt/Tut_2:NewTutorial_31
 NEW_TUTORIAL_35,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_35,
-NEW_TUTORIAL_4,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_4,
-NEW_TUTORIAL_5,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_5,
+NEW_TUTORIAL_4,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_4,StoryArt/Tut_Energy:NewTutorial_41|StoryArt/Convent:NewTutorial_42|StoryArt/Tut_InfoPanel2:NewTutorial_43
+NEW_TUTORIAL_5,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_5,StoryArt/Tut_Faith:NewTutorial_51|StoryArt/Tut_Charity:NewTutorial_52|StoryArt/Convent:NewTutorial_53
 NEW_TUTORIAL_6,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_6,
 NEW_TUTORIAL_7,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorial_7,
 NEW_TUTORIAL_FAILED_1,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,NewTutorialFailed_1,

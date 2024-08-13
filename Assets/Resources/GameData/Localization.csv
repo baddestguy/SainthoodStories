@@ -1317,38 +1317,40 @@ NewTutorialFailed_2,Let's try again. Head back to the Convent and avoid the Shet
 NewTutorialFailed_3,"Uh oh, you ran out of time.",,,,,,
 NewTutorialFailed_3,"Remember, the day always ends at midnight. You actually don't need to return to the Convent before midnight, but for the sake of this tutorial, let's try to get there before midnight.",,,,,,
 NewTutorial_1,Welcome to the Tutorial. Let's get started.,,,,,,
-NewTutorial_1,The most important thing to keep track of is your <b>Time</b>.,,,,,,
-NewTutorial_1,"Time passes in the game when you perform certain activities, so you can take all the (real world) time you need to think about your next move.",,,,,,
-NewTutorial_1,Let's try a Prayer Activity now.,,,,,,
-NewTutorial_15,"Select the Prayer activity, take a look at its info panel to see how much time it will take, then press and hold to trigger it, and keep an eye on the clock!",,,,,,
+NewTutorial_11,The most important thing to keep track of is your <b>Time</b>.,,,,,,
+NewTutorial_11,"Time passes in the game when you perform certain activities, so you can take all the (real world) time you need to think about your next move.",,,,,,
+NewTutorial_12,Let's try a Prayer Activity now.,,,,,,
+NewTutorial_15,"Select the Prayer activity, take a look at its info panel to see how much time it will take, then press and hold to trigger it.
+
+Keep an eye on the clock before you begin.",,,,,,
 NewTutorial_2,Excellent! Pretty simple eh?,,,,,,
-NewTutorial_2,Did you also notice that time has passed on the clock?,,,,,,
+NewTutorial_2,"I hope you noted the time before you started. When you close this popup, you will notice that time has passed.",,,,,,
 NewTutorial_2,Time also passes when you move in the world.,,,,,,
 NewTutorial_2,Let's demonstrate this by going to another building.,,,,,,
-NewTutorial_2,Click the Exit button to go to the world view.,,,,,,
+NewTutorial_25,Click the Exit button to go to the world view.,,,,,,
 NewTutorial_3,"The world is made up of an 8x8 grid.
 
 Movement on each square takes exactly <b>15 minutes.</b>",,,,,,
 NewTutorial_3,"Knowing this, you can calculate how much time it will take to get to the Hospital over there!",,,,,,
-NewTutorial_3,"Click on an adjacent square to move your character if using a mouse, otherwise use the D-pad or Joystick on your controller. 
+NewTutorial_31,"Click on an adjacent square to move your character if using a mouse, otherwise use the D-pad or Joystick on your controller. 
 
 Try to get to the Hospital before 12PM.",,,,,,
-NewTutorial_35,"Oh, I forgot to mention. Do you see the white orbs spread out on the map? Those are angel spirits called ""Ehi"".",,,,,,
+NewTutorial_35,"Oh, I forgot to mention. There are angel spirits called ""Ehi"" that will pop up on the map.",,,,,,
 NewTutorial_35,"Ehi will help you with building upgrades, and they never leave you, even after you've used them on an upgrade.",,,,,,
 NewTutorial_35,"Try to collect as many as you can on your way to the Hospital, but don't get carried away! You still have to get to the Hospital before 12PM.",,,,,,
 NewTutorial_4,You made it! Well done!,,,,,,
-NewTutorial_4,The next important thing you need to keep track of is your <b>Energy.</b>,,,,,,
-NewTutorial_4,"Energy will be used to perform many activities, and you will not be able to perform them if you do not meet the Energy requirement for that activity.",,,,,,
-NewTutorial_4,Let's try a Volunteer Activity now.,,,,,,
-NewTutorial_4,"Select the Volunteer activity, take a look at its info panel to see how much time AND Energy it will take, then press and hold to trigger it, and keep an eye on the clock and your Energy!",,,,,,
+NewTutorial_41,The next important thing you need to keep track of is your <b>Energy.</b>,,,,,,
+NewTutorial_41,"Energy will be used to perform many activities, and you will not be able to perform them if you do not meet the Energy requirement for that activity.",,,,,,
+NewTutorial_42,Let's try a Volunteer Activity now.,,,,,,
+NewTutorial_43,"Select the Volunteer activity, take a look at its info panel to see how much time AND Energy it will take, then press and hold to trigger it, and keep an eye on the clock and your Energy!",,,,,,
 NewTutorial_5,Nicely done! You're getting the hang of it.,,,,,,
 NewTutorial_5,"You may have noticed in the info panels that there is a third icon. 
 
 This icon is a reward that denotes either Faith Points, or Charity Points.",,,,,,
-NewTutorial_5,"Faith Points are rewarded when you pray at any building, or complete a special prayer objective at the convent.",,,,,,
-NewTutorial_5,Charity Points are rewarded any time you complete an objective at any building.,,,,,,
-NewTutorial_5,"At the end of the game, both your total Faith Points and Charity Points are assessed, and the end game sequence wil be determined by your scores.",,,,,,
-NewTutorial_5,This means every day counts! Try to max out your Faith Points and Charity Points every day to get the best possible ending!,,,,,,
+NewTutorial_51,"Faith Points are rewarded when you pray at any building, or complete a special prayer objective at the convent.",,,,,,
+NewTutorial_52,Charity Points are rewarded any time you complete an objective at any building.,,,,,,
+NewTutorial_53,"At the end of the game, both your total Faith Points and Charity Points are assessed, and the end game sequence wil be determined by your scores.",,,,,,
+NewTutorial_53,This means every day counts! Try to max out your Faith Points and Charity Points every day to get the best possible ending!,,,,,,
 NewTutorial_6,"Let's head back to the Convent. 
 
 Any money earned in the field needs to be deposited at the Convent's Treasury.",,,,,,
