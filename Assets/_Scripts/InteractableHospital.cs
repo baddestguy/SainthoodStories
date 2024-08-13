@@ -46,7 +46,10 @@ public class InteractableHospital : InteractableHouse
                 MaxVolunteerPoints = CalculateMaxVolunteerPoints();
                 if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_4))
                 {
-                    MyObjective = GameDataManager.Instance.HouseObjectivesData[HouseName][12];
+                    if(!TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_5))
+                    {
+                        MyObjective = GameDataManager.Instance.HouseObjectivesData[HouseName][12];
+                    }
                 }
             }
             else

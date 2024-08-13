@@ -24,6 +24,7 @@ public class PopIcon : MonoBehaviour
             gameObject.SetActive(false);
             return;
         }
+        gameObject.SetActive(true);
 
         BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{sprite}");
         ItemsRequiredDisplay.text = $"{items}";

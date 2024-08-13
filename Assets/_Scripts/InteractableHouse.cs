@@ -335,10 +335,7 @@ public class InteractableHouse : InteractableObject
                 }
             }
         }
-        if (MyObjective != null || BuildingState == BuildingState.HAZARDOUS)
-        {
-            PopMyIcon();
-        }
+        PopMyIcon();
     }
 
     public void DestroyBuilding()
@@ -425,7 +422,6 @@ public class InteractableHouse : InteractableObject
             {
                 ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
                 ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
-                ExteriorPopUI.gameObject.SetActive(true);
                 HouseUIActive = true;
                 PopIcon.gameObject.SetActive(false);
 
@@ -1056,14 +1052,21 @@ public class InteractableHouse : InteractableObject
             UI.Instance.SideNotificationPop(HouseName + GetHazardIcon());
         }
 
-        PopIcon.gameObject.SetActive(true);
-        if (BuildingState == BuildingState.HAZARDOUS)
+        if (!InsideHouse && CameraLockOnMe)
+        {
+            PopIcon.Init("Icon2", 0, time);
+        }
+        else if (BuildingState == BuildingState.HAZARDOUS)
         {
             PopIcon.Init(GetHazardIcon(), items, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown / 2d));
         }
-        else
+        else if(MyObjective != null)
         {
             PopIcon.Init(name, items, time);
+        }
+        else
+        {
+            PopIcon.gameObject.SetActive(false);
         }
     }
 
@@ -1298,9 +1301,10 @@ public class InteractableHouse : InteractableObject
     {
         if (CameraLockOnMe)
         {
-            ExteriorPopUI.gameObject.SetActive(enabled);
-            if(InteriorPopUI && InteriorSpaces[UpgradeLevel].activeSelf)
-            InteriorPopUI.gameObject.SetActive(enabled);
+            if(BuildingState == BuildingState.RUBBLE)
+                ExteriorPopUI.gameObject.SetActive(enabled);
+            if (InteriorPopUI && InteriorSpaces[UpgradeLevel].activeSelf)
+                InteriorPopUI.gameObject.SetActive(enabled);
         }
 
         if(MyObjective != null) //Only reason to have popicons displaying
@@ -1525,8 +1529,6 @@ public class InteractableHouse : InteractableObject
         }
         if (BuildingState == BuildingState.RUBBLE)
         {
-            RubbleInfoPopup.gameObject.SetActive(true);
-            if (CanBuild()) RubbleInfoPopup.UpdateReadyForConstruction();
             if(GameManager.Instance.Player.WeCanMove(CurrentGroundTile))
                 ToolTipManager.Instance.ShowToolTip("Tooltip_ConstructionSite", GameDataManager.Instance.GetToolTip(TooltipStatId.MOVE, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true)));
             else
@@ -1534,16 +1536,12 @@ public class InteractableHouse : InteractableObject
         }
         else
         {
-            InfoPopup.gameObject.SetActive(true);
-
             if (GameManager.Instance.Player.WeCanMove(CurrentGroundTile))
                 ToolTipManager.Instance.ShowToolTip("Tooltip_"+GetType().Name, GameDataManager.Instance.GetToolTip(TooltipStatId.MOVE, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true)));
             else
                 ToolTipManager.Instance.ShowToolTip("Tooltip_" + GetType().Name);
         }
 
-        InfoPopup.Init(GetType().Name, OpenTime, ClosingTime, RelationshipPoints, DuringOpenHours());
-        PopIcon.gameObject.SetActive(false);
         base.Hover();
     }
 
