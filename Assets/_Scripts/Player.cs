@@ -124,7 +124,15 @@ public class Player : MonoBehaviour
     }
 
     private InteractableHouse GetCurrentBuilding()
-    {        
+    {
+        if (GameSettings.Instance.TUTORIAL_MODE)
+        {
+            if (TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_6))
+            {
+                return FindObjectOfType<InteractableHospital>();
+            }
+        }
+
         switch (GameManager.Instance.SaveData.CurrentHouse)
         {
             case "InteractableChurch":
@@ -326,9 +334,9 @@ public class Player : MonoBehaviour
 
         PopUIFXIcons();
 
-        if (GameSettings.Instance.FTUE)
+        if (GameSettings.Instance.TUTORIAL_MODE && TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_3))
         {
-            TutorialManager.Instance.RemoveTileFromGroup();
+            TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_35);
         }
 
         if (StatusEffects.Count > 0)

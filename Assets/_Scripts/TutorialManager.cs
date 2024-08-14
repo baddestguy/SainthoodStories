@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class TutorialManager : MonoBehaviour
     public List<string> TutorialStrings = new List<string>();
     public bool SkipTutorial;
 
+    public List<CustomEventType> Steps = new List<CustomEventType>();
+
     private void Awake()
     {
         Instance = this;
@@ -17,6 +20,7 @@ public class TutorialManager : MonoBehaviour
 
     void Start()
     {
+        EventsManager.EventExecuted += OnEventExecuted;
         EventsManager.EventDialogTriggered += FinishedTalking;
     }
 
@@ -234,21 +238,72 @@ public class TutorialManager : MonoBehaviour
 
     private void FinishedTalking(bool started)
     {
-        return;
-        FindObjectOfType<TutorialMapArrows>().SetActive(false);
+        if (!GameSettings.Instance.TUTORIAL_MODE) return;
 
-        if (!started)
+        if (!started && Steps.Contains(CustomEventType.NEW_TUTORIAL_5) && !Steps.Contains(CustomEventType.NEW_TUTORIAL_6))
         {
-            ShowTutorialPopup(Resources.FindObjectsOfTypeAll<CustomEventPopup>()[0].EventData.LocalizationKey);
-
-            if (GameSettings.Instance.FTUE && CurrentTutorialStep >= 16)
-            {
-                GameSettings.Instance.FTUE = false;
-                GameSettings.Instance.TutorialToggle = false;
-                GameSettings.Instance.Save();
-                SwapHospitalMapTileIndex();
-            }
+            GameManager.Instance.GameClock.OnOveride(1, 20);
+            StartCoroutine(WaitAndTriggerNextTutorial(CustomEventType.NEW_TUTORIAL_6));
         }
+    }
+
+    private void OnEventExecuted(CustomEventData eventData)
+    {
+        StartCoroutine(OnEventExecutedAsync(eventData));
+    }
+
+    IEnumerator OnEventExecutedAsync(CustomEventData eventData)
+    {
+        while(EventsManager.Instance.EventInProgress)
+        {
+            yield return null;
+        }
+        
+        yield return new WaitForSeconds(0.5f);
+
+        if (eventData.Id == CustomEventType.NEW_TUTORIAL_FAILED_1)
+        {
+            GameManager.Instance.GameClock.OnOveride(1, 6);
+        }
+        else if (eventData.Id == CustomEventType.NEW_TUTORIAL_FAILED_2 || eventData.Id == CustomEventType.NEW_TUTORIAL_FAILED_3)
+        {
+            GameManager.Instance.GameClock.OnOveride(1, 20);
+            GridCollectibleManager.Instance.TutorialEvilSpawns();
+        }
+        else if(eventData.Id == CustomEventType.NEW_TUTORIAL_6)
+        {
+            GridCollectibleManager.Instance.TutorialEvilSpawns();
+        }
+        else if (eventData.Id == CustomEventType.NEW_TUTORIAL_7)
+        {
+            UI.Instance.EnableAllUIElements(false);
+            SoundManager.Instance.EndAllTracks();
+            GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+        }
+    }
+
+    IEnumerator WaitAndTriggerNextTutorial(CustomEventType step)
+    {
+        yield return null;
+        UI.Instance.EnableAllUIElements(false);
+
+        yield return new WaitForSeconds(3f);
+        EventsManager.Instance.AddEventToList(step);
+        Steps.Add(step);
+        EventsManager.Instance.ExecuteEvents();
+    }
+
+    public bool CheckTutorialStepDialog(CustomEventType step)
+    {
+        if (!GameSettings.Instance.TUTORIAL_MODE) return false;
+
+        if (!Steps.Contains(step))
+        {
+            EventsManager.Instance.AddEventToList(step);
+            Steps.Add(step);
+        }
+
+        return true;
     }
 
     private void SwapHospitalMapTileIndex()
@@ -303,5 +358,11 @@ public class TutorialManager : MonoBehaviour
     public void ClearData()
     {
         TutorialStrings.Clear();
+    }
+
+    public void OnDisable()
+    {
+        EventsManager.EventExecuted -= OnEventExecuted;
+        EventsManager.EventDialogTriggered -= FinishedTalking;
     }
 }

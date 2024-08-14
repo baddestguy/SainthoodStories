@@ -89,9 +89,16 @@ public class GridCollectibleManager : MonoBehaviour
         Spawning = false;
     }
 
+    public void TutorialEvilSpawns()
+    {
+        ClearAll();
+        Behaviours.Add(SacredItemBehaviour.HOVER);
+        GenerateCollectibles(5);
+    }
+
     public void OnTick(double time, int day)
     {
-        if (!GameClock.DeltaTime) return;
+        if (!GameClock.DeltaTime || GameSettings.Instance.TUTORIAL_MODE) return;
 
         if(time == 19)
         {
@@ -363,7 +370,13 @@ public class GridCollectibleManager : MonoBehaviour
     {
         Behaviours.Clear();
         SpawnedTiles.Clear();
-        BroadcastMessage("DeleteCollectible", SendMessageOptions.DontRequireReceiver);
+        SacredItemSpawned = 0;
+
+        var childScripts = GetComponentsInChildren<GridCollectibleItem>();
+        foreach (var script in childScripts)
+        {
+            script.DeleteCollectible();
+        }
     }
 
 

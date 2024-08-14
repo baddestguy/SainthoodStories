@@ -70,7 +70,7 @@ public class SaveDataManager : MonoBehaviour
 
     public void SaveGame()
     {
-        if (GameSettings.Instance.FTUE) return;
+        if (GameSettings.Instance.TUTORIAL_MODE) return;
 
         if (!FileExixst(FILENAME))
         {

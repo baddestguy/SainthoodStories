@@ -178,9 +178,11 @@ public class GameManager : MonoBehaviour
                 EventsManager.Instance.TriggeredMissionEvents.Add(obj.DailyEvent);
             }
 
-            GridCollectibleManager.Instance.SpawnedTiles.Clear();
-            GridCollectibleManager.Instance.SacredItemSpawned = 0;
-
+            GridCollectibleManager.Instance.ClearAll();
+            if (GameSettings.Instance.TUTORIAL_MODE)
+            {
+                Player.Energy.OnOveride(4);
+            }
         }
         else if (scene.IsMenu())
         {
@@ -214,8 +216,8 @@ public class GameManager : MonoBehaviour
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
             SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay:70);
-            GameSettings.Instance.IdleMode();
-
+            GameSettings.Instance.TUTORIAL_MODE = false;
+            TutorialManager.Instance.Steps.Clear();
         }
         else if (scene.IsSaintShowcase())
         {
@@ -374,7 +376,6 @@ public class GameManager : MonoBehaviour
 
     public void ReloadLevel()
     {
-
         SaveDataManager.Instance.LoadGame((data, newGame) => {
             CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, data.Energy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));

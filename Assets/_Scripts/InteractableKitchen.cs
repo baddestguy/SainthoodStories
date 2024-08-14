@@ -106,7 +106,7 @@ public class InteractableKitchen : InteractableHouse
             TreasuryManager.Instance.DonateMoney(2);
             CookFX.Play();
 
-            var moddedEnergy = EnergyConsumption - (utensils?.Value ?? 0);
+            var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption - (utensils?.Value ?? 0));
             var ticks = TicksPerUpgradeLevel();
 
             player.ConsumeEnergy(moddedEnergy);
@@ -203,7 +203,9 @@ public class InteractableKitchen : InteractableHouse
         switch (actionName)
         {
             case "COOK":
-                return !player.EnergyDepleted() && DuringOpenHours() && InventoryManager.Instance.CheckItem(ItemType.GROCERIES);
+                var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
+                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption - (utensils?.Value ?? 0));
+                return !player.CanUseEnergy(moddedEnergy) && InventoryManager.Instance.CheckItem(ItemType.GROCERIES);
         }
 
         return base.CanDoAction(actionName);

@@ -118,9 +118,13 @@ public class InteractableHouse : InteractableObject
                 AllObjectivesComplete = true;
             }
         }
-        else
+        else if(!GameSettings.Instance.TUTORIAL_MODE)
         {
             MyObjective = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
+        }
+        else
+        {
+            MyObjective = null;
         }
 
         if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT_URGENT)
@@ -331,10 +335,7 @@ public class InteractableHouse : InteractableObject
                 }
             }
         }
-        if (MyObjective != null || BuildingState == BuildingState.HAZARDOUS)
-        {
-            PopMyIcon();
-        }
+        PopMyIcon();
     }
 
     public void DestroyBuilding()
@@ -393,6 +394,7 @@ public class InteractableHouse : InteractableObject
     protected virtual void TryZoom(float zoom)
     {
         if (EventsManager.Instance.EventInProgress || CustomEventPopup.IsDisplaying) return;
+        if (GameSettings.Instance.TUTORIAL_MODE && !TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_35)) return;
         StartCoroutine("TryZoomAsync", zoom);
     }
 
@@ -420,7 +422,6 @@ public class InteractableHouse : InteractableObject
             {
                 ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
                 ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
-                ExteriorPopUI.gameObject.SetActive(true);
                 HouseUIActive = true;
                 PopIcon.gameObject.SetActive(false);
 
@@ -628,7 +629,8 @@ public class InteractableHouse : InteractableObject
             case ThankYouType.VOLUNTEER:
                 if(MyObjective != null)
                 {
-                    if(!EventsManager.Instance.TriggeredMissionEvents.Contains(MyObjective.ThankYouEvent))
+                    TutorialManager.Instance.Steps.Add(CustomEventType.NEW_TUTORIAL_5);
+                    if (!EventsManager.Instance.TriggeredMissionEvents.Contains(MyObjective.ThankYouEvent))
                         EventsManager.Instance.AddEventToList(MyObjective.ThankYouEvent);
                 }
                 break;
@@ -832,28 +834,36 @@ public class InteractableHouse : InteractableObject
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
                 InsideHouse = false;
                 OnEnterHouse?.Invoke(InsideHouse);
+                ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
                 StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
                 break;
 
             case "WORLD":
                 if(GetType().Name == "InteractableChurch")
                 {
-                    foreach (var house in GameManager.Instance.Houses)
+                    if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_3)) 
                     {
-                        if (house.AllObjectivesComplete && house.HouseName.Contains("Shelter") ||
-                            (house.MyObjective != null 
-                            && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT 
-                            || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT
-                            || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)))
+                        EventsManager.Instance.ExecuteEvents();
+                    }
+                    else
+                    {
+                        foreach (var house in GameManager.Instance.Houses)
                         {
-                            UI.Instance.EnablePackageSelector(true, this);
+                            if (house.AllObjectivesComplete && house.HouseName.Contains("Shelter") ||
+                                (house.MyObjective != null 
+                                && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT 
+                                || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT
+                                || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)))
+                            {
+                                UI.Instance.EnablePackageSelector(true, this);
+                                return;
+                            }
+                        }
+                        if(!InventoryManager.HasChosenProvision)
+                        {
+                            InventoryManager.Instance.GenerateProvisionsForNewDay();
                             return;
                         }
-                    }
-                    if(!InventoryManager.HasChosenProvision)
-                    {
-                        InventoryManager.Instance.GenerateProvisionsForNewDay();
-                        return;
                     }
                 }
 
@@ -883,6 +893,9 @@ public class InteractableHouse : InteractableObject
 
         SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
         InsideHouse = false;
+        ExteriorPopUI.gameObject.SetActive(false);
+        HouseUIActive = false;
+        PopIcon.UIPopped(false);
         OnEnterHouse?.Invoke(InsideHouse);
 
         Player.ReadyToLeave = true;
@@ -890,10 +903,12 @@ public class InteractableHouse : InteractableObject
         {
             LeaveArrows.SetActive(true);
         }
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(Vector3.zero);
         StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
 
         yield return null;
 
+        GameManager.Instance.GameClock.Ping();
         ToolTipManager.Instance.ShowToolTip("");
         TooltipMouseOver.IsHovering = false;
         //UI.Instance.CrossFade(1f, 15f);
@@ -904,17 +919,13 @@ public class InteractableHouse : InteractableObject
 
     public void InteriorLightsOff()
     {
-        ExteriorPopUI.gameObject.SetActive(true);
-        ExteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam.GetComponent<CameraControls>());
-
         InteriorPopUI.gameObject.SetActive(false);
         InteriorCam.enabled = false;
         InteriorUICamera.enabled = false;
-        ExteriorCamera.Instance.Camera.enabled = true;
-        ExteriorCamera.Instance.UICamera.enabled = true;
-        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
         InteriorCam.GetComponent<CameraControls>().SetZoomTarget(7f);
         InteriorSpaces[UpgradeLevel].SetActive(false);
+        ExteriorCamera.Instance.Camera.enabled = true;
+        ExteriorCamera.Instance.UICamera.enabled = true;
     }
 
     public void InteriorLightsOn()
@@ -1041,14 +1052,21 @@ public class InteractableHouse : InteractableObject
             UI.Instance.SideNotificationPop(HouseName + GetHazardIcon());
         }
 
-        PopIcon.gameObject.SetActive(true);
-        if (BuildingState == BuildingState.HAZARDOUS)
+        if (!InsideHouse && CameraLockOnMe)
+        {
+            PopIcon.Init("Icon2", 0, time);
+        }
+        else if (BuildingState == BuildingState.HAZARDOUS)
         {
             PopIcon.Init(GetHazardIcon(), items, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown / 2d));
         }
-        else
+        else if(MyObjective != null)
         {
             PopIcon.Init(name, items, time);
+        }
+        else
+        {
+            PopIcon.gameObject.SetActive(false);
         }
     }
 
@@ -1283,9 +1301,10 @@ public class InteractableHouse : InteractableObject
     {
         if (CameraLockOnMe)
         {
-            ExteriorPopUI.gameObject.SetActive(enabled);
-            if(InteriorPopUI && InteriorSpaces[UpgradeLevel].activeSelf)
-            InteriorPopUI.gameObject.SetActive(enabled);
+            if(BuildingState == BuildingState.RUBBLE)
+                ExteriorPopUI.gameObject.SetActive(enabled);
+            if (InteriorPopUI && InteriorSpaces[UpgradeLevel].activeSelf)
+                InteriorPopUI.gameObject.SetActive(enabled);
         }
 
         if(MyObjective != null) //Only reason to have popicons displaying
@@ -1364,22 +1383,36 @@ public class InteractableHouse : InteractableObject
 
     public virtual bool CanDoAction(string actionName)
     {
+        Player player = GameManager.Instance.Player;
         switch (actionName)
         {
             case "BUILD":
-                return !GameManager.Instance.Player.EnergyDepleted() && CanBuild();
+                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption);
+                return !player.CanUseEnergy(moddedEnergy) && CanBuild();
 
             //case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0) || (!DuringOpenHours() && BuildingState != BuildingState.NORMAL);
-            case "PRAY": return true;
-            case "SLEEP": return MissionManager.Instance.CurrentMissionId != 1 || GameManager.Instance.GameClock.Time != 5;// MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
+            case "PRAY": return TutorialCanDoAction(actionName);
+            case "SLEEP": return !GameSettings.Instance.TUTORIAL_MODE && (MissionManager.Instance.CurrentMissionId != 1 || GameManager.Instance.GameClock.Time != 5);// MissionManager.Instance.CurrentObjectives.Any(obj => obj.Event == BuildingEventType.RETURN);
             case "EXIT": return true;
-            case "WORLD": return true;
+            case "WORLD": return TutorialCanDoAction(actionName);
             case "ENTER": return true;
-            case "SAINTS": return true;
+            case "SAINTS": return !GameSettings.Instance.TUTORIAL_MODE;
             case "UPGRADE": return CanAffordUpgrade();
         }
 
         return false;
+    }
+
+    public bool TutorialCanDoAction(string actionName)
+    {
+        if(!GameSettings.Instance.TUTORIAL_MODE) return true;
+
+        switch(actionName) {
+            case "PRAY":
+                return !TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_2);
+        }
+
+        return true;
     }
 
     public bool CanAffordUpgrade()
@@ -1496,8 +1529,6 @@ public class InteractableHouse : InteractableObject
         }
         if (BuildingState == BuildingState.RUBBLE)
         {
-            RubbleInfoPopup.gameObject.SetActive(true);
-            if (CanBuild()) RubbleInfoPopup.UpdateReadyForConstruction();
             if(GameManager.Instance.Player.WeCanMove(CurrentGroundTile))
                 ToolTipManager.Instance.ShowToolTip("Tooltip_ConstructionSite", GameDataManager.Instance.GetToolTip(TooltipStatId.MOVE, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true)));
             else
@@ -1505,16 +1536,12 @@ public class InteractableHouse : InteractableObject
         }
         else
         {
-            InfoPopup.gameObject.SetActive(true);
-
             if (GameManager.Instance.Player.WeCanMove(CurrentGroundTile))
                 ToolTipManager.Instance.ShowToolTip("Tooltip_"+GetType().Name, GameDataManager.Instance.GetToolTip(TooltipStatId.MOVE, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(CurrentGroundTile, true)));
             else
                 ToolTipManager.Instance.ShowToolTip("Tooltip_" + GetType().Name);
         }
 
-        InfoPopup.Init(GetType().Name, OpenTime, ClosingTime, RelationshipPoints, DuringOpenHours());
-        PopIcon.gameObject.SetActive(false);
         base.Hover();
     }
 

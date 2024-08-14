@@ -18,6 +18,13 @@ public class InteractableHospital : InteractableHouse
     {
         PopUILocation = "UI/ExternalUI";
         base.Start();
+        if (GameSettings.Instance.TUTORIAL_MODE)
+        {
+            BuildingState = BuildingState.NORMAL;
+            PopUILocation = OriginalPopUILocation;
+            Destroy(ExteriorPopUI.gameObject);
+            Initialize();
+        }
     }
 
     public override void GetInteriorPopUI()
@@ -37,6 +44,13 @@ public class InteractableHospital : InteractableHouse
                 StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOn));
                 MaxDeliveryPoints = CalculateMaxVolunteerPoints();
                 MaxVolunteerPoints = CalculateMaxVolunteerPoints();
+                if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_4))
+                {
+                    if(!TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_5))
+                    {
+                        MyObjective = GameDataManager.Instance.HouseObjectivesData[HouseName][12];
+                    }
+                }
             }
             else
             {
@@ -56,6 +70,7 @@ public class InteractableHospital : InteractableHouse
 
     public override float CalculateMaxVolunteerPoints(int amount = 6)
     {
+        amount = 6;
         return base.CalculateMaxVolunteerPoints(amount);
     }
 
@@ -399,10 +414,21 @@ public class InteractableHospital : InteractableHouse
                 return !player.EnergyDepleted() && MyObjective != null && MyObjective.Event == BuildingEventType.BABY;
 
             case "VOLUNTEER":
-                return !player.EnergyDepleted() && AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT));
+                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption + ModVolunteerEnergyWithProvisions());
+                return !player.CanUseEnergy(moddedEnergy) && (AllObjectivesComplete || (MyObjective != null && (MyObjective.Event == BuildingEventType.VOLUNTEER || MyObjective.Event == BuildingEventType.VOLUNTEER_URGENT)));
 
             case "MEDS":
                 return InventoryManager.Instance.CheckItem(ItemType.MEDS);
+
+            case "WORLD":
+                if (GameSettings.Instance.TUTORIAL_MODE)
+                {
+                    if (!TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_5))
+                    {
+                        return false;
+                    }
+                }
+                break;
         }
 
         return base.CanDoAction(actionName);

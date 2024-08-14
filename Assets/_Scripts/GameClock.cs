@@ -87,6 +87,7 @@ public class GameClock
         {
             EndDay?.Invoke();
         }
+        CheckTutorial();
         ExecuteEvents?.Invoke();
         SaveDataManager.Instance.SaveGame();
         DeltaTime = false;
@@ -98,6 +99,19 @@ public class GameClock
     {
         Ticked?.Invoke(Time, Day);
         ExecuteEvents?.Invoke();
+    }
+
+    public void CheckTutorial()
+    {
+        if (!GameSettings.Instance.TUTORIAL_MODE) return;
+
+        if (!TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_4))
+        {
+            if (Time > 12)
+            {
+                GameManager.Instance.ReloadLevel();
+            }
+        }
     }
 
     public void EndTheWeek()
