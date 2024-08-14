@@ -70,7 +70,8 @@ public class InteractableHospital : InteractableHouse
 
     public override float CalculateMaxVolunteerPoints(int amount = 6)
     {
-        amount = 6;
+        var hospitalMaterials = InventoryManager.Instance.GetProvision(Provision.HOSPITAL_RELATIONSHIP_BUILDER);
+        amount = 6 + (hospitalMaterials?.Ticks ?? 0);
         return base.CalculateMaxVolunteerPoints(amount);
     }
 
@@ -91,7 +92,7 @@ public class InteractableHospital : InteractableHouse
         if (BuildingActivityState != BuildingActivityState.DELIVERING_BABY) return 0;
 
         var hospitalMaterials = InventoryManager.Instance.GetProvision(Provision.HOSPITAL_RELATIONSHIP_BUILDER);
-        return hospitalMaterials?.Value ?? 0;
+        return hospitalMaterials?.Energy ?? 0;
     }
 
     public override void Tick(double time, int day)
@@ -165,8 +166,7 @@ public class InteractableHospital : InteractableHouse
         if(thanks == ThankYouType.BABY || thanks == ThankYouType.VOLUNTEER)
         {
             var hospitalMaterials = InventoryManager.Instance.GetProvision(Provision.HOSPITAL_RELATIONSHIP_BUILDER);
-            amount += 1 + (hospitalMaterials?.Value ?? 0);
-            TreasuryManager.Instance.DonateMoney(hospitalMaterials?.Value ?? 0);
+            TreasuryManager.Instance.DonateMoney(hospitalMaterials?.Coin ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }

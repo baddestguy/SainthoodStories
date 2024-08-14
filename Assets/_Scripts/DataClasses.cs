@@ -196,7 +196,6 @@ public enum Provision
 {
     UMBRELLA,
     WINTER_CLOAK,
-    SHADES,
     ENERGY_DRINK,
     ROSARY,
     COOKING_UTENSILS,
@@ -209,7 +208,6 @@ public enum Provision
     HOSPITAL_RELATIONSHIP_BUILDER,
     SCHOOL_RELATIONSHIP_BUILDER,
     ORPHANAGE_RELATIONSHIP_BUILDER,
-    KITCHEN_RELATIONSHIP_BUILDER,
     SHELTER_RELATIONSHIP_BUILDER
     ,SOFT_MATTRESS
     ,REDUCE_SLEEP_TIME
@@ -219,6 +217,8 @@ public enum Provision
     ,SECURITY_GUARDS
     ,STURDY_BUILDING_MATERIALS
     ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
+    ,SHADES
+    ,KITCHEN_RELATIONSHIP_BUILDER
     ,EXTRA_INVENTORY 
     ,AUTO_DELIVER
 }
@@ -463,6 +463,13 @@ public class ProvisionData
     public Provision Id;
     public int Level;
     public int Value;
+    public int Time;
+    public int Ticks;
+    public int Energy;
+    public int FP;
+    public int CP;
+    public int Coin;
+    public int Spirits;
     public string NameKey;
     public string DescriptionKey;
     public string Tooltips;

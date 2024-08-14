@@ -128,14 +128,15 @@ public class GameClock
         var ac = InventoryManager.Instance.GetProvision(Provision.REDUCE_SLEEP_TIME);
         if (ac != null)
         {
-            Time += ac.Value;
+            Time += ac.Time;
+            GameManager.Instance.Player.ConsumeEnergy(ac.Energy);
         }
 
         var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
         if (mattress != null)
         {
-            Time += mattress.Value;
-            GameManager.Instance.Player.ConsumeEnergy(-mattress.Value);
+            Time += mattress.Time;
+            GameManager.Instance.Player.ConsumeEnergy(-mattress.Energy);
         }
     }
 

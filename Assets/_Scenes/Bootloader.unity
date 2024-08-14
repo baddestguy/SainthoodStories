@@ -1443,6 +1443,7 @@ MonoBehaviour:
   ShowFPSCounter: 0
   PlayingTrailer: 0
   TUTORIAL_MODE: 0
+  DEMO_MODE_3: 1
   fullScreenMode: 0
   currentQualityLevel: 0
   brightnessPercent: 0

@@ -32,8 +32,8 @@ public class EndWeekSequence : MonoBehaviour
     {
         int cashAmount = Mathf.Clamp(cpPool, 0, 100000000);
         var donation = InventoryManager.Instance.GetProvision(Provision.ALLOWANCE);
-        cashAmount += donation?.Value ?? 0;
-        TreasuryManager.Instance.DonateMoney(cashAmount);
+        cashAmount += donation?.Coin ?? 0;
+        TreasuryManager.Instance.DonateMoney(cashAmount);   //Will not get this if player closes before RunSequence
         SaintProgressBar.currentPercent = fp * 100f / fpTarget;
         SaintProgressBar.endPercent = (fpPool + fp) * 100f / fpTarget;
 

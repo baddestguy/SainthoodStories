@@ -208,7 +208,7 @@ public class UI : MonoBehaviour
 
         int oldEnergy = int.Parse(EnergyDisplay.text);
         EnergyDisplay.DOCounter(oldEnergy, energy.Amount, 0.5f).SetDelay(2f);
-        var bonusEnergy = InventoryManager.Instance.GetProvision(Provision.ENERGY_DRINK)?.Value ?? 0;
+        var bonusEnergy = InventoryManager.Instance.GetProvision(Provision.ENERGY_DRINK)?.Energy ?? 0;
         EnFillBar.DOFillAmount(energy.Amount / (3f + bonusEnergy), 1f).SetDelay(2f);
 
         if (energy.Amount < 1)

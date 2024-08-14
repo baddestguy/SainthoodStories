@@ -40,9 +40,9 @@ public class Player : MonoBehaviour
     public ParticleSystem SnowSplash;
     public GameObject CharacterGO;
 
-    private int SickCountdown = 3;
-    private int MigraineCountdown = 6;
-    private int FastingCoutndown = 6;
+    private int SickCountdown = 6;
+    private int MigraineCountdown = 12;
+    private int FastingCoutndown = 12;
 
     public GameObject Grid;
 
@@ -605,14 +605,16 @@ public class Player : MonoBehaviour
         if (!GameClock.DeltaTime) return;
 
         var fasting = InventoryManager.Instance.GetProvision(Provision.FASTING);
-        if (fasting == null) return;
-
-        FastingCoutndown--;
-        if(FastingCoutndown == 0)
+        if (fasting != null)
         {
-            ConsumeEnergy(fasting.Value);
-            GameManager.Instance.MissionManager.UpdateFaithPoints(fasting.Value);
-            FastingCoutndown = 6;
+            FastingCoutndown--;
+            if(FastingCoutndown == 0)
+            {
+                ConsumeEnergy(fasting.Energy);
+                GameManager.Instance.MissionManager.UpdateFaithPoints(fasting.FP);
+                FastingCoutndown = 12;
+                SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
+            }
         }
 
         if (StatusEffects.Any())

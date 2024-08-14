@@ -115,7 +115,7 @@ public class InteractableChurch : InteractableHouse
     public void CheckProvisions()
     {
         var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-        MaxPrayerProgress = rosary != null ? 6f : 4f;
+        MaxPrayerProgress = 4 + (rosary?.Ticks ?? 0);
     }
 
     public override void Tick(double time, int day)
@@ -327,13 +327,15 @@ public class InteractableChurch : InteractableHouse
             if (PrayerProgress == MaxPrayerProgress)
             {
                 var provData = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-                extraPoints += provData?.Value ?? 0;
                 var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+                var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
+                var bonusFPChance = incense?.Value / 100d ?? 0;
 
+                extraPoints += provData?.FP ?? 0 + (Random.Range(0, 100) < bonusFPChance ? incense?.FP ?? 0 : 0);
                 if (koboko != null)
                 {
-                    extraPoints += koboko?.Value ?? 0;
-                    player.ConsumeEnergy(koboko.Value);
+                    extraPoints += koboko?.FP ?? 0;
+                    player.ConsumeEnergy(koboko.Energy);
                 }
 
                 PrayerProgress = 0;
@@ -450,16 +452,19 @@ public class InteractableChurch : InteractableHouse
                 GameClock clock = GameManager.Instance.GameClock;
                 CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
 
+                var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
+                var bonusFPChance = incense?.Value / 100d ?? 0;
+
                 var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
                 var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
-                var bonusFp = (koboko?.Value ?? 0) + (rosary?.Value ?? 0);
+                var bonusFp = (koboko?.FP ?? 0) + (rosary?.FP ?? 0) + (Random.Range(0, 100) < bonusFPChance ? incense?.FP ?? 0 : 0);
                 var maxPP = 0;
                 if (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT)
                 {
                     maxPP = 12;
                 }
 
-                return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, ticksOverride:maxPP, ticksModifier: rosary != null ? 2 : 0, energyModifier: -koboko?.Value ?? 0, fpModifier: FPBonus + bonusFp, fpOverride:MyObjective?.Reward ?? 0);
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, ticksOverride:maxPP, ticksModifier: rosary != null ? rosary.Ticks : 0, energyModifier: -(koboko?.Energy ?? 0), fpModifier: FPBonus + bonusFp, fpOverride:MyObjective?.Reward ?? 0);
 
             case "SLEEP":
                 if (MaxSleepProgress - SleepProgress == 1)
