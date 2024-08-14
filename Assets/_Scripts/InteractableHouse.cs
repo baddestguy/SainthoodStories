@@ -207,12 +207,6 @@ public class InteractableHouse : InteractableObject
     {
         if (MyObjective == null) return;
 
-        if (MyObjective.CustomEventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(MyObjective.CustomEventId) ?? false))
-        {
-            EventsManager.Instance.AddEventToList(MyObjective.CustomEventId);
-            EventsManager.Instance.TriggeredMissionEvents.Add(MyObjective.CustomEventId);
-        }
-
         if(MyObjective.Event == BuildingEventType.DELIVER_ITEM || MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT
             || MyObjective.Event == BuildingEventType.COOK || MyObjective.Event == BuildingEventType.COOK_URGENT
             || MyObjective.Event == BuildingEventType.DELIVER_MEAL || MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)
@@ -226,7 +220,6 @@ public class InteractableHouse : InteractableObject
             var clock = GameManager.Instance.GameClock;
             TriggerHazardousMode(clock.Time, clock.Day);
         }
-
     }
 
     public virtual void GetInteriorPopUI()
@@ -593,6 +586,7 @@ public class InteractableHouse : InteractableObject
             if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM || MyObjective?.Event == BuildingEventType.DELIVER_ITEM_URGENT
                 || MyObjective?.Event == BuildingEventType.DELIVER_MEAL || MyObjective?.Event == BuildingEventType.DELIVER_MEAL_URGENT)
             {
+                BuildRelationship(ThankYouType.ITEM);
                 CurrentMissionId++;
                 UpdateCharityPoints(MyObjective.Reward, 0);
                 var obj = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
@@ -610,7 +604,6 @@ public class InteractableHouse : InteractableObject
                 UpdateCharityPoints(1, 0);
             }
 
-            BuildRelationship(ThankYouType.ITEM);
 
             if (!autoDeliver)
             {

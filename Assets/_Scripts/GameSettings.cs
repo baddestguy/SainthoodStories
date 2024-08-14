@@ -32,6 +32,7 @@ public class GameSettings : MonoBehaviour
     public bool ShowFPSCounter;
     public bool PlayingTrailer;
     public bool TUTORIAL_MODE;
+    public bool DEMO_MODE_3;
 
     [HideInInspector]
     public bool IsUsingController

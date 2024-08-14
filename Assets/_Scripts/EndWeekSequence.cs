@@ -28,7 +28,7 @@ public class EndWeekSequence : MonoBehaviour
     public ProgressBar SaintProgressBar;
     private bool Continue = false;
 
-    public IEnumerator RunSequenceAsync(int fp, int fpPool, int cp, int cpPool, IEnumerable<SaintData> saintsUnlocked)
+    public IEnumerator RunSequenceAsync(int fp, int fpPool, int cp, int cpPool, IEnumerable<SaintData> saintsUnlocked, int missionId)
     {
         int cashAmount = Mathf.Clamp(cpPool, 0, 100000000);
         var donation = InventoryManager.Instance.GetProvision(Provision.ALLOWANCE);
@@ -124,8 +124,8 @@ public class EndWeekSequence : MonoBehaviour
         SaintProgressBar.gameObject.SetActive(false);
 
         DaysLeftObj.SetActive(true);
-        OldDaysleft.text = $"{GameDataManager.MAX_MISSION_ID - MissionManager.Instance.CurrentMissionId+1}";
-        NewDaysleft.text = $"{GameDataManager.MAX_MISSION_ID - MissionManager.Instance.CurrentMissionId}";
+        OldDaysleft.text = $"{GameDataManager.MAX_MISSION_ID - missionId + 1}";
+        NewDaysleft.text = $"{GameDataManager.MAX_MISSION_ID - missionId}";
 
         yield return new WaitForSeconds(1f);
 

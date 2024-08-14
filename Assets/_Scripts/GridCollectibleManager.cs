@@ -110,7 +110,7 @@ public class GridCollectibleManager : MonoBehaviour
         {
             StartCoroutine(SpawnSacredItemAsync());
 
-            switch (day)
+            switch (MissionManager.Instance.CurrentMissionId)
             {
                 case 2:
                     Behaviours.Clear();
