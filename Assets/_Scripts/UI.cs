@@ -265,10 +265,8 @@ public class UI : MonoBehaviour
         TimeDisplay.text = GameManager.Instance.GameClock.TimeDisplay();
         DayDisplay.text = DayofTheWeek(day);
 
-        //if (GameClock.DeltaTime)
-        //{
-        //    StatusEffectDisplay.gameObject.SetActive(false);
-        //}
+        //Tutorial Checks
+        TutorialHideUI();
     }
 
     public void EnableProvisionPopup(ProvisionData prov1, ProvisionData prov2)
@@ -407,6 +405,43 @@ public class UI : MonoBehaviour
         if(DayNightIcon != null)
         {
             DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{dayNight}");
+        }
+    }
+
+    public void HideUIItemsExcept(List<string> items)
+    {
+        LeftItems.SetActive(false);
+        foreach (Transform g in LeftItems.transform)
+        {
+            g.gameObject.SetActive(false);
+        }
+        RightItems.SetActive(false);
+        foreach (Transform g in RightItems.transform)
+        {
+            g.gameObject.SetActive(false);
+        }
+        CenterItems.SetActive(false);
+
+        foreach (var item in items)
+        {
+            foreach (Transform t in RightItems.transform)
+            {
+                if (t.name == item)
+                {
+                    RightItems.SetActive(true);
+                    if(item != "TreasuryBalance" && item != "Spirits")
+                        RightItems.transform.Find("Image").gameObject.SetActive(true);
+                    t.gameObject.SetActive(true);
+                }
+            }
+            foreach (Transform t in LeftItems.transform)
+            {
+                if (t.name == item)
+                {
+                    LeftItems.SetActive(true);
+                    t.gameObject.SetActive(true);
+                }
+            }
         }
     }
 
@@ -1027,6 +1062,33 @@ public class UI : MonoBehaviour
         CPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         FPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         FullUIVisible = enable;
+
+        TutorialHideUI();
+    }
+
+    private void TutorialHideUI()
+    {
+        if (!GameSettings.Instance.TUTORIAL_MODE) return;
+        if (!TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_35))
+        {
+            HideUIItemsExcept(new List<string>() { "Time" });
+        }
+        else if (!TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_4))
+        {
+            HideUIItemsExcept(new List<string>() { "Time", "Spirits" });
+        }
+        else if (!TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_5))
+        {
+            HideUIItemsExcept(new List<string>() { "Time", "Spirits", "Energy" });
+        }
+        else if (!TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_6))
+        {
+            HideUIItemsExcept(new List<string>() { "Time", "Spirits", "Energy", "FP", "CP" });
+        }
+        else
+        {
+            HideUIItemsExcept(new List<string>() { "Time", "Spirits", "Energy", "FP", "CP", "TreasuryBalance" });
+        }
     }
 
     public void StartMinigame(MinigameType minigame, Action<string> callback)
