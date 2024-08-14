@@ -308,8 +308,6 @@ public class GameManager : MonoBehaviour
 
     public void SetMissionParameters(MissionDifficulty missionDifficulty, bool newGame = false, bool showUI = true)
     {
-        GameSettings.Instance.StopIdleMode();
-
         switch (missionDifficulty)
         {
             case MissionDifficulty.HARD:
