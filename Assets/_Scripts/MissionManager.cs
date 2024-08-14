@@ -140,6 +140,7 @@ public class MissionManager : MonoBehaviour
     {
         int fp = FaithPoints;
         int fpPool = FaithPointsPool;
+        int fpTarget = GameDataManager.Instance.GetNextSaintUnlockThreshold();
         int cp = CharityPoints;
         int cpPool = CharityPointsPool;
         var newSaint = UnlockSaints();
@@ -186,7 +187,7 @@ public class MissionManager : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
         EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
-        yield return seq.RunSequenceAsync(fp, fpPool, cp, cpPool, newSaint, oldMissionId);
+        yield return seq.RunSequenceAsync(fp, fpPool, fpTarget, cp, cpPool, newSaint, oldMissionId);
 
 
         if (GameSettings.Instance.DEMO_MODE_3 && oldMissionId == 3)

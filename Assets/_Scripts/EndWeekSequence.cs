@@ -28,14 +28,14 @@ public class EndWeekSequence : MonoBehaviour
     public ProgressBar SaintProgressBar;
     private bool Continue = false;
 
-    public IEnumerator RunSequenceAsync(int fp, int fpPool, int cp, int cpPool, IEnumerable<SaintData> saintsUnlocked, int missionId)
+    public IEnumerator RunSequenceAsync(int fp, int fpPool, int fpTarget, int cp, int cpPool, IEnumerable<SaintData> saintsUnlocked, int missionId)
     {
         int cashAmount = Mathf.Clamp(cpPool, 0, 100000000);
         var donation = InventoryManager.Instance.GetProvision(Provision.ALLOWANCE);
         cashAmount += donation?.Value ?? 0;
         TreasuryManager.Instance.DonateMoney(cashAmount);
-        SaintProgressBar.currentPercent = fp * 100f / GameDataManager.Instance.GetNextSaintUnlockThreshold();
-        SaintProgressBar.endPercent = (fpPool + fp) * 100f / GameDataManager.Instance.GetNextSaintUnlockThreshold();
+        SaintProgressBar.currentPercent = fp * 100f / fpTarget;
+        SaintProgressBar.endPercent = (fpPool + fp) * 100f / fpTarget;
 
         BG.SetActive(true);
         CPFPObj.SetActive(true);
