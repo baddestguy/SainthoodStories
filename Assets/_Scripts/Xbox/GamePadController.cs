@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
-namespace Assets.Xbox
+namespace Assets._Scripts.Xbox
 {
     public enum DirectionInput
     {

@@ -1,9 +1,8 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Assets.Xbox
+namespace Assets._Scripts.Xbox
 {
     /// <summary>
     /// Responsible for managing game pad input on the main menu
@@ -89,8 +88,8 @@ namespace Assets.Xbox
         void Update()
         {
             TryApplyControllerHover();
-
-            if (Gamepad.current == null || !GameSettings.Instance.IsUsingController) return;
+            
+            if (Gamepad.current == null || !GameSettings.Instance.IsUsingController || UI.Instance.TutorialPopupQuestion.activeInHierarchy) return;
 
             if(_skipFrame)
             {
@@ -115,26 +114,37 @@ namespace Assets.Xbox
             var pressedDirection = GamePadController.GetDirection();
             if (!pressedDirection.Control.wasPressedThisFrame) return;
 
-            if (continueGameAvailable && pressedDirection.Input is DirectionInput.Up or DirectionInput.Down)
+            if (pressedDirection.Input is DirectionInput.Up or DirectionInput.Down)
             {
                 var buttonIndex = pressedDirection.Input switch
                 {
                     DirectionInput.Up => _currentVerticalButtonIndex - 1,
                     DirectionInput.Down => _currentVerticalButtonIndex + 1,
-                    _ => _currentVerticalButtonIndex
+                    _ => _currentVerticalButtonIndex //impossible to get here
                 };
 
                 _currentHorizontalButtonIndex = -1;
                 _currentVerticalButtonIndex = buttonIndex % _verticalButtonsLength;
+
                 if (_currentVerticalButtonIndex < 0)
                 {
                     _currentVerticalButtonIndex = _verticalButtonsLength - 1;
                 }
 
+                // Skip the continue button if it's not available
+                if (!continueGameAvailable && _currentVerticalButtonIndex == 1)
+                {
+                    _currentVerticalButtonIndex = pressedDirection.Input switch
+                    {
+                        DirectionInput.Up => 0,
+                        DirectionInput.Down => 2,
+                        _ => _currentVerticalButtonIndex //impossible to get here
+                    };
+                }
+
                 SetNewActiveMainMenuButton(VerticalButtons[_currentVerticalButtonIndex]);
             }
-
-            if (pressedDirection.Input is DirectionInput.Left or DirectionInput.Right)
+            else if (pressedDirection.Input is DirectionInput.Left or DirectionInput.Right)
             {
                 var buttonIndex = pressedDirection.Input switch
                 {
@@ -147,6 +157,7 @@ namespace Assets.Xbox
                 {
                     case < 0:
                         _currentHorizontalButtonIndex = -1;
+                        if(_currentVerticalButtonIndex < 0) _currentVerticalButtonIndex = 0;
                         SetNewActiveMainMenuButton(VerticalButtons[_currentVerticalButtonIndex]);
                         break;
                     case >= 0 when buttonIndex < _horizontalButtonCount:

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Assets.Xbox
+namespace Assets._Scripts.Xbox
 {
 
     /// <summary>
@@ -49,7 +49,8 @@ namespace Assets.Xbox
         private bool ShouldHandleConversation => CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null;
         private bool ShouldHandlePackageSelector => _packageSelector != null && _packageSelector.isActiveAndEnabled;
         private bool ShouldHandleProvisionsSelector => _provisionsPopUp != null;
-        private bool IsShowingInventoryPopup => UI.Instance?.InventoryPopup?.activeSelf ?? false;
+        private bool IsShowingInventoryPopup => UI.Instance?.InventoryPopup != null && UI.Instance.InventoryPopup.activeSelf;
+        private bool ShouldHandlerReturnEarly => Gamepad.current == null || Player == null || !GameSettings.Instance.IsUsingController || MissionManager.MissionOver;
 
 
 
@@ -62,8 +63,15 @@ namespace Assets.Xbox
             OnInputMethodChanged += HandleInputMethodChanged;
         }
 
+        public void OnDisable()
+        {
+            OnInputMethodChanged -= HandleInputMethodChanged;
+        }
+
         public void HandleInputMethodChanged(bool isUsingController)
         {
+            if (ShouldHandlerReturnEarly) return;
+
             //todo: pause menu buttons, etc.
             if (isUsingController)
             {
@@ -71,13 +79,25 @@ namespace Assets.Xbox
             }
             else
             {
-                if (ShouldHandlePackageSelector)
+                if (ShouldHandleConversation)
+                {
+                    var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
+                        .Where(x => x.HasControllerHover)
+                        .ToArray();
+
+                    foreach (var tooltipMouseOver in toolTipMouseOvers)
+                    {
+                        tooltipMouseOver.HandleControllerExit();
+                    }
+
+                }
+                else if (ShouldHandlePackageSelector)
                 {
                     DeselectSelectedPackage();
                 }
                 else if (ShouldHandleProvisionsSelector)
                 {
-                    DeselectProvisionSelect();
+                    DeselectProvision();
                 }
                 else if (IsInBuilding)
                 {
@@ -109,19 +129,19 @@ namespace Assets.Xbox
                 }
             }
             //else check if any controller button is pressed, so we can switch to controller mode
-            else if(!GameSettings.Instance.IsUsingController)
+            else if (!GameSettings.Instance.IsUsingController)
             {
                 var button = GamePadController.GetButton();
                 var direction = GamePadController.GetDirection();
 
-                if (button.Button != GamePadButton.Void || direction.Input != DirectionInput.Void ) 
+                if (button.Button != GamePadButton.Void || direction.Input != DirectionInput.Void)
                 {
                     OnInputMethodChanged?.Invoke(true);
                     return;
                 }
             }
 
-            if (Gamepad.current == null || Player == null || !GameSettings.Instance.IsUsingController || MissionManager.MissionOver) return;
+            if (ShouldHandlerReturnEarly) return;
 
             if (Player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Equals("Jump", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -155,7 +175,7 @@ namespace Assets.Xbox
             {
                 UI.Instance.InventoryPopupEnable();
             }
-            else if(IsShowingInventoryPopup)
+            else if (IsShowingInventoryPopup)
             {
                 //todo: Navigate inventory
             }
@@ -188,20 +208,30 @@ namespace Assets.Xbox
         /// <param name="customEventPopup">The displayed Custom Event Pop Up</param>
         public void SetCurrentCustomEventPopup(CustomEventPopup customEventPopup)
         {
-            if (_currentCustomEventPopup != null)
+            try
             {
-                var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
-                    .OrderBy(x => x.name)
-                    .ToArray();
-                toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
+                if (_currentCustomEventPopup != null)
+                {
+                    var toolTipMouseOvers = _currentCustomEventPopup.GetComponentsInChildren<TooltipMouseOver>(false)
+                        .OrderBy(x => x.name)
+                        .ToArray();
+                    toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
+                }
+
+                _currentCustomEventPopup = customEventPopup;
+                _customEventPopupFirstActionButtonAcknowledged = false;
+                _customEventLowerTooltips = _currentCustomEventPopup != null &&
+                                            _currentCustomEventPopup.EventData.EventPopupType == EventPopupType.YESNO;
+
+                if (customEventPopup == null) return;
+
+                HandleConversationEventPopup();
             }
-
-            _currentCustomEventPopup = customEventPopup;
-            _customEventPopupFirstActionButtonAcknowledged = false;
-            _customEventLowerTooltips = _currentCustomEventPopup != null && _currentCustomEventPopup.EventData.EventPopupType == EventPopupType.YESNO;
-            HandleConversationEventPopup();
-
-            Debug.Log($"New Custom Event Popup: {_currentCustomEventPopup?.name}");
+            catch(Exception e)
+            {
+                Debug.LogWarning(e);
+                //I'm fine with swallowing this exception, but we should log it.
+            }
         }
 
         /// <summary>
@@ -214,6 +244,7 @@ namespace Assets.Xbox
             if (_provisionsPopUp == null) return;
 
             _provisionItems = provisionsPopup.NewProvisionUIItems.Concat(provisionsPopup.UpgradeProvisionUIItems).Where(x => x.HasProvision).ToArray();
+            SelectFirstProvision();
         }
 
         /// <summary>
@@ -335,7 +366,6 @@ namespace Assets.Xbox
 
         private void HandleConversationEventPopup()
         {
-            if (_currentCustomEventPopup == null) return;
             TooltipMouseOver[] toolTipMouseOvers;
 
             if (_currentCustomEventPopup.EventData.EventPopupType == EventPopupType.OK)
@@ -422,7 +452,6 @@ namespace Assets.Xbox
                 toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerExit();
                 _customEventPopupButtonIndex = (_customEventPopupButtonIndex + increment + toolTipMouseOvers.Length) % toolTipMouseOvers.Length;
                 toolTipMouseOvers[_customEventPopupButtonIndex].HandleControllerHover();
-                Debug.Log($"Current Event Popup Button is: {toolTipMouseOvers[_customEventPopupButtonIndex].name}");
             }
         }
         #endregion
@@ -436,7 +465,7 @@ namespace Assets.Xbox
 
             if (pressedDirection.Input != DirectionInput.Void && pressedDirection.Control.wasPressedThisFrame)
             {
-                DeselectProvisionSelect();
+                DeselectProvision();
 
                 var closestProvisionGameObject = pressedDirection.Input.GetClosestGameObjectOnCanvasInDirection(
                     _currentProvisionUIItem?.gameObject,
@@ -458,27 +487,25 @@ namespace Assets.Xbox
                 if (pressedButton.Button == GamePadButton.East)
                 {
                     var wasReplacePhase = _provisionsPopUp.PopupPhase == ProvisionsPopupPhase.REPLACE;
-                    DeselectProvisionSelect();
+                    DeselectProvision();
                     _currentProvisionUIItem = null;
                     _provisionsPopUp.OnClick("X");
 
                     //If we are going back from the replace phase, set first available provision to hover
                     if (wasReplacePhase)
                     {
-                        _currentProvisionUIItem = _provisionItems.FirstOrDefault(x => x.gameObject.activeInHierarchy);
-                        _currentProvisionUIItem?.HandleControllerHover();
+                        SelectFirstProvision();
                     }
                 }
                 else if (pressedButton.Button == GamePadButton.South && _currentProvisionUIItem != null)
                 {
                     _currentProvisionUIItem.OnClick();
-                    DeselectProvisionSelect();
+                    DeselectProvision();
 
                     //If we are at the limit and have to replace a provision, hover over the first existing provision
-                    if(_currentProvisionUIItem.Type == ProvisionUIItemType.NEW && _provisionsPopUp.PopupPhase == ProvisionsPopupPhase.REPLACE)
+                    if (_currentProvisionUIItem.Type == ProvisionUIItemType.NEW && _provisionsPopUp.PopupPhase == ProvisionsPopupPhase.REPLACE)
                     {
-                        _currentProvisionUIItem = _provisionItems.FirstOrDefault(x => x.gameObject.activeInHierarchy);
-                        _currentProvisionUIItem?.HandleControllerHover();
+                        SelectFirstProvision();
                     }
                     else
                     {
@@ -488,7 +515,13 @@ namespace Assets.Xbox
             }
         }
 
-        private void DeselectProvisionSelect()
+        private void SelectFirstProvision()
+        {
+           _currentProvisionUIItem = _provisionItems.FirstOrDefault(x => x.gameObject.activeInHierarchy);
+            _currentProvisionUIItem?.HandleControllerHover();
+        }
+
+        private void DeselectProvision()
         {
             _currentProvisionUIItem?.EndControllerHover();
         }

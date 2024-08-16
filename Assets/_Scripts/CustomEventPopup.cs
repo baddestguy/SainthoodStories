@@ -1,4 +1,4 @@
-﻿using Assets.Xbox;
+﻿using Assets._Scripts.Xbox;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Xbox
+namespace Assets._Scripts.Xbox
 {
     /// <summary>
     /// Responsible for managing game pad input during on the pause menu, and the settings screen.
@@ -25,6 +25,11 @@ namespace Assets.Xbox
         void Start()
         {
             GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
+        }
+
+        public void OnDisable()
+        {
+            GameplayControllerHandler.Instance.OnInputMethodChanged -= HandleInputMethodChanged;
         }
 
         private void Update()

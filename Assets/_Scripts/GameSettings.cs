@@ -3,7 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using Assets.Xbox;
+using Assets._Scripts.Xbox;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;

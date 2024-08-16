@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Xbox;
+using Assets._Scripts.Xbox;
 using DG.Tweening;
 using Michsky.UI.ModernUIPack;
 using TMPro;

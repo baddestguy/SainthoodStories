@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets._Scripts.Extensions;
-using Assets.Xbox;
+using Assets._Scripts.Xbox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

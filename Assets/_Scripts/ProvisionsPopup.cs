@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Assets.Xbox;
+using Assets._Scripts.Xbox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
