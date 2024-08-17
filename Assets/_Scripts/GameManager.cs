@@ -285,9 +285,14 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        if (GameClock.DeltaTime && GameClock.EndofDay)
+
+        if (time >= 19 || time < 6)
         {
-        //    MissionManager.Instance.UpdateCharityPoints(-1, null);
+            SoundManager.Instance.StartPlaylist(false);
+        }
+        else
+        {
+            SoundManager.Instance.StartPlaylist();
         }
     }
 
@@ -341,7 +346,6 @@ public class GameManager : MonoBehaviour
                     }
 
                     UI.Instance.DisplayRunAttempts();
-                    SoundManager.Instance.StartPlaylist();
                 }, newGame, false, !activeScene.name.Contains("MainMenu"), showUI: showUI);
                 break;
         }

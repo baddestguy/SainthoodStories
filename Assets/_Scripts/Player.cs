@@ -376,7 +376,7 @@ public class Player : MonoBehaviour
                 GroundMoveFX.transform.position = newTile.transform.position + new Vector3(0,0.1f);
                 GroundMoveFX.SetActive(false);
                 GroundMoveFX.SetActive(true);
-                SoundManager.Instance.PlayOneShotSfx("Walk_SFX");
+                SoundManager.Instance.PlayOneShotSfx("HouseJump_SFX");
             }
             else
             {
@@ -427,11 +427,17 @@ public class Player : MonoBehaviour
 
         if(tile is InteractableHospital)
         {
-            energyAmount += 1;
+            if((tile as InteractableHospital).BuildingState == BuildingState.NORMAL)
+            {
+                energyAmount += 1;
+            }
         }
         else if(tile is InteractableOrphanage)
         {
-            energyAmount += 1;
+            if((tile as InteractableOrphanage).BuildingState == BuildingState.NORMAL)
+            {
+                energyAmount += 1;
+            }
         }
 
         return energyAmount; 

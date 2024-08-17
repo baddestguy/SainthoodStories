@@ -140,7 +140,7 @@ public class InteractableOrphanage : InteractableHouse
     protected override int ModVolunteerEnergyWithProvisions()
     {
         var orphanageMaterials = InventoryManager.Instance.GetProvision(Provision.ORPHANAGE_RELATIONSHIP_BUILDER);
-        return orphanageMaterials?.Value ?? 0;
+        return orphanageMaterials?.Energy ?? 0;
     }
 
     public override void RelationshipReward(ThankYouType thanks)

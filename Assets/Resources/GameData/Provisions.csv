@@ -80,9 +80,12 @@ CONSTRUCTION_TENTS,2,0,0,0,2,0,2,0,0,Provision_ConstructionTentName,Provision_Co
 En: <color=""red"">{SubheaderSize}-2"
 CONSTRUCTION_TENTS,3,0,0,0,1,0,3,0,0,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building/upgrade completion: CP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
 En: <color=""red"">{SubheaderSize}-1"
-CHAPEL_BLUEPRINT,1,0,0,0,0,1,0,15,0,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,When praying: FP {SubheaderColor}{SubheaderSize}+1
-CHAPEL_BLUEPRINT,2,0,0,0,0,2,0,25,0,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,When praying: FP {SubheaderColor}{SubheaderSize}+2
-CHAPEL_BLUEPRINT,3,0,0,0,0,3,0,50,0,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,When praying: FP {SubheaderColor}{SubheaderSize}+3
+CHAPEL_BLUEPRINT,1,0,0,0,0,1,0,15,0,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"FP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
+Cost to install: <color=""red"">{SubheaderSize}-15"
+CHAPEL_BLUEPRINT,2,0,0,0,0,2,0,25,0,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize}
+Cost to install: <color=""red"">{SubheaderSize}-25"
+CHAPEL_BLUEPRINT,3,0,0,0,0,3,0,50,0,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+Cost to install: <color=""red"">{SubheaderSize}-50"
 BUILDING_BLUEPRINT,1,10,0,0,0,0,0,0,0,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 10%
 BUILDING_BLUEPRINT,2,15,0,0,0,0,0,0,0,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 15%
 BUILDING_BLUEPRINT,3,25,0,0,0,0,0,0,0,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 25%

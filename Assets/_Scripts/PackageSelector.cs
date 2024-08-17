@@ -115,7 +115,7 @@ public class PackageSelector : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach(var item in InstantiatedGos)
+        foreach (var item in InstantiatedGos)
         {
             Destroy(item.gameObject);
         }
@@ -140,6 +140,8 @@ public class PackageSelector : MonoBehaviour
 
     public void GoToWorld()
     {
+        TextMeshProUGUI provisionDescription = GameObject.Find("ProvisionDescription")?.GetComponent<TextMeshProUGUI>();
+        provisionDescription.text = "";
         gameObject.SetActive(false);
         if (!InventoryManager.HasChosenProvision)
             InventoryManager.Instance.GenerateProvisionsForNewDay();

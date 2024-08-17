@@ -462,7 +462,11 @@ public class UI : MonoBehaviour
                         t.gameObject.SetActive(true);
                         TreasuryManager.DonatedMoney?.Invoke(TreasuryManager.Instance.TemporaryMoneyToDonate);
                     }
-                    if(t.name == "CP")
+                    if (customEvent.RewardType == CustomEventRewardType.CP && t.name == "CP")
+                    {
+                        t.gameObject.SetActive(true);
+                    }
+                    if (customEvent.RewardType == CustomEventRewardType.FP && t.name == "FP")
                     {
                         t.gameObject.SetActive(true);
                     }

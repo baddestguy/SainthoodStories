@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,8 +56,8 @@ public class PackageItem : MonoBehaviour
 
 
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
-
-        mouseOverBtn.Loc_Key = $"InventoryTooltip_{Item}";
+        var house = GameManager.Instance.Houses.Where(h=> h.HouseName == data.House).First();
+        mouseOverBtn.Loc_Key = house.MyObjective.MissionDescription;
 
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderColor}", HeaderColor);
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{SubheaderColor}", SubheaderColor);

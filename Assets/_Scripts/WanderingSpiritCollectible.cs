@@ -68,6 +68,7 @@ public class WanderingSpiritCollectible : GridCollectibleItem
             InventoryManager.Instance.AddWanderers(TotalAmount);
             Instantiate(MyExplosion, transform.position, transform.rotation);
             ExteriorCamera.Instance.GetComponent<CameraControls>()?.MyCamera.DOShakeRotation(1f, 0.25f);
+            SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX");
         }
         else
         {
@@ -78,6 +79,7 @@ public class WanderingSpiritCollectible : GridCollectibleItem
             Instantiate(MyExplosionEvil, transform.position, transform.rotation);
             ExteriorCamera.Instance.GetComponent<CameraControls>()?.MyCamera.DOShakeRotation(1f, 1.5f);
             WeatherManager.Instance.DayNightCycle.Light.color = Color.red;
+            SoundManager.Instance.PlayOneShotSfx("EvilImpact");
 
             if (GameSettings.Instance.TUTORIAL_MODE)
             {

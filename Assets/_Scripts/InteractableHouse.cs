@@ -213,7 +213,6 @@ public class InteractableHouse : InteractableObject
         {
             RequiredItems = RequiredItems != 0 && RequiredItems < MyObjective.RequiredAmount ? RequiredItems : MyObjective.RequiredAmount;
             DeadlineSet = true;
-            SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
         }
         else if(MyObjective.Event == BuildingEventType.REPAIR || MyObjective.Event == BuildingEventType.REPAIR_URGENT)
         {
@@ -731,7 +730,7 @@ public class InteractableHouse : InteractableObject
                 var tools = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TOOLS);
                 var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
                 var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption + (tools?.Energy ?? 0) + (tents?.Energy ?? 0));
-                var moddedCPReward = extraPoints + (tents?.Value ?? 0);
+                var moddedCPReward = extraPoints + (tents?.CP ?? 0);
                 player.ConsumeEnergy(moddedEnergy);
                 UpdateCharityPoints(MyObjective.Reward + moddedCPReward, moddedEnergy);
                 MyObjective = null;
@@ -1395,7 +1394,7 @@ public class InteractableHouse : InteractableObject
             case "WORLD": return TutorialCanDoAction(actionName);
             case "ENTER": return true;
             case "SAINTS": return !GameSettings.Instance.TUTORIAL_MODE;
-            case "UPGRADE": return CanAffordUpgrade();
+            case "UPGRADE": return !GameSettings.Instance.TUTORIAL_MODE && CanAffordUpgrade();
         }
 
         return false;
@@ -1496,7 +1495,7 @@ public class InteractableHouse : InteractableObject
                 {
                     maxPP = MyObjective.Reward;
                 }
-                return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, ticksOverride: tools?.Ticks ?? 0, cpOverride: maxPP, cpModifier: tents?.Value ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: (tools?.Energy ?? 0) + (tents?.Energy ?? 0)));
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, ticksOverride: tools?.Ticks ?? 0, cpOverride: maxPP, cpModifier: tents?.CP ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: (tools?.Energy ?? 0) + (tents?.Energy ?? 0)));
 
             case "UPGRADE":
                 if(UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue)

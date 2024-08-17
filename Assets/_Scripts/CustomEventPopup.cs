@@ -52,7 +52,7 @@ public class CustomEventPopup : MonoBehaviour
         YesNoGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         IconsGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         OKGO.SetActive(customEvent.EventPopupType == EventPopupType.OK);
-        SkipGO.SetActive(customEvent.EventGroup == EventGroup.STORY);
+        SkipGO.SetActive(customEvent.EventGroup == EventGroup.STORY || customEvent.EventGroup == EventGroup.THANKYOU);
         CameraControls = GetCameraControl();
 
         StoryImage.gameObject.SetActive(true);

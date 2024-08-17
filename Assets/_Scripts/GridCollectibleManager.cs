@@ -87,6 +87,11 @@ public class GridCollectibleManager : MonoBehaviour
             yield return StartCoroutine(SpawnCollectible(WanderingSpiritResource, Behaviours[Random.Range(0,Behaviours.Count()-1)]));
         }
         Spawning = false;
+
+        if(count > 0 && !Behaviours.Contains(SacredItemBehaviour.HARMLESS))
+        {
+            SoundManager.Instance.PlayOneShotSfx("EvilSpawn", timeToDie: 3f);
+        }
     }
 
     public void TutorialEvilSpawns()
