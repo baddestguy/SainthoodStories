@@ -47,10 +47,24 @@ namespace Assets._Scripts.Xbox
 
         private bool ShouldHandleSaintCollection => SaintShowcaseHandler.Instance != null && SaintShowcaseHandler.Instance.isActiveAndEnabled;
         private bool ShouldHandleConversation => CustomEventPopup.IsDisplaying && _currentCustomEventPopup != null;
+        /// <summary>
+        /// This is the window that shows when you exit the monastery to select delivery supplies
+        /// </summary>
         private bool ShouldHandlePackageSelector => _packageSelector != null && _packageSelector.isActiveAndEnabled;
+        /// <summary>
+        /// This is the window that shows when you exit the monastery to select passive abilities like extra coin, faster build times, or relationship bonuses
+        /// </summary>
         private bool ShouldHandleProvisionsSelector => _provisionsPopUp != null;
-        private bool IsShowingInventoryPopup => UI.Instance?.InventoryPopup != null && UI.Instance.InventoryPopup.activeSelf;
-        private bool ShouldHandlerReturnEarly => Gamepad.current == null || Player == null || !GameSettings.Instance.IsUsingController || MissionManager.MissionOver;
+        /// <summary>
+        /// This is the menu that shows inventory, current objectives, ailments, and sacred artifacts
+        /// </summary>
+        private bool IsShowingObjectiveInventoryPopup => UI.Instance?.InventoryPopup != null && UI.Instance.InventoryPopup.activeSelf;
+        private bool ShouldHandlerReturnEarly => 
+            Gamepad.current == null ||
+            Player == null ||
+            !GameSettings.Instance.IsUsingController ||
+            MissionManager.MissionOver ||
+            PauseMenu.Instance.active;
 
 
 
@@ -103,7 +117,7 @@ namespace Assets._Scripts.Xbox
                 {
                     DeselectBuildingButton();
                 }
-                else if (IsShowingInventoryPopup)
+                else if (IsShowingObjectiveInventoryPopup)
                 {
                     //todo: Remove hover
                 }
@@ -171,13 +185,13 @@ namespace Assets._Scripts.Xbox
                 HandleProvisionSelectPopup();
             }
             else if (pressedButton.Control.wasPressedThisFrame &&
-                     (pressedButton.Button == GamePadButton.North || (pressedButton.Button == GamePadButton.East && IsShowingInventoryPopup)))
+                     (pressedButton.Button == GamePadButton.North || (pressedButton.Button == GamePadButton.East && IsShowingObjectiveInventoryPopup)))
             {
                 UI.Instance.InventoryPopupEnable();
             }
-            else if (IsShowingInventoryPopup)
+            else if (IsShowingObjectiveInventoryPopup)
             {
-                //todo: Navigate inventory
+                HandleObjectiveInventoryPopup();
             }
             else if (IsInBuilding)
             {
@@ -296,6 +310,44 @@ namespace Assets._Scripts.Xbox
                 GameManager.OnMapTileTap(occupyingBuilding ?? mapTile);
             }
         }
+
+        #region Objective & Inventory Popup
+
+        private void HandleObjectiveInventoryPopup()
+        {
+            //get the pressed direction input. Add if statements to handle all four directions
+            var pressedDirection = GamePadController.GetDirection();
+            if (pressedDirection.Control.wasPressedThisFrame)
+            {
+                var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
+                if(inventoryPopup == null) return;
+
+                const float scrollFactor = 0.02f;
+
+                if (pressedDirection.Input == DirectionInput.Up)
+                {
+                    var scrollRect = inventoryPopup.CurrentTab.GetComponentInChildren<ScrollRect>();
+                    if(scrollRect == null) return;
+                    scrollRect.verticalNormalizedPosition = Math.Min(scrollRect.verticalNormalizedPosition + scrollFactor, 1f);
+                }
+                else if (pressedDirection.Input == DirectionInput.Down)
+                {
+                    var scrollRect = inventoryPopup.CurrentTab.GetComponentInChildren<ScrollRect>();
+                    if (scrollRect == null) return;
+                    scrollRect.verticalNormalizedPosition = Math.Max(scrollRect.verticalNormalizedPosition - scrollFactor, 0f);
+                }
+                else if (pressedDirection.Input == DirectionInput.Left)
+                {
+                    inventoryPopup.PrevTab();
+                }
+                else if (pressedDirection.Input == DirectionInput.Right)
+                {
+                    inventoryPopup.NextTab();
+                }
+            }
+        }
+
+        #endregion
 
         #region BuildingMovementAndAction
         private void HandlePlayerActions()
@@ -503,7 +555,9 @@ namespace Assets._Scripts.Xbox
                     DeselectProvision();
 
                     //If we are at the limit and have to replace a provision, hover over the first existing provision
-                    if (_currentProvisionUIItem.Type == ProvisionUIItemType.NEW && _provisionsPopUp.PopupPhase == ProvisionsPopupPhase.REPLACE)
+                    if (_currentProvisionUIItem.Type == ProvisionUIItemType.NEW &&
+                        _provisionsPopUp != null && 
+                        _provisionsPopUp.PopupPhase == ProvisionsPopupPhase.REPLACE)
                     {
                         SelectFirstProvision();
                     }
@@ -523,7 +577,10 @@ namespace Assets._Scripts.Xbox
 
         private void DeselectProvision()
         {
-            _currentProvisionUIItem?.EndControllerHover();
+            if (_currentProvisionUIItem != null)
+            {
+                _currentProvisionUIItem.EndControllerHover();
+            }
         }
 
 

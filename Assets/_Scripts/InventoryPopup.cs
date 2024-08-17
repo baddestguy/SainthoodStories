@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
@@ -19,6 +20,7 @@ public class InventoryPopup : MonoBehaviour
     public GameObject ArtifactObj;
 
     public GameObject[] Tabs;
+    public GameObject CurrentTab => Tabs[TabIndex];
     private int TabIndex;
 
     public static bool Open;
@@ -100,19 +102,15 @@ public class InventoryPopup : MonoBehaviour
 
     public void NextTab()
     {
-        if (TabIndex+1 >= Tabs.Length) return;
-
         Tabs[TabIndex].SetActive(false);
-        TabIndex++;
+        TabIndex = (TabIndex + 1) % Tabs.Length;
         Tabs[TabIndex].SetActive(true);
     }
 
     public void PrevTab()
     {
-        if (TabIndex-1 < 0) return;
-
         Tabs[TabIndex].SetActive(false);
-        TabIndex--;
+        TabIndex = (TabIndex - 1 + Tabs.Length) % Tabs.Length;
         Tabs[TabIndex].SetActive(true);
     }
 
