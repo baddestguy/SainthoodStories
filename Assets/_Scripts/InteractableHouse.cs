@@ -933,6 +933,7 @@ public class InteractableHouse : InteractableObject
         InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
         PopIcon.UIPopped(true);
         InteriorCam.enabled = true;
+        InteriorCam.GetComponent<CameraControls>().EnableDepthOfField(true);
         InteriorUICamera.enabled = true;
         ExteriorCamera.Instance.Camera.enabled = false;
         ExteriorCamera.Instance.UICamera.enabled = false;
