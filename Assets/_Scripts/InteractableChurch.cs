@@ -320,19 +320,20 @@ public class InteractableChurch : InteractableHouse
             if (PopUI.CriticalHitCount == MaxPrayerProgress) extraPoints += 1;
 
             var maxPP = MaxPrayerProgress;
+            var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+            var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+            var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
+            var bonusFPChance = incense?.Value / 100d ?? 0;
+
             if (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT)
             {
-                maxPP += 12; //3hrs minimum to complete prayer objective
+                maxPP = 12; //New 3hrs base time to complete prayer objective
+                maxPP += rosary?.Ticks ?? 0;
             }
 
             if (PrayerProgress == MaxPrayerProgress)
             {
-                var provData = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-                var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
-                var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
-                var bonusFPChance = incense?.Value / 100d ?? 0;
-
-                extraPoints += (provData?.FP ?? 0) + (Random.Range(0, 100) < bonusFPChance ? incense?.FP ?? 0 : 0);
+                extraPoints += (rosary?.FP ?? 0) + (Random.Range(0, 100) < bonusFPChance ? incense?.FP ?? 0 : 0);
                 if (koboko != null)
                 {
                     extraPoints += koboko?.FP ?? 0;
@@ -360,7 +361,7 @@ public class InteractableChurch : InteractableHouse
                     {
                         BuildRelationship(ThankYouType.VOLUNTEER);
                         CurrentMissionId++;
-                        UpdateFaithPoints(MyObjective.Reward, 0);
+                        UpdateFaithPoints(MyObjective.Reward + FPBonus + extraPoints, 0);
                         MyObjective = null;
                         VolunteerProgress = 0;
                         CurrentMissionCompleteToday = true;
