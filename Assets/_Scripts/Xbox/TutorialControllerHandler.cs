@@ -48,7 +48,7 @@ namespace Assets._Scripts.Xbox
         // Update is called once per frame
         void Update()
         {
-            if (Gamepad.current == null || !GameSettings.Instance.IsUsingController) return;
+            if (Gamepad.current == null || !GameSettings.Instance.IsUsingController || PauseMenu.Instance.active) return;
 
             if (_skipFrame)
             {
@@ -74,7 +74,7 @@ namespace Assets._Scripts.Xbox
                 var pressedDirection = GamePadController.GetDirection();
                 var pressedButton = GamePadController.GetButton();
 
-                if (pressedDirection.Control.wasPressedThisFrame)
+                if (pressedDirection.Control.WasPressedThisFrame)
                 {
                     if (pressedDirection.Input == DirectionInput.Left)
                     {
@@ -85,12 +85,12 @@ namespace Assets._Scripts.Xbox
                         HandleEventPopupButtonNavigate(1);
                     }
                 }
-                else if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)
+                else if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame)
                 {
                     if(_buttonIndex == 0) UI.Instance.TutorialConfirmation("YES");
                     if(_buttonIndex == 1) UI.Instance.TutorialConfirmation("NO");
                 }
-                else if (pressedButton.Button == GamePadButton.East && pressedButton.Control.wasPressedThisFrame)
+                else if (pressedButton.Button == GamePadButton.East && pressedButton.Control.WasPressedThisFrame)
                 {
                     UI.Instance.TutorialConfirmation("CLOSE");
                 }

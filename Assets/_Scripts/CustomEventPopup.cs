@@ -297,7 +297,7 @@ public class CustomEventPopup : MonoBehaviour
         if (GameSettings.Instance.IsUsingController && EventData.Id == CustomEventType.ENDGAME_DEMO)
         {
             var pressedButton = GamePadController.GetButton();
-            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)
+            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame)
             {
                 int sequences = LocalizationManager.Instance.GetTotalSequences(EventData.LocalizationKey);
 

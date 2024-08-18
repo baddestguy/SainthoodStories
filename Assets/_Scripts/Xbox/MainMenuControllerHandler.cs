@@ -89,7 +89,8 @@ namespace Assets._Scripts.Xbox
         {
             TryApplyControllerHover();
             
-            if (Gamepad.current == null || !GameSettings.Instance.IsUsingController || UI.Instance.TutorialPopupQuestion.activeInHierarchy) return;
+            if (Gamepad.current == null || !GameSettings.Instance.IsUsingController ||
+                PauseMenu.Instance.active || UI.Instance.TutorialPopupQuestion.activeInHierarchy) return;
 
             if(_skipFrame)
             {
@@ -98,7 +99,7 @@ namespace Assets._Scripts.Xbox
             }
 
             var pressedButton = GamePadController.GetButton();
-            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)
+            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame)
             {
                 _activeMainMenuButton.onClick.Invoke();
             }
@@ -112,7 +113,7 @@ namespace Assets._Scripts.Xbox
         {
             var continueGameAvailable = UI.Instance.ContinueBtn.interactable;
             var pressedDirection = GamePadController.GetDirection();
-            if (!pressedDirection.Control.wasPressedThisFrame) return;
+            if (!pressedDirection.Control.WasPressedThisFrame) return;
 
             if (pressedDirection.Input is DirectionInput.Up or DirectionInput.Down)
             {

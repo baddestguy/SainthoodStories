@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -26,6 +27,21 @@ namespace Assets._Scripts.Xbox
         Start
     }
 
+    /// <summary>
+    /// Custom button control to override the wasPressedThisFrame property
+    /// </summary>
+    public class CustomButtonControl
+    {
+        public bool WasPressedThisFrame { get; }
+        public bool WasReleasedThisFrame { get; }
+
+        public CustomButtonControl([CanBeNull] ButtonControl control = null)
+        {
+            WasPressedThisFrame = control?.wasPressedThisFrame ?? false;
+            WasReleasedThisFrame = control?.wasReleasedThisFrame ?? false;
+        }
+    }
+
     public static class GamePadController
     {
         private static StickControl LeftStick => Gamepad.current.leftStick;
@@ -35,42 +51,50 @@ namespace Assets._Scripts.Xbox
         /// Get the current dpad direction, if any, that is pressed this frame
         /// </summary>
         /// <returns>The direction being pressed and the button control</returns>
-        public static (DirectionInput Input, ButtonControl Control) GetDirection()
+        public static (DirectionInput Input, CustomButtonControl Control) GetDirection()
         {
-            if (Gamepad.current == null) return (DirectionInput.Void, null);
+            if (Gamepad.current == null)
+            {
+                GameplayControllerHandler.Instance.AlertNoControllerDetected();
+                return (DirectionInput.Void, new CustomButtonControl());
+            }
 
-            if (DPad.up.isPressed || DPad.up.wasReleasedThisFrame) return (DirectionInput.Up, DPad.up);
-            if (DPad.down.isPressed || DPad.down.wasReleasedThisFrame) return (DirectionInput.Down, DPad.down);
-            if (DPad.left.isPressed || DPad.left.wasReleasedThisFrame) return (DirectionInput.Left, DPad.left);
-            if (DPad.right.isPressed || DPad.right.wasReleasedThisFrame) return (DirectionInput.Right, DPad.right);
+            if (DPad.up.isPressed || DPad.up.wasReleasedThisFrame) return (DirectionInput.Up, new(DPad.up));
+            if (DPad.down.isPressed || DPad.down.wasReleasedThisFrame) return (DirectionInput.Down, new(DPad.down));
+            if (DPad.left.isPressed || DPad.left.wasReleasedThisFrame) return (DirectionInput.Left, new(DPad.left));
+            if (DPad.right.isPressed || DPad.right.wasReleasedThisFrame) return (DirectionInput.Right, new(DPad.right));
 
-            if (LeftStick.up.isPressed || LeftStick.up.wasReleasedThisFrame) return (DirectionInput.Up, LeftStick.up);
-            if (LeftStick.down.isPressed || LeftStick.down.wasReleasedThisFrame) return (DirectionInput.Down, LeftStick.down);
-            if (LeftStick.left.isPressed || LeftStick.left.wasReleasedThisFrame) return (DirectionInput.Left, LeftStick.left);
-            if (LeftStick.right.isPressed || LeftStick.right.wasReleasedThisFrame) return (DirectionInput.Right, LeftStick.right);
+            if (LeftStick.up.isPressed || LeftStick.up.wasReleasedThisFrame) return (DirectionInput.Up, new(LeftStick.up));
+            if (LeftStick.down.isPressed || LeftStick.down.wasReleasedThisFrame) return (DirectionInput.Down, new(LeftStick.down));
+            if (LeftStick.left.isPressed || LeftStick.left.wasReleasedThisFrame) return (DirectionInput.Left, new(LeftStick.left));
+            if (LeftStick.right.isPressed || LeftStick.right.wasReleasedThisFrame) return (DirectionInput.Right, new(LeftStick.right));
 
-            return (DirectionInput.Void, DPad.up);
+            return (DirectionInput.Void, new CustomButtonControl());
         }
 
         /// <summary>
         /// Get the current controller button being pressed, if any, that is pressed this frame
         /// </summary>
         /// <returns>The direction being pressed and the button control</returns>
-        public static (GamePadButton Button, ButtonControl Control) GetButton()
+        public static (GamePadButton Button, CustomButtonControl Control) GetButton()
         {
-            if(Gamepad.current == null) return (GamePadButton.Void, null);
+            if (Gamepad.current == null)
+            {
+                GameplayControllerHandler.Instance.AlertNoControllerDetected();
+                return (GamePadButton.Void, new CustomButtonControl());
+            }
 
-            if (Gamepad.current.buttonNorth.isPressed || Gamepad.current.buttonNorth.wasReleasedThisFrame) return (GamePadButton.North, Gamepad.current.buttonNorth);
-            if (Gamepad.current.buttonEast.isPressed || Gamepad.current.buttonEast.wasReleasedThisFrame) return (GamePadButton.East, Gamepad.current.buttonEast);
-            if (Gamepad.current.buttonSouth.isPressed || Gamepad.current.buttonSouth.wasReleasedThisFrame) return (GamePadButton.South, Gamepad.current.buttonSouth);
-            if (Gamepad.current.buttonWest.isPressed || Gamepad.current.buttonWest.wasReleasedThisFrame) return (GamePadButton.West, Gamepad.current.buttonWest);
-            if (Gamepad.current.rightShoulder.isPressed || Gamepad.current.rightShoulder.wasReleasedThisFrame) return (GamePadButton.RightShoulder, Gamepad.current.rightShoulder);
-            if (Gamepad.current.rightTrigger.isPressed || Gamepad.current.rightTrigger.wasReleasedThisFrame) return (GamePadButton.RightShoulder, Gamepad.current.rightTrigger);
-            if (Gamepad.current.leftShoulder.isPressed || Gamepad.current.leftShoulder.wasReleasedThisFrame) return (GamePadButton.LeftShoulder, Gamepad.current.leftShoulder);
-            if (Gamepad.current.leftTrigger.isPressed || Gamepad.current.leftTrigger.wasReleasedThisFrame) return (GamePadButton.LeftShoulder, Gamepad.current.leftTrigger);
-            if (Gamepad.current.startButton.isPressed || Gamepad.current.startButton.wasReleasedThisFrame) return (GamePadButton.Start, Gamepad.current.startButton);
+            if (Gamepad.current.buttonNorth.isPressed || Gamepad.current.buttonNorth.wasReleasedThisFrame) return (GamePadButton.North, new(Gamepad.current.buttonNorth));
+            if (Gamepad.current.buttonEast.isPressed || Gamepad.current.buttonEast.wasReleasedThisFrame) return (GamePadButton.East, new(Gamepad.current.buttonEast));
+            if (Gamepad.current.buttonSouth.isPressed || Gamepad.current.buttonSouth.wasReleasedThisFrame) return (GamePadButton.South, new(Gamepad.current.buttonSouth));
+            if (Gamepad.current.buttonWest.isPressed || Gamepad.current.buttonWest.wasReleasedThisFrame) return (GamePadButton.West, new(Gamepad.current.buttonWest));
+            if (Gamepad.current.rightShoulder.isPressed || Gamepad.current.rightShoulder.wasReleasedThisFrame) return (GamePadButton.RightShoulder, new(Gamepad.current.rightShoulder));
+            if (Gamepad.current.rightTrigger.isPressed || Gamepad.current.rightTrigger.wasReleasedThisFrame) return (GamePadButton.RightShoulder, new(Gamepad.current.rightTrigger));
+            if (Gamepad.current.leftShoulder.isPressed || Gamepad.current.leftShoulder.wasReleasedThisFrame) return (GamePadButton.LeftShoulder, new(Gamepad.current.leftShoulder));
+            if (Gamepad.current.leftTrigger.isPressed || Gamepad.current.leftTrigger.wasReleasedThisFrame) return (GamePadButton.LeftShoulder, new(Gamepad.current.leftTrigger));
+            if (Gamepad.current.startButton.isPressed || Gamepad.current.startButton.wasReleasedThisFrame) return (GamePadButton.Start, new(Gamepad.current.startButton));
 
-            return (GamePadButton.Void, Gamepad.current.selectButton);
+            return (GamePadButton.Void, new CustomButtonControl());
         }
 
         /// <summary>
@@ -90,13 +114,13 @@ namespace Assets._Scripts.Xbox
         {
             const float axisWeight = 0.3f;
 
-            if(direction == DirectionInput.Void) return null;
+            if (direction == DirectionInput.Void) return null;
 
             var closestObjectDistance = double.MaxValue;
             GameObject closestGameObject = null;
 
             var currentPosition = new Vector3(0, 0);
-            if(currentGameObject != null)
+            if (currentGameObject != null)
             {
                 var currentGameObjectRectTransform = currentGameObject.GetComponent<RectTransform>();
                 currentPosition = useAnchoredPosition ? currentGameObjectRectTransform.anchoredPosition3D : currentGameObjectRectTransform.position;

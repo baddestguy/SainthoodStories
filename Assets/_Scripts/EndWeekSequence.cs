@@ -61,7 +61,7 @@ public class EndWeekSequence : MonoBehaviour
             if (GameSettings.Instance.IsUsingController)
             {
                 var pressedButton = GamePadController.GetButton();
-                if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame) ContinueSequence();
+                if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame) ContinueSequence();
             }
             
             yield return null;
@@ -111,7 +111,7 @@ public class EndWeekSequence : MonoBehaviour
                 if (GameSettings.Instance.IsUsingController)
                 {
                     var pressedButton = GamePadController.GetButton();
-                    if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame) ContinueSequence();
+                    if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame) ContinueSequence();
                 }
                 yield return null;
             }

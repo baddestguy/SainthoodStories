@@ -82,6 +82,14 @@ namespace Assets._Scripts.Xbox
             OnInputMethodChanged -= HandleInputMethodChanged;
         }
 
+        /// <summary>
+        /// This is a move of last resort. There are very VERY few cases where we would need to call this directly.
+        /// </summary>
+        public void AlertNoControllerDetected()
+        {
+            OnInputMethodChanged?.Invoke(false);
+        }
+
         public void HandleInputMethodChanged(bool isUsingController)
         {
             if (ShouldHandlerReturnEarly) return;
@@ -136,7 +144,7 @@ namespace Assets._Scripts.Xbox
                 //var currentMousePosition = Mouse.current.position.ReadValue();
                 var mouseX = Input.GetAxis("Mouse X");
                 var mouseY = Input.GetAxis("Mouse Y");
-                if (mouseX != 0 || mouseY != 0)
+                if (mouseX != 0 || mouseY != 0 || Gamepad.current == null)
                 {
                     OnInputMethodChanged?.Invoke(false);
                     return;
@@ -184,7 +192,7 @@ namespace Assets._Scripts.Xbox
             {
                 HandleProvisionSelectPopup();
             }
-            else if (pressedButton.Control.wasPressedThisFrame &&
+            else if (pressedButton.Control.WasPressedThisFrame &&
                      (pressedButton.Button == GamePadButton.North || (pressedButton.Button == GamePadButton.East && IsShowingObjectiveInventoryPopup)))
             {
                 UI.Instance.InventoryPopupEnable();
@@ -274,7 +282,7 @@ namespace Assets._Scripts.Xbox
         {
             var direction = GamePadController.GetDirection();
             var pressedButton = GamePadController.GetButton();
-            if (!direction.Control.wasPressedThisFrame && !pressedButton.Control.wasPressedThisFrame) return;
+            if (!direction.Control.WasPressedThisFrame && !pressedButton.Control.WasPressedThisFrame) return;
 
             if (pressedButton.Button == GamePadButton.South)
             {
@@ -317,7 +325,7 @@ namespace Assets._Scripts.Xbox
         {
             //get the pressed direction input. Add if statements to handle all four directions
             var pressedDirection = GamePadController.GetDirection();
-            if (pressedDirection.Control.wasPressedThisFrame)
+            if (pressedDirection.Control.WasPressedThisFrame)
             {
                 var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
                 if(inventoryPopup == null) return;
@@ -353,7 +361,7 @@ namespace Assets._Scripts.Xbox
         private void HandlePlayerActions()
         {
             var direction = GamePadController.GetDirection();
-            if (direction.Control.wasPressedThisFrame)
+            if (direction.Control.WasPressedThisFrame)
             {
                 HandleActionButtonNavigateWithDirection(direction.Input);
             }
@@ -361,7 +369,7 @@ namespace Assets._Scripts.Xbox
             if (_currentPopUIButton == null || !_currentPopUIButton.HasControllerHover) return;
 
             var pressedButton = GamePadController.GetButton();
-            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)
+            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame)
             {
                 if (_currentPopUIButton.HasCriticalCircle)
                 {
@@ -373,12 +381,12 @@ namespace Assets._Scripts.Xbox
                     DeselectBuildingButton();
                 }
             }
-            else if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasReleasedThisFrame)
+            else if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasReleasedThisFrame)
             {
                 _currentPopUIButton.HandleControllerHover();
                 if (_currentPopUIButton.HasCriticalCircle) _currentPopUI.OnPointerUp();
             }
-            else if (pressedButton.Button == GamePadButton.East && pressedButton.Control.wasPressedThisFrame)
+            else if (pressedButton.Button == GamePadButton.East && pressedButton.Control.WasPressedThisFrame)
             {
                 DeselectBuildingButton();
             }
@@ -456,7 +464,7 @@ namespace Assets._Scripts.Xbox
                 var pressedDirection = GamePadController.GetDirection();
                 var pressedButton = GamePadController.GetButton();
 
-                if (pressedDirection.Control.wasPressedThisFrame)
+                if (pressedDirection.Control.WasPressedThisFrame)
                 {
                     if (pressedDirection.Input == DirectionInput.Left)
                     {
@@ -475,7 +483,7 @@ namespace Assets._Scripts.Xbox
                 }
                 else if (pressedButton.Button == GamePadButton.South)
                 {
-                    if (pressedButton.Control.wasPressedThisFrame)
+                    if (pressedButton.Control.WasPressedThisFrame)
                     {
                         if (_customEventLowerTooltips && _customEventPopupButtonIndex == 0)
                         {
@@ -487,7 +495,7 @@ namespace Assets._Scripts.Xbox
                                 .onClick.Invoke();
                         }
                     }
-                    else if (pressedButton.Control.wasReleasedThisFrame)
+                    else if (pressedButton.Control.WasReleasedThisFrame)
                     {
                         if (_customEventLowerTooltips)
                         {
@@ -515,7 +523,7 @@ namespace Assets._Scripts.Xbox
             var pressedDirection = GamePadController.GetDirection();
             var pressedButton = GamePadController.GetButton();
 
-            if (pressedDirection.Input != DirectionInput.Void && pressedDirection.Control.wasPressedThisFrame)
+            if (pressedDirection.Input != DirectionInput.Void && pressedDirection.Control.WasPressedThisFrame)
             {
                 DeselectProvision();
 
@@ -534,7 +542,7 @@ namespace Assets._Scripts.Xbox
 
                 _currentProvisionUIItem?.HandleControllerHover();
             }
-            else if (pressedButton.Control.wasPressedThisFrame)
+            else if (pressedButton.Control.WasPressedThisFrame)
             {
                 if (pressedButton.Button == GamePadButton.East)
                 {
@@ -595,7 +603,7 @@ namespace Assets._Scripts.Xbox
             var pressedDirection = GamePadController.GetDirection();
             var pressedButton = GamePadController.GetButton();
 
-            if (pressedButton.Button == GamePadButton.East && pressedButton.Control.wasPressedThisFrame)
+            if (pressedButton.Button == GamePadButton.East && pressedButton.Control.WasPressedThisFrame)
             {
                 saintPopup.OnExit();
                 _hasHoveredFirstSaintButton = false;
@@ -618,7 +626,7 @@ namespace Assets._Scripts.Xbox
                     return;
                 }
 
-                if (pressedDirection.Control.wasPressedThisFrame)
+                if (pressedDirection.Control.WasPressedThisFrame)
                 {
                     if (pressedDirection.Input == DirectionInput.Right && !_saintNextOptionHasHover)
                     {
@@ -649,7 +657,7 @@ namespace Assets._Scripts.Xbox
                 }
             }
 
-            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)
+            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame)
             {
                 if (_saintNextOptionHasHover)
                 {
@@ -682,7 +690,7 @@ namespace Assets._Scripts.Xbox
             var pressedDirection = GamePadController.GetDirection();
             var pressedButton = GamePadController.GetButton();
 
-            if (pressedDirection.Input != DirectionInput.Void && pressedDirection.Control.wasPressedThisFrame)
+            if (pressedDirection.Input != DirectionInput.Void && pressedDirection.Control.WasPressedThisFrame)
             {
                 DeselectSelectedPackage();
 
@@ -713,7 +721,7 @@ namespace Assets._Scripts.Xbox
                     _packageSelector.ExitGameObject.transform.DOScale(_packageSelector.ExitGameObject.transform.localScale * PackageScaleValue, 0.5f);
                 }
             }
-            else if (pressedButton.Control.wasPressedThisFrame)
+            else if (pressedButton.Control.WasPressedThisFrame)
             {
 
                 if (pressedButton.Button == GamePadButton.East)
@@ -771,7 +779,7 @@ namespace Assets._Scripts.Xbox
         private void HandleZoom()
         {
             var pressedButton = GamePadController.GetButton();
-            if (!pressedButton.Control.wasPressedThisFrame) return;
+            if (!pressedButton.Control.WasPressedThisFrame) return;
 
             if (pressedButton.Button == GamePadButton.RightShoulder)
             {
