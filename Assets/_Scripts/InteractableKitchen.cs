@@ -61,7 +61,7 @@ public class InteractableKitchen : InteractableHouse
             {
                 RequiredItems--;
                 var amt = MyObjective.RequiredAmount - RequiredItems;
-                OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 2);
+                OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 1);
 
                 var extraPoints = 0;
                 if (PopUI.CriticalHitCount == 1) extraPoints = 1;
