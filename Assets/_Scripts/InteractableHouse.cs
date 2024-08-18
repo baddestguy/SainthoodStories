@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Assets.Xbox;
 using DG.Tweening;
 using UnityEngine;
@@ -1438,7 +1439,12 @@ public class InteractableHouse : InteractableObject
 
     public virtual float SetButtonTimer(string actionName)
     {
-        return 1f;
+        if(actionName == "PRAY")
+        {
+            return MathF.Ceiling(MaxPrayerProgress / 4);
+        }
+
+        return MathF.Ceiling(MaxVolunteerPoints / 4);
     }
 
     public virtual int GetEnergyCostForCustomEvent(CustomEventData eventData)

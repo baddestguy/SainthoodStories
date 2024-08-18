@@ -322,7 +322,7 @@ public class InteractableChurch : InteractableHouse
             var maxPP = MaxPrayerProgress;
             if (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT)
             {
-                maxPP = 12; //3hrs minimum to complete prayer objective
+                maxPP += 12; //3hrs minimum to complete prayer objective
             }
 
             if (PrayerProgress == MaxPrayerProgress)
@@ -332,7 +332,7 @@ public class InteractableChurch : InteractableHouse
                 var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
                 var bonusFPChance = incense?.Value / 100d ?? 0;
 
-                extraPoints += provData?.FP ?? 0 + (Random.Range(0, 100) < bonusFPChance ? incense?.FP ?? 0 : 0);
+                extraPoints += (provData?.FP ?? 0) + (Random.Range(0, 100) < bonusFPChance ? incense?.FP ?? 0 : 0);
                 if (koboko != null)
                 {
                     extraPoints += koboko?.FP ?? 0;
@@ -483,25 +483,6 @@ public class InteractableChurch : InteractableHouse
 
     public override float SetButtonTimer(string actionName)
     {
-        switch (actionName)
-        {
-            case "PRAY":
-
-                if (MyObjective != null && MyObjective.Event == BuildingEventType.MASS)
-                {
-                    GameClock clock = GameManager.Instance.GameClock;
-                    if (clock.Time == ConfessionTime)
-                    {
-                        return 2f;
-                    }
-                    else if (clock.Time >= MassStartTime && clock.Time < MassEndTime)
-                    {
-                        return 4f;
-                    }
-                }
-                break;
-        }
-
         return base.SetButtonTimer(actionName);
     }
 
