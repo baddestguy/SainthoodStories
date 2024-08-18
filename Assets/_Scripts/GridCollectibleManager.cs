@@ -335,6 +335,7 @@ public class GridCollectibleManager : MonoBehaviour
 
     IEnumerator SpawnSacredItemAsync()
     {
+        if (GameSettings.Instance.DEMO_MODE_3 && MissionManager.Instance.CurrentCollectibleCounter > 4) yield break;
         if (SacredItemSpawned >= (GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount - MissionManager.Instance.CurrentCollectibleCounter)) yield break;
         if (MissionManager.Instance.CurrentCollectibleCounter >= GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount) yield break;
 
@@ -365,6 +366,14 @@ public class GridCollectibleManager : MonoBehaviour
                            where !saveData.Collectibles?.Contains(obj.Name) ?? true
                            select obj.Name).Distinct().ToList();
             GameManager.Instance.WorldCollectibles = newList;
+
+            if (GameSettings.Instance.DEMO_MODE_3)
+            {
+                var tutorialList = GameDataManager.Instance.CollectibleData["BIBLE"].GetRange(0, 6);
+                GameManager.Instance.WorldCollectibles = tutorialList.Select(x => x.Name).ToList();
+                return GameManager.Instance.WorldCollectibles;
+            }
+
             return newList;
         }
 

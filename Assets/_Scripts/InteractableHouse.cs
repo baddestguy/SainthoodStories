@@ -1395,7 +1395,7 @@ public class InteractableHouse : InteractableObject
             case "WORLD": return TutorialCanDoAction(actionName);
             case "ENTER": return true;
             case "SAINTS": return !GameSettings.Instance.TUTORIAL_MODE;
-            case "UPGRADE": return !GameSettings.Instance.TUTORIAL_MODE && CanAffordUpgrade();
+            case "UPGRADE": return !GameSettings.Instance.DEMO_MODE_3 && CanAffordUpgrade();
         }
 
         return false;
@@ -1415,6 +1415,7 @@ public class InteractableHouse : InteractableObject
 
     public bool CanAffordUpgrade()
     {
+        if (GameSettings.Instance.DEMO_MODE_3) return false;
         if (UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue) return false;
 
         return InventoryManager.Instance.WanderingSpirits >= GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel+1}"].IntValue && TreasuryManager.Instance.Money >= GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel+1}"].IntValue;
@@ -1422,6 +1423,7 @@ public class InteractableHouse : InteractableObject
 
     public void UpgradeBuilding()
     {
+        if (GameSettings.Instance.DEMO_MODE_3) return;
         if (UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue) return;
 
         double cost = GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue;
