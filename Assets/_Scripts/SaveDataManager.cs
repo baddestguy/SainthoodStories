@@ -136,34 +136,17 @@ public class SaveDataManager : MonoBehaviour
 
     public SaveObject NewGameData()
     {
-        if (TutorialManager.Instance.SkipTutorial)
-        {
-            return new SaveObject()
-            {
-                FP = 0,
-                FPPool = 0,
-                CP = 0,
-                CPPool = 0,
-                Energy = 3,
-                Week = 1,
-                Day = 1,
-                Time = 5,
-                TutorialSteps = 40,
-                Money = 0
-            };
-        }
-
         return new SaveObject()
         {
             FP = 0,
             FPPool = 0,
             CP = 0,
             CPPool = 0,
-            Energy = 1,
+            Energy = 3,
             Week = 1,
             Day = 1,
             Time = 5,
-            TutorialSteps = 0,
+            TutorialSteps = 40,
             Money = 0
         };
     }

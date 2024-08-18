@@ -10,10 +10,10 @@ ENERGY_DRINK,3,0,0,0,3,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDe
 ENERGY_DRINK,4,0,0,0,4,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+4
 ENERGY_DRINK,5,0,0,0,5,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+5
 ENERGY_DRINK,6,0,0,0,6,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+6
-ENERGY_DRINK,7,0,0,0,6,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+7
-ENERGY_DRINK,8,0,0,0,6,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+8
-ENERGY_DRINK,9,0,0,0,6,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+9
-ENERGY_DRINK,10,0,0,0,6,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+10
+ENERGY_DRINK,7,0,0,0,7,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+7
+ENERGY_DRINK,8,0,0,0,8,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+8
+ENERGY_DRINK,9,0,0,0,9,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+9
+ENERGY_DRINK,10,0,0,0,10,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+10
 SOFT_MATTRESS,1,1,5,0,1,0,0,0,0,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">{SubheaderSize}+5hrs{DescriptionColor}{DescriptionSize}
 Add. En{SubheaderColor}{SubheaderSize}+1"
 SOFT_MATTRESS,2,3,3,0,3,0,0,0,0,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">{SubheaderSize}+3hrs{DescriptionColor}{DescriptionSize}
