@@ -950,6 +950,8 @@ public class InteractableHouse : InteractableObject
 
                 case BuildingEventType.VOLUNTEER:
                 case BuildingEventType.VOLUNTEER_URGENT:
+                case BuildingEventType.COOK:
+                case BuildingEventType.COOK_URGENT:
                     OnActionProgress?.Invoke(VolunteerProgress / (float)MyObjective.RequiredAmount, this, 1);
                     break;
 
@@ -957,8 +959,6 @@ public class InteractableHouse : InteractableObject
                 case BuildingEventType.DELIVER_ITEM_URGENT:
                 case BuildingEventType.DELIVER_MEAL:
                 case BuildingEventType.DELIVER_MEAL_URGENT:
-                case BuildingEventType.COOK:
-                case BuildingEventType.COOK_URGENT:
                     var amt = MyObjective.RequiredAmount - RequiredItems;
                     OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 2);
                     break;

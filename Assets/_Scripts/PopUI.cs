@@ -41,6 +41,7 @@ public class PopUI : MonoBehaviour
 
     public TextMeshProUGUI RPDisplay;
     public Image GlowImage;
+    public List<Image> GlowImages = new List<Image>();
 
     void Awake()
     {
@@ -181,7 +182,13 @@ public class PopUI : MonoBehaviour
 
         Callback?.Invoke(button);
 
-        FlashIconOnCompletedAction(GlowImage);
+        foreach(var glow in GlowImages)
+        {
+            if(glow.transform.parent == myButton.transform)
+            {
+                FlashIconOnCompletedAction(glow);
+            }
+        }
 
         if (RPDisplay != null && MyHouse != null)
         {

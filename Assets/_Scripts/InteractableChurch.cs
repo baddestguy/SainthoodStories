@@ -103,6 +103,7 @@ public class InteractableChurch : InteractableHouse
 
     public void CheckCollectibleObjectives()
     {
+        if (GameSettings.Instance.DEMO_MODE_3) return;
         if (MissionManager.Instance.CurrentCollectibleCounter == GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount)
         {
             EventsManager.Instance.AddEventToList(GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].OnComplete);
