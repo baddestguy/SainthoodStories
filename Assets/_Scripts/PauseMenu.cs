@@ -57,18 +57,6 @@ public class PauseMenu : MonoBehaviour
         {
             Activate();
         }
-
-        if (GameSettings.Instance.IsUsingController)
-        {
-            var pressedButton = GamePadController.GetButton();
-            if (pressedButton.Control.WasPressedThisFrame)
-            {
-                if (pressedButton.Button == GamePadButton.Start || (pressedButton.Button == GamePadButton.East && active))
-                {
-                    Activate();
-                }
-            }
-        }
     }
 
     public void Activate()
@@ -86,10 +74,7 @@ public class PauseMenu : MonoBehaviour
                 TutorialEnabled.SetIsOnWithoutNotify(GameSettings.Instance.TutorialToggle);
             }
 
-            if (GameSettings.Instance.IsUsingController)
-            {
-                PauseMenuControllerHandler.Instance.Activate(MenuToggleGroup);
-            }
+            PauseMenuControllerHandler.Instance.Activate();
 
             if (!GameManager.Instance.InGameSession)
             {

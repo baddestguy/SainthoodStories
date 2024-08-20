@@ -32,11 +32,13 @@ namespace Assets._Scripts.Xbox
     /// </summary>
     public class CustomButtonControl
     {
+        public bool IsPressed { get; }
         public bool WasPressedThisFrame { get; }
         public bool WasReleasedThisFrame { get; }
 
         public CustomButtonControl([CanBeNull] ButtonControl control = null)
         {
+            IsPressed = control?.isPressed ?? false;
             WasPressedThisFrame = control?.wasPressedThisFrame ?? false;
             WasReleasedThisFrame = control?.wasReleasedThisFrame ?? false;
         }
