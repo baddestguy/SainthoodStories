@@ -2,13 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Assets._Scripts.Xbox;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using static Rewired.InputMapper;
 using Random = UnityEngine.Random;
 
 public class InteractableHouse : InteractableObject
