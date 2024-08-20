@@ -2,7 +2,6 @@
 using Assets._Scripts.Extensions;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets._Scripts.Xbox
@@ -121,7 +120,7 @@ namespace Assets._Scripts.Xbox
                 return;
             }
 
-            if (pressedButton.Control.WasPressedThisFrame && pressedButton.Button is GamePadButton.LeftShoulder or GamePadButton.RightShoulder)
+            if (!_isQualityDropdownOpen && pressedButton.Control.WasPressedThisFrame && pressedButton.Button is GamePadButton.LeftShoulder or GamePadButton.RightShoulder)
             {
                 HandleTabSwitch(pressedButton);
             }
@@ -148,8 +147,14 @@ namespace Assets._Scripts.Xbox
         public void Deactivate()
         {
             SetPauseTabHover(false);
+            if (_isQualityDropdownOpen)
+            {
+                ActiveGraphicsTabOptionDropdown.Hide();
+                _isQualityDropdownOpen = false;
+            }
             SetGraphicsTabHover(false);
             SetSoundTabHover(false);
+            
         }
 
         private void HandleTabInputs(
@@ -250,8 +255,12 @@ namespace Assets._Scripts.Xbox
             }
             else if (pressedDirection.Control.WasPressedThisFrame && _isQualityDropdownOpen)
             {
+                SetGraphicsTabDropdownHover(false);
                 //select a dropdown option
-                //ActiveGraphicsTabOptionDropdown.options[_qualityDropdownIndex]. = "Test";
+                var dropdownIncrement = pressedDirection.Input is DirectionInput.Up ? -1 : pressedDirection.Input is DirectionInput.Down ? 1 : 0;
+                _qualityDropdownIndex = (_qualityDropdownIndex + dropdownIncrement + ActiveGraphicsTabOptionDropdown.options.Count) % ActiveGraphicsTabOptionDropdown.options.Count;
+
+                SetGraphicsTabDropdownHover(true);
             }
             else if (pressedButton.Control.WasPressedThisFrame)
             {
@@ -271,24 +280,18 @@ namespace Assets._Scripts.Xbox
                         case 2:
                         case 3:
                             //Quality
-                            //UIGraphicsSettings.Instance.quality.value = (UIGraphicsSettings.Instance.quality.value + 1) % UIGraphicsSettings.Instance.quality.options.Count;
-
-                            ExecuteEvents.Execute(ActiveGraphicsTabOptionDropdown.gameObject,
-                                new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+                            ActiveGraphicsTabOptionDropdown.Show();
                             _isQualityDropdownOpen = true;
                             _qualityDropdownIndex = 0;
+                            SetGraphicsTabDropdownHover(true);
                             break;
-                            //Resolution
-                            //UIGraphicsSettings.Instance.resolution.value = (UIGraphicsSettings.Instance.resolution.value + 1) % UIGraphicsSettings.Instance.resolution.options.Count;
-                            //ExecuteEvents.Execute(ActiveGraphicsTabOptionDropdown.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
-                            //_isQualityDropdownOpen = true;
-                            //break;
                     }
                 }
                 //dropdown is open. Select a dropdown option or close the dropdown
                 else if (pressedButton.Button == GamePadButton.East && _isQualityDropdownOpen)
                 {
-                    ExecuteEvents.Execute(ActiveGraphicsTabOptionDropdown.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+                    //ExecuteEvents.Execute(ActiveGraphicsTabOptionText.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+                    ActiveGraphicsTabOptionDropdown.Hide();
                     _isQualityDropdownOpen = false;
                 }
                 else if (pressedButton.Button == GamePadButton.South && _isQualityDropdownOpen)
@@ -313,6 +316,25 @@ namespace Assets._Scripts.Xbox
                 //these are the dropdowns
                 ActiveGraphicsTabOptionDropdownImage.color = setActive ? Color.black : _defaultButtonColour;
             }
+        }
+
+        private void SetGraphicsTabDropdownHover(bool setActive)
+        {
+            // Get the dropdown list (created dynamically when the dropdown is expanded)
+            GameObject dropdownList = ActiveGraphicsTabOptionDropdown.transform.Find("Dropdown List").gameObject;
+
+            // Find the first item in the dropdown list
+            Transform firstItem = dropdownList.transform.Find("Viewport/Content").GetChild(_qualityDropdownIndex + 1); //Add 1 to account for the template item
+
+            // Access the background of the first item
+            var toggle = firstItem.gameObject.FindDeepChild("Item Background").GetComponent<Image>();
+
+            if (toggle != null)
+            {
+                // Change the background color
+                toggle.color = setActive ? _defaultButtonColour : Color.black;
+            }
+
         }
 
         #region Sound
