@@ -1441,7 +1441,6 @@ MonoBehaviour:
   IsXboxMode: 0
   MaxXboxResolution: 2073600
   ShowFPSCounter: 0
-  PlayingTrailer: 0
   TUTORIAL_MODE: 0
   DEMO_MODE_3: 1
   fullScreenMode: 0

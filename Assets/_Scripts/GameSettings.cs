@@ -132,13 +132,13 @@ public class GameSettings : MonoBehaviour
         else
         {
             fullScreenMode = true;
-            SetQuality(QualityLevel.QUALITY_SETTING_ULTRA);
+            SetQuality(QualityLevel.QUALITY_SETTING_MEDIUM);
             brightnessPercent = 0.5f;
             currentResolution = GetResolution($"1920x1080");
             sfxEnebled = true;
             musicEnabled = true;
             ambianceEnabled = true;
-            ShowGrid = false;
+            ShowGrid = true;
             SetVolume("Global", 1);
             SetVolume("Music", 1);
             SetVolume("SFX", 0.85f);
