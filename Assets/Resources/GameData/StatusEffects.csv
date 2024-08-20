@@ -1,8 +1,8 @@
 Id,NameKey,DescriptionKey,Tooltips
 FATIGUED,FatiguedName,FatiguedDescription,"Actions cost more Energy.
-En: <color=""red"">+1"
+Add'l Energy: <color=""red"">+1"
 SICK,SickName,SickDescription,"Lose Energy every 1.5 hrs.
-En:  <color=""red"">-1"
+Add'l Energy:  <color=""red"">-1"
 VULNERABLE,VulnerableName,VulnerableDescription,"You will receive <color=""red"">double<color=#74664B> status ailments while vulnerable."
 MIGRAINE,MigraineName,MigraineDescription,"Every 3 hours, lose <color=""red"">all Energy."
 FROZEN,FrozenName,FrozenDescription,"On breaking free, you will be afflicted by multiple status ailments."

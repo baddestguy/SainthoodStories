@@ -205,7 +205,9 @@ public class InventoryManager : MonoBehaviour
         if (GameSettings.Instance.DEMO_MODE_3)
         {
             var demoIds = new List<int>() { 2,3,5,6,7,8};
-            prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, demoIds.Count)][0];
+            demoIds.Shuffle();
+            var demoId = demoIds.First();
+            prov1 = GameDataManager.Instance.ProvisionData[(Provision)demoId][0];
         }
 
         prov1 = SwapProvisionBySeason(prov1);
@@ -215,7 +217,9 @@ public class InventoryManager : MonoBehaviour
             if (GameSettings.Instance.DEMO_MODE_3)
             {
                 var demoIds = new List<int>() { 2, 3, 5, 6, 7, 8 };
-                prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, demoIds.Count)][0];
+                demoIds.Shuffle();
+                var demoId = demoIds.First();
+                prov1 = GameDataManager.Instance.ProvisionData[(Provision)demoId][0];
             }
             prov1 = SwapProvisionBySeason(prov1);
         }
@@ -225,7 +229,9 @@ public class InventoryManager : MonoBehaviour
         if (GameSettings.Instance.DEMO_MODE_3)
         {
             var demoIds = new List<int>() { 2, 3, 5, 6, 7, 8 };
-            prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, demoIds.Count)][0];
+            demoIds.Shuffle();
+            var demoId = demoIds.First();
+            prov2 = GameDataManager.Instance.ProvisionData[(Provision)demoId][0];
         }
   
         prov2 = SwapProvisionBySeason(prov2);
@@ -236,7 +242,9 @@ public class InventoryManager : MonoBehaviour
             if (GameSettings.Instance.DEMO_MODE_3)
             {
                 var demoIds = new List<int>() { 2, 3, 5, 6, 7, 8 };
-                prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, demoIds.Count)][0];
+                demoIds.Shuffle();
+                var demoId = demoIds.First();
+                prov2 = GameDataManager.Instance.ProvisionData[(Provision)demoId][0];
             }
             prov2 = SwapProvisionBySeason(prov2);
         }
