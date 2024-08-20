@@ -38,16 +38,15 @@ namespace Assets._Scripts.Xbox
         private int _selectedPauseButtonIndex;
         private int _selectedGraphicsButtonIndex;
         private int _selectedSoundButtonIndex;
-        private ColorBlock _defaultPauseTabColorBlock;
-        private ColorBlock _activePauseTabColorBlock;
         private readonly Color _defaultButtonColour = new(0.7882353f, 0.6627451f, 0.3882353f);
         private bool _skipFrame;
-        private bool _isQualityDropdownOpen;
-        private int _qualityDropdownIndex;
+        private bool _isDropdownOpen;
+        private int _dropdownIndex;
 
         private PauseMenu.ActivePauseTab ActiveTab => PauseMenu.Instance.ActiveTab;
 
         private Button ActivePauseTabButton => PauseTabOptions[_selectedPauseButtonIndex].GetComponent<Button>();
+        private Image ActivePauseTabButtonImage => PauseTabOptions[_selectedPauseButtonIndex].GetComponent<Image>();
 
         private Text ActiveGraphicsTabOptionText => GraphicTabOptions[_selectedGraphicsButtonIndex].GetComponentInChildren<Text>();
         private Outline ActiveGraphicsTabOptionTextOutline => GraphicTabOptions[_selectedGraphicsButtonIndex].GetComponentInChildren<Outline>();
@@ -121,7 +120,7 @@ namespace Assets._Scripts.Xbox
                 return;
             }
 
-            if (!_isQualityDropdownOpen && pressedButton.Control.WasPressedThisFrame && pressedButton.Button is GamePadButton.LeftShoulder or GamePadButton.RightShoulder)
+            if (!_isDropdownOpen && pressedButton.Control.WasPressedThisFrame && pressedButton.Button is GamePadButton.LeftShoulder or GamePadButton.RightShoulder)
             {
                 HandleTabSwitch(pressedButton);
             }
@@ -133,10 +132,6 @@ namespace Assets._Scripts.Xbox
 
         public void Activate()
         {
-            _defaultPauseTabColorBlock = ActivePauseTabButton.colors;
-            _activePauseTabColorBlock = _defaultPauseTabColorBlock;
-            _activePauseTabColorBlock.normalColor = _defaultPauseTabColorBlock.highlightedColor;
-
             if (!GameSettings.Instance.IsUsingController) return;
 
             ResetIndexes();
@@ -148,10 +143,10 @@ namespace Assets._Scripts.Xbox
         public void Deactivate()
         {
             SetPauseTabHover(false);
-            if (_isQualityDropdownOpen)
+            if (_isDropdownOpen)
             {
                 ActiveGraphicsTabOptionDropdown.Hide();
-                _isQualityDropdownOpen = false;
+                _isDropdownOpen = false;
             }
             SetGraphicsTabHover(false);
             SetSoundTabHover(false);
@@ -237,7 +232,7 @@ namespace Assets._Scripts.Xbox
         }
         private void SetPauseTabHover(bool setActive)
         {
-            ActivePauseTabButton.colors = setActive ? _activePauseTabColorBlock : _defaultPauseTabColorBlock;
+            ActivePauseTabButtonImage.color = setActive ? Color.black : _defaultButtonColour;
         }
         #endregion
 
@@ -246,7 +241,7 @@ namespace Assets._Scripts.Xbox
             (DirectionInput Input, CustomButtonControl Control) pressedDirection)
         {
             //Navigate the graphics tab
-            if (pressedDirection.Control.WasPressedThisFrame && !_isQualityDropdownOpen)
+            if (pressedDirection.Control.WasPressedThisFrame && !_isDropdownOpen)
             {
                 SetGraphicsTabHover(false);
 
@@ -256,19 +251,19 @@ namespace Assets._Scripts.Xbox
                 SetGraphicsTabHover(true);
             }
             //Navigate the open dropdown
-            else if (pressedDirection.Control.WasPressedThisFrame && _isQualityDropdownOpen)
+            else if (pressedDirection.Control.WasPressedThisFrame && _isDropdownOpen)
             {
                 SetGraphicsTabDropdownHover(false);
                 //select a dropdown option
                 var dropdownIncrement = pressedDirection.Input is DirectionInput.Up ? -1 : pressedDirection.Input is DirectionInput.Down ? 1 : 0;
-                _qualityDropdownIndex = (_qualityDropdownIndex + dropdownIncrement + ActiveGraphicsTabOptionDropdown.options.Count) % ActiveGraphicsTabOptionDropdown.options.Count;
+                _dropdownIndex = (_dropdownIndex + dropdownIncrement + ActiveGraphicsTabOptionDropdown.options.Count) % ActiveGraphicsTabOptionDropdown.options.Count;
 
                 SetGraphicsTabDropdownHover(true);
             }
             else if (pressedButton.Control.WasPressedThisFrame)
             {
                 //Toggle an option or open the dropdown
-                if (pressedButton.Button == GamePadButton.South && !_isQualityDropdownOpen)
+                if (pressedButton.Button == GamePadButton.South && !_isDropdownOpen)
                 {
                     switch (_selectedGraphicsButtonIndex)
                     {
@@ -284,8 +279,8 @@ namespace Assets._Scripts.Xbox
                         case 3:
                             //Quality and Resolution
                             ActiveGraphicsTabOptionDropdown.Show();
-                            _isQualityDropdownOpen = true;
-                            _qualityDropdownIndex = ActiveGraphicsTabOptionDropdown.value;
+                            _isDropdownOpen = true;
+                            _dropdownIndex = ActiveGraphicsTabOptionDropdown.value;
                             SetGraphicsTabDropdownHover(true);
                             break;
                     }
@@ -294,10 +289,10 @@ namespace Assets._Scripts.Xbox
                 else if (pressedButton.Button == GamePadButton.East)
                 {
                     //dropdown is open. Close the dropdown
-                    if (_isQualityDropdownOpen)
+                    if (_isDropdownOpen)
                     {
                         ActiveGraphicsTabOptionDropdown.Hide();
-                        _isQualityDropdownOpen = false;
+                        _isDropdownOpen = false;
                     }
                     //dropdown is closed. Close the pause menu
                     else
@@ -306,12 +301,12 @@ namespace Assets._Scripts.Xbox
                     }
                 }
                 //dropdown is open. Select an option
-                else if (pressedButton.Button == GamePadButton.South && _isQualityDropdownOpen)
+                else if (pressedButton.Button == GamePadButton.South && _isDropdownOpen)
                 {
-                    ActiveGraphicsTabOptionDropdown.value = _qualityDropdownIndex;
+                    ActiveGraphicsTabOptionDropdown.value = _dropdownIndex;
                     SetGraphicsTabDropdownHover(false);
                     ActiveGraphicsTabOptionDropdown.Hide();
-                    _isQualityDropdownOpen = false;
+                    _isDropdownOpen = false;
                 }
             }
         }
@@ -339,7 +334,7 @@ namespace Assets._Scripts.Xbox
             var dropdownList = ActiveGraphicsTabOptionDropdown.transform.Find("Dropdown List").gameObject;
 
             // Find the first item in the dropdown list
-            var firstItem = dropdownList.transform.Find("Viewport/Content").GetChild(_qualityDropdownIndex + 1); //Add 1 to account for the template item
+            var firstItem = dropdownList.transform.Find("Viewport/Content").GetChild(_dropdownIndex + 1); //Add 1 to account for the template item
 
             // Access the background of the first item
             var toggle = firstItem.gameObject.FindDeepChild("Item Background").GetComponent<Image>();
@@ -372,11 +367,11 @@ namespace Assets._Scripts.Xbox
                 if (scrollRect != null)
                 {
                     var content = scrollRect.content;
-                    if (_qualityDropdownIndex >= 0 && _qualityDropdownIndex < content.childCount)
+                    if (_dropdownIndex >= 0 && _dropdownIndex < content.childCount)
                     {
                         // Calculate the scroll position
                         // Add one because zero based, subtract one because the template item is not included
-                        var normalizedPosition = (float)(_qualityDropdownIndex + 1) / (content.childCount - 1); 
+                        var normalizedPosition = (float)(_dropdownIndex + 1) / (content.childCount - 1); 
 
                         // Set the scroll position (0 is the bottom, 1 is the top)
                         scrollRect.verticalNormalizedPosition = 1f - normalizedPosition;

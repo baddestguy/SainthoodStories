@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Assets._Scripts.Extensions;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -24,6 +25,9 @@ namespace Assets._Scripts.Xbox
         private bool _customEventPopupFirstActionButtonAcknowledged;
         private int _customEventPopupButtonIndex;
         private bool _customEventLowerTooltips;
+
+        private int _objectiveInventoryScrollIndex;
+        private readonly Color _defaultColour = new(0.7882353f, 0.6627451f, 0.3882353f);
 
         private ActionButton _currentPopUIButton;
         private ProvisionsPopup _provisionsPopUp;
@@ -128,6 +132,13 @@ namespace Assets._Scripts.Xbox
                 else if (IsShowingObjectiveInventoryPopup)
                 {
                     //todo: Remove hover
+
+                    var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
+                    if (inventoryPopup == null) return;
+                    var scrollRect = inventoryPopup.CurrentTab.GetComponentInChildren<ScrollRect>();
+                    if (scrollRect == null) return;
+
+                    HighlightArtifact(scrollRect, false);
                 }
 
                 //todo: Hide button prompts
@@ -175,6 +186,13 @@ namespace Assets._Scripts.Xbox
             {
                 DeselectBuildingButton();
                 _currentPopUIButton = null;
+            }
+            else if (UI.Instance.SacredItemPopup.activeInHierarchy)
+            {
+                if(pressedButton.Button == GamePadButton.East && pressedButton.Control.WasPressedThisFrame)
+                {
+                    UI.Instance.SacredItemPopup.GetComponent<SacredItemPopup>().Close();
+                }
             }
             else if (ShouldHandleSaintCollection)
             {
@@ -330,29 +348,58 @@ namespace Assets._Scripts.Xbox
                 var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
                 if(inventoryPopup == null) return;
 
-                const float scrollFactor = 0.02f;
-
                 if (pressedDirection.Input == DirectionInput.Up)
                 {
                     var scrollRect = inventoryPopup.CurrentTab.GetComponentInChildren<ScrollRect>();
                     if(scrollRect == null) return;
-                    scrollRect.verticalNormalizedPosition = Math.Min(scrollRect.verticalNormalizedPosition + scrollFactor, 1f);
+
+                    HighlightArtifact(scrollRect, false);
+                    //scrollRect.verticalNormalizedPosition = Math.Min(scrollRect.verticalNormalizedPosition + scrollFactor, 1f);
+                    _objectiveInventoryScrollIndex = (_objectiveInventoryScrollIndex - 1 + scrollRect.content.childCount) % scrollRect.content.childCount;
+
+                    // Calculate the scroll position
+                    var normalizedPosition = (float)(_objectiveInventoryScrollIndex) / (scrollRect.content.childCount - 1);
+                    // Set the scroll position (0 is the bottom, 1 is the top)
+                    scrollRect.verticalNormalizedPosition = 1f - normalizedPosition;
+                    HighlightArtifact(scrollRect, true);
                 }
                 else if (pressedDirection.Input == DirectionInput.Down)
                 {
                     var scrollRect = inventoryPopup.CurrentTab.GetComponentInChildren<ScrollRect>();
                     if (scrollRect == null) return;
-                    scrollRect.verticalNormalizedPosition = Math.Max(scrollRect.verticalNormalizedPosition - scrollFactor, 0f);
+
+
+                    HighlightArtifact(scrollRect, false);
+                    //scrollRect.verticalNormalizedPosition = Math.Max(scrollRect.verticalNormalizedPosition - scrollFactor, 0f);
+                    _objectiveInventoryScrollIndex = (_objectiveInventoryScrollIndex + 1) % scrollRect.content.childCount;
+
+                    // Calculate the scroll position
+                    var normalizedPosition = (float)(_objectiveInventoryScrollIndex) / (scrollRect.content.childCount - 1);
+                    // Set the scroll position (0 is the bottom, 1 is the top)
+                    scrollRect.verticalNormalizedPosition = 1f - normalizedPosition;
+                    HighlightArtifact(scrollRect, true);
                 }
                 else if (pressedDirection.Input == DirectionInput.Left)
                 {
                     inventoryPopup.PrevTab();
+                    _objectiveInventoryScrollIndex = 0;
                 }
                 else if (pressedDirection.Input == DirectionInput.Right)
                 {
                     inventoryPopup.NextTab();
+                    _objectiveInventoryScrollIndex = 0;
                 }
             }
+        }
+
+        private void HighlightArtifact(ScrollRect scrollRect, bool setActive)
+        {
+            var artifact = scrollRect.content.GetChild(_objectiveInventoryScrollIndex);
+            artifact.gameObject.FindDeepChild("Square").GetComponent<Image>().color = setActive ? Color.black : _defaultColour;
+            artifact.gameObject.FindDeepChild("Image").GetComponent<Image>().color = setActive ? _defaultColour : Color.white;
+            artifact.gameObject.FindDeepChild("Title").GetComponent<TMP_Text>().fontSize = setActive ? 20 : 15;
+            
+            if (setActive) artifact.gameObject.GetComponent<SacredItemUIItem>().OnSelect();
         }
 
         #endregion
