@@ -52,6 +52,11 @@ namespace Assets._Scripts.Xbox
             }
         }
 
+        public void OnDisable()
+        {
+            GameplayControllerHandler.Instance.OnInputMethodChanged -= HandleInputMethodChanged;
+        }
+
         private void HandleInputMethodChanged(bool isUsingController)
         {
             if(isUsingController)

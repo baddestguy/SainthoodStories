@@ -92,17 +92,8 @@ public class GameSettings : MonoBehaviour
         {
             IsUsingController = true;
         }
-        else
-        {
-            GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
-        }
     }
 
-
-    private void HandleInputMethodChanged(bool isUsingController)
-    {
-        IsUsingController = isUsingController;
-    }
 
     public void Load()
     {
