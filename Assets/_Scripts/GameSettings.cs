@@ -32,6 +32,7 @@ public class GameSettings : MonoBehaviour
     public bool ShowFPSCounter;
     public bool TUTORIAL_MODE;
     public bool DEMO_MODE_3;
+    private bool _hasRegisteredForInputMethodChanged;
 
     [HideInInspector]
     public bool IsUsingController
@@ -94,6 +95,28 @@ public class GameSettings : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (!_hasRegisteredForInputMethodChanged)
+        {
+            GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
+            _hasRegisteredForInputMethodChanged = true;
+        }
+    }
+
+    public void OnDisable()
+    {
+        if (_hasRegisteredForInputMethodChanged)
+        {
+            GameplayControllerHandler.Instance.OnInputMethodChanged -= HandleInputMethodChanged;
+            _hasRegisteredForInputMethodChanged = false;
+        }
+    }
+
+    private void HandleInputMethodChanged(bool isUsingController)
+    {
+        IsUsingController = isUsingController;
+    }
 
     public void Load()
     {

@@ -42,6 +42,7 @@ namespace Assets._Scripts.Xbox
         private bool _skipFrame;
         private bool _isDropdownOpen;
         private int _dropdownIndex;
+        private bool _hasRegisteredForInputMethodChanged;
 
         private PauseMenu.ActivePauseTab ActiveTab => PauseMenu.Instance.ActiveTab;
 
@@ -68,7 +69,6 @@ namespace Assets._Scripts.Xbox
 
         void Start()
         {
-            GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
             if (!GameSettings.Instance.IsXboxMode) return;
 
             //You can only change show grid option on xbox
@@ -85,8 +85,13 @@ namespace Assets._Scripts.Xbox
 
         public void OnDisable()
         {
-            GameplayControllerHandler.Instance.OnInputMethodChanged -= HandleInputMethodChanged;
+            if (_hasRegisteredForInputMethodChanged)
+            {
+                GameplayControllerHandler.Instance.OnInputMethodChanged -= HandleInputMethodChanged;
+                _hasRegisteredForInputMethodChanged = false;
+            }
         }
+
         private void HandleInputMethodChanged(bool isUsingController)
         {
             if (isUsingController)
@@ -102,6 +107,12 @@ namespace Assets._Scripts.Xbox
 
         private void Update()
         {
+            if (!_hasRegisteredForInputMethodChanged)
+            {
+                GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
+                _hasRegisteredForInputMethodChanged = true;
+            }
+
             if (!GameSettings.Instance.IsUsingController) return;
 
             var pressedButton = GamePadController.GetButton();
@@ -371,7 +382,7 @@ namespace Assets._Scripts.Xbox
                     {
                         // Calculate the scroll position
                         // Add one because zero based, subtract one because the template item is not included
-                        var normalizedPosition = (float)(_dropdownIndex + 1) / (content.childCount - 1); 
+                        var normalizedPosition = (float)(_dropdownIndex + 1) / (content.childCount - 1);
 
                         // Set the scroll position (0 is the bottom, 1 is the top)
                         scrollRect.verticalNormalizedPosition = 1f - normalizedPosition;

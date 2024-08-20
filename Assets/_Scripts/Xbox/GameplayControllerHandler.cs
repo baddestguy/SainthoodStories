@@ -98,8 +98,6 @@ namespace Assets._Scripts.Xbox
         {
             if (ShouldHandlerReturnEarly) return;
 
-            GameSettings.Instance.IsUsingController = GameSettings.Instance.IsXboxMode || isUsingController;
-
             //todo: pause menu buttons, etc.
             if (isUsingController)
             {
