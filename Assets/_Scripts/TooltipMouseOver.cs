@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -93,6 +94,22 @@ public class TooltipMouseOver : MonoBehaviour
             }
             else
             {
+                TextMeshProUGUI textHover = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+
+                if (textHover != null)
+                {
+                    
+                    var toolTipMouseOvers = UI.Instance.CustomEventPopup?.GetComponentsInChildren<TooltipMouseOver>(false)?.Where(x => x.HasControllerHover)?.ToArray();
+                    if(toolTipMouseOvers != null)
+                    {
+                        foreach (var tooltipMouseOver in toolTipMouseOvers)
+                        {
+                            tooltipMouseOver.HandleControllerExit();
+                        }
+                    }
+
+                    textHover.fontStyle = FontStyles.Bold | FontStyles.Underline;
+                }
                 ShowInfoPanel(CustomToolStats);
                 ToolTipManager.Instance.ShowToolTip(Loc_Key);
             }
@@ -103,6 +120,12 @@ public class TooltipMouseOver : MonoBehaviour
 
     public void HideToolTip()
     {
+        TextMeshProUGUI textHover = gameObject.GetComponentInChildren<TextMeshProUGUI>();
+
+        if (textHover != null)
+        {
+            textHover.fontStyle = FontStyles.Normal;
+        }
         ToolTipManager.Instance.ShowToolTip("");
         IsHovering = false;
         transform.DOComplete();

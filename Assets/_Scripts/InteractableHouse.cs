@@ -1383,7 +1383,9 @@ public class InteractableHouse : InteractableObject
         switch (actionName)
         {
             case "BUILD":
-                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption);
+                var tools = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TOOLS);
+                var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
+                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption + (tools?.Energy ?? 0) + (tents?.Energy ?? 0));
                 return !player.CanUseEnergy(moddedEnergy) && CanBuild();
 
             //case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0) || (!DuringOpenHours() && BuildingState != BuildingState.NORMAL);

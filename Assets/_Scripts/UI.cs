@@ -925,6 +925,7 @@ public class UI : MonoBehaviour
 
     public void DisplayToolTip(string text)
     {
+        return;
         if (MissionManager.MissionOver)
         {
             TooltipDisplay.transform.parent.gameObject.SetActive(false);
