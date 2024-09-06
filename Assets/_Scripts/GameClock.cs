@@ -10,7 +10,7 @@ public class GameClock
 
     public static UnityAction<double, int> Ticked;
     public static UnityAction ExecuteEvents;
-    public static UnityAction EndDay;
+    public static UnityAction<bool> EndDay;
     public static UnityAction StartNewDay;
 
     public static bool DeltaTime { get; private set; }
@@ -85,7 +85,7 @@ public class GameClock
         Ticked?.Invoke(Time, Day);
         if (EndofDay)
         {
-            EndDay?.Invoke();
+            EndDay?.Invoke(false);
         }
         CheckTutorial();
         ExecuteEvents?.Invoke();

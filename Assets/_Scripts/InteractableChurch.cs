@@ -393,7 +393,7 @@ public class InteractableChurch : InteractableHouse
 
     public void Sleep()
     {
-        MissionManager.Instance.EndDay();
+        MissionManager.Instance.EndDay(true);
 
         //GameClock clock = GameManager.Instance.GameClock;
         //Player player = GameManager.Instance.Player;

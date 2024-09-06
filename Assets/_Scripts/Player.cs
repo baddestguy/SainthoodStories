@@ -599,6 +599,11 @@ public class Player : MonoBehaviour
         Energy.Consume(10000);
 
         Energy.Consume(-3);
+
+        if (MissionManager.Instance.SleptEarly)
+        {
+            Energy.Consume(-1);
+        }
     }
 
     public int GetEnergyAmount()

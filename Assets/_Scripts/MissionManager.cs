@@ -23,8 +23,9 @@ public class MissionManager : MonoBehaviour
     public int CharityPointsPool { get; private set; }
     public int FaithPoints { get; private set; }
     public int FaithPointsPool { get; private set; }
-
     public int FaithPointsPermanentlyLost;
+
+    public bool SleptEarly = false;
 
     public ObjectivesData CurrentObjective { get { return GameDataManager.Instance.ObjectivesData[CurrentMissionId]; } }
 
@@ -84,8 +85,9 @@ public class MissionManager : MonoBehaviour
         GameManager.Instance.ReloadLevel();
     }
 
-    public void EndDay()
+    public void EndDay(bool sleptEarly = false)
     {
+        SleptEarly = sleptEarly;
         GridCollectibleManager.Instance.ClearAll();
         if (GameSettings.Instance.TUTORIAL_MODE)
         {
