@@ -54,9 +54,14 @@ public class PackageItem : MonoBehaviour
                 break;
         }
 
+        SetLocalizedText(Item);
+    }
 
+    public void SetLocalizedText(ItemType item)
+    {
+        var houseName = ShopItemData.HouseNameForItemType(item);
+        var house = GameManager.Instance.Houses.Where(h=> h.HouseName == houseName).First();
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
-        var house = GameManager.Instance.Houses.Where(h=> h.HouseName == data.House).First();
         mouseOverBtn.Loc_Key = house.MyObjective.MissionDescription;
 
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderColor}", HeaderColor);
@@ -65,9 +70,7 @@ public class PackageItem : MonoBehaviour
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderSize}", HeaderSize);
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{SubheaderSize}", SubheaderSize);
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{DescriptionSize}", DescriptionSize);
-
     }
-
 
     public void Select()
     {

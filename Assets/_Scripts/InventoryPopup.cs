@@ -35,6 +35,7 @@ public class InventoryPopup : MonoBehaviour
         {
             ItemList[i].PackageIcon.gameObject.SetActive(true);
             ItemList[i].PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{InventoryManager.Instance.Items[i]}");
+            ItemList[i].SetLocalizedText(InventoryManager.Instance.Items[i]);
         }
 
         for (int i = 0; i < InventoryManager.Instance.Provisions.Count; i++)

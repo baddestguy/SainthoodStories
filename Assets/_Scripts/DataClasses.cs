@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class DataClasses : MonoBehaviour
@@ -455,6 +456,24 @@ public class ShopItemData
     public double Price;
     public string NameKey;
     public string DescriptionKey;
+
+    public static string HouseNameForItemType(ItemType item)
+    {
+        switch (item)
+        {
+            case ItemType.MEDS:
+                return "InteractableHospital";
+            case ItemType.TOYS:
+                return "InteractableOrphanage";
+            case ItemType.MEAL:
+                return "InteractableKitchen";
+            case ItemType.GROCERIES:
+                return "InteractableShelter";
+            case ItemType.STATIONERY:
+                return "InteractableSchool";
+        }
+        return "";
+    }
 }
 
 [System.Serializable]

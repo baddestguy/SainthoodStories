@@ -1299,7 +1299,7 @@ public class InteractableHouse : InteractableObject
         {
             if(BuildingState == BuildingState.RUBBLE)
                 ExteriorPopUI.gameObject.SetActive(enabled);
-            if (InteriorPopUI && InteriorSpaces[UpgradeLevel].activeSelf)
+            if (InteriorPopUI && InteriorSpaces[UpgradeLevel] != null && InteriorSpaces[UpgradeLevel].activeSelf)
                 InteriorPopUI.gameObject.SetActive(enabled);
         }
 
