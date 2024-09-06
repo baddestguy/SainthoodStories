@@ -18,7 +18,8 @@ public class UI : MonoBehaviour
 
     public TextMeshProUGUI EnergyDisplay;
     public Image EnFillBar;
-    public TextMeshProUGUI TimeDisplay;
+    public TextMeshProUGUI TimeHrDisplay;
+    public TextMeshProUGUI TimeMinDisplay;
     public TextMeshProUGUI DayDisplay;
     public TextMeshProUGUI MessageDisplay;
     public TextMeshProUGUI ReportDisplay;
@@ -190,7 +191,7 @@ public class UI : MonoBehaviour
     public void InitTimeEnergy(GameClock clock, Energy energy)
     {
         EnergyDisplay.text = $"{energy.Amount}";
-        TimeDisplay.text = clock.TimeDisplay();
+        TimeDisplay(clock.Time);
         DayDisplay.text = DayofTheWeek(clock.Day);
     }
 
@@ -262,11 +263,34 @@ public class UI : MonoBehaviour
             ReportDisplay.text = "";
         }
 
-        TimeDisplay.text = GameManager.Instance.GameClock.TimeDisplay();
+        TimeDisplay(time);
         DayDisplay.text = DayofTheWeek(day);
 
         //Tutorial Checks
         TutorialHideUI();
+    }
+
+    public void TimeDisplay(double time)
+    {
+        var currentMinute = int.Parse(TimeMinDisplay.text);
+        var currentHour = int.Parse(TimeHrDisplay.text);
+
+        var newMinute = 0;
+        var newHour = (int)time;
+        if (time - (int)time == 0) newMinute = 0;
+        if (time - (int)time == 0.25) newMinute = 15;
+        if (time - (int)time == 0.5) newMinute = 30;
+        if (time - (int)time == 0.75) newMinute = 45;
+
+        TimeHrDisplay.DOCounter(currentHour, newHour, 1f, "{0:D2}", false);
+        TimeMinDisplay.DOCounter(currentMinute, newMinute, 1f, "{0:D2}", false);
+
+        if(newHour > 21)
+        {
+            TimeHrDisplay.color = Color.red;
+            TimeMinDisplay.color = Color.red;
+            DayDisplay.color = Color.red;
+        }
     }
 
     public void EnableProvisionPopup(ProvisionData prov1, ProvisionData prov2)

@@ -120,7 +120,7 @@ namespace DG.Tweening
         /// <param name="addThousandsSeparator">If TRUE (default) also adds thousands separators</param>
         /// <param name="culture">The <see cref="CultureInfo"/> to use (InvariantCulture if NULL)</param>
         public static TweenerCore<int, int, NoOptions> DOCounter(
-            this TMP_Text target, int fromValue, int endValue, float duration, bool addThousandsSeparator = true, CultureInfo culture = null
+            this TMP_Text target, int fromValue, int endValue, float duration, string leadingZeroes = "", bool addThousandsSeparator = true, CultureInfo culture = null
         ){
             int v = fromValue;
             CultureInfo cInfo = !addThousandsSeparator ? null : culture ?? CultureInfo.InvariantCulture;
@@ -128,6 +128,8 @@ namespace DG.Tweening
                 v = x;
                 target.text = addThousandsSeparator
                     ? v.ToString("N0", cInfo)
+                    : leadingZeroes != ""
+                    ? string.Format(leadingZeroes, v)
                     : v.ToString();
             }, endValue, duration);
             t.SetTarget(target);
