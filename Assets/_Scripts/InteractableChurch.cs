@@ -230,6 +230,18 @@ public class InteractableChurch : InteractableHouse
         }
     }
 
+    public override void PlaySpecialChargeVfx(string buttonName)
+    {
+        if (buttonName == "PRAY" && (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT))
+        {
+            InteriorPopUI.PlayVFX("Halo2");
+        }
+        else
+        {
+            InteriorPopUI.PlayVFX("Halo");
+        }
+    }
+
     public void Pray()
     {
         GameClock clock = GameManager.Instance.GameClock;

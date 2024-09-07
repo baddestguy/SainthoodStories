@@ -234,10 +234,12 @@ public class PopUI : MonoBehaviour
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
         if(MyHouse != null && MyHouse.BuildingState == BuildingState.RUBBLE)
         {
+            MyHouse.PlaySpecialChargeVfx(ButtonName);
             ChargeFx.transform.position = myButton.transform.position;
         }
         else
         {
+            MyHouse.PlaySpecialChargeVfx(ButtonName);
             ChargeFx.transform.position = myButton.transform.position + new Vector3(0,0, -5f);
         }
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
@@ -398,13 +400,15 @@ public class PopUI : MonoBehaviour
         }
     }
 
-    public void PlayVFX(string vfxName)
+    public void PlayVFX(string vfxName, float offset = 2f)
     {
         CurrentVfx = transform.Find(vfxName)?.gameObject;
         if (CurrentVfx == null) return;
 
         CurrentVfx.SetActive(false);
         CurrentVfx.SetActive(true);
+        var myButton = Buttons.FirstOrDefault(b => b.ButtonName == ButtonName);
+        CurrentVfx.transform.position = new Vector3(myButton.transform.position.x, myButton.transform.position.y, myButton.transform.position.z-offset);
     }
 
     public void CriticalSequence()

@@ -1195,6 +1195,21 @@ public class InteractableHouse : InteractableObject
         }
     }
 
+    public virtual void PlaySpecialChargeVfx(string buttonName)
+    {
+       // if (buttonName == "PRAY")
+        {
+            if (BuildingState == BuildingState.RUBBLE)
+            {
+                ExteriorPopUI.PlayVFX("Halo", 0f);
+            }
+            else
+            {
+                InteriorPopUI.PlayVFX("Halo");
+            }
+        }
+    }
+
     public virtual void TriggerCustomEvent()
     {
         //if (GameSettings.Instance.FTUE) return;
