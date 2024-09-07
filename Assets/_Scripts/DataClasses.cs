@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DataClasses : MonoBehaviour
@@ -346,11 +346,21 @@ public class WeatherData
 }
 
 [System.Serializable]
-public class CollectibleData
+public class CollectibleData : IComparable<CollectibleData>
 {
     public string Id;
     public string Name;
     public string Description;
+    public int SortOrder;
+
+    public int CompareTo(CollectibleData compareCollectible)
+    {
+        if (compareCollectible == null)
+            return 1;
+
+        else
+            return SortOrder.CompareTo(compareCollectible.SortOrder);
+    }
 }
 
 [System.Serializable]

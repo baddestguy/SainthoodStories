@@ -85,12 +85,20 @@ public class InventoryPopup : MonoBehaviour
         int counter = 0;
         var scrollerContentRect = ArtifactScroller.content.GetComponent<RectTransform>();
         ArtifactScrollerContentVSize = scrollerContentRect.sizeDelta.y;
+        var sortedList = new List<CollectibleData>();
         foreach (var col in InventoryManager.Instance.Collectibles)
+        {
+            var colName = col.Split(':')[1];
+            var item = GameDataManager.Instance.GetCollectibleData(colName);
+            sortedList.Add(item);
+        }
+        sortedList.Sort();
+        foreach (var col in sortedList)
         {
             var artifact = Instantiate(ArtifactObj);
             artifact.transform.SetParent(ArtifactObj.transform.parent);
             artifact.SetActive(true);
-            artifact.GetComponent<SacredItemUIItem>().Init(col.Split(':')[1]);
+            artifact.GetComponent<SacredItemUIItem>().Init(col.Name);
             if (counter > 6) //Expand scroll view if items spawned go beyond the current single-page view
             {
                 scrollerContentRect.sizeDelta = new Vector2(scrollerContentRect.sizeDelta.x, scrollerContentRect.sizeDelta.y + 41);
