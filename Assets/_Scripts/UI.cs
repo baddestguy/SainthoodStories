@@ -1093,6 +1093,7 @@ public class UI : MonoBehaviour
         FullUIVisible = enable;
 
         TutorialHideUI();
+        BroadcastMessage("HideInfoPanel", SendMessageOptions.DontRequireReceiver);
     }
 
     private void TutorialHideUI()
