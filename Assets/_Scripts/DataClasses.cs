@@ -184,6 +184,7 @@ public enum ItemType
 {
     NONE = 0,
     GROCERIES,
+    KITCHEN_INGREDIENTS,
     CLOTHES,
     TOYS,
     STATIONERY,
@@ -466,6 +467,7 @@ public class ShopItemData
             case ItemType.TOYS:
                 return "InteractableOrphanage";
             case ItemType.MEAL:
+            case ItemType.KITCHEN_INGREDIENTS:
                 return "InteractableKitchen";
             case ItemType.GROCERIES:
                 return "InteractableShelter";

@@ -5933,6 +5933,7 @@ MonoBehaviour:
   CurrentCollectibleMissionId: 0
   CurrentMissionId: 0
   FaithPointsPermanentlyLost: 0
+  SleptEarly: 0
 --- !u!1 &583654964
 GameObject:
   m_ObjectHideFlags: 0

@@ -51,7 +51,7 @@ public class InteractableKitchen : InteractableHouse
             return;
         }
 
-        ItemType item = InventoryManager.Instance.GetItem(ItemType.GROCERIES);
+        ItemType item = InventoryManager.Instance.GetItem(ItemType.KITCHEN_INGREDIENTS);
         GameClock clock = GameManager.Instance.GameClock;
 
         if (item != ItemType.NONE)
@@ -210,7 +210,7 @@ public class InteractableKitchen : InteractableHouse
             case "COOK":
                 var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
                 var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption + (utensils?.Energy ?? 0));
-                return !player.CanUseEnergy(moddedEnergy) && InventoryManager.Instance.CheckItem(ItemType.GROCERIES) && (AllObjectivesComplete || (MyObjective != null));
+                return !player.CanUseEnergy(moddedEnergy) && InventoryManager.Instance.CheckItem(ItemType.KITCHEN_INGREDIENTS) && (AllObjectivesComplete || (MyObjective != null));
         }
 
         return base.CanDoAction(actionName);
