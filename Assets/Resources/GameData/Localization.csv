@@ -1346,7 +1346,7 @@ NewTutorialFailed_3,"Uh oh, you ran out of time.",,,,,,
 NewTutorialFailed_3,"Remember, the day always ends at midnight. You actually don't need to return to the Convent before midnight, but for the sake of this tutorial, let's try to get there before midnight.",,,,,,
 NewTutorial_1,Welcome to the Tutorial. Let's get started.,,,,,,
 NewTutorial_11,The most important thing to keep track of is your <b>Time</b>.,,,,,,
-NewTutorial_11,"Time passes in the game when you perform certain activities, so you can take all the (real world) time you need to think about your next move.",,,,,,
+NewTutorial_11,"Time passes in the game only when you perform certain activities, so you can take all the (real world) time you need before making your next move.",,,,,,
 NewTutorial_12,Let's try a Prayer Activity now.,,,,,,
 NewTutorial_15,"Select the Prayer activity, take a look at its info panel to see how much time it will take, then press and hold to trigger it.
 

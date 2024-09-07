@@ -133,6 +133,7 @@ public class PopUI : MonoBehaviour
 
     public void OnClick(string button)
     {
+        if (Player.LockMovement) return;
         if (LockUI)
         {
             SoundManager.Instance.PlayOneShotSfx("Button_SFX");
@@ -201,6 +202,8 @@ public class PopUI : MonoBehaviour
 
     public void OnPointerDown(string button)
     {
+        if (Player.LockMovement) return;
+
         var myButton = Buttons.FirstOrDefault(b => b.ButtonName == button);
 
         if (GameSettings.Instance.FTUE)
@@ -275,6 +278,8 @@ public class PopUI : MonoBehaviour
 
     public void OnPointerUp()
     {
+        if (Player.LockMovement) return;
+   
         StopCoroutine("CriticalCircle");
         if (CriticalCircleFX != null)
         {
@@ -400,7 +405,7 @@ public class PopUI : MonoBehaviour
         }
     }
 
-    public void PlayVFX(string vfxName, float offset = 2f)
+    public void PlayVFX(string vfxName, float offset = 5f)
     {
         CurrentVfx = transform.Find(vfxName)?.gameObject;
         if (CurrentVfx == null) return;
@@ -408,7 +413,7 @@ public class PopUI : MonoBehaviour
         CurrentVfx.SetActive(false);
         CurrentVfx.SetActive(true);
         var myButton = Buttons.FirstOrDefault(b => b.ButtonName == ButtonName);
-        CurrentVfx.transform.position = new Vector3(myButton.transform.position.x, myButton.transform.position.y, myButton.transform.position.z-offset);
+        CurrentVfx.transform.localPosition = new Vector3(myButton.transform.localPosition.x, myButton.transform.localPosition.y, myButton.transform.localPosition.z-offset);
     }
 
     public void CriticalSequence()
