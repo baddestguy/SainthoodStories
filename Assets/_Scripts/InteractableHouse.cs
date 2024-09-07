@@ -1443,6 +1443,11 @@ public class InteractableHouse : InteractableObject
             return MathF.Ceiling(MaxPrayerProgress / 4);
         }
 
+        if (actionName == "BUILD")
+        {
+            return MathF.Ceiling(MaxBuildPoints / 4);
+        }
+        
         return MathF.Ceiling(MaxVolunteerPoints / 4);
     }
 

@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class InteractableChurch : InteractableHouse
 {
@@ -484,6 +486,15 @@ public class InteractableChurch : InteractableHouse
 
     public override float SetButtonTimer(string actionName)
     {
+        if (actionName == "PRAY")
+        {
+            if (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT)
+            {
+                return MathF.Ceiling((12f + MaxPrayerProgress) / 4);
+            }
+            return MathF.Ceiling(MaxPrayerProgress / 4);
+        }
+
         return base.SetButtonTimer(actionName);
     }
 

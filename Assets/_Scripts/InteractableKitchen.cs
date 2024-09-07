@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 
 public class InteractableKitchen : InteractableHouse
@@ -172,6 +173,15 @@ public class InteractableKitchen : InteractableHouse
                 UI.Meditate?.Invoke(this);
                 break;
         }
+    }
+    public override float SetButtonTimer(string actionName)
+    {
+        if (actionName == "COOK")
+        {
+            return MathF.Ceiling(TicksPerUpgradeLevel() / 4);
+        }
+
+        return base.SetButtonTimer(actionName);
     }
 
     public override int TicksPerUpgradeLevel()
