@@ -19,8 +19,30 @@ public class InventoryPopup : MonoBehaviour
     public float ArtifactScrollerContentVSize;
     public GameObject ArtifactObj;
 
+    /// <summary>
+    /// 0 - Objectives
+    /// <br />
+    /// 1 - Backpack (Inventory/Provisions)
+    /// <br />
+    /// 2 - Ailments
+    /// <br />
+    /// 3 - Artifacts
+    /// </summary>
     public GameObject[] Tabs;
-    public GameObject CurrentTab => Tabs[TabIndex];
+
+    /// <summary>
+    /// TabIndex:
+    /// <br />
+    /// 0 - Objectives
+    /// <br />
+    /// 1 - Backpack (Inventory/Provisions)
+    /// <br />
+    /// 2 - Ailments
+    /// <br />
+    /// 3 - Artifacts
+    /// <br />
+    /// </summary>
+    public (GameObject GameObject, int TabIndex) CurrentTab => (Tabs[TabIndex], TabIndex);
     private int TabIndex;
 
     public static bool Open;

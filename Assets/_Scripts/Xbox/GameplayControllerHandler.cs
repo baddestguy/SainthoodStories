@@ -33,6 +33,7 @@ namespace Assets._Scripts.Xbox
         private ProvisionsPopup _provisionsPopUp;
         private ProvisionUIItem[] _provisionItems;
         private ProvisionUIItem _currentProvisionUIItem;
+        private GameObject _currentInventoryGameObject;
 
         private bool _hasHoveredFirstSaintButton;
         private bool _saintNextOptionHasHover;
@@ -63,7 +64,7 @@ namespace Assets._Scripts.Xbox
         /// This is the menu that shows inventory, current objectives, ailments, and sacred artifacts
         /// </summary>
         private bool IsShowingObjectiveInventoryPopup => UI.Instance?.InventoryPopup != null && UI.Instance.InventoryPopup.activeSelf;
-        private bool ShouldHandlerReturnEarly => 
+        private bool ShouldHandlerReturnEarly =>
             Gamepad.current == null ||
             Player == null ||
             !GameSettings.Instance.IsUsingController ||
@@ -98,7 +99,6 @@ namespace Assets._Scripts.Xbox
         {
             if (ShouldHandlerReturnEarly) return;
 
-            //todo: pause menu buttons, etc.
             if (isUsingController)
             {
 
@@ -125,20 +125,25 @@ namespace Assets._Scripts.Xbox
                 {
                     DeselectProvision();
                 }
-                else if (IsInBuilding)
+                else
                 {
-                    DeselectBuildingButton();
-                }
-                else if (IsShowingObjectiveInventoryPopup)
-                {
-                    //todo: Remove hover
+                    if (IsInBuilding)
+                    {
+                        DeselectBuildingButton();
+                    }
 
-                    var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
-                    if (inventoryPopup == null) return;
-                    var scrollRect = inventoryPopup.CurrentTab.GetComponentInChildren<ScrollRect>();
-                    if (scrollRect == null) return;
+                    if (IsShowingObjectiveInventoryPopup)
+                    {
+                        var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
+                        if (inventoryPopup == null) return;
 
-                    HighlightArtifact(scrollRect, false);
+                        DeselectInventoryItem();
+
+                        var scrollRect = inventoryPopup.Tabs[3].GetComponentInChildren<ScrollRect>();
+                        if (scrollRect == null) return;
+
+                        HighlightArtifact(scrollRect, false);
+                    }
                 }
 
                 //todo: Hide button prompts
@@ -189,7 +194,7 @@ namespace Assets._Scripts.Xbox
             }
             else if (UI.Instance.SacredItemPopup.activeInHierarchy)
             {
-                if(pressedButton.Button == GamePadButton.East && pressedButton.Control.WasPressedThisFrame)
+                if (pressedButton.Button == GamePadButton.East && pressedButton.Control.WasPressedThisFrame)
                 {
                     UI.Instance.SacredItemPopup.GetComponent<SacredItemPopup>().Close();
                 }
@@ -213,7 +218,16 @@ namespace Assets._Scripts.Xbox
             else if (pressedButton.Control.WasPressedThisFrame &&
                      (pressedButton.Button == GamePadButton.North || (pressedButton.Button == GamePadButton.East && IsShowingObjectiveInventoryPopup)))
             {
+                if (IsShowingObjectiveInventoryPopup)
+                {
+                    DeselectInventoryItem();
+                }
+
                 UI.Instance.InventoryPopupEnable();
+
+                var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
+                var backpackGameObject = inventoryPopup.Tabs[1].FindDeepChild("PackageUIItem");
+                _currentInventoryGameObject = backpackGameObject;
             }
             else if (IsShowingObjectiveInventoryPopup)
             {
@@ -228,7 +242,10 @@ namespace Assets._Scripts.Xbox
                 HandlePlayerMovement();
             }
 
-            HandleZoom();
+            if (!IsShowingObjectiveInventoryPopup)
+            {
+                HandleZoom();
+            }
 
         }
 
@@ -267,7 +284,7 @@ namespace Assets._Scripts.Xbox
 
                 HandleConversationEventPopup();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Debug.LogWarning(e);
                 //I'm fine with swallowing this exception, but we should log it.
@@ -284,7 +301,11 @@ namespace Assets._Scripts.Xbox
             if (_provisionsPopUp == null) return;
 
             _provisionItems = provisionsPopup.NewProvisionUIItems.Concat(provisionsPopup.UpgradeProvisionUIItems).Where(x => x.HasProvision).ToArray();
-            SelectFirstProvision();
+
+            if (GameSettings.Instance.IsUsingController)
+            {
+                SelectFirstProvision();
+            }
         }
 
         /// <summary>
@@ -338,70 +359,128 @@ namespace Assets._Scripts.Xbox
         }
 
         #region Objective & Inventory Popup
-
         private void HandleObjectiveInventoryPopup()
         {
-            //get the pressed direction input. Add if statements to handle all four directions
             var pressedDirection = GamePadController.GetDirection();
+            var pressedButton = GamePadController.GetButton();
+
+            var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
+            if (inventoryPopup == null) return;
+
+            var scrollRect = inventoryPopup.CurrentTab.TabIndex == 3 ?
+                inventoryPopup.CurrentTab.GameObject.GetComponentInChildren<ScrollRect>() :
+                null;
+            HighlightArtifact(scrollRect, true);
+
             if (pressedDirection.Control.WasPressedThisFrame)
             {
-                var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
-                if(inventoryPopup == null) return;
-
-                if (pressedDirection.Input == DirectionInput.Up)
+                if (scrollRect != null && pressedDirection.Input is DirectionInput.Up or DirectionInput.Down && inventoryPopup.CurrentTab.TabIndex == 3)
                 {
-                    var scrollRect = inventoryPopup.CurrentTab.GetComponentInChildren<ScrollRect>();
-                    if(scrollRect == null) return;
-
                     HighlightArtifact(scrollRect, false);
-                    //scrollRect.verticalNormalizedPosition = Math.Min(scrollRect.verticalNormalizedPosition + scrollFactor, 1f);
-                    _objectiveInventoryScrollIndex = (_objectiveInventoryScrollIndex - 1 + scrollRect.content.childCount) % scrollRect.content.childCount;
+                    _objectiveInventoryScrollIndex = pressedDirection.Input switch
+                    {
+                        DirectionInput.Up => (_objectiveInventoryScrollIndex - 1 + scrollRect.content.childCount) % scrollRect.content.childCount,
+                        DirectionInput.Down => (_objectiveInventoryScrollIndex + 1) % scrollRect.content.childCount,
+                        _ => _objectiveInventoryScrollIndex
+                    };
 
-                    // Calculate the scroll position
+                    if(_objectiveInventoryScrollIndex == 0) _objectiveInventoryScrollIndex = pressedDirection.Input == DirectionInput.Up ?
+                        scrollRect.content.childCount - 1:
+                            1; //skip the first item because it is a template
+
                     var normalizedPosition = (float)(_objectiveInventoryScrollIndex) / (scrollRect.content.childCount - 1);
-                    // Set the scroll position (0 is the bottom, 1 is the top)
                     scrollRect.verticalNormalizedPosition = 1f - normalizedPosition;
                     HighlightArtifact(scrollRect, true);
+
                 }
-                else if (pressedDirection.Input == DirectionInput.Down)
+            }
+            else if (pressedButton.Control.WasPressedThisFrame)
+            {
+                if (pressedButton.Button is GamePadButton.LeftShoulder or GamePadButton.RightShoulder)
                 {
-                    var scrollRect = inventoryPopup.CurrentTab.GetComponentInChildren<ScrollRect>();
-                    if (scrollRect == null) return;
-
-
                     HighlightArtifact(scrollRect, false);
-                    //scrollRect.verticalNormalizedPosition = Math.Max(scrollRect.verticalNormalizedPosition - scrollFactor, 0f);
-                    _objectiveInventoryScrollIndex = (_objectiveInventoryScrollIndex + 1) % scrollRect.content.childCount;
+                    _objectiveInventoryScrollIndex = 1;
 
-                    // Calculate the scroll position
-                    var normalizedPosition = (float)(_objectiveInventoryScrollIndex) / (scrollRect.content.childCount - 1);
-                    // Set the scroll position (0 is the bottom, 1 is the top)
-                    scrollRect.verticalNormalizedPosition = 1f - normalizedPosition;
-                    HighlightArtifact(scrollRect, true);
+                    switch (pressedButton.Button)
+                    {
+                        case GamePadButton.LeftShoulder:
+                            inventoryPopup.PrevTab();
+                            break;
+                        case GamePadButton.RightShoulder:
+                            inventoryPopup.NextTab();
+                            break;
+                    }
                 }
-                else if (pressedDirection.Input == DirectionInput.Left)
+
+            }
+
+            if (inventoryPopup.CurrentTab.TabIndex == 1)
+            {
+                HandleBackPackNavigation();
+            }
+
+            return;
+
+            void HandleBackPackNavigation()
+            {
+                _currentInventoryGameObject.GetComponent<TooltipMouseOver>().HandleControllerHover();
+                if (pressedDirection.Input == DirectionInput.Void || !pressedDirection.Control.WasPressedThisFrame) return;
+
+                DeselectInventoryItem();
+
+                //get game objects nested in inventoryPopup that have a Tooltip Mouse Over Script attached
+                var inventoryTooltips = inventoryPopup.CurrentTab.GameObject.GetComponentsInChildren<TooltipMouseOver>(true);
+
+                if (!inventoryTooltips.Any()) return;
+
+                var closestProvisionGameObject = pressedDirection.Input.GetClosestGameObjectOnCanvasInDirection(
+                    _currentInventoryGameObject,
+                    inventoryTooltips.Select(x => x.gameObject).ToArray());
+
+                if (closestProvisionGameObject != null)
                 {
-                    inventoryPopup.PrevTab();
-                    _objectiveInventoryScrollIndex = 0;
+                    _currentInventoryGameObject = closestProvisionGameObject;
                 }
-                else if (pressedDirection.Input == DirectionInput.Right)
+
+                if (_currentInventoryGameObject == null)
                 {
-                    inventoryPopup.NextTab();
-                    _objectiveInventoryScrollIndex = 0;
+                    _currentInventoryGameObject = _provisionItems.First().gameObject;
                 }
+
+                _currentInventoryGameObject.GetComponent<TooltipMouseOver>().HandleControllerHover();
             }
         }
 
         private void HighlightArtifact(ScrollRect scrollRect, bool setActive)
         {
-            var artifact = scrollRect.content.GetChild(_objectiveInventoryScrollIndex);
-            artifact.gameObject.FindDeepChild("Square").GetComponent<Image>().color = setActive ? Color.black : _defaultColour;
-            artifact.gameObject.FindDeepChild("Image").GetComponent<Image>().color = setActive ? _defaultColour : Color.white;
-            artifact.gameObject.FindDeepChild("Title").GetComponent<TMP_Text>().fontSize = setActive ? 20 : 15;
-            
-            if (setActive) artifact.gameObject.GetComponent<SacredItemUIItem>().OnSelect();
+            try
+            {
+                if(scrollRect == null) return;
+
+                var artifact = scrollRect.content.GetChild(_objectiveInventoryScrollIndex);
+                if (artifact == null || !artifact.gameObject.activeInHierarchy) return;
+
+                artifact.gameObject.FindDeepChild("Square").GetComponent<Image>().color =
+                    setActive ? Color.black : _defaultColour;
+                artifact.gameObject.FindDeepChild("Image").GetComponent<Image>().color =
+                    setActive ? _defaultColour : Color.white;
+                artifact.gameObject.FindDeepChild("Title").GetComponent<TMP_Text>().fontSize = setActive ? 20 : 15;
+
+                if (setActive) artifact.gameObject.GetComponent<SacredItemUIItem>().OnSelect();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning(e);
+            }
         }
 
+        private void DeselectInventoryItem()
+        {
+            if (_currentInventoryGameObject != null)
+            {
+                _currentInventoryGameObject.GetComponent<TooltipMouseOver>().HandleControllerExit();
+            }
+        }
         #endregion
 
         #region BuildingMovementAndAction
@@ -611,7 +690,7 @@ namespace Assets._Scripts.Xbox
 
                     //If we are at the limit and have to replace a provision, hover over the first existing provision
                     if (_currentProvisionUIItem.Type == ProvisionUIItemType.NEW &&
-                        _provisionsPopUp != null && 
+                        _provisionsPopUp != null &&
                         _provisionsPopUp.PopupPhase == ProvisionsPopupPhase.REPLACE)
                     {
                         SelectFirstProvision();
@@ -626,7 +705,7 @@ namespace Assets._Scripts.Xbox
 
         private void SelectFirstProvision()
         {
-           _currentProvisionUIItem = _provisionItems.FirstOrDefault(x => x.gameObject.activeInHierarchy);
+            _currentProvisionUIItem = _provisionItems.FirstOrDefault(x => x.gameObject.activeInHierarchy);
             _currentProvisionUIItem?.HandleControllerHover();
         }
 
