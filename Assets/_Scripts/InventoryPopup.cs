@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
@@ -18,7 +19,30 @@ public class InventoryPopup : MonoBehaviour
     public float ArtifactScrollerContentVSize;
     public GameObject ArtifactObj;
 
+    /// <summary>
+    /// 0 - Objectives
+    /// <br />
+    /// 1 - Backpack (Inventory/Provisions)
+    /// <br />
+    /// 2 - Ailments
+    /// <br />
+    /// 3 - Artifacts
+    /// </summary>
     public GameObject[] Tabs;
+
+    /// <summary>
+    /// TabIndex:
+    /// <br />
+    /// 0 - Objectives
+    /// <br />
+    /// 1 - Backpack (Inventory/Provisions)
+    /// <br />
+    /// 2 - Ailments
+    /// <br />
+    /// 3 - Artifacts
+    /// <br />
+    /// </summary>
+    public (GameObject GameObject, int TabIndex) CurrentTab => (Tabs[TabIndex], TabIndex);
     private int TabIndex;
 
     public static bool Open;
@@ -33,6 +57,7 @@ public class InventoryPopup : MonoBehaviour
         {
             ItemList[i].PackageIcon.gameObject.SetActive(true);
             ItemList[i].PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{InventoryManager.Instance.Items[i]}");
+            ItemList[i].SetLocalizedText(InventoryManager.Instance.Items[i]);
         }
 
         for (int i = 0; i < InventoryManager.Instance.Provisions.Count; i++)
@@ -82,12 +107,20 @@ public class InventoryPopup : MonoBehaviour
         int counter = 0;
         var scrollerContentRect = ArtifactScroller.content.GetComponent<RectTransform>();
         ArtifactScrollerContentVSize = scrollerContentRect.sizeDelta.y;
+        var sortedList = new List<CollectibleData>();
         foreach (var col in InventoryManager.Instance.Collectibles)
+        {
+            var colName = col.Split(':')[1];
+            var item = GameDataManager.Instance.GetCollectibleData(colName);
+            sortedList.Add(item);
+        }
+        sortedList.Sort();
+        foreach (var col in sortedList)
         {
             var artifact = Instantiate(ArtifactObj);
             artifact.transform.SetParent(ArtifactObj.transform.parent);
             artifact.SetActive(true);
-            artifact.GetComponent<SacredItemUIItem>().Init(col.Split(':')[1]);
+            artifact.GetComponent<SacredItemUIItem>().Init(col.Name);
             if (counter > 6) //Expand scroll view if items spawned go beyond the current single-page view
             {
                 scrollerContentRect.sizeDelta = new Vector2(scrollerContentRect.sizeDelta.x, scrollerContentRect.sizeDelta.y + 41);
@@ -100,19 +133,15 @@ public class InventoryPopup : MonoBehaviour
 
     public void NextTab()
     {
-        if (TabIndex+1 >= Tabs.Length) return;
-
         Tabs[TabIndex].SetActive(false);
-        TabIndex++;
+        TabIndex = (TabIndex + 1) % Tabs.Length;
         Tabs[TabIndex].SetActive(true);
     }
 
     public void PrevTab()
     {
-        if (TabIndex-1 < 0) return;
-
         Tabs[TabIndex].SetActive(false);
-        TabIndex--;
+        TabIndex = (TabIndex - 1 + Tabs.Length) % Tabs.Length;
         Tabs[TabIndex].SetActive(true);
     }
 

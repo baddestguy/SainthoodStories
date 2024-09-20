@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class InteractableChurch : InteractableHouse
 {
@@ -103,6 +105,7 @@ public class InteractableChurch : InteractableHouse
 
     public void CheckCollectibleObjectives()
     {
+        if (GameSettings.Instance.DEMO_MODE_3) return;
         if (MissionManager.Instance.CurrentCollectibleCounter == GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount)
         {
             EventsManager.Instance.AddEventToList(GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].OnComplete);
@@ -115,7 +118,7 @@ public class InteractableChurch : InteractableHouse
     public void CheckProvisions()
     {
         var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-        MaxPrayerProgress = rosary != null ? 6f : 4f;
+        MaxPrayerProgress = 4 + (rosary?.Ticks ?? 0);
     }
 
     public override void Tick(double time, int day)
@@ -227,6 +230,18 @@ public class InteractableChurch : InteractableHouse
         }
     }
 
+    public override void PlaySpecialChargeVfx(string buttonName)
+    {
+        if (buttonName == "PRAY" && (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT))
+        {
+            InteriorPopUI.PlayVFX("Halo2");
+        }
+        else
+        {
+            InteriorPopUI.PlayVFX("Halo");
+        }
+    }
+
     public void Pray()
     {
         GameClock clock = GameManager.Instance.GameClock;
@@ -319,21 +334,24 @@ public class InteractableChurch : InteractableHouse
             if (PopUI.CriticalHitCount == MaxPrayerProgress) extraPoints += 1;
 
             var maxPP = MaxPrayerProgress;
+            var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
+            var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
+            var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
+            var bonusFPChance = incense?.Value / 100d ?? 0;
+
             if (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT)
             {
-                maxPP = 12; //3hrs minimum to complete prayer objective
+                maxPP = 12; //New 3hrs base time to complete prayer objective
+                maxPP += rosary?.Ticks ?? 0;
             }
 
             if (PrayerProgress == MaxPrayerProgress)
             {
-                var provData = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-                extraPoints += provData?.Value ?? 0;
-                var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
-
+                extraPoints += (rosary?.FP ?? 0) + (Random.Range(0, 100) < bonusFPChance ? incense?.FP ?? 0 : 0);
                 if (koboko != null)
                 {
-                    extraPoints += koboko?.Value ?? 0;
-                    player.ConsumeEnergy(koboko.Value);
+                    extraPoints += koboko?.FP ?? 0;
+                    player.ConsumeEnergy(koboko.Energy);
                 }
 
                 PrayerProgress = 0;
@@ -357,7 +375,7 @@ public class InteractableChurch : InteractableHouse
                     {
                         BuildRelationship(ThankYouType.VOLUNTEER);
                         CurrentMissionId++;
-                        UpdateFaithPoints(MyObjective.Reward, 0);
+                        UpdateFaithPoints(MyObjective.Reward + FPBonus + extraPoints, 0);
                         MyObjective = null;
                         VolunteerProgress = 0;
                         CurrentMissionCompleteToday = true;
@@ -389,7 +407,7 @@ public class InteractableChurch : InteractableHouse
 
     public void Sleep()
     {
-        MissionManager.Instance.EndDay();
+        MissionManager.Instance.EndDay(true);
 
         //GameClock clock = GameManager.Instance.GameClock;
         //Player player = GameManager.Instance.Player;
@@ -450,16 +468,19 @@ public class InteractableChurch : InteractableHouse
                 GameClock clock = GameManager.Instance.GameClock;
                 CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.WEEKDAY_MASS);
 
+                var incense = InventoryManager.Instance.GetProvision(Provision.INCENSE);
+                var bonusFPChance = incense?.Value / 100d ?? 0;
+
                 var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
                 var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
-                var bonusFp = (koboko?.Value ?? 0) + (rosary?.Value ?? 0);
+                var bonusFp = (koboko?.FP ?? 0) + (rosary?.FP ?? 0) + (Random.Range(0, 100) < bonusFPChance ? incense?.FP ?? 0 : 0);
                 var maxPP = 0;
                 if (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT)
                 {
                     maxPP = 12;
                 }
 
-                return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, ticksOverride:maxPP, ticksModifier: rosary != null ? 2 : 0, energyModifier: -koboko?.Value ?? 0, fpModifier: FPBonus + bonusFp, fpOverride:MyObjective?.Reward ?? 0);
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, ticksOverride:maxPP, ticksModifier: rosary != null ? rosary.Ticks : 0, energyModifier: -(koboko?.Energy ?? 0), fpModifier: FPBonus + bonusFp, fpOverride:MyObjective?.Reward ?? 0);
 
             case "SLEEP":
                 if (MaxSleepProgress - SleepProgress == 1)
@@ -477,23 +498,13 @@ public class InteractableChurch : InteractableHouse
 
     public override float SetButtonTimer(string actionName)
     {
-        switch (actionName)
+        if (actionName == "PRAY")
         {
-            case "PRAY":
-
-                if (MyObjective != null && MyObjective.Event == BuildingEventType.MASS)
-                {
-                    GameClock clock = GameManager.Instance.GameClock;
-                    if (clock.Time == ConfessionTime)
-                    {
-                        return 2f;
-                    }
-                    else if (clock.Time >= MassStartTime && clock.Time < MassEndTime)
-                    {
-                        return 4f;
-                    }
-                }
-                break;
+            if (MyObjective?.Event == BuildingEventType.PRAY || MyObjective?.Event == BuildingEventType.PRAY_URGENT)
+            {
+                return MathF.Ceiling((12f + MaxPrayerProgress) / 4);
+            }
+            return MathF.Ceiling(MaxPrayerProgress / 4);
         }
 
         return base.SetButtonTimer(actionName);

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Xbox;
+using Assets._Scripts.Xbox;
 using DG.Tweening;
 using Michsky.UI.ModernUIPack;
 using TMPro;
@@ -28,14 +28,14 @@ public class EndWeekSequence : MonoBehaviour
     public ProgressBar SaintProgressBar;
     private bool Continue = false;
 
-    public IEnumerator RunSequenceAsync(int fp, int fpPool, int cp, int cpPool, IEnumerable<SaintData> saintsUnlocked)
+    public IEnumerator RunSequenceAsync(int fp, int fpPool, int fpTarget, int cp, int cpPool, IEnumerable<SaintData> saintsUnlocked, int missionId)
     {
         int cashAmount = Mathf.Clamp(cpPool, 0, 100000000);
         var donation = InventoryManager.Instance.GetProvision(Provision.ALLOWANCE);
-        cashAmount += donation?.Value ?? 0;
-        TreasuryManager.Instance.DonateMoney(cashAmount);
-        SaintProgressBar.currentPercent = fp * 100f / GameDataManager.Instance.GetNextSaintUnlockThreshold();
-        SaintProgressBar.endPercent = (fpPool + fp) * 100f / GameDataManager.Instance.GetNextSaintUnlockThreshold();
+        cashAmount += donation?.Coin ?? 0;
+        TreasuryManager.Instance.DonateMoney(cashAmount);   //Will not get this if player closes before RunSequence
+        SaintProgressBar.currentPercent = fp * 100f / fpTarget;
+        SaintProgressBar.endPercent = (fpPool + fp) * 100f / fpTarget;
 
         BG.SetActive(true);
         CPFPObj.SetActive(true);
@@ -61,7 +61,7 @@ public class EndWeekSequence : MonoBehaviour
             if (GameSettings.Instance.IsUsingController)
             {
                 var pressedButton = GamePadController.GetButton();
-                if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame) ContinueSequence();
+                if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame) ContinueSequence();
             }
             
             yield return null;
@@ -111,7 +111,7 @@ public class EndWeekSequence : MonoBehaviour
                 if (GameSettings.Instance.IsUsingController)
                 {
                     var pressedButton = GamePadController.GetButton();
-                    if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame) ContinueSequence();
+                    if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame) ContinueSequence();
                 }
                 yield return null;
             }
@@ -124,8 +124,8 @@ public class EndWeekSequence : MonoBehaviour
         SaintProgressBar.gameObject.SetActive(false);
 
         DaysLeftObj.SetActive(true);
-        OldDaysleft.text = $"{GameDataManager.MAX_MISSION_ID - MissionManager.Instance.CurrentMissionId+1}";
-        NewDaysleft.text = $"{GameDataManager.MAX_MISSION_ID - MissionManager.Instance.CurrentMissionId}";
+        OldDaysleft.text = $"{GameDataManager.MAX_MISSION_ID - missionId + 1}";
+        NewDaysleft.text = $"{GameDataManager.MAX_MISSION_ID - missionId}";
 
         yield return new WaitForSeconds(1f);
 

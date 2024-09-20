@@ -1,4 +1,4 @@
-﻿using Assets.Xbox;
+﻿using Assets._Scripts.Xbox;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;

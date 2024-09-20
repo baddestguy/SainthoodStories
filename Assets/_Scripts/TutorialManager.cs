@@ -278,7 +278,8 @@ public class TutorialManager : MonoBehaviour
         {
             UI.Instance.EnableAllUIElements(false);
             SoundManager.Instance.EndAllTracks();
-            GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+            GameSettings.Instance.TUTORIAL_MODE = false;
+            GameManager.Instance.ReloadLevel();
         }
     }
 

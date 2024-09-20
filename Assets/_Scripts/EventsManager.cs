@@ -79,8 +79,12 @@ public class EventsManager : MonoBehaviour
         EventDialogTriggered?.Invoke(true);
         Player.LockMovement = true;
 
+        if (EventList.Any())
+        {
+            EventInProgress = true;
+            yield return new WaitForSeconds(1f);
+        }
         UI.Instance.EnableAllUIElements(false);
-     //   if (EventList.Any()) yield return new WaitForSeconds(2f);
         //Execute events one by one
         foreach (var e in EventList)
         {

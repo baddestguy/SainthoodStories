@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Assets.Xbox;
+using Assets._Scripts.Xbox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -136,7 +136,7 @@ public class ProvisionsPopup : MonoBehaviour
     {
         var bonusEnergy = InventoryManager.Instance.GetProvision(Provision.ENERGY_DRINK);
         Player player = GameManager.Instance.Player;
-        player.ConsumeEnergy(-bonusEnergy?.Value ?? 0);
+        player.ConsumeEnergy(-bonusEnergy?.Energy ?? 0);
 
         CustomEventPopup.IsDisplaying = false;
         gameObject.SetActive(false);

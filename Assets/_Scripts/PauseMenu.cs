@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using Assets.Xbox;
+using Assets._Scripts.Xbox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,12 +25,20 @@ public class PauseMenu : MonoBehaviour
     public ToggleGroup MenuToggleGroup;
 
     [HideInInspector] public bool active;
+    [HideInInspector] public ActivePauseTab ActiveTab;
     public static PauseMenu Instance
     {
         get
         {
             return instance;
         }
+    }
+
+    public enum ActivePauseTab
+    {
+        Pause,
+        Graphics,
+        Sound
     }
 
     private void Awake()
@@ -49,18 +57,6 @@ public class PauseMenu : MonoBehaviour
         {
             Activate();
         }
-
-        if (GameSettings.Instance.IsUsingController)
-        {
-            var pressedButton = GamePadController.GetButton();
-            if (pressedButton.Control.wasPressedThisFrame)
-            {
-                if (pressedButton.Button == GamePadButton.Start || (pressedButton.Button == GamePadButton.East && active))
-                {
-                    Activate();
-                }
-            }
-        }
     }
 
     public void Activate()
@@ -78,26 +74,18 @@ public class PauseMenu : MonoBehaviour
                 TutorialEnabled.SetIsOnWithoutNotify(GameSettings.Instance.TutorialToggle);
             }
 
-            if (GameSettings.Instance.IsUsingController)
-            {
-                PauseMenuControllerHandler.Instance.Activate(MenuToggleGroup);
-            }
+            PauseMenuControllerHandler.Instance.Activate();
 
             if (!GameManager.Instance.InGameSession)
             {
                 PauseToggleObj.SetActive(false);
 
                 ToggleGraphics();
-                var graphicsToggleTransform = MenuToggleGroup.transform.Find("Graphics");
-                var graphicsToggle = graphicsToggleTransform.GetComponent<Toggle>();
-                graphicsToggle.isOn = true;
             }
             else
             {
                 PauseToggleObj.SetActive(true);
                 TogglePause();
-                var pauseToggle = MenuToggleGroup.transform.Find("PauseTab").GetComponent<Toggle>();
-                pauseToggle.isOn = true;
             }
 
             ShowGridToggle.SetIsOnWithoutNotify(GameSettings.Instance.ShowGrid);
@@ -119,6 +107,9 @@ public class PauseMenu : MonoBehaviour
 
         CloseAll();
         PauseSettings.SetActive(true);
+        var pauseToggle = MenuToggleGroup.transform.Find("PauseTab").GetComponent<Toggle>();
+        pauseToggle.SetIsOnWithoutNotify(true);
+        ActiveTab = ActivePauseTab.Pause;
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 
@@ -126,6 +117,9 @@ public class PauseMenu : MonoBehaviour
     {
         CloseAll();
         GraphicsSettings.SetActive(true);
+        var graphicsToggle = MenuToggleGroup.transform.Find("Graphics").GetComponent<Toggle>();
+        graphicsToggle.SetIsOnWithoutNotify(true);
+        ActiveTab = ActivePauseTab.Graphics;
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 
@@ -133,6 +127,9 @@ public class PauseMenu : MonoBehaviour
     {
         CloseAll();
         SoundSettings.SetActive(true);
+        var graphicsToggle = MenuToggleGroup.transform.Find("SoundTab").GetComponent<Toggle>();
+        graphicsToggle.SetIsOnWithoutNotify(true);
+        ActiveTab = ActivePauseTab.Sound;
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 

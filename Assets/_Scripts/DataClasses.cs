@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DataClasses : MonoBehaviour
@@ -183,6 +184,7 @@ public enum ItemType
 {
     NONE = 0,
     GROCERIES,
+    KITCHEN_INGREDIENTS,
     CLOTHES,
     TOYS,
     STATIONERY,
@@ -196,7 +198,6 @@ public enum Provision
 {
     UMBRELLA,
     WINTER_CLOAK,
-    SHADES,
     ENERGY_DRINK,
     ROSARY,
     COOKING_UTENSILS,
@@ -209,7 +210,6 @@ public enum Provision
     HOSPITAL_RELATIONSHIP_BUILDER,
     SCHOOL_RELATIONSHIP_BUILDER,
     ORPHANAGE_RELATIONSHIP_BUILDER,
-    KITCHEN_RELATIONSHIP_BUILDER,
     SHELTER_RELATIONSHIP_BUILDER
     ,SOFT_MATTRESS
     ,REDUCE_SLEEP_TIME
@@ -219,6 +219,8 @@ public enum Provision
     ,SECURITY_GUARDS
     ,STURDY_BUILDING_MATERIALS
     ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
+    ,SHADES
+    ,KITCHEN_RELATIONSHIP_BUILDER
     ,EXTRA_INVENTORY 
     ,AUTO_DELIVER
 }
@@ -344,11 +346,21 @@ public class WeatherData
 }
 
 [System.Serializable]
-public class CollectibleData
+public class CollectibleData : IComparable<CollectibleData>
 {
     public string Id;
     public string Name;
     public string Description;
+    public int SortOrder;
+
+    public int CompareTo(CollectibleData compareCollectible)
+    {
+        if (compareCollectible == null)
+            return 1;
+
+        else
+            return SortOrder.CompareTo(compareCollectible.SortOrder);
+    }
 }
 
 [System.Serializable]
@@ -455,6 +467,25 @@ public class ShopItemData
     public double Price;
     public string NameKey;
     public string DescriptionKey;
+
+    public static string HouseNameForItemType(ItemType item)
+    {
+        switch (item)
+        {
+            case ItemType.MEDS:
+                return "InteractableHospital";
+            case ItemType.TOYS:
+                return "InteractableOrphanage";
+            case ItemType.MEAL:
+            case ItemType.KITCHEN_INGREDIENTS:
+                return "InteractableKitchen";
+            case ItemType.GROCERIES:
+                return "InteractableShelter";
+            case ItemType.STATIONERY:
+                return "InteractableSchool";
+        }
+        return "";
+    }
 }
 
 [System.Serializable]
@@ -463,6 +494,13 @@ public class ProvisionData
     public Provision Id;
     public int Level;
     public int Value;
+    public int Time;
+    public int Ticks;
+    public int Energy;
+    public int FP;
+    public int CP;
+    public int Coin;
+    public int Spirits;
     public string NameKey;
     public string DescriptionKey;
     public string Tooltips;

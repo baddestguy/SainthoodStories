@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 
 public class InteractableKitchen : InteractableHouse
@@ -50,7 +51,7 @@ public class InteractableKitchen : InteractableHouse
             return;
         }
 
-        ItemType item = InventoryManager.Instance.GetItem(ItemType.GROCERIES);
+        ItemType item = InventoryManager.Instance.GetItem(ItemType.KITCHEN_INGREDIENTS);
         GameClock clock = GameManager.Instance.GameClock;
 
         if (item != ItemType.NONE)
@@ -61,7 +62,7 @@ public class InteractableKitchen : InteractableHouse
             {
                 RequiredItems--;
                 var amt = MyObjective.RequiredAmount - RequiredItems;
-                OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 2);
+                OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 1);
 
                 var extraPoints = 0;
                 if (PopUI.CriticalHitCount == 1) extraPoints = 1;
@@ -103,10 +104,10 @@ public class InteractableKitchen : InteractableHouse
                 }
             }
 
-            TreasuryManager.Instance.DonateMoney(2);
+            TreasuryManager.Instance.DonateMoney(utensils?.Coin ?? 0);
             CookFX.Play();
 
-            var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption - (utensils?.Value ?? 0));
+            var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption + (utensils?.Energy ?? 0));
             var ticks = TicksPerUpgradeLevel();
 
             player.ConsumeEnergy(moddedEnergy);
@@ -131,8 +132,8 @@ public class InteractableKitchen : InteractableHouse
                 if (MyObjective?.Event == BuildingEventType.COOK || MyObjective?.Event == BuildingEventType.COOK_URGENT)
                 {
                     var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
-                    var moddedEnergy = -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: EnergyConsumption - (utensils?.Value ?? 0));
-                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride: TicksPerUpgradeLevel(), energyModifier: moddedEnergy, cpOverride: MyObjective.Reward);
+                    var moddedEnergy = GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: (utensils?.Energy ?? 0));
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride: TicksPerUpgradeLevel(), energyModifier: -moddedEnergy, cpOverride: MyObjective.Reward);
                 }
                 else
                 {
@@ -145,11 +146,6 @@ public class InteractableKitchen : InteractableHouse
 
     public override void BuildRelationship(ThankYouType thanks, int amount = 3)
     {
-        if (thanks == ThankYouType.VOLUNTEER)
-        {
-            var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
-            TreasuryManager.Instance.DonateMoney(utensils?.Value ?? 0);
-        }
         base.BuildRelationship(thanks, amount);
     }
 
@@ -178,6 +174,15 @@ public class InteractableKitchen : InteractableHouse
                 break;
         }
     }
+    public override float SetButtonTimer(string actionName)
+    {
+        if (actionName == "COOK")
+        {
+            return MathF.Ceiling(TicksPerUpgradeLevel() / 4);
+        }
+
+        return base.SetButtonTimer(actionName);
+    }
 
     public override int TicksPerUpgradeLevel()
     {
@@ -204,8 +209,8 @@ public class InteractableKitchen : InteractableHouse
         {
             case "COOK":
                 var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
-                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption - (utensils?.Value ?? 0));
-                return !player.CanUseEnergy(moddedEnergy) && InventoryManager.Instance.CheckItem(ItemType.GROCERIES);
+                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption + (utensils?.Energy ?? 0));
+                return !player.CanUseEnergy(moddedEnergy) && InventoryManager.Instance.CheckItem(ItemType.KITCHEN_INGREDIENTS) && (AllObjectivesComplete || (MyObjective != null));
         }
 
         return base.CanDoAction(actionName);

@@ -42,7 +42,9 @@ public class InteractableOrphanage : InteractableHouse
 
     public override float CalculateMaxVolunteerPoints(int amount = 4)
     {
-        return base.CalculateMaxVolunteerPoints(amount);
+        var orphanageMaterials = InventoryManager.Instance.GetProvision(Provision.ORPHANAGE_RELATIONSHIP_BUILDER);
+
+        return base.CalculateMaxVolunteerPoints(amount + (orphanageMaterials?.Ticks ?? 0));
     }
 
     public override void SetObjectiveParameters()
@@ -131,15 +133,14 @@ public class InteractableOrphanage : InteractableHouse
         if(thanks == ThankYouType.VOLUNTEER)
         {
             var orphanageMaterials = InventoryManager.Instance.GetProvision(Provision.ORPHANAGE_RELATIONSHIP_BUILDER);
-            amount += 2 + (orphanageMaterials?.Value ?? 0);
-            TreasuryManager.Instance.DonateMoney(orphanageMaterials?.Value ?? 0);
+            TreasuryManager.Instance.DonateMoney(orphanageMaterials?.Coin ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }
     protected override int ModVolunteerEnergyWithProvisions()
     {
         var orphanageMaterials = InventoryManager.Instance.GetProvision(Provision.ORPHANAGE_RELATIONSHIP_BUILDER);
-        return orphanageMaterials?.Value ?? 0;
+        return orphanageMaterials?.Energy ?? 0;
     }
 
     public override void RelationshipReward(ThankYouType thanks)

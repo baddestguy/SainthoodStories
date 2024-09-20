@@ -23,8 +23,9 @@ public class MissionManager : MonoBehaviour
     public int CharityPointsPool { get; private set; }
     public int FaithPoints { get; private set; }
     public int FaithPointsPool { get; private set; }
-
     public int FaithPointsPermanentlyLost;
+
+    public bool SleptEarly = false;
 
     public ObjectivesData CurrentObjective { get { return GameDataManager.Instance.ObjectivesData[CurrentMissionId]; } }
 
@@ -84,8 +85,9 @@ public class MissionManager : MonoBehaviour
         GameManager.Instance.ReloadLevel();
     }
 
-    public void EndDay()
+    public void EndDay(bool sleptEarly = false)
     {
+        SleptEarly = sleptEarly;
         GridCollectibleManager.Instance.ClearAll();
         if (GameSettings.Instance.TUTORIAL_MODE)
         {
@@ -140,9 +142,11 @@ public class MissionManager : MonoBehaviour
     {
         int fp = FaithPoints;
         int fpPool = FaithPointsPool;
+        int fpTarget = GameDataManager.Instance.GetNextSaintUnlockThreshold();
         int cp = CharityPoints;
         int cpPool = CharityPointsPool;
         var newSaint = UnlockSaints();
+        int oldMissionId = CurrentMissionId;
 
         CurrentMissionId++;
         InteractableHouse.HazardCounter = 0;
@@ -185,10 +189,10 @@ public class MissionManager : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
         EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
-        yield return seq.RunSequenceAsync(fp, fpPool, cp, cpPool, newSaint);
+        yield return seq.RunSequenceAsync(fp, fpPool, fpTarget, cp, cpPool, newSaint, oldMissionId);
 
 
-        if (GameSettings.Instance.DEMO_MODE_2 && CurrentMissionId == 3)
+        if (GameSettings.Instance.DEMO_MODE_3 && oldMissionId == 3)
         {
             EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_DEMO);
             SaveDataManager.Instance.DeleteProgress();
@@ -202,7 +206,7 @@ public class MissionManager : MonoBehaviour
         }
 
         //If we finished the final mission
-        if (CurrentMissionId == GameDataManager.MAX_MISSION_ID)
+        if (oldMissionId == GameDataManager.MAX_MISSION_ID)
         {
             FaithPoints += FaithPointsPool;
             CharityPoints += CharityPointsPool;
@@ -269,7 +273,7 @@ public class MissionManager : MonoBehaviour
 
     public IEnumerable<SaintData> UnlockSaints()
     {
-        if (GameSettings.Instance.DEMO_MODE && SaintsManager.Instance.UnlockedSaints.Count >= 3) return new List<SaintData>();
+        if (GameSettings.Instance.DEMO_MODE_3 && SaintsManager.Instance.UnlockedSaints.Count >= 3) return new List<SaintData>();
 
         var saintsUnlocked = new List<SaintData>();
 

@@ -1441,8 +1441,8 @@ MonoBehaviour:
   IsXboxMode: 0
   MaxXboxResolution: 2073600
   ShowFPSCounter: 0
-  PlayingTrailer: 0
   TUTORIAL_MODE: 0
+  DEMO_MODE_3: 1
   fullScreenMode: 0
   currentQualityLevel: 0
   brightnessPercent: 0
@@ -5933,6 +5933,7 @@ MonoBehaviour:
   CurrentCollectibleMissionId: 0
   CurrentMissionId: 0
   FaithPointsPermanentlyLost: 0
+  SleptEarly: 0
 --- !u!1 &583654964
 GameObject:
   m_ObjectHideFlags: 0
@@ -18531,6 +18532,7 @@ MonoBehaviour:
   ShowGridToggle: {fileID: 1239087689}
   MenuToggleGroup: {fileID: 414853737}
   active: 0
+  ActiveTab: 0
 --- !u!114 &1539138721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18606,10 +18608,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7c644449f5ca3e47983aff843d13aad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Buttons:
+  PauseTabOptions:
   - {fileID: 1495196491}
   - {fileID: 178695149}
   - {fileID: 155028590}
+  GraphicTabOptions:
+  - {fileID: 656510788}
+  - {fileID: 597586239}
+  - {fileID: 1860973599}
+  - {fileID: 1684863219}
+  SoundTabOptions:
+  - {fileID: 1546964696}
+  - {fileID: 148929223}
+  - {fileID: 169320070}
+  - {fileID: 1545918820}
+  - {fileID: 1732058696}
 --- !u!1 &1540468935
 GameObject:
   m_ObjectHideFlags: 0

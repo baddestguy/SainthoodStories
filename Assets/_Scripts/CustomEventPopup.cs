@@ -1,4 +1,5 @@
-﻿using Assets.Xbox;
+﻿using System.Linq;
+using Assets._Scripts.Xbox;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -52,7 +53,7 @@ public class CustomEventPopup : MonoBehaviour
         YesNoGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         IconsGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         OKGO.SetActive(customEvent.EventPopupType == EventPopupType.OK);
-        SkipGO.SetActive(customEvent.EventGroup == EventGroup.STORY);
+        SkipGO.SetActive(customEvent.EventGroup == EventGroup.STORY || customEvent.EventGroup == EventGroup.THANKYOU);
         CameraControls = GetCameraControl();
 
         StoryImage.gameObject.SetActive(true);
@@ -297,7 +298,7 @@ public class CustomEventPopup : MonoBehaviour
         if (GameSettings.Instance.IsUsingController && EventData.Id == CustomEventType.ENDGAME_DEMO)
         {
             var pressedButton = GamePadController.GetButton();
-            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.wasPressedThisFrame)
+            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame)
             {
                 int sequences = LocalizationManager.Instance.GetTotalSequences(EventData.LocalizationKey);
 

@@ -1,101 +1,188 @@
-Id,Level,Value,NameKey,DescriptionKey,Tooltips
-UMBRELLA,1,1,Provision_UmbrellaName,Provision_UmbrellaDescription,Chance of preventing status ailments: {SubheaderColor}{SubheaderSize} 100%
-WINTER_CLOAK,1,1,Provision_WinterCloakName,Provision_WinterCloakDescription,Chance of preventing status ailments: {SubheaderColor}{SubheaderSize} 100%
-SHADES,1,1,Provision_ShadesName,Provision_ShadesDescription,Chance of preventing status ailments: {SubheaderColor}{SubheaderSize} 100%
-EXTRA_INVENTORY,1,2,Provision_ExtraInventoryName,Provision_ExtraInventoryDescription,Inventory size {SubheaderColor}{SubheaderSize} +1
-EXTRA_INVENTORY,2,3,Provision_ExtraInventoryName,Provision_ExtraInventoryDescription,Inventory size {SubheaderColor}{SubheaderSize} +2
-ENERGY_DRINK,1,1,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+1
-ENERGY_DRINK,2,2,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+2
-ENERGY_DRINK,3,3,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+3
-ENERGY_DRINK,4,4,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+4
-ENERGY_DRINK,5,5,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+5
-ENERGY_DRINK,6,6,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+6
-SOFT_MATTRESS,1,2,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+0.5hrs{DescriptionColor}{DescriptionSize}
-En {SubheaderColor}{SubheaderSize}+1"
-SOFT_MATTRESS,2,4,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1hr{DescriptionColor}{DescriptionSize}
-En {SubheaderColor}{SubheaderSize}+3"
-SOFT_MATTRESS,3,6,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">+1.5hrs{DescriptionColor}{DescriptionSize}
-En {SubheaderColor}{SubheaderSize}+4"
-REDUCE_SLEEP_TIME,1,-1,Provision_SleepEnergyName,Provision_SleepEnergyDescription,Sleep Time {SubheaderColor}{SubheaderSize}-1hrs
-REDUCE_SLEEP_TIME,1,-2,Provision_SleepEnergyName,Provision_SleepEnergyDescription,Sleep Time {SubheaderColor}{SubheaderSize}-2hrs
-REDUCE_SLEEP_TIME,1,-3,Provision_SleepEnergyName,Provision_SleepEnergyDescription,Sleep Time {SubheaderColor}{SubheaderSize}-3hrs
-ROSARY,1,1,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+Id,Level,Value,Time,Ticks,Energy,FP,CP,Coin,Spirits,NameKey,DescriptionKey,Tooltips
+UMBRELLA,1,1,0,0,0,0,0,0,0,Provision_UmbrellaName,Provision_UmbrellaDescription,Chance of preventing status ailments: {SubheaderColor}{SubheaderSize} 100%
+WINTER_CLOAK,1,1,0,0,0,0,0,0,0,Provision_WinterCloakName,Provision_WinterCloakDescription,Chance of preventing status ailments: {SubheaderColor}{SubheaderSize} 100%
+SHADES,1,1,0,0,0,0,0,0,0,Provision_ShadesName,Provision_ShadesDescription,Chance of preventing status ailments: {SubheaderColor}{SubheaderSize} 100%
+EXTRA_INVENTORY,1,2,0,0,0,0,0,0,0,Provision_ExtraInventoryName,Provision_ExtraInventoryDescription,Inventory size {SubheaderColor}{SubheaderSize} +1
+EXTRA_INVENTORY,2,3,0,0,0,0,0,0,0,Provision_ExtraInventoryName,Provision_ExtraInventoryDescription,Inventory size {SubheaderColor}{SubheaderSize} +2
+ENERGY_DRINK,1,0,0,0,1,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+1
+ENERGY_DRINK,2,0,0,0,2,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+2
+ENERGY_DRINK,3,0,0,0,3,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+3
+ENERGY_DRINK,4,0,0,0,4,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+4
+ENERGY_DRINK,5,0,0,0,5,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+5
+ENERGY_DRINK,6,0,0,0,6,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+6
+ENERGY_DRINK,7,0,0,0,7,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+7
+ENERGY_DRINK,8,0,0,0,8,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+8
+ENERGY_DRINK,9,0,0,0,9,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+9
+ENERGY_DRINK,10,0,0,0,10,0,0,0,0,Provision_EnergyDrinkName,Provision_EnergyDrinkDescription,Daily starting En {SubheaderColor}{SubheaderSize}+10
+SOFT_MATTRESS,1,1,5,0,1,0,0,0,0,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">{SubheaderSize}+5hrs{DescriptionColor}{DescriptionSize}
+Add'l Energy{SubheaderColor}{SubheaderSize}+1"
+SOFT_MATTRESS,2,3,3,0,3,0,0,0,0,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">{SubheaderSize}+3hrs{DescriptionColor}{DescriptionSize}
+Add'l Energy{SubheaderColor}{SubheaderSize}+3"
+SOFT_MATTRESS,3,5,1,0,5,0,0,0,0,Provision_MattressName,Provision_MattressDescription,"Sleep Time <color=""red"">{SubheaderSize}+1hr{DescriptionColor}{DescriptionSize}
+Add'l Energy{SubheaderColor}{SubheaderSize}+5"
+REDUCE_SLEEP_TIME,1,-1,-1,0,1,0,0,0,0,Provision_SleepEnergyName,Provision_SleepEnergyDescription,"Sleep Time {SubheaderColor}{SubheaderSize}-1hrs{DescriptionColor}{DescriptionSize}
+Add'l Energy<color=""red"">{SubheaderSize}-1"
+REDUCE_SLEEP_TIME,2,-2,-2,0,1,0,0,0,0,Provision_SleepEnergyName,Provision_SleepEnergyDescription,"Sleep Time {SubheaderColor}{SubheaderSize}-2hrs{DescriptionColor}{DescriptionSize}
+Add'l Energy<color=""red"">{SubheaderSize}-1"
+REDUCE_SLEEP_TIME,3,-3,-3,0,1,0,0,0,0,Provision_SleepEnergyName,Provision_SleepEnergyDescription,"Sleep Time {SubheaderColor}{SubheaderSize}-3hrs{DescriptionColor}{DescriptionSize}
+Add'l Energy<color=""red"">{SubheaderSize}-1"
+ROSARY,1,0,0,20,0,1,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
 FP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
-Time <color=""red"">+0.5hrs"
-ROSARY,2,2,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+Time <color=""red"">{SubheaderSize}+5hrs"
+ROSARY,2,0,0,16,0,2,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
 FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize}
-Time <color=""red"">+0.5hrs"
-ROSARY,3,3,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+Time <color=""red"">{SubheaderSize}+4hrs"
+ROSARY,3,0,0,12,0,3,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
 FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
-Time <color=""red"">+0.5hrs"
-COOKING_UTENSILS,1,1,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +1{DescriptionColor}{DescriptionSize}
-Uses less Energy: {SubheaderColor}{SubheaderSize}-1"
-COOKING_UTENSILS,2,2,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +2{DescriptionColor}{DescriptionSize}
-Uses less Energy: {SubheaderColor}{SubheaderSize}-2"
-COOKING_UTENSILS,3,3,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Cook Energy<color=""red""> +3{DescriptionColor}{DescriptionSize}
-Uses less Energy: {SubheaderColor}{SubheaderSize}-3"
-DISCOUNT_CARD,1,20,Provision_DiscountCardName,Provision_DiscountCardDescription,Shop item discount {SubheaderColor}{SubheaderSize}20%
-DISCOUNT_CARD,2,30,Provision_DiscountCardName,Provision_DiscountCardDescription,Shop item discount {SubheaderColor}{SubheaderSize}30%
-DISCOUNT_CARD,3,50,Provision_DiscountCardName,Provision_DiscountCardDescription,Shop item discount {SubheaderColor}{SubheaderSize}50%
-ALLOWANCE,1,1,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+1
-ALLOWANCE,2,2,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+2
-ALLOWANCE,3,3,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+3
-ALLOWANCE,4,4,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+4
-ALLOWANCE,5,5,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+5
-ALLOWANCE,6,6,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+6
-CONSTRUCTION_TOOLS,1,6,Provision_ConstructionName,Provision_ConstructionDescription,Construction Time {SubheaderColor}{SubheaderSize}1.5hrs
-CONSTRUCTION_TOOLS,2,4,Provision_ConstructionName,Provision_ConstructionDescription,Construction Time {SubheaderColor}{SubheaderSize}1hr
-CONSTRUCTION_TOOLS,3,2,Provision_ConstructionName,Provision_ConstructionDescription,Construction Time {SubheaderColor}{SubheaderSize}0.5hrs
-STURDY_BUILDING_MATERIALS,1,3,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Hazard Immunity {SubheaderColor}{SubheaderSize}3hrs
-STURDY_BUILDING_MATERIALS,2,5,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Hazard Immunity {SubheaderColor}{SubheaderSize}5hrs
-STURDY_BUILDING_MATERIALS,3,7,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Hazard Immunity {SubheaderColor}{SubheaderSize}7hrs
-CONSTRUCTION_TENTS,1,1,Provision_ConstructionTentName,Provision_ConstructionTentDescription,On building completion: CP {SubheaderColor}{SubheaderSize}+1
-CONSTRUCTION_TENTS,2,2,Provision_ConstructionTentName,Provision_ConstructionTentDescription,On building completion: CP {SubheaderColor}{SubheaderSize}+2
-CONSTRUCTION_TENTS,3,3,Provision_ConstructionTentName,Provision_ConstructionTentDescription,On building completion: CP {SubheaderColor}{SubheaderSize}+3
-CHAPEL_BLUEPRINT,1,1,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,When praying: FP {SubheaderColor}{SubheaderSize}+1
-CHAPEL_BLUEPRINT,2,2,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,When praying: FP {SubheaderColor}{SubheaderSize}+2
-CHAPEL_BLUEPRINT,3,3,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,When praying: FP {SubheaderColor}{SubheaderSize}+3
-BUILDING_BLUEPRINT,1,10,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 10%
-BUILDING_BLUEPRINT,2,15,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 15%
-BUILDING_BLUEPRINT,3,25,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 25%
-HOSPITAL_RELATIONSHIP_BUILDER,1,1,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +1
-HOSPITAL_RELATIONSHIP_BUILDER,2,2,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +2
-HOSPITAL_RELATIONSHIP_BUILDER,3,3,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +3
-SCHOOL_RELATIONSHIP_BUILDER,1,1,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +1
-SCHOOL_RELATIONSHIP_BUILDER,2,2,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +2
-SCHOOL_RELATIONSHIP_BUILDER,3,3,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +3
-ORPHANAGE_RELATIONSHIP_BUILDER,1,1,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +1
-ORPHANAGE_RELATIONSHIP_BUILDER,2,2,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +2
-ORPHANAGE_RELATIONSHIP_BUILDER,3,3,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +3
-KITCHEN_RELATIONSHIP_BUILDER,1,1,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +1
-KITCHEN_RELATIONSHIP_BUILDER,2,2,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +2
-KITCHEN_RELATIONSHIP_BUILDER,3,3,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +3
-SHELTER_RELATIONSHIP_BUILDER,1,1,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +1
-SHELTER_RELATIONSHIP_BUILDER,2,2,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +2
-SHELTER_RELATIONSHIP_BUILDER,3,3,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +3
-AUTO_DELIVER,1,1,Provision_AutoDeliverName,Provision_AutoDeliverDescription,Auto deliver {SubheaderColor}{SubheaderSize} 1 item
-AUTO_DELIVER,2,2,Provision_AutoDeliverName,Provision_AutoDeliverDescription,Auto deliver {SubheaderColor}{SubheaderSize} 2 items
-AUTO_DELIVER,3,3,Provision_AutoDeliverName,Provision_AutoDeliverDescription,Auto deliver {SubheaderColor}{SubheaderSize} 3 items
-FASTING,1,1,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
+Time <color=""red"">{SubheaderSize}+3hrs"
+ROSARY,4,0,0,8,0,3,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+Time <color=""red"">{SubheaderSize}+2hrs"
+ROSARY,5,0,0,4,0,3,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+Time <color=""red"">{SubheaderSize}+1hrs"
+ROSARY,6,0,0,0,0,3,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+Time {SubheaderColor}{SubheaderSize}+0hrs"
+COOKING_UTENSILS,1,0,0,0,2,0,0,3,0,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Extra Payment: {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+Add'l Energy: <color=""red"">{SubheaderSize}-2"
+COOKING_UTENSILS,2,0,0,0,2,0,0,5,0,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Extra Payment: {SubheaderColor}{SubheaderSize}+5{DescriptionColor}{DescriptionSize}
+Add'l Energy: <color=""red"">{SubheaderSize}-2"
+COOKING_UTENSILS,3,0,0,0,1,0,0,10,0,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Extra Payment: {SubheaderColor}{SubheaderSize}+10{DescriptionColor}{DescriptionSize}
+Add'l Energy: <color=""red"">{SubheaderSize}-1"
+DISCOUNT_CARD,1,20,0,0,0,0,0,0,0,Provision_DiscountCardName,Provision_DiscountCardDescription,Shop item discount {SubheaderColor}{SubheaderSize}20%
+DISCOUNT_CARD,2,30,0,0,0,0,0,0,0,Provision_DiscountCardName,Provision_DiscountCardDescription,Shop item discount {SubheaderColor}{SubheaderSize}30%
+DISCOUNT_CARD,3,50,0,0,0,0,0,0,0,Provision_DiscountCardName,Provision_DiscountCardDescription,Shop item discount {SubheaderColor}{SubheaderSize}50%
+ALLOWANCE,1,0,0,0,0,0,0,1,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+1
+ALLOWANCE,2,0,0,0,0,0,0,2,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+2
+ALLOWANCE,3,0,0,0,0,0,0,3,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+3
+ALLOWANCE,4,0,0,0,0,0,0,4,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+4
+ALLOWANCE,5,0,0,0,0,0,0,5,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+5
+ALLOWANCE,6,0,0,0,0,0,0,6,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+6
+ALLOWANCE,7,0,0,0,0,0,0,7,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+7
+ALLOWANCE,8,0,0,0,0,0,0,8,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+8
+ALLOWANCE,9,0,0,0,0,0,0,9,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+9
+ALLOWANCE,10,0,0,0,0,0,0,10,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin {SubheaderColor}{SubheaderSize}+10
+CONSTRUCTION_TOOLS,1,0,0,6,2,0,0,0,0,Provision_ConstructionName,Provision_ConstructionDescription,"Construction/Upgrade Time: {SubheaderColor}{SubheaderSize}1.5hrs{DescriptionColor}{DescriptionSize}
+Add'l Energy: <color=""red"">{SubheaderSize}-2"
+CONSTRUCTION_TOOLS,2,0,0,4,2,0,0,0,0,Provision_ConstructionName,Provision_ConstructionDescription,"Construction/Upgrade Time: {SubheaderColor}{SubheaderSize}1hr{DescriptionColor}{DescriptionSize}
+Add'l Energy: <color=""red"">{SubheaderSize}-2"
+CONSTRUCTION_TOOLS,3,0,0,2,1,0,0,0,0,Provision_ConstructionName,Provision_ConstructionDescription,"Construction/Upgrade Time: {SubheaderColor}{SubheaderSize}0.5hrs{DescriptionColor}{DescriptionSize}
+Add'l Energy: <color=""red"">{SubheaderSize}-1"
+STURDY_BUILDING_MATERIALS,1,12,0,0,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Building Hazard Immunity {SubheaderColor}{SubheaderSize}3hrs
+STURDY_BUILDING_MATERIALS,2,20,0,0,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Building Hazard Immunity {SubheaderColor}{SubheaderSize}5hrs
+STURDY_BUILDING_MATERIALS,3,28,0,0,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Building Hazard Immunity {SubheaderColor}{SubheaderSize}7hrs
+STURDY_BUILDING_MATERIALS,4,48,0,0,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Building Hazard Immunity {SubheaderColor}{SubheaderSize}12hrs
+STURDY_BUILDING_MATERIALS,5,96,0,0,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Building Hazard Immunity {SubheaderColor}{SubheaderSize}24hrs
+CONSTRUCTION_TENTS,1,0,0,0,2,0,1,0,0,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building/upgrade completion: CP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
+Add'l Energy: <color=""red"">{SubheaderSize}-2"
+CONSTRUCTION_TENTS,2,0,0,0,2,0,2,0,0,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building/upgrade completion: CP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize}
+Add'l Energy: <color=""red"">{SubheaderSize}-2"
+CONSTRUCTION_TENTS,3,0,0,0,1,0,3,0,0,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building/upgrade completion: CP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+Add'l Energy: <color=""red"">{SubheaderSize}-1"
+CHAPEL_BLUEPRINT,1,0,0,0,0,1,0,15,0,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"FP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
+Cost to install: <color=""red"">{SubheaderSize}-15"
+CHAPEL_BLUEPRINT,2,0,0,0,0,2,0,25,0,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize}
+Cost to install: <color=""red"">{SubheaderSize}-25"
+CHAPEL_BLUEPRINT,3,0,0,0,0,3,0,50,0,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+Cost to install: <color=""red"">{SubheaderSize}-50"
+BUILDING_BLUEPRINT,1,10,0,0,0,0,0,0,0,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 10%
+BUILDING_BLUEPRINT,2,15,0,0,0,0,0,0,0,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 15%
+BUILDING_BLUEPRINT,3,25,0,0,0,0,0,0,0,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 25%
+BUILDING_BLUEPRINT,4,30,0,0,0,0,0,0,0,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 30%
+BUILDING_BLUEPRINT,5,40,0,0,0,0,0,0,0,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 40%
+BUILDING_BLUEPRINT,6,50,0,0,0,0,0,0,0,Provision_BlueprintName,Provision_BlueprintDescription,Cheaper upgrades: {SubheaderColor}{SubheaderSize} 50%
+HOSPITAL_RELATIONSHIP_BUILDER,1,0,0,20,0,0,0,1,0,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +1{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+5"
+HOSPITAL_RELATIONSHIP_BUILDER,2,0,0,16,0,0,0,3,0,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +3{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+4"
+HOSPITAL_RELATIONSHIP_BUILDER,3,0,0,12,0,0,0,5,0,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +5{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+3"
+HOSPITAL_RELATIONSHIP_BUILDER,4,0,0,8,0,0,0,7,0,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +7{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+2"
+HOSPITAL_RELATIONSHIP_BUILDER,5,0,0,4,0,0,0,10,0,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +10{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+1"
+HOSPITAL_RELATIONSHIP_BUILDER,6,0,0,0,0,0,0,10,0,Provision_HospitalRBuilderName,Provision_HospitalRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +10{DescriptionColor}{DescriptionSize}
+Time: {SubheaderColor}{SubheaderSize}+0"
+SCHOOL_RELATIONSHIP_BUILDER,1,0,0,20,0,0,0,1,0,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +1{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+5"
+SCHOOL_RELATIONSHIP_BUILDER,2,0,0,16,0,0,0,3,0,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +3{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+4"
+SCHOOL_RELATIONSHIP_BUILDER,3,0,0,12,0,0,0,5,0,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +5{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+3"
+SCHOOL_RELATIONSHIP_BUILDER,4,0,0,8,0,0,0,7,0,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +7{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+2"
+SCHOOL_RELATIONSHIP_BUILDER,5,0,0,4,0,0,0,10,0,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +10{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+1"
+SCHOOL_RELATIONSHIP_BUILDER,6,0,0,0,0,0,0,10,0,Provision_SchoolRBuilderName,Provision_SchoolRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +10{DescriptionColor}{DescriptionSize}
+Time: {SubheaderColor}{SubheaderSize}+0"
+ORPHANAGE_RELATIONSHIP_BUILDER,1,0,0,20,0,0,0,1,0,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +1{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+5"
+ORPHANAGE_RELATIONSHIP_BUILDER,2,0,0,16,0,0,0,3,0,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +3{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+4"
+ORPHANAGE_RELATIONSHIP_BUILDER,3,0,0,12,0,0,0,5,0,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +5{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+3"
+ORPHANAGE_RELATIONSHIP_BUILDER,4,0,0,8,0,0,0,7,0,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +7{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+2"
+ORPHANAGE_RELATIONSHIP_BUILDER,5,0,0,4,0,0,0,10,0,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +10{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+1"
+ORPHANAGE_RELATIONSHIP_BUILDER,6,0,0,0,0,0,0,10,0,Provision_OrphanageRBuilderName,Provision_OrphanageRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +10{DescriptionColor}{DescriptionSize}
+Time: {SubheaderColor}{SubheaderSize}+0"
+KITCHEN_RELATIONSHIP_BUILDER,1,0,0,20,0,0,0,1,0,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +1{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+5"
+KITCHEN_RELATIONSHIP_BUILDER,2,0,0,16,0,0,0,3,0,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +3{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+4"
+KITCHEN_RELATIONSHIP_BUILDER,3,0,0,12,0,0,0,5,0,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +5{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+3"
+KITCHEN_RELATIONSHIP_BUILDER,4,0,0,8,0,0,0,7,0,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +7{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+2"
+KITCHEN_RELATIONSHIP_BUILDER,5,0,0,4,0,0,0,10,0,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +10{DescriptionColor}{DescriptionSize}
+Time: <color=""red"">{SubheaderSize}+1"
+KITCHEN_RELATIONSHIP_BUILDER,6,0,0,0,0,0,0,10,0,Provision_KitchenRBuilderName,Provision_KitchenRBuilderDescription,"Extra Payment: {SubheaderColor}{SubheaderSize} +10{DescriptionColor}{DescriptionSize}
+Time: {SubheaderColor}{SubheaderSize}+0"
+SHELTER_RELATIONSHIP_BUILDER,1,0,0,20,0,0,0,1,0,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +1{DescriptionColor}{DescriptionSize}
+SHELTER_RELATIONSHIP_BUILDER,2,0,0,16,0,0,0,3,0,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +3{DescriptionColor}{DescriptionSize}
+SHELTER_RELATIONSHIP_BUILDER,3,0,0,12,0,0,0,5,0,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +5{DescriptionColor}{DescriptionSize}
+SHELTER_RELATIONSHIP_BUILDER,4,0,0,8,0,0,0,7,0,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +7{DescriptionColor}{DescriptionSize}
+SHELTER_RELATIONSHIP_BUILDER,5,0,0,4,0,0,0,10,0,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +10{DescriptionColor}{DescriptionSize}
+SHELTER_RELATIONSHIP_BUILDER,6,0,0,0,0,0,0,10,0,Provision_ShelterRBuilderName,Provision_ShelterRBuilderDescription,Extra Payment: {SubheaderColor}{SubheaderSize} +10{DescriptionColor}{DescriptionSize}
+AUTO_DELIVER,1,0,0,0,0,0,0,0,0,Provision_AutoDeliverName,Provision_AutoDeliverDescription,Auto deliver {SubheaderColor}{SubheaderSize} 1 item
+AUTO_DELIVER,2,0,0,0,0,0,0,0,0,Provision_AutoDeliverName,Provision_AutoDeliverDescription,Auto deliver {SubheaderColor}{SubheaderSize} 2 items
+AUTO_DELIVER,3,0,0,0,0,0,0,0,0,Provision_AutoDeliverName,Provision_AutoDeliverDescription,Auto deliver {SubheaderColor}{SubheaderSize} 3 items
+FASTING,1,0,0,0,3,1,0,0,0,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
 FP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize} 
-En <color=""red"">-1"
-FASTING,2,1,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
+Add'l Energy<color=""red"">{SubheaderSize}-3"
+FASTING,2,0,0,0,2,2,0,0,0,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
 FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize} 
-En <color=""red"">-1"
-FASTING,3,2,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
-FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize} 
-En <color=""red"">-2"
-KOBOKO,1,3,Provision_KobokoName,Provision_KobokoDescription,"When praying:
+Add'l Energy<color=""red"">{SubheaderSize}-2"
+FASTING,3,0,0,0,1,2,0,0,0,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
+FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize} 
+Add'l Energy<color=""red"">{SubheaderSize}-1"
+FASTING,4,0,0,0,0,2,0,0,0,Provision_FastingName,Provision_FastingDescription,"Every 3 hours:
+FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize}
+Add'l Energy{SubheaderColor}{SubheaderSize}0"
+KOBOKO,1,0,0,0,3,1,0,0,0,Provision_KobokoName,Provision_KobokoDescription,"When praying:
 FP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize} 
-En <color=""red""> -3"
-KOBOKO,2,2,Provision_KobokoName,Provision_KobokoDescription,"When praying:
+Add'l Energy<color=""red"">{SubheaderSize} -3"
+KOBOKO,2,0,0,0,2,2,0,0,0,Provision_KobokoName,Provision_KobokoDescription,"When praying:
 FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize} 
-En <color=""red""> -2"
-KOBOKO,3,1,Provision_KobokoName,Provision_KobokoDescription,"When praying:
-FP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize} 
-En <color=""red""> -1"
-INCENSE,1,10,Provision_IncenseName,Provision_IncenseDescription,Bonus FP chance during a Liturgy {SubheaderColor}{SubheaderSize}10%
-INCENSE,2,15,Provision_IncenseName,Provision_IncenseDescription,Bonus FP chance during a Liturgy {SubheaderColor}{SubheaderSize}15%
-INCENSE,3,20,Provision_IncenseName,Provision_IncenseDescription,Bonus FP chance during a Liturgy {SubheaderColor}{SubheaderSize}20%
-INCENSE,4,25,Provision_IncenseName,Provision_IncenseDescription,Bonus FP chance during a Liturgy {SubheaderColor}{SubheaderSize}25%
-SECURITY_GUARDS,1,1,Provision_SecurityGuardsName,Provision_SecurityGuardsDescription,Chance of preventing robberies {SubheaderColor}{SubheaderSize}100%
+Add'l Energy<color=""red"">{SubheaderSize} -2"
+KOBOKO,3,0,0,0,1,2,0,0,0,Provision_KobokoName,Provision_KobokoDescription,"When praying:
+FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize} 
+Add'l Energy<color=""red"">{SubheaderSize} -1"
+KOBOKO,4,0,0,0,0,2,0,0,0,Provision_KobokoName,Provision_KobokoDescription,"When praying:
+FP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize} 
+Add'l Energy{SubheaderColor}{SubheaderSize} 0"
+INCENSE,1,10,0,0,0,1,0,0,0,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance in Convent: {SubheaderColor}{SubheaderSize}10%{DescriptionColor}{DescriptionSize} 
+FP <color=""red"">{SubheaderSize} +1"
+INCENSE,2,15,0,0,0,1,0,0,0,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance in Convent: {SubheaderColor}{SubheaderSize}15%{DescriptionColor}{DescriptionSize} 
+FP <color=""red"">{SubheaderSize} +1"
+INCENSE,3,20,0,0,0,2,0,0,0,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance in Convent: {SubheaderColor}{SubheaderSize}20%{DescriptionColor}{DescriptionSize} 
+FP <color=""red"">{SubheaderSize} +2"
+INCENSE,4,25,0,0,0,2,0,0,0,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance in Convent: {SubheaderColor}{SubheaderSize}25%{DescriptionColor}{DescriptionSize} 
+FP <color=""red"">{SubheaderSize} +2"
+INCENSE,5,30,0,0,0,3,0,0,0,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance in Convent: {SubheaderColor}{SubheaderSize}30%{DescriptionColor}{DescriptionSize} 
+FP <color=""red"">{SubheaderSize} +3"
+INCENSE,6,35,0,0,0,3,0,0,0,Provision_IncenseName,Provision_IncenseDescription,"Bonus FP chance in Convent: {SubheaderColor}{SubheaderSize}35%{DescriptionColor}{DescriptionSize} 
+FP <color=""red"">{SubheaderSize} +3"
+SECURITY_GUARDS,1,1,0,0,0,0,0,0,0,Provision_SecurityGuardsName,Provision_SecurityGuardsDescription,Chance of preventing robberies {SubheaderColor}{SubheaderSize}100%

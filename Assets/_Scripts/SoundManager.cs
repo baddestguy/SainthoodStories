@@ -19,7 +19,7 @@ public class SoundManager : MonoBehaviour
     private string AmbientTrackName;
     [HideInInspector]public AudioSource gameplayTrack;
     [HideInInspector]public AudioLowPassFilter lowPassFilter;
-    public string[] MusicPlaylist = new string[] { "Convent_Music", "Field_Music", "Temp1", "Temp2", "Temp3" };
+    public string[] MusicPlaylist;
 
     public AudioMixer audioMixer;
 
@@ -56,9 +56,19 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void StartPlaylist()
+    public void StartPlaylist(bool daytime = true)
     {
-        MusicPlaylist = new string[] { "Convent_Music", "Field_Music", "Temp1", "Temp2", "Temp3" };
+        if (daytime)
+        {
+            if (MusicPlaylist.Contains("Temp4")) return;
+            MusicPlaylist = new string[] { "Convent_Music", "Field_Music", "Temp4", "Temp5", "Temp6", "Temp7" };
+        }
+        else
+        {
+            if (MusicPlaylist.Contains("Night")) return;
+
+            MusicPlaylist = new string[] { "Night" };
+        }
         MusicPlaylist.Shuffle();
         PlayMusic(MusicPlaylist[0]);
         StartCoroutine(StartPlaylistAsync());
@@ -67,12 +77,15 @@ public class SoundManager : MonoBehaviour
     IEnumerator StartPlaylistAsync()
     {
         var index = 1;
+        if (index >= MusicPlaylist.Length) index = 0;
+
         while (true)
         {
             yield return new WaitForSeconds(5);
             if (MusicAudioSourceChannel1.isPlaying) continue;
 
             yield return new WaitForSeconds(Random.Range(40, 60));
+            if (index >= MusicPlaylist.Length) index = 0;
             PlayMusic(MusicPlaylist[index]);
             index++;
             if (index == MusicPlaylist.Length)

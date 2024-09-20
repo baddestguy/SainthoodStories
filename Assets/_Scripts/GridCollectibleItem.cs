@@ -27,6 +27,10 @@ public class GridCollectibleItem : MonoBehaviour
 
     public virtual void Collect()
     {
+        if(MyTween != null)
+        {
+            MyTween.Kill();
+        }
         DeleteCollectible();
     }
 
@@ -43,6 +47,10 @@ public class GridCollectibleItem : MonoBehaviour
 
     private void OnDisable()
     {
+        if (MyTween != null)
+        {
+            MyTween.Kill();
+        }
         GameClock.Ticked -= OnTick;
     }
 }

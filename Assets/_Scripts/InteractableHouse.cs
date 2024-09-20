@@ -2,12 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Xbox;
+using Assets._Scripts.Xbox;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using static Rewired.InputMapper;
 using Random = UnityEngine.Random;
 
 public class InteractableHouse : InteractableObject
@@ -207,26 +205,18 @@ public class InteractableHouse : InteractableObject
     {
         if (MyObjective == null) return;
 
-        if (MyObjective.CustomEventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(MyObjective.CustomEventId) ?? false))
-        {
-            EventsManager.Instance.AddEventToList(MyObjective.CustomEventId);
-            EventsManager.Instance.TriggeredMissionEvents.Add(MyObjective.CustomEventId);
-        }
-
         if(MyObjective.Event == BuildingEventType.DELIVER_ITEM || MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT
             || MyObjective.Event == BuildingEventType.COOK || MyObjective.Event == BuildingEventType.COOK_URGENT
             || MyObjective.Event == BuildingEventType.DELIVER_MEAL || MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)
         {
             RequiredItems = RequiredItems != 0 && RequiredItems < MyObjective.RequiredAmount ? RequiredItems : MyObjective.RequiredAmount;
             DeadlineSet = true;
-            SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
         }
         else if(MyObjective.Event == BuildingEventType.REPAIR || MyObjective.Event == BuildingEventType.REPAIR_URGENT)
         {
             var clock = GameManager.Instance.GameClock;
             TriggerHazardousMode(clock.Time, clock.Day);
         }
-
     }
 
     public virtual void GetInteriorPopUI()
@@ -553,10 +543,10 @@ public class InteractableHouse : InteractableObject
 
             if(koboko != null)
             {
-                extraPoints += koboko?.Value ?? 0;
-                player.ConsumeEnergy(koboko.Value);
+                extraPoints += koboko?.FP ?? 0;
+                player.ConsumeEnergy(koboko.Energy);
             }
-            extraPoints += rosary?.Value ?? 0;
+            extraPoints += rosary?.FP ?? 0;
 
             UpdateFaithPoints(MeditationPoints + FPBonus + extraPoints);
             PrayersProgress = 0;
@@ -593,6 +583,7 @@ public class InteractableHouse : InteractableObject
             if(MyObjective?.Event == BuildingEventType.DELIVER_ITEM || MyObjective?.Event == BuildingEventType.DELIVER_ITEM_URGENT
                 || MyObjective?.Event == BuildingEventType.DELIVER_MEAL || MyObjective?.Event == BuildingEventType.DELIVER_MEAL_URGENT)
             {
+                BuildRelationship(ThankYouType.ITEM);
                 CurrentMissionId++;
                 UpdateCharityPoints(MyObjective.Reward, 0);
                 var obj = GameDataManager.Instance.HouseObjectivesData[HouseName][CurrentMissionId];
@@ -610,7 +601,6 @@ public class InteractableHouse : InteractableObject
                 UpdateCharityPoints(1, 0);
             }
 
-            BuildRelationship(ThankYouType.ITEM);
 
             if (!autoDeliver)
             {
@@ -735,9 +725,10 @@ public class InteractableHouse : InteractableObject
             {
                 BuildRelationship(ThankYouType.VOLUNTEER);
                 CurrentMissionId++;
-                var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption);
+                var tools = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TOOLS);
                 var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
-                var moddedCPReward = extraPoints + (tents?.Value ?? 0);
+                var moddedEnergy = player.ModifyEnergyConsumption(amount: EnergyConsumption + (tools?.Energy ?? 0) + (tents?.Energy ?? 0));
+                var moddedCPReward = extraPoints + (tents?.CP ?? 0);
                 player.ConsumeEnergy(moddedEnergy);
                 UpdateCharityPoints(MyObjective.Reward + moddedCPReward, moddedEnergy);
                 MyObjective = null;
@@ -763,7 +754,11 @@ public class InteractableHouse : InteractableObject
             }
 
             var chapelBlueprint = InventoryManager.Instance.GetProvision(Provision.CHAPEL_BLUEPRINT);
-            FPBonus = chapelBlueprint?.Value ?? 0;
+            if (chapelBlueprint != null && TreasuryManager.Instance.CanAfford(chapelBlueprint.Coin))
+            {
+                FPBonus = chapelBlueprint?.FP ?? 0;
+                TreasuryManager.Instance.SpendMoney(chapelBlueprint.Coin);
+            }
 
             //Reduce chance of environmental hazards
             var sturdyMaterials = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
@@ -936,6 +931,7 @@ public class InteractableHouse : InteractableObject
         InteriorPopUI.Init(PopUICallback, GetType().Name, RequiredItems, DeadlineTime, this, InteriorCam == null ? null : InteriorCam?.GetComponent<CameraControls>());
         PopIcon.UIPopped(true);
         InteriorCam.enabled = true;
+        InteriorCam.GetComponent<CameraControls>().EnableDepthOfField(true);
         InteriorUICamera.enabled = true;
         ExteriorCamera.Instance.Camera.enabled = false;
         ExteriorCamera.Instance.UICamera.enabled = false;
@@ -952,6 +948,8 @@ public class InteractableHouse : InteractableObject
 
                 case BuildingEventType.VOLUNTEER:
                 case BuildingEventType.VOLUNTEER_URGENT:
+                case BuildingEventType.COOK:
+                case BuildingEventType.COOK_URGENT:
                     OnActionProgress?.Invoke(VolunteerProgress / (float)MyObjective.RequiredAmount, this, 1);
                     break;
 
@@ -959,8 +957,6 @@ public class InteractableHouse : InteractableObject
                 case BuildingEventType.DELIVER_ITEM_URGENT:
                 case BuildingEventType.DELIVER_MEAL:
                 case BuildingEventType.DELIVER_MEAL_URGENT:
-                case BuildingEventType.COOK:
-                case BuildingEventType.COOK_URGENT:
                     var amt = MyObjective.RequiredAmount - RequiredItems;
                     OnActionProgress?.Invoke(amt / (float)MyObjective.RequiredAmount, this, 2);
                     break;
@@ -1103,12 +1099,12 @@ public class InteractableHouse : InteractableObject
             var tools = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TOOLS);
             if (tools != null)
             {
-                MaxBuildPoints = tools.Value;
+                MaxBuildPoints = tools.Ticks;
             }
 
             MaxVolunteerPoints = CalculateMaxVolunteerPoints();
             var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
-            MaxPrayerProgress = rosary != null ? 6f : 4f;
+            MaxPrayerProgress = 4 + (rosary?.Ticks ?? 0);
 
             if (GameManager.Instance.CurrentHouse != this) //Entered a new building
             {
@@ -1196,6 +1192,21 @@ public class InteractableHouse : InteractableObject
         if (LeaveArrows != null)
         {
             LeaveArrows.SetActive(false);
+        }
+    }
+
+    public virtual void PlaySpecialChargeVfx(string buttonName)
+    {
+       // if (buttonName == "PRAY")
+        {
+            if (BuildingState == BuildingState.RUBBLE)
+            {
+                ExteriorPopUI.PlayVFX("Halo", 0f);
+            }
+            else
+            {
+                InteriorPopUI.PlayVFX("Halo");
+            }
         }
     }
 
@@ -1303,7 +1314,7 @@ public class InteractableHouse : InteractableObject
         {
             if(BuildingState == BuildingState.RUBBLE)
                 ExteriorPopUI.gameObject.SetActive(enabled);
-            if (InteriorPopUI && InteriorSpaces[UpgradeLevel].activeSelf)
+            if (InteriorPopUI && InteriorSpaces[UpgradeLevel] != null && InteriorSpaces[UpgradeLevel].activeSelf)
                 InteriorPopUI.gameObject.SetActive(enabled);
         }
 
@@ -1387,7 +1398,9 @@ public class InteractableHouse : InteractableObject
         switch (actionName)
         {
             case "BUILD":
-                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption);
+                var tools = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TOOLS);
+                var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
+                var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption + (tools?.Energy ?? 0) + (tents?.Energy ?? 0));
                 return !player.CanUseEnergy(moddedEnergy) && CanBuild();
 
             //case "PRAY": return DuringOpenHours() || (!DuringOpenHours() && PrayersProgress > 0) || (!DuringOpenHours() && BuildingState != BuildingState.NORMAL);
@@ -1397,7 +1410,7 @@ public class InteractableHouse : InteractableObject
             case "WORLD": return TutorialCanDoAction(actionName);
             case "ENTER": return true;
             case "SAINTS": return !GameSettings.Instance.TUTORIAL_MODE;
-            case "UPGRADE": return CanAffordUpgrade();
+            case "UPGRADE": return !GameSettings.Instance.DEMO_MODE_3 && CanAffordUpgrade();
         }
 
         return false;
@@ -1417,6 +1430,7 @@ public class InteractableHouse : InteractableObject
 
     public bool CanAffordUpgrade()
     {
+        if (GameSettings.Instance.DEMO_MODE_3) return false;
         if (UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue) return false;
 
         return InventoryManager.Instance.WanderingSpirits >= GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel+1}"].IntValue && TreasuryManager.Instance.Money >= GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel+1}"].IntValue;
@@ -1424,6 +1438,7 @@ public class InteractableHouse : InteractableObject
 
     public void UpgradeBuilding()
     {
+        if (GameSettings.Instance.DEMO_MODE_3) return;
         if (UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue) return;
 
         double cost = GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue;
@@ -1438,7 +1453,17 @@ public class InteractableHouse : InteractableObject
 
     public virtual float SetButtonTimer(string actionName)
     {
-        return 1f;
+        if(actionName == "PRAY")
+        {
+            return MathF.Ceiling(MaxPrayerProgress / 4);
+        }
+
+        if (actionName == "BUILD")
+        {
+            return MathF.Ceiling(MaxBuildPoints / 4);
+        }
+        
+        return MathF.Ceiling(MaxVolunteerPoints / 4);
     }
 
     public virtual int GetEnergyCostForCustomEvent(CustomEventData eventData)
@@ -1461,8 +1486,8 @@ public class InteractableHouse : InteractableObject
             case "PRAY":
                 var rosary = InventoryManager.Instance.GetProvision(Provision.ROSARY);
                 var koboko = InventoryManager.Instance.GetProvision(Provision.KOBOKO);
-                var bonusFp = (koboko?.Value ?? 0) + (rosary?.Value ?? 0);
-                return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, ticksModifier: rosary != null ? 2 : 0, energyModifier: -koboko?.Value ?? 0, fpModifier: FPBonus + bonusFp);
+                var bonusFp = (koboko?.FP ?? 0) + (rosary?.FP ?? 0);
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.PRAY, ticksModifier: rosary != null ? rosary.Ticks : 0, energyModifier: -(koboko?.Energy ?? 0), fpModifier: FPBonus + bonusFp);
             case "VOLUNTEER":
                 var maxCP = 0;
                 if (MyObjective?.Event == BuildingEventType.VOLUNTEER || MyObjective?.Event == BuildingEventType.VOLUNTEER_URGENT)
@@ -1498,7 +1523,7 @@ public class InteractableHouse : InteractableObject
                 {
                     maxPP = MyObjective.Reward;
                 }
-                return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, ticksOverride: tools?.Value ?? 0, cpOverride: maxPP, cpModifier: tents?.Value ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: 0));
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, ticksOverride: tools?.Ticks ?? 0, cpOverride: maxPP, cpModifier: tents?.CP ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: (tools?.Energy ?? 0) + (tents?.Energy ?? 0)));
 
             case "UPGRADE":
                 if(UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue)

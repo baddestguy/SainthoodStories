@@ -104,8 +104,7 @@
         if(thanks == ThankYouType.ITEM)
         {
             var shelterMaterials = InventoryManager.Instance.GetProvision(Provision.SHELTER_RELATIONSHIP_BUILDER);
-            amount += shelterMaterials?.Value ?? 0;
-            TreasuryManager.Instance.DonateMoney(shelterMaterials?.Value ?? 0);
+            TreasuryManager.Instance.DonateMoney(shelterMaterials?.Coin ?? 0);
         }
         if (thanks == ThankYouType.IMMEDIATE_ASSISTANCE)
         {
@@ -146,7 +145,7 @@
         switch (actionName)
         {
             case "FOOD":
-                return MyObjective != null && (InventoryManager.Instance.CheckItem(ItemType.GROCERIES) || InventoryManager.Instance.CheckItem(ItemType.MEAL));
+                return (AllObjectivesComplete || MyObjective != null) && (InventoryManager.Instance.CheckItem(ItemType.GROCERIES) || InventoryManager.Instance.CheckItem(ItemType.MEAL));
         }
 
         return base.CanDoAction(actionName);

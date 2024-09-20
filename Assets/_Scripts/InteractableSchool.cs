@@ -45,7 +45,8 @@ public class InteractableSchool : InteractableHouse
 
     public override float CalculateMaxVolunteerPoints(int amount = 8)
     {
-        amount = 8;
+        var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
+        amount = 8 + (schoolMaterials?.Ticks ?? 0);
         return base.CalculateMaxVolunteerPoints(amount);
     }
 
@@ -100,8 +101,7 @@ public class InteractableSchool : InteractableHouse
         if(thanks == ThankYouType.VOLUNTEER)
         {
             var schoolMaterials = InventoryManager.Instance.GetProvision(Provision.SCHOOL_RELATIONSHIP_BUILDER);
-            amount += schoolMaterials?.Value ?? 0;
-            TreasuryManager.Instance.DonateMoney(schoolMaterials?.Value ?? 0);
+            TreasuryManager.Instance.DonateMoney(schoolMaterials?.Coin ?? 0);
         }
         base.BuildRelationship(thanks, amount);
     }

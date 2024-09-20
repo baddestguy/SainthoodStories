@@ -40,9 +40,9 @@ public class Player : MonoBehaviour
     public ParticleSystem SnowSplash;
     public GameObject CharacterGO;
 
-    private int SickCountdown = 3;
-    private int MigraineCountdown = 6;
-    private int FastingCoutndown = 6;
+    private int SickCountdown = 6;
+    private int MigraineCountdown = 12;
+    private int FastingCoutndown = 12;
 
     public GameObject Grid;
 
@@ -376,7 +376,7 @@ public class Player : MonoBehaviour
                 GroundMoveFX.transform.position = newTile.transform.position + new Vector3(0,0.1f);
                 GroundMoveFX.SetActive(false);
                 GroundMoveFX.SetActive(true);
-                SoundManager.Instance.PlayOneShotSfx("Walk_SFX");
+                SoundManager.Instance.PlayOneShotSfx("HouseJump_SFX");
             }
             else
             {
@@ -427,11 +427,17 @@ public class Player : MonoBehaviour
 
         if(tile is InteractableHospital)
         {
-            energyAmount += 1;
+            if((tile as InteractableHospital).BuildingState == BuildingState.NORMAL)
+            {
+                energyAmount += 1;
+            }
         }
         else if(tile is InteractableOrphanage)
         {
-            energyAmount += 1;
+            if((tile as InteractableOrphanage).BuildingState == BuildingState.NORMAL)
+            {
+                energyAmount += 1;
+            }
         }
 
         return energyAmount; 
@@ -593,6 +599,11 @@ public class Player : MonoBehaviour
         Energy.Consume(10000);
 
         Energy.Consume(-3);
+
+        if (MissionManager.Instance.SleptEarly)
+        {
+            Energy.Consume(-1);
+        }
     }
 
     public int GetEnergyAmount()
@@ -605,14 +616,16 @@ public class Player : MonoBehaviour
         if (!GameClock.DeltaTime) return;
 
         var fasting = InventoryManager.Instance.GetProvision(Provision.FASTING);
-        if (fasting == null) return;
-
-        FastingCoutndown--;
-        if(FastingCoutndown == 0)
+        if (fasting != null)
         {
-            ConsumeEnergy(fasting.Value);
-            GameManager.Instance.MissionManager.UpdateFaithPoints(fasting.Value);
-            FastingCoutndown = 6;
+            FastingCoutndown--;
+            if(FastingCoutndown == 0)
+            {
+                ConsumeEnergy(fasting.Energy);
+                GameManager.Instance.MissionManager.UpdateFaithPoints(fasting.FP);
+                FastingCoutndown = 12;
+                SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
+            }
         }
 
         if (StatusEffects.Any())

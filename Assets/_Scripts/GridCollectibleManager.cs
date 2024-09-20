@@ -13,6 +13,7 @@ public class GridCollectibleManager : MonoBehaviour
 
     private GridCollectibleItem NewCollectibleSpawned;
     public int SacredItemSpawned = 0;
+    private List<string> SacredItemSpawnedList = new List<string>();
 
     bool Spawning;
 
@@ -87,6 +88,11 @@ public class GridCollectibleManager : MonoBehaviour
             yield return StartCoroutine(SpawnCollectible(WanderingSpiritResource, Behaviours[Random.Range(0,Behaviours.Count()-1)]));
         }
         Spawning = false;
+
+        if(count > 0 && !Behaviours.Contains(SacredItemBehaviour.HARMLESS))
+        {
+            SoundManager.Instance.PlayOneShotSfx("EvilSpawn", timeToDie: 3f);
+        }
     }
 
     public void TutorialEvilSpawns()
@@ -110,7 +116,7 @@ public class GridCollectibleManager : MonoBehaviour
         {
             StartCoroutine(SpawnSacredItemAsync());
 
-            switch (day)
+            switch (MissionManager.Instance.CurrentMissionId)
             {
                 case 2:
                     Behaviours.Clear();
@@ -330,6 +336,7 @@ public class GridCollectibleManager : MonoBehaviour
 
     IEnumerator SpawnSacredItemAsync()
     {
+        if (GameSettings.Instance.DEMO_MODE_3 && (SacredItemSpawned >= 2 || MissionManager.Instance.CurrentCollectibleCounter > 4)) yield break;
         if (SacredItemSpawned >= (GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount - MissionManager.Instance.CurrentCollectibleCounter)) yield break;
         if (MissionManager.Instance.CurrentCollectibleCounter >= GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount) yield break;
 
@@ -340,10 +347,18 @@ public class GridCollectibleManager : MonoBehaviour
         SacredItemSpawned++;
 
         yield return new WaitForSeconds(2f);
+        var it = collectibleList[Random.Range(0, collectibleList.Count - 1)];
+        int tries = 0;
+        while (SacredItemSpawnedList.Contains(it) || InventoryManager.Instance.Collectibles.Any(x => x.Split(':')[1] == it))
+        {
+            yield return null;
+            it = collectibleList[Random.Range(0, collectibleList.Count - 1)];
+            tries++;
+            if(tries > 10) yield break;
+        }
         yield return StartCoroutine(SpawnCollectible(SacredItemResource, SacredItemBehaviour.HARMLESS));
         
-        var it = collectibleList[Random.Range(0, collectibleList.Count - 1)];
-        collectibleList.Remove(it);
+        SacredItemSpawnedList.Add(it);
         (NewCollectibleSpawned as SacredItemCollectible).SacredName = it;
         (NewCollectibleSpawned as SacredItemCollectible).SacredDescription = GameDataManager.Instance.GetCollectibleData(it).Description;
     }
@@ -360,6 +375,14 @@ public class GridCollectibleManager : MonoBehaviour
                            where !saveData.Collectibles?.Contains(obj.Name) ?? true
                            select obj.Name).Distinct().ToList();
             GameManager.Instance.WorldCollectibles = newList;
+
+            if (GameSettings.Instance.DEMO_MODE_3)
+            {
+                var tutorialList = GameDataManager.Instance.CollectibleData["BIBLE"].GetRange(0, 6);
+                GameManager.Instance.WorldCollectibles = tutorialList.Select(x => x.Name).ToList();
+                return GameManager.Instance.WorldCollectibles;
+            }
+
             return newList;
         }
 
@@ -371,6 +394,7 @@ public class GridCollectibleManager : MonoBehaviour
         Behaviours.Clear();
         SpawnedTiles.Clear();
         SacredItemSpawned = 0;
+        SacredItemSpawnedList.Clear();
 
         var childScripts = GetComponentsInChildren<GridCollectibleItem>();
         foreach (var script in childScripts)

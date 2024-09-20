@@ -127,6 +127,11 @@ public class CameraControls : MonoBehaviour
         ZoomComplete = false;
     }
 
+    public void EnableDepthOfField(bool enable)
+    {
+        DepthOfField.active = enable;
+    }
+
     /// <summary>
     /// Note : This zoom controls the camera position
     /// </summary>

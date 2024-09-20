@@ -182,7 +182,6 @@ public class InventoryManager : MonoBehaviour
         GameClock c = GameManager.Instance.GameClock;
 
         if (MissionManager.MissionOver) return;
-        if (GameSettings.Instance.FTUE && GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day < 2) return;
 
         StartCoroutine(WaitAndEnableProvisionPopupAsync());
     }
@@ -202,19 +201,51 @@ public class InventoryManager : MonoBehaviour
 
         //Check to make sure that we dont already have the Provision in our Inventory
         var prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
+        
+        if (GameSettings.Instance.DEMO_MODE_3)
+        {
+            var demoIds = new List<int>() { 2,3,5,6,7,8};
+            demoIds.Shuffle();
+            var demoId = demoIds.First();
+            prov1 = GameDataManager.Instance.ProvisionData[(Provision)demoId][0];
+        }
+
         prov1 = SwapProvisionBySeason(prov1);
         while (Provisions.Any(p => p.Id == prov1.Id))
         {
             prov1 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
+            if (GameSettings.Instance.DEMO_MODE_3)
+            {
+                var demoIds = new List<int>() { 2, 3, 5, 6, 7, 8 };
+                demoIds.Shuffle();
+                var demoId = demoIds.First();
+                prov1 = GameDataManager.Instance.ProvisionData[(Provision)demoId][0];
+            }
             prov1 = SwapProvisionBySeason(prov1);
         }
 
         var prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
+  
+        if (GameSettings.Instance.DEMO_MODE_3)
+        {
+            var demoIds = new List<int>() { 2, 3, 5, 6, 7, 8 };
+            demoIds.Shuffle();
+            var demoId = demoIds.First();
+            prov2 = GameDataManager.Instance.ProvisionData[(Provision)demoId][0];
+        }
+  
         prov2 = SwapProvisionBySeason(prov2);
 
         while (Provisions.Any(p => p.Id == prov2.Id) || prov2.Id == prov1.Id)
         {
             prov2 = GameDataManager.Instance.ProvisionData[(Provision)Random.Range(0, (int)Provision.MAX_COUNT)][0];
+            if (GameSettings.Instance.DEMO_MODE_3)
+            {
+                var demoIds = new List<int>() { 2, 3, 5, 6, 7, 8 };
+                demoIds.Shuffle();
+                var demoId = demoIds.First();
+                prov2 = GameDataManager.Instance.ProvisionData[(Provision)demoId][0];
+            }
             prov2 = SwapProvisionBySeason(prov2);
         }
 

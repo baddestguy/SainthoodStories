@@ -18,7 +18,8 @@ public class UI : MonoBehaviour
 
     public TextMeshProUGUI EnergyDisplay;
     public Image EnFillBar;
-    public TextMeshProUGUI TimeDisplay;
+    public TextMeshProUGUI TimeHrDisplay;
+    public TextMeshProUGUI TimeMinDisplay;
     public TextMeshProUGUI DayDisplay;
     public TextMeshProUGUI MessageDisplay;
     public TextMeshProUGUI ReportDisplay;
@@ -190,7 +191,7 @@ public class UI : MonoBehaviour
     public void InitTimeEnergy(GameClock clock, Energy energy)
     {
         EnergyDisplay.text = $"{energy.Amount}";
-        TimeDisplay.text = clock.TimeDisplay();
+        TimeDisplay(clock.Time);
         DayDisplay.text = DayofTheWeek(clock.Day);
     }
 
@@ -208,7 +209,7 @@ public class UI : MonoBehaviour
 
         int oldEnergy = int.Parse(EnergyDisplay.text);
         EnergyDisplay.DOCounter(oldEnergy, energy.Amount, 0.5f).SetDelay(2f);
-        var bonusEnergy = InventoryManager.Instance.GetProvision(Provision.ENERGY_DRINK)?.Value ?? 0;
+        var bonusEnergy = InventoryManager.Instance.GetProvision(Provision.ENERGY_DRINK)?.Energy ?? 0;
         EnFillBar.DOFillAmount(energy.Amount / (3f + bonusEnergy), 1f).SetDelay(2f);
 
         if (energy.Amount < 1)
@@ -262,11 +263,34 @@ public class UI : MonoBehaviour
             ReportDisplay.text = "";
         }
 
-        TimeDisplay.text = GameManager.Instance.GameClock.TimeDisplay();
+        TimeDisplay(time);
         DayDisplay.text = DayofTheWeek(day);
 
         //Tutorial Checks
         TutorialHideUI();
+    }
+
+    public void TimeDisplay(double time)
+    {
+        var currentMinute = int.Parse(TimeMinDisplay.text);
+        var currentHour = int.Parse(TimeHrDisplay.text);
+
+        var newMinute = 0;
+        var newHour = (int)time;
+        if (time - (int)time == 0) newMinute = 0;
+        if (time - (int)time == 0.25) newMinute = 15;
+        if (time - (int)time == 0.5) newMinute = 30;
+        if (time - (int)time == 0.75) newMinute = 45;
+
+        TimeHrDisplay.DOCounter(currentHour, newHour, 1f, "{0:D2}", false);
+        TimeMinDisplay.DOCounter(currentMinute, newMinute, 1f, "{0:D2}", false);
+
+        if(newHour > 21)
+        {
+            TimeHrDisplay.color = Color.red;
+            TimeMinDisplay.color = Color.red;
+            DayDisplay.color = Color.red;
+        }
     }
 
     public void EnableProvisionPopup(ProvisionData prov1, ProvisionData prov2)
@@ -462,7 +486,11 @@ public class UI : MonoBehaviour
                         t.gameObject.SetActive(true);
                         TreasuryManager.DonatedMoney?.Invoke(TreasuryManager.Instance.TemporaryMoneyToDonate);
                     }
-                    if(t.name == "CP")
+                    if (customEvent.RewardType == CustomEventRewardType.CP && t.name == "CP")
+                    {
+                        t.gameObject.SetActive(true);
+                    }
+                    if (customEvent.RewardType == CustomEventRewardType.FP && t.name == "FP")
                     {
                         t.gameObject.SetActive(true);
                     }
@@ -921,6 +949,7 @@ public class UI : MonoBehaviour
 
     public void DisplayToolTip(string text)
     {
+        return;
         if (MissionManager.MissionOver)
         {
             TooltipDisplay.transform.parent.gameObject.SetActive(false);
@@ -1064,6 +1093,7 @@ public class UI : MonoBehaviour
         FullUIVisible = enable;
 
         TutorialHideUI();
+        BroadcastMessage("HideInfoPanel", SendMessageOptions.DontRequireReceiver);
     }
 
     private void TutorialHideUI()

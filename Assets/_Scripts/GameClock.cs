@@ -10,7 +10,7 @@ public class GameClock
 
     public static UnityAction<double, int> Ticked;
     public static UnityAction ExecuteEvents;
-    public static UnityAction EndDay;
+    public static UnityAction<bool> EndDay;
     public static UnityAction StartNewDay;
 
     public static bool DeltaTime { get; private set; }
@@ -85,7 +85,7 @@ public class GameClock
         Ticked?.Invoke(Time, Day);
         if (EndofDay)
         {
-            EndDay?.Invoke();
+            EndDay?.Invoke(false);
         }
         CheckTutorial();
         ExecuteEvents?.Invoke();
@@ -128,14 +128,15 @@ public class GameClock
         var ac = InventoryManager.Instance.GetProvision(Provision.REDUCE_SLEEP_TIME);
         if (ac != null)
         {
-            Time += ac.Value;
+            Time += ac.Time;
+            GameManager.Instance.Player.ConsumeEnergy(ac.Energy);
         }
 
         var mattress = InventoryManager.Instance.GetProvision(Provision.SOFT_MATTRESS);
         if (mattress != null)
         {
-            Time += mattress.Value;
-            GameManager.Instance.Player.ConsumeEnergy(-mattress.Value);
+            Time += mattress.Time;
+            GameManager.Instance.Player.ConsumeEnergy(-mattress.Energy);
         }
     }
 

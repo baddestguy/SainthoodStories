@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,8 +41,8 @@ public class PackageItem : MonoBehaviour
                 PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{ItemType.TOYS}");
                 break;
             case "InteractableKitchen":
-                Item = ItemType.GROCERIES;
-                PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{ItemType.GROCERIES}");
+                Item = ItemType.KITCHEN_INGREDIENTS;
+                PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{ItemType.KITCHEN_INGREDIENTS}");
                 break;
             case "InteractableShelter":
                 Item = ItemType.GROCERIES;
@@ -53,10 +54,15 @@ public class PackageItem : MonoBehaviour
                 break;
         }
 
+        SetLocalizedText(Item);
+    }
 
+    public void SetLocalizedText(ItemType item)
+    {
+        var houseName = ShopItemData.HouseNameForItemType(item);
+        var house = GameManager.Instance.Houses.Where(h=> h.HouseName == houseName).First();
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
-
-        mouseOverBtn.Loc_Key = $"InventoryTooltip_{Item}";
+        mouseOverBtn.Loc_Key = house.MyObjective.MissionDescription;
 
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderColor}", HeaderColor);
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{SubheaderColor}", SubheaderColor);
@@ -64,9 +70,7 @@ public class PackageItem : MonoBehaviour
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderSize}", HeaderSize);
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{SubheaderSize}", SubheaderSize);
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{DescriptionSize}", DescriptionSize);
-
     }
-
 
     public void Select()
     {

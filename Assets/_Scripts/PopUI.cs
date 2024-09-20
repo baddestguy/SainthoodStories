@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Xbox;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,6 +40,7 @@ public class PopUI : MonoBehaviour
 
     public TextMeshProUGUI RPDisplay;
     public Image GlowImage;
+    public List<Image> GlowImages = new List<Image>();
 
     void Awake()
     {
@@ -133,6 +133,7 @@ public class PopUI : MonoBehaviour
 
     public void OnClick(string button)
     {
+        if (Player.LockMovement) return;
         if (LockUI)
         {
             SoundManager.Instance.PlayOneShotSfx("Button_SFX");
@@ -181,7 +182,13 @@ public class PopUI : MonoBehaviour
 
         Callback?.Invoke(button);
 
-        FlashIconOnCompletedAction(GlowImage);
+        foreach(var glow in GlowImages)
+        {
+            if(glow.transform.parent == myButton.transform)
+            {
+                FlashIconOnCompletedAction(glow);
+            }
+        }
 
         if (RPDisplay != null && MyHouse != null)
         {
@@ -195,6 +202,8 @@ public class PopUI : MonoBehaviour
 
     public void OnPointerDown(string button)
     {
+        if (Player.LockMovement) return;
+
         var myButton = Buttons.FirstOrDefault(b => b.ButtonName == button);
 
         if (GameSettings.Instance.FTUE)
@@ -228,10 +237,12 @@ public class PopUI : MonoBehaviour
         Vector3 fxpos = UICam.Instance.Camera.ScreenToWorldPoint(Input.mousePosition);
         if(MyHouse != null && MyHouse.BuildingState == BuildingState.RUBBLE)
         {
+            MyHouse.PlaySpecialChargeVfx(ButtonName);
             ChargeFx.transform.position = myButton.transform.position;
         }
         else
         {
+            MyHouse.PlaySpecialChargeVfx(ButtonName);
             ChargeFx.transform.position = myButton.transform.position + new Vector3(0,0, -5f);
         }
         ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
@@ -267,6 +278,8 @@ public class PopUI : MonoBehaviour
 
     public void OnPointerUp()
     {
+        if (Player.LockMovement) return;
+   
         StopCoroutine("CriticalCircle");
         if (CriticalCircleFX != null)
         {
@@ -392,13 +405,15 @@ public class PopUI : MonoBehaviour
         }
     }
 
-    public void PlayVFX(string vfxName)
+    public void PlayVFX(string vfxName, float offset = 5f)
     {
         CurrentVfx = transform.Find(vfxName)?.gameObject;
         if (CurrentVfx == null) return;
 
         CurrentVfx.SetActive(false);
         CurrentVfx.SetActive(true);
+        var myButton = Buttons.FirstOrDefault(b => b.ButtonName == ButtonName);
+        CurrentVfx.transform.localPosition = new Vector3(myButton.transform.localPosition.x, myButton.transform.localPosition.y, myButton.transform.localPosition.z-offset);
     }
 
     public void CriticalSequence()
