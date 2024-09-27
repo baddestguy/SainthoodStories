@@ -48,7 +48,7 @@ namespace Assets._Scripts.Xbox
         // Update is called once per frame
         void Update()
         {
-            if (Gamepad.current == null || !GameSettings.Instance.IsUsingController || PauseMenu.Instance.active) return;
+            if ((Gamepad.current == null && GameSettings.Instance.IsXboxMode) || !GameSettings.Instance.IsUsingController || PauseMenu.Instance.active) return;
 
             if (_skipFrame)
             {

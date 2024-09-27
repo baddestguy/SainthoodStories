@@ -94,7 +94,7 @@ namespace Assets._Scripts.Xbox
         {
             TryApplyControllerHover();
             
-            if (Gamepad.current == null || !GameSettings.Instance.IsUsingController ||
+            if ((Gamepad.current == null && GameSettings.Instance.IsXboxMode) || !GameSettings.Instance.IsUsingController ||
                 PauseMenu.Instance.active || UI.Instance.TutorialPopupQuestion.activeInHierarchy) return;
 
             if(_skipFrame)

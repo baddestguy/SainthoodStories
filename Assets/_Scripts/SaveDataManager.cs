@@ -28,12 +28,12 @@ public class SaveDataManager : MonoBehaviour
     public int DayOverride;
     public double TimeOverride;
 
-    [HideInInspector]public SavedDataUiHandler savedDataUiHandler;
+    [HideInInspector] public SavedDataUiHandler savedDataUiHandler;
 
     private const string FILENAME = "Sainthood.save";
     private const string SPARE_FILENAME = "Sainthood_DayCheckpoint.save";
 
-    string GetPath(string fileName) => Path.Combine(Application.persistentDataPath , fileName);
+    string GetPath(string fileName) => Path.Combine(Application.persistentDataPath, fileName);
     private bool FileExixst(string fileName) => File.Exists(GetPath(FILENAME));
 
 
@@ -44,8 +44,14 @@ public class SaveDataManager : MonoBehaviour
 
     void Start()
     {
-        
-        Debug.Log("SAVE PATH: " + Application.persistentDataPath);
+        if (GameSettings.Instance.IsXboxMode)
+        {
+
+        }
+        else
+        {
+            Debug.Log("SAVE PATH: " + Application.persistentDataPath);
+        }
     }
 
     public void DaySave()
@@ -64,7 +70,7 @@ public class SaveDataManager : MonoBehaviour
     {
         var data = GetSavedDataSet(SPARE_FILENAME);
         var saveObjects = data.Values.ToArray();
-        var save = saveObjects.OrderBy(x => x.Day).LastOrDefault(); 
+        var save = saveObjects.OrderBy(x => x.Day).LastOrDefault();
         Save(new SaveObject[1] { save });
     }
 
@@ -74,7 +80,7 @@ public class SaveDataManager : MonoBehaviour
 
         if (!FileExixst(FILENAME))
         {
-           //Beter just do a direct save than looking for what do not exist...
+            //Beter just do a direct save than looking for what do not exist...
             FirstSave();
         }
         else
@@ -126,7 +132,7 @@ public class SaveDataManager : MonoBehaviour
             HasChosenProvision = InventoryManager.HasChosenProvision,
             FaithPointsPermanentlyLost = MissionManager.Instance.FaithPointsPermanentlyLost
         };
-    }    
+    }
 
     public HouseSaveData[] GetSavedHouses()
     {
@@ -167,7 +173,7 @@ public class SaveDataManager : MonoBehaviour
     }
 
 
-    private bool IsNewWeek(SaveObject[] saveObjects , SaveObject newData)
+    private bool IsNewWeek(SaveObject[] saveObjects, SaveObject newData)
     {
         return saveObjects[saveObjects.Length - 1].Week != newData.Week;
     }
@@ -182,38 +188,52 @@ public class SaveDataManager : MonoBehaviour
 
     private void Save(params SaveObject[] data)
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(GetPath(FILENAME));
-        bf.Serialize(file, data);
-        file.Close();
-        GameManager.Instance.SaveData = data[0];
-     //   Debug.Log("SAVED!");
+        if (GameSettings.Instance.IsXboxMode)
+        {
+
+        }
+        else
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(GetPath(FILENAME));
+            bf.Serialize(file, data);
+            file.Close();
+            GameManager.Instance.SaveData = data[0];
+            //   Debug.Log("SAVED!");
+        }
     }
 
     private Dictionary<Days, SaveObject> GetSavedDataSet(string fileName = FILENAME)
     {
         try
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(GetPath(fileName), FileMode.Open);
-            SaveObject[] saveObjects = (SaveObject[])bf.Deserialize(file);
-            file.Close();
-            Dictionary<Days, SaveObject> keyVal = saveObjects.ToDictionary(x => (Days)x.Day, x => x);
-            return keyVal;
+            if (GameSettings.Instance.IsXboxMode)
+            {
+                return null;
+            }
+            else
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = File.Open(GetPath(fileName), FileMode.Open);
+                SaveObject[] saveObjects = (SaveObject[])bf.Deserialize(file);
+                file.Close();
+                Dictionary<Days, SaveObject> keyVal = saveObjects.ToDictionary(x => (Days)x.Day, x => x);
+                return keyVal;
+            }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             //Debug.LogError("Error " + e.Message);
             return null;
 
         }
-    } 
-    
+    }
+
     /// <summary>
     /// Load the game data 
     /// </summary>
     /// <param name="callback"></param>
-    public void LoadGame(Action<SaveObject, bool> callback , bool newGame ,bool lastDay = false, bool ingameLoading = false, bool showUI = true)
+    public void LoadGame(Action<SaveObject, bool> callback, bool newGame, bool lastDay = false, bool ingameLoading = false, bool showUI = true)
     {
         if (Directory.Exists(Application.persistentDataPath))
         {
@@ -292,7 +312,7 @@ public class SaveDataManager : MonoBehaviour
             var newSave = NewGameData();
             newSave.Saints = save.Saints;
             newSave.RunAttempts = GameManager.Instance.RunAttempts;
-            
+
             File.Delete(Application.persistentDataPath + "/Sainthood.save");
 
             Save(new SaveObject[1] { newSave });

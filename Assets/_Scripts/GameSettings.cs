@@ -33,6 +33,7 @@ public class GameSettings : MonoBehaviour
     public bool TUTORIAL_MODE;
     public bool DEMO_MODE_3;
     private bool _hasRegisteredForInputMethodChanged;
+    private bool _hasRegisteredForLoginStatusChanged;
 
     [HideInInspector]
     public bool IsUsingController
@@ -194,22 +195,35 @@ public class GameSettings : MonoBehaviour
             language = currentLanguage
         };
 
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(GetPath());
-        bf.Serialize(file, data);
-        file.Close();
+        if (IsXboxMode)
+        {
+
+        }
+        else
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Create(GetPath());
+            bf.Serialize(file, data);
+            file.Close();
+        }
     }
 
     private SaveSettingsData GetSavedDataSet()
     {
         try
         {
+            if (IsXboxMode)
+            {
+                return null;
+            }
+
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(GetPath(), FileMode.Open);
             SaveSettingsData saveObjects = (SaveSettingsData)bf.Deserialize(file);
             file.Close();
 
             return saveObjects;
+
         }
         catch (Exception e)
         {
@@ -233,14 +247,14 @@ public class GameSettings : MonoBehaviour
     {
         if (IsXboxMode)
         {
-            var bestResolution = resolutions.Select(x => new { Resolution = x, Pixels = x.height * x.width })
-                .Where(x => x.Pixels <= (int)MaxXboxResolution)
+            var orderedResolutions = resolutions.Select(x => new { Resolution = x, Pixels = x.height * x.width })
                 .OrderByDescending(x => x.Pixels)
                 .ThenByDescending(x => x.Resolution.refreshRateRatio.value)
-                .First()
-                .Resolution;
+                .ToList();
 
-            return bestResolution;
+            var bestResolutionBelowMax = orderedResolutions.FirstOrDefault(x => x.Pixels <= (int)MaxXboxResolution);
+
+            return bestResolutionBelowMax?.Resolution ?? orderedResolutions.Last().Resolution;
         }
 
         string[] val = value.Replace(" ", "").Split('x');

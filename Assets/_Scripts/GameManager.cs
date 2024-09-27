@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets._Scripts.Extensions;
+using Assets._Scripts.Xbox;
 using Rewired;
 using UnityEngine;
 using UnityEngine.Events;
@@ -53,10 +54,11 @@ public class GameManager : MonoBehaviour
     public int[] MaptileIndexes;// = new int[14] {0, 4, 7, 9, 13, 16, 23, 40, 47, 50, 53, 56, 60, 63};
 
     public InteractableHouse[] Houses;
-    public Dictionary<string,BuildingState> HouseStates = new Dictionary<string, BuildingState>();
+    public Dictionary<string, BuildingState> HouseStates = new Dictionary<string, BuildingState>();
     public List<string> WorldCollectibles = new List<string>();
 
     public AsyncOperation LoadingOperation;
+
 
     private void Awake()
     {
@@ -70,6 +72,10 @@ public class GameManager : MonoBehaviour
         MapTile.OnClickEvent += OnMapTileTap;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
         GameClock.Ticked += OnTick;
+    }
+
+    public void PlayerLoginSuccess()
+    {
         LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
@@ -129,7 +135,7 @@ public class GameManager : MonoBehaviour
             MissionManager.LoadAllMissions(CurrentMission);
             GameClock = new GameClock(SaveData.Time, SaveData.Day);
 
-            if(PreviousSceneID == SceneID.SaintsShowcase_Day || PreviousSceneID == SceneID.WorldMap)
+            if (PreviousSceneID == SceneID.SaintsShowcase_Day || PreviousSceneID == SceneID.WorldMap)
             {
                 UI.Instance.ShowWeekBeginText("");
             }
@@ -166,7 +172,7 @@ public class GameManager : MonoBehaviour
                 WeatherManager.Instance.OverrideWeatherActivation(0, 1);
             }
 
-            if(obj != null && obj.DailyEvent != CustomEventType.NONE)
+            if (obj != null && obj.DailyEvent != CustomEventType.NONE)
             {
                 var security = InventoryManager.Instance.GetProvision(Provision.SECURITY_GUARDS);
                 if (security != null && obj.DailyEvent == CustomEventType.VANDALISM)
@@ -190,7 +196,8 @@ public class GameManager : MonoBehaviour
 
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.MainMenu;
-            SaveDataManager.Instance.LoadGame((data, newGame) => {
+            SaveDataManager.Instance.LoadGame((data, newGame) =>
+            {
                 //CAREFUL! GAMEDATAMANAGER HAS NOT BEEN LOADED YET!
                 SaveData = data;
                 RunAttempts = data.RunAttempts;
@@ -204,7 +211,7 @@ public class GameManager : MonoBehaviour
 
                 UI.Instance.DisplayRunAttempts();
 
-                if(data.Maptiles == null)
+                if (data.Maptiles == null)
                 {
                     UI.Instance.DisableMainMenuContinueBtn();
                 }
@@ -215,7 +222,7 @@ public class GameManager : MonoBehaviour
             }, false, true);
             InGameSession = false;
             SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
-            SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay:70);
+            SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay: 70);
             GameSettings.Instance.TUTORIAL_MODE = false;
             TutorialManager.Instance.Steps.Clear();
         }
@@ -223,7 +230,8 @@ public class GameManager : MonoBehaviour
         {
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.SaintsShowcase_Day;
-        }else if (scene.IsPauseMenu())
+        }
+        else if (scene.IsPauseMenu())
         {
         }
         else if (scene.IsWorldMap())
@@ -231,14 +239,14 @@ public class GameManager : MonoBehaviour
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = SceneID.WorldMap;
             var obj = MissionManager.Instance.CurrentObjective;
-            if(obj != null)
+            if (obj != null)
             {
                 WeatherManager.Instance.ChangeWeather(obj.WeatherId);
             }
             else
             {
-                int[] randomWeather = new int[] {6, 10, 22, 24};
-                WeatherManager.Instance.ChangeWeather(randomWeather[Random.Range(0, randomWeather.Length-1)]);
+                int[] randomWeather = new int[] { 6, 10, 22, 24 };
+                WeatherManager.Instance.ChangeWeather(randomWeather[Random.Range(0, randomWeather.Length - 1)]);
             }
         }
 
@@ -253,7 +261,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public  void OnMapTileTap(MapTile tile)
+    public void OnMapTileTap(MapTile tile)
     {
         if (Player == null) return;
 
@@ -274,12 +282,12 @@ public class GameManager : MonoBehaviour
     private void OnTick(double time, int day)
     {
         PlayAmbience(time, day);
-        if(GameClock.DeltaTime && time % 2 == 0)
+        if (GameClock.DeltaTime && time % 2 == 0)
         {
-            foreach(var h in Houses)
+            foreach (var h in Houses)
             {
                 if (h.MyObjective == null) continue;
-                if(h.MyObjective.Event > BuildingEventType.URGENT)
+                if (h.MyObjective.Event > BuildingEventType.URGENT)
                 {
                     MissionManager.Instance.UpdateCharityPoints(-1, null);
                 }
@@ -316,9 +324,10 @@ public class GameManager : MonoBehaviour
         switch (missionDifficulty)
         {
             case MissionDifficulty.HARD:
-                
-                SaveDataManager.Instance.LoadGame((data, aNewGame) => {
-                    
+
+                SaveDataManager.Instance.LoadGame((data, aNewGame) =>
+                {
+
                     if (aNewGame)
                     {
                         RunAttempts++;
@@ -363,8 +372,8 @@ public class GameManager : MonoBehaviour
             case "InteractableShelter": return Player.Map.MapTiles[MaptileIndexes[3]];
             case "InteractableKitchen": return Player.Map.MapTiles[MaptileIndexes[4]];
             case "InteractableMarket": return Player.Map.MapTiles[MaptileIndexes[5]];
-            //case "InteractableChurch": 
-            //    var 
+                //case "InteractableChurch": 
+                //    var 
 
         }
 
@@ -378,7 +387,8 @@ public class GameManager : MonoBehaviour
 
     public void ReloadLevel()
     {
-        SaveDataManager.Instance.LoadGame((data, newGame) => {
+        SaveDataManager.Instance.LoadGame((data, newGame) =>
+        {
             CurrentMission = new Mission(data.FP, data.FPPool, data.CP, data.CPPool, data.Energy, data.Time, 7, data.Week);
             StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
             SaveData = data;
@@ -398,16 +408,16 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator WaitAndLoadScene(string sceneName)
     {
-        if(UI.Instance != null)
+        if (UI.Instance != null)
             UI.Instance.CrossFade(1f);
         yield return new WaitForSeconds(1f);
         SceneLoaded = false;
         LoadingOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
 
-        if(UI.Instance != null) UI.Instance.LoadingScreenEnable(true);
+        if (UI.Instance != null) UI.Instance.LoadingScreenEnable(true);
         LoadingScreen loadingScreen = null;
         if (UI.Instance != null) loadingScreen = UI.Instance.LoadingScreen.GetComponent<LoadingScreen>();
-        while(!LoadingOperation.isDone)
+        while (!LoadingOperation.isDone)
         {
             float progressValue = Mathf.Clamp01(LoadingOperation.progress / 0.9f);
 

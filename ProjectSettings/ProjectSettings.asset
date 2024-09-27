@@ -76,6 +76,7 @@ PlayerSettings:
   androidMinimumWindowWidth: 400
   androidMinimumWindowHeight: 300
   androidFullscreenMode: 1
+  androidAutoRotationBehavior: 1
   defaultIsNativeResolution: 1
   macRetinaSupport: 1
   runInBackground: 0
@@ -136,6 +137,8 @@ PlayerSettings:
   vulkanEnableLateAcquireNextImage: 0
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
+  visionOSBundleVersion: 1.0
+  tvOSBundleVersion: 1.0
   bundleVersion: 2.6.1.4
   preloadedAssets:
   - {fileID: 0}
@@ -236,6 +239,7 @@ PlayerSettings:
   iOSMetalForceHardShadows: 0
   metalEditorSupport: 1
   metalAPIValidation: 1
+  metalCompileShaderBinary: 0
   iOSRenderExtraFrameOnPause: 0
   iosCopyPluginsCodeInsteadOfSymlink: 0
   appleDeveloperTeamID: 
@@ -732,7 +736,8 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;CROSS_PLATFORM_INPUT;MOBILE_INPUT
     EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
-    GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
+    GameCoreScarlett: GAIA_2_PRESENT;GAIA_MESH_PRESENT
+    GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT;GAIA_2_PRESENT;GAIA_MESH_PRESENT;MICROSOFT_GDK_SUPPORT
     LinuxHeadlessSimulation: UNITY_POST_PROCESSING_STACK_V2
     Nintendo Switch: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
     PS4: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
@@ -799,6 +804,7 @@ PlayerSettings:
   metroSplashScreenBackgroundColor: {r: 0.12941177, g: 0.17254902, b: 0.21568628,
     a: 1}
   metroSplashScreenUseBackgroundColor: 0
+  syncCapabilities: 0
   platformCapabilities: {}
   metroTargetDeviceFamilies:
     Desktop: True
