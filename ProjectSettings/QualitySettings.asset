@@ -203,6 +203,7 @@ QualitySettings:
     terrainMaxTrees: 50
     excludedTargetPlatforms:
     - Windows Store Apps
+    - GameCoreXboxOne
   - serializedVersion: 3
     name: Very High
     pixelLightCount: 3
@@ -253,6 +254,7 @@ QualitySettings:
     terrainMaxTrees: 50
     excludedTargetPlatforms:
     - Windows Store Apps
+    - GameCoreXboxOne
   - serializedVersion: 3
     name: Ultra
     pixelLightCount: 4
@@ -303,9 +305,12 @@ QualitySettings:
     terrainMaxTrees: 50
     excludedTargetPlatforms:
     - Windows Store Apps
+    - GameCoreXboxOne
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
     Android: 5
+    GameCoreScarlett: 5
+    GameCoreXboxOne: 2
     Server: 5
     Standalone: 5
     WebGL: 5

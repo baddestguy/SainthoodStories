@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Assets._Scripts.Extensions;
 using Assets._Scripts.Xbox;
 using Rewired;
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerLoginSuccess()
     {
+        GameSettings.Instance.BeginLoad();
         LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
@@ -409,8 +411,11 @@ public class GameManager : MonoBehaviour
     private IEnumerator WaitAndLoadScene(string sceneName)
     {
         if (UI.Instance != null)
+        {
             UI.Instance.CrossFade(1f);
+        }
         yield return new WaitForSeconds(1f);
+
         SceneLoaded = false;
         LoadingOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
 

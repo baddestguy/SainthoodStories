@@ -55,6 +55,7 @@ namespace Assets._Scripts.Xbox
     {
         private static StickControl LeftStick => Gamepad.current.leftStick;
         private static DpadControl DPad => Gamepad.current.dpad;
+        public static int ActiveXboxGamePadModifier { get; set; } = 0;
 
         /// <summary>
         /// Get the current dpad direction, if any, that is pressed this frame
@@ -62,50 +63,52 @@ namespace Assets._Scripts.Xbox
         /// <returns>The direction being pressed and the button control</returns>
         public static (DirectionInput Input, CustomButtonControl Control) GetDirection()
         {
+#if MICROSOFT_GDK_SUPPORT
             if (GameSettings.Instance.IsXboxMode)
             {
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadUp) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadUp) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadUp))
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadUp + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadUp + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadUp + ActiveXboxGamePadModifier))
                 {
                     return (DirectionInput.Up,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadUp),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadUp),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadUp)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadUp + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadUp + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadUp + ActiveXboxGamePadModifier)));
                 }
 
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadDown) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadDown) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadDown))
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadDown + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadDown + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadDown + ActiveXboxGamePadModifier))
                 {
                     return (DirectionInput.Down,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadDown),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadDown),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadDown)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadDown + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadDown + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadDown + ActiveXboxGamePadModifier)));
                 }
 
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadLeft) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadLeft) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadLeft))
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadLeft + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadLeft + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadLeft + ActiveXboxGamePadModifier))
                 {
                     return (DirectionInput.Left,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadLeft),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadLeft),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadLeft)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadLeft + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadLeft + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadLeft + ActiveXboxGamePadModifier)));
                 }
 
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadRight) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadRight) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadRight))
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadRight + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadRight + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadRight + ActiveXboxGamePadModifier))
                 {
                     return (DirectionInput.Right,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadRight),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadRight),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadRight)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadRight + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadRight + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadRight + ActiveXboxGamePadModifier)));
                 }
 
                 return (DirectionInput.Void, new CustomButtonControl());
             }
+#endif
 
             if (Gamepad.current == null)
             {
@@ -132,80 +135,85 @@ namespace Assets._Scripts.Xbox
         /// <returns>The direction being pressed and the button control</returns>
         public static (GamePadButton Button, CustomButtonControl Control) GetButton()
         {
+
+#if MICROSOFT_GDK_SUPPORT
             if (GameSettings.Instance.IsXboxMode)
             {
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonY) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonY) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonY))
+
+
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonY + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonY + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonY + ActiveXboxGamePadModifier))
                 {
                     return (GamePadButton.North,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonY),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonY),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonY)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonY + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonY + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonY + ActiveXboxGamePadModifier)));
                 }
 
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonB) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonB) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonB))
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonB + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonB + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonB + ActiveXboxGamePadModifier))
                 {
                     return (GamePadButton.East,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonB),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonB),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonB)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonB + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonB + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonB + ActiveXboxGamePadModifier)));
                 }
 
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonA) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonA) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonA))
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonA + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonA + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonA + ActiveXboxGamePadModifier))
                 {
                     return (GamePadButton.South,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonA),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonA),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonA)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonA + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonA + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonA + ActiveXboxGamePadModifier)));
                 }
 
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonX) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonX) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonX))
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonX + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonX + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonX + ActiveXboxGamePadModifier))
                 {
                     return (GamePadButton.West,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonX),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonX),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonX)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonX + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonX + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonX + ActiveXboxGamePadModifier)));
                 }
 
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonRightShoulder) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonRightShoulder) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonRightShoulder))
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonRightShoulder + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonRightShoulder + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonRightShoulder + ActiveXboxGamePadModifier))
                 {
                     return (GamePadButton.RightShoulder,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonRightShoulder),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonRightShoulder),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonRightShoulder)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonRightShoulder + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonRightShoulder + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonRightShoulder + ActiveXboxGamePadModifier)));
                 }
 
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonLeftShoulder) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonLeftShoulder) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonLeftShoulder))
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonLeftShoulder + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonLeftShoulder + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonLeftShoulder + ActiveXboxGamePadModifier))
                 {
                     return (GamePadButton.LeftShoulder,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonLeftShoulder),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonLeftShoulder),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonLeftShoulder)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonLeftShoulder + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonLeftShoulder + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonLeftShoulder + ActiveXboxGamePadModifier)));
                 }
 
-                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonMenu) ||
-                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonMenu) ||
-                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonMenu))
+                if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonMenu + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonMenu + ActiveXboxGamePadModifier) ||
+                    GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonMenu + ActiveXboxGamePadModifier))
                 {
                     return (GamePadButton.Start,
-                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonMenu),
-                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonMenu),
-                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonMenu)));
+                        new(GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonMenu + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonMenu + ActiveXboxGamePadModifier),
+                            GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonMenu + ActiveXboxGamePadModifier)));
                 }
 
                 return (GamePadButton.Void, new CustomButtonControl());
             }
+#endif
 
             if (Gamepad.current == null)
             {

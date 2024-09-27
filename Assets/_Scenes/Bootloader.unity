@@ -4887,7 +4887,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6733,10 +6733,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1213467159}
-    - targetCorrespondingSourceObject: {fileID: 259144130774116807, guid: a9a30e14f69b1c44cb3851a65741daf2,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1213467161}
   m_SourcePrefab: {fileID: 100100000, guid: a9a30e14f69b1c44cb3851a65741daf2, type: 3}
 --- !u!1 &615920188
 GameObject:
@@ -11562,7 +11558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartButtonPrompt: {fileID: 1668638036}
-  FailureReasonPrompt: {fileID: 0}
+  FailureReasonPrompt: {fileID: 419339705}
 --- !u!114 &968352303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14490,18 +14486,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1c748c79bb84714cb023cd1de7bee7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1213467161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1088906238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dfd5fa8b3f7d2848bb0c41ce0fda052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1214102985

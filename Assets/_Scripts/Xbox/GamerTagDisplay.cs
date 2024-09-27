@@ -11,7 +11,7 @@ public class GamerTagDisplay : MonoBehaviour
     {
         if (GameSettings.Instance.IsXboxMode)
         {
-            TextMesh.text = XboxUserManager.Instance.GamerTag;
+            TextMesh.text = XboxUserHandler.Instance.GamerTag;
         }
         else
         {

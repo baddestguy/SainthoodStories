@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using Assets._Scripts.Xbox;
 using UnityEngine;
 
 
@@ -34,7 +35,7 @@ public class SaveDataManager : MonoBehaviour
     private const string SPARE_FILENAME = "Sainthood_DayCheckpoint.save";
 
     string GetPath(string fileName) => Path.Combine(Application.persistentDataPath, fileName);
-    private bool FileExixst(string fileName) => File.Exists(GetPath(FILENAME));
+    private bool FileExixst() => File.Exists(GetPath(FILENAME));
 
 
     private void Awake()
@@ -56,14 +57,10 @@ public class SaveDataManager : MonoBehaviour
 
     public void DaySave()
     {
-        SaveObject save = CurrentSaveData();
-        SaveObject[] data = new SaveObject[1] { save };
+        var save = CurrentSaveData();
+        var data = new SaveObject[1] { save };
 
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(GetPath(SPARE_FILENAME));
-        bf.Serialize(file, data);
-        file.Close();
-        GameManager.Instance.SaveData = data[0];
+        Save(data, SPARE_FILENAME);
     }
 
     public void LoadDaySave()
@@ -77,17 +74,7 @@ public class SaveDataManager : MonoBehaviour
     public void SaveGame()
     {
         if (GameSettings.Instance.TUTORIAL_MODE) return;
-
-        if (!FileExixst(FILENAME))
-        {
-            //Beter just do a direct save than looking for what do not exist...
-            FirstSave();
-        }
-        else
-        {
-            DoSequentialSave();
-        }
-
+        DoSequentialSave();
     }
 
     public SaveObject CurrentSaveData()
@@ -158,21 +145,6 @@ public class SaveDataManager : MonoBehaviour
     }
 
 
-    public void FirstSave()
-    {
-        //InitialDataSaving
-        SaveObject save = CurrentSaveData();
-        SaveObject[] saveObjects = new SaveObject[1] { save };
-
-        Save(saveObjects);
-
-        //BinaryFormatter bf = new BinaryFormatter();
-        //FileStream file = File.Create(Application.persistentDataPath + $"/Sainthood.save");
-        //bf.Serialize(file, saveObjects);
-        //file.Close();
-    }
-
-
     private bool IsNewWeek(SaveObject[] saveObjects, SaveObject newData)
     {
         return saveObjects[saveObjects.Length - 1].Week != newData.Week;
@@ -182,44 +154,47 @@ public class SaveDataManager : MonoBehaviour
     {
         SaveObject save = CurrentSaveData();
         SaveObject[] saves = new SaveObject[1] { save };
-
+        
         Save(saves);
     }
 
-    private void Save(params SaveObject[] data)
+    private void Save(SaveObject[] data, string fileName = FILENAME)
     {
         if (GameSettings.Instance.IsXboxMode)
         {
-
+            XboxUserHandler.Instance.SaveData(fileName, data);
         }
         else
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Create(GetPath(FILENAME));
+            FileStream file = File.Create(GetPath(fileName));
             bf.Serialize(file, data);
             file.Close();
-            GameManager.Instance.SaveData = data[0];
             //   Debug.Log("SAVED!");
         }
+        GameManager.Instance.SaveData = data[0];
     }
 
     private Dictionary<Days, SaveObject> GetSavedDataSet(string fileName = FILENAME)
     {
         try
         {
+            SaveObject[] saveObjects;
             if (GameSettings.Instance.IsXboxMode)
             {
-                return null;
+                Debug.LogError("Loading previous save");
+                saveObjects = XboxUserHandler.Instance.LoadData<SaveObject[]>(fileName);
+                Debug.LogError("Loaded previous save");
             }
             else
             {
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream file = File.Open(GetPath(fileName), FileMode.Open);
-                SaveObject[] saveObjects = (SaveObject[])bf.Deserialize(file);
+                saveObjects = (SaveObject[])bf.Deserialize(file);
                 file.Close();
-                Dictionary<Days, SaveObject> keyVal = saveObjects.ToDictionary(x => (Days)x.Day, x => x);
-                return keyVal;
             }
+            Dictionary<Days, SaveObject> keyVal = saveObjects.ToDictionary(x => (Days)x.Day, x => x);
+            return keyVal;
         }
         catch (Exception e)
         {
@@ -235,13 +210,16 @@ public class SaveDataManager : MonoBehaviour
     /// <param name="callback"></param>
     public void LoadGame(Action<SaveObject, bool> callback, bool newGame, bool lastDay = false, bool ingameLoading = false, bool showUI = true)
     {
-        if (Directory.Exists(Application.persistentDataPath))
+        if (GameSettings.Instance.IsXboxMode || Directory.Exists(Application.persistentDataPath))
         {
+
+            Debug.LogError("Loading game for real ");
             Dictionary<Days, SaveObject> keyVal = GetSavedDataSet();
 
             if (keyVal == null || newGame)
             {
 
+                Debug.LogError("looks like a new game");
                 callback?.Invoke(NewGameData(), true);
                 return;
             }
@@ -249,12 +227,14 @@ public class SaveDataManager : MonoBehaviour
             SaveObject[] saveObjects = keyVal.Values.ToArray();
             if (saveObjects == null || saveObjects.Length <= 0)
             {
+                Debug.LogError("No save objects? ");
                 callback?.Invoke(NewGameData(), true);
                 return;
             }
 
             if (lastDay || !showUI)
             {
+                Debug.LogError("Last day checl ");
                 SaveObject data = saveObjects.OrderBy(x => x.Day).LastOrDefault();
                 callback?.Invoke(data, false);
                 return;
@@ -265,12 +245,15 @@ public class SaveDataManager : MonoBehaviour
 
                 if (data == null)
                 {
+                    Debug.LogError("There's some null data? ");
                     data = NewGameData();
-                    Save(data);
+                    Save(new[] { data });
                     newGame = true;
                 }
                 else
                 {
+
+                    Debug.LogError("We got some data to work with");
                     Dictionary<Days, SaveObject> set = GetSavedDataSet();
                     SaveObject[] newData = set.Where(x => ((int)x.Key) <= data.Day).Select(x => x.Value).ToArray();
                     Save(newData);
