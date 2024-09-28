@@ -3,8 +3,10 @@ using System.Collections;
 using System.Text;
 using Newtonsoft.Json;
 using Unity.XGamingRuntime;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using HR = Unity.XGamingRuntime.HR;
 
 namespace Assets._Scripts.Xbox
 {
@@ -21,13 +23,15 @@ namespace Assets._Scripts.Xbox
         private static bool Initialized { get; set; }
         private static string GameConfigScId => "00000000-0000-0000-0000-000060fcc671";
         private static string GameSaveContainerName => "com.TaiwoPictures.Sainthood";
+        private static int AchievementUnlockProgress => 100;
 
 
         private bool _isUserLoggedIn;
+        private ulong _userId;
         private XUserHandle _userHandle;
         private XUserChangeRegistrationToken _registrationToken;
         private XboxSavedDataHandler _savedDataHandler;
-
+        private XblContextHandle _xblContextHandle;
 
         public bool SaveHandlerInitialized { get; private set; }
         public bool IsUserLoggedIn
@@ -130,7 +134,7 @@ namespace Assets._Scripts.Xbox
                 return default;
             }
 
-            var data = _savedDataHandler.LoadAsync(GameSaveContainerName, saveFileName);
+            var data = _savedDataHandler.Load(GameSaveContainerName, saveFileName);
             if (data == null || data.Length == 0)
             {
                 Debug.LogError("No data found");
@@ -157,6 +161,41 @@ namespace Assets._Scripts.Xbox
             Debug.Log($"SAVE? {wasSaveSuccessful}");
 
             return wasSaveSuccessful ? dataToSave : default;
+        }
+
+        /// <summary>
+        /// Unlock an achievement for the current logged in xbox user.
+        /// </summary>
+        /// <param name="achievementId">The achievement ID as configured in Partner Center</param>
+        /// <param name="progressLevel">The value we want to increase the achievement level to. (0 - 100)</param>
+        public void UnlockAchievement(string achievementId, int progressLevel = 100)
+        {
+            // This API will work even when offline.  Offline updates will be posted by the system when connection is
+            // re-established even if the title isn’t running. If the achievement has already been unlocked or the progress
+            // value is less than or equal to what is currently recorded on the server HTTP_E_STATUS_NOT_MODIFIED (0x80190130L)
+            // will be returned.
+            SDK.XBL.XblAchievementsUpdateAchievementAsync(
+                _xblContextHandle,
+                _userId,
+                achievementId,
+                (uint)Math.Min(progressLevel, AchievementUnlockProgress),
+                hResult =>
+                {
+                    if (hResult == HR.HTTP_E_STATUS_NOT_MODIFIED)
+                    {
+                        Debug.LogError("Achievement ALREADY Unlocked!");
+                        return;
+                    }
+                    
+                    if (HR.FAILED(hResult))
+                    {
+                        Debug.LogError($"FAILED: Achievement Update, hResult=0x{hResult:X} ({HR.NameOf(hResult)})");
+                        return;
+                    }
+
+                    Debug.Log($"SUCCESS: {achievementId} has been updated to leve l{progressLevel}");
+                }
+            );
         }
 
         /// <summary>
@@ -255,10 +294,17 @@ namespace Assets._Scripts.Xbox
 
             _userHandle = userHandle;
 
-            var getGamertagHResult = SDK.XUserGetGamertag(_userHandle, XUserGamertagComponent.UniqueModern, out var gamertag);
-            if (Unity.XGamingRuntime.Interop.HR.FAILED(getGamertagHResult))
+            var getGamerTagResult = SDK.XUserGetGamertag(_userHandle, XUserGamertagComponent.UniqueModern, out var gamertag);
+            if (Unity.XGamingRuntime.Interop.HR.FAILED(getGamerTagResult))
             {
-                Debug.LogError($"FAILED: Could not get user tag, hResult=0x{getGamertagHResult:X} ({HR.NameOf(getGamertagHResult)})");
+                Debug.LogError($"FAILED: Could not get user tag, hResult=0x{getGamerTagResult:X} ({HR.NameOf(getGamerTagResult)})");
+                return;
+            }
+
+            var userIdHResult = SDK.XUserGetId(_userHandle, out _userId);
+            if (Unity.XGamingRuntime.Interop.HR.FAILED(hResult))
+            {
+                Debug.LogError($"FAILED: Could not get user ID, hResult=0x{userIdHResult:X} ({HR.NameOf(userIdHResult)})");
                 return;
             }
 
@@ -271,13 +317,19 @@ namespace Assets._Scripts.Xbox
             GamerTag = gamertag;
             IsUserLoggedIn = true;
 
-            //If this works, we can consider loading save data in the main menu
             if (_savedDataHandler.Initialize(_userHandle, GameConfigScId))
             {
                 SaveHandlerInitialized = true;
                 GameManager.Instance.PlayerLoginSuccess();
             }
 
+            var xblContextResult  = SDK.XBL.XblContextCreateHandle(_userHandle, out _xblContextHandle);
+            if (Unity.XGamingRuntime.Interop.HR.FAILED(xblContextResult))
+            {
+                Debug.LogError($"FAILED: Could not create context handle, hResult=0x{xblContextResult:X} ({HR.NameOf(xblContextResult)})");
+            }
+
+            UnlockAchievement("1");
         }
 
         private void UserChangeEventCallback(IntPtr _, XUserLocalId userLocalId, XUserChangeEvent eventType)
