@@ -328,8 +328,6 @@ namespace Assets._Scripts.Xbox
             {
                 Debug.LogError($"FAILED: Could not create context handle, hResult=0x{xblContextResult:X} ({HR.NameOf(xblContextResult)})");
             }
-
-            UnlockAchievement("1");
         }
 
         private void UserChangeEventCallback(IntPtr _, XUserLocalId userLocalId, XUserChangeEvent eventType)
