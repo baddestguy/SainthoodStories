@@ -95,9 +95,13 @@ public class PauseMenu : MonoBehaviour
             //else
             //    TutorialEnabled.transform.parent.gameObject.SetActive(true);
         }
-        else if (GameSettings.Instance.IsUsingController)
+        else
         {
-            PauseMenuControllerHandler.Instance.Deactivate();
+            GameSettings.Instance.Save();
+            if (GameSettings.Instance.IsUsingController)
+            {
+                PauseMenuControllerHandler.Instance.Deactivate();
+            }
         }
     }
 
@@ -211,7 +215,6 @@ public class PauseMenu : MonoBehaviour
 
     private void OnDisable()
     {
-        GameSettings.Instance.Save();
     }
 
     private IEnumerator ScheduleCallback(Action callback, float delay)

@@ -65,7 +65,7 @@ namespace Assets._Scripts.Xbox
         /// </summary>
         private bool IsShowingObjectiveInventoryPopup => UI.Instance?.InventoryPopup != null && UI.Instance.InventoryPopup.activeSelf;
         private bool ShouldHandlerReturnEarly =>
-            Gamepad.current == null ||
+            (Gamepad.current == null && !GameSettings.Instance.IsXboxMode) ||
             Player == null ||
             !GameSettings.Instance.IsUsingController ||
             MissionManager.MissionOver ||

@@ -16,8 +16,6 @@ namespace Assets._Scripts.Xbox
         public GameObject SteamWishListGameObject;
         public GameObject DiscordGameObject;
 
-        private bool IsNewGameButtonActive => _activeMainMenuButton.gameObject.Equals(NewGameGameObject);
-        private bool IsSettingsButtonActive => _activeMainMenuButton.gameObject.Equals(SettingsButtonGameObject);
         private GameObject[] VerticalButtons => new[] { NewGameGameObject, ContinueGameObject, ExitGameObject };
         private GameObject[] HorizontalButtons => new[] { SettingsButtonGameObject, SteamWishListGameObject, DiscordGameObject };
 
@@ -36,12 +34,12 @@ namespace Assets._Scripts.Xbox
         {
             GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
 
-            _verticalButtonsLength = GameSettings.Instance.IsUsingController ? 2 : VerticalButtons.Length;
-            _horizontalButtonCount = GameSettings.Instance.IsUsingController ? 1 : HorizontalButtons.Length;
+            _verticalButtonsLength = GameSettings.Instance.IsXboxMode ? 2 : VerticalButtons.Length;
+            _horizontalButtonCount = GameSettings.Instance.IsXboxMode ? 1 : HorizontalButtons.Length;
+            _currentVerticalButtonIndex = 0;
 
             if (GameSettings.Instance.IsXboxMode)
             {
-                _currentVerticalButtonIndex = 0;
                 ExitGameObject.SetActive(false);
                 SteamWishListGameObject.SetActive(false);
                 DiscordGameObject.SetActive(false);
@@ -94,7 +92,7 @@ namespace Assets._Scripts.Xbox
         {
             TryApplyControllerHover();
             
-            if (Gamepad.current == null || !GameSettings.Instance.IsUsingController ||
+            if ((Gamepad.current == null && !GameSettings.Instance.IsXboxMode) || !GameSettings.Instance.IsUsingController ||
                 PauseMenu.Instance.active || UI.Instance.TutorialPopupQuestion.activeInHierarchy) return;
 
             if(_skipFrame)
@@ -143,7 +141,7 @@ namespace Assets._Scripts.Xbox
                     _currentVerticalButtonIndex = pressedDirection.Input switch
                     {
                         DirectionInput.Up => 0,
-                        DirectionInput.Down => 2,
+                        DirectionInput.Down => GameSettings.Instance.IsXboxMode ? 0 : 2,
                         _ => _currentVerticalButtonIndex //impossible to get here
                     };
                 }

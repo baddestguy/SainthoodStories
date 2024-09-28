@@ -38,4 +38,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/SaintsShowcase_Day.unity
     guid: c536db3534ec8394ea5714f10c34b2d3
-  m_configObjects: {}
+  m_configObjects:
+    Unity.Microsoft.GDK.Editor.Settings: {fileID: 11400000, guid: 40437b3521fe8a74fa96b1c6bf929ee4,
+      type: 2}

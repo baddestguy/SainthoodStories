@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Game
+  configVersion="1">
+  <Identity
+    Name="Sainthood"
+    Publisher="CN=33B081AD-758B-4A1D-A558-021DCD1BE7E4"
+    Version="2.6.1.4" />
+  <ShellVisuals
+    StoreLogo="StoreLogo.png"
+    Square150x150Logo="Square150x150Logo.png"
+    Square44x44Logo="Square44x44Logo.png"
+    Square480x480Logo="default480x480.png"
+    SplashScreenImage="SplashScreenImage.png" />
+  <ExecutableList>
+    <Executable
+      Name="Sainthood.exe"
+      Id="Game" />
+  </ExecutableList>
+  <StoreId>9NXPDTC3NRP3</StoreId>
+  <MSAAppId>000000004D368306</MSAAppId>
+  <TitleId>60FCC671</TitleId>
+  <ExtendedAttributeList>
+    <ExtendedAttribute
+      Name="SandboxIds"
+      Value="JDTDWX.0,JDTDWX.1,JDTDWX.2,XXDP.17,XXDP.19,XXDP.93,DVKLWP.1,XDKS.1" />
+    <ExtendedAttribute
+      Name="Scid"
+      Value="00000000-0000-0000-0000-000060fcc671" />
+  </ExtendedAttributeList>
+  <DevelopmentOnly />
+  <AdvancedUserModel>true</AdvancedUserModel>
+</Game>

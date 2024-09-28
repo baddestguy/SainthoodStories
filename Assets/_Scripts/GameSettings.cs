@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using Assets._Scripts.Xbox;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class GameSettings : MonoBehaviour
 {
@@ -33,6 +31,7 @@ public class GameSettings : MonoBehaviour
     public bool TUTORIAL_MODE;
     public bool DEMO_MODE_3;
     private bool _hasRegisteredForInputMethodChanged;
+    private bool _hasRegisteredForLoginStatusChanged;
 
     [HideInInspector]
     public bool IsUsingController
@@ -78,7 +77,12 @@ public class GameSettings : MonoBehaviour
 
     [HideInInspector] public Language currentLanguage;
 
-    string GetPath() => Path.Combine(Application.persistentDataPath, "Settings.dat");
+    private string SettingsFileName => "Settings.dat";
+    string GetPath() => Path.Combine(Application.persistentDataPath, SettingsFileName);
+
+
+    //public delegate void SavedDataSetLoaded(SaveSettingsData data);
+    //public event SavedDataSetLoaded OnSavedDataSetLoaded;
 
     private void Awake()
     {
@@ -88,11 +92,12 @@ public class GameSettings : MonoBehaviour
 
     private void Start()
     {
-        Load();
         if (IsXboxMode)
         {
             IsUsingController = true;
         }
+
+        //OnSavedDataSetLoaded += Load;
     }
 
     private void Update()
@@ -118,10 +123,49 @@ public class GameSettings : MonoBehaviour
         IsUsingController = isUsingController;
     }
 
-    public void Load()
+    #region LoadGameSettings
+    public void BeginLoad()
     {
+        var savedGameSettings =  GetSavedDataSet();
+        Load(savedGameSettings);
+        Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
+    }
 
-        SaveSettingsData data = GetSavedDataSet();
+    private SaveSettingsData GetSavedDataSet()
+    {
+        try
+        {
+            if (IsXboxMode)
+            {
+                while (!XboxUserHandler.Instance?.SaveHandlerInitialized ?? true)
+                {
+                    //This shouldn't be possible anymore, but just in case
+                    Debug.LogError("Waiting for save handler before loading game settings");
+                }
+
+                Debug.Log("Loading game settings");
+                var savedData = XboxUserHandler.Instance.LoadData<SaveSettingsData>(SettingsFileName);
+                return savedData;
+            }
+
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(GetPath(), FileMode.Open);
+            SaveSettingsData saveObjects = (SaveSettingsData)bf.Deserialize(file);
+            file.Close();
+            return saveObjects;
+
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e); //Ideally, this should only throw an error on first boot or if game settings file is deleted
+            return null;
+
+        }
+
+    }
+
+    private void Load(SaveSettingsData data)
+    {
         if (data != null)
         {
             fullScreenMode = data.fullscreen;
@@ -161,11 +205,8 @@ public class GameSettings : MonoBehaviour
             SetLanguage(Language.ENGLISH);
 
         }
-
-
-        Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
-
     }
+    #endregion
 
     public void Save()
     {
@@ -194,30 +235,17 @@ public class GameSettings : MonoBehaviour
             language = currentLanguage
         };
 
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(GetPath());
-        bf.Serialize(file, data);
-        file.Close();
-    }
-
-    private SaveSettingsData GetSavedDataSet()
-    {
-        try
+        if (IsXboxMode)
+        {
+            XboxUserHandler.Instance.SaveData(SettingsFileName, data);
+        }
+        else
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(GetPath(), FileMode.Open);
-            SaveSettingsData saveObjects = (SaveSettingsData)bf.Deserialize(file);
+            FileStream file = File.Create(GetPath());
+            bf.Serialize(file, data);
             file.Close();
-
-            return saveObjects;
         }
-        catch (Exception e)
-        {
-            //Debug.LogError("Error " + e.Message);
-            return null;
-
-        }
-
     }
 
     public void ToggleGrid()
@@ -233,14 +261,14 @@ public class GameSettings : MonoBehaviour
     {
         if (IsXboxMode)
         {
-            var bestResolution = resolutions.Select(x => new { Resolution = x, Pixels = x.height * x.width })
-                .Where(x => x.Pixels <= (int)MaxXboxResolution)
+            var orderedResolutions = resolutions.Select(x => new { Resolution = x, Pixels = x.height * x.width })
                 .OrderByDescending(x => x.Pixels)
                 .ThenByDescending(x => x.Resolution.refreshRateRatio.value)
-                .First()
-                .Resolution;
+                .ToList();
 
-            return bestResolution;
+            var bestResolutionBelowMax = orderedResolutions.FirstOrDefault(x => x.Pixels <= (int)MaxXboxResolution);
+
+            return bestResolutionBelowMax?.Resolution ?? orderedResolutions.Last().Resolution;
         }
 
         string[] val = value.Replace(" ", "").Split('x');
