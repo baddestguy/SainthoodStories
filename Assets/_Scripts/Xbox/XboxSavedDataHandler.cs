@@ -49,7 +49,7 @@ namespace Assets._Scripts.Xbox
         /// </summary>
         /// <param name="containerName">Name of the container.</param>
         /// <param name="blobName">Name of the blob (file) to load data from.</param>
-        public byte[] LoadAsync(string containerName, string blobName)
+        public byte[] Load(string containerName, string blobName)
         {
             //Step 1: Create a container
             if (!TryCreateSaveContainer(containerName))
