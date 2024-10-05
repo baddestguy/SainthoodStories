@@ -1,6 +1,8 @@
+using System.Collections;
 using Assets._Scripts.Xbox;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets._Scripts
 {
@@ -8,7 +10,7 @@ namespace Assets._Scripts
     {
         public static SplashSceneController Instance;
 
-        public TextMeshProUGUI StartButtonPrompt;
+        public Text StartButtonPrompt;
         public TextMeshProUGUI FailureReasonPrompt;
 
         private bool _hasRegisteredForInputMethodChanged;
@@ -18,6 +20,20 @@ namespace Assets._Scripts
         void Start()
         {
             Instance = this;
+            StartButtonPrompt.text = "Click to Start";
+
+            StartCoroutine(Initialize());
+        }
+
+        IEnumerator Initialize()
+        {
+            while(GameManager.Instance == null) yield return null;
+            while (SoundManager.Instance == null) yield return null;
+            while (SoundManager.Instance == null) yield return null;
+
+            GameSettings.Instance.BeginLoad();
+            yield return null;
+            SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
         }
 
         // Update is called once per frame
@@ -90,6 +106,13 @@ namespace Assets._Scripts
                 //We might need to do something here to get the steam user in the future
                 GameManager.Instance.PlayerLoginSuccess();
             }
+
+            while (SoundManager.Instance == null)
+            {
+                //Wait for SoundManager if not initialized...
+            }
+
+            SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
         }
 
 

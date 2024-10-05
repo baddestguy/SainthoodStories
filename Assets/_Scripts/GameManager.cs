@@ -77,7 +77,6 @@ public class GameManager : MonoBehaviour
 
     public void PlayerLoginSuccess()
     {
-        GameSettings.Instance.BeginLoad();
         LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
@@ -223,7 +222,6 @@ public class GameManager : MonoBehaviour
                 //    EventsManager.Instance.CurrentEvents.Add(data.CurrentDailyEvent);
             }, false, true);
             InGameSession = false;
-            SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
             SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay: 70);
             GameSettings.Instance.TUTORIAL_MODE = false;
             TutorialManager.Instance.Steps.Clear();
