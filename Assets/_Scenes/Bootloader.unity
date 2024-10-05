@@ -19121,6 +19121,7 @@ MonoBehaviour:
   - {fileID: 169320070}
   - {fileID: 1545918820}
   - {fileID: 1732058696}
+  ExitToDesktopGameObject: {fileID: 155028590}
 --- !u!1 &1540468935
 GameObject:
   m_ObjectHideFlags: 0

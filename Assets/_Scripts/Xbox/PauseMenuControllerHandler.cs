@@ -35,6 +35,7 @@ namespace Assets._Scripts.Xbox
         /// <br /> 5: Ambiance Slider.
         /// </summary>
         public GameObject[] SoundTabOptions;
+        public GameObject ExitToDesktopGameObject;
         private int _selectedPauseButtonIndex;
         private int _selectedGraphicsButtonIndex;
         private int _selectedSoundButtonIndex;
@@ -70,6 +71,9 @@ namespace Assets._Scripts.Xbox
         void Start()
         {
             if (!GameSettings.Instance.IsXboxMode) return;
+
+            //Hide the desktop button
+            ExitToDesktopGameObject.SetActive(false);
 
             //You can only change show grid option on xbox
             for (var i = 0; i < GraphicTabOptions.Length; i++)

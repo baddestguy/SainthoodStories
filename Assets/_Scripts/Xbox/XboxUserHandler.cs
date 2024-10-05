@@ -3,7 +3,6 @@ using System.Collections;
 using System.Text;
 using Newtonsoft.Json;
 using Unity.XGamingRuntime;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using HR = Unity.XGamingRuntime.HR;
@@ -163,6 +162,31 @@ namespace Assets._Scripts.Xbox
             return wasSaveSuccessful ? dataToSave : default;
         }
 
+        public void QueueSave<T>(string filename, T data)
+        {
+            //Add the save to the queue
+            _savedDataHandler.SaveQueue.Enqueue(_savedDataHandler.SaveAsync(GameSaveContainerName, filename, data));
+
+            //If the save queue is not already running, start it
+            if (!_savedDataHandler.IsProcessingSave)
+            {
+                _savedDataHandler.IsProcessingSave = true;
+                StartCoroutine(ProcessSaveQueue());
+            }
+        }
+
+        private IEnumerator ProcessSaveQueue()
+        {
+            // process queue in order until it is empty
+            while (_savedDataHandler.SaveQueue.Count > 0)
+            {
+                var save = _savedDataHandler.SaveQueue.Dequeue();
+                yield return StartCoroutine(save);
+            }
+
+            _savedDataHandler.IsProcessingSave = false;
+        }
+
         /// <summary>
         /// Unlock an achievement for the current logged in xbox user.
         /// </summary>
@@ -187,7 +211,7 @@ namespace Assets._Scripts.Xbox
                         return;
                     }
                     
-                    if (HR.FAILED(hResult))
+                    if (Unity.XGamingRuntime.Interop.HR.FAILED(hResult))
                     {
                         Debug.LogError($"FAILED: Achievement Update, hResult=0x{hResult:X} ({HR.NameOf(hResult)})");
                         return;
