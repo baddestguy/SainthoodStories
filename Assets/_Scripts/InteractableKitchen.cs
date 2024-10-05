@@ -99,7 +99,7 @@ public class InteractableKitchen : InteractableHouse
                     }
                     else if(shelter.AllObjectivesComplete)
                     {
-                        InventoryManager.Instance.AddToInventory(ItemType.MEAL);
+                    //    InventoryManager.Instance.AddToInventory(ItemType.MEAL);
                     }
                 }
             }

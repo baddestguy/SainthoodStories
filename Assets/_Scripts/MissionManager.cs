@@ -213,12 +213,15 @@ public class MissionManager : MonoBehaviour
 
             if (FaithPoints < 75 || CharityPoints < 75)
             {
-                if (FaithPoints < 75)
+                if (FaithPoints < 75 && CharityPoints < 75)
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.WORST_ENDING);
+                }
+                else if (FaithPoints < 75)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
-
                 }
-                if (CharityPoints < 75)
+                else if (CharityPoints < 75)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
                 }
