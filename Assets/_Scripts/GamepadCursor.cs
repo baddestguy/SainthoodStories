@@ -66,10 +66,10 @@ public class GamepadCursor : MonoBehaviour
 
     private void OnDisable()
     {
-        InputSystem.onAfterUpdate -= UpdateMotion;
-        PlayerInput.actions["Click"].performed -= ActionButton;
-        PlayerInput.actions["ScrollWheel"].performed -= Scroll;
-        PlayerInput.user.UnpairDevicesAndRemoveUser();
+        //InputSystem.onAfterUpdate -= UpdateMotion;
+        //PlayerInput.actions["Click"].performed -= ActionButton;
+        //PlayerInput.actions["ScrollWheel"].performed -= Scroll;
+        //PlayerInput.user.UnpairDevicesAndRemoveUser();
     }
 
     private void OnControlsChanged()
