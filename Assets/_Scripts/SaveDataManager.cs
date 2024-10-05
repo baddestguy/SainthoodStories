@@ -162,7 +162,7 @@ public class SaveDataManager : MonoBehaviour
     {
         if (GameSettings.Instance.IsXboxMode)
         {
-            XboxUserHandler.Instance.SaveData(fileName, data);
+            XboxUserHandler.Instance.QueueSave(fileName, data);
         }
         else
         {
@@ -182,9 +182,7 @@ public class SaveDataManager : MonoBehaviour
             SaveObject[] saveObjects;
             if (GameSettings.Instance.IsXboxMode)
             {
-                Debug.LogError("Loading previous save");
                 saveObjects = XboxUserHandler.Instance.LoadData<SaveObject[]>(fileName);
-                Debug.LogError("Loaded previous save");
             }
             else
             {
@@ -212,14 +210,10 @@ public class SaveDataManager : MonoBehaviour
     {
         if (GameSettings.Instance.IsXboxMode || Directory.Exists(Application.persistentDataPath))
         {
-
-            Debug.LogError("Loading game for real ");
             Dictionary<Days, SaveObject> keyVal = GetSavedDataSet();
 
             if (keyVal == null || newGame)
             {
-
-                Debug.LogError("looks like a new game");
                 callback?.Invoke(NewGameData(), true);
                 return;
             }
@@ -234,7 +228,6 @@ public class SaveDataManager : MonoBehaviour
 
             if (lastDay || !showUI)
             {
-                Debug.LogError("Last day checl ");
                 SaveObject data = saveObjects.OrderBy(x => x.Day).LastOrDefault();
                 callback?.Invoke(data, false);
                 return;
@@ -245,15 +238,12 @@ public class SaveDataManager : MonoBehaviour
 
                 if (data == null)
                 {
-                    Debug.LogError("There's some null data? ");
                     data = NewGameData();
                     Save(new[] { data });
                     newGame = true;
                 }
                 else
                 {
-
-                    Debug.LogError("We got some data to work with");
                     Dictionary<Days, SaveObject> set = GetSavedDataSet();
                     SaveObject[] newData = set.Where(x => ((int)x.Key) <= data.Day).Select(x => x.Value).ToArray();
                     Save(newData);
