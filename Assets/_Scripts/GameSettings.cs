@@ -157,7 +157,7 @@ public class GameSettings : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError(e); //Ideally, this should only throw an error on first boot or if game settings file is deleted
+         //   Debug.LogError(e); //Ideally, this should only throw an error on first boot or if game settings file is deleted
             return null;
 
         }

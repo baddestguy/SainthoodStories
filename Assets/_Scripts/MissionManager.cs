@@ -27,7 +27,9 @@ public class MissionManager : MonoBehaviour
 
     public bool SleptEarly = false;
 
-    public ObjectivesData CurrentObjective { get { return GameDataManager.Instance.ObjectivesData[CurrentMissionId]; } }
+    public static int TOTAL_FP_TARGET = 100;
+    public static int TOTAL_CP_TARGET = 100;
+    public ObjectivesData CurrentObjective { get { return CurrentMissionId <= GameDataManager.MAX_MISSION_ID ? GameDataManager.Instance.ObjectivesData[CurrentMissionId] : null; } }
 
     private void Awake()
     {
@@ -208,9 +210,6 @@ public class MissionManager : MonoBehaviour
         //If we finished the final mission
         if (oldMissionId == GameDataManager.MAX_MISSION_ID)
         {
-            FaithPoints += FaithPointsPool;
-            CharityPoints += CharityPointsPool;
-
             if (FaithPoints < 75 || CharityPoints < 75)
             {
                 if (FaithPoints < 75 && CharityPoints < 75)

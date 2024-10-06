@@ -19,6 +19,7 @@ public class EndWeekSequence : MonoBehaviour
     public TextMeshProUGUI Title;
     public TextMeshProUGUI SaintUnlockedTitle;
     public TextMeshProUGUI Score;
+    public ProgressBar TotalCPProgress;
     public TextMeshProUGUI SaintScore;
     public TextMeshProUGUI CashAmount;
     public TextMeshProUGUI OldDaysleft;
@@ -26,6 +27,7 @@ public class EndWeekSequence : MonoBehaviour
 
     public EndgameSaintPortrait[] SaintPortraits;
     public ProgressBar SaintProgressBar;
+    public ProgressBar TotalFPProgress;
     private bool Continue = false;
 
     public IEnumerator RunSequenceAsync(int fp, int fpPool, int fpTarget, int cp, int cpPool, IEnumerable<SaintData> saintsUnlocked, int missionId)
@@ -41,6 +43,8 @@ public class EndWeekSequence : MonoBehaviour
         CPFPObj.SetActive(true);
         Title.text = LocalizationManager.Instance.GetText("CP_ENDGAME_TITLE");
         Score.DOCounter(cp, cp + cpPool, 2f);
+        TotalCPProgress.currentPercent = cp * 100 / MissionManager.TOTAL_CP_TARGET;
+        TotalCPProgress.endPercent = Mathf.Ceil((cp + cpPool) * 100 / MissionManager.TOTAL_CP_TARGET)+1;
         //SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie:5f);
 
         yield return new WaitForSeconds(2f);
@@ -51,6 +55,7 @@ public class EndWeekSequence : MonoBehaviour
         CashUnlockObj.transform.localPosition = new Vector3(CashUnlockObj.transform.localPosition.x - 50, CashUnlockObj.transform.localPosition.y, CashUnlockObj.transform.localPosition.z);
         CashUnlockObj.transform.DOLocalMoveX(localPosition, 0.5f);
         CashUnlockObj.SetActive(true);
+        TotalCPProgress.gameObject.SetActive(false);
         CashAmount.text = "+" + cashAmount.ToString();
         SoundManager.Instance.PlayOneShotSfx("Cheer_SFX", timeToDie: 5f);
 
@@ -82,6 +87,8 @@ public class EndWeekSequence : MonoBehaviour
             SaintProgressBar.isOn = true;
             SaintProgressBar.speed = 1;
 
+            TotalFPProgress.currentPercent = fp * 100f / MissionManager.TOTAL_FP_TARGET;
+            TotalFPProgress.endPercent = Mathf.Ceil((fpPool + fp) * 100f / MissionManager.TOTAL_FP_TARGET)+1;
             yield return new WaitForSeconds(2f);
 
             var sp = SaintPortraits[1];

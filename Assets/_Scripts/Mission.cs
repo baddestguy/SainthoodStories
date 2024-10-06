@@ -30,7 +30,7 @@ public class Mission
         get 
         {
             var currentMission = MissionManager.Instance.CurrentObjective;
-            return currentMission.Season;
+            return currentMission?.Season ?? Season.WINTER;
         } 
     }
 
