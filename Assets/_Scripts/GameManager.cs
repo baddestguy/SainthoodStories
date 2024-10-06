@@ -60,6 +60,8 @@ public class GameManager : MonoBehaviour
 
     public AsyncOperation LoadingOperation;
 
+    [HideInInspector]
+    public bool PlayerHasLoggedIn { get; private set; }
 
     private void Awake()
     {
@@ -77,9 +79,25 @@ public class GameManager : MonoBehaviour
 
     public void PlayerLoginSuccess()
     {
-        LoadScene("MainMenu", LoadSceneMode.Single);
+        StartCoroutine(CompletePlayerLoginProcess());
     }
 
+    private IEnumerator CompletePlayerLoginProcess()
+    {
+        while (SoundManager.Instance == null)
+        {
+            //Wait for SoundManager if not initialized...
+            yield return null;
+        }
+
+        GameSettings.Instance.BeginLoad();
+        SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+
+        LoadScene("MainMenu", LoadSceneMode.Single);
+        yield return null;
+
+        PlayerHasLoggedIn = true;
+    }
 
     private void Update()
     {
@@ -222,6 +240,7 @@ public class GameManager : MonoBehaviour
                 //    EventsManager.Instance.CurrentEvents.Add(data.CurrentDailyEvent);
             }, false, true);
             InGameSession = false;
+            SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
             SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay: 70);
             GameSettings.Instance.TUTORIAL_MODE = false;
             TutorialManager.Instance.Steps.Clear();

@@ -22,7 +22,6 @@ namespace Assets._Scripts.Xbox
         private static bool Initialized { get; set; }
         private static string GameConfigScId => "00000000-0000-0000-0000-000060fcc671";
         private static string GameSaveContainerName => "com.TaiwoPictures.Sainthood";
-        private static int AchievementUnlockProgress => 100;
 
 
         private bool _isUserLoggedIn;
@@ -136,30 +135,13 @@ namespace Assets._Scripts.Xbox
             var data = _savedDataHandler.Load(GameSaveContainerName, saveFileName);
             if (data == null || data.Length == 0)
             {
-                Debug.LogError("No data found");
+                Debug.LogError($"No data found for ${saveFileName}");
                 return default;
             }
 
             var loadedDataAsJson = Encoding.ASCII.GetString(data);
             var loadedData = JsonConvert.DeserializeObject<T>(loadedDataAsJson);
             return loadedData;
-        }
-
-        /// <summary>
-        /// Begin the process of saving data to local or cloud storage.
-        /// </summary>
-        /// <typeparam name="T">The type of data we are saving</typeparam>
-        /// <param name="fileName">The filename to save the data under</param>
-        /// <param name="dataToSave">The object we are saving. Note: Total size of all saved files cannot exceed 12MB</param>
-        public T SaveData<T>(string fileName, T dataToSave)
-        {
-            var dataAsJson = JsonConvert.SerializeObject(dataToSave);
-            var dataBytes = Encoding.ASCII.GetBytes(dataAsJson);
-            var wasSaveSuccessful = _savedDataHandler.Save(GameSaveContainerName, fileName, dataBytes);
-
-            Debug.Log($"SAVE? {wasSaveSuccessful}");
-
-            return wasSaveSuccessful ? dataToSave : default;
         }
 
         public void QueueSave<T>(string filename, T data)
@@ -194,6 +176,8 @@ namespace Assets._Scripts.Xbox
         /// <param name="progressLevel">The value we want to increase the achievement level to. (0 - 100)</param>
         public void UnlockAchievement(string achievementId, int progressLevel = 100)
         {
+            if (!GameSettings.Instance.IsXboxMode) return;
+
             // This API will work even when offline.  Offline updates will be posted by the system when connection is
             // re-established even if the title isn’t running. If the achievement has already been unlocked or the progress
             // value is less than or equal to what is currently recorded on the server HTTP_E_STATUS_NOT_MODIFIED (0x80190130L)
@@ -202,7 +186,7 @@ namespace Assets._Scripts.Xbox
                 _xblContextHandle,
                 _userId,
                 achievementId,
-                (uint)Math.Min(progressLevel, AchievementUnlockProgress),
+                (uint)progressLevel,
                 hResult =>
                 {
                     if (hResult == HR.HTTP_E_STATUS_NOT_MODIFIED)
@@ -217,7 +201,7 @@ namespace Assets._Scripts.Xbox
                         return;
                     }
 
-                    Debug.Log($"SUCCESS: {achievementId} has been updated to leve l{progressLevel}");
+                    Debug.Log($"SUCCESS: {achievementId} has been updated to level {progressLevel}");
                 }
             );
         }
@@ -297,7 +281,6 @@ namespace Assets._Scripts.Xbox
 
         private void InitializeAndAddUser()
         {
-            Debug.Log($"Starting {nameof(InitializeAndAddUser)}");
             SDK.XUserAddAsync(XUserAddOptions.AddDefaultUserAllowingUI, AddUserComplete);
         }
 
@@ -312,7 +295,7 @@ namespace Assets._Scripts.Xbox
             {
                 Debug.LogError($"FAILED: Could not signin a user, hResult={hResult:X} ({HR.NameOf(hResult)})");
                 SplashSceneController.Instance.FailureReasonPrompt.text = $"Failed to sign in user. Please try again.\n{HR.NameOf(hResult)}";
-                GameManager.Instance.LoadScene("Bootstrapper", LoadSceneMode.Single);
+                GameManager.Instance.LoadScene("Bootloader", LoadSceneMode.Single);
                 return;
             }
 

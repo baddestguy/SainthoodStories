@@ -56,6 +56,7 @@ namespace Assets._Scripts.Xbox
         private static StickControl LeftStick => Gamepad.current.leftStick;
         private static DpadControl DPad => Gamepad.current.dpad;
         public static int ActiveXboxGamePadModifier { get; set; } = 0;
+        private const float ThumbStickThreshold = 0.2f;
 
         /// <summary>
         /// Get the current dpad direction, if any, that is pressed this frame
@@ -66,6 +67,9 @@ namespace Assets._Scripts.Xbox
 #if MICROSOFT_GDK_SUPPORT
             if (GameSettings.Instance.IsXboxMode)
             {
+
+                //todo: Read analog stick input
+
                 if (GXDKInput.GetKey(GXDKKeyCode.Gamepad1ButtonDPadUp + ActiveXboxGamePadModifier) ||
                     GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonDPadUp + ActiveXboxGamePadModifier) ||
                     GXDKInput.GetKeyUp(GXDKKeyCode.Gamepad1ButtonDPadUp + ActiveXboxGamePadModifier))
@@ -337,6 +341,24 @@ namespace Assets._Scripts.Xbox
             }
 
             return closestGameObject;
+        }
+
+        public static (GamePadButton button, CustomButtonControl control) TryInitializeXboxController()
+        {
+#if MICROSOFT_GDK_SUPPORT
+            for (var i = 0; i < GXDKInput.GetNumActiveGamepads(); i++) // Assume MaxGamepads is a constant defining the max number of supported gamepads
+            {
+                Debug.Log($"Evaluating controller {i}");
+                ActiveXboxGamePadModifier = (20 * i);
+                var pressedButton = GetButton();
+                if (pressedButton.Button != GamePadButton.Void && pressedButton.Control.WasPressedThisFrame)
+                {
+                    return pressedButton;
+                }
+            }
+#endif
+
+            return (GamePadButton.Void, new CustomButtonControl(false, false, false));
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using Assets._Scripts.Extensions;
 using TMPro;
 using UnityEngine;
@@ -23,8 +24,9 @@ namespace Assets._Scripts.Xbox
         /// <summary>
         /// 1: Full Screen Toggle.
         /// <br />2: Show Grid Toggle.
-        /// <br /> 3: Quality Dropdown.
-        /// <br /> 4: Resolution Dropdown.
+        /// <br />3: Show Story Toggle.
+        /// <br /> 4: Quality Dropdown.
+        /// <br /> 5: Resolution Dropdown.
         /// </summary>
         public GameObject[] GraphicTabOptions;
         /// <summary>
@@ -49,12 +51,14 @@ namespace Assets._Scripts.Xbox
 
         private Button ActivePauseTabButton => PauseTabOptions[_selectedPauseButtonIndex].GetComponent<Button>();
         private Image ActivePauseTabButtonImage => PauseTabOptions[_selectedPauseButtonIndex].GetComponent<Image>();
+        private int _pauseOptionsCount;
 
         private Text ActiveGraphicsTabOptionText => GraphicTabOptions[_selectedGraphicsButtonIndex].GetComponentInChildren<Text>();
         private Outline ActiveGraphicsTabOptionTextOutline => GraphicTabOptions[_selectedGraphicsButtonIndex].GetComponentInChildren<Outline>();
         private Toggle ActiveGraphicsTabOptionToggle => GraphicTabOptions[_selectedGraphicsButtonIndex].GetComponentInChildren<Toggle>();
         private Image ActiveGraphicsTabOptionDropdownImage => GraphicTabOptions[_selectedGraphicsButtonIndex].FindDeepChild("Dropdown").GetComponent<Image>();
         private TMP_Dropdown ActiveGraphicsTabOptionDropdown => GraphicTabOptions[_selectedGraphicsButtonIndex].GetComponentInChildren<TMP_Dropdown>();
+        private int _graphicsOptionsCount;
 
         private Text ActiveSoundsTabOptionText => SoundTabOptions[_selectedSoundButtonIndex].GetComponentInChildren<Text>();
         private Outline ActiveSoundsTabOptionTextOutline => SoundTabOptions[_selectedSoundButtonIndex].GetComponentInChildren<Outline>();
@@ -70,19 +74,26 @@ namespace Assets._Scripts.Xbox
 
         void Start()
         {
+            _graphicsOptionsCount = GraphicTabOptions.Length;
+            _pauseOptionsCount = PauseTabOptions.Length;
+
             if (!GameSettings.Instance.IsXboxMode) return;
 
             //Hide the desktop button
             ExitToDesktopGameObject.SetActive(false);
+            PauseTabOptions = PauseTabOptions[..2];
 
             //You can only change show grid option on xbox
             for (var i = 0; i < GraphicTabOptions.Length; i++)
             {
-                if (i != 1)
+                if (i != 1 && i != 2)
                 {
                     GraphicTabOptions[i].SetActive(false);
                 }
             }
+
+            GraphicTabOptions = new[] { GraphicTabOptions[1], GraphicTabOptions[2] };
+            _graphicsOptionsCount = GraphicTabOptions.Length;
             //Move the show grid option to the top of the list
             GraphicTabOptions[1].transform.localPosition = new Vector3(GraphicTabOptions[1].transform.localPosition.x, GraphicTabOptions[0].transform.localPosition.y);
         }
@@ -111,6 +122,9 @@ namespace Assets._Scripts.Xbox
 
         private void Update()
         {
+
+            if (!GameManager.Instance.PlayerHasLoggedIn) return;
+
             if (!_hasRegisteredForInputMethodChanged)
             {
                 GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
@@ -261,7 +275,7 @@ namespace Assets._Scripts.Xbox
                 SetGraphicsTabHover(false);
 
                 var graphicsIncrement = pressedDirection.Input is DirectionInput.Up ? -1 : pressedDirection.Input is DirectionInput.Down ? 1 : 0;
-                _selectedGraphicsButtonIndex = (_selectedGraphicsButtonIndex + graphicsIncrement + GraphicTabOptions.Length) % GraphicTabOptions.Length;
+                _selectedGraphicsButtonIndex = (_selectedGraphicsButtonIndex + graphicsIncrement + _graphicsOptionsCount) % _graphicsOptionsCount;
 
                 SetGraphicsTabHover(true);
             }
@@ -334,7 +348,7 @@ namespace Assets._Scripts.Xbox
             var colour = setActive ? Color.black : Color.white;
             ActiveGraphicsTabOptionText.color = colour;
             ActiveGraphicsTabOptionTextOutline.enabled = !setActive;
-            if (_selectedGraphicsButtonIndex < 2)
+            if (_selectedGraphicsButtonIndex < 3)
             {
                 //these are the only two options that can be toggled
                 ActiveGraphicsTabOptionToggle.colors = new ColorBlock { normalColor = colour, selectedColor = colour, colorMultiplier = 1 };
