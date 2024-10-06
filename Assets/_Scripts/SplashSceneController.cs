@@ -15,6 +15,7 @@ namespace Assets._Scripts
 
         private bool _hasRegisteredForInputMethodChanged;
         private bool _hasIinitializedText;
+        bool ClickedStart;
 
         // Start is called before the first frame update
         void Start()
@@ -91,6 +92,8 @@ namespace Assets._Scripts
 
         public void StartButtonClicked()
         {
+            if (ClickedStart) return;
+            ClickedStart = true;
             while (GameManager.Instance == null || GameSettings.Instance == null)
             {
                 // We can't do anything until the GameManager is initialized
