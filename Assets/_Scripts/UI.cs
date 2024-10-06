@@ -829,6 +829,7 @@ public class UI : MonoBehaviour
                 TutorialPopupQuestion.SetActive(false);
                 GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, true);
                 GameSettings.Instance.TUTORIAL_MODE = true;
+                GameSettings.Instance.CustomEventsToggle = true;
                 break;
 
             case "NO":
