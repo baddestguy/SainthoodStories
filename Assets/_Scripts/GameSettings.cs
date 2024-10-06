@@ -178,6 +178,7 @@ public class GameSettings : MonoBehaviour
             ambianceEnabled = data.ambianceEnabled;
             TutorialToggle = data.tutorialEnabled;
             ShowGrid = data.ShowGrid;
+            CustomEventsToggle = data.CustomEventsToggle;
 
             SetVolume("Global", data.globalVolume);
             SetVolume("Music", data.musicVolume);
@@ -197,6 +198,7 @@ public class GameSettings : MonoBehaviour
             musicEnabled = true;
             ambianceEnabled = true;
             ShowGrid = true;
+            CustomEventsToggle = true;
             SetVolume("Global", 1);
             SetVolume("Music", 1);
             SetVolume("SFX", 0.85f);
@@ -230,6 +232,7 @@ public class GameSettings : MonoBehaviour
             tutorialEnabled = !TutorialManager.Instance.SkipTutorial,
             DEMO_MODE = DEMO_MODE,
             ShowGrid = ShowGrid,
+            CustomEventsToggle = CustomEventsToggle,
 
             //Language
             language = currentLanguage
@@ -300,6 +303,10 @@ public class GameSettings : MonoBehaviour
     {
         fullScreenMode = value;
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
+    }
+    public void SetStoryToggle(bool value)
+    {
+        CustomEventsToggle = value;
     }
     public void SetBrightmessLevel(float percent)
     {

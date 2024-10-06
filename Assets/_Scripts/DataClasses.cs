@@ -691,6 +691,7 @@ public class SaveSettingsData
     public bool tutorialEnabled;
     public bool DEMO_MODE;
     public bool ShowGrid;
+    public bool CustomEventsToggle;
 
     public Language language;
 }

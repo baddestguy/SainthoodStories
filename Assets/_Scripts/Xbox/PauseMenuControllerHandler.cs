@@ -291,7 +291,10 @@ namespace Assets._Scripts.Xbox
                             PauseMenu.Instance.ShowGridToggle.isOn = !PauseMenu.Instance.ShowGridToggle.isOn;
                             break;
                         case 2:
+                            UIGraphicsSettings.Instance.storyToggle.isOn = !UIGraphicsSettings.Instance.storyToggle.isOn;
+                            break;
                         case 3:
+                        case 4:
                             //Quality and Resolution
                             ActiveGraphicsTabOptionDropdown.Show();
                             _isDropdownOpen = true;
