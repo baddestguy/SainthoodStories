@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets._Scripts.Xbox;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -79,6 +80,15 @@ public class InventoryManager : MonoBehaviour
         GameManager.Instance.WorldCollectibles.Remove(newCollectible);
         UI.Instance.SacredItemPopupEnable(newCollectible); 
         Debug.Log("COLLECTED: " + newCollectible);
+
+        if(Collectibles.Count == 33)
+        {
+            XboxUserHandler.Instance.UnlockAchievement("14");
+        }
+        else if(Collectibles.Count == 66)
+        {
+            XboxUserHandler.Instance.UnlockAchievement("15");
+        }
     }
 
     public void AddGridCollectible(string newCollectible)
@@ -116,6 +126,7 @@ public class InventoryManager : MonoBehaviour
         }
         HasChosenProvision = true;
         RefreshInventoryUI?.Invoke();
+        CheckProvisionAchievements();
     }
 
     public void UpgradeProvision(ProvisionData currProvision)
@@ -134,6 +145,20 @@ public class InventoryManager : MonoBehaviour
         }
         HasChosenProvision = true;
         RefreshInventoryUI?.Invoke();
+        CheckProvisionAchievements();
+    }
+
+    void CheckProvisionAchievements()
+    {
+        if (Provisions.Count < MaxProvisionsSlots) return;
+
+        foreach(var prov in Provisions)
+        {
+            ProvisionData nextLevel = GameDataManager.Instance.GetProvision(prov.Id, prov.Level + 1);
+            if (nextLevel != null) return;
+        }
+
+        XboxUserHandler.Instance.UnlockAchievement("17");
     }
 
     public void RemoveProvision(Provision Id)

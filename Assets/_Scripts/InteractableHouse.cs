@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets._Scripts.Xbox;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -648,6 +649,45 @@ public class InteractableHouse : InteractableObject
             EventsManager.Instance.AddEventToList(thankYouEvent);
             EventsManager.Instance.ExecuteEvents();
         }
+    }
+
+    public void CheckEndGameAchievements()
+    {
+        if (CurrentMissionId <= GameDataManager.MAX_HOUSE_MISSION_ID) return;
+
+        switch (HouseName)
+        {
+            case "InteractableChurch":
+                XboxUserHandler.Instance.UnlockAchievement("19");
+                break;
+            case "InteractableHospital":
+                XboxUserHandler.Instance.UnlockAchievement("4");
+                break;
+            case "InteractableKitchen":
+                XboxUserHandler.Instance.UnlockAchievement("10");
+                break;
+            case "InteractableOrphanage":
+                XboxUserHandler.Instance.UnlockAchievement("8");
+                break;
+            case "InteractableShelter":
+                XboxUserHandler.Instance.UnlockAchievement("11");
+                break;
+            case "InteractableSchool":
+                XboxUserHandler.Instance.UnlockAchievement("9");
+                break;
+        }
+
+        var houses = GameManager.Instance.Houses;
+        int completedCounter = 1;
+        foreach (var house in houses)
+        {
+            if (house.AllObjectivesComplete || (house is InteractableChurch && InventoryManager.Instance.Collectibles.Count >= 66))
+            {
+                completedCounter++;
+            }
+        }
+
+        XboxUserHandler.Instance.UnlockAchievement("5", completedCounter * 100 / 6);
     }
 
     public virtual void TriggerUpgradeStory()
@@ -1447,6 +1487,24 @@ public class InteractableHouse : InteractableObject
         BuildRelationship(ThankYouType.UPGRADE, 10);
         SaveDataManager.Instance.SaveGame();
         GameManager.Instance.ReloadLevel();
+        XboxUserHandler.Instance.UnlockAchievement("6");
+
+        if(UpgradeLevel == 3)
+        {
+            XboxUserHandler.Instance.UnlockAchievement("7");
+
+            var houses = GameManager.Instance.Houses;
+            int upgradedCounter = 0;
+            foreach (var house in houses)
+            {
+                if (house.UpgradeLevel == 3)
+                {
+                    upgradedCounter++;
+                }
+            }
+
+            XboxUserHandler.Instance.UnlockAchievement("16", upgradedCounter * 100 / 6);
+        }
     }
 
     public virtual float SetButtonTimer(string actionName)

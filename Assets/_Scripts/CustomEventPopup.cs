@@ -156,6 +156,7 @@ public class CustomEventPopup : MonoBehaviour
         {
             player.CurrentBuilding.CurrentMissionCompleteToday = true;
             player.CurrentBuilding.CurrentMissionId++;
+            player.CurrentBuilding.CheckEndGameAchievements();
             player.CurrentBuilding.MyObjective = null;
         }
 

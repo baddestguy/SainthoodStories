@@ -1,3 +1,5 @@
+using Assets._Scripts.Xbox;
+
 public class SacredItemCollectible : GridCollectibleItem
 {
     public string SacredName;
@@ -9,5 +11,6 @@ public class SacredItemCollectible : GridCollectibleItem
         //Trigger fancy VFX+UI
         DeleteCollectible();
         SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
+        XboxUserHandler.Instance.UnlockAchievement("13");
     }
 }

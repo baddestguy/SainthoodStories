@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets._Scripts.Xbox;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -142,6 +143,7 @@ public class MissionManager : MonoBehaviour
 
     private IEnumerator EndMissionAsync()
     {
+        CheckAchievements();
         int fp = FaithPoints;
         int fpPool = FaithPointsPool;
         int fpTarget = GameDataManager.Instance.GetNextSaintUnlockThreshold();
@@ -210,6 +212,7 @@ public class MissionManager : MonoBehaviour
         //If we finished the final mission
         if (oldMissionId == GameDataManager.MAX_MISSION_ID)
         {
+            XboxUserHandler.Instance.UnlockAchievement("12");
             if (FaithPoints < 75 || CharityPoints < 75)
             {
                 if (FaithPoints < 75 && CharityPoints < 75)
@@ -241,7 +244,7 @@ public class MissionManager : MonoBehaviour
                 bool hasAtLeastOneEnding = false;
                 foreach (var house in houses)
                 {
-                    if (house.AllObjectivesComplete || (house is InteractableChurch && InventoryManager.Instance.Collectibles.Count >= 100))
+                    if (house.AllObjectivesComplete || (house is InteractableChurch && InventoryManager.Instance.Collectibles.Count >= 66))
                     {
                         hasAtLeastOneEnding = true;
                         EventsManager.Instance.AddEventToList(house.GetEndGameStory());
@@ -251,6 +254,7 @@ public class MissionManager : MonoBehaviour
                 if (hasAtLeastOneEnding)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_BEST);
+                    XboxUserHandler.Instance.UnlockAchievement("2");
                 }
                 else
                 {
@@ -287,6 +291,7 @@ public class MissionManager : MonoBehaviour
             if(newSaint != null)
             {
                 saintsUnlocked.Add(newSaint);
+                XboxUserHandler.Instance.UnlockAchievement("18", (SaintsManager.Instance.UnlockedSaints.Count*100 / GameDataManager.TOTAL_UNLOCKABLE_SAINTS));
             }
         }
 
@@ -316,5 +321,13 @@ public class MissionManager : MonoBehaviour
     public bool FirstWeek()
     {
         return CurrentMission.CurrentWeek == 1;
+    }
+
+    public void CheckAchievements()
+    {
+        XboxUserHandler.Instance.UnlockAchievement("1");
+        if(CurrentMissionId == 16) {
+            XboxUserHandler.Instance.UnlockAchievement("3");
+        }
     }
 }
