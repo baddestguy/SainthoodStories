@@ -391,8 +391,6 @@ public class InteractableHouse : InteractableObject
     public static bool Zooming;
     IEnumerator TryZoomAsync(float zoom) 
     {
-        if (GameSettings.Instance.FTUE && TutorialManager.Instance.CurrentTutorialStep < 2) yield break;
-
         InfoPopup.gameObject.SetActive(false);
         RubbleInfoPopup.gameObject.SetActive(false);
         if (!CameraLockOnMe || Zooming)

@@ -21,6 +21,8 @@ public class PackageSelector : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
+        CustomEventPopup.IsDisplaying = true;
+
         ItemGO = Resources.Load<GameObject>("UI/PackageUIItem");
         foreach (var house in GameManager.Instance.Houses)
         {
@@ -115,6 +117,7 @@ public class PackageSelector : MonoBehaviour
 
     private void OnDisable()
     {
+        CustomEventPopup.IsDisplaying = false;
         foreach (var item in InstantiatedGos)
         {
             Destroy(item.gameObject);

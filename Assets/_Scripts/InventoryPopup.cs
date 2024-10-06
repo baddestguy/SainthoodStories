@@ -50,6 +50,7 @@ public class InventoryPopup : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
+        CustomEventPopup.IsDisplaying = true;
         Open = true;
         UI.Instance.EnableAllUIElements(false);
         Player.LockMovement = true;
@@ -155,6 +156,7 @@ public class InventoryPopup : MonoBehaviour
     private void OnDisable()
     {
         Open = false;
+        CustomEventPopup.IsDisplaying = false;
 
         for (int i = 0; i < InventoryManager.Instance.Items.Count; i++)
         {
