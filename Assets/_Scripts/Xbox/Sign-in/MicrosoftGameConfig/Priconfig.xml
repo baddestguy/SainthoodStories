@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources targetOsVersion="10.0.0.0">
+    <index>
+        <default>
+            <qualifier name="Language" value="en-US"/>
+            <qualifier name="Scale" value="100"/>
+        </default>
+    </index>
+</resources>

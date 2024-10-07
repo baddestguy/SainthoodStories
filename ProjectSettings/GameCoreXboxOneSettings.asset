@@ -1,6 +1,6 @@
 {
-    "buildSubtarget": 0,
-    "deploymentMethod": 0,
+    "buildSubtarget": 1,
+    "deploymentMethod": 2,
     "deploymentDrive": 0,
     "scid": "00000000-0000-0000-0000-000000000000",
     "packageEncryption": 0,

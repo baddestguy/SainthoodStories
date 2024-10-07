@@ -28,7 +28,7 @@ MonoBehaviour:
     targetMicrosoftGdk: 1
     gameConfigAsset: {fileID: -944628639613478452, guid: 12269783b880c7f458d7477ef26c8de4,
       type: 3}
-    shellVisualsMode: 0
+    shellVisualsMode: 1
     createScriptingDefine: 1
     createPackage: 0
     sideloadPackage: 0
@@ -36,7 +36,7 @@ MonoBehaviour:
     targetMicrosoftGdk: 1
     gameConfigAsset: {fileID: -944628639613478452, guid: 12269783b880c7f458d7477ef26c8de4,
       type: 3}
-    shellVisualsMode: 0
+    shellVisualsMode: 1
     createScriptingDefine: 1
     createPackage: 0
     sideloadPackage: 0
