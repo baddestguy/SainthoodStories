@@ -72,8 +72,6 @@ namespace Assets._Scripts.Xbox
 
                 if (!Initialized)
                 {
-                    Debug.Log("GDK XGameRuntime Library not initialized.");
-
                     Instance = this;
 
                     if (Unity.XGamingRuntime.Interop.HR.FAILED(InitializeGamingRuntime()) || !InitializeXboxLive(GameConfigScId))
@@ -83,6 +81,7 @@ namespace Assets._Scripts.Xbox
                         return;
                     }
 
+                    Initialized = true;
                     // Might remove later. Confirm that the console believes the same things I do
                     int hResult = SDK.XGameGetXboxTitleId(out var titleId);
                     if (Unity.XGamingRuntime.Interop.HR.FAILED(hResult))
@@ -118,7 +117,7 @@ namespace Assets._Scripts.Xbox
             catch (Exception e)
             {
                 Debug.LogError($"Error trying to log in user: {e.Message}");
-                SplashSceneController.Instance.FailureReasonPrompt.text = "Failed to sign in user. Please try again.";
+                OnXboxUserLoginStatusChange?.Invoke(false, $"Failed to sign in user. Please try again. \n {e.Message}", true);
             }
         }
 
