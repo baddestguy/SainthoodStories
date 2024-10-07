@@ -60,8 +60,30 @@ public class SoundManager : MonoBehaviour
     {
         if (daytime)
         {
-            if (MusicPlaylist.Contains("Temp4")) return;
-            MusicPlaylist = new string[] { "Convent_Music", "Field_Music", "Temp4", "Temp5", "Temp6", "Temp7" };
+            if (MusicPlaylist.Contains("Convent_Music")) return;
+            MusicPlaylist = new string[] 
+            { 
+                "Convent_Music", 
+                "Field_Music",
+                "Adoro Te Devote",
+                "Ave Maria",
+                "Away In A Manger",
+                "Curoo Curoo",
+                "Kyrie",
+                "O Salutaris Hostia",
+                "Sanctus",
+                "Still, Still, Still",
+                "Adoro Te Devote (Piano Version)",
+                "Ave Maria (Piano Version)",
+                "Away In A Manger (Piano Version)",
+                "Curoo Curoo (Piano Version)",
+                "Kyrie (Piano Version)",
+                "O Salutaris Hostia (Piano Version)",
+                "Sanctus (Piano Version)",
+                "Still, Still, Still (Piano Version)",
+                "Away In A Manger 2",
+                "Away In A Manger 2 (Piano Version)"
+            };
         }
         else
         {
