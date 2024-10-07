@@ -346,9 +346,8 @@ namespace Assets._Scripts.Xbox
         public static (GamePadButton button, CustomButtonControl control) TryInitializeXboxController()
         {
 #if MICROSOFT_GDK_SUPPORT
-            for (var i = 0; i < GXDKInput.GetNumActiveGamepads(); i++) // Assume MaxGamepads is a constant defining the max number of supported gamepads
+            for (var i = 0; i < 8; i++)
             {
-                Debug.Log($"Evaluating controller {i}");
                 ActiveXboxGamePadModifier = (20 * i);
                 var pressedButton = GetButton();
                 if (pressedButton.Button != GamePadButton.Void && pressedButton.Control.WasPressedThisFrame)

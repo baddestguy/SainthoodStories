@@ -12,7 +12,7 @@ namespace Assets._Scripts.Xbox
     public class XboxUserHandler : MonoBehaviour
     {
         public static XboxUserHandler Instance { get; private set; }
-        public delegate void XboxUserLoginStatusChange(bool isLoggedIn);
+        public delegate void XboxUserLoginStatusChange(bool isLoggedIn, string message = "", bool isError = false);
         public event XboxUserLoginStatusChange OnXboxUserLoginStatusChange;
 
         public string GamerTag { get; private set; }
@@ -68,6 +68,8 @@ namespace Assets._Scripts.Xbox
         {
             try
             {
+                OnXboxUserLoginStatusChange?.Invoke(false, "Logging In...");
+
                 if (!Initialized)
                 {
                     Debug.Log("GDK XGameRuntime Library not initialized.");
@@ -77,6 +79,7 @@ namespace Assets._Scripts.Xbox
                     if (Unity.XGamingRuntime.Interop.HR.FAILED(InitializeGamingRuntime()) || !InitializeXboxLive(GameConfigScId))
                     {
                         Initialized = false;
+                        OnXboxUserLoginStatusChange?.Invoke(false, "Failed to initialize XGame Runtime", true);
                         return;
                     }
 
@@ -291,10 +294,13 @@ namespace Assets._Scripts.Xbox
         /// <param name="userHandle"></param>
         private void AddUserComplete(int hResult, XUserHandle userHandle)
         {
+            OnXboxUserLoginStatusChange?.Invoke(false, "Completing Add User...");
+
             if (Unity.XGamingRuntime.Interop.HR.FAILED(hResult))
             {
                 Debug.LogError($"FAILED: Could not signin a user, hResult={hResult:X} ({HR.NameOf(hResult)})");
-                SplashSceneController.Instance.FailureReasonPrompt.text = $"Failed to sign in user. Please try again.\n{HR.NameOf(hResult)}";
+
+                OnXboxUserLoginStatusChange?.Invoke(false, $"Failed to sign in user. Please try again.\n{HR.NameOf(hResult)}", true);
                 GameManager.Instance.LoadScene("Bootloader", LoadSceneMode.Single);
                 return;
             }
@@ -305,6 +311,7 @@ namespace Assets._Scripts.Xbox
             if (Unity.XGamingRuntime.Interop.HR.FAILED(getGamerTagResult))
             {
                 Debug.LogError($"FAILED: Could not get user tag, hResult=0x{getGamerTagResult:X} ({HR.NameOf(getGamerTagResult)})");
+                OnXboxUserLoginStatusChange?.Invoke(false, $"FAILED: Could not get user tag, hResult=0x{getGamerTagResult:X} ({HR.NameOf(getGamerTagResult)})", true);
                 return;
             }
 
@@ -312,6 +319,7 @@ namespace Assets._Scripts.Xbox
             if (Unity.XGamingRuntime.Interop.HR.FAILED(hResult))
             {
                 Debug.LogError($"FAILED: Could not get user ID, hResult=0x{userIdHResult:X} ({HR.NameOf(userIdHResult)})");
+                OnXboxUserLoginStatusChange?.Invoke(false, $"FAILED: Could not get user ID, hResult=0x{userIdHResult:X} ({HR.NameOf(userIdHResult)})", true);
                 return;
             }
 
@@ -324,17 +332,21 @@ namespace Assets._Scripts.Xbox
             GamerTag = gamertag;
             IsUserLoggedIn = true;
 
-            if (_savedDataHandler.Initialize(_userHandle, GameConfigScId))
-            {
-                SaveHandlerInitialized = true;
-                GameManager.Instance.PlayerLoginSuccess();
-            }
-
             var xblContextResult  = SDK.XBL.XblContextCreateHandle(_userHandle, out _xblContextHandle);
             if (Unity.XGamingRuntime.Interop.HR.FAILED(xblContextResult))
             {
                 Debug.LogError($"FAILED: Could not create context handle, hResult=0x{xblContextResult:X} ({HR.NameOf(xblContextResult)})");
+                OnXboxUserLoginStatusChange?.Invoke(false, $"FAILED: Could not create context handle, hResult=0x{xblContextResult:X} ({HR.NameOf(xblContextResult)})", true);
+                return;
             }
+
+            if (_savedDataHandler.Initialize(_userHandle, GameConfigScId))
+            {
+                SaveHandlerInitialized = true;
+                OnXboxUserLoginStatusChange?.Invoke(false, "Loading Game Settings...");
+                GameManager.Instance.PlayerLoginSuccess();
+            }
+
         }
 
         private void UserChangeEventCallback(IntPtr _, XUserLocalId userLocalId, XUserChangeEvent eventType)

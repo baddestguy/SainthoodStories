@@ -80,7 +80,9 @@ namespace Assets._Scripts.Xbox
 
             if (GameSettings.Instance.IsXboxMode)
             {
+#if MICROSOFT_GDK_SUPPORT
                 UnityEngine.WindowsGames.WindowsGamesPLM.OnSuspendingEvent += WindowsGamesPLM_OnSuspendingEvent;
+#endif
             }
             else
             {
@@ -92,7 +94,9 @@ namespace Assets._Scripts.Xbox
         {
             if (GameSettings.Instance.IsXboxMode)
             {
+#if MICROSOFT_GDK_SUPPORT
                 UnityEngine.WindowsGames.WindowsGamesPLM.OnSuspendingEvent -= WindowsGamesPLM_OnSuspendingEvent;
+#endif
             }
             else
             {
@@ -102,7 +106,9 @@ namespace Assets._Scripts.Xbox
 
         private void WindowsGamesPLM_OnSuspendingEvent()
         {
+#if MICROSOFT_GDK_SUPPORT
             UnityEngine.WindowsGames.WindowsGamesPLM.AmReadyToSuspendNow();
+#endif
         }
 
         /// <summary>

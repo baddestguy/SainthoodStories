@@ -1,6 +1,7 @@
 using Assets._Scripts.Xbox;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets._Scripts
 {
@@ -8,14 +9,17 @@ namespace Assets._Scripts
     {
         public static SplashSceneController Instance;
 
+        public  Text StatusText;
         public TextMeshProUGUI FailureReasonPrompt;
 
         private bool _clickedStart;
+        private const string DefaultStatusText = "PRESS ANY BUTTON TO START";
 
         // Start is called before the first frame update
         void Start()
         {
             Instance = this;
+            StatusText.text = DefaultStatusText;
         }
 
         // Update is called once per frame
@@ -26,6 +30,9 @@ namespace Assets._Scripts
                 Debug.Log("Splash screen controller waiting for Game manager and settings");
                 return;  // We can't do anything without GameManager or GameSettings is ready
             }
+
+            if (_clickedStart)
+                return;
 
             (GamePadButton Button, CustomButtonControl Control) pressedButton = (GamePadButton.Void, new CustomButtonControl());
 
@@ -59,27 +66,54 @@ namespace Assets._Scripts
 
         }
 
-        public void StartButtonClicked()
+        void OnDisable()
         {
-            if (_clickedStart)
+            if (GameSettings.Instance.IsXboxMode)
             {
-            }
-            else
-            {
-                _clickedStart = true;
-
-                if (GameSettings.Instance.IsXboxMode)
-                //if(false)
-                {
-                    XboxUserHandler.Instance.TryLogInUser();
-                }
-                else
-                {
-                    //We might need to do something here to get the steam user in the future
-                    GameManager.Instance.PlayerLoginSuccess();
-                }
+                XboxUserHandler.Instance.OnXboxUserLoginStatusChange -= OnXboxUserLoginStatusChange;
             }
         }
 
+        public void StartButtonClicked()
+        {
+            if (_clickedStart)
+                return;
+
+            _clickedStart = true;
+
+            if (GameSettings.Instance.IsXboxMode)
+            {
+                XboxUserHandler.Instance.OnXboxUserLoginStatusChange += OnXboxUserLoginStatusChange;
+                XboxUserHandler.Instance.TryLogInUser();
+            }
+            else
+            {
+                //We might need to do something here to get the steam user in the future
+                GameManager.Instance.PlayerLoginSuccess();
+            }
+
+        }
+
+        private void OnXboxUserLoginStatusChange(bool isLoggedIn, string message, bool isError)
+        {
+            if (isLoggedIn) return;
+
+            if(isError)
+            {
+                StatusText.text = DefaultStatusText;
+                FailureReasonPrompt.text = message;
+                FailureReasonPrompt.gameObject.SetActive(true);
+                _clickedStart = false;
+            }
+            else
+            {
+                FailureReasonPrompt.gameObject.SetActive(false);
+
+                if (!string.IsNullOrWhiteSpace(message))
+                {
+                    StatusText.text = message;
+                }
+            }
+        }
     }
 }

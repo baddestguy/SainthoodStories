@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Linq;
 using Assets._Scripts.Extensions;
 using TMPro;
 using UnityEngine;
@@ -51,7 +50,6 @@ namespace Assets._Scripts.Xbox
 
         private Button ActivePauseTabButton => PauseTabOptions[_selectedPauseButtonIndex].GetComponent<Button>();
         private Image ActivePauseTabButtonImage => PauseTabOptions[_selectedPauseButtonIndex].GetComponent<Image>();
-        private int _pauseOptionsCount;
 
         private Text ActiveGraphicsTabOptionText => GraphicTabOptions[_selectedGraphicsButtonIndex].GetComponentInChildren<Text>();
         private Outline ActiveGraphicsTabOptionTextOutline => GraphicTabOptions[_selectedGraphicsButtonIndex].GetComponentInChildren<Outline>();
@@ -75,7 +73,6 @@ namespace Assets._Scripts.Xbox
         void Start()
         {
             _graphicsOptionsCount = GraphicTabOptions.Length;
-            _pauseOptionsCount = PauseTabOptions.Length;
 
             if (!GameSettings.Instance.IsXboxMode) return;
 
@@ -83,7 +80,7 @@ namespace Assets._Scripts.Xbox
             ExitToDesktopGameObject.SetActive(false);
             PauseTabOptions = PauseTabOptions[..2];
 
-            //You can only change show grid option on xbox
+            //You can only change show grid and toggle story options on xbox
             for (var i = 0; i < GraphicTabOptions.Length; i++)
             {
                 if (i != 1 && i != 2)
@@ -92,10 +89,13 @@ namespace Assets._Scripts.Xbox
                 }
             }
 
+            //Move the visible option to the top of the list
+            GraphicTabOptions[2].transform.localPosition = new Vector3(GraphicTabOptions[2].transform.localPosition.x, GraphicTabOptions[1].transform.localPosition.y);
+            GraphicTabOptions[1].transform.localPosition = new Vector3(GraphicTabOptions[1].transform.localPosition.x, GraphicTabOptions[0].transform.localPosition.y);
+
+
             GraphicTabOptions = new[] { GraphicTabOptions[1], GraphicTabOptions[2] };
             _graphicsOptionsCount = GraphicTabOptions.Length;
-            //Move the show grid option to the top of the list
-            GraphicTabOptions[1].transform.localPosition = new Vector3(GraphicTabOptions[1].transform.localPosition.x, GraphicTabOptions[0].transform.localPosition.y);
         }
 
         public void OnDisable()
