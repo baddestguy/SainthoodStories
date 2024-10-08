@@ -2,14 +2,17 @@
 <Game
   configVersion="1">
   <Identity
-    Name="Sainthood"
+    Name="TaiwoPicturesInc.Sainthood-TheGame"
     Publisher="CN=33B081AD-758B-4A1D-A558-021DCD1BE7E4"
-    Version="2.6.2.2" />
+    Version="2.6.2.3" />
   <ShellVisuals
+    DefaultDisplayName="Sainthood"
+    PublisherDisplayName="Taiwo Pictures Inc"
     StoreLogo="StoreLogo.png"
     Square150x150Logo="Square150x150Logo.png"
     Square44x44Logo="Square44x44Logo.png"
     Square480x480Logo="default480x480.png"
+    ForegroundText="light"
     SplashScreenImage="SplashScreenImage.png" />
   <ExecutableList>
     <Executable
