@@ -78,13 +78,37 @@ namespace Assets._Scripts.Xbox
         {
             Instance = this;
 
-            if (GameSettings.Instance.IsXboxMode) return;
-            OnInputMethodChanged += HandleInputMethodChanged;
+            if (GameSettings.Instance.IsXboxMode)
+            {
+#if MICROSOFT_GDK_SUPPORT
+                UnityEngine.WindowsGames.WindowsGamesPLM.OnSuspendingEvent += WindowsGamesPLM_OnSuspendingEvent;
+#endif
+            }
+            else
+            {
+                OnInputMethodChanged += HandleInputMethodChanged;
+            }
         }
 
         public void OnDisable()
         {
-            OnInputMethodChanged -= HandleInputMethodChanged;
+            if (GameSettings.Instance.IsXboxMode)
+            {
+#if MICROSOFT_GDK_SUPPORT
+                UnityEngine.WindowsGames.WindowsGamesPLM.OnSuspendingEvent -= WindowsGamesPLM_OnSuspendingEvent;
+#endif
+            }
+            else
+            {
+                OnInputMethodChanged -= HandleInputMethodChanged;
+            }
+        }
+
+        private void WindowsGamesPLM_OnSuspendingEvent()
+        {
+#if MICROSOFT_GDK_SUPPORT
+            UnityEngine.WindowsGames.WindowsGamesPLM.AmReadyToSuspendNow();
+#endif
         }
 
         /// <summary>
@@ -384,8 +408,8 @@ namespace Assets._Scripts.Xbox
                         _ => _objectiveInventoryScrollIndex
                     };
 
-                    if(_objectiveInventoryScrollIndex == 0) _objectiveInventoryScrollIndex = pressedDirection.Input == DirectionInput.Up ?
-                        scrollRect.content.childCount - 1:
+                    if (_objectiveInventoryScrollIndex == 0) _objectiveInventoryScrollIndex = pressedDirection.Input == DirectionInput.Up ?
+                        scrollRect.content.childCount - 1 :
                             1; //skip the first item because it is a template
 
                     var normalizedPosition = (float)(_objectiveInventoryScrollIndex) / (scrollRect.content.childCount - 1);
@@ -455,7 +479,7 @@ namespace Assets._Scripts.Xbox
         {
             try
             {
-                if(scrollRect == null) return;
+                if (scrollRect == null) return;
 
                 var artifact = scrollRect.content.GetChild(_objectiveInventoryScrollIndex);
                 if (artifact == null || !artifact.gameObject.activeInHierarchy) return;

@@ -19,9 +19,6 @@ public static class GdkPlatformSettings
     public static string gameConfigScid = "00000000-0000-0000-0000-000060fcc671";
     public static string gameConfigSandbox = "";
 #else
-    public static string gameConfigTitleId = "60FCC671";
-    public static string gameConfigScid = "00000000-0000-0000-0000-000060fcc671";
-    public static string gameConfigSandbox = "";
 #endif
 }
 }

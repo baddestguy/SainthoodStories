@@ -12,7 +12,7 @@ namespace Assets._Scripts.Xbox
     public class XboxUserHandler : MonoBehaviour
     {
         public static XboxUserHandler Instance { get; private set; }
-        public delegate void XboxUserLoginStatusChange(bool isLoggedIn);
+        public delegate void XboxUserLoginStatusChange(bool isLoggedIn, string message = "", bool isError = false);
         public event XboxUserLoginStatusChange OnXboxUserLoginStatusChange;
 
         public string GamerTag { get; private set; }
@@ -22,7 +22,6 @@ namespace Assets._Scripts.Xbox
         private static bool Initialized { get; set; }
         private static string GameConfigScId => "00000000-0000-0000-0000-000060fcc671";
         private static string GameSaveContainerName => "com.TaiwoPictures.Sainthood";
-        private static int AchievementUnlockProgress => 100;
 
 
         private bool _isUserLoggedIn;
@@ -69,18 +68,20 @@ namespace Assets._Scripts.Xbox
         {
             try
             {
+                OnXboxUserLoginStatusChange?.Invoke(false, "Logging In...");
+
                 if (!Initialized)
                 {
-                    Debug.Log("GDK XGameRuntime Library not initialized.");
-
                     Instance = this;
 
                     if (Unity.XGamingRuntime.Interop.HR.FAILED(InitializeGamingRuntime()) || !InitializeXboxLive(GameConfigScId))
                     {
                         Initialized = false;
+                        OnXboxUserLoginStatusChange?.Invoke(false, "Failed to initialize XGame Runtime", true);
                         return;
                     }
 
+                    Initialized = true;
                     // Might remove later. Confirm that the console believes the same things I do
                     int hResult = SDK.XGameGetXboxTitleId(out var titleId);
                     if (Unity.XGamingRuntime.Interop.HR.FAILED(hResult))
@@ -116,7 +117,7 @@ namespace Assets._Scripts.Xbox
             catch (Exception e)
             {
                 Debug.LogError($"Error trying to log in user: {e.Message}");
-                SplashSceneController.Instance.FailureReasonPrompt.text = "Failed to sign in user. Please try again.";
+                OnXboxUserLoginStatusChange?.Invoke(false, $"Failed to sign in user. Please try again. \n {e.Message}", true);
             }
         }
 
@@ -136,30 +137,13 @@ namespace Assets._Scripts.Xbox
             var data = _savedDataHandler.Load(GameSaveContainerName, saveFileName);
             if (data == null || data.Length == 0)
             {
-                Debug.LogError("No data found");
+                Debug.LogError($"No data found for ${saveFileName}");
                 return default;
             }
 
             var loadedDataAsJson = Encoding.ASCII.GetString(data);
             var loadedData = JsonConvert.DeserializeObject<T>(loadedDataAsJson);
             return loadedData;
-        }
-
-        /// <summary>
-        /// Begin the process of saving data to local or cloud storage.
-        /// </summary>
-        /// <typeparam name="T">The type of data we are saving</typeparam>
-        /// <param name="fileName">The filename to save the data under</param>
-        /// <param name="dataToSave">The object we are saving. Note: Total size of all saved files cannot exceed 12MB</param>
-        public T SaveData<T>(string fileName, T dataToSave)
-        {
-            var dataAsJson = JsonConvert.SerializeObject(dataToSave);
-            var dataBytes = Encoding.ASCII.GetBytes(dataAsJson);
-            var wasSaveSuccessful = _savedDataHandler.Save(GameSaveContainerName, fileName, dataBytes);
-
-            Debug.Log($"SAVE? {wasSaveSuccessful}");
-
-            return wasSaveSuccessful ? dataToSave : default;
         }
 
         public void QueueSave<T>(string filename, T data)
@@ -194,6 +178,8 @@ namespace Assets._Scripts.Xbox
         /// <param name="progressLevel">The value we want to increase the achievement level to. (0 - 100)</param>
         public void UnlockAchievement(string achievementId, int progressLevel = 100)
         {
+            if (!GameSettings.Instance.IsXboxMode) return;
+
             // This API will work even when offline.  Offline updates will be posted by the system when connection is
             // re-established even if the title isn’t running. If the achievement has already been unlocked or the progress
             // value is less than or equal to what is currently recorded on the server HTTP_E_STATUS_NOT_MODIFIED (0x80190130L)
@@ -202,7 +188,7 @@ namespace Assets._Scripts.Xbox
                 _xblContextHandle,
                 _userId,
                 achievementId,
-                (uint)Math.Min(progressLevel, AchievementUnlockProgress),
+                (uint)progressLevel,
                 hResult =>
                 {
                     if (hResult == HR.HTTP_E_STATUS_NOT_MODIFIED)
@@ -217,7 +203,7 @@ namespace Assets._Scripts.Xbox
                         return;
                     }
 
-                    Debug.Log($"SUCCESS: {achievementId} has been updated to leve l{progressLevel}");
+                    Debug.Log($"SUCCESS: {achievementId} has been updated to level {progressLevel}");
                 }
             );
         }
@@ -297,7 +283,6 @@ namespace Assets._Scripts.Xbox
 
         private void InitializeAndAddUser()
         {
-            Debug.Log($"Starting {nameof(InitializeAndAddUser)}");
             SDK.XUserAddAsync(XUserAddOptions.AddDefaultUserAllowingUI, AddUserComplete);
         }
 
@@ -308,11 +293,14 @@ namespace Assets._Scripts.Xbox
         /// <param name="userHandle"></param>
         private void AddUserComplete(int hResult, XUserHandle userHandle)
         {
+            OnXboxUserLoginStatusChange?.Invoke(false, "Completing Add User...");
+
             if (Unity.XGamingRuntime.Interop.HR.FAILED(hResult))
             {
                 Debug.LogError($"FAILED: Could not signin a user, hResult={hResult:X} ({HR.NameOf(hResult)})");
-                SplashSceneController.Instance.FailureReasonPrompt.text = $"Failed to sign in user. Please try again.\n{HR.NameOf(hResult)}";
-                GameManager.Instance.LoadScene("Bootstrapper", LoadSceneMode.Single);
+
+                OnXboxUserLoginStatusChange?.Invoke(false, $"Failed to sign in user. Please try again.\n{HR.NameOf(hResult)}", true);
+                GameManager.Instance.LoadScene("Bootloader", LoadSceneMode.Single);
                 return;
             }
 
@@ -322,6 +310,7 @@ namespace Assets._Scripts.Xbox
             if (Unity.XGamingRuntime.Interop.HR.FAILED(getGamerTagResult))
             {
                 Debug.LogError($"FAILED: Could not get user tag, hResult=0x{getGamerTagResult:X} ({HR.NameOf(getGamerTagResult)})");
+                OnXboxUserLoginStatusChange?.Invoke(false, $"FAILED: Could not get user tag, hResult=0x{getGamerTagResult:X} ({HR.NameOf(getGamerTagResult)})", true);
                 return;
             }
 
@@ -329,6 +318,7 @@ namespace Assets._Scripts.Xbox
             if (Unity.XGamingRuntime.Interop.HR.FAILED(hResult))
             {
                 Debug.LogError($"FAILED: Could not get user ID, hResult=0x{userIdHResult:X} ({HR.NameOf(userIdHResult)})");
+                OnXboxUserLoginStatusChange?.Invoke(false, $"FAILED: Could not get user ID, hResult=0x{userIdHResult:X} ({HR.NameOf(userIdHResult)})", true);
                 return;
             }
 
@@ -341,17 +331,21 @@ namespace Assets._Scripts.Xbox
             GamerTag = gamertag;
             IsUserLoggedIn = true;
 
-            if (_savedDataHandler.Initialize(_userHandle, GameConfigScId))
-            {
-                SaveHandlerInitialized = true;
-                GameManager.Instance.PlayerLoginSuccess();
-            }
-
             var xblContextResult  = SDK.XBL.XblContextCreateHandle(_userHandle, out _xblContextHandle);
             if (Unity.XGamingRuntime.Interop.HR.FAILED(xblContextResult))
             {
                 Debug.LogError($"FAILED: Could not create context handle, hResult=0x{xblContextResult:X} ({HR.NameOf(xblContextResult)})");
+                OnXboxUserLoginStatusChange?.Invoke(false, $"FAILED: Could not create context handle, hResult=0x{xblContextResult:X} ({HR.NameOf(xblContextResult)})", true);
+                return;
             }
+
+            if (_savedDataHandler.Initialize(_userHandle, GameConfigScId))
+            {
+                SaveHandlerInitialized = true;
+                OnXboxUserLoginStatusChange?.Invoke(false, "Loading Game Settings...");
+                GameManager.Instance.PlayerLoginSuccess();
+            }
+
         }
 
         private void UserChangeEventCallback(IntPtr _, XUserLocalId userLocalId, XUserChangeEvent eventType)

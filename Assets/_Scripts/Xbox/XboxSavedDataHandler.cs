@@ -61,7 +61,6 @@ namespace Assets._Scripts.Xbox
                 return false;
             }
 
-            Debug.Log("SUCCESS: Initialize game save provider");
             return true;
         }
 
@@ -129,7 +128,6 @@ namespace Assets._Scripts.Xbox
             }
 
             var loadedDataAsJson = Encoding.ASCII.GetString(metaBlobData[0].Data);
-            Debug.Log($"Save METADATA: {loadedDataAsJson}");
             var metadata = JsonConvert.DeserializeObject<XboxSaveMetadata>(loadedDataAsJson);
             var recentData = data.FirstOrDefault(x => x.Info.Name.EndsWith(metadata.LastSaveIndex.ToString()));
             return recentData?.Data;
@@ -173,7 +171,6 @@ namespace Assets._Scripts.Xbox
                 return false;
             }
 
-            Debug.Log($"{containerName} | {blobName} Save completed. Closing Update handle and container.");
             SDK.XGameSaveCloseUpdate(_gameSaveContainerUpdateHandle);
             SDK.XGameSaveCloseContainer(_gameSaveContainerHandle);
 
@@ -191,7 +188,6 @@ namespace Assets._Scripts.Xbox
         {
             var dataAsJson = JsonConvert.SerializeObject(dataToSave);
             var dataBytes = Encoding.ASCII.GetBytes(dataAsJson);
-            Debug.Log("About to fire and forget save async");
             var saveTask = SaveAsyncImplementation(containerName, fileName, dataBytes);
             yield return new WaitUntil(() => saveTask.IsCompleted);
         }
@@ -204,14 +200,11 @@ namespace Assets._Scripts.Xbox
         /// <param name="blobData">The bytes that are to be written to the blob (file).</param>
         private async Task SaveAsyncImplementation(string containerName, string blobName, byte[] blobData)
         {
-            Debug.Log($"Async Save: [{containerName} | {blobName}] starting.");
             //Step 1: Create a container
             if (!TryCreateSaveContainer(containerName))
             {
                 return;
             }
-
-            Debug.Log($"Save: [{containerName} | {blobName}] starting.");
 
             //Step 2:  Start container Update
             var containerUpdateResult = SDK.XGameSaveCreateUpdate(_gameSaveContainerHandle, blobName, out _gameSaveContainerUpdateHandle);
@@ -230,7 +223,6 @@ namespace Assets._Scripts.Xbox
             while (_inProgressSaveIndices[myIndex])
             {
                 await Task.Delay(100);
-                Debug.Log($"Save: [{containerName} | {blobName}] delayed.");
             }
 
             _inProgressSaveIndices[myIndex] = true;
@@ -271,16 +263,12 @@ namespace Assets._Scripts.Xbox
                         return;
                     }
 
-
-                    Debug.Log($"Save: [{containerName} | {blobName}] completed. Closing Update handle and container.");
                     SDK.XGameSaveCloseUpdate(_gameSaveContainerUpdateHandle);
                     SDK.XGameSaveCloseContainer(_gameSaveContainerHandle);
                     saveTaskResult.SetResult(true);
                 });
 
                 await saveTaskResult.Task;
-
-                Debug.Log($"Async Save: [{containerName} | {blobName}] done.");
             }
             catch (Exception e)
             {
@@ -292,46 +280,6 @@ namespace Assets._Scripts.Xbox
             }
 
         }
-
-        ///// <summary>
-        ///// Callback invoked when the QueryContainerBlobs async task completes.
-        ///// </summary>
-        ///// <param name="hresult">The hresult of the operation.</param>
-        //public delegate void DeleteCallback(int hresult);
-
-        ///// <summary>
-        ///// Deletes a container along with all of its blobs (files).
-        ///// </summary>
-        ///// <param name="containerName">Name of the container to delete.</param>
-        ///// <param name="callback">Callback invoked when the async task completes. DeleteCallback(Int32 hresult)</param>
-        //public void Delete(string containerName, DeleteCallback callback)
-        //{
-        //    SDK.XGameSaveDeleteContainerAsync(_gameSaveProviderHandle, containerName,
-        //        new XGameSaveDeleteContainerCompleted(callback));
-        //}
-
-        ///// <summary>
-        ///// Deletes a specific blob (file) from within the specified container.
-        ///// </summary>
-        ///// <param name="containerName">Name of the container.</param>
-        ///// <param name="blobName">Name of the blob (file) to delete from the specified container.</param>
-        ///// <param name="callback">Callback invoked when the async task completes. DeleteCallback(Int32 hresult)</param>
-        //public void Delete(string containerName, string blobName, DeleteCallback callback)
-        //{
-        //    Delete(containerName, new[] { blobName }, callback);
-        //}
-
-        ///// <summary>
-        ///// Deletes a specific set of blobs (files) from within the specified container.
-        ///// </summary>
-        ///// <param name="containerName">Name of the container.</param>
-        ///// <param name="blobNames">Array of blob (file) names to delete from the specified container.</param>
-        ///// <param name="callback">Callback invoked when the async task completes. DeleteCallback(Int32 hresult)</param>
-        //public void Delete(string containerName, string[] blobNames, DeleteCallback callback)
-        //{
-        //    Update(containerName, null, blobNames, new UpdateCallback(callback));
-        //}
-
 
         private bool TryCreateSaveContainer(string containerName)
         {

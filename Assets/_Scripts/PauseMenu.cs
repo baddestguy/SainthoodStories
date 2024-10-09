@@ -53,6 +53,8 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
+        if (!GameManager.Instance.PlayerHasLoggedIn) return;
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Activate();

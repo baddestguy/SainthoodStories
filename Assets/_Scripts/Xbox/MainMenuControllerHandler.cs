@@ -90,6 +90,8 @@ namespace Assets._Scripts.Xbox
         // Update is called once per frame
         void Update()
         {
+
+            if (!GameManager.Instance.PlayerHasLoggedIn) return;
             TryApplyControllerHover();
             
             if ((Gamepad.current == null && !GameSettings.Instance.IsXboxMode) || !GameSettings.Instance.IsUsingController ||

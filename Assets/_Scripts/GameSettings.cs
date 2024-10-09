@@ -240,7 +240,7 @@ public class GameSettings : MonoBehaviour
 
         if (IsXboxMode)
         {
-            XboxUserHandler.Instance.SaveData(SettingsFileName, data);
+            XboxUserHandler.Instance.QueueSave(SettingsFileName, data);
         }
         else
         {
