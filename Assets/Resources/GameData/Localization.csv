@@ -75,6 +75,7 @@ BlizzardIntro,"""I detect an incoming blizzard on the way."" she begins with a w
 BlizzardIntro,"""There's a high chance you could <i>Freeze</i> if you are caught out in the storm without protection.""",,,,,,
 BlizzardIntro,"""My advice? Get a Winter Cloak as soon as the Postman brings it over.""",,,,,,
 BlizzardIntro,"""If you do not have a Winter Cloak, please stay indoors.""",,,,,,
+BlizzardIntro,"""If your are <i>Frozen</i>, try to keep moving. You will break out of your Frozen state...eventually, but not without time lost and some adverse effects.""",,,,,,
 ProvisionsIntro,"Postman Pratt stops by with a large duffel bag. ""I've got provisions for you ma'am. You get to choose only one though, as we have to share with the community, so pick wisely.""",,,,,,
 ProvisionsIntro,Provisions always appear first thing in the morning. Use these strategically in your spiritual and charitable quest!,,,,,,
 OrphanageIntro,"Eltee walks up and taps you on the shoulder. ""Guess what? We just got approved to finish up the Orphanage! Of course ya know we can't do it without ya, so come on down when ya got a moment to spare us will ya?""",,,,,,
