@@ -365,8 +365,27 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (WeCanMove(newTile) && !StatusEffects.Contains(PlayerStatusEffect.FROZEN))
+            if (WeCanMove(newTile))
             {
+                if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
+                {
+                    FrozenCounter--;
+                    Energy.Consume(ModifyEnergyConsumption(newTile));
+                    if (FrozenCounter <= 0)
+                    {
+                        FrozenCounter = 3;
+                        StatusEffects.Remove(PlayerStatusEffect.FROZEN);
+                        AddRandomAilment();
+                        SnowSplash.Play();
+                    }
+                    FrozenFx.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.3f);
+
+                    ApplyStatusEffect();
+
+                    GameManager.Instance.PassTime();
+                    return;
+                }
+
                 transform.localScale = Vector3.one;
                 OnMove(newTile);
                 OnMoveSuccessEvent?.Invoke(Energy, newTile);
@@ -451,25 +470,9 @@ public class Player : MonoBehaviour
         }
         else if(tile == CurrentTile)
         {
-
             if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
             {
-                FrozenCounter--;
-                Energy.Consume(ModifyEnergyConsumption(tile));
-                Debug.LogWarning("FROZEN!");
-                if (FrozenCounter <= 0)
-                {
-                    FrozenCounter = 3;
-                    StatusEffects.Remove(PlayerStatusEffect.FROZEN);
-                    AddRandomAilment();
-                    SnowSplash.Play();
-                    Debug.LogWarning("SICK FROM ICE!");
-                }
                 FrozenFx.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.3f);
-
-                ApplyStatusEffect();
-
-                GameManager.Instance.PassTime();
                 return;
             }
 
