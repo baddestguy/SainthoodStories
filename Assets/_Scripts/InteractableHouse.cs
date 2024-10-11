@@ -659,20 +659,26 @@ public class InteractableHouse : InteractableObject
         {
             case "InteractableChurch":
                 XboxUserHandler.Instance.UnlockAchievement("19");
+                SteamManager.Instance.UnlockAchievement("PIOUS");
                 break;
             case "InteractableHospital":
                 XboxUserHandler.Instance.UnlockAchievement("4");
+                SteamManager.Instance.UnlockAchievement("HEALER");
                 break;
             case "InteractableKitchen":
+                SteamManager.Instance.UnlockAchievement("FEAST");
                 XboxUserHandler.Instance.UnlockAchievement("10");
                 break;
             case "InteractableOrphanage":
+                SteamManager.Instance.UnlockAchievement("ANGEL");
                 XboxUserHandler.Instance.UnlockAchievement("8");
                 break;
             case "InteractableShelter":
+                SteamManager.Instance.UnlockAchievement("FEEDER");
                 XboxUserHandler.Instance.UnlockAchievement("11");
                 break;
             case "InteractableSchool":
+                SteamManager.Instance.UnlockAchievement("TEACHER");
                 XboxUserHandler.Instance.UnlockAchievement("9");
                 break;
         }
@@ -688,6 +694,10 @@ public class InteractableHouse : InteractableObject
         }
 
         XboxUserHandler.Instance.UnlockAchievement("5", completedCounter * 100 / 6);
+        if(completedCounter == 6)
+        {
+            SteamManager.Instance.UnlockAchievement("COMMUNION");
+        }
     }
 
     public virtual void TriggerUpgradeStory()
@@ -1488,10 +1498,12 @@ public class InteractableHouse : InteractableObject
         SaveDataManager.Instance.SaveGame();
         GameManager.Instance.ReloadLevel();
         XboxUserHandler.Instance.UnlockAchievement("6");
+        SteamManager.Instance.UnlockAchievement("INTERVENTION");
 
-        if(UpgradeLevel == 3)
+        if (UpgradeLevel == 3)
         {
             XboxUserHandler.Instance.UnlockAchievement("7");
+            SteamManager.Instance.UnlockAchievement("ARCHITECT");
 
             var houses = GameManager.Instance.Houses;
             int upgradedCounter = 0;
@@ -1504,6 +1516,10 @@ public class InteractableHouse : InteractableObject
             }
 
             XboxUserHandler.Instance.UnlockAchievement("16", upgradedCounter * 100 / 6);
+            if(upgradedCounter == 6)
+            {
+                SteamManager.Instance.UnlockAchievement("KINGDOM_ARCHITECT");
+            }
         }
     }
 

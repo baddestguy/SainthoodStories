@@ -469,5 +469,6 @@ public class GameManager : MonoBehaviour
         MapTile.OnClickEvent -= OnMapTileTap;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
         GameClock.Ticked -= OnTick;
+        Steamworks.SteamClient.Shutdown();
     }
 }

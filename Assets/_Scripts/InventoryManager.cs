@@ -83,10 +83,12 @@ public class InventoryManager : MonoBehaviour
 
         if(Collectibles.Count == 33)
         {
+            SteamManager.Instance.UnlockAchievement("KEEPER");
             XboxUserHandler.Instance.UnlockAchievement("14");
         }
         else if(Collectibles.Count == 66)
         {
+            SteamManager.Instance.UnlockAchievement("LIBRARY");
             XboxUserHandler.Instance.UnlockAchievement("15");
         }
     }
@@ -159,6 +161,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         XboxUserHandler.Instance.UnlockAchievement("17");
+        SteamManager.Instance.UnlockAchievement("CACHE");
     }
 
     public void RemoveProvision(Provision Id)

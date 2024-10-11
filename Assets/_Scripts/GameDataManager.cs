@@ -37,6 +37,8 @@ public class GameDataManager : MonoBehaviour
     public const int MAX_HOUSE_MISSION_ID = 11;
     public const int MAX_MISSION_ID = 33;
 
+    public const int APP_ID = 1748600;
+
     void Awake()
     {
         Instance = this;

@@ -88,10 +88,8 @@ namespace Assets._Scripts
             }
             else
             {
-                //We might need to do something here to get the steam user in the future
                 GameManager.Instance.PlayerLoginSuccess();
             }
-
         }
 
         private void OnXboxUserLoginStatusChange(bool isLoggedIn, string message, bool isError)

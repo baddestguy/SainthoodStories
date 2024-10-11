@@ -11,6 +11,7 @@ public class SacredItemCollectible : GridCollectibleItem
         //Trigger fancy VFX+UI
         DeleteCollectible();
         SoundManager.Instance.PlayOneShotSfx("Success_SFX", 1f, 5f);
+        SteamManager.Instance.UnlockAchievement("SEEKER");
         XboxUserHandler.Instance.UnlockAchievement("13");
     }
 }

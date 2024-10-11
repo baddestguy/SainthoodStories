@@ -212,6 +212,7 @@ public class MissionManager : MonoBehaviour
         //If we finished the final mission
         if (oldMissionId == GameDataManager.MAX_MISSION_ID)
         {
+            SteamManager.Instance.UnlockAchievement("FINISHED");
             XboxUserHandler.Instance.UnlockAchievement("12");
             if (FaithPoints < 75 || CharityPoints < 75)
             {
@@ -254,6 +255,7 @@ public class MissionManager : MonoBehaviour
                 if (hasAtLeastOneEnding)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_BEST);
+                    SteamManager.Instance.UnlockAchievement("CANONIZED");
                     XboxUserHandler.Instance.UnlockAchievement("2");
                 }
                 else
@@ -292,6 +294,11 @@ public class MissionManager : MonoBehaviour
             {
                 saintsUnlocked.Add(newSaint);
                 XboxUserHandler.Instance.UnlockAchievement("18", (SaintsManager.Instance.UnlockedSaints.Count*100 / GameDataManager.TOTAL_UNLOCKABLE_SAINTS));
+
+                if(SaintsManager.Instance.UnlockedSaints.Count >= GameDataManager.TOTAL_UNLOCKABLE_SAINTS)
+                {
+                    SteamManager.Instance.UnlockAchievement("LITANY");
+                }
             }
         }
 
@@ -326,8 +333,10 @@ public class MissionManager : MonoBehaviour
     public void CheckAchievements()
     {
         XboxUserHandler.Instance.UnlockAchievement("1");
+        SteamManager.Instance.UnlockAchievement("GETTING_STARTED");
         if(CurrentMissionId == 16) {
             XboxUserHandler.Instance.UnlockAchievement("3");
+            SteamManager.Instance.UnlockAchievement("MIDWAY");
         }
     }
 }
