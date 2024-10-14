@@ -334,3 +334,5 @@ sysinfo.txt
 /PC LAUNCH BUILD/UnityPlayer.dll
 /XSBuild/
 /PC DEMO BUILD/
+/PC LAUNCH BUILD/Sainthood_Data/Managed/Facepunch.Steamworks.Win64.dll
+/PC LAUNCH BUILD/Sainthood_Data/Plugins/x86_64/steam_api64.dll
