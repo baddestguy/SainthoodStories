@@ -71,10 +71,10 @@ public class SaveDataManager : MonoBehaviour
         Save(new SaveObject[1] { save });
     }
 
-    public void SaveGame()
+    public void SaveGame(bool useXboxSyncSave = false)
     {
         if (GameSettings.Instance.TUTORIAL_MODE) return;
-        DoSequentialSave();
+        DoSequentialSave(useXboxSyncSave);
     }
 
     public SaveObject CurrentSaveData()
@@ -150,19 +150,26 @@ public class SaveDataManager : MonoBehaviour
         return saveObjects[saveObjects.Length - 1].Week != newData.Week;
     }
 
-    private void DoSequentialSave()
+    private void DoSequentialSave(bool useXboxSyncSave = false)
     {
         SaveObject save = CurrentSaveData();
         SaveObject[] saves = new SaveObject[1] { save };
         
-        Save(saves);
+        Save(saves, useXboxSyncSave: useXboxSyncSave);
     }
 
-    private void Save(SaveObject[] data, string fileName = FILENAME)
+    private void Save(SaveObject[] data, string fileName = FILENAME, bool useXboxSyncSave = false)
     {
         if (GameSettings.Instance.IsXboxMode)
         {
-            XboxUserHandler.Instance.QueueSave(fileName, data);
+            if (useXboxSyncSave)
+            {
+                XboxUserHandler.Instance.Save(fileName, data);
+            }
+            else
+            {
+                XboxUserHandler.Instance.QueueSave(fileName, data);
+            }
         }
         else
         {

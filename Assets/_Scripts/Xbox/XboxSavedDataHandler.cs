@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,15 +14,14 @@ namespace Assets._Scripts.Xbox
     public class XboxSavedDataHandler
     {
         public bool IsProcessingSave { get; set; }
-        public Queue<IEnumerator> SaveQueue { get; private set; } = new();
+        public ConcurrentQueue<(string Filename, object SaveData)> SaveQueue { get; private set; } = new();
 
         private XUserHandle _userHandle;
-        private XGameSaveContainerHandle _gameSaveContainerHandle;
         private XGameSaveProviderHandle _gameSaveProviderHandle;
-        private XGameSaveUpdateHandle _gameSaveContainerUpdateHandle;
-        private ConcurrentDictionary<int, bool> _inProgressSaveIndices = new();
+        private readonly ConcurrentDictionary<int, bool> _inProgressSaveIndices = new();
         private const int RollingFileMax = 5;
         private static int _rollingFileIndex = 1;
+        private bool _killAsyncSaves;
 
 
         ~XboxSavedDataHandler()
@@ -41,12 +39,12 @@ namespace Assets._Scripts.Xbox
         {
             _userHandle = null;
             _gameSaveProviderHandle = null;
-            for (var i = 1; i <= RollingFileMax; i++)
+            for (var i = 0; i < RollingFileMax; i++)
             {
                 _inProgressSaveIndices.AddOrUpdate(i, _ => false, (_, _) => false);
             }
 
-            SaveQueue = new Queue<IEnumerator>();
+            SaveQueue = new ConcurrentQueue<(string, object)>();
 
             var hr = SDK.XUserDuplicateHandle(userHandle, out _userHandle);
             if (HR.FAILED(hr))
@@ -69,68 +67,113 @@ namespace Assets._Scripts.Xbox
         /// </summary>
         /// <param name="containerName">Name of the container.</param>
         /// <param name="blobName">Name of the blob (file) to load data from.</param>
-        public byte[] Load(string containerName, string blobName)
+        /// <param name="killAsyncSaves">Avoid scenario where blob info is invalidated due to async save after load process started</param>
+        public byte[] Load(string containerName, string blobName, bool killAsyncSaves = true, int retryCount = 3)
         {
-            //Step 1: Create a container
-            if (!TryCreateSaveContainer(containerName))
+            while (retryCount > 0)
             {
-                return default;
-            }
-
-            //Step 2: Get metadata about the blob
-            var blobInfoResult = SDK.XGameSaveEnumerateBlobInfoByName(_gameSaveContainerHandle, blobName, out var blobInfos);
-
-            if (HR.FAILED(blobInfoResult))
-            {
-                Debug.LogError($"FAILED: Enumerate blob info by name. HResult: ({Unity.XGamingRuntime.HR.NameOf(blobInfoResult)}  0x{blobInfoResult:x})");
-                return default;
-            }
-
-            //Step 3: Read the blob 
-            var readBlobResult = SDK.XGameSaveReadBlobData(_gameSaveContainerHandle,
-                blobInfos,
-                out var data
-            );
-
-            if (HR.FAILED(readBlobResult))
-            {
-                if (readBlobResult == Unity.XGamingRuntime.HR.E_GS_USER_NOT_REGISTERED_IN_SERVICE)
+                //If we are currently saving any async files, cancel it. Next time don't quit the game while saving.
+                if (killAsyncSaves && _inProgressSaveIndices.Any(x => x.Value))
                 {
-                    Debug.LogError($"FAILED: User may be logging out x{readBlobResult:X} ({Unity.XGamingRuntime.HR.NameOf(readBlobResult)})");
-                }
-                else
-                {
-                    Debug.LogError($"FAILED: Game load, hResult=0x{readBlobResult:X} ({Unity.XGamingRuntime.HR.NameOf(readBlobResult)})");
+                    Debug.Log($"Kill {SaveQueue.Count} async saves");
+                    _killAsyncSaves = true;
+                    SaveQueue.Clear();
                 }
 
-                return default;
+                var loadedData = LoadImplementation(containerName, blobName);
+                if (loadedData != default)
+                {
+                    return loadedData;
+                }
+                retryCount--;
             }
 
+            return default;
 
-            if (data.Length == 1) return data[0].Data;
-
-            //Step 4: Read the metadata
-            var metaBlobInfoResult = SDK.XGameSaveEnumerateBlobInfoByName(_gameSaveContainerHandle, "META", out var metaBlobInfos);
-            if (HR.FAILED(metaBlobInfoResult))
+            byte[] LoadImplementation(string saveContainerName, string saveBlobName)
             {
-                Debug.LogError($"FAILED: Enumerate blob info by name for metadata. HResult: ({Unity.XGamingRuntime.HR.NameOf(metaBlobInfoResult)}  0x{metaBlobInfoResult})");
-                return default;
-            }
-            var metaReadResult = SDK.XGameSaveReadBlobData(_gameSaveContainerHandle,
-                metaBlobInfos,
-                out var metaBlobData
-            );
+                try
+                {
+                    Debug.Log($"Eltee: Loading save for container {saveContainerName} and blob {saveBlobName}");
+                    //Step 1: Create a container
+                    if (!TryCreateSaveContainer(saveContainerName, out var gameSaveContainerHandle))
+                    {
+                        return default;
+                    }
 
-            if (HR.FAILED(metaReadResult))
-            {
-                Debug.LogError($"FAILED: Read metadata blob. HResult: ({Unity.XGamingRuntime.HR.NameOf(metaReadResult)}  0x{metaReadResult:x})");
-                return default;
-            }
+                    //Step 2: Get metadata about the blob
+                    var blobInfoResult =
+                        SDK.XGameSaveEnumerateBlobInfoByName(gameSaveContainerHandle, saveBlobName, out var blobInfos);
 
-            var loadedDataAsJson = Encoding.ASCII.GetString(metaBlobData[0].Data);
-            var metadata = JsonConvert.DeserializeObject<XboxSaveMetadata>(loadedDataAsJson);
-            var recentData = data.FirstOrDefault(x => x.Info.Name.EndsWith(metadata.LastSaveIndex.ToString()));
-            return recentData?.Data;
+                    if (HR.FAILED(blobInfoResult))
+                    {
+                        Debug.LogError(
+                            $"FAILED: Enumerate blob info by name. HResult: ({Unity.XGamingRuntime.HR.NameOf(blobInfoResult)}  0x{blobInfoResult:x})");
+                        return default;
+                    }
+
+                    //Step 3: Read the blob 
+                    var readBlobResult = SDK.XGameSaveReadBlobData(gameSaveContainerHandle,
+                        blobInfos,
+                        out var data
+                    );
+
+                    if (HR.FAILED(readBlobResult))
+                    {
+                        if (readBlobResult == Unity.XGamingRuntime.HR.E_GS_USER_NOT_REGISTERED_IN_SERVICE)
+                        {
+                            Debug.LogError(
+                                $"FAILED: User may be logging out x{readBlobResult:X} ({Unity.XGamingRuntime.HR.NameOf(readBlobResult)})");
+                        }
+                        else
+                        {
+                            Debug.LogError(
+                                $"FAILED: Game load, hResult=0x{readBlobResult:X} ({Unity.XGamingRuntime.HR.NameOf(readBlobResult)})");
+                        }
+
+                        return default;
+                    }
+
+
+                    if (data.Length == 1) return data[0].Data;
+                    Debug.Log($"Eltee: There are multiple blobs, switching to multi blob handler");
+
+                    //Step 4: Read the metadata
+                    var metaBlobInfoResult =
+                        SDK.XGameSaveEnumerateBlobInfoByName(gameSaveContainerHandle, "META", out var metaBlobInfos);
+                    if (HR.FAILED(metaBlobInfoResult))
+                    {
+                        Debug.LogError(
+                            $"FAILED: Enumerate blob info by name for metadata. HResult: ({Unity.XGamingRuntime.HR.NameOf(metaBlobInfoResult)}  0x{metaBlobInfoResult})");
+                        return default;
+                    }
+
+                    var metaReadResult = SDK.XGameSaveReadBlobData(gameSaveContainerHandle,
+                        metaBlobInfos,
+                        out var metaBlobData
+                    );
+
+                    if (HR.FAILED(metaReadResult))
+                    {
+                        Debug.LogError(
+                            $"FAILED: Read metadata blob. HResult: ({Unity.XGamingRuntime.HR.NameOf(metaReadResult)}  0x{metaReadResult:x})");
+                        return default;
+                    }
+
+                    var loadedDataAsJson = Encoding.ASCII.GetString(metaBlobData[0].Data);
+                    Debug.Log($"Eltee: Multi blob metadata is {loadedDataAsJson}");
+
+                    var metadata = JsonConvert.DeserializeObject<XboxSaveMetadata>(loadedDataAsJson);
+                    var recentData = data.FirstOrDefault(x => x.Info.Name.EndsWith(metadata.LastSaveIndex.ToString()));
+
+                    return recentData?.Data;
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Exception while loading save: {e}");
+                    return default;
+                }
+            }
         }
 
         /// <summary>
@@ -142,13 +185,13 @@ namespace Assets._Scripts.Xbox
         public bool Save(string containerName, string blobName, byte[] blobData)
         {
             //Step 1: Create a container
-            if (!TryCreateSaveContainer(containerName))
+            if (!TryCreateSaveContainer(containerName, out var gameSaveContainerHandle))
             {
                 return false;
             }
 
             //Step 2:  Start container Update
-            var containerUpdateResult = SDK.XGameSaveCreateUpdate(_gameSaveContainerHandle, blobName, out _gameSaveContainerUpdateHandle);
+            var containerUpdateResult = SDK.XGameSaveCreateUpdate(gameSaveContainerHandle, blobName, out var gameSaveContainerUpdateHandle);
             if (HR.FAILED(containerUpdateResult))
             {
                 Debug.LogError($"Error when creating the {blobName} container display  update process. HResult: ({Unity.XGamingRuntime.HR.NameOf(containerUpdateResult)}  0x{containerUpdateResult:x})");
@@ -156,7 +199,7 @@ namespace Assets._Scripts.Xbox
             }
 
             //Step 3: Submit data blob to write
-            var submitResult = SDK.XGameSaveSubmitBlobWrite(_gameSaveContainerUpdateHandle, blobName, blobData);
+            var submitResult = SDK.XGameSaveSubmitBlobWrite(gameSaveContainerUpdateHandle, blobName, blobData);
             if (HR.FAILED(submitResult))
             {
                 Debug.LogError($"Error when submitting the blob {blobName}. HResult: ({Unity.XGamingRuntime.HR.NameOf(submitResult)}  0x{submitResult:x})");
@@ -164,15 +207,15 @@ namespace Assets._Scripts.Xbox
             }
 
             //Submit blob update
-            var hResult = SDK.XGameSaveSubmitUpdate(_gameSaveContainerUpdateHandle);
+            var hResult = SDK.XGameSaveSubmitUpdate(gameSaveContainerUpdateHandle);
             if (HR.FAILED(hResult))
             {
                 Debug.LogError($"Error when submitting container updated process. HResult: ({Unity.XGamingRuntime.HR.NameOf(hResult)}  0x{hResult:x})");
                 return false;
             }
 
-            SDK.XGameSaveCloseUpdate(_gameSaveContainerUpdateHandle);
-            SDK.XGameSaveCloseContainer(_gameSaveContainerHandle);
+            SDK.XGameSaveCloseUpdate(gameSaveContainerUpdateHandle);
+            SDK.XGameSaveCloseContainer(gameSaveContainerHandle);
 
             return true;
         }
@@ -186,9 +229,17 @@ namespace Assets._Scripts.Xbox
         /// <param name="dataToSave">The object we are saving. Note: Total size of all saved files cannot exceed 12MB</param>
         public IEnumerator SaveAsync<T>(string containerName, string fileName, T dataToSave)
         {
+            if (_killAsyncSaves)
+            {
+                Debug.Log("Eltee: Killing async save");
+                _killAsyncSaves = false;
+                yield break;
+            }
+
             var dataAsJson = JsonConvert.SerializeObject(dataToSave);
             var dataBytes = Encoding.ASCII.GetBytes(dataAsJson);
             var saveTask = SaveAsyncImplementation(containerName, fileName, dataBytes);
+
             yield return new WaitUntil(() => saveTask.IsCompleted);
         }
 
@@ -200,16 +251,25 @@ namespace Assets._Scripts.Xbox
         /// <param name="blobData">The bytes that are to be written to the blob (file).</param>
         private async Task SaveAsyncImplementation(string containerName, string blobName, byte[] blobData)
         {
+            if (_killAsyncSaves)
+            {
+                Debug.Log("Eltee: Killing async save");
+                _killAsyncSaves = false;
+                return;
+            }
+
             //Step 1: Create a container
-            if (!TryCreateSaveContainer(containerName))
+            if (!TryCreateSaveContainer(containerName, out var gameSaveContainerHandle))
             {
                 return;
             }
 
+            Debug.Log($"Eltee: Starting save for container {containerName} and blob {blobName} container created");
             //Step 2:  Start container Update
-            var containerUpdateResult = SDK.XGameSaveCreateUpdate(_gameSaveContainerHandle, blobName, out _gameSaveContainerUpdateHandle);
+            var containerUpdateResult = SDK.XGameSaveCreateUpdate(gameSaveContainerHandle, blobName, out var gameSaveContainerUpdateHandle);
             if (HR.FAILED(containerUpdateResult))
             {
+                SDK.XGameSaveCloseUpdate(gameSaveContainerUpdateHandle);
                 Debug.LogError($"Error when creating the {blobName} container display  update process. HResult: ({Unity.XGamingRuntime.HR.NameOf(containerUpdateResult)}  0x{containerUpdateResult:x})");
                 return;
             }
@@ -217,21 +277,39 @@ namespace Assets._Scripts.Xbox
             _rollingFileIndex = (_rollingFileIndex + 1) % RollingFileMax;
             var myIndex = _rollingFileIndex;
 
-            blobName = $"{blobName}_{myIndex}";
-
-            //If we're currently writing to this file, wait until it's done
-            while (_inProgressSaveIndices[myIndex])
-            {
-                await Task.Delay(100);
-            }
-
-            _inProgressSaveIndices[myIndex] = true;
-
-
             try
             {
+                if (_killAsyncSaves)
+                {
+                    Debug.Log("Eltee: Killing async save");
+                    _killAsyncSaves = false;
+                    return;
+                }
+
+                blobName = $"{blobName}_{myIndex}";
+
+                Debug.Log($"Eltee: Indexed File name is {blobName}");
+
+                //If we're currently writing to this file, wait until it's done. We shouldn't enter here anymore since switching to queue method.
+                while (_inProgressSaveIndices[myIndex])
+                {
+                    Debug.Log($"Eltee: {blobName} waiting for concurrent file to finish saving");
+                    await Task.Delay(100);
+                }
+
+                if (_killAsyncSaves)
+                {
+                    Debug.Log("Eltee: Killing async save");
+                    _killAsyncSaves = false;
+                    return;
+                }
+
+                _inProgressSaveIndices[myIndex] = true;
+
+                Debug.Log($"Eltee: {blobName} No concurrent files");
+
                 //Step 3: Submit data blob to write
-                var submitResult = SDK.XGameSaveSubmitBlobWrite(_gameSaveContainerUpdateHandle, blobName, blobData);
+                var submitResult = SDK.XGameSaveSubmitBlobWrite(gameSaveContainerUpdateHandle, blobName, blobData);
                 if (HR.FAILED(submitResult))
                 {
                     Debug.LogError(
@@ -239,21 +317,40 @@ namespace Assets._Scripts.Xbox
                     return;
                 }
 
+
+                if (_killAsyncSaves)
+                {
+                    Debug.Log("Eltee: Killing async save");
+                    _killAsyncSaves = false;
+                    return;
+                }
+
+                Debug.Log($"Eltee: {blobName} Data blob submit successful");
                 //Step 4: Submit metadata blob to write
                 var metaData = new XboxSaveMetadata { LastSaveIndex = myIndex, LastUpdated = DateTime.UtcNow };
                 var dataAsJson = JsonConvert.SerializeObject(metaData);
                 var dataBytes = Encoding.ASCII.GetBytes(dataAsJson);
-                var metaSubmitResult = SDK.XGameSaveSubmitBlobWrite(_gameSaveContainerUpdateHandle, "META", dataBytes);
+                var metaSubmitResult = SDK.XGameSaveSubmitBlobWrite(gameSaveContainerUpdateHandle, "META", dataBytes);
                 if (HR.FAILED(metaSubmitResult))
                 {
                     Debug.LogError(
                         $"Error when submitting the metadata blob {blobName}. HResult: ({Unity.XGamingRuntime.HR.NameOf(metaSubmitResult)}  0x{metaSubmitResult:x})");
                     return;
                 }
+                Debug.Log($"Eltee: {blobName} Meta blob submit successful");
+
+
+                if (_killAsyncSaves)
+                {
+                    Debug.Log("Eltee: Killing async save");
+                    _killAsyncSaves = false;
+                    return;
+                }
+
 
                 //Submit blob updates
                 var saveTaskResult = new TaskCompletionSource<bool>();
-                SDK.XGameSaveSubmitUpdateAsync(_gameSaveContainerUpdateHandle, hResult =>
+                SDK.XGameSaveSubmitUpdateAsync(gameSaveContainerUpdateHandle, hResult =>
                 {
                     if (HR.FAILED(hResult))
                     {
@@ -263,9 +360,9 @@ namespace Assets._Scripts.Xbox
                         return;
                     }
 
-                    SDK.XGameSaveCloseUpdate(_gameSaveContainerUpdateHandle);
-                    SDK.XGameSaveCloseContainer(_gameSaveContainerHandle);
                     saveTaskResult.SetResult(true);
+                    Debug.Log($"Eltee: {blobName} blob writes successful");
+
                 });
 
                 await saveTaskResult.Task;
@@ -276,23 +373,28 @@ namespace Assets._Scripts.Xbox
             }
             finally
             {
+                SDK.XGameSaveCloseUpdate(gameSaveContainerUpdateHandle);
+                SDK.XGameSaveCloseContainer(gameSaveContainerHandle);
                 _inProgressSaveIndices[myIndex] = false;
             }
 
+
         }
 
-        private bool TryCreateSaveContainer(string containerName)
+        private bool TryCreateSaveContainer(string containerName, out XGameSaveContainerHandle gameSaveContainerHandle)
         {
             if (_gameSaveProviderHandle == null)
             {
                 Debug.LogError("Game Save Provider not initialized. Not doing anything.");
+                gameSaveContainerHandle = null;
                 return false;
             }
 
-            var hResult = SDK.XGameSaveCreateContainer(_gameSaveProviderHandle, containerName, out _gameSaveContainerHandle);
+            var hResult = SDK.XGameSaveCreateContainer(_gameSaveProviderHandle, containerName, out gameSaveContainerHandle);
             if (HR.FAILED(hResult))
             {
                 Debug.LogError($"Error when creating the {containerName} container. HResult: ({Unity.XGamingRuntime.HR.NameOf(hResult)}  0x{hResult:x})");
+                gameSaveContainerHandle = null;
                 return false;
             }
 

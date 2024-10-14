@@ -1495,7 +1495,7 @@ public class InteractableHouse : InteractableObject
         TreasuryManager.Instance.SpendMoney(cost);
         UpgradeLevel++;
         BuildRelationship(ThankYouType.UPGRADE, 10);
-        SaveDataManager.Instance.SaveGame();
+        SaveDataManager.Instance.SaveGame(useXboxSyncSave: true);
         GameManager.Instance.ReloadLevel();
         XboxUserHandler.Instance.UnlockAchievement("6");
         SteamManager.Instance.UnlockAchievement("INTERVENTION");

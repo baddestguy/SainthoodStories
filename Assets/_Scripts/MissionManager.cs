@@ -169,6 +169,17 @@ public class MissionManager : MonoBehaviour
         GameManager.Instance.ScrambleMapTiles();
         GameManager.Instance.CurrentBuilding = "InteractableChurch";
         SaveDataManager.Instance.SaveGame();
+
+        //Wait for all xbox saves to catch up before going into the house
+        if (GameSettings.Instance.IsXboxMode)
+        {
+            while (!XboxUserHandler.Instance.SavedDataHandler.SaveQueue.IsEmpty)
+            {
+                Debug.LogWarning("Waiting for all saves to complete");
+                yield return new WaitForSeconds(0.3f);
+            }
+        }
+
         SaveDataManager.Instance.DaySave();
 
         ToolTipManager.Instance.ShowToolTip("");
@@ -276,6 +287,19 @@ public class MissionManager : MonoBehaviour
         }
 
         SaveDataManager.Instance.SaveGame();
+
+
+        //Wait for all xbox saves to catch up before going into the house
+        if (GameSettings.Instance.IsXboxMode)
+        {
+            while (!XboxUserHandler.Instance.SavedDataHandler.SaveQueue.IsEmpty)
+            {
+                Debug.LogWarning("Waiting for all saves to complete");
+                yield return new WaitForSeconds(0.3f);
+            }
+        }
+
+
         MissionComplete?.Invoke(missionFailed);
     }
 
