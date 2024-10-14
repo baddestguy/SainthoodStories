@@ -103,6 +103,7 @@ public class UI : MonoBehaviour
     public GameObject InventoryPopup;
     public GameObject SacredItemPopup;
     public GameObject TutorialPopupQuestion;
+    public GameObject CreditsObj;
     public bool WasUiHit
     {
         get
@@ -898,14 +899,9 @@ public class UI : MonoBehaviour
         LocalizationManager.Instance.ChangeLanguage(language);
     }
 
-    public void CreditsScene()
+    public void Credits()
     {
-        SceneManager.LoadScene("Credits", LoadSceneMode.Single);
-    }
-
-    public void ExitCredits()
-    {
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        CreditsObj.SetActive(!CreditsObj.activeSelf);
     }
 
     public void Discord()

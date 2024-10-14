@@ -54,7 +54,14 @@ public class SteamManager : MonoBehaviour
     {
         if (!Achievements.ContainsKey(id) || GameSettings.Instance.IsXboxMode) return;
 
-        Achievements[id].Trigger();
+        try
+        {
+            Achievements[id].Trigger();
+        }
+        catch
+        {
+            return;
+        }
     }
 
     public void ClearAchievement(string id)
