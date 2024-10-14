@@ -123,6 +123,10 @@ namespace Assets._Scripts.Xbox
         {
             if (ShouldHandlerReturnEarly) return;
 
+
+
+            //todo: Show and Hide button prompts
+
             if (isUsingController)
             {
 
@@ -169,8 +173,6 @@ namespace Assets._Scripts.Xbox
                         HighlightArtifact(scrollRect, false);
                     }
                 }
-
-                //todo: Hide button prompts
             }
         }
 
@@ -205,7 +207,10 @@ namespace Assets._Scripts.Xbox
 
             if (ShouldHandlerReturnEarly) return;
 
-            if (Player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Equals("Jump", StringComparison.InvariantCultureIgnoreCase))
+            if (Player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Equals("Jump", StringComparison.InvariantCultureIgnoreCase) &&
+                !Player.StatusEffects.Contains(PlayerStatusEffect.FROZEN) &&
+                !IsInBuilding
+                )
             {
                 return;
             }
