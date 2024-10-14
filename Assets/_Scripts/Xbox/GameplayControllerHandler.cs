@@ -646,8 +646,8 @@ namespace Assets._Scripts.Xbox
                         }
                         else
                         {
-                            toolTipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>()
-                                .onClick.Invoke();
+                            var button = toolTipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>();
+                            if (button != null) button.onClick.Invoke();
                         }
                     }
                     else if (pressedButton.Control.WasReleasedThisFrame)

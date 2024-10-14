@@ -6162,7 +6162,7 @@ GameObject:
   - component: {fileID: 1071474882}
   - component: {fileID: 1071474885}
   - component: {fileID: 1071474884}
-  - component: {fileID: 1071474883}
+  - component: {fileID: 1071474886}
   m_Layer: 5
   m_Name: Credits
   m_TagString: Untagged
@@ -6192,18 +6192,6 @@ RectTransform:
   m_AnchoredPosition: {x: -35, y: 16}
   m_SizeDelta: {x: 799.9999, y: 449.99994}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1071474883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1071474881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a32606587ae9e3f47bcdd5e47356f69c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1071474884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6242,6 +6230,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1071474881}
   m_CullTransparentMesh: 0
+--- !u!114 &1071474886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071474881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2450801b5a8e44ca2c016f1e85297d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1079558875
 GameObject:
   m_ObjectHideFlags: 0
@@ -11476,6 +11476,7 @@ MonoBehaviour:
   SettingsButtonGameObject: {fileID: 189673516}
   SteamWishListGameObject: {fileID: 57460584}
   DiscordGameObject: {fileID: 2041105733}
+  CreditsGameObject: {fileID: 1304271504}
 --- !u!1 &2071927174
 GameObject:
   m_ObjectHideFlags: 0
