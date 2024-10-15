@@ -412,17 +412,6 @@ public class Player : MonoBehaviour
         CurrentBuilding = iTile as InteractableHouse;
         OnMove(iTile.CurrentGroundTile);
         yield return new WaitForSeconds(0.3f);
-
-        //Wait for all xbox saves to catch up before going into the house
-        if (GameSettings.Instance.IsXboxMode)
-        {
-            while (!XboxUserHandler.Instance.SavedDataHandler.SaveQueue.IsEmpty)
-            {
-                Debug.LogWarning("Waiting for all saves to complete");
-                yield return new WaitForSeconds(0.3f);
-            }
-        }
-
         DissapearInHouse = true;
         OnMoveSuccessEvent?.Invoke(Energy, iTile);
         ApplyStatusEffect();

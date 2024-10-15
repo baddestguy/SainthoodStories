@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets._Scripts.Xbox;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -248,6 +249,7 @@ public class UI : MonoBehaviour
         {
             yield return null;
         }
+
         EventsManager.Instance.CurrentEvents.Clear();
         GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, showUI: complete);
     }

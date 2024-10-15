@@ -32,10 +32,12 @@ public class SteamManager : MonoBehaviour
         {"LITANY", new Achievement("LITANY")},
         {"PIOUS", new Achievement("PIOUS")}
     };
-
+    
+#endif
     private void Awake()
     {
         Instance = this;
+#if !MICROSOFT_GDK_SUPPORT
         try
         {
             SteamClient.Init(GameDataManager.APP_ID);
@@ -44,15 +46,17 @@ public class SteamManager : MonoBehaviour
         {
             Debug.LogError("Couldn't initialize Steam client!");
         }
+#endif
     }
 
     private void Update()
     {
+#if !MICROSOFT_GDK_SUPPORT
         if (GameSettings.Instance.IsXboxMode) return;
         
         SteamClient.RunCallbacks();
-    }
 #endif
+    }
 
     public void UnlockAchievement(string id)
     {

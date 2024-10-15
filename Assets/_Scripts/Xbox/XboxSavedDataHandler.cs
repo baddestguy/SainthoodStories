@@ -68,6 +68,7 @@ namespace Assets._Scripts.Xbox
         /// <param name="containerName">Name of the container.</param>
         /// <param name="blobName">Name of the blob (file) to load data from.</param>
         /// <param name="killAsyncSaves">Avoid scenario where blob info is invalidated due to async save after load process started</param>
+        /// <param name="retryCount"></param>
         public byte[] Load(string containerName, string blobName, bool killAsyncSaves = true, int retryCount = 3)
         {
             while (retryCount > 0)
@@ -94,7 +95,7 @@ namespace Assets._Scripts.Xbox
             {
                 try
                 {
-                    Debug.Log($"Eltee: Loading save for container {saveContainerName} and blob {saveBlobName}");
+                    Debug.Log($"Loading save for container {saveContainerName} and blob {saveBlobName}");
                     //Step 1: Create a container
                     if (!TryCreateSaveContainer(saveContainerName, out var gameSaveContainerHandle))
                     {
@@ -136,7 +137,6 @@ namespace Assets._Scripts.Xbox
 
 
                     if (data.Length == 1) return data[0].Data;
-                    Debug.Log($"Eltee: There are multiple blobs, switching to multi blob handler");
 
                     //Step 4: Read the metadata
                     var metaBlobInfoResult =
@@ -161,7 +161,6 @@ namespace Assets._Scripts.Xbox
                     }
 
                     var loadedDataAsJson = Encoding.ASCII.GetString(metaBlobData[0].Data);
-                    Debug.Log($"Eltee: Multi blob metadata is {loadedDataAsJson}");
 
                     var metadata = JsonConvert.DeserializeObject<XboxSaveMetadata>(loadedDataAsJson);
                     var recentData = data.FirstOrDefault(x => x.Info.Name.EndsWith(metadata.LastSaveIndex.ToString()));
@@ -184,6 +183,13 @@ namespace Assets._Scripts.Xbox
         /// <param name="blobData">The bytes that are to be written to the blob (file).</param>
         public bool Save(string containerName, string blobName, byte[] blobData)
         {
+            if(_inProgressSaveIndices.Any(x => x.Value))
+            {
+                Debug.Log($"Kill {SaveQueue.Count} async saves");
+                _killAsyncSaves = true;
+                SaveQueue.Clear();
+            }
+
             //Step 1: Create a container
             if (!TryCreateSaveContainer(containerName, out var gameSaveContainerHandle))
             {
@@ -231,7 +237,7 @@ namespace Assets._Scripts.Xbox
         {
             if (_killAsyncSaves)
             {
-                Debug.Log("Eltee: Killing async save");
+                Debug.Log("Killing async save");
                 _killAsyncSaves = false;
                 yield break;
             }
@@ -253,7 +259,7 @@ namespace Assets._Scripts.Xbox
         {
             if (_killAsyncSaves)
             {
-                Debug.Log("Eltee: Killing async save");
+                Debug.Log("Killing async save");
                 _killAsyncSaves = false;
                 return;
             }
@@ -264,7 +270,7 @@ namespace Assets._Scripts.Xbox
                 return;
             }
 
-            Debug.Log($"Eltee: Starting save for container {containerName} and blob {blobName} container created");
+            Debug.Log($"Starting save for container {containerName} and blob {blobName} container created");
             //Step 2:  Start container Update
             var containerUpdateResult = SDK.XGameSaveCreateUpdate(gameSaveContainerHandle, blobName, out var gameSaveContainerUpdateHandle);
             if (HR.FAILED(containerUpdateResult))
@@ -281,32 +287,28 @@ namespace Assets._Scripts.Xbox
             {
                 if (_killAsyncSaves)
                 {
-                    Debug.Log("Eltee: Killing async save");
+                    Debug.Log("Killing async save");
                     _killAsyncSaves = false;
                     return;
                 }
 
                 blobName = $"{blobName}_{myIndex}";
 
-                Debug.Log($"Eltee: Indexed File name is {blobName}");
-
                 //If we're currently writing to this file, wait until it's done. We shouldn't enter here anymore since switching to queue method.
                 while (_inProgressSaveIndices[myIndex])
                 {
-                    Debug.Log($"Eltee: {blobName} waiting for concurrent file to finish saving");
+                    Debug.Log($"{blobName} waiting for concurrent file to finish saving");
                     await Task.Delay(100);
                 }
 
                 if (_killAsyncSaves)
                 {
-                    Debug.Log("Eltee: Killing async save");
+                    Debug.Log("Killing async save");
                     _killAsyncSaves = false;
                     return;
                 }
 
                 _inProgressSaveIndices[myIndex] = true;
-
-                Debug.Log($"Eltee: {blobName} No concurrent files");
 
                 //Step 3: Submit data blob to write
                 var submitResult = SDK.XGameSaveSubmitBlobWrite(gameSaveContainerUpdateHandle, blobName, blobData);
@@ -320,12 +322,11 @@ namespace Assets._Scripts.Xbox
 
                 if (_killAsyncSaves)
                 {
-                    Debug.Log("Eltee: Killing async save");
+                    Debug.Log("Killing async save");
                     _killAsyncSaves = false;
                     return;
                 }
 
-                Debug.Log($"Eltee: {blobName} Data blob submit successful");
                 //Step 4: Submit metadata blob to write
                 var metaData = new XboxSaveMetadata { LastSaveIndex = myIndex, LastUpdated = DateTime.UtcNow };
                 var dataAsJson = JsonConvert.SerializeObject(metaData);
@@ -337,12 +338,11 @@ namespace Assets._Scripts.Xbox
                         $"Error when submitting the metadata blob {blobName}. HResult: ({Unity.XGamingRuntime.HR.NameOf(metaSubmitResult)}  0x{metaSubmitResult:x})");
                     return;
                 }
-                Debug.Log($"Eltee: {blobName} Meta blob submit successful");
 
 
                 if (_killAsyncSaves)
                 {
-                    Debug.Log("Eltee: Killing async save");
+                    Debug.Log("Killing async save");
                     _killAsyncSaves = false;
                     return;
                 }
@@ -361,7 +361,7 @@ namespace Assets._Scripts.Xbox
                     }
 
                     saveTaskResult.SetResult(true);
-                    Debug.Log($"Eltee: {blobName} blob writes successful");
+                    Debug.Log($"{blobName} save successful");
 
                 });
 

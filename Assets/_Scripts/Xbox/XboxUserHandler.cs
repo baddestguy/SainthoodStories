@@ -144,7 +144,7 @@ namespace Assets._Scripts.Xbox
 
             var loadedDataAsJson = Encoding.ASCII.GetString(data);
 
-            Debug.Log($"Eltee: Returning {loadedDataAsJson}");
+            Debug.Log($"Returning {loadedDataAsJson}");
             var loadedData = JsonConvert.DeserializeObject<T>(loadedDataAsJson);
             return loadedData;
         }
@@ -224,7 +224,7 @@ namespace Assets._Scripts.Xbox
                 {
                     if (hResult == HR.HTTP_E_STATUS_NOT_MODIFIED)
                     {
-                        Debug.LogError($"Achievement {achievementId} ALREADY Unlocked!");
+                        Debug.Log($"Achievement {achievementId} ALREADY Unlocked!");
                         return;
                     }
 
