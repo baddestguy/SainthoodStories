@@ -345,8 +345,7 @@ public class InteractableHouse : InteractableObject
         {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
         }
-     
-        SaveDataManager.Instance.SaveGame();
+         
     }
 
     public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
@@ -1423,7 +1422,6 @@ public class InteractableHouse : InteractableObject
     public virtual void RelationshipReward(ThankYouType thanks)
     {
         ThankYouMessage(thanks);
-        SaveDataManager.Instance.SaveGame();
     }
 
     public bool CanBuild()
@@ -1495,7 +1493,6 @@ public class InteractableHouse : InteractableObject
         TreasuryManager.Instance.SpendMoney(cost);
         UpgradeLevel++;
         BuildRelationship(ThankYouType.UPGRADE, 10);
-        SaveDataManager.Instance.SaveGame(useXboxSyncSave: true);
         GameManager.Instance.ReloadLevel();
         XboxUserHandler.Instance.UnlockAchievement("6");
         SteamManager.Instance.UnlockAchievement("INTERVENTION");

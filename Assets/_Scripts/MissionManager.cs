@@ -80,14 +80,6 @@ public class MissionManager : MonoBehaviour
         InventoryManager.Instance.AddCollectible(item);
     }
 
-    public void RestartMission()
-    {
-        UI.Instance.TriggerGameOver();
-        SaveDataManager.Instance.LoadDaySave();
-        MissionsBegin();
-        GameManager.Instance.ReloadLevel();
-    }
-
     public void EndDay(bool sleptEarly = false)
     {
         SleptEarly = sleptEarly;
@@ -179,8 +171,6 @@ public class MissionManager : MonoBehaviour
                 yield return new WaitForSeconds(0.3f);
             }
         }
-
-        SaveDataManager.Instance.DaySave();
 
         ToolTipManager.Instance.ShowToolTip("");
         bool missionFailed = false;
@@ -285,9 +275,6 @@ public class MissionManager : MonoBehaviour
 
             }
         }
-
-        SaveDataManager.Instance.SaveGame();
-
 
         //Wait for all xbox saves to catch up before going into the house
         if (GameSettings.Instance.IsXboxMode)

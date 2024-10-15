@@ -89,7 +89,6 @@ public class GameClock
         }
         CheckTutorial();
         ExecuteEvents?.Invoke();
-        SaveDataManager.Instance.SaveGame();
         DeltaTime = false;
 
     //    Debug.Log(Day + " : " + Time);

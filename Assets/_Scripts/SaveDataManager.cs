@@ -55,22 +55,6 @@ public class SaveDataManager : MonoBehaviour
         }
     }
 
-    public void DaySave()
-    {
-        var save = CurrentSaveData();
-        var data = new SaveObject[1] { save };
-
-        Save(data, SPARE_FILENAME);
-    }
-
-    public void LoadDaySave()
-    {
-        var data = GetSavedDataSet(SPARE_FILENAME);
-        var saveObjects = data.Values.ToArray();
-        var save = saveObjects.OrderBy(x => x.Day).LastOrDefault();
-        Save(new SaveObject[1] { save });
-    }
-
     public void SaveGame(bool useXboxSyncSave = false)
     {
         if (GameSettings.Instance.TUTORIAL_MODE) return;

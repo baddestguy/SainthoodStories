@@ -291,7 +291,6 @@ public class InventoryManager : MonoBehaviour
             GeneratedProvisions.Add(prov2);
             UI.Instance.EnableProvisionPopup(prov1, prov2);
         }
-        SaveDataManager.Instance.SaveGame();
     }
 
     private ProvisionData SwapProvisionBySeason(ProvisionData prov)
