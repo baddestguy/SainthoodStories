@@ -205,7 +205,7 @@ public class Player : MonoBehaviour
     public void ForceEnterBuilding(string houseName)
     {
         var building = GetBuilding(houseName);
-        CurrentBuilding = GetCurrentBuilding();
+        CurrentBuilding = building;
         AdjacentTiles = Map.GetAdjacentTiles(CurrentBuilding.CurrentGroundTile);
         OnMove(CurrentBuilding.CurrentGroundTile);
         StartTile = CurrentBuilding;
