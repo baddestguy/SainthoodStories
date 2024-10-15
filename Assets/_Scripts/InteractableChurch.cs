@@ -51,7 +51,7 @@ public class InteractableChurch : InteractableHouse
             if (missionId <= GameDataManager.MAX_MISSION_ID)
             {
                 var eventId = GameDataManager.Instance.ObjectivesData[missionId].CustomEventId;
-                if (eventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(eventId) ?? false))
+                if (eventId != CustomEventType.NONE && !(EventsManager.Instance.TriggeredMissionEvents?.Contains(eventId) ?? false))
                 {
                     EventsManager.Instance.AddEventToList(eventId);
                     EventsManager.Instance.TriggeredMissionEvents.Add(eventId);
@@ -363,7 +363,7 @@ public class InteractableChurch : InteractableHouse
                 PrayerProgress = 0;
 
                 if(TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_2)) { }
-                else if(MissionManager.Instance.CurrentMissionId == 1 && !(GameManager.Instance.SaveData.MissionEvents?.Contains(CustomEventType.MISSION_1) ?? false))
+                else if(MissionManager.Instance.CurrentMissionId == 1 && !(EventsManager.Instance.TriggeredMissionEvents?.Contains(CustomEventType.MISSION_1) ?? false))
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.MISSION_1);
                     EventsManager.Instance.TriggeredMissionEvents.Add(CustomEventType.MISSION_1);
