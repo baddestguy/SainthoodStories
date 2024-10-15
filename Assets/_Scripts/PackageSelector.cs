@@ -82,10 +82,22 @@ public class PackageSelector : MonoBehaviour
                 break;
             }
         }
-        if(item.PackageSelectorIsNew) InventoryManager.Instance.AddToInventory(item.Item);
-        AvailableItems.Remove(item.Item);
-        InstantiatedGos.Remove(item);
-        Destroy(item.gameObject);
+        if (item.PackageSelectorIsNew)
+        {
+            bool added = InventoryManager.Instance.AddToInventory(item.Item);
+            if (added)
+            {
+                AvailableItems.Remove(item.Item);
+                InstantiatedGos.Remove(item);
+                Destroy(item.gameObject);
+            }
+        }
+        else
+        {
+            AvailableItems.Remove(item.Item);
+            InstantiatedGos.Remove(item);
+            Destroy(item.gameObject);
+        }
     }
 
     /// <summary>
