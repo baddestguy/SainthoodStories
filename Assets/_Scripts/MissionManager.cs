@@ -185,7 +185,7 @@ public class MissionManager : MonoBehaviour
         ToolTipManager.Instance.ShowToolTip("");
         bool missionFailed = false;
         Player.LockMovement = true;
-        while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress) yield return null;
+        while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress || EventsManager.Instance.HasEventsInQueue()) yield return null;
 
         //if any unresolved building hazards exist, penalize the player
         foreach (var house in GameManager.Instance.Houses)
