@@ -62,6 +62,27 @@ public class InteractableChurch : InteractableHouse
         }
     }
 
+    public override void TriggerUpgradeStory()
+    {
+        if (HasBeenDestroyed) return;
+
+        if (UpgradeLevel == 3 && !MyStoryEvents.Contains(CustomEventType.CONVENT_STORY_3))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.CONVENT_STORY_3);
+            MyStoryEvents.Add(CustomEventType.CONVENT_STORY_3);
+        }
+        else if (UpgradeLevel == 2 && !MyStoryEvents.Contains(CustomEventType.CONVENT_STORY_2))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.CONVENT_STORY_2);
+            MyStoryEvents.Add(CustomEventType.CONVENT_STORY_2);
+        }
+        else if (UpgradeLevel == 1 && !MyStoryEvents.Contains(CustomEventType.CONVENT_STORY_1))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.CONVENT_STORY_1);
+            MyStoryEvents.Add(CustomEventType.CONVENT_STORY_1);
+        }
+    }
+
     public override void GetInteriorPopUI()
     {
         InteriorPopUI = UI.Instance.transform.Find("ChurchUI").GetComponent<PopUI>();

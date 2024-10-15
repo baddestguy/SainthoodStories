@@ -1492,6 +1492,7 @@ public class InteractableHouse : InteractableObject
         var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
         cost -= cost * (buildingBlueprint?.Value / 100d ?? 0);
         TreasuryManager.Instance.SpendMoney(cost);
+        InteriorSpaces[UpgradeLevel].SetActive(false);
         UpgradeLevel++;
         BuildRelationship(ThankYouType.UPGRADE, 10);
         GameManager.Instance.RefreshStage(HouseName);
