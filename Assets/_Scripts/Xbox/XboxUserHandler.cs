@@ -166,9 +166,9 @@ namespace Assets._Scripts.Xbox
                 SavedDataHandler.SaveQueue.Enqueue((filename, data));
 
                 //If the save queue is not already running, start it
-                if (!SavedDataHandler.IsProcessingSave)
+                if (!SavedDataHandler.IsProcessingAsyncSave)
                 {
-                    SavedDataHandler.IsProcessingSave = true;
+                    SavedDataHandler.IsProcessingAsyncSave = true;
                     StartCoroutine(ProcessSaveQueue());
                 }
             }
@@ -198,7 +198,7 @@ namespace Assets._Scripts.Xbox
                 }
             }
 
-            SavedDataHandler.IsProcessingSave = false;
+            SavedDataHandler.IsProcessingAsyncSave = false;
             yield break;
         }
 

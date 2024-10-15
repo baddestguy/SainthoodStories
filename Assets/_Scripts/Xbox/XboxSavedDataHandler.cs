@@ -13,15 +13,12 @@ namespace Assets._Scripts.Xbox
 {
     public class XboxSavedDataHandler
     {
-        public bool IsProcessingSave { get; set; }
+        public bool IsProcessingAsyncSave { get; set; }
         public ConcurrentQueue<(string Filename, object SaveData)> SaveQueue { get; private set; } = new();
 
         private XUserHandle _userHandle;
         private XGameSaveProviderHandle _gameSaveProviderHandle;
-        private readonly ConcurrentDictionary<int, bool> _inProgressSaveIndices = new();
-        private const int RollingFileMax = 5;
-        private static int _rollingFileIndex = 1;
-        private bool _killAsyncSaves;
+        private bool _shouKillAsyncSaves;
 
 
         ~XboxSavedDataHandler()
@@ -39,11 +36,6 @@ namespace Assets._Scripts.Xbox
         {
             _userHandle = null;
             _gameSaveProviderHandle = null;
-            for (var i = 0; i < RollingFileMax; i++)
-            {
-                _inProgressSaveIndices.AddOrUpdate(i, _ => false, (_, _) => false);
-            }
-
             SaveQueue = new ConcurrentQueue<(string, object)>();
 
             var hr = SDK.XUserDuplicateHandle(userHandle, out _userHandle);
@@ -67,17 +59,17 @@ namespace Assets._Scripts.Xbox
         /// </summary>
         /// <param name="containerName">Name of the container.</param>
         /// <param name="blobName">Name of the blob (file) to load data from.</param>
-        /// <param name="killAsyncSaves">Avoid scenario where blob info is invalidated due to async save after load process started</param>
+        /// <param name="shouldKillAsyncSaves">Avoid scenario where blob info is invalidated due to async save after load process started</param>
         /// <param name="retryCount"></param>
-        public byte[] Load(string containerName, string blobName, bool killAsyncSaves = true, int retryCount = 3)
+        public byte[] Load(string containerName, string blobName, bool shouldKillAsyncSaves = true, int retryCount = 3)
         {
             while (retryCount > 0)
             {
                 //If we are currently saving any async files, cancel it. Next time don't quit the game while saving.
-                if (killAsyncSaves && _inProgressSaveIndices.Any(x => x.Value))
+                if (shouldKillAsyncSaves && IsProcessingAsyncSave)
                 {
-                    Debug.Log($"Kill {SaveQueue.Count} async saves");
-                    _killAsyncSaves = true;
+                    Debug.Log($"Kill {SaveQueue.Count} async saves because we are attempting to load data");
+                    _shouKillAsyncSaves = true;
                     SaveQueue.Clear();
                 }
 
@@ -135,37 +127,7 @@ namespace Assets._Scripts.Xbox
                         return default;
                     }
 
-
-                    if (data.Length == 1) return data[0].Data;
-
-                    //Step 4: Read the metadata
-                    var metaBlobInfoResult =
-                        SDK.XGameSaveEnumerateBlobInfoByName(gameSaveContainerHandle, "META", out var metaBlobInfos);
-                    if (HR.FAILED(metaBlobInfoResult))
-                    {
-                        Debug.LogError(
-                            $"FAILED: Enumerate blob info by name for metadata. HResult: ({Unity.XGamingRuntime.HR.NameOf(metaBlobInfoResult)}  0x{metaBlobInfoResult})");
-                        return default;
-                    }
-
-                    var metaReadResult = SDK.XGameSaveReadBlobData(gameSaveContainerHandle,
-                        metaBlobInfos,
-                        out var metaBlobData
-                    );
-
-                    if (HR.FAILED(metaReadResult))
-                    {
-                        Debug.LogError(
-                            $"FAILED: Read metadata blob. HResult: ({Unity.XGamingRuntime.HR.NameOf(metaReadResult)}  0x{metaReadResult:x})");
-                        return default;
-                    }
-
-                    var loadedDataAsJson = Encoding.ASCII.GetString(metaBlobData[0].Data);
-
-                    var metadata = JsonConvert.DeserializeObject<XboxSaveMetadata>(loadedDataAsJson);
-                    var recentData = data.FirstOrDefault(x => x.Info.Name.EndsWith(metadata.LastSaveIndex.ToString()));
-
-                    return recentData?.Data;
+                    return data.SingleOrDefault(x => x.Info.Name.Equals(saveBlobName))?.Data;
                 }
                 catch (Exception e)
                 {
@@ -183,10 +145,10 @@ namespace Assets._Scripts.Xbox
         /// <param name="blobData">The bytes that are to be written to the blob (file).</param>
         public bool Save(string containerName, string blobName, byte[] blobData)
         {
-            if(_inProgressSaveIndices.Any(x => x.Value))
+            if(IsProcessingAsyncSave)
             {
-                Debug.Log($"Kill {SaveQueue.Count} async saves");
-                _killAsyncSaves = true;
+                Debug.Log($"Kill {SaveQueue.Count} async saves because we are doing a synchronous save");
+                _shouKillAsyncSaves = true;
                 SaveQueue.Clear();
             }
 
@@ -235,10 +197,10 @@ namespace Assets._Scripts.Xbox
         /// <param name="dataToSave">The object we are saving. Note: Total size of all saved files cannot exceed 12MB</param>
         public IEnumerator SaveAsync<T>(string containerName, string fileName, T dataToSave)
         {
-            if (_killAsyncSaves)
+            if (_shouKillAsyncSaves)
             {
-                Debug.Log("Killing async save");
-                _killAsyncSaves = false;
+                Debug.Log($"{nameof(SaveAsync)} - Killing async save");
+                _shouKillAsyncSaves = false;
                 yield break;
             }
 
@@ -257,10 +219,10 @@ namespace Assets._Scripts.Xbox
         /// <param name="blobData">The bytes that are to be written to the blob (file).</param>
         private async Task SaveAsyncImplementation(string containerName, string blobName, byte[] blobData)
         {
-            if (_killAsyncSaves)
+            if (_shouKillAsyncSaves)
             {
-                Debug.Log("Killing async save");
-                _killAsyncSaves = false;
+                Debug.Log($"{nameof(SaveAsyncImplementation)} Killing async save");
+                _shouKillAsyncSaves = false;
                 return;
             }
 
@@ -280,35 +242,14 @@ namespace Assets._Scripts.Xbox
                 return;
             }
 
-            _rollingFileIndex = (_rollingFileIndex + 1) % RollingFileMax;
-            var myIndex = _rollingFileIndex;
-
             try
             {
-                if (_killAsyncSaves)
+                if (_shouKillAsyncSaves)
                 {
-                    Debug.Log("Killing async save");
-                    _killAsyncSaves = false;
+                    Debug.Log($"{nameof(SaveAsyncImplementation)} Killing async save");
+                    _shouKillAsyncSaves = false;
                     return;
                 }
-
-                blobName = $"{blobName}_{myIndex}";
-
-                //If we're currently writing to this file, wait until it's done. We shouldn't enter here anymore since switching to queue method.
-                while (_inProgressSaveIndices[myIndex])
-                {
-                    Debug.Log($"{blobName} waiting for concurrent file to finish saving");
-                    await Task.Delay(100);
-                }
-
-                if (_killAsyncSaves)
-                {
-                    Debug.Log("Killing async save");
-                    _killAsyncSaves = false;
-                    return;
-                }
-
-                _inProgressSaveIndices[myIndex] = true;
 
                 //Step 3: Submit data blob to write
                 var submitResult = SDK.XGameSaveSubmitBlobWrite(gameSaveContainerUpdateHandle, blobName, blobData);
@@ -320,33 +261,12 @@ namespace Assets._Scripts.Xbox
                 }
 
 
-                if (_killAsyncSaves)
+                if (_shouKillAsyncSaves)
                 {
-                    Debug.Log("Killing async save");
-                    _killAsyncSaves = false;
+                    Debug.Log($"{nameof(SaveAsyncImplementation)} Killing async save");
+                    _shouKillAsyncSaves = false;
                     return;
                 }
-
-                //Step 4: Submit metadata blob to write
-                var metaData = new XboxSaveMetadata { LastSaveIndex = myIndex, LastUpdated = DateTime.UtcNow };
-                var dataAsJson = JsonConvert.SerializeObject(metaData);
-                var dataBytes = Encoding.ASCII.GetBytes(dataAsJson);
-                var metaSubmitResult = SDK.XGameSaveSubmitBlobWrite(gameSaveContainerUpdateHandle, "META", dataBytes);
-                if (HR.FAILED(metaSubmitResult))
-                {
-                    Debug.LogError(
-                        $"Error when submitting the metadata blob {blobName}. HResult: ({Unity.XGamingRuntime.HR.NameOf(metaSubmitResult)}  0x{metaSubmitResult:x})");
-                    return;
-                }
-
-
-                if (_killAsyncSaves)
-                {
-                    Debug.Log("Killing async save");
-                    _killAsyncSaves = false;
-                    return;
-                }
-
 
                 //Submit blob updates
                 var saveTaskResult = new TaskCompletionSource<bool>();
@@ -375,7 +295,6 @@ namespace Assets._Scripts.Xbox
             {
                 SDK.XGameSaveCloseUpdate(gameSaveContainerUpdateHandle);
                 SDK.XGameSaveCloseContainer(gameSaveContainerHandle);
-                _inProgressSaveIndices[myIndex] = false;
             }
 
 

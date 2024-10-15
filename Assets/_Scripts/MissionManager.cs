@@ -166,7 +166,7 @@ public class MissionManager : MonoBehaviour
         //Wait for all xbox saves to catch up before going into the house
         if (GameSettings.Instance.IsXboxMode)
         {
-            while (!XboxUserHandler.Instance.SavedDataHandler.SaveQueue.IsEmpty || XboxUserHandler.Instance.SavedDataHandler.IsProcessingSave)
+            while (!XboxUserHandler.Instance.SavedDataHandler.SaveQueue.IsEmpty || XboxUserHandler.Instance.SavedDataHandler.IsProcessingAsyncSave)
             {
                 Debug.LogWarning("Waiting for all saves to complete");
                 yield return new WaitForSeconds(0.3f);
@@ -280,7 +280,7 @@ public class MissionManager : MonoBehaviour
         //Wait for all xbox saves to catch up before going into the house
         if (GameSettings.Instance.IsXboxMode)
         {
-            while (!XboxUserHandler.Instance.SavedDataHandler.SaveQueue.IsEmpty || XboxUserHandler.Instance.SavedDataHandler.IsProcessingSave)
+            while (!XboxUserHandler.Instance.SavedDataHandler.SaveQueue.IsEmpty || XboxUserHandler.Instance.SavedDataHandler.IsProcessingAsyncSave)
             {
                 Debug.LogWarning("Waiting for all saves to complete");
                 yield return new WaitForSeconds(0.3f);
