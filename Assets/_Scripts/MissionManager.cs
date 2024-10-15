@@ -216,17 +216,17 @@ public class MissionManager : MonoBehaviour
         {
             SteamManager.Instance.UnlockAchievement("FINISHED");
             XboxUserHandler.Instance.UnlockAchievement("12");
-            if (FaithPoints < 75 || CharityPoints < 75)
+            if (FaithPoints < 100 || CharityPoints < 100)
             {
-                if (FaithPoints < 75 && CharityPoints < 75)
+                if (FaithPoints < 100 && CharityPoints < 100)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.WORST_ENDING);
                 }
-                else if (FaithPoints < 75)
+                else if (FaithPoints < 100)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
                 }
-                else if (CharityPoints < 75)
+                else if (CharityPoints < 100)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
                 }
@@ -325,6 +325,47 @@ public class MissionManager : MonoBehaviour
         SaveDataManager.Instance.SaveGame();
         MissionsBegin();
         GameManager.Instance.ReloadLevel();
+    }
+
+    public void OverrideHouseMission(HouseType houseType, int missionId)
+    {
+        var houseName = houseType.ToString();
+        InteractableHouse house = null;
+
+        switch (houseName)
+        {
+            case "InteractableChurch":
+                house = FindObjectOfType<InteractableChurch>();
+                break;
+            case "InteractableHospital":
+                house = FindObjectOfType<InteractableHospital>();
+                break;
+            case "InteractableKitchen":
+                house = FindObjectOfType<InteractableKitchen>();
+                break;
+            case "InteractableOrphanage":
+                house = FindObjectOfType<InteractableOrphanage>();
+                break;
+            case "InteractableShelter":
+                house = FindObjectOfType<InteractableShelter>();
+                break;
+            case "InteractableSchool":
+                house = FindObjectOfType<InteractableSchool>();
+                break;
+            case "InteractableClothesBank":
+                house = FindObjectOfType<InteractableClothesBank>();
+                break;
+        }
+
+        if(house != null )
+        {
+            house.CurrentMissionId = missionId;
+            WeatherManager.Instance.ResetWeather();
+            GameManager.Instance.GameClock.Reset(missionId);
+            SaveDataManager.Instance.SaveGame();
+            MissionsBegin();
+            GameManager.Instance.ReloadLevel();
+        }
     }
 
     public void OverideCP(int cp)

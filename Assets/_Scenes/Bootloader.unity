@@ -19249,6 +19249,8 @@ MonoBehaviour:
   NewSaint: 0
   UnlockedSaints: 0
   MissionId: 0
+  HouseType: 0
+  HouseMissionId: 0
   showDayTimeUI: 1
   showCpFpEnUI: 1
   showInvProUI: 1

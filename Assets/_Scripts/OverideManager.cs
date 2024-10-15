@@ -18,6 +18,8 @@ public class OverideManager : MonoBehaviour
     public SaintID NewSaint;
     public bool UnlockedSaints;
     public int MissionId;
+    public HouseType HouseType;
+    public int HouseMissionId;
 
     [SerializeField]
     public bool showDayTimeUI;
@@ -93,6 +95,11 @@ public class OverideManager : MonoBehaviour
     public void OverrideMission()
     {
         MissionManager.Instance.OverrideMission(MissionId);
+    }
+
+    public void OverrideHouseMission()
+    {
+        MissionManager.Instance.OverrideHouseMission(HouseType, HouseMissionId);
     }
 
     public void OverrideProvitionInventory(bool provision, bool inventory, bool adding)
