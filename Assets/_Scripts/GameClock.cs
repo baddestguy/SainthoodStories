@@ -108,7 +108,7 @@ public class GameClock
         {
             if (Time > 12)
             {
-                GameManager.Instance.ReloadLevel();
+                GameManager.Instance.RefreshStage("InteractableChurch");
             }
         }
     }

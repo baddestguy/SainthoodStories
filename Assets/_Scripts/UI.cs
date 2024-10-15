@@ -294,6 +294,12 @@ public class UI : MonoBehaviour
             TimeMinDisplay.color = Color.red;
             DayDisplay.color = Color.red;
         }
+        else
+        {
+            TimeHrDisplay.color = Color.white;
+            TimeMinDisplay.color = Color.white;
+            DayDisplay.color = Color.white;
+        }
     }
 
     public void EnableProvisionPopup(ProvisionData prov1, ProvisionData prov2)

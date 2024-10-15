@@ -86,7 +86,8 @@ public class MissionManager : MonoBehaviour
         GridCollectibleManager.Instance.ClearAll();
         if (GameSettings.Instance.TUTORIAL_MODE)
         {
-            GameManager.Instance.ReloadLevel();
+            GameManager.Instance.RefreshStage("InteractableHospital");
+
             return;
         }
         StartCoroutine(NewDayAsync());

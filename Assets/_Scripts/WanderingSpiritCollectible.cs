@@ -83,7 +83,7 @@ public class WanderingSpiritCollectible : GridCollectibleItem
 
             if (GameSettings.Instance.TUTORIAL_MODE)
             {
-                GameManager.Instance.ReloadLevel();
+                GameManager.Instance.RefreshStage("InteractableHospital");
             }
         }
         base.Collect();

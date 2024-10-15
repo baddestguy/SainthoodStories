@@ -1494,7 +1494,7 @@ public class InteractableHouse : InteractableObject
         TreasuryManager.Instance.SpendMoney(cost);
         UpgradeLevel++;
         BuildRelationship(ThankYouType.UPGRADE, 10);
-        GameManager.Instance.ReloadLevel();
+        GameManager.Instance.RefreshStage(HouseName);
         XboxUserHandler.Instance.UnlockAchievement("6");
         SteamManager.Instance.UnlockAchievement("INTERVENTION");
 

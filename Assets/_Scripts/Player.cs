@@ -135,7 +135,12 @@ public class Player : MonoBehaviour
             }
         }
 
-        switch (GameManager.Instance.SaveData.CurrentHouse)
+        return GetBuilding(GameManager.Instance.SaveData.CurrentHouse);
+    }
+
+    InteractableHouse GetBuilding(string houseName)
+    {
+        switch (houseName)
         {
             case "InteractableChurch":
                 return FindObjectOfType<InteractableChurch>();
@@ -196,6 +201,21 @@ public class Player : MonoBehaviour
             //   EventsManager.Instance.ForceTriggerStoryEvent(filteredEvents);
         }
     }
+
+    public void ForceEnterBuilding(string houseName)
+    {
+        var building = GetBuilding(houseName);
+        CurrentBuilding = GetCurrentBuilding();
+        AdjacentTiles = Map.GetAdjacentTiles(CurrentBuilding.CurrentGroundTile);
+        OnMove(CurrentBuilding.CurrentGroundTile);
+        StartTile = CurrentBuilding;
+
+        OnMoveSuccessEvent?.Invoke(Energy, CurrentBuilding);
+        GameManager.Instance.GameClock.Ping();
+        ToolTipManager.Instance.ShowToolTip("");
+        ConsumeEnergy(0, overrideZero: true); //Used to refresh UI
+    }
+
     public virtual void OnTriggerEnter(Collider other)
     {
         var collectible = other.GetComponent<GridCollectibleItem>();
@@ -418,18 +438,6 @@ public class Player : MonoBehaviour
 
         if (passTime)
             GameManager.Instance.PassTime();
-    }
-
-    private void ResetPlayerOnEnergyDepletedAsync()
-    {
-        //  StatusEffect = PlayerStatusEffect.FATIGUED;
-        UI.Instance.CrossFade(1f);
-
-        SoundManager.Instance.EndAllTracks();
-        OnEnergyDepleted = true;
-        WeatherManager.Instance.ResetWeather();
-        EventsManager.Instance.AddEventToList(CustomEventType.ENERGY_DEPLETED);
-        GameManager.Instance.ReloadLevel();
     }
 
     public int ModifyEnergyConsumption(MapTile tile = null, bool tooltip = false, int amount = 1)

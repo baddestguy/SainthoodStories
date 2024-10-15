@@ -43,24 +43,9 @@ public class InteractableChurch : InteractableHouse
     {
         if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_1))
         {
-            if (TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_6))
-            {
-                if(MissionManager.Instance.FaithPointsPermanentlyLost > 0)
-                {
-                    EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_2);
-                    MissionManager.Instance.FaithPointsPermanentlyLost = 0;
-                }
-                else
-                {
-                    EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_3);
-                }
-            }
-            else if (TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_3))
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_1);
-            }
+            //Don't worry about this
         }
-        else
+        else 
         {
             var missionId = MissionManager.Instance.CurrentMissionId;
             if (missionId <= GameDataManager.MAX_MISSION_ID)
