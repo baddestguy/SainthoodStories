@@ -150,8 +150,8 @@ public class CustomEventPopup : MonoBehaviour
                 break;
         }
 
-        player.CurrentBuilding.ClearHazard();
         player.CurrentBuilding.BuildRelationship(ThankYouType.IMMEDIATE_ASSISTANCE);
+        player.CurrentBuilding.ClearHazard();
         if (player.CurrentBuilding.MyObjective?.Event == BuildingEventType.SPECIAL_EVENT || player.CurrentBuilding.MyObjective?.Event == BuildingEventType.SPECIAL_EVENT_URGENT)
         {
             player.CurrentBuilding.CurrentMissionCompleteToday = true;

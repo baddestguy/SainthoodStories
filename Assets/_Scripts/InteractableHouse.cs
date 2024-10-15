@@ -609,6 +609,7 @@ public class InteractableHouse : InteractableObject
 
     public void ThankYouMessage(ThankYouType thanks)
     {
+        if (BuildingState == BuildingState.HAZARDOUS) return;
         switch (thanks)
         {
             case ThankYouType.ITEM: 
