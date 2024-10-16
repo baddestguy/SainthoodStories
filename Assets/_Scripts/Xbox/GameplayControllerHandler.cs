@@ -64,11 +64,15 @@ namespace Assets._Scripts.Xbox
         /// This is the menu that shows inventory, current objectives, ailments, and sacred artifacts
         /// </summary>
         private bool IsShowingObjectiveInventoryPopup => UI.Instance?.InventoryPopup != null && UI.Instance.InventoryPopup.activeSelf;
+        /// <summary>
+        /// We have finished the game and are now showing the end game dialog
+        /// </summary>
+        private bool IsEndGameConversationPopup => MissionManager.Instance.CurrentMissionId > GameDataManager.MAX_MISSION_ID && ShouldHandleConversation;
         private bool ShouldHandlerReturnEarly =>
             (Gamepad.current == null && !GameSettings.Instance.IsXboxMode) ||
             Player == null ||
             !GameSettings.Instance.IsUsingController ||
-            MissionManager.MissionOver ||
+            (MissionManager.MissionOver && !IsEndGameConversationPopup) ||
             PauseMenu.Instance.active;
 
 
