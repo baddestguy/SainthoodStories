@@ -49,18 +49,20 @@ public class InventoryManager : MonoBehaviour
         return (Items.Count >= MaxInventorySlots && autodelivery == null) || (Items.Count >= MaxInventorySlots && autodelivery != null && AutoDeliveryItems.Sum(x => x.Value.Count) == autodelivery.Value);
     }
 
-    public void AddToInventory(ItemType item, int amount = 1)
+    public bool AddToInventory(ItemType item, int amount = 1)
     {
         for(int i = 0; i < amount; i++)
         {
             if (Items.Count == MaxInventorySlots)
             {
                 UI.Instance.DisplayMessage("INVENTORY FULL!");
-                return;
+                return false;
             }
             Items.Add(item);
             RefreshInventoryUI?.Invoke();
         }
+
+        return true;
     }
 
     public void RemoveFromInventory(ItemType item)
@@ -289,7 +291,6 @@ public class InventoryManager : MonoBehaviour
             GeneratedProvisions.Add(prov2);
             UI.Instance.EnableProvisionPopup(prov1, prov2);
         }
-        SaveDataManager.Instance.SaveGame();
     }
 
     private ProvisionData SwapProvisionBySeason(ProvisionData prov)

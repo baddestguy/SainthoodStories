@@ -1,12 +1,15 @@
+#if !MICROSOFT_GDK_SUPPORT
 using System.Collections.Generic;
 using Steamworks;
 using Steamworks.Data;
+#endif
 using UnityEngine;
 
 public class SteamManager : MonoBehaviour
 {
     public static SteamManager Instance;
 
+#if !MICROSOFT_GDK_SUPPORT
     public Dictionary<string, Achievement> Achievements = new Dictionary<string, Achievement>()
     {
         {"GETTING_STARTED", new Achievement("GETTING_STARTED")},
@@ -29,10 +32,12 @@ public class SteamManager : MonoBehaviour
         {"LITANY", new Achievement("LITANY")},
         {"PIOUS", new Achievement("PIOUS")}
     };
-
+    
+#endif
     private void Awake()
     {
         Instance = this;
+#if !MICROSOFT_GDK_SUPPORT
         try
         {
             SteamClient.Init(GameDataManager.APP_ID);
@@ -41,17 +46,22 @@ public class SteamManager : MonoBehaviour
         {
             Debug.LogError("Couldn't initialize Steam client!");
         }
+#endif
     }
 
     private void Update()
     {
+#if !MICROSOFT_GDK_SUPPORT
         if (GameSettings.Instance.IsXboxMode) return;
         
         SteamClient.RunCallbacks();
+#endif
     }
 
     public void UnlockAchievement(string id)
     {
+
+#if !MICROSOFT_GDK_SUPPORT
         if (!Achievements.ContainsKey(id) || GameSettings.Instance.IsXboxMode) return;
 
         try
@@ -62,12 +72,16 @@ public class SteamManager : MonoBehaviour
         {
             return;
         }
+#endif
     }
 
     public void ClearAchievement(string id)
     {
+#if !MICROSOFT_GDK_SUPPORT
+        
         if (!Achievements.ContainsKey(id)) return;
 
         Achievements[id].Clear();
+#endif
     }
 }

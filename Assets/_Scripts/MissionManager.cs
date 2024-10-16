@@ -80,21 +80,14 @@ public class MissionManager : MonoBehaviour
         InventoryManager.Instance.AddCollectible(item);
     }
 
-    public void RestartMission()
-    {
-        UI.Instance.TriggerGameOver();
-        SaveDataManager.Instance.LoadDaySave();
-        MissionsBegin();
-        GameManager.Instance.ReloadLevel();
-    }
-
     public void EndDay(bool sleptEarly = false)
     {
         SleptEarly = sleptEarly;
         GridCollectibleManager.Instance.ClearAll();
         if (GameSettings.Instance.TUTORIAL_MODE)
         {
-            GameManager.Instance.ReloadLevel();
+            GameManager.Instance.RefreshStage("InteractableHospital");
+
             return;
         }
         StartCoroutine(NewDayAsync());
@@ -168,13 +161,32 @@ public class MissionManager : MonoBehaviour
         FaithPointsPermanentlyLost = 0;
         GameManager.Instance.ScrambleMapTiles();
         GameManager.Instance.CurrentBuilding = "InteractableChurch";
-        SaveDataManager.Instance.SaveGame();
-        SaveDataManager.Instance.DaySave();
+
+        //if final mission, don't save (they can replay the last day if they quit the app at this point. And the save is getting wiped after this point anyway
+        //Also, force story mode to true so they must see the ending story even if they have the toggle off
+        if (oldMissionId == GameDataManager.MAX_MISSION_ID)
+        {
+            GameSettings.Instance.CustomEventsToggle = true;
+        }
+        else
+        {
+            SaveDataManager.Instance.SaveGame();
+        }
+
+        //Wait for all xbox saves to catch up before going into the house
+        if (GameSettings.Instance.IsXboxMode)
+        {
+            while (!XboxUserHandler.Instance.SavedDataHandler.SaveQueue.IsEmpty || XboxUserHandler.Instance.SavedDataHandler.IsProcessingAsyncSave)
+            {
+                Debug.LogWarning("Waiting for all saves to complete");
+                yield return new WaitForSeconds(0.3f);
+            }
+        }
 
         ToolTipManager.Instance.ShowToolTip("");
         bool missionFailed = false;
         Player.LockMovement = true;
-        while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress) yield return null;
+        while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress || EventsManager.Instance.HasEventsInQueue()) yield return null;
 
         //if any unresolved building hazards exist, penalize the player
         foreach (var house in GameManager.Instance.Houses)
@@ -214,17 +226,17 @@ public class MissionManager : MonoBehaviour
         {
             SteamManager.Instance.UnlockAchievement("FINISHED");
             XboxUserHandler.Instance.UnlockAchievement("12");
-            if (FaithPoints < 75 || CharityPoints < 75)
+            if (FaithPoints < 100 || CharityPoints < 100)
             {
-                if (FaithPoints < 75 && CharityPoints < 75)
+                if (FaithPoints < 100 && CharityPoints < 100)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.WORST_ENDING);
                 }
-                else if (FaithPoints < 75)
+                else if (FaithPoints < 100)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
                 }
-                else if (CharityPoints < 75)
+                else if (CharityPoints < 100)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
                 }
@@ -275,7 +287,17 @@ public class MissionManager : MonoBehaviour
             }
         }
 
-        SaveDataManager.Instance.SaveGame();
+        //Wait for all xbox saves to catch up before going into the house
+        if (GameSettings.Instance.IsXboxMode)
+        {
+            while (!XboxUserHandler.Instance.SavedDataHandler.SaveQueue.IsEmpty || XboxUserHandler.Instance.SavedDataHandler.IsProcessingAsyncSave)
+            {
+                Debug.LogWarning("Waiting for all saves to complete");
+                yield return new WaitForSeconds(0.3f);
+            }
+        }
+
+
         MissionComplete?.Invoke(missionFailed);
     }
 
@@ -313,6 +335,47 @@ public class MissionManager : MonoBehaviour
         SaveDataManager.Instance.SaveGame();
         MissionsBegin();
         GameManager.Instance.ReloadLevel();
+    }
+
+    public void OverrideHouseMission(HouseType houseType, int missionId)
+    {
+        var houseName = houseType.ToString();
+        InteractableHouse house = null;
+
+        switch (houseName)
+        {
+            case "InteractableChurch":
+                house = FindObjectOfType<InteractableChurch>();
+                break;
+            case "InteractableHospital":
+                house = FindObjectOfType<InteractableHospital>();
+                break;
+            case "InteractableKitchen":
+                house = FindObjectOfType<InteractableKitchen>();
+                break;
+            case "InteractableOrphanage":
+                house = FindObjectOfType<InteractableOrphanage>();
+                break;
+            case "InteractableShelter":
+                house = FindObjectOfType<InteractableShelter>();
+                break;
+            case "InteractableSchool":
+                house = FindObjectOfType<InteractableSchool>();
+                break;
+            case "InteractableClothesBank":
+                house = FindObjectOfType<InteractableClothesBank>();
+                break;
+        }
+
+        if(house != null )
+        {
+            house.CurrentMissionId = missionId;
+            WeatherManager.Instance.ResetWeather();
+            GameManager.Instance.GameClock.Reset(missionId);
+            SaveDataManager.Instance.SaveGame();
+            MissionsBegin();
+            GameManager.Instance.ReloadLevel();
+        }
     }
 
     public void OverideCP(int cp)

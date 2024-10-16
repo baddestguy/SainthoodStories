@@ -40,15 +40,18 @@ public class PackageSelector : MonoBehaviour
                     InstantiatedGos.Add(pItem);
                 }
             }
-            else if(house.AllObjectivesComplete && house.HouseName.Contains("Shelter"))
+            else if(house.AllObjectivesComplete)
             {
-                for (int i = 0; i < 2; i++)
+                if (house.HouseName.Contains("Shelter") || house.HouseName.Contains("Kitchen"))
                 {
-                    var item = Instantiate(ItemGO);
-                    item.transform.SetParent(Scroller.content);
-                    var pItem = item.GetComponent<PackageItem>();
-                    pItem.Init(new HouseObjectivesData() { House = "InteractableShelter" });
-                    InstantiatedGos.Add(pItem);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        var item = Instantiate(ItemGO);
+                        item.transform.SetParent(Scroller.content);
+                        var pItem = item.GetComponent<PackageItem>();
+                        pItem.Init(new HouseObjectivesData() { House = house.HouseName });
+                        InstantiatedGos.Add(pItem);
+                    }
                 }
             }
         }
@@ -82,10 +85,22 @@ public class PackageSelector : MonoBehaviour
                 break;
             }
         }
-        if(item.PackageSelectorIsNew) InventoryManager.Instance.AddToInventory(item.Item);
-        AvailableItems.Remove(item.Item);
-        InstantiatedGos.Remove(item);
-        Destroy(item.gameObject);
+        if (item.PackageSelectorIsNew)
+        {
+            bool added = InventoryManager.Instance.AddToInventory(item.Item);
+            if (added)
+            {
+                AvailableItems.Remove(item.Item);
+                InstantiatedGos.Remove(item);
+                Destroy(item.gameObject);
+            }
+        }
+        else
+        {
+            AvailableItems.Remove(item.Item);
+            InstantiatedGos.Remove(item);
+            Destroy(item.gameObject);
+        }
     }
 
     /// <summary>

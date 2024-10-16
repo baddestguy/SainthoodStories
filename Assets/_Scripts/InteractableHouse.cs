@@ -345,8 +345,7 @@ public class InteractableHouse : InteractableObject
         {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
         }
-     
-        SaveDataManager.Instance.SaveGame();
+         
     }
 
     public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
@@ -368,7 +367,6 @@ public class InteractableHouse : InteractableObject
 
         DeadlineTime.SetClock(-1, day);
         DeadlineSet = false;
-        RequiredItems = 0;
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name);
         OnActionProgress?.Invoke(1f, this, 1); //Reset all progress bars
@@ -610,6 +608,7 @@ public class InteractableHouse : InteractableObject
 
     public void ThankYouMessage(ThankYouType thanks)
     {
+        if (BuildingState == BuildingState.HAZARDOUS) return;
         switch (thanks)
         {
             case ThankYouType.ITEM: 
@@ -687,14 +686,14 @@ public class InteractableHouse : InteractableObject
         int completedCounter = 1;
         foreach (var house in houses)
         {
-            if (house.AllObjectivesComplete || (house is InteractableChurch && InventoryManager.Instance.Collectibles.Count >= 66))
+            if (house.AllObjectivesComplete)
             {
                 completedCounter++;
             }
         }
 
         XboxUserHandler.Instance.UnlockAchievement("5", completedCounter * 100 / 6);
-        if(completedCounter == 6)
+        if(completedCounter >= 6)
         {
             SteamManager.Instance.UnlockAchievement("COMMUNION");
         }
@@ -1423,7 +1422,6 @@ public class InteractableHouse : InteractableObject
     public virtual void RelationshipReward(ThankYouType thanks)
     {
         ThankYouMessage(thanks);
-        SaveDataManager.Instance.SaveGame();
     }
 
     public bool CanBuild()
@@ -1493,10 +1491,10 @@ public class InteractableHouse : InteractableObject
         var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
         cost -= cost * (buildingBlueprint?.Value / 100d ?? 0);
         TreasuryManager.Instance.SpendMoney(cost);
+        InteriorSpaces[UpgradeLevel].SetActive(false);
         UpgradeLevel++;
         BuildRelationship(ThankYouType.UPGRADE, 10);
-        SaveDataManager.Instance.SaveGame();
-        GameManager.Instance.ReloadLevel();
+        GameManager.Instance.RefreshStage(HouseName);
         XboxUserHandler.Instance.UnlockAchievement("6");
         SteamManager.Instance.UnlockAchievement("INTERVENTION");
 
@@ -1568,7 +1566,7 @@ public class InteractableHouse : InteractableObject
                 }
                 else
                 {
-                    return new TooltipStats();
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride: CalculateMaxVolunteerPoints(), energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
                 }
                 return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride:CalculateMaxVolunteerPoints(), cpOverride: maxCP, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
 
@@ -1582,7 +1580,7 @@ public class InteractableHouse : InteractableObject
                 }
                 else
                 {
-                    return new TooltipStats();
+                    return new TooltipStats() { CP = 1 };
                 }
 
                 return new TooltipStats() { CP = maxdCP };

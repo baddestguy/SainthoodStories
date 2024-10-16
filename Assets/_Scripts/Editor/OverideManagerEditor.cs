@@ -135,8 +135,10 @@ public class OverideManagerEditor : Editor
     private void DrawMissionIdOverride(bool canClick)
     {
         SerializedProperty MissionId = serializedObject.FindProperty(nameof(overideManager.MissionId));
+        SerializedProperty HouseType = serializedObject.FindProperty(nameof(overideManager.HouseType));
+        SerializedProperty HouseMissionId = serializedObject.FindProperty(nameof(overideManager.HouseMissionId));
 
-        if (EditorGUILayout.DropdownButton(new GUIContent("Override Mission ID"), FocusType.Keyboard, uIStyle))
+        if (EditorGUILayout.DropdownButton(new GUIContent("Override Mission IDs"), FocusType.Keyboard, uIStyle))
             overideManager.showMissionUI = !overideManager.showMissionUI;
 
         if (overideManager.showMissionUI)
@@ -152,6 +154,13 @@ public class OverideManagerEditor : Editor
             }
 
             EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.PropertyField(HouseType, new GUIContent(nameof(overideManager.HouseType)));
+            EditorGUILayout.PropertyField(HouseMissionId, new GUIContent(nameof(overideManager.HouseMissionId)));
+            if (GUILayout.Button("Overide House Mission ID") && canClick)
+            {
+                overideManager.OverrideHouseMission();
+            }
 
             GUILayout.Space(10);
         }

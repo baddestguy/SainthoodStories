@@ -24,7 +24,7 @@ public class PackageItem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     public void Init(HouseObjectivesData data)
@@ -59,10 +59,19 @@ public class PackageItem : MonoBehaviour
 
     public void SetLocalizedText(ItemType item)
     {
-        var houseName = ShopItemData.HouseNameForItemType(item);
-        var house = GameManager.Instance.Houses.Where(h=> h.HouseName == houseName).First();
+        var houseName = ShopItemData.HouseNameForItemType(item); 
+        var house = GameManager.Instance.Houses.Where(h => h.HouseName == houseName).First();
+
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
-        mouseOverBtn.Loc_Key = house.MyObjective.MissionDescription;
+
+        if(house.MyObjective == null)
+        {
+            mouseOverBtn.Loc_Key = $"{house.HouseName}_MissionsCompleteDescription";
+        }
+        else
+        {
+            mouseOverBtn.Loc_Key = house.MyObjective.MissionDescription;
+        }
 
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderColor}", HeaderColor);
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{SubheaderColor}", SubheaderColor);

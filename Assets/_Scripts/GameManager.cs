@@ -415,6 +415,22 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void RefreshStage(string house)
+    {
+        StartCoroutine(RefreshStageAsync(house));
+        TutorialManager.Instance.CheckTutorialFailureState();
+    }
+
+    IEnumerator RefreshStageAsync(string house)
+    {
+        UI.Instance.CrossFade(1f);
+        yield return new WaitForSeconds(1f);
+        Player.ForceEnterBuilding(house);
+        yield return new WaitForSeconds(1f);
+
+        UI.Instance.CrossFade(0f);
+    }
+
     public bool HasPlayerEnergy()
     {
         return PlayerEnergy > 0 || GameSettings.Instance.InfiniteBoost;
@@ -469,6 +485,9 @@ public class GameManager : MonoBehaviour
         MapTile.OnClickEvent -= OnMapTileTap;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
         GameClock.Ticked -= OnTick;
+
+#if !MICROSOFT_GDK_SUPPORT
         Steamworks.SteamClient.Shutdown();
+#endif
     }
 }

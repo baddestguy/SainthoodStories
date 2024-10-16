@@ -5,9 +5,5 @@ using UnityEngine;
 public class GameoverPopup : MonoBehaviour
 {
 
-    public void Restart()
-    {
-        MissionManager.Instance.RestartMission();
-    }
 
 }

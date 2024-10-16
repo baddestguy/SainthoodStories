@@ -150,15 +150,15 @@ public class CustomEventPopup : MonoBehaviour
                 break;
         }
 
-        player.CurrentBuilding.ClearHazard();
         player.CurrentBuilding.BuildRelationship(ThankYouType.IMMEDIATE_ASSISTANCE);
-        if (player.CurrentBuilding.MyObjective?.Event == BuildingEventType.SPECIAL_EVENT || player.CurrentBuilding.MyObjective?.Event == BuildingEventType.SPECIAL_EVENT_URGENT)
+        if (player.CurrentBuilding.BuildingState != BuildingState.HAZARDOUS && (player.CurrentBuilding.MyObjective?.Event == BuildingEventType.SPECIAL_EVENT || player.CurrentBuilding.MyObjective?.Event == BuildingEventType.SPECIAL_EVENT_URGENT))
         {
             player.CurrentBuilding.CurrentMissionCompleteToday = true;
             player.CurrentBuilding.CurrentMissionId++;
             player.CurrentBuilding.CheckEndGameAchievements();
             player.CurrentBuilding.MyObjective = null;
         }
+        player.CurrentBuilding.ClearHazard();
 
         var timeCost = Mathf.Abs(EventData.Cost);
         for (int i = 0; i < timeCost; i++)

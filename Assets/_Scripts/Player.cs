@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets._Scripts.Xbox;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
@@ -54,7 +55,8 @@ public class Player : MonoBehaviour
         PopUIFX = Instantiate(Resources.Load("UI/PopUIFX") as GameObject).GetComponent<PopUIFX>();
         PopUIFX.gameObject.SetActive(false);
 
-        switch (MissionManager.Instance.CurrentMission.Season) {
+        switch (MissionManager.Instance.CurrentMission.Season)
+        {
             case Season.SUMMER:
                 GroundTapFX = Instantiate(Resources.Load("Environment/GroundLeavesFx") as GameObject);
                 break;
@@ -133,7 +135,12 @@ public class Player : MonoBehaviour
             }
         }
 
-        switch (GameManager.Instance.SaveData.CurrentHouse)
+        return GetBuilding(GameManager.Instance.SaveData.CurrentHouse);
+    }
+
+    InteractableHouse GetBuilding(string houseName)
+    {
+        switch (houseName)
         {
             case "InteractableChurch":
                 return FindObjectOfType<InteractableChurch>();
@@ -191,9 +198,24 @@ public class Player : MonoBehaviour
                 EventsManager.Instance.ExecuteEvents();
             }
 
-         //   EventsManager.Instance.ForceTriggerStoryEvent(filteredEvents);
+            //   EventsManager.Instance.ForceTriggerStoryEvent(filteredEvents);
         }
     }
+
+    public void ForceEnterBuilding(string houseName)
+    {
+        var building = GetBuilding(houseName);
+        CurrentBuilding = building;
+        AdjacentTiles = Map.GetAdjacentTiles(CurrentBuilding.CurrentGroundTile);
+        OnMove(CurrentBuilding.CurrentGroundTile);
+        StartTile = CurrentBuilding;
+
+        OnMoveSuccessEvent?.Invoke(Energy, CurrentBuilding);
+        GameManager.Instance.GameClock.Ping();
+        ToolTipManager.Instance.ShowToolTip("");
+        ConsumeEnergy(0, overrideZero: true); //Used to refresh UI
+    }
+
     public virtual void OnTriggerEnter(Collider other)
     {
         var collectible = other.GetComponent<GridCollectibleItem>();
@@ -258,19 +280,19 @@ public class Player : MonoBehaviour
 
         switch (MissionManager.Instance.CurrentMission.Season)
         {
-                //if (!InventoryManager.Instance.HasProvision(Provision.SHADES))
-                //{
-                //    WeatherStatusCounter++;
-                //    if (WeatherStatusCounter >= 3)
-                //    {
-                //        if (Random.Range(0, 100) < 50)
-                //        {
-                //            WeatherStatusCounter = 0;
-                //            AddRandomAilment();
-                //        }
-                //    }
-                //}
-                //break;
+            //if (!InventoryManager.Instance.HasProvision(Provision.SHADES))
+            //{
+            //    WeatherStatusCounter++;
+            //    if (WeatherStatusCounter >= 3)
+            //    {
+            //        if (Random.Range(0, 100) < 50)
+            //        {
+            //            WeatherStatusCounter = 0;
+            //            AddRandomAilment();
+            //        }
+            //    }
+            //}
+            //break;
 
             case Season.SUMMER:
             case Season.FALL:
@@ -310,20 +332,20 @@ public class Player : MonoBehaviour
     {
         StormyWeatherEffect();
 
-        if(CurrentTile != null && CurrentTile.TileType != TileType.BUILDING)
+        if (CurrentTile != null && CurrentTile.TileType != TileType.BUILDING)
         {
             CurrentTile.TileType = TileType.ROAD;
         }
-        
+
         CurrentTile = newTile;
-        
-        if(CurrentTile.TileType != TileType.BUILDING)
+
+        if (CurrentTile.TileType != TileType.BUILDING)
         {
             CurrentTile.TileType = TileType.PLAYER;
         }
 
         EnergyConsumption = ModifyEnergyConsumption(CurrentTile);
-    //    Energy.Consume(EnergyConsumption);
+        //    Energy.Consume(EnergyConsumption);
 
         FaceNewDirection(CurrentTile);
         AdjacentTiles = Map.GetAdjacentTiles(CurrentTile);
@@ -392,7 +414,7 @@ public class Player : MonoBehaviour
                 ApplyStatusEffect();
                 if (passTime)
                     GameManager.Instance.PassTime();
-                GroundMoveFX.transform.position = newTile.transform.position + new Vector3(0,0.1f);
+                GroundMoveFX.transform.position = newTile.transform.position + new Vector3(0, 0.1f);
                 GroundMoveFX.SetActive(false);
                 GroundMoveFX.SetActive(true);
                 SoundManager.Instance.PlayOneShotSfx("HouseJump_SFX");
@@ -406,6 +428,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator WaitThenDisappear(InteractableObject iTile, bool passTime)
     {
+
         CurrentBuilding = iTile as InteractableHouse;
         OnMove(iTile.CurrentGroundTile);
         yield return new WaitForSeconds(0.3f);
@@ -417,58 +440,46 @@ public class Player : MonoBehaviour
             GameManager.Instance.PassTime();
     }
 
-    private void ResetPlayerOnEnergyDepletedAsync()
-    {
-      //  StatusEffect = PlayerStatusEffect.FATIGUED;
-        UI.Instance.CrossFade(1f);
-
-        SoundManager.Instance.EndAllTracks();
-        OnEnergyDepleted = true;
-        WeatherManager.Instance.ResetWeather();
-        EventsManager.Instance.AddEventToList(CustomEventType.ENERGY_DEPLETED);
-        GameManager.Instance.ReloadLevel();
-    }
-
     public int ModifyEnergyConsumption(MapTile tile = null, bool tooltip = false, int amount = 1)
     {
         int energyAmount = amount;
         CustomEventData e = EventsManager.Instance.CurrentEvents.Find(i => i.Id == CustomEventType.SICK);
 
-        if(StatusEffects.Contains(PlayerStatusEffect.FATIGUED))
+        if (StatusEffects.Contains(PlayerStatusEffect.FATIGUED))
         {
             energyAmount++;
         }
 
-        if(e != null)
+        if (e != null)
         {
             energyAmount += (int)e.Cost;
         }
 
-        if(tile is InteractableHospital)
+        if (tile is InteractableHospital)
         {
-            if((tile as InteractableHospital).BuildingState == BuildingState.NORMAL)
+            if ((tile as InteractableHospital).BuildingState == BuildingState.NORMAL)
             {
                 energyAmount += 1;
             }
         }
-        else if(tile is InteractableOrphanage)
+        else if (tile is InteractableOrphanage)
         {
-            if((tile as InteractableOrphanage).BuildingState == BuildingState.NORMAL)
+            if ((tile as InteractableOrphanage).BuildingState == BuildingState.NORMAL)
             {
                 energyAmount += 1;
             }
         }
 
-        return energyAmount; 
+        return energyAmount;
     }
 
     public void TileDance(MapTile tile)
     {
-        if(tile is InteractableHouse)
+        if (tile is InteractableHouse)
         {
             (tile as InteractableHouse).HouseJump();
         }
-        else if(tile == CurrentTile)
+        else if (tile == CurrentTile)
         {
             if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
             {
@@ -497,7 +508,7 @@ public class Player : MonoBehaviour
 
     public void ConsumeEnergy(int amount, MapTile tile = null, bool overrideZero = false)
     {
-        if(amount >= 0)
+        if (amount >= 0)
         {
             amount = ModifyEnergyConsumption(tile, amount: amount);
         }
@@ -508,12 +519,12 @@ public class Player : MonoBehaviour
         {
             AddRandomAilment();
         }
-        else if(GameManager.Instance.CurrentMission.Season > Season.FALL && (Energy.Amount <= 0 && Random.Range(0,100) < 50 && (MissionManager.Instance.CurrentMission.CurrentWeek > 1 || GameManager.Instance.GameClock.Day >= 3)))
+        else if (GameManager.Instance.CurrentMission.Season > Season.FALL && (Energy.Amount <= 0 && Random.Range(0, 100) < 50 && (MissionManager.Instance.CurrentMission.CurrentWeek > 1 || GameManager.Instance.GameClock.Day >= 3)))
         {
             StatusEffects.Add(PlayerStatusEffect.VULNERABLE);
         }
 
-        if(StatusEffects.Count > 0)
+        if (StatusEffects.Count > 0)
         {
             UI.Instance.ErrorFlash("Energy");
         }
@@ -524,7 +535,7 @@ public class Player : MonoBehaviour
         if (StatusEffects.Contains(PlayerStatusEffect.SICK))
         {
             SickCountdown--;
-            if(SickCountdown == 0)
+            if (SickCountdown == 0)
             {
                 Energy.Consume(1);
                 SickCountdown = 3;
@@ -534,7 +545,7 @@ public class Player : MonoBehaviour
         if (StatusEffects.Contains(PlayerStatusEffect.MIGRAINE))
         {
             MigraineCountdown--;
-            if(MigraineCountdown == 0)
+            if (MigraineCountdown == 0)
             {
                 Energy.Consume(1000);
                 MigraineCountdown = 6;
@@ -622,7 +633,7 @@ public class Player : MonoBehaviour
         if (fasting != null)
         {
             FastingCoutndown--;
-            if(FastingCoutndown == 0)
+            if (FastingCoutndown == 0)
             {
                 ConsumeEnergy(fasting.Energy);
                 GameManager.Instance.MissionManager.UpdateFaithPoints(fasting.FP);

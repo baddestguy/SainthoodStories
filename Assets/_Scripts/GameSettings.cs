@@ -144,7 +144,7 @@ public class GameSettings : MonoBehaviour
                 }
 
                 Debug.Log("Loading game settings");
-                var savedData = XboxUserHandler.Instance.LoadData<SaveSettingsData>(SettingsFileName);
+                var savedData = XboxUserHandler.Instance.LoadData<SaveSettingsData>(SettingsFileName, killAsyncSaves: false);
                 return savedData;
             }
 
@@ -240,7 +240,7 @@ public class GameSettings : MonoBehaviour
 
         if (IsXboxMode)
         {
-            XboxUserHandler.Instance.QueueSave(SettingsFileName, data);
+            XboxUserHandler.Instance.Save(SettingsFileName, data);
         }
         else
         {

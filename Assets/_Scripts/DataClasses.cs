@@ -225,6 +225,17 @@ public enum Provision
     ,AUTO_DELIVER
 }
 
+public enum HouseType
+{
+    InteractableChurch = 0,
+    InteractableHospital,
+    InteractableKitchen,
+    InteractableOrphanage,
+    InteractableShelter,
+    InteractableSchool,
+    InteractableClothesBank
+}
+
 public enum BuildingState
 {
     RUBBLE = 0,
