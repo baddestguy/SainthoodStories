@@ -367,7 +367,6 @@ public class InteractableHouse : InteractableObject
 
         DeadlineTime.SetClock(-1, day);
         DeadlineSet = false;
-        RequiredItems = 0;
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name);
         OnActionProgress?.Invoke(1f, this, 1); //Reset all progress bars
@@ -1567,7 +1566,7 @@ public class InteractableHouse : InteractableObject
                 }
                 else
                 {
-                    return new TooltipStats();
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride: CalculateMaxVolunteerPoints(), energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
                 }
                 return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride:CalculateMaxVolunteerPoints(), cpOverride: maxCP, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
 
@@ -1581,7 +1580,7 @@ public class InteractableHouse : InteractableObject
                 }
                 else
                 {
-                    return new TooltipStats();
+                    return new TooltipStats() { CP = 1 };
                 }
 
                 return new TooltipStats() { CP = maxdCP };

@@ -103,6 +103,11 @@ public class InventoryPopup : MonoBehaviour
             {
                 Objs[i].Text.text = $"{LocalizationManager.Instance.GetText(houses[i].MyObjective.MissionDescription)}: {houses[i].VolunteerProgress}/{houses[i].MyObjective.RequiredAmount}";
             }
+
+            if (houses[i].BuildingState == BuildingState.HAZARDOUS)
+            {
+                Objs[i].Text.text = $"{LocalizationManager.Instance.GetText("BuildingHazardousMissionDescription")}";
+            }
         }
 
         int counter = 0;

@@ -59,30 +59,19 @@ public class PackageItem : MonoBehaviour
 
     public void SetLocalizedText(ItemType item)
     {
-        Debug.Log($"ELTEE: {nameof(SetLocalizedText)}");
         var houseName = ShopItemData.HouseNameForItemType(item); 
-        Debug.Log($"ELTEE: {nameof(SetLocalizedText)} - House Name is  {houseName}"); //InteractableShelter
-        Debug.Log($"ELTEE: {nameof(SetLocalizedText)} - Search the following house names: {string.Join("||", GameManager.Instance.Houses.Select(x => x.HouseName))}");
-        //InteractableOrphanage||InteractableClothesBank||InteractableChurch||InteractableKitchen||InteractableHospital||InteractableShelter||InteractableSchool||InteractableMarket
-
         var house = GameManager.Instance.Houses.Where(h => h.HouseName == houseName).First();
-        Debug.Log($"ELTEE: {nameof(SetLocalizedText)} - Found House Name is  {house.HouseName} "); //InteractableShelter
 
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
-        if (mouseOverBtn == null)
-        {
-            Debug.LogError("TooltipMouseOver not found");
-        }
 
         if(house.MyObjective == null)
         {
-            Debug.LogError("House Objective not found"); //BINGO!!!!!
+            mouseOverBtn.Loc_Key = $"{house.HouseName}_MissionsCompleteDescription";
         }
-
-        Debug.Log($"ELTEE: {nameof(SetLocalizedText)} -Mission description is  {house.MyObjective.MissionDescription}");
-
-        mouseOverBtn.Loc_Key = house.MyObjective.MissionDescription;
-
+        else
+        {
+            mouseOverBtn.Loc_Key = house.MyObjective.MissionDescription;
+        }
 
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderColor}", HeaderColor);
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{SubheaderColor}", SubheaderColor);

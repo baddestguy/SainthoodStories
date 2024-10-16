@@ -40,15 +40,18 @@ public class PackageSelector : MonoBehaviour
                     InstantiatedGos.Add(pItem);
                 }
             }
-            else if(house.AllObjectivesComplete && house.HouseName.Contains("Shelter"))
+            else if(house.AllObjectivesComplete)
             {
-                for (int i = 0; i < 2; i++)
+                if (house.HouseName.Contains("Shelter") || house.HouseName.Contains("Kitchen"))
                 {
-                    var item = Instantiate(ItemGO);
-                    item.transform.SetParent(Scroller.content);
-                    var pItem = item.GetComponent<PackageItem>();
-                    pItem.Init(new HouseObjectivesData() { House = "InteractableShelter" });
-                    InstantiatedGos.Add(pItem);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        var item = Instantiate(ItemGO);
+                        item.transform.SetParent(Scroller.content);
+                        var pItem = item.GetComponent<PackageItem>();
+                        pItem.Init(new HouseObjectivesData() { House = house.HouseName });
+                        InstantiatedGos.Add(pItem);
+                    }
                 }
             }
         }
