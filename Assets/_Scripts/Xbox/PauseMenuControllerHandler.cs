@@ -56,7 +56,6 @@ namespace Assets._Scripts.Xbox
         private Toggle ActiveGraphicsTabOptionToggle => GraphicTabOptions[_selectedGraphicsButtonIndex].GetComponentInChildren<Toggle>();
         private Image ActiveGraphicsTabOptionDropdownImage => GraphicTabOptions[_selectedGraphicsButtonIndex].FindDeepChild("Dropdown").GetComponent<Image>();
         private TMP_Dropdown ActiveGraphicsTabOptionDropdown => GraphicTabOptions[_selectedGraphicsButtonIndex].GetComponentInChildren<TMP_Dropdown>();
-        private int _graphicsOptionsCount;
 
         private Text ActiveSoundsTabOptionText => SoundTabOptions[_selectedSoundButtonIndex].GetComponentInChildren<Text>();
         private Outline ActiveSoundsTabOptionTextOutline => SoundTabOptions[_selectedSoundButtonIndex].GetComponentInChildren<Outline>();
@@ -72,7 +71,6 @@ namespace Assets._Scripts.Xbox
 
         void Start()
         {
-            _graphicsOptionsCount = GraphicTabOptions.Length;
 
             if (!GameSettings.Instance.IsXboxMode) return;
 
@@ -95,7 +93,6 @@ namespace Assets._Scripts.Xbox
 
 
             GraphicTabOptions = new[] { GraphicTabOptions[1], GraphicTabOptions[2] };
-            _graphicsOptionsCount = GraphicTabOptions.Length;
         }
 
         public void OnDisable()
@@ -275,7 +272,7 @@ namespace Assets._Scripts.Xbox
                 SetGraphicsTabHover(false);
 
                 var graphicsIncrement = pressedDirection.Input is DirectionInput.Up ? -1 : pressedDirection.Input is DirectionInput.Down ? 1 : 0;
-                _selectedGraphicsButtonIndex = (_selectedGraphicsButtonIndex + graphicsIncrement + _graphicsOptionsCount) % _graphicsOptionsCount;
+                _selectedGraphicsButtonIndex = (_selectedGraphicsButtonIndex + graphicsIncrement + GraphicTabOptions.Length) % GraphicTabOptions.Length;
 
                 SetGraphicsTabHover(true);
             }
@@ -297,14 +294,32 @@ namespace Assets._Scripts.Xbox
                     switch (_selectedGraphicsButtonIndex)
                     {
                         case 0:
-                            //Fullscreen
-                            UIGraphicsSettings.Instance.fullscreenToggle.isOn = !UIGraphicsSettings.Instance.fullscreenToggle.isOn;
+                            if (GameSettings.Instance.IsXboxMode)
+                            {
+                                //Show Grid
+                                PauseMenu.Instance.ShowGridToggle.isOn = !PauseMenu.Instance.ShowGridToggle.isOn;
+                            }
+                            else
+                            {
+                                //Fullscreen
+                                UIGraphicsSettings.Instance.fullscreenToggle.isOn = !UIGraphicsSettings.Instance.fullscreenToggle.isOn;
+                            }
+
                             break;
                         case 1:
-                            //Show Grid
-                            PauseMenu.Instance.ShowGridToggle.isOn = !PauseMenu.Instance.ShowGridToggle.isOn;
+                            if (GameSettings.Instance.IsXboxMode)
+                            {
+                                //Toggle Story
+                                UIGraphicsSettings.Instance.storyToggle.isOn = !UIGraphicsSettings.Instance.storyToggle.isOn;
+                            }
+                            else
+                            {
+                                //Show Grid
+                                PauseMenu.Instance.ShowGridToggle.isOn = !PauseMenu.Instance.ShowGridToggle.isOn;
+                            }
                             break;
                         case 2:
+                            //Toggle Story
                             UIGraphicsSettings.Instance.storyToggle.isOn = !UIGraphicsSettings.Instance.storyToggle.isOn;
                             break;
                         case 3:
