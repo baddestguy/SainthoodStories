@@ -686,14 +686,14 @@ public class InteractableHouse : InteractableObject
         int completedCounter = 1;
         foreach (var house in houses)
         {
-            if (house.AllObjectivesComplete || (house is InteractableChurch && InventoryManager.Instance.Collectibles.Count >= 66))
+            if (house.AllObjectivesComplete)
             {
                 completedCounter++;
             }
         }
 
         XboxUserHandler.Instance.UnlockAchievement("5", completedCounter * 100 / 6);
-        if(completedCounter == 6)
+        if(completedCounter >= 6)
         {
             SteamManager.Instance.UnlockAchievement("COMMUNION");
         }

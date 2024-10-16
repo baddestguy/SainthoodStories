@@ -161,7 +161,17 @@ public class MissionManager : MonoBehaviour
         FaithPointsPermanentlyLost = 0;
         GameManager.Instance.ScrambleMapTiles();
         GameManager.Instance.CurrentBuilding = "InteractableChurch";
-        SaveDataManager.Instance.SaveGame();
+
+        //if final mission, don't save (they can replay the last day if they quit the app at this point. And the save is getting wiped after this point anyway
+        //Also, force story mode to true so they must see the ending story even if they have the toggle off
+        if (oldMissionId == GameDataManager.MAX_MISSION_ID)
+        {
+            GameSettings.Instance.CustomEventsToggle = true;
+        }
+        else
+        {
+            SaveDataManager.Instance.SaveGame();
+        }
 
         //Wait for all xbox saves to catch up before going into the house
         if (GameSettings.Instance.IsXboxMode)
