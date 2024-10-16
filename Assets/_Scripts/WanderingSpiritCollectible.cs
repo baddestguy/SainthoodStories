@@ -61,6 +61,21 @@ public class WanderingSpiritCollectible : GridCollectibleItem
         }
     }
 
+    private void Update()
+    {
+        if (MyTween != null)
+        {
+            if (SacredItemPopup.IsOpen && MyTween.IsPlaying())
+            {
+                MyTween.Pause();
+            }
+            else if (!SacredItemPopup.IsOpen && !MyTween.IsPlaying())
+            {
+                MyTween.Play();
+            }
+        }
+    }
+
     public override void Collect()
     {
         if(Behaviour == SacredItemBehaviour.HARMLESS)
