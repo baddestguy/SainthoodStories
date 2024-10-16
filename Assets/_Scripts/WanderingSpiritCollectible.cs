@@ -146,9 +146,12 @@ public class WanderingSpiritCollectible : GridCollectibleItem
                 {
                     if (Mathf.FloorToInt((float)time / 0.25f) % 2 == 0)
                     {
-                        MyTile.TileType = TileType.ROAD;
-                        MyTile = GameManager.Instance.Player.GetCurrentTile();
-                        MyTween = transform.DOJump(MyTile.transform.position, 5f, 1, 5f);
+                        if (!InteractableHouse.InsideHouse)
+                        {
+                            MyTile.TileType = TileType.ROAD;
+                            MyTile = GameManager.Instance.Player.GetCurrentTile();
+                            MyTween = transform.DOJump(MyTile.transform.position, 5f, 1, 5f);
+                        }
                     }
                     else
                     {
@@ -197,18 +200,20 @@ public class WanderingSpiritCollectible : GridCollectibleItem
 
         var map = GameManager.Instance.Player.Map;
         AdjacentTiles = map.GetAdjacentTiles(MyTile);
-        var directions = AdjacentTiles.Keys.Where(d => AdjacentTiles[d].TileType != TileType.BUILDING);
+        var houses = GameManager.Instance.Houses;
+        var directions = AdjacentTiles.Keys.Where(d => !houses.Any(h=> h.CurrentGroundTile == AdjacentTiles[d]));
 
         if (!directions.Any()) return currentTile;
         
         var direction = directions.ToArray()[Random.Range(0, directions.Count() - 1)];
         currentTile = AdjacentTiles[direction];
-
-        while (currentTile.TileType != TileType.BUILDING)
+        var tempTile = currentTile;
+        while (!houses.Any(h => h.CurrentGroundTile == tempTile))
         {
+            currentTile = tempTile;
             AdjacentTiles = map.GetAdjacentTiles(currentTile);
             if (!AdjacentTiles.ContainsKey(direction)) break;
-            currentTile = AdjacentTiles[direction];
+            tempTile = AdjacentTiles[direction];
         }
 
         return currentTile;
