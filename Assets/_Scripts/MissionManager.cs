@@ -257,7 +257,7 @@ public class MissionManager : MonoBehaviour
                 bool hasAtLeastOneEnding = false;
                 foreach (var house in houses)
                 {
-                    if (house.AllObjectivesComplete || (house is InteractableChurch && InventoryManager.Instance.Collectibles.Count >= 66))
+                    if (house.AllObjectivesComplete)
                     {
                         hasAtLeastOneEnding = true;
                         EventsManager.Instance.AddEventToList(house.GetEndGameStory());
