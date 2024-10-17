@@ -614,6 +614,7 @@ public class Player : MonoBehaviour
         return Energy.Depleted();
     }
 
+    //This should definitely be renamed because 'true' actually means you CAN'T use energy
     public bool CanUseEnergy(int consumption)
     {
         return Energy.CanUseEnergy(consumption);

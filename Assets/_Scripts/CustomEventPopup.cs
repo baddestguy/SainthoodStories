@@ -63,12 +63,16 @@ public class CustomEventPopup : MonoBehaviour
         switch (customEvent.EventPopupType)
         {
             case EventPopupType.YESNO:
-                GameClock clock = GameManager.Instance.GameClock;
                 Player player = GameManager.Instance.Player;
 
-                GameClock c = new GameClock(clock.Time);
-                c.AddTicks(Mathf.Abs((int)customEvent.Cost));
-                TimeDisplay.text = c.TimeDisplay();
+                if (customEvent.Cost / 4 == 1)
+                {
+                    TimeDisplay.text = $"+{customEvent.Cost / 4}hr";
+                }
+                else
+                {
+                    TimeDisplay.text = $"+{customEvent.Cost / 4}hrs";
+                }
 
                 var moddedEnergy = player.ModifyEnergyConsumption(amount: EventData.EnergyCost);
                 EnergyDisplay.text = moddedEnergy == 0 ? "0" : moddedEnergy > 0 ? $"-{moddedEnergy}" : $"+{-moddedEnergy}";
@@ -115,6 +119,34 @@ public class CustomEventPopup : MonoBehaviour
         ButtonTimerTarget = 1f;
         SoundManager.Instance.PlayOneShotSfx("DialogOpen_SFX");
         GameplayControllerHandler.Instance.SetCurrentCustomEventPopup(this);
+    }
+
+    public void RefreshDisplayStats(bool hoverOnReject)
+    {
+        if(hoverOnReject)
+        {
+            TimeDisplay.text = $"0hrs";
+            EnergyDisplay.text = "0";
+            FPCPDisplay.text = $"{-(int)EventData.RejectionCost}";
+        }
+        else
+        {
+            Player player = GameManager.Instance.Player;
+
+            if (EventData.Cost / 4 == 1)
+            {
+                TimeDisplay.text = $"+{EventData.Cost / 4}hr";
+            }
+            else
+            {
+                TimeDisplay.text = $"+{EventData.Cost / 4}hrs";
+            }
+
+            var moddedEnergy = player.ModifyEnergyConsumption(amount: EventData.EnergyCost);
+            EnergyDisplay.text = moddedEnergy == 0 ? "0" : moddedEnergy > 0 ? $"-{moddedEnergy}" : $"+{-moddedEnergy}";
+
+            FPCPDisplay.text = $"+{EventData.Gain}";
+        }
     }
 
     public void Yes()
@@ -257,7 +289,14 @@ public class CustomEventPopup : MonoBehaviour
         }
         Player player = GameManager.Instance.Player;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: EventData.EnergyCost);
-        if (player.CanUseEnergy(moddedEnergy) || player.CurrentBuilding.BuildingState == BuildingState.RUBBLE) return;
+        if (player.CanUseEnergy(moddedEnergy) || player.CurrentBuilding.BuildingState == BuildingState.RUBBLE)
+        {
+            if (player.CanUseEnergy(moddedEnergy))
+            {
+                UI.Instance.ErrorFlash("Energy");
+            }
+            return;
+        }
 
         PointerDown = true;
         ChargeFx.SetActive(true);

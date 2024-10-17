@@ -63,15 +63,18 @@ public class TooltipMouseOver : MonoBehaviour
                 House = FindObjectOfType<InteractableMarket>();
                 break;
             case "RejectEvent":
-                if (GameManager.Instance.Player.CurrentBuilding.BuildingState == BuildingState.HAZARDOUS)
+                var customEventPopup = FindObjectOfType<CustomEventPopup>();
+                if(customEventPopup != null)
                 {
-                    Loc_Key = "Building will be destroyed";
+                    customEventPopup.RefreshDisplayStats(true);
                 }
-                var customEvent = FindObjectOfType<CustomEventPopup>().EventData;
-                if (customEvent.RewardType == CustomEventRewardType.FP)
-                    CustomToolStats = new TooltipStats() { CP = 0, Energy = 0, FP = -(int)customEvent.RejectionCost, Ticks = 0 };
-                else
-                    CustomToolStats = new TooltipStats() { CP = -(int)customEvent.RejectionCost, Energy = 0, FP = 0, Ticks = 0 };
+                break;
+            case "AcceptEvent":
+                var customEventPopup2 = FindObjectOfType<CustomEventPopup>();
+                if (customEventPopup2 != null)
+                {
+                    customEventPopup2.RefreshDisplayStats(false);
+                }
                 break;
         }
 
