@@ -299,7 +299,7 @@ public class Player : MonoBehaviour
                 if (!InventoryManager.Instance.HasProvision(Provision.UMBRELLA))
                 {
                     WeatherStatusCounter++;
-                    if (WeatherStatusCounter >= 3)
+                    if (WeatherStatusCounter >= 6)
                     {
                         if (Random.Range(0, 100) < 30)
                         {
@@ -314,7 +314,7 @@ public class Player : MonoBehaviour
                 if (!InventoryManager.Instance.HasProvision(Provision.WINTER_CLOAK))
                 {
                     WeatherStatusCounter++;
-                    if (WeatherStatusCounter >= 3)
+                    if (WeatherStatusCounter >= 6)
                     {
                         if (Random.Range(0, 100) < 30)
                         {
@@ -382,6 +382,12 @@ public class Player : MonoBehaviour
             }
             else
             {
+                if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
+                {
+                    TryUnfreeze(iTile.CurrentGroundTile);
+                    return;
+                }
+
                 TileDance(iTile);
             }
         }
@@ -391,20 +397,7 @@ public class Player : MonoBehaviour
             {
                 if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
                 {
-                    FrozenCounter--;
-                    Energy.Consume(ModifyEnergyConsumption(newTile));
-                    if (FrozenCounter <= 0)
-                    {
-                        FrozenCounter = 3;
-                        StatusEffects.Remove(PlayerStatusEffect.FROZEN);
-                        AddRandomAilment();
-                        SnowSplash.Play();
-                    }
-                    FrozenFx.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.3f);
-
-                    ApplyStatusEffect();
-
-                    GameManager.Instance.PassTime();
+                    TryUnfreeze(newTile);
                     return;
                 }
 
@@ -424,6 +417,24 @@ public class Player : MonoBehaviour
                 TileDance(newTile);
             }
         }
+    }
+
+    private void TryUnfreeze(MapTile newTile)
+    {
+        FrozenCounter--;
+        Energy.Consume(ModifyEnergyConsumption(newTile));
+        if (FrozenCounter <= 0)
+        {
+            FrozenCounter = 3;
+            StatusEffects.Remove(PlayerStatusEffect.FROZEN);
+            AddRandomAilment();
+            SnowSplash.Play();
+        }
+        FrozenFx.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.3f);
+
+        ApplyStatusEffect();
+
+        GameManager.Instance.PassTime();
     }
 
     private IEnumerator WaitThenDisappear(InteractableObject iTile, bool passTime)
