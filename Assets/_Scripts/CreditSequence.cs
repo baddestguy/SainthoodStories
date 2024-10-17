@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets._Scripts.Helpers;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -79,7 +80,7 @@ public class CreditSequence : MonoBehaviour
     public void LoadNames()
     {
         TextAsset csvFile = Resources.Load<TextAsset>("GameData/KSBackers");
-        var x = CSVSerializer.Deserialize<KSBackers>(csvFile.text);
+        var x = CsvSerializer.Deserialize<KSBackers>(csvFile.text);
         NameList = x.ToList();
     }
 

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets._Scripts.Helpers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -58,7 +58,8 @@ public class GameDataManager : MonoBehaviour
     {
         //Custom Events
         TextAsset csvFile = Resources.Load<TextAsset>("GameData/CustomEvents");
-        var customEvents = CSVSerializer.Deserialize<CustomEventData>(csvFile.text);
+        var customEvents = CsvSerializer.Deserialize<CustomEventData>(csvFile.text);
+
         foreach (var ev in customEvents)
         {
             if (CustomEventData.ContainsKey(ev.Id))
@@ -75,7 +76,8 @@ public class GameDataManager : MonoBehaviour
 
         //Constants
         csvFile = Resources.Load<TextAsset>("GameData/Constants");
-        var constData = CSVSerializer.Deserialize<ConstantsData>(csvFile.text);
+        var constData = CsvSerializer.Deserialize<ConstantsData>(csvFile.text);
+
         foreach (var con in constData)
         {
             Constants.Add(con.Id, con);
@@ -85,7 +87,8 @@ public class GameDataManager : MonoBehaviour
 
         //Localization
         csvFile = Resources.Load<TextAsset>("GameData/Localization");
-        var locData = CSVSerializer.Deserialize<LocalizationData>(csvFile.text);
+        var locData = CsvSerializer.Deserialize<LocalizationData>(csvFile.text);
+
         foreach (var loc in locData)
         {
             if (LocalizationData.ContainsKey(loc.Key))
@@ -102,7 +105,8 @@ public class GameDataManager : MonoBehaviour
 
         //Provisions
         csvFile = Resources.Load<TextAsset>("GameData/Provisions");
-        var provData = CSVSerializer.Deserialize<ProvisionData>(csvFile.text);
+        var provData = CsvSerializer.Deserialize<ProvisionData>(csvFile.text);
+
         foreach (var prov in provData)
         {
             if (ProvisionData.ContainsKey(prov.Id))
@@ -119,7 +123,8 @@ public class GameDataManager : MonoBehaviour
 
         //ShopItems
         csvFile = Resources.Load<TextAsset>("GameData/ShopItems");
-        var shopData = CSVSerializer.Deserialize<ShopItemData>(csvFile.text);
+        var shopData = CsvSerializer.Deserialize<ShopItemData>(csvFile.text);
+
         foreach (var item in shopData)
         {
             ShopItemData.Add(item.Id, item);
@@ -129,7 +134,8 @@ public class GameDataManager : MonoBehaviour
 
         //Construction Availability
         csvFile = Resources.Load<TextAsset>("GameData/ConstructionAvailability");
-        var availData = CSVSerializer.Deserialize<ConstructionAvailabilityData>(csvFile.text);
+        var availData = CsvSerializer.Deserialize<ConstructionAvailabilityData>(csvFile.text);
+
         foreach (var item in availData)
         {
             ConstructionAvailability.Add(item.Id, item);
@@ -139,7 +145,8 @@ public class GameDataManager : MonoBehaviour
 
         //Story Events 
         csvFile = Resources.Load<TextAsset>("GameData/StoryEvents");
-        var storyData = CSVSerializer.Deserialize<StoryEventData>(csvFile.text);
+        var storyData = CsvSerializer.Deserialize<StoryEventData>(csvFile.text);
+
         foreach (var item in storyData)
         {
             StoryEventData.Add(item.Id, item);
@@ -149,7 +156,8 @@ public class GameDataManager : MonoBehaviour
 
         //Building Missions
         csvFile = Resources.Load<TextAsset>("GameData/BuildingMissions");
-        var missionData = CSVSerializer.Deserialize<BuildingMissionData>(csvFile.text);
+        var missionData = CsvSerializer.Deserialize<BuildingMissionData>(csvFile.text);
+
         foreach (var item in missionData)
         {
             if (BuildingMissionData.ContainsKey(item.InteractableHouse))
@@ -166,7 +174,8 @@ public class GameDataManager : MonoBehaviour
 
         //Objectives
         csvFile = Resources.Load<TextAsset>("GameData/Objectives");
-        var objData = CSVSerializer.Deserialize<ObjectivesData>(csvFile.text);
+        var objData = CsvSerializer.Deserialize<ObjectivesData>(csvFile.text);
+
         foreach (var item in objData)
         {
             if (ObjectivesData.ContainsKey(item.Id))
@@ -181,7 +190,8 @@ public class GameDataManager : MonoBehaviour
 
         //House Objectives
         csvFile = Resources.Load<TextAsset>("GameData/HouseObjectives");
-        var houseObjData = CSVSerializer.Deserialize<HouseObjectivesData>(csvFile.text);
+        var houseObjData = CsvSerializer.Deserialize<HouseObjectivesData>(csvFile.text);
+
         foreach (var item in houseObjData)
         {
             if (HouseObjectivesData.ContainsKey(item.House))
@@ -198,7 +208,8 @@ public class GameDataManager : MonoBehaviour
 
         //Collectible Objectives
         csvFile = Resources.Load<TextAsset>("GameData/CollectibleObjectives");
-        var colObjData = CSVSerializer.Deserialize<CollectibleObjectivesData>(csvFile.text);
+        var colObjData = CsvSerializer.Deserialize<CollectibleObjectivesData>(csvFile.text);
+
         foreach (var item in colObjData)
         {
             if (CollectibleObjectivesData.ContainsKey(item.Id))
@@ -215,7 +226,8 @@ public class GameDataManager : MonoBehaviour
 
         //Collectibles
         csvFile = Resources.Load<TextAsset>("GameData/Collectibles");
-        var colData = CSVSerializer.Deserialize<CollectibleData>(csvFile.text);
+        var colData = CsvSerializer.Deserialize<CollectibleData>(csvFile.text);
+
         foreach (var item in colData)
         {
             if (CollectibleData.ContainsKey(item.Id))
@@ -232,7 +244,8 @@ public class GameDataManager : MonoBehaviour
 
         //Weather Data
         csvFile = Resources.Load<TextAsset>("GameData/WeatherData");
-        var weatherData = CSVSerializer.Deserialize<WeatherData>(csvFile.text);
+        var weatherData = CsvSerializer.Deserialize<WeatherData>(csvFile.text);
+
         foreach (var item in weatherData)
         {
             WeatherData.Add(item);
@@ -242,7 +255,8 @@ public class GameDataManager : MonoBehaviour
 
         //Saints
         csvFile = Resources.Load<TextAsset>("GameData/Saints");
-        var saintData = CSVSerializer.Deserialize<SaintData>(csvFile.text);
+        var saintData = CsvSerializer.Deserialize<SaintData>(csvFile.text);
+
         foreach (var item in saintData)
         {
             Saints.Add(item.Id, item);
@@ -252,7 +266,8 @@ public class GameDataManager : MonoBehaviour
 
         //Status Effects
         csvFile = Resources.Load<TextAsset>("GameData/StatusEffects");
-        var statusData = CSVSerializer.Deserialize<StatusEffectData>(csvFile.text);
+        var statusData = CsvSerializer.Deserialize<StatusEffectData>(csvFile.text);
+
         foreach (var status in statusData)
         {
             if (StatusEffectData.ContainsKey(status.Id))
@@ -269,7 +284,8 @@ public class GameDataManager : MonoBehaviour
 
         //Tooltips
         csvFile = Resources.Load<TextAsset>("GameData/Tooltips");
-        var tips = CSVSerializer.Deserialize<TooltipStats>(csvFile.text);
+        var tips = CsvSerializer.Deserialize<TooltipStats>(csvFile.text);
+
         foreach (var item in tips)
         {
             ToolTips.Add(item.Id, item);
@@ -279,7 +295,8 @@ public class GameDataManager : MonoBehaviour
 
         //Minigames
         csvFile = Resources.Load<TextAsset>("GameData/Minigames");
-        var games = CSVSerializer.Deserialize<MinigameData>(csvFile.text);
+        var games = CsvSerializer.Deserialize<MinigameData>(csvFile.text);
+
         foreach (var item in games)
         {
             MinigameData.Add(item.Id, item);

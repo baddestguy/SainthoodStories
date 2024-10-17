@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CsvHelper.Configuration.Attributes;
 using UnityEngine;
 
 public class DataClasses : MonoBehaviour
@@ -16,33 +17,33 @@ public enum MinigameType
 
 public enum SaintID
 {
-     NONE = 0
-    ,ANDREW
-    ,ANN
-    ,BAKHITA
-    ,CANUTE
-    ,ELIZABETH
-    ,FRANCOIS
-    ,FREDERICK
-    ,FREI
-    ,IRMA
-    ,JADWIGA
-    ,JOHN
-    ,JOSE
-    ,JOSEPH
-    ,KATERI
-    ,KATHARINE
-    ,LORENZO
-    ,MAGDALENE
-    ,MARIAM
-    ,MARIE
-    ,MONICA
-    ,MOSES
-    ,PEDRO
-    ,ROQUE
-    ,SANMARTIN
-    ,VICTOR
-}   
+    NONE = 0
+    , ANDREW
+    , ANN
+    , BAKHITA
+    , CANUTE
+    , ELIZABETH
+    , FRANCOIS
+    , FREDERICK
+    , FREI
+    , IRMA
+    , JADWIGA
+    , JOHN
+    , JOSE
+    , JOSEPH
+    , KATERI
+    , KATHARINE
+    , LORENZO
+    , MAGDALENE
+    , MARIAM
+    , MARIE
+    , MONICA
+    , MOSES
+    , PEDRO
+    , ROQUE
+    , SANMARTIN
+    , VICTOR
+}
 
 public enum WeatherId
 {
@@ -204,25 +205,25 @@ public enum Provision
     DISCOUNT_CARD,
     ALLOWANCE,
     CONSTRUCTION_TOOLS
-    ,CONSTRUCTION_TENTS
-    ,CHAPEL_BLUEPRINT
-    ,BUILDING_BLUEPRINT,
+    , CONSTRUCTION_TENTS
+    , CHAPEL_BLUEPRINT
+    , BUILDING_BLUEPRINT,
     HOSPITAL_RELATIONSHIP_BUILDER,
     SCHOOL_RELATIONSHIP_BUILDER,
     ORPHANAGE_RELATIONSHIP_BUILDER,
     SHELTER_RELATIONSHIP_BUILDER
-    ,SOFT_MATTRESS
-    ,REDUCE_SLEEP_TIME
-    ,FASTING
-    ,KOBOKO
-    ,INCENSE
-    ,SECURITY_GUARDS
-    ,STURDY_BUILDING_MATERIALS
-    ,MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
-    ,SHADES
-    ,KITCHEN_RELATIONSHIP_BUILDER
-    ,EXTRA_INVENTORY 
-    ,AUTO_DELIVER
+    , SOFT_MATTRESS
+    , REDUCE_SLEEP_TIME
+    , FASTING
+    , KOBOKO
+    , INCENSE
+    , SECURITY_GUARDS
+    , STURDY_BUILDING_MATERIALS
+    , MAX_COUNT      //Anything below Max_Count will not be obtained during gameplay. Keep the broken provisions here!
+    , SHADES
+    , KITCHEN_RELATIONSHIP_BUILDER
+    , EXTRA_INVENTORY
+    , AUTO_DELIVER
 }
 
 public enum HouseType
@@ -264,11 +265,11 @@ public enum EventGroup
     KITCHEN,
     SHELTER,
     CLOTHES
-    ,SAVE_HOSPITAL
-    ,SAVE_SCHOOL
-    ,SAVE_ORPHANAGE
-    ,SAVE_KITCHEN
-    ,SAVE_SHELTER
+    , SAVE_HOSPITAL
+    , SAVE_SCHOOL
+    , SAVE_ORPHANAGE
+    , SAVE_KITCHEN
+    , SAVE_SHELTER
 }
 
 public enum Language
@@ -336,33 +337,36 @@ public class HouseSaveData
 
 public class TooltipStats
 {
-    public TooltipStatId Id;
-    public double Ticks;
-    public int FP;
-    public int CP;
-    public int Energy;
-    public int Spirits;
-    public int Coin;
-    public int RP;
+    public TooltipStatId Id {get; set; }
+    public double Ticks {get; set; }
+    public int FP {get; set; }
+    public int CP {get; set; }
+    public int Energy {get; set; }
+    [Optional]
+    public int Spirits {get; set; }
+    [Optional]
+    public int Coin {get; set; }
+    [Optional]
+    public int RP {get; set; }
 }
 
 [System.Serializable]
 public class WeatherData
 {
-    public int Week;
-    public int Day;
-    public double Time;
-    public double StartTime;
-    public double Duration;
+    public int Week {get; set; }
+    public int Day {get; set; }
+    public double Time {get; set; }
+    public double StartTime {get; set; }
+    public double Duration {get; set; }
 }
 
 [System.Serializable]
 public class CollectibleData : IComparable<CollectibleData>
 {
-    public string Id;
-    public string Name;
-    public string Description;
-    public int SortOrder;
+    public string Id {get; set; }
+    public string Name {get; set; }
+    public string Description {get; set; }
+    public int SortOrder {get; set; }
 
     public int CompareTo(CollectibleData compareCollectible)
     {
@@ -377,23 +381,23 @@ public class CollectibleData : IComparable<CollectibleData>
 [System.Serializable]
 public class CollectibleObjectivesData
 {
-    public int Id;
-    public int Amount;
-    public CustomEventType OnComplete;
+    public int Id {get; set; }
+    public int Amount {get; set; }
+    public CustomEventType OnComplete {get; set; }
 }
 
 [System.Serializable]
 public class HouseObjectivesData
 {
-    public string House;
-    public int MissionId;
-    public BuildingEventType Event;
-    public int RequiredAmount;
-    public CustomEventType CustomEventId;
-    public CustomEventType ThankYouEvent;
-    public CustomEventType SpecialEventId;
-    public int Reward;
-    public string MissionDescription;
+    public string House {get; set; }
+    public int MissionId {get; set; }
+    public BuildingEventType Event {get; set; }
+    public int RequiredAmount {get; set; }
+    public CustomEventType CustomEventId {get; set; }
+    public CustomEventType ThankYouEvent {get; set; }
+    public CustomEventType SpecialEventId {get; set; }
+    public int Reward {get; set; }
+    public string MissionDescription {get; set; }
 
     public override bool Equals(object obj)
     {
@@ -427,11 +431,11 @@ public class HouseObjectivesData
 [System.Serializable]
 public class ObjectivesData
 {
-    public int Id;
-    public CustomEventType CustomEventId;
-    public CustomEventType DailyEvent;
-    public int WeatherId;
-    public Season Season;
+    public int Id {get; set; }
+    public CustomEventType CustomEventId {get; set; }
+    public CustomEventType DailyEvent {get; set; }
+    public int WeatherId {get; set; }
+    public Season Season {get; set; }
 
     public override bool Equals(object obj)
     {
@@ -442,7 +446,7 @@ public class ObjectivesData
 
         ObjectivesData other = (ObjectivesData)obj;
         return Id == other.Id && CustomEventId == other.CustomEventId
-            && WeatherId == other.WeatherId && Season == other.Season;
+                              && WeatherId == other.WeatherId && Season == other.Season;
     }
 
     public override int GetHashCode()
@@ -462,22 +466,23 @@ public class ObjectivesData
 [System.Serializable]
 public class BuildingMissionData
 {
-    public int Week;
-    public int Day;
-    public double Time;
-    public int RequiredItems;
-    public double DeadlineHours;
-    public BuildingEventType Event;
-    public string InteractableHouse;
+    public int Week {get; set; }
+    public int Day {get; set; }
+    public double Time {get; set; }
+    public int RequiredItems {get; set; }
+    public double DeadlineHours {get; set; }
+    public BuildingEventType Event {get; set; }
+    public string InteractableHouse {get; set; }
 }
+
 
 [System.Serializable]
 public class ShopItemData
 {
-    public ItemType Id;
-    public double Price;
-    public string NameKey;
-    public string DescriptionKey;
+    public ItemType Id {get; set; }
+    public double Price {get; set; }
+    public string NameKey {get; set; }
+    public string DescriptionKey {get; set; }
 
     public static string HouseNameForItemType(ItemType item)
     {
@@ -502,111 +507,115 @@ public class ShopItemData
 [System.Serializable]
 public class ProvisionData
 {
-    public Provision Id;
-    public int Level;
-    public int Value;
-    public int Time;
-    public int Ticks;
-    public int Energy;
-    public int FP;
-    public int CP;
-    public int Coin;
-    public int Spirits;
-    public string NameKey;
-    public string DescriptionKey;
-    public string Tooltips;
+    public Provision Id {get; set; }
+    public int Level {get; set; }
+    public int Value {get; set; }
+    public int Time {get; set; }
+    public int Ticks {get; set; }
+    public int Energy {get; set; }
+    public int FP {get; set; }
+    public int CP {get; set; }
+    public int Coin {get; set; }
+    public int Spirits {get; set; }
+    public string NameKey {get; set; }
+    public string DescriptionKey {get; set; }
+    public string Tooltips {get; set; }
 }
 
 [System.Serializable]
 public class StatusEffectData
 {
-    public PlayerStatusEffect Id;
-    public string NameKey;
-    public string DescriptionKey;
-    public string Tooltips;
+    public PlayerStatusEffect Id {get; set; }
+    public string NameKey {get; set; }
+    public string DescriptionKey {get; set; }
+    public string Tooltips {get; set; }
 }
 
 [System.Serializable]
 public class ConstantsData
 {
-    public string Id;
-    public int IntValue;
-    public float FloatValue;
+    public string Id {get; set; }
+    public int IntValue {get; set; }
+    public float FloatValue {get; set; }
 }
 
 [System.Serializable]
 public class CustomEventData
 {
-    public CustomEventType Id;
-    public EventPopupType EventPopupType;
-    public EventGroup EventGroup;
-    public int Weight;
-    public float Cost;
-    public int EnergyCost;
-    public float Gain;
-    public CustomEventRewardType RewardType;
-    public float RejectionCost;
-    public bool IsOrderedSequence;
-    public string TriggerWeekDay;
-    public string ImagePath;
-    public string LocalizationKey;
-    public string LinkTo;
+    public CustomEventType Id { get; set; }
+    public EventPopupType EventPopupType { get; set; }
+    public EventGroup EventGroup { get; set; }
+    public int Weight { get; set; }
+    public float Cost { get; set; }
+    public int EnergyCost { get; set; }
+    public float Gain { get; set; }
+    public CustomEventRewardType RewardType { get; set; }
+    public float RejectionCost { get; set; }
+    public bool IsOrderedSequence { get; set; }
+    public string TriggerWeekDay { get; set; }
+    public string ImagePath { get; set; }
+    public string LocalizationKey { get; set; }
+    public string LinkTo { get; set; }
 }
 
 [System.Serializable]
 public class StoryEventData
 {
-    public string Id;
-    public EventGroup EventGroup = EventGroup.STORY;
-    public int Week;
-    public int Day;
-    public double Time;
-    public string ImagePath;
-    public bool IsOrderedSequence;
-    public int OrderBy;
+    public string Id {get; set; }
+    [Optional]
+    public EventGroup EventGroup { get; set; } = EventGroup.STORY;
+    public int Week {get; set; }
+    public int Day {get; set; }
+    public double Time {get; set; }
+    public string ImagePath {get; set; }
+    public bool IsOrderedSequence {get; set; }
+    public int OrderBy {get; set; }
 }
 
 [System.Serializable]
 public class LocalizationData
 {
-    public string Key;
-    public string English;
-    public string French;
-    public string BrPt;
-    public string Filipino;
-    public string LatAmSpanish;
-    public string Italian;
-    public string German;
+    public string Key {get; set; }
+    public string English {get; set; }
+    public string French {get; set; }
+    public string BrPt {get; set; }
+    public string Filipino {get; set; }
+    public string LatAmSpanish {get; set; }
+    public string Italian {get; set; }
+    public string German {get; set; }
 }
+
 
 [System.Serializable]
 public class ConstructionAvailabilityData
 {
-    public string Id;
-    public int Week;
-    public int Day;
-    public double Time;
+    public string Id {get; set; }
+    public int Week {get; set; }
+    public int Day {get; set; }
+    public double Time {get; set; }
 }
+
 
 [System.Serializable]
 public class SaintData
 {
-    public SaintID Id;
-    public string Name;
-    public string Birthday;
-    public string Death;
-    public string FeastDay;
-    public string PatronKey;
-    public string BioKey;
-    public string IconPath;
+    public SaintID Id {get; set; }
+    public string Name {get; set; }
+    public string Birthday {get; set; }
+    public string Death {get; set; }
+    public string FeastDay {get; set; }
+    public string PatronKey {get; set; }
+    public string BioKey {get; set; }
+    public string IconPath {get; set; }
 }
+
 
 [System.Serializable]
 public class MinigameData
 {
-    public MinigameType Id;
-    public string IconPath;
-    public int Sequences;
+    public MinigameType Id {get; set; }
+    public string IconPath {get; set; }
+    public int Sequences {get; set; }
 }
 
 public class TileData
@@ -885,204 +894,204 @@ public enum CustomEventType
     , MISSION_24
     , MISSION_25
     , MISSION_26
-    ,MISSION_27
-    ,MISSION_28
-    ,MISSION_29
-    ,MISSION_30
-    ,MISSION_31
-    ,MISSION_32
-    ,MISSION_33
-    ,MISSION_34
-    ,MISSION_35
-    ,MISSION_36
-    ,MISSION_37
-    ,MISSION_38
-    ,MISSION_39
-    ,MISSION_40
-    ,HOSPITAL_MISSION_1
-    ,HOSPITAL_MISSION_2
-    ,HOSPITAL_MISSION_3
-    ,HOSPITAL_MISSION_4
-    ,HOSPITAL_MISSION_5
-    ,HOSPITAL_MISSION_6
-    ,HOSPITAL_MISSION_7
-    ,HOSPITAL_MISSION_8
-    ,HOSPITAL_MISSION_9
-    ,HOSPITAL_MISSION_10
-    ,HOSPITAL_MISSION_11
-    ,HOSPITAL_MISSION_12
-    ,HOSPITAL_MISSION_13
-    ,HOSPITAL_MISSION_14
-    ,HOSPITAL_MISSION_15
-    ,ORPHANAGE_MISSION_1
-    ,ORPHANAGE_MISSION_2
-    ,ORPHANAGE_MISSION_3
-    ,ORPHANAGE_MISSION_4
-    ,ORPHANAGE_MISSION_5
-    ,ORPHANAGE_MISSION_6
-    ,ORPHANAGE_MISSION_7
-    ,ORPHANAGE_MISSION_8
-    ,ORPHANAGE_MISSION_9
-    ,ORPHANAGE_MISSION_10
-    ,ORPHANAGE_MISSION_11
-    ,ORPHANAGE_MISSION_12
-    ,ORPHANAGE_MISSION_13
-    ,ORPHANAGE_MISSION_14
-    ,ORPHANAGE_MISSION_15
-    ,SCHOOL_MISSION_1
-    ,SCHOOL_MISSION_2
-    ,SCHOOL_MISSION_3
-    ,SCHOOL_MISSION_4
-    ,SCHOOL_MISSION_5
-    ,SCHOOL_MISSION_6
-    ,SCHOOL_MISSION_7
-    ,SCHOOL_MISSION_8
-    ,SCHOOL_MISSION_9
-    ,SCHOOL_MISSION_10
-    ,SCHOOL_MISSION_11
-    ,SCHOOL_MISSION_12
-    ,SCHOOL_MISSION_13
-    ,SCHOOL_MISSION_14
-    ,SCHOOL_MISSION_15
-    ,SHELTER_MISSION_1
-    ,SHELTER_MISSION_2
-    ,SHELTER_MISSION_3
-    ,SHELTER_MISSION_4
-    ,SHELTER_MISSION_5
-    ,SHELTER_MISSION_6
-    ,SHELTER_MISSION_7
-    ,SHELTER_MISSION_8
-    ,SHELTER_MISSION_9
-    ,SHELTER_MISSION_10
-    ,SHELTER_MISSION_11
-    ,SHELTER_MISSION_12
-    ,SHELTER_MISSION_13
-    ,SHELTER_MISSION_14
-    ,SHELTER_MISSION_15
-    ,KITCHEN_MISSION_1
-    ,KITCHEN_MISSION_2
-    ,KITCHEN_MISSION_3
-    ,KITCHEN_MISSION_4
-    ,KITCHEN_MISSION_5
-    ,KITCHEN_MISSION_6
-    ,KITCHEN_MISSION_7
-    ,KITCHEN_MISSION_8
-    ,KITCHEN_MISSION_9
-    ,KITCHEN_MISSION_10
-    ,KITCHEN_MISSION_11
-    ,KITCHEN_MISSION_12
-    ,KITCHEN_MISSION_13
-    ,KITCHEN_MISSION_14
-    ,KITCHEN_MISSION_15
-    ,CHURCH_MISSION_1
-    ,CHURCH_MISSION_2
-    ,CHURCH_MISSION_3
-    ,CHURCH_MISSION_4
-    ,CHURCH_MISSION_5
-    ,CHURCH_MISSION_6
-    ,CHURCH_MISSION_7
-    ,CHURCH_MISSION_8
-    ,CHURCH_MISSION_9
-    ,CHURCH_MISSION_10
-    ,CHURCH_MISSION_11
-    ,CHURCH_MISSION_12
-    ,CHURCH_MISSION_13
-    ,CHURCH_MISSION_14
-    ,CHURCH_MISSION_15
-    ,THANKYOU_HOSPITAL_1
-    ,THANKYOU_HOSPITAL_2
-    ,THANKYOU_HOSPITAL_3
-    ,THANKYOU_HOSPITAL_4
-    ,THANKYOU_HOSPITAL_5
-    ,THANKYOU_HOSPITAL_6
-    ,THANKYOU_HOSPITAL_7
-    ,THANKYOU_HOSPITAL_8
-    ,THANKYOU_HOSPITAL_9
-    ,THANKYOU_HOSPITAL_10
-    ,THANKYOU_HOSPITAL_11
-    ,THANKYOU_HOSPITAL_12
-    ,THANKYOU_HOSPITAL_13
-    ,THANKYOU_HOSPITAL_14
-    ,THANKYOU_ORPHANAGE_1
-    ,THANKYOU_ORPHANAGE_2
-    ,THANKYOU_ORPHANAGE_3
-    ,THANKYOU_ORPHANAGE_4
-    ,THANKYOU_ORPHANAGE_5
-    ,THANKYOU_ORPHANAGE_6
-    ,THANKYOU_ORPHANAGE_7
-    ,THANKYOU_ORPHANAGE_8
-    ,THANKYOU_ORPHANAGE_9
-    ,THANKYOU_ORPHANAGE_10
-    ,THANKYOU_ORPHANAGE_11
-    ,THANKYOU_ORPHANAGE_12
-    ,THANKYOU_ORPHANAGE_13
-    ,THANKYOU_ORPHANAGE_14
-    ,THANKYOU_SCHOOL_1
-    ,THANKYOU_SCHOOL_2
-    ,THANKYOU_SCHOOL_3
-    ,THANKYOU_SCHOOL_4
-    ,THANKYOU_SCHOOL_5
-    ,THANKYOU_SCHOOL_6
-    ,THANKYOU_SCHOOL_7
-    ,THANKYOU_SCHOOL_8
-    ,THANKYOU_SCHOOL_9
-    ,THANKYOU_SCHOOL_10
-    ,THANKYOU_SCHOOL_11
-    ,THANKYOU_SCHOOL_12
-    ,THANKYOU_SCHOOL_13
-    ,THANKYOU_SCHOOL_14
-    ,THANKYOU_SHELTER_1
-    ,THANKYOU_SHELTER_2
-    ,THANKYOU_SHELTER_3
-    ,THANKYOU_SHELTER_4
-    ,THANKYOU_SHELTER_5
-    ,THANKYOU_SHELTER_6
-    ,THANKYOU_SHELTER_7
-    ,THANKYOU_SHELTER_8
-    ,THANKYOU_SHELTER_9
-    ,THANKYOU_SHELTER_10
-    ,THANKYOU_SHELTER_11
-    ,THANKYOU_SHELTER_12
-    ,THANKYOU_SHELTER_13
-    ,THANKYOU_SHELTER_14
-    ,THANKYOU_COOK_1
-    ,THANKYOU_COOK_2
-    ,THANKYOU_COOK_3
-    ,THANKYOU_COOK_4
-    ,THANKYOU_COOK_5
-    ,THANKYOU_COOK_6
-    ,THANKYOU_COOK_7
-    ,THANKYOU_COOK_8
-    ,THANKYOU_COOK_9
-    ,THANKYOU_COOK_10
-    ,THANKYOU_COOK_11
-    ,THANKYOU_COOK_12
-    ,THANKYOU_COOK_13
-    ,THANKYOU_COOK_14
-    ,THANKYOU_CHURCH_1
-    ,THANKYOU_CHURCH_2
-    ,THANKYOU_CHURCH_3
-    ,THANKYOU_CHURCH_4
-    ,THANKYOU_CHURCH_5
-    ,THANKYOU_CHURCH_6
-    ,THANKYOU_CHURCH_7
-    ,THANKYOU_CHURCH_8
-    ,THANKYOU_CHURCH_9
-    ,THANKYOU_CHURCH_10
-    ,THANKYOU_CHURCH_11
-    ,THANKYOU_CHURCH_12
-    ,THANKYOU_CHURCH_13
-    ,THANKYOU_CHURCH_14
-    ,THANKYOU_CHURCH_15
-    ,BLOOD_DONATION
-    ,HEALTH_INSPECTION
-    ,NEW_TUTORIAL_1
-    ,NEW_TUTORIAL_2
-    ,NEW_TUTORIAL_3
+    , MISSION_27
+    , MISSION_28
+    , MISSION_29
+    , MISSION_30
+    , MISSION_31
+    , MISSION_32
+    , MISSION_33
+    , MISSION_34
+    , MISSION_35
+    , MISSION_36
+    , MISSION_37
+    , MISSION_38
+    , MISSION_39
+    , MISSION_40
+    , HOSPITAL_MISSION_1
+    , HOSPITAL_MISSION_2
+    , HOSPITAL_MISSION_3
+    , HOSPITAL_MISSION_4
+    , HOSPITAL_MISSION_5
+    , HOSPITAL_MISSION_6
+    , HOSPITAL_MISSION_7
+    , HOSPITAL_MISSION_8
+    , HOSPITAL_MISSION_9
+    , HOSPITAL_MISSION_10
+    , HOSPITAL_MISSION_11
+    , HOSPITAL_MISSION_12
+    , HOSPITAL_MISSION_13
+    , HOSPITAL_MISSION_14
+    , HOSPITAL_MISSION_15
+    , ORPHANAGE_MISSION_1
+    , ORPHANAGE_MISSION_2
+    , ORPHANAGE_MISSION_3
+    , ORPHANAGE_MISSION_4
+    , ORPHANAGE_MISSION_5
+    , ORPHANAGE_MISSION_6
+    , ORPHANAGE_MISSION_7
+    , ORPHANAGE_MISSION_8
+    , ORPHANAGE_MISSION_9
+    , ORPHANAGE_MISSION_10
+    , ORPHANAGE_MISSION_11
+    , ORPHANAGE_MISSION_12
+    , ORPHANAGE_MISSION_13
+    , ORPHANAGE_MISSION_14
+    , ORPHANAGE_MISSION_15
+    , SCHOOL_MISSION_1
+    , SCHOOL_MISSION_2
+    , SCHOOL_MISSION_3
+    , SCHOOL_MISSION_4
+    , SCHOOL_MISSION_5
+    , SCHOOL_MISSION_6
+    , SCHOOL_MISSION_7
+    , SCHOOL_MISSION_8
+    , SCHOOL_MISSION_9
+    , SCHOOL_MISSION_10
+    , SCHOOL_MISSION_11
+    , SCHOOL_MISSION_12
+    , SCHOOL_MISSION_13
+    , SCHOOL_MISSION_14
+    , SCHOOL_MISSION_15
+    , SHELTER_MISSION_1
+    , SHELTER_MISSION_2
+    , SHELTER_MISSION_3
+    , SHELTER_MISSION_4
+    , SHELTER_MISSION_5
+    , SHELTER_MISSION_6
+    , SHELTER_MISSION_7
+    , SHELTER_MISSION_8
+    , SHELTER_MISSION_9
+    , SHELTER_MISSION_10
+    , SHELTER_MISSION_11
+    , SHELTER_MISSION_12
+    , SHELTER_MISSION_13
+    , SHELTER_MISSION_14
+    , SHELTER_MISSION_15
+    , KITCHEN_MISSION_1
+    , KITCHEN_MISSION_2
+    , KITCHEN_MISSION_3
+    , KITCHEN_MISSION_4
+    , KITCHEN_MISSION_5
+    , KITCHEN_MISSION_6
+    , KITCHEN_MISSION_7
+    , KITCHEN_MISSION_8
+    , KITCHEN_MISSION_9
+    , KITCHEN_MISSION_10
+    , KITCHEN_MISSION_11
+    , KITCHEN_MISSION_12
+    , KITCHEN_MISSION_13
+    , KITCHEN_MISSION_14
+    , KITCHEN_MISSION_15
+    , CHURCH_MISSION_1
+    , CHURCH_MISSION_2
+    , CHURCH_MISSION_3
+    , CHURCH_MISSION_4
+    , CHURCH_MISSION_5
+    , CHURCH_MISSION_6
+    , CHURCH_MISSION_7
+    , CHURCH_MISSION_8
+    , CHURCH_MISSION_9
+    , CHURCH_MISSION_10
+    , CHURCH_MISSION_11
+    , CHURCH_MISSION_12
+    , CHURCH_MISSION_13
+    , CHURCH_MISSION_14
+    , CHURCH_MISSION_15
+    , THANKYOU_HOSPITAL_1
+    , THANKYOU_HOSPITAL_2
+    , THANKYOU_HOSPITAL_3
+    , THANKYOU_HOSPITAL_4
+    , THANKYOU_HOSPITAL_5
+    , THANKYOU_HOSPITAL_6
+    , THANKYOU_HOSPITAL_7
+    , THANKYOU_HOSPITAL_8
+    , THANKYOU_HOSPITAL_9
+    , THANKYOU_HOSPITAL_10
+    , THANKYOU_HOSPITAL_11
+    , THANKYOU_HOSPITAL_12
+    , THANKYOU_HOSPITAL_13
+    , THANKYOU_HOSPITAL_14
+    , THANKYOU_ORPHANAGE_1
+    , THANKYOU_ORPHANAGE_2
+    , THANKYOU_ORPHANAGE_3
+    , THANKYOU_ORPHANAGE_4
+    , THANKYOU_ORPHANAGE_5
+    , THANKYOU_ORPHANAGE_6
+    , THANKYOU_ORPHANAGE_7
+    , THANKYOU_ORPHANAGE_8
+    , THANKYOU_ORPHANAGE_9
+    , THANKYOU_ORPHANAGE_10
+    , THANKYOU_ORPHANAGE_11
+    , THANKYOU_ORPHANAGE_12
+    , THANKYOU_ORPHANAGE_13
+    , THANKYOU_ORPHANAGE_14
+    , THANKYOU_SCHOOL_1
+    , THANKYOU_SCHOOL_2
+    , THANKYOU_SCHOOL_3
+    , THANKYOU_SCHOOL_4
+    , THANKYOU_SCHOOL_5
+    , THANKYOU_SCHOOL_6
+    , THANKYOU_SCHOOL_7
+    , THANKYOU_SCHOOL_8
+    , THANKYOU_SCHOOL_9
+    , THANKYOU_SCHOOL_10
+    , THANKYOU_SCHOOL_11
+    , THANKYOU_SCHOOL_12
+    , THANKYOU_SCHOOL_13
+    , THANKYOU_SCHOOL_14
+    , THANKYOU_SHELTER_1
+    , THANKYOU_SHELTER_2
+    , THANKYOU_SHELTER_3
+    , THANKYOU_SHELTER_4
+    , THANKYOU_SHELTER_5
+    , THANKYOU_SHELTER_6
+    , THANKYOU_SHELTER_7
+    , THANKYOU_SHELTER_8
+    , THANKYOU_SHELTER_9
+    , THANKYOU_SHELTER_10
+    , THANKYOU_SHELTER_11
+    , THANKYOU_SHELTER_12
+    , THANKYOU_SHELTER_13
+    , THANKYOU_SHELTER_14
+    , THANKYOU_COOK_1
+    , THANKYOU_COOK_2
+    , THANKYOU_COOK_3
+    , THANKYOU_COOK_4
+    , THANKYOU_COOK_5
+    , THANKYOU_COOK_6
+    , THANKYOU_COOK_7
+    , THANKYOU_COOK_8
+    , THANKYOU_COOK_9
+    , THANKYOU_COOK_10
+    , THANKYOU_COOK_11
+    , THANKYOU_COOK_12
+    , THANKYOU_COOK_13
+    , THANKYOU_COOK_14
+    , THANKYOU_CHURCH_1
+    , THANKYOU_CHURCH_2
+    , THANKYOU_CHURCH_3
+    , THANKYOU_CHURCH_4
+    , THANKYOU_CHURCH_5
+    , THANKYOU_CHURCH_6
+    , THANKYOU_CHURCH_7
+    , THANKYOU_CHURCH_8
+    , THANKYOU_CHURCH_9
+    , THANKYOU_CHURCH_10
+    , THANKYOU_CHURCH_11
+    , THANKYOU_CHURCH_12
+    , THANKYOU_CHURCH_13
+    , THANKYOU_CHURCH_14
+    , THANKYOU_CHURCH_15
+    , BLOOD_DONATION
+    , HEALTH_INSPECTION
+    , NEW_TUTORIAL_1
+    , NEW_TUTORIAL_2
+    , NEW_TUTORIAL_3
     , NEW_TUTORIAL_35
     , NEW_TUTORIAL_4
-    ,NEW_TUTORIAL_5
-    ,NEW_TUTORIAL_6
+    , NEW_TUTORIAL_5
+    , NEW_TUTORIAL_6
     , NEW_TUTORIAL_7
     , NEW_TUTORIAL_FAILED_1
     , NEW_TUTORIAL_FAILED_2
