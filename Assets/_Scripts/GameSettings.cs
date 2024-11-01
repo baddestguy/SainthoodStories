@@ -276,9 +276,10 @@ public class GameSettings : MonoBehaviour
 
         string[] val = value.Replace(" ", "").Split('x');
         Resolution? res = resolutions.FirstOrDefault(x => x.width.ToString() == val[0] && x.height.ToString() == val[1]);
-        if (res == null)
+
+        if (res == null || res.Value.width == 0 || res.Value.width > Screen.mainWindowDisplayInfo.width)
         {
-            return Screen.currentResolution;
+            return new Resolution(){ width = Screen.mainWindowDisplayInfo.width, height = Screen.mainWindowDisplayInfo.height };
         }
         return res.Value;
     }
