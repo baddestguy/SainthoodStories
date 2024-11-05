@@ -17,6 +17,7 @@ public class GamerTagDisplay : MonoBehaviour
         {
             TextMesh.text = "";
         }
+        TextMesh.gameObject.SetActive(GameSettings.Instance.ShowFPSCounter);
     }
 
     // Update is called once per frame

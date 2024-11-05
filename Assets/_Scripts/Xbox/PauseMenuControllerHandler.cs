@@ -23,8 +23,9 @@ namespace Assets._Scripts.Xbox
         /// <summary>
         /// 1: Full Screen Toggle.
         /// <br />2: Show Grid Toggle.
-        /// <br /> 3: Quality Dropdown.
-        /// <br /> 4: Resolution Dropdown.
+        /// <br />3: Show Story Toggle.
+        /// <br /> 4: Quality Dropdown.
+        /// <br /> 5: Resolution Dropdown.
         /// </summary>
         public GameObject[] GraphicTabOptions;
         /// <summary>
@@ -70,21 +71,28 @@ namespace Assets._Scripts.Xbox
 
         void Start()
         {
+
             if (!GameSettings.Instance.IsXboxMode) return;
 
             //Hide the desktop button
             ExitToDesktopGameObject.SetActive(false);
+            PauseTabOptions = PauseTabOptions[..2];
 
-            //You can only change show grid option on xbox
+            //You can only change show grid and toggle story options on xbox
             for (var i = 0; i < GraphicTabOptions.Length; i++)
             {
-                if (i != 1)
+                if (i != 1 && i != 2)
                 {
                     GraphicTabOptions[i].SetActive(false);
                 }
             }
-            //Move the show grid option to the top of the list
+
+            //Move the visible option to the top of the list
+            GraphicTabOptions[2].transform.localPosition = new Vector3(GraphicTabOptions[2].transform.localPosition.x, GraphicTabOptions[1].transform.localPosition.y);
             GraphicTabOptions[1].transform.localPosition = new Vector3(GraphicTabOptions[1].transform.localPosition.x, GraphicTabOptions[0].transform.localPosition.y);
+
+
+            GraphicTabOptions = new[] { GraphicTabOptions[1], GraphicTabOptions[2] };
         }
 
         public void OnDisable()
@@ -111,6 +119,9 @@ namespace Assets._Scripts.Xbox
 
         private void Update()
         {
+
+            if (!GameManager.Instance.PlayerHasLoggedIn) return;
+
             if (!_hasRegisteredForInputMethodChanged)
             {
                 GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
@@ -283,15 +294,36 @@ namespace Assets._Scripts.Xbox
                     switch (_selectedGraphicsButtonIndex)
                     {
                         case 0:
-                            //Fullscreen
-                            UIGraphicsSettings.Instance.fullscreenToggle.isOn = !UIGraphicsSettings.Instance.fullscreenToggle.isOn;
+                            if (GameSettings.Instance.IsXboxMode)
+                            {
+                                //Show Grid
+                                PauseMenu.Instance.ShowGridToggle.isOn = !PauseMenu.Instance.ShowGridToggle.isOn;
+                            }
+                            else
+                            {
+                                //Fullscreen
+                                UIGraphicsSettings.Instance.fullscreenToggle.isOn = !UIGraphicsSettings.Instance.fullscreenToggle.isOn;
+                            }
+
                             break;
                         case 1:
-                            //Show Grid
-                            PauseMenu.Instance.ShowGridToggle.isOn = !PauseMenu.Instance.ShowGridToggle.isOn;
+                            if (GameSettings.Instance.IsXboxMode)
+                            {
+                                //Toggle Story
+                                UIGraphicsSettings.Instance.storyToggle.isOn = !UIGraphicsSettings.Instance.storyToggle.isOn;
+                            }
+                            else
+                            {
+                                //Show Grid
+                                PauseMenu.Instance.ShowGridToggle.isOn = !PauseMenu.Instance.ShowGridToggle.isOn;
+                            }
                             break;
                         case 2:
+                            //Toggle Story
+                            UIGraphicsSettings.Instance.storyToggle.isOn = !UIGraphicsSettings.Instance.storyToggle.isOn;
+                            break;
                         case 3:
+                        case 4:
                             //Quality and Resolution
                             ActiveGraphicsTabOptionDropdown.Show();
                             _isDropdownOpen = true;
@@ -331,7 +363,7 @@ namespace Assets._Scripts.Xbox
             var colour = setActive ? Color.black : Color.white;
             ActiveGraphicsTabOptionText.color = colour;
             ActiveGraphicsTabOptionTextOutline.enabled = !setActive;
-            if (_selectedGraphicsButtonIndex < 2)
+            if (_selectedGraphicsButtonIndex < 3)
             {
                 //these are the only two options that can be toggled
                 ActiveGraphicsTabOptionToggle.colors = new ColorBlock { normalColor = colour, selectedColor = colour, colorMultiplier = 1 };

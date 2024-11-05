@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets._Scripts.Xbox;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -48,18 +49,20 @@ public class InventoryManager : MonoBehaviour
         return (Items.Count >= MaxInventorySlots && autodelivery == null) || (Items.Count >= MaxInventorySlots && autodelivery != null && AutoDeliveryItems.Sum(x => x.Value.Count) == autodelivery.Value);
     }
 
-    public void AddToInventory(ItemType item, int amount = 1)
+    public bool AddToInventory(ItemType item, int amount = 1)
     {
         for(int i = 0; i < amount; i++)
         {
             if (Items.Count == MaxInventorySlots)
             {
                 UI.Instance.DisplayMessage("INVENTORY FULL!");
-                return;
+                return false;
             }
             Items.Add(item);
             RefreshInventoryUI?.Invoke();
         }
+
+        return true;
     }
 
     public void RemoveFromInventory(ItemType item)
@@ -79,6 +82,17 @@ public class InventoryManager : MonoBehaviour
         GameManager.Instance.WorldCollectibles.Remove(newCollectible);
         UI.Instance.SacredItemPopupEnable(newCollectible); 
         Debug.Log("COLLECTED: " + newCollectible);
+
+        if(Collectibles.Count == 33)
+        {
+            SteamManager.Instance.UnlockAchievement("KEEPER");
+            XboxUserHandler.Instance.UnlockAchievement("14");
+        }
+        else if(Collectibles.Count == 66)
+        {
+            SteamManager.Instance.UnlockAchievement("LIBRARY");
+            XboxUserHandler.Instance.UnlockAchievement("15");
+        }
     }
 
     public void AddGridCollectible(string newCollectible)
@@ -116,6 +130,7 @@ public class InventoryManager : MonoBehaviour
         }
         HasChosenProvision = true;
         RefreshInventoryUI?.Invoke();
+        CheckProvisionAchievements();
     }
 
     public void UpgradeProvision(ProvisionData currProvision)
@@ -134,6 +149,21 @@ public class InventoryManager : MonoBehaviour
         }
         HasChosenProvision = true;
         RefreshInventoryUI?.Invoke();
+        CheckProvisionAchievements();
+    }
+
+    void CheckProvisionAchievements()
+    {
+        if (Provisions.Count < MaxProvisionsSlots) return;
+
+        foreach(var prov in Provisions)
+        {
+            ProvisionData nextLevel = GameDataManager.Instance.GetProvision(prov.Id, prov.Level + 1);
+            if (nextLevel != null) return;
+        }
+
+        XboxUserHandler.Instance.UnlockAchievement("17");
+        SteamManager.Instance.UnlockAchievement("CACHE");
     }
 
     public void RemoveProvision(Provision Id)
@@ -249,7 +279,7 @@ public class InventoryManager : MonoBehaviour
             prov2 = SwapProvisionBySeason(prov2);
         }
 
-        GeneratedProvisions = GameManager.Instance.SaveData.GeneratedProvisions?.ToList();
+        GeneratedProvisions = GeneratedProvisions.Any() ? GeneratedProvisions : GameManager.Instance.SaveData.GeneratedProvisions?.ToList();
         if (GeneratedProvisions != null && GeneratedProvisions.Any())
         {
             UI.Instance.EnableProvisionPopup(GeneratedProvisions[0], GeneratedProvisions[1]);
@@ -261,7 +291,6 @@ public class InventoryManager : MonoBehaviour
             GeneratedProvisions.Add(prov2);
             UI.Instance.EnableProvisionPopup(prov1, prov2);
         }
-        SaveDataManager.Instance.SaveGame();
     }
 
     private ProvisionData SwapProvisionBySeason(ProvisionData prov)

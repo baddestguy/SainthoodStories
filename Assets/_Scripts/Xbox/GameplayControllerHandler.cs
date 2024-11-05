@@ -64,11 +64,15 @@ namespace Assets._Scripts.Xbox
         /// This is the menu that shows inventory, current objectives, ailments, and sacred artifacts
         /// </summary>
         private bool IsShowingObjectiveInventoryPopup => UI.Instance?.InventoryPopup != null && UI.Instance.InventoryPopup.activeSelf;
+        /// <summary>
+        /// We have finished the game and are now showing the end game dialog
+        /// </summary>
+        private bool IsEndGameConversationPopup => MissionManager.Instance.CurrentMissionId > GameDataManager.MAX_MISSION_ID && ShouldHandleConversation;
         private bool ShouldHandlerReturnEarly =>
             (Gamepad.current == null && !GameSettings.Instance.IsXboxMode) ||
             Player == null ||
             !GameSettings.Instance.IsUsingController ||
-            MissionManager.MissionOver ||
+            (MissionManager.MissionOver && !IsEndGameConversationPopup) ||
             PauseMenu.Instance.active;
 
 
@@ -78,13 +82,37 @@ namespace Assets._Scripts.Xbox
         {
             Instance = this;
 
-            if (GameSettings.Instance.IsXboxMode) return;
-            OnInputMethodChanged += HandleInputMethodChanged;
+            if (GameSettings.Instance.IsXboxMode)
+            {
+#if MICROSOFT_GDK_SUPPORT
+                UnityEngine.WindowsGames.WindowsGamesPLM.OnSuspendingEvent += WindowsGamesPLM_OnSuspendingEvent;
+#endif
+            }
+            else
+            {
+                OnInputMethodChanged += HandleInputMethodChanged;
+            }
         }
 
         public void OnDisable()
         {
-            OnInputMethodChanged -= HandleInputMethodChanged;
+            if (GameSettings.Instance.IsXboxMode)
+            {
+#if MICROSOFT_GDK_SUPPORT
+                UnityEngine.WindowsGames.WindowsGamesPLM.OnSuspendingEvent -= WindowsGamesPLM_OnSuspendingEvent;
+#endif
+            }
+            else
+            {
+                OnInputMethodChanged -= HandleInputMethodChanged;
+            }
+        }
+
+        private void WindowsGamesPLM_OnSuspendingEvent()
+        {
+#if MICROSOFT_GDK_SUPPORT
+            UnityEngine.WindowsGames.WindowsGamesPLM.AmReadyToSuspendNow();
+#endif
         }
 
         /// <summary>
@@ -98,6 +126,10 @@ namespace Assets._Scripts.Xbox
         public void HandleInputMethodChanged(bool isUsingController)
         {
             if (ShouldHandlerReturnEarly) return;
+
+
+
+            //todo: Show and Hide button prompts
 
             if (isUsingController)
             {
@@ -145,8 +177,6 @@ namespace Assets._Scripts.Xbox
                         HighlightArtifact(scrollRect, false);
                     }
                 }
-
-                //todo: Hide button prompts
             }
         }
 
@@ -181,7 +211,10 @@ namespace Assets._Scripts.Xbox
 
             if (ShouldHandlerReturnEarly) return;
 
-            if (Player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Equals("Jump", StringComparison.InvariantCultureIgnoreCase))
+            if (Player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Equals("Jump", StringComparison.InvariantCultureIgnoreCase) &&
+                !Player.StatusEffects.Contains(PlayerStatusEffect.FROZEN) &&
+                !IsInBuilding
+                )
             {
                 return;
             }
@@ -384,8 +417,8 @@ namespace Assets._Scripts.Xbox
                         _ => _objectiveInventoryScrollIndex
                     };
 
-                    if(_objectiveInventoryScrollIndex == 0) _objectiveInventoryScrollIndex = pressedDirection.Input == DirectionInput.Up ?
-                        scrollRect.content.childCount - 1:
+                    if (_objectiveInventoryScrollIndex == 0) _objectiveInventoryScrollIndex = pressedDirection.Input == DirectionInput.Up ?
+                        scrollRect.content.childCount - 1 :
                             1; //skip the first item because it is a template
 
                     var normalizedPosition = (float)(_objectiveInventoryScrollIndex) / (scrollRect.content.childCount - 1);
@@ -455,7 +488,7 @@ namespace Assets._Scripts.Xbox
         {
             try
             {
-                if(scrollRect == null) return;
+                if (scrollRect == null) return;
 
                 var artifact = scrollRect.content.GetChild(_objectiveInventoryScrollIndex);
                 if (artifact == null || !artifact.gameObject.activeInHierarchy) return;
@@ -617,8 +650,8 @@ namespace Assets._Scripts.Xbox
                         }
                         else
                         {
-                            toolTipMouseOvers[_customEventPopupButtonIndex].gameObject.GetComponentInChildren<Button>()
-                                .onClick.Invoke();
+                            var button = toolTipMouseOvers[_customEventPopupButtonIndex]?.gameObject.GetComponentInChildren<Button>();
+                            if (button != null) button.onClick.Invoke();
                         }
                     }
                     else if (pressedButton.Control.WasReleasedThisFrame)

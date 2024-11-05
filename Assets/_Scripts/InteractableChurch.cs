@@ -43,30 +43,15 @@ public class InteractableChurch : InteractableHouse
     {
         if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_1))
         {
-            if (TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_6))
-            {
-                if(MissionManager.Instance.FaithPointsPermanentlyLost > 0)
-                {
-                    EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_2);
-                    MissionManager.Instance.FaithPointsPermanentlyLost = 0;
-                }
-                else
-                {
-                    EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_3);
-                }
-            }
-            else if (TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_3))
-            {
-                EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_1);
-            }
+            //Don't worry about this
         }
-        else
+        else 
         {
             var missionId = MissionManager.Instance.CurrentMissionId;
             if (missionId <= GameDataManager.MAX_MISSION_ID)
             {
                 var eventId = GameDataManager.Instance.ObjectivesData[missionId].CustomEventId;
-                if (eventId != CustomEventType.NONE && !(GameManager.Instance.SaveData.MissionEvents?.Contains(eventId) ?? false))
+                if (eventId != CustomEventType.NONE && !(EventsManager.Instance.TriggeredMissionEvents?.Contains(eventId) ?? false))
                 {
                     EventsManager.Instance.AddEventToList(eventId);
                     EventsManager.Instance.TriggeredMissionEvents.Add(eventId);
@@ -74,6 +59,27 @@ public class InteractableChurch : InteractableHouse
             }
 
             base.SetObjectiveParameters();
+        }
+    }
+
+    public override void TriggerUpgradeStory()
+    {
+        if (HasBeenDestroyed) return;
+
+        if (UpgradeLevel == 3 && !MyStoryEvents.Contains(CustomEventType.CONVENT_STORY_3))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.CONVENT_STORY_3);
+            MyStoryEvents.Add(CustomEventType.CONVENT_STORY_3);
+        }
+        else if (UpgradeLevel == 2 && !MyStoryEvents.Contains(CustomEventType.CONVENT_STORY_2))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.CONVENT_STORY_2);
+            MyStoryEvents.Add(CustomEventType.CONVENT_STORY_2);
+        }
+        else if (UpgradeLevel == 1 && !MyStoryEvents.Contains(CustomEventType.CONVENT_STORY_1))
+        {
+            EventsManager.Instance.AddEventToList(CustomEventType.CONVENT_STORY_1);
+            MyStoryEvents.Add(CustomEventType.CONVENT_STORY_1);
         }
     }
 
@@ -357,7 +363,7 @@ public class InteractableChurch : InteractableHouse
                 PrayerProgress = 0;
 
                 if(TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_2)) { }
-                else if(MissionManager.Instance.CurrentMissionId == 1 && !(GameManager.Instance.SaveData.MissionEvents?.Contains(CustomEventType.MISSION_1) ?? false))
+                else if(MissionManager.Instance.CurrentMissionId == 1 && !(EventsManager.Instance.TriggeredMissionEvents?.Contains(CustomEventType.MISSION_1) ?? false))
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.MISSION_1);
                     EventsManager.Instance.TriggeredMissionEvents.Add(CustomEventType.MISSION_1);

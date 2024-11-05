@@ -12,12 +12,14 @@ namespace Assets._Scripts.Xbox
         public GameObject NewGameGameObject;
         public GameObject ContinueGameObject;
         public GameObject ExitGameObject;
+
         public GameObject SettingsButtonGameObject;
         public GameObject SteamWishListGameObject;
         public GameObject DiscordGameObject;
+        public GameObject CreditsGameObject;
 
         private GameObject[] VerticalButtons => new[] { NewGameGameObject, ContinueGameObject, ExitGameObject };
-        private GameObject[] HorizontalButtons => new[] { SettingsButtonGameObject, SteamWishListGameObject, DiscordGameObject };
+        private GameObject[] HorizontalButtons => new[] { SettingsButtonGameObject, DiscordGameObject, CreditsGameObject };
 
         private Button _activeMainMenuButton;
         private ColorBlock _defaultMainMenuColorBlock;
@@ -90,10 +92,18 @@ namespace Assets._Scripts.Xbox
         // Update is called once per frame
         void Update()
         {
+
+            if (!GameManager.Instance.PlayerHasLoggedIn) return;
             TryApplyControllerHover();
             
-            if ((Gamepad.current == null && !GameSettings.Instance.IsXboxMode) || !GameSettings.Instance.IsUsingController ||
-                PauseMenu.Instance.active || UI.Instance.TutorialPopupQuestion.activeInHierarchy) return;
+            //Don't do anything if we aren't using a controller or a pop up is overlaying the main menu.
+            if ((Gamepad.current == null && !GameSettings.Instance.IsXboxMode) ||
+                !GameSettings.Instance.IsUsingController ||
+                PauseMenu.Instance.active ||
+                UI.Instance.TutorialPopupQuestion.activeInHierarchy ||
+                UI.Instance.CreditsObj.activeInHierarchy) return;
+
+
 
             if(_skipFrame)
             {

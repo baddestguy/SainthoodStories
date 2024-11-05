@@ -16,12 +16,12 @@ PlayerSettings:
   productName: Sainthood
   defaultCursor: {fileID: 2800000, guid: 8b2021bcb0cc4ed4d808a56f8e29f25a, type: 3}
   cursorHotspot: {x: 16, y: 16}
-  m_SplashScreenBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
-  m_ShowUnitySplashScreen: 1
+  m_SplashScreenBackgroundColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  m_ShowUnitySplashScreen: 0
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 1
-  m_SplashScreenAnimation: 0
-  m_SplashScreenLogoStyle: 1
+  m_SplashScreenAnimation: 1
+  m_SplashScreenLogoStyle: 0
   m_SplashScreenDrawMode: 0
   m_SplashScreenBackgroundAnimationZoom: 1
   m_SplashScreenLogoAnimationZoom: 1
@@ -139,7 +139,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 2.6.1.4
+  bundleVersion: 2.6.4.5
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 0}
@@ -455,6 +455,9 @@ PlayerSettings:
   - m_BuildTarget: MetroSupport
     m_APIs: 12000000
     m_Automatic: 0
+  - m_BuildTarget: WindowsStandaloneSupport
+    m_APIs: 1200000002000000
+    m_Automatic: 0
   m_BuildTargetVRSettings: []
   m_DefaultShaderChunkSizeInMB: 16
   m_DefaultShaderChunkCount: 0
@@ -736,7 +739,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;CROSS_PLATFORM_INPUT;MOBILE_INPUT
     EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
-    GameCoreScarlett: GAIA_2_PRESENT;GAIA_MESH_PRESENT
+    GameCoreScarlett: GAIA_2_PRESENT;GAIA_MESH_PRESENT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT;MICROSOFT_GDK_SUPPORT
     GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT;GAIA_2_PRESENT;GAIA_MESH_PRESENT;MICROSOFT_GDK_SUPPORT
     LinuxHeadlessSimulation: UNITY_POST_PROCESSING_STACK_V2
     Nintendo Switch: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3

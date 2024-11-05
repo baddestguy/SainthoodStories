@@ -144,7 +144,7 @@ public class GameSettings : MonoBehaviour
                 }
 
                 Debug.Log("Loading game settings");
-                var savedData = XboxUserHandler.Instance.LoadData<SaveSettingsData>(SettingsFileName);
+                var savedData = XboxUserHandler.Instance.LoadData<SaveSettingsData>(SettingsFileName, killAsyncSaves: false);
                 return savedData;
             }
 
@@ -157,7 +157,7 @@ public class GameSettings : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError(e); //Ideally, this should only throw an error on first boot or if game settings file is deleted
+         //   Debug.LogError(e); //Ideally, this should only throw an error on first boot or if game settings file is deleted
             return null;
 
         }
@@ -178,6 +178,7 @@ public class GameSettings : MonoBehaviour
             ambianceEnabled = data.ambianceEnabled;
             TutorialToggle = data.tutorialEnabled;
             ShowGrid = data.ShowGrid;
+            CustomEventsToggle = data.CustomEventsToggle;
 
             SetVolume("Global", data.globalVolume);
             SetVolume("Music", data.musicVolume);
@@ -197,6 +198,7 @@ public class GameSettings : MonoBehaviour
             musicEnabled = true;
             ambianceEnabled = true;
             ShowGrid = true;
+            CustomEventsToggle = true;
             SetVolume("Global", 1);
             SetVolume("Music", 1);
             SetVolume("SFX", 0.85f);
@@ -230,6 +232,7 @@ public class GameSettings : MonoBehaviour
             tutorialEnabled = !TutorialManager.Instance.SkipTutorial,
             DEMO_MODE = DEMO_MODE,
             ShowGrid = ShowGrid,
+            CustomEventsToggle = CustomEventsToggle,
 
             //Language
             language = currentLanguage
@@ -237,7 +240,7 @@ public class GameSettings : MonoBehaviour
 
         if (IsXboxMode)
         {
-            XboxUserHandler.Instance.SaveData(SettingsFileName, data);
+            XboxUserHandler.Instance.Save(SettingsFileName, data);
         }
         else
         {
@@ -273,9 +276,10 @@ public class GameSettings : MonoBehaviour
 
         string[] val = value.Replace(" ", "").Split('x');
         Resolution? res = resolutions.FirstOrDefault(x => x.width.ToString() == val[0] && x.height.ToString() == val[1]);
-        if (res == null)
+
+        if (res == null || res.Value.width == 0 || res.Value.width > Screen.mainWindowDisplayInfo.width)
         {
-            return Screen.currentResolution;
+            return new Resolution(){ width = Screen.mainWindowDisplayInfo.width, height = Screen.mainWindowDisplayInfo.height };
         }
         return res.Value;
     }
@@ -300,6 +304,10 @@ public class GameSettings : MonoBehaviour
     {
         fullScreenMode = value;
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
+    }
+    public void SetStoryToggle(bool value)
+    {
+        CustomEventsToggle = value;
     }
     public void SetBrightmessLevel(float percent)
     {

@@ -60,6 +60,8 @@ public class GameManager : MonoBehaviour
 
     public AsyncOperation LoadingOperation;
 
+    [HideInInspector]
+    public bool PlayerHasLoggedIn { get; private set; }
 
     private void Awake()
     {
@@ -77,10 +79,25 @@ public class GameManager : MonoBehaviour
 
     public void PlayerLoginSuccess()
     {
-        GameSettings.Instance.BeginLoad();
-        LoadScene("MainMenu", LoadSceneMode.Single);
+        StartCoroutine(CompletePlayerLoginProcess());
     }
 
+    private IEnumerator CompletePlayerLoginProcess()
+    {
+        while (SoundManager.Instance == null)
+        {
+            //Wait for SoundManager if not initialized...
+            yield return null;
+        }
+
+        GameSettings.Instance.BeginLoad();
+        SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+
+        LoadScene("MainMenu", LoadSceneMode.Single);
+        yield return null;
+
+        PlayerHasLoggedIn = true;
+    }
 
     private void Update()
     {
@@ -398,6 +415,22 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void RefreshStage(string house)
+    {
+        StartCoroutine(RefreshStageAsync(house));
+        TutorialManager.Instance.CheckTutorialFailureState();
+    }
+
+    IEnumerator RefreshStageAsync(string house)
+    {
+        UI.Instance.CrossFade(1f);
+        yield return new WaitForSeconds(1f);
+        Player.ForceEnterBuilding(house);
+        yield return new WaitForSeconds(1f);
+
+        UI.Instance.CrossFade(0f);
+    }
+
     public bool HasPlayerEnergy()
     {
         return PlayerEnergy > 0 || GameSettings.Instance.InfiniteBoost;
@@ -452,5 +485,9 @@ public class GameManager : MonoBehaviour
         MapTile.OnClickEvent -= OnMapTileTap;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
         GameClock.Ticked -= OnTick;
+
+#if !MICROSOFT_GDK_SUPPORT
+        Steamworks.SteamClient.Shutdown();
+#endif
     }
 }

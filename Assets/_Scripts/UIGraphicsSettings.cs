@@ -11,6 +11,7 @@ public class UIGraphicsSettings : MonoBehaviour
 
     [Header("Graphics")]
     public Toggle fullscreenToggle;
+    public Toggle storyToggle;
     public TMP_Dropdown quality;
     public TMP_Dropdown resolution;
     public Slider brightness;
@@ -55,15 +56,21 @@ public class UIGraphicsSettings : MonoBehaviour
         //remove First
         quality.onValueChanged.RemoveAllListeners();
         fullscreenToggle.onValueChanged.RemoveAllListeners();
+        storyToggle.onValueChanged.RemoveAllListeners();
         resolution.onValueChanged.RemoveAllListeners();
         brightness.onValueChanged.RemoveAllListeners();
         gamma.onValueChanged.RemoveAllListeners();
 
         //Than Add
         fullscreenToggle.isOn = GameSettings.Instance.fullScreenMode;
+        storyToggle.isOn = GameSettings.Instance.CustomEventsToggle;
         fullscreenToggle.onValueChanged.AddListener((value) => {
             //print(value);
             GameSettings.Instance.SetFullScreen(value);
+        });
+        storyToggle.onValueChanged.AddListener((value) => {
+            //print(value);
+            GameSettings.Instance.SetStoryToggle(value);
         });
         quality.onValueChanged.AddListener((value) => {
             GameSettings.Instance.SetQuality((QualityLevel)value);

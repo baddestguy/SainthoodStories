@@ -10,6 +10,8 @@ public class SacredItemPopup : MonoBehaviour
     public TextMeshProUGUI Description;
     public Image Icon;
 
+    public static bool IsOpen;
+
     public void Init(string itemName)
     {
         transform.DOJump(transform.position, 30f, 1, 1f);
@@ -17,11 +19,13 @@ public class SacredItemPopup : MonoBehaviour
         Title.text = item.Name;
         Description.text = item.Description;
         Icon.sprite = Resources.Load<Sprite>($"Icons/{item.Id}");
+        IsOpen = true;
     }
 
     public void Close()
     {
         gameObject.SetActive(false);
         UI.Instance.EnableAllUIElements(true);
+        IsOpen = false;
     }
 }

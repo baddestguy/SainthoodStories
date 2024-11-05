@@ -1,6 +1,7 @@
 using Assets._Scripts.Xbox;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets._Scripts
 {
@@ -8,94 +9,109 @@ namespace Assets._Scripts
     {
         public static SplashSceneController Instance;
 
-        public TextMeshProUGUI StartButtonPrompt;
+        public  Text StatusText;
         public TextMeshProUGUI FailureReasonPrompt;
 
-        private bool _hasRegisteredForInputMethodChanged;
-        private bool _hasIinitializedText;
+        private bool _clickedStart;
+        private const string DefaultStatusText = "PRESS ANY BUTTON TO START";
 
         // Start is called before the first frame update
         void Start()
         {
             Instance = this;
+            StatusText.text = DefaultStatusText;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (GameSettings.Instance == null || !GameSettings.Instance.IsUsingController) return;
-
-            if (!_hasRegisteredForInputMethodChanged)
+            if (GameManager.Instance == null || GameSettings.Instance == null)
             {
-                GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
-                _hasRegisteredForInputMethodChanged = true;
+                Debug.Log("Splash screen controller waiting for Game manager and settings");
+                return;  // We can't do anything without GameManager or GameSettings is ready
             }
 
-            if (!_hasIinitializedText)
-            {
-                HandleInputMethodChanged(GameSettings.Instance.IsUsingController);
-                _hasIinitializedText = true;
-            }
+            if (_clickedStart)
+                return;
 
             (GamePadButton Button, CustomButtonControl Control) pressedButton = (GamePadButton.Void, new CustomButtonControl());
-            if (GameSettings.Instance.IsXboxMode)
+
+            if (GameSettings.Instance.IsUsingController)
             {
+                if (GameSettings.Instance.IsXboxMode)
+                {
 
 #if MICROSOFT_GDK_SUPPORT
-                // Check for button A press on all connected gamepads
-                for (var i = 0; i < 8; i++) // Assume MaxGamepads is a constant defining the max number of supported gamepads
-                {
-                    if (GXDKInput.GetKeyDown(GXDKKeyCode.Gamepad1ButtonA + (20*i)))
-                    {
-                        GamePadController.ActiveXboxGamePadModifier = (20 * i);
-                        pressedButton = (GamePadButton.South, new CustomButtonControl(true, true, false));
-                    }
-                }
+                    pressedButton = GamePadController.TryInitializeXboxController();
 #endif
+                }
+                if (GameSettings.Instance.IsUsingController)
+                {
+                    pressedButton = GamePadController.GetButton();
+                }
+
+                if (pressedButton.Button != GamePadButton.Void && pressedButton.Control.WasPressedThisFrame)
+                {
+                    StartButtonClicked();
+                }
             }
             else
             {
-                pressedButton = GamePadController.GetButton();
+                if (Input.anyKeyDown || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                {
+                    StartButtonClicked();
+                }
             }
 
-            if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame)
-            {
-                StartButtonClicked();
-            }
+
         }
 
-        public void OnDisable()
+        void OnDisable()
         {
-            if (_hasRegisteredForInputMethodChanged)
+            if (GameSettings.Instance.IsXboxMode)
             {
-                GameplayControllerHandler.Instance.OnInputMethodChanged -= HandleInputMethodChanged;
-                _hasRegisteredForInputMethodChanged = false;
+                XboxUserHandler.Instance.OnXboxUserLoginStatusChange -= OnXboxUserLoginStatusChange;
             }
         }
 
         public void StartButtonClicked()
         {
-            while (GameManager.Instance == null || GameSettings.Instance == null)
-            {
-                // We can't do anything until the GameManager is initialized
-            }
+            if (_clickedStart)
+                return;
+
+            _clickedStart = true;
 
             if (GameSettings.Instance.IsXboxMode)
-            //if(false)
             {
+                XboxUserHandler.Instance.OnXboxUserLoginStatusChange += OnXboxUserLoginStatusChange;
                 XboxUserHandler.Instance.TryLogInUser();
             }
             else
             {
-                //We might need to do something here to get the steam user in the future
                 GameManager.Instance.PlayerLoginSuccess();
             }
         }
 
-
-        private void HandleInputMethodChanged(bool isUsingController)
+        private void OnXboxUserLoginStatusChange(bool isLoggedIn, string message, bool isError)
         {
-            StartButtonPrompt.text = isUsingController ? "Press A to Start" : "Click to Start";
+            if (isLoggedIn) return;
+
+            if(isError)
+            {
+                StatusText.text = DefaultStatusText;
+                FailureReasonPrompt.text = message;
+                FailureReasonPrompt.gameObject.SetActive(true);
+                _clickedStart = false;
+            }
+            else
+            {
+                FailureReasonPrompt.gameObject.SetActive(false);
+
+                if (!string.IsNullOrWhiteSpace(message))
+                {
+                    StatusText.text = message;
+                }
+            }
         }
     }
 }

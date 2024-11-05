@@ -50,6 +50,7 @@ public class InventoryPopup : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
+        CustomEventPopup.IsDisplaying = true;
         Open = true;
         UI.Instance.EnableAllUIElements(false);
         Player.LockMovement = true;
@@ -57,6 +58,7 @@ public class InventoryPopup : MonoBehaviour
         {
             ItemList[i].PackageIcon.gameObject.SetActive(true);
             ItemList[i].PackageIcon.sprite = Resources.Load<Sprite>($"Icons/{InventoryManager.Instance.Items[i]}");
+            ItemList[i].Item = InventoryManager.Instance.Items[i];
             ItemList[i].SetLocalizedText(InventoryManager.Instance.Items[i]);
         }
 
@@ -101,6 +103,11 @@ public class InventoryPopup : MonoBehaviour
                 || houses[i].MyObjective.Event == BuildingEventType.PRAY_URGENT)
             {
                 Objs[i].Text.text = $"{LocalizationManager.Instance.GetText(houses[i].MyObjective.MissionDescription)}: {houses[i].VolunteerProgress}/{houses[i].MyObjective.RequiredAmount}";
+            }
+
+            if (houses[i].BuildingState == BuildingState.HAZARDOUS)
+            {
+                Objs[i].Text.text = $"{LocalizationManager.Instance.GetText("BuildingHazardousMissionDescription")}";
             }
         }
 
@@ -155,10 +162,12 @@ public class InventoryPopup : MonoBehaviour
     private void OnDisable()
     {
         Open = false;
+        CustomEventPopup.IsDisplaying = false;
 
         for (int i = 0; i < InventoryManager.Instance.Items.Count; i++)
         {
             ItemList[i].PackageIcon.gameObject.SetActive(false);
+            ItemList[i].Item = ItemType.NONE;
         }
         for (int i = 0; i < Objs.Length; i++)
         {

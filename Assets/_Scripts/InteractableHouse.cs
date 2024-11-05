@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets._Scripts.Xbox;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -344,8 +345,7 @@ public class InteractableHouse : InteractableObject
         {
             StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
         }
-     
-        SaveDataManager.Instance.SaveGame();
+         
     }
 
     public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
@@ -367,7 +367,6 @@ public class InteractableHouse : InteractableObject
 
         DeadlineTime.SetClock(-1, day);
         DeadlineSet = false;
-        RequiredItems = 0;
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name);
         OnActionProgress?.Invoke(1f, this, 1); //Reset all progress bars
@@ -391,8 +390,6 @@ public class InteractableHouse : InteractableObject
     public static bool Zooming;
     IEnumerator TryZoomAsync(float zoom) 
     {
-        if (GameSettings.Instance.FTUE && TutorialManager.Instance.CurrentTutorialStep < 2) yield break;
-
         InfoPopup.gameObject.SetActive(false);
         RubbleInfoPopup.gameObject.SetActive(false);
         if (!CameraLockOnMe || Zooming)
@@ -611,6 +608,7 @@ public class InteractableHouse : InteractableObject
 
     public void ThankYouMessage(ThankYouType thanks)
     {
+        if (BuildingState == BuildingState.HAZARDOUS) return;
         switch (thanks)
         {
             case ThankYouType.ITEM: 
@@ -649,6 +647,55 @@ public class InteractableHouse : InteractableObject
         {
             EventsManager.Instance.AddEventToList(thankYouEvent);
             EventsManager.Instance.ExecuteEvents();
+        }
+    }
+
+    public void CheckEndGameAchievements()
+    {
+        if (CurrentMissionId <= GameDataManager.MAX_HOUSE_MISSION_ID) return;
+
+        switch (HouseName)
+        {
+            case "InteractableChurch":
+                XboxUserHandler.Instance.UnlockAchievement("19");
+                SteamManager.Instance.UnlockAchievement("PIOUS");
+                break;
+            case "InteractableHospital":
+                XboxUserHandler.Instance.UnlockAchievement("4");
+                SteamManager.Instance.UnlockAchievement("HEALER");
+                break;
+            case "InteractableKitchen":
+                SteamManager.Instance.UnlockAchievement("FEAST");
+                XboxUserHandler.Instance.UnlockAchievement("10");
+                break;
+            case "InteractableOrphanage":
+                SteamManager.Instance.UnlockAchievement("ANGEL");
+                XboxUserHandler.Instance.UnlockAchievement("8");
+                break;
+            case "InteractableShelter":
+                SteamManager.Instance.UnlockAchievement("FEEDER");
+                XboxUserHandler.Instance.UnlockAchievement("11");
+                break;
+            case "InteractableSchool":
+                SteamManager.Instance.UnlockAchievement("TEACHER");
+                XboxUserHandler.Instance.UnlockAchievement("9");
+                break;
+        }
+
+        var houses = GameManager.Instance.Houses;
+        int completedCounter = 1;
+        foreach (var house in houses)
+        {
+            if (house.AllObjectivesComplete)
+            {
+                completedCounter++;
+            }
+        }
+
+        XboxUserHandler.Instance.UnlockAchievement("5", completedCounter * 100 / 6);
+        if(completedCounter >= 6)
+        {
+            SteamManager.Instance.UnlockAchievement("COMMUNION");
         }
     }
 
@@ -719,7 +766,9 @@ public class InteractableHouse : InteractableObject
         OnActionProgress?.Invoke(BuildPoints / MaxBuildPoints, this, 0);
 
         UI.Instance.DisplayMessage("BUILDING!");
-        if(BuildPoints >= MaxBuildPoints)
+        var sturdyMaterials = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
+
+        if (BuildPoints >= MaxBuildPoints)
         {
             if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT_URGENT)
             {
@@ -761,7 +810,6 @@ public class InteractableHouse : InteractableObject
             }
 
             //Reduce chance of environmental hazards
-            var sturdyMaterials = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
             SturdyMaterials = sturdyMaterials?.Value ?? 0;
             CurrentSturdyMaterials = SturdyMaterials;
             UI.Instance.SideNotificationPop(GetType().Name);
@@ -774,7 +822,8 @@ public class InteractableHouse : InteractableObject
             SoundManager.Instance.PlayOneShotSfx("Build_SFX", 1f, 5f);
         }
         GameClock clock = GameManager.Instance.GameClock;
-        for (int i = 0; i < MaxBuildPoints; i++)
+        var totalBuildTime = MaxBuildPoints + (sturdyMaterials?.Ticks ?? 0);
+        for (int i = 0; i < totalBuildTime; i++)
         {
             clock.Tick();
         }
@@ -1375,7 +1424,6 @@ public class InteractableHouse : InteractableObject
     public virtual void RelationshipReward(ThankYouType thanks)
     {
         ThankYouMessage(thanks);
-        SaveDataManager.Instance.SaveGame();
     }
 
     public bool CanBuild()
@@ -1433,7 +1481,14 @@ public class InteractableHouse : InteractableObject
         if (GameSettings.Instance.DEMO_MODE_3) return false;
         if (UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue) return false;
 
-        return InventoryManager.Instance.WanderingSpirits >= GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel+1}"].IntValue && TreasuryManager.Instance.Money >= GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel+1}"].IntValue;
+        double cost = GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue;
+        var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
+        var chapelBlueprint = InventoryManager.Instance.GetProvision(Provision.CHAPEL_BLUEPRINT);
+        
+        cost += chapelBlueprint?.Coin ?? 0;
+        cost -= cost * (buildingBlueprint?.Value / 100d ?? 0);
+
+        return InventoryManager.Instance.WanderingSpirits >= GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel + 1}"].IntValue && TreasuryManager.Instance.CanAfford(cost);
     }
 
     public void UpgradeBuilding()
@@ -1443,12 +1498,56 @@ public class InteractableHouse : InteractableObject
 
         double cost = GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue;
         var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
+
+        var sturdyMaterials = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
+        SturdyMaterials = sturdyMaterials?.Value ?? 0;
+        CurrentSturdyMaterials = SturdyMaterials;
+
+        var chapelBlueprint = InventoryManager.Instance.GetProvision(Provision.CHAPEL_BLUEPRINT);
+        if (chapelBlueprint != null)
+        {
+            FPBonus = chapelBlueprint?.FP ?? 0;
+            cost += chapelBlueprint?.Coin ?? 0;
+        }
+
         cost -= cost * (buildingBlueprint?.Value / 100d ?? 0);
+
         TreasuryManager.Instance.SpendMoney(cost);
+        InteriorSpaces[UpgradeLevel].SetActive(false);
         UpgradeLevel++;
         BuildRelationship(ThankYouType.UPGRADE, 10);
-        SaveDataManager.Instance.SaveGame();
-        GameManager.Instance.ReloadLevel();
+        GameManager.Instance.RefreshStage(HouseName);
+        XboxUserHandler.Instance.UnlockAchievement("6");
+        SteamManager.Instance.UnlockAchievement("INTERVENTION");
+
+        if (UpgradeLevel == 3)
+        {
+            XboxUserHandler.Instance.UnlockAchievement("7");
+            SteamManager.Instance.UnlockAchievement("ARCHITECT");
+
+            var houses = GameManager.Instance.Houses;
+            int upgradedCounter = 0;
+            foreach (var house in houses)
+            {
+                if (house.UpgradeLevel == 3)
+                {
+                    upgradedCounter++;
+                }
+            }
+
+            XboxUserHandler.Instance.UnlockAchievement("16", upgradedCounter * 100 / 6);
+            if(upgradedCounter == 6)
+            {
+                SteamManager.Instance.UnlockAchievement("KINGDOM_ARCHITECT");
+            }
+        }
+
+        GameClock clock = GameManager.Instance.GameClock;
+        var totalBuildTime = MaxBuildPoints + (sturdyMaterials?.Ticks ?? 0);
+        for (int i = 0; i < totalBuildTime; i++)
+        {
+            clock.Tick();
+        }
     }
 
     public virtual float SetButtonTimer(string actionName)
@@ -1496,7 +1595,7 @@ public class InteractableHouse : InteractableObject
                 }
                 else
                 {
-                    return new TooltipStats();
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride: CalculateMaxVolunteerPoints(), energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
                 }
                 return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride:CalculateMaxVolunteerPoints(), cpOverride: maxCP, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: 0));
 
@@ -1510,7 +1609,7 @@ public class InteractableHouse : InteractableObject
                 }
                 else
                 {
-                    return new TooltipStats();
+                    return new TooltipStats() { CP = 1 };
                 }
 
                 return new TooltipStats() { CP = maxdCP };
@@ -1518,18 +1617,31 @@ public class InteractableHouse : InteractableObject
             case "CONSTRUCT":
                 var tools = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TOOLS);
                 var tents = InventoryManager.Instance.GetProvision(Provision.CONSTRUCTION_TENTS);
+                var sturdyMaterials1 = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
+                var totalTime1 = MaxBuildPoints + (sturdyMaterials1?.Ticks ?? 0);
                 var maxPP = 0;
                 if (MyObjective?.Event == BuildingEventType.CONSTRUCT || MyObjective?.Event == BuildingEventType.CONSTRUCT_URGENT)
                 {
                     maxPP = MyObjective.Reward;
                 }
-                return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, ticksOverride: tools?.Ticks ?? 0, cpOverride: maxPP, cpModifier: tents?.CP ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: (tools?.Energy ?? 0) + (tents?.Energy ?? 0)));
+                return GameDataManager.Instance.GetToolTip(TooltipStatId.CONSTRUCT, ticksOverride: totalTime1, cpOverride: maxPP, cpModifier: tents?.CP ?? 0, energyModifier: -GameManager.Instance.Player.ModifyEnergyConsumption(amount: (tools?.Energy ?? 0) + (tents?.Energy ?? 0)));
 
             case "UPGRADE":
                 if(UpgradeLevel >= GameDataManager.Instance.Constants["MAX_UPGRADE_LEVEL"].IntValue)
                     return new TooltipStats();
                 else
-                    return new TooltipStats() { Spirits = GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel + 1}"].IntValue, Coin = -GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue, RP = 10 };
+                {
+                    var cost = -GameDataManager.Instance.Constants[$"UPGRADE_COINS_LEVEL_{UpgradeLevel + 1}"].IntValue;
+                    var sturdyMaterials = InventoryManager.Instance.GetProvision(Provision.STURDY_BUILDING_MATERIALS);
+                    var buildingBlueprint = InventoryManager.Instance.GetProvision(Provision.BUILDING_BLUEPRINT);
+                    var chapelBlueprint = InventoryManager.Instance.GetProvision(Provision.CHAPEL_BLUEPRINT);
+
+                    var totalTime = MaxBuildPoints + (sturdyMaterials?.Ticks ?? 0);
+                    cost -= chapelBlueprint?.Coin ?? 0;
+                    cost -= (int)(cost * ((buildingBlueprint?.Value / 100d) ?? 0));
+
+                    return new TooltipStats() { Spirits = GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel + 1}"].IntValue, Coin = cost, RP = (int)totalTime };
+                }
         }
 
         return new TooltipStats() { Ticks = 0, FP = 0, CP = 0, Energy = 0 };

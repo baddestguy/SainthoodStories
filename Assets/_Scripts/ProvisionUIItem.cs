@@ -32,22 +32,22 @@ public class ProvisionUIItem : MonoBehaviour
 
         if (InventoryPopup.Open)
         {
-            mouseOverBtn.Loc_Key = $"<b>{HeaderSize}{HeaderColor}{LocalizationManager.Instance.GetText(prov.NameKey)}{SubheaderSize}</b>{SubheaderColor}\n<i>LV.{prov.Level}\n{DescriptionSize}{DescriptionColor}{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n<i> {prov.Tooltips}";
+            mouseOverBtn.Loc_Key = $"<b>{HeaderSize}{HeaderColor}{LocalizationManager.Instance.GetText(prov.NameKey)}{SubheaderSize}</b>{SubheaderColor}\n<i>LV.{prov.Level}</i>\n{DescriptionSize}{DescriptionColor}{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n{prov.Tooltips}";
         }
         else if(Type == ProvisionUIItemType.NEW)
         {
-            mouseOverBtn.Loc_Key = $"<b>{HeaderSize}{HeaderColor}{LocalizationManager.Instance.GetText(prov.NameKey)}{SubheaderSize}</b>{SubheaderColor}\n<b>NEW</b>\n{DescriptionSize}{DescriptionColor}{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n<i> {prov.Tooltips}";
+            mouseOverBtn.Loc_Key = $"<b>{HeaderSize}{HeaderColor}{LocalizationManager.Instance.GetText(prov.NameKey)}{SubheaderSize}</b>{SubheaderColor}\n<b>NEW</b>\n{DescriptionSize}{DescriptionColor}{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n{prov.Tooltips}";
         }
         else
         {
             ProvisionData nextLevel = GameDataManager.Instance.GetProvision(prov.Id, prov.Level + 1);
             if(nextLevel == null)
             {
-                mouseOverBtn.Loc_Key = $"<b>{HeaderSize}{HeaderColor}{ LocalizationManager.Instance.GetText(prov.NameKey)}{SubheaderSize} LV.{prov.Level}</b>{SubheaderColor}\n<b>MAX LEVEL</b>\n{DescriptionSize}{DescriptionColor}{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n<i>LV.{prov.Level}\n{prov.Tooltips}";
+                mouseOverBtn.Loc_Key = $"<b>{HeaderSize}{HeaderColor}{ LocalizationManager.Instance.GetText(prov.NameKey)}{SubheaderSize} LV.{prov.Level}</b>{SubheaderColor}\n<b>MAX LEVEL</b>\n{DescriptionSize}{DescriptionColor}{LocalizationManager.Instance.GetText(prov.DescriptionKey)}\n\n<i>LV.{prov.Level}</i>\n{prov.Tooltips}";
             }
             else
             {
-                mouseOverBtn.Loc_Key = $"<b>{HeaderSize}{HeaderColor}{ LocalizationManager.Instance.GetText(prov.NameKey)}{SubheaderSize} LV.{prov.Level}</b>{SubheaderColor}\n<b>UPGRADE</b>\n{DescriptionSize}{DescriptionColor}{LocalizationManager.Instance.GetText(nextLevel.DescriptionKey)}\n\n<i>LV.{prov.Level}\n{prov.Tooltips} \n{DescriptionColor}{DescriptionSize}--\nLV.{nextLevel.Level}\n{nextLevel.Tooltips}";
+                mouseOverBtn.Loc_Key = $"<b>{HeaderSize}{HeaderColor}{ LocalizationManager.Instance.GetText(prov.NameKey)}{SubheaderSize} LV.{prov.Level}</b>{SubheaderColor}\n<b>UPGRADE</b>\n{DescriptionSize}{DescriptionColor}{LocalizationManager.Instance.GetText(nextLevel.DescriptionKey)}\n\n<i>LV.{prov.Level}</i>\n{prov.Tooltips} \n{DescriptionColor}{DescriptionSize}--\n<i>LV.{nextLevel.Level}</i>\n{nextLevel.Tooltips}";
             }
         }
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderColor}", HeaderColor);

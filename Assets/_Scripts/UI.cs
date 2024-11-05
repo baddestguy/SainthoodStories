@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets._Scripts.Xbox;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -103,6 +104,7 @@ public class UI : MonoBehaviour
     public GameObject InventoryPopup;
     public GameObject SacredItemPopup;
     public GameObject TutorialPopupQuestion;
+    public GameObject CreditsObj;
     public bool WasUiHit
     {
         get
@@ -247,6 +249,7 @@ public class UI : MonoBehaviour
         {
             yield return null;
         }
+
         EventsManager.Instance.CurrentEvents.Clear();
         GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, showUI: complete);
     }
@@ -290,6 +293,12 @@ public class UI : MonoBehaviour
             TimeHrDisplay.color = Color.red;
             TimeMinDisplay.color = Color.red;
             DayDisplay.color = Color.red;
+        }
+        else
+        {
+            TimeHrDisplay.color = Color.white;
+            TimeMinDisplay.color = Color.white;
+            DayDisplay.color = Color.white;
         }
     }
 
@@ -829,6 +838,7 @@ public class UI : MonoBehaviour
                 TutorialPopupQuestion.SetActive(false);
                 GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, true);
                 GameSettings.Instance.TUTORIAL_MODE = true;
+                GameSettings.Instance.CustomEventsToggle = true;
                 break;
 
             case "NO":
@@ -897,14 +907,9 @@ public class UI : MonoBehaviour
         LocalizationManager.Instance.ChangeLanguage(language);
     }
 
-    public void CreditsScene()
+    public void Credits()
     {
-        SceneManager.LoadScene("Credits", LoadSceneMode.Single);
-    }
-
-    public void ExitCredits()
-    {
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        CreditsObj.SetActive(!CreditsObj.activeSelf);
     }
 
     public void Discord()

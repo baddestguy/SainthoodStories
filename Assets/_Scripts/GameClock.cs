@@ -89,7 +89,6 @@ public class GameClock
         }
         CheckTutorial();
         ExecuteEvents?.Invoke();
-        SaveDataManager.Instance.SaveGame();
         DeltaTime = false;
 
     //    Debug.Log(Day + " : " + Time);
@@ -109,7 +108,7 @@ public class GameClock
         {
             if (Time > 12)
             {
-                GameManager.Instance.ReloadLevel();
+                GameManager.Instance.RefreshStage("InteractableChurch");
             }
         }
     }

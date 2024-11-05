@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,11 +21,12 @@ public class PackageItem : MonoBehaviour
     private string DescriptionSize = "<size=7>";
 
     public bool PackageSelectorIsNew = false;
+    private TextMeshProUGUI provisionDescription;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     public void Init(HouseObjectivesData data)
@@ -59,10 +61,21 @@ public class PackageItem : MonoBehaviour
 
     public void SetLocalizedText(ItemType item)
     {
-        var houseName = ShopItemData.HouseNameForItemType(item);
-        var house = GameManager.Instance.Houses.Where(h=> h.HouseName == houseName).First();
+        if(item == ItemType.NONE) return;
+
+        var houseName = ShopItemData.HouseNameForItemType(item); 
+        var house = GameManager.Instance.Houses.Where(h => h.HouseName == houseName).First();
+
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
-        mouseOverBtn.Loc_Key = house.MyObjective.MissionDescription;
+
+        if(house.MyObjective == null)
+        {
+            mouseOverBtn.Loc_Key = $"{house.HouseName}_MissionsCompleteDescription";
+        }
+        else
+        {
+            mouseOverBtn.Loc_Key = house.MyObjective.MissionDescription;
+        }
 
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{HeaderColor}", HeaderColor);
         mouseOverBtn.Loc_Key = mouseOverBtn.Loc_Key.Replace("{SubheaderColor}", SubheaderColor);
@@ -84,5 +97,22 @@ public class PackageItem : MonoBehaviour
         if (InventoryPopup.Open) return;
         PackageSelectorIsNew = false;
         SendMessageUpwards("PackageDeselected", this);
+    }
+
+    private void OnEnable()
+    {
+        provisionDescription = GameObject.Find("ProvisionDescription")?.GetComponent<TextMeshProUGUI>();
+        SetLocalizedText(Item);
+    }
+
+    public void OnDisable()
+    {
+        TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
+        mouseOverBtn.Loc_Key = "";
+
+        if (provisionDescription != null)
+        {
+            provisionDescription.text = "";
+        }
     }
 }

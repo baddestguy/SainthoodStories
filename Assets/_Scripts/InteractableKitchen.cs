@@ -87,30 +87,16 @@ public class InteractableKitchen : InteractableHouse
             }
             else
             {
-                var shelter = GameManager.Instance.Houses.Where(h => h is InteractableShelter).FirstOrDefault();
-                if (shelter != null)
-                {
-                    if (shelter.MyObjective != null)
-                    {
-                        if (InventoryManager.Instance.CountItem(ItemType.MEAL) < shelter.RequiredItems)
-                        {
-                            InventoryManager.Instance.AddToInventory(ItemType.MEAL);
-                        }
-                    }
-                    else if(shelter.AllObjectivesComplete)
-                    {
-                        InventoryManager.Instance.AddToInventory(ItemType.MEAL);
-                    }
-                }
+                TreasuryManager.Instance.DonateMoney(30);
+                UpdateCharityPoints(1, 0);
             }
 
             TreasuryManager.Instance.DonateMoney(utensils?.Coin ?? 0);
             CookFX.Play();
 
-            var moddedEnergy = player.ModifyEnergyConsumption(this, amount: EnergyConsumption + (utensils?.Energy ?? 0));
             var ticks = TicksPerUpgradeLevel();
 
-            player.ConsumeEnergy(moddedEnergy);
+            player.ConsumeEnergy(EnergyConsumption + (utensils?.Energy ?? 0));
             for(int i = 0; i < ticks; i++)
             {
                 clock.Tick();
@@ -137,7 +123,9 @@ public class InteractableKitchen : InteractableHouse
                 }
                 else
                 {
-                    return new TooltipStats();
+                    var utensils = InventoryManager.Instance.GetProvision(Provision.COOKING_UTENSILS);
+                    var moddedEnergy = GameManager.Instance.Player.ModifyEnergyConsumption(this, amount: (utensils?.Energy ?? 0));
+                    return GameDataManager.Instance.GetToolTip(TooltipStatId.VOLUNTEER, ticksOverride: TicksPerUpgradeLevel(), energyModifier: -moddedEnergy);
                 }
         }
 

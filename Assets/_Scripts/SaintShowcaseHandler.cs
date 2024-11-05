@@ -19,6 +19,8 @@ public class SaintShowcaseHandler : MonoBehaviour
 
     private void OnEnable()
     {
+        CustomEventPopup.IsDisplaying = true;
+
         ToolTipManager.Instance.ShowToolTip("");
         TooltipMouseOver.IsHovering = false;
 
@@ -28,6 +30,7 @@ public class SaintShowcaseHandler : MonoBehaviour
 
     private void OnDisable()
     {
+        CustomEventPopup.IsDisplaying = false;
         UI.Instance.EnableAllUIElements(true);
     }
 

@@ -307,6 +307,29 @@ public class TutorialManager : MonoBehaviour
         return true;
     }
 
+    public void CheckTutorialFailureState()
+    {
+        if (TutorialManager.Instance.CheckTutorialStepDialog(CustomEventType.NEW_TUTORIAL_1))
+        {
+            if (TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_6))
+            {
+                if (MissionManager.Instance.FaithPointsPermanentlyLost > 0)
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_2);
+                    MissionManager.Instance.FaithPointsPermanentlyLost = 0;
+                }
+                else
+                {
+                    EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_3);
+                }
+            }
+            else if (TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_3))
+            {
+                EventsManager.Instance.AddEventToList(CustomEventType.NEW_TUTORIAL_FAILED_1);
+            }
+        }
+    }
+
     private void SwapHospitalMapTileIndex()
     {
         for(int i = 0; i < GameManager.Instance.MaptileIndexes.Length; i++)
