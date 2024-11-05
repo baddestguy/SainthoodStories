@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,7 @@ public class PackageItem : MonoBehaviour
     private string DescriptionSize = "<size=7>";
 
     public bool PackageSelectorIsNew = false;
+    private TextMeshProUGUI provisionDescription;
 
     // Start is called before the first frame update
     void Start()
@@ -59,6 +61,8 @@ public class PackageItem : MonoBehaviour
 
     public void SetLocalizedText(ItemType item)
     {
+        if(item == ItemType.NONE) return;
+
         var houseName = ShopItemData.HouseNameForItemType(item); 
         var house = GameManager.Instance.Houses.Where(h => h.HouseName == houseName).First();
 
@@ -93,5 +97,22 @@ public class PackageItem : MonoBehaviour
         if (InventoryPopup.Open) return;
         PackageSelectorIsNew = false;
         SendMessageUpwards("PackageDeselected", this);
+    }
+
+    private void OnEnable()
+    {
+        provisionDescription = GameObject.Find("ProvisionDescription")?.GetComponent<TextMeshProUGUI>();
+        SetLocalizedText(Item);
+    }
+
+    public void OnDisable()
+    {
+        TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
+        mouseOverBtn.Loc_Key = "";
+
+        if (provisionDescription != null)
+        {
+            provisionDescription.text = "";
+        }
     }
 }

@@ -179,7 +179,14 @@ public class TooltipMouseOver : MonoBehaviour
         }
         if (stats.RP != 0) 
         {
-            FPCPStatsDisplay.text = stats.RP >= 0 ? $"<color=#74664B>+{stats.RP}" : $" <color=\"red\">{stats.RP}";
+            if (stats.RP / 4 == 1)
+            {
+                FPCPStatsDisplay.text = $"+{(double)stats.RP / 4}hr";
+            }
+            else
+            {
+                FPCPStatsDisplay.text = $"+{(double)stats.RP / 4}hrs";
+            }
         }
     }
 

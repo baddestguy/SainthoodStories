@@ -29,20 +29,20 @@ Add'l Energy: <color=""red"">{SubheaderSize}-1"
 ROSARY,1,0,0,20,0,1,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
 FP: {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
 Time: <color=""red"">{SubheaderSize}+5hrs"
-ROSARY,2,0,0,16,0,2,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP: {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize}
+ROSARY,2,0,0,16,0,1,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP: {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
 Time: <color=""red"">{SubheaderSize}+4hrs"
-ROSARY,3,0,0,12,0,3,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP: {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+ROSARY,3,0,0,12,0,1,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP: {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
 Time: <color=""red"">{SubheaderSize}+3hrs"
-ROSARY,4,0,0,8,0,3,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP: {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+ROSARY,4,0,0,8,0,1,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP: {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
 Time: <color=""red"">{SubheaderSize}+2hrs"
-ROSARY,5,0,0,4,0,3,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP: {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+ROSARY,5,0,0,4,0,1,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP: {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
 Time: <color=""red"">{SubheaderSize}+1hrs"
-ROSARY,6,0,0,0,0,3,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
-FP: {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+ROSARY,6,0,0,0,0,1,0,0,0,Provision_RosaryName,Provision_RosaryDescription,"When praying: 
+FP: {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
 Time: {SubheaderColor}{SubheaderSize}+0hrs"
 COOKING_UTENSILS,1,0,0,0,2,0,0,3,0,Provision_CookingUtensilsName,Provision_CookingUtensilsDescription,"Extra Payment: {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
 Add'l Energy: <color=""red"">{SubheaderSize}-2"
@@ -63,22 +63,27 @@ ALLOWANCE,7,0,0,0,0,0,0,7,0,Provision_AllowanceName,Provision_AllowanceDescripti
 ALLOWANCE,8,0,0,0,0,0,0,8,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin: {SubheaderColor}{SubheaderSize}+8
 ALLOWANCE,9,0,0,0,0,0,0,9,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin: {SubheaderColor}{SubheaderSize}+9
 ALLOWANCE,10,0,0,0,0,0,0,10,0,Provision_AllowanceName,Provision_AllowanceDescription,Daily Coin: {SubheaderColor}{SubheaderSize}+10
-CONSTRUCTION_TOOLS,1,0,0,6,2,0,0,0,0,Provision_ConstructionName,Provision_ConstructionDescription,"Construction/Upgrade Time: {SubheaderColor}{SubheaderSize}1.5hrs{DescriptionColor}{DescriptionSize}
+CONSTRUCTION_TOOLS,1,0,0,6,2,0,0,0,0,Provision_ConstructionName,Provision_ConstructionDescription,"Construction/Upgrade Time: {SubheaderColor}{SubheaderSize}-0.5hrs{DescriptionColor}{DescriptionSize}
 Add'l Energy: <color=""red"">{SubheaderSize}-2"
-CONSTRUCTION_TOOLS,2,0,0,4,2,0,0,0,0,Provision_ConstructionName,Provision_ConstructionDescription,"Construction/Upgrade Time: {SubheaderColor}{SubheaderSize}1hr{DescriptionColor}{DescriptionSize}
+CONSTRUCTION_TOOLS,2,0,0,4,2,0,0,0,0,Provision_ConstructionName,Provision_ConstructionDescription,"Construction/Upgrade Time: {SubheaderColor}{SubheaderSize}-1hr{DescriptionColor}{DescriptionSize}
 Add'l Energy: <color=""red"">{SubheaderSize}-2"
-CONSTRUCTION_TOOLS,3,0,0,2,1,0,0,0,0,Provision_ConstructionName,Provision_ConstructionDescription,"Construction/Upgrade Time: {SubheaderColor}{SubheaderSize}0.5hrs{DescriptionColor}{DescriptionSize}
+CONSTRUCTION_TOOLS,3,0,0,2,1,0,0,0,0,Provision_ConstructionName,Provision_ConstructionDescription,"Construction/Upgrade Time: {SubheaderColor}{SubheaderSize}-1.5hrs{DescriptionColor}{DescriptionSize}
 Add'l Energy: <color=""red"">{SubheaderSize}-1"
-STURDY_BUILDING_MATERIALS,1,12,0,0,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Building Hazard Immunity {SubheaderColor}{SubheaderSize}3hrs
-STURDY_BUILDING_MATERIALS,2,20,0,0,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Building Hazard Immunity {SubheaderColor}{SubheaderSize}5hrs
-STURDY_BUILDING_MATERIALS,3,28,0,0,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Building Hazard Immunity {SubheaderColor}{SubheaderSize}7hrs
-STURDY_BUILDING_MATERIALS,4,48,0,0,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Building Hazard Immunity {SubheaderColor}{SubheaderSize}12hrs
-STURDY_BUILDING_MATERIALS,5,96,0,0,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,Building Hazard Immunity {SubheaderColor}{SubheaderSize}24hrs
-CONSTRUCTION_TENTS,1,0,0,0,2,0,1,0,0,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building/upgrade completion: CP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
+STURDY_BUILDING_MATERIALS,1,12,0,2,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,"Building Hazard Immunity {SubheaderColor}{SubheaderSize}3hrs{DescriptionColor}{DescriptionSize}
+Add'l Time: <color=""red"">0.5hrs"
+STURDY_BUILDING_MATERIALS,2,20,0,4,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,"Building Hazard Immunity {SubheaderColor}{SubheaderSize}5hrs{DescriptionColor}{DescriptionSize}
+Add'l Time: <color=""red"">1hrs"
+STURDY_BUILDING_MATERIALS,3,28,0,6,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,"Building Hazard Immunity {SubheaderColor}{SubheaderSize}7hrs{DescriptionColor}{DescriptionSize}
+Add'l Time: <color=""red"">1.5hrs"
+STURDY_BUILDING_MATERIALS,4,48,0,8,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,"Building Hazard Immunity {SubheaderColor}{SubheaderSize}12hrs{DescriptionColor}{DescriptionSize}
+Add'l Time: <color=""red"">2hrs"
+STURDY_BUILDING_MATERIALS,5,96,0,10,0,0,0,0,0,Provision_SturdyMaterialsName,Provision_SturdyMaterialsDescription,"Building Hazard Immunity {SubheaderColor}{SubheaderSize}24hrs{DescriptionColor}{DescriptionSize}
+Add'l Time: <color=""red"">2.5hrs"
+CONSTRUCTION_TENTS,1,0,0,0,2,0,1,0,0,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On construction completion: CP {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
 Add'l Energy: <color=""red"">{SubheaderSize}-2"
-CONSTRUCTION_TENTS,2,0,0,0,2,0,2,0,0,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building/upgrade completion: CP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize}
+CONSTRUCTION_TENTS,2,0,0,0,2,0,2,0,0,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On construction completion: CP {SubheaderColor}{SubheaderSize}+2{DescriptionColor}{DescriptionSize}
 Add'l Energy: <color=""red"">{SubheaderSize}-2"
-CONSTRUCTION_TENTS,3,0,0,0,1,0,3,0,0,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On building/upgrade completion: CP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
+CONSTRUCTION_TENTS,3,0,0,0,1,0,3,0,0,Provision_ConstructionTentName,Provision_ConstructionTentDescription,"On construction completion: CP {SubheaderColor}{SubheaderSize}+3{DescriptionColor}{DescriptionSize}
 Add'l Energy: <color=""red"">{SubheaderSize}-1"
 CHAPEL_BLUEPRINT,1,0,0,0,0,1,0,15,0,Provision_ChapelBlueprintName,Provision_ChapelBlueprintDescription,"FP: {SubheaderColor}{SubheaderSize}+1{DescriptionColor}{DescriptionSize}
 Cost to install: <color=""red"">{SubheaderSize}-15"

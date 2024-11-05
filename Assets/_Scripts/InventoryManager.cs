@@ -279,7 +279,7 @@ public class InventoryManager : MonoBehaviour
             prov2 = SwapProvisionBySeason(prov2);
         }
 
-        GeneratedProvisions = GameManager.Instance.SaveData.GeneratedProvisions?.ToList();
+        GeneratedProvisions = GeneratedProvisions.Any() ? GeneratedProvisions : GameManager.Instance.SaveData.GeneratedProvisions?.ToList();
         if (GeneratedProvisions != null && GeneratedProvisions.Any())
         {
             UI.Instance.EnableProvisionPopup(GeneratedProvisions[0], GeneratedProvisions[1]);
