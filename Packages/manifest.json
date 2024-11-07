@@ -8,6 +8,7 @@
     "com.unity.ide.visualstudio": "2.0.22",
     "com.unity.ide.vscode": "1.2.5",
     "com.unity.inputsystem": "1.7.0",
+    "com.unity.inputsystem.gxdk": "file:com.unity.inputsystem.gxdk-1.0.1/package",
     "com.unity.microsoft.gdk": "1.1.0",
     "com.unity.microsoft.gdk.tools": "1.1.0",
     "com.unity.microsoft.gdk.tools.xbox": "file:com.unity.microsoft.gdk.tools.xbox-1.0.1/package",

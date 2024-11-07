@@ -9,7 +9,7 @@ namespace Assets._Scripts
     {
         public static SplashSceneController Instance;
 
-        public  Text StatusText;
+        public Text StatusText;
         public TextMeshProUGUI FailureReasonPrompt;
 
         private bool _clickedStart;
@@ -38,13 +38,6 @@ namespace Assets._Scripts
 
             if (GameSettings.Instance.IsUsingController)
             {
-                if (GameSettings.Instance.IsXboxMode)
-                {
-
-#if MICROSOFT_GDK_SUPPORT
-                    pressedButton = GamePadController.TryInitializeXboxController();
-#endif
-                }
                 if (GameSettings.Instance.IsUsingController)
                 {
                     pressedButton = GamePadController.GetButton();
@@ -96,7 +89,7 @@ namespace Assets._Scripts
         {
             if (isLoggedIn) return;
 
-            if(isError)
+            if (isError)
             {
                 StatusText.text = DefaultStatusText;
                 FailureReasonPrompt.text = message;
