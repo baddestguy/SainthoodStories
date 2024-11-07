@@ -136,6 +136,7 @@ namespace Assets._Scripts.Xbox
             if (pressedButton.Control.WasPressedThisFrame && pressedButton.Button == GamePadButton.Start)
             {
                 PauseMenu.Instance.Activate();
+                return;
             }
 
             if (!PauseMenu.Instance.active) return;
@@ -146,14 +147,20 @@ namespace Assets._Scripts.Xbox
                 return;
             }
 
-            if (!_isDropdownOpen && pressedButton.Control.WasPressedThisFrame && pressedButton.Button is GamePadButton.LeftShoulder or GamePadButton.RightShoulder)
+            if (!_isDropdownOpen && pressedButton.Control.WasPressedThisFrame)
             {
-                HandleTabSwitch(pressedButton);
+                switch (pressedButton.Button)
+                {
+                    case GamePadButton.East:
+                        PauseMenu.Instance.Activate();
+                        return;
+                    case GamePadButton.LeftShoulder or GamePadButton.RightShoulder:
+                        HandleTabSwitch(pressedButton);
+                        return;
+                }
             }
-            else
-            {
-                HandleTabInputs(pressedButton, pressedDirection);
-            }
+
+            HandleTabInputs(pressedButton, pressedDirection);
         }
 
         public void Activate()
@@ -332,20 +339,11 @@ namespace Assets._Scripts.Xbox
                             break;
                     }
                 }
-                //back button pressed
-                else if (pressedButton.Button == GamePadButton.East)
+                //back button pressed and dropdown is open. Close the dropdown
+                else if (pressedButton.Button == GamePadButton.East && _isDropdownOpen)
                 {
-                    //dropdown is open. Close the dropdown
-                    if (_isDropdownOpen)
-                    {
-                        ActiveGraphicsTabOptionDropdown.Hide();
-                        _isDropdownOpen = false;
-                    }
-                    //dropdown is closed. Close the pause menu
-                    else
-                    {
-                        PauseMenu.Instance.Activate();
-                    }
+                    ActiveGraphicsTabOptionDropdown.Hide();
+                    _isDropdownOpen = false;
                 }
                 //dropdown is open. Select an option
                 else if (pressedButton.Button == GamePadButton.South && _isDropdownOpen)
