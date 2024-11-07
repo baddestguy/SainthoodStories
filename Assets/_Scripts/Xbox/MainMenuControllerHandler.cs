@@ -37,7 +37,7 @@ namespace Assets._Scripts.Xbox
             GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
 
             _verticalButtonsLength = GameSettings.Instance.IsXboxMode ? 2 : VerticalButtons.Length;
-            _horizontalButtonCount = GameSettings.Instance.IsXboxMode ? 1 : HorizontalButtons.Length;
+            _horizontalButtonCount = GameSettings.Instance.IsXboxMode ? 2 : HorizontalButtons.Length;
             _currentVerticalButtonIndex = 0;
 
             if (GameSettings.Instance.IsXboxMode)
