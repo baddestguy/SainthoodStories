@@ -64,6 +64,14 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.inputsystem.gxdk": {
+      "version": "file:com.unity.inputsystem.gxdk-1.0.1/package",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.inputsystem": "1.6.1"
+      }
+    },
     "com.unity.microsoft.gdk": {
       "version": "1.1.0",
       "depth": 0,

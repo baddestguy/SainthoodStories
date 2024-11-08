@@ -18,8 +18,8 @@ namespace Assets._Scripts.Xbox
         public GameObject DiscordGameObject;
         public GameObject CreditsGameObject;
 
-        private GameObject[] VerticalButtons => new[] { NewGameGameObject, ContinueGameObject, ExitGameObject };
-        private GameObject[] HorizontalButtons => new[] { SettingsButtonGameObject, DiscordGameObject, CreditsGameObject };
+        private GameObject[] _verticalButtons; 
+        private GameObject[] _horizontalButtons;
 
         private Button _activeMainMenuButton;
         private ColorBlock _defaultMainMenuColorBlock;
@@ -36,9 +36,7 @@ namespace Assets._Scripts.Xbox
         {
             GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
 
-            _verticalButtonsLength = GameSettings.Instance.IsXboxMode ? 2 : VerticalButtons.Length;
-            _horizontalButtonCount = GameSettings.Instance.IsXboxMode ? 1 : HorizontalButtons.Length;
-            _currentVerticalButtonIndex = 0;
+
 
             if (GameSettings.Instance.IsXboxMode)
             {
@@ -49,7 +47,19 @@ namespace Assets._Scripts.Xbox
                 SettingsButtonGameObject.transform.localPosition = new Vector3(
                     DiscordGameObject.transform.localPosition.x,
                     DiscordGameObject.transform.localPosition.y);
+
+                _verticalButtons = new[] { NewGameGameObject, ContinueGameObject };
+                _horizontalButtons = new[] { SettingsButtonGameObject, CreditsGameObject };
             }
+            else
+            {
+                _verticalButtons = new[] { NewGameGameObject, ContinueGameObject, ExitGameObject };
+                _horizontalButtons = new[] { SettingsButtonGameObject, DiscordGameObject, CreditsGameObject };
+            }
+
+            _verticalButtonsLength = GameSettings.Instance.IsXboxMode ? 2 : _verticalButtons.Length;
+            _horizontalButtonCount = GameSettings.Instance.IsXboxMode ? 2 : _horizontalButtons.Length;
+            _currentVerticalButtonIndex = 0;
         }
 
         public void OnDisable()
@@ -59,7 +69,7 @@ namespace Assets._Scripts.Xbox
 
         private void HandleInputMethodChanged(bool isUsingController)
         {
-            if(isUsingController)
+            if (isUsingController)
             {
                 _skipFrame = true;
                 _currentVerticalButtonIndex = 0;
@@ -95,7 +105,7 @@ namespace Assets._Scripts.Xbox
 
             if (!GameManager.Instance.PlayerHasLoggedIn) return;
             TryApplyControllerHover();
-            
+
             //Don't do anything if we aren't using a controller or a pop up is overlaying the main menu.
             if ((Gamepad.current == null && !GameSettings.Instance.IsXboxMode) ||
                 !GameSettings.Instance.IsUsingController ||
@@ -105,7 +115,7 @@ namespace Assets._Scripts.Xbox
 
 
 
-            if(_skipFrame)
+            if (_skipFrame)
             {
                 _skipFrame = false;
                 return;
@@ -156,7 +166,7 @@ namespace Assets._Scripts.Xbox
                     };
                 }
 
-                SetNewActiveMainMenuButton(VerticalButtons[_currentVerticalButtonIndex]);
+                SetNewActiveMainMenuButton(_verticalButtons[_currentVerticalButtonIndex]);
             }
             else if (pressedDirection.Input is DirectionInput.Left or DirectionInput.Right)
             {
@@ -171,12 +181,12 @@ namespace Assets._Scripts.Xbox
                 {
                     case < 0:
                         _currentHorizontalButtonIndex = -1;
-                        if(_currentVerticalButtonIndex < 0) _currentVerticalButtonIndex = 0;
-                        SetNewActiveMainMenuButton(VerticalButtons[_currentVerticalButtonIndex]);
+                        if (_currentVerticalButtonIndex < 0) _currentVerticalButtonIndex = 0;
+                        SetNewActiveMainMenuButton(_verticalButtons[_currentVerticalButtonIndex]);
                         break;
                     case >= 0 when buttonIndex < _horizontalButtonCount:
-                        _currentHorizontalButtonIndex = buttonIndex;
-                        SetNewActiveMainMenuButton(HorizontalButtons[buttonIndex]);
+                        _currentHorizontalButtonIndex =  buttonIndex;
+                        SetNewActiveMainMenuButton(_horizontalButtons[_currentHorizontalButtonIndex]);
                         break;
                 }
             }

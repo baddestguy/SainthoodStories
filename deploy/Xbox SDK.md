@@ -9,6 +9,7 @@ Get access to the [Unity for Game Downloads Unity Forum](https://discussions.uni
     1. Download and install the **GDKX** associated with the release stream. This will give you the ability to access the XBOX native APIs.
 2. ### Tools:
     1. Back on the Main forum page, find and download the latest version of the **Microsoft GDK Tools Xbox Package**. This extends the functionality provided by the [Packages](#packages) below. Install this to *{rootFolder}\Packages*
+    1. Download the latest versino of the **GXDK Input System**. This allows us to treat the Xbox Controller as a native Gamepad.
 3. ### Packages:
     1. Launch Unity and navigate to the Package manager. We'll need the following packages to work with the Unity SDK from within Unity.
     1. Microsoft GDK API Package: This is a Unity wrapper class that gives you access to the native APIS. It has decent documentation and sample projects that show you how to implement features.
