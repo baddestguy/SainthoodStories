@@ -337,27 +337,36 @@ public class GridCollectibleManager : MonoBehaviour
     IEnumerator SpawnSacredItemAsync()
     {
         if (GameSettings.Instance.DEMO_MODE_3 && (SacredItemSpawned >= 2 || MissionManager.Instance.CurrentCollectibleCounter > 4)) yield break;
-        if (SacredItemSpawned >= (GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount - MissionManager.Instance.CurrentCollectibleCounter)) yield break;
+        if (!GameDataManager.Instance.CollectibleObjectivesData.ContainsKey(MissionManager.Instance.CurrentCollectibleMissionId)) yield break;
+
         if (MissionManager.Instance.CurrentCollectibleCounter >= GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount) yield break;
 
         var collectibleList = new List<string>();
         collectibleList.AddRange(GetCollectibleList());
 
         if (collectibleList.Count == 0) yield break; //Player has collected all collectibles
-        SacredItemSpawned++;
+        
+        var iCollectibles = InventoryManager.Instance.Collectibles.Select(x => x.Split(':')[1]);
+        var newList = collectibleList.Except(iCollectibles).Except(SacredItemSpawnedList).ToList();
+        if(newList.Count == 0) yield break;
 
         yield return new WaitForSeconds(2f);
-        var it = collectibleList[Random.Range(0, collectibleList.Count - 1)];
+        
+        var it = newList[Random.Range(0, newList.Count - 1)];
         int tries = 0;
         while (SacredItemSpawnedList.Contains(it) || InventoryManager.Instance.Collectibles.Any(x => x.Split(':')[1] == it))
         {
             yield return null;
-            it = collectibleList[Random.Range(0, collectibleList.Count - 1)];
+            it = newList[Random.Range(0, newList.Count - 1)];
             tries++;
             if(tries > 10) yield break;
         }
-        yield return StartCoroutine(SpawnCollectible(SacredItemResource, SacredItemBehaviour.HARMLESS));
+
+        if (SacredItemSpawned >= (GameDataManager.Instance.CollectibleObjectivesData[MissionManager.Instance.CurrentCollectibleMissionId].Amount - MissionManager.Instance.CurrentCollectibleCounter)) yield break;
         
+        SacredItemSpawned++;
+        yield return StartCoroutine(SpawnCollectible(SacredItemResource, SacredItemBehaviour.HARMLESS));
+
         SacredItemSpawnedList.Add(it);
         (NewCollectibleSpawned as SacredItemCollectible).SacredName = it;
         (NewCollectibleSpawned as SacredItemCollectible).SacredDescription = GameDataManager.Instance.GetCollectibleData(it).Description;
