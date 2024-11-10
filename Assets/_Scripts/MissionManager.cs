@@ -162,6 +162,16 @@ public class MissionManager : MonoBehaviour
         GameManager.Instance.ScrambleMapTiles();
         GameManager.Instance.CurrentBuilding = "InteractableChurch";
 
+        //if any unresolved building hazards exist, penalize the player
+        foreach (var house in GameManager.Instance.Houses)
+        {
+            if (house.BuildingState == BuildingState.HAZARDOUS)
+            {
+                UpdateCharityPoints(-3, null);
+                house.BuildingState = BuildingState.NORMAL;
+            }
+        }
+
         //if final mission, don't save (they can replay the last day if they quit the app at this point. And the save is getting wiped after this point anyway
         //Also, force story mode to true so they must see the ending story even if they have the toggle off
         if (oldMissionId == GameDataManager.MAX_MISSION_ID)
@@ -188,15 +198,6 @@ public class MissionManager : MonoBehaviour
         Player.LockMovement = true;
         while (UI.Instance.CrossFading || EventsManager.Instance.EventInProgress || EventsManager.Instance.HasEventsInQueue()) yield return null;
 
-        //if any unresolved building hazards exist, penalize the player
-        foreach (var house in GameManager.Instance.Houses)
-        {
-            if (house.BuildingState == BuildingState.HAZARDOUS)
-            {
-                UpdateCharityPoints(-3, null);
-                house.BuildingState = BuildingState.NORMAL;
-            }
-        }
         MissionOver = true;
         UI.Instance.EnableAllUIElements(false);
         UI.Instance.GameOver();

@@ -755,19 +755,21 @@ CollectibleComplete2,"""Hmm, what's this?""",,,,,,
 CollectibleComplete2,"""There seems to be some kind of inscription on each of these manuscripts. When I arrange the words together, this is what it says:""",,,,,,
 CollectibleComplete2,"<i>""War tears through our land,
 
-We escape by sea with trembling hands.""</i>",,,,,,
+We escape by sea with trembling hands.""</i>","<i>""War tears through our land,
+
+We escape by sea with trembling hands.""</i>",,,,,
 CollectibleComplete2,"""I wonder what that could mean.""",,,,,,
 CollectibleComplete2,"""I've never been one to solve riddles. As a kid, it took me way too long to figure out why the chicken crossed the road.""",,,,,,
 CollectibleComplete2,"""Anyway, let me know when you've found another ten. Perhaps you can piece together more of this mystery.
 
 Good luck!""",,,,,,
 CollectibleComplete3,"""Excellent work on the manuscripts! These ones contain some of my favorite stories.""",,,,,,
-CollectibleComplete3,"""More of those inscriptions. When I put the words together, we get this:""","""Fortunately, or unfortunately, depending on whether you like half full or half empty glasses, that is the extent to the variation of the Spirits.
-
-Perhaps the designers ran out of time, or simply were not creative enough.""",,,,,
+CollectibleComplete3,"""More of those inscriptions. When I put the words together, we get this:""",,,,,,
 CollectibleComplete3,"<i>""The boat rocks side to side,
 
-No place we can hide.""</i>",,,,,,
+No place we can hide.""</i>","<i>""The boat rocks side to side,
+
+No place we can hide.""</i>",,,,,
 CollectibleComplete3,"""I still have no clue what it could be about, but hopefully you've been taking notes.""",,,,,,
 CollectibleComplete3,"""More Ancient Manuscripts to be found still. Go get 'em!""",,,,,,
 CollectibleComplete4,"""Wonderful, you found another ten! These are all great stories.""",,,,,,
@@ -775,30 +777,63 @@ CollectibleComplete4,"""The island folks are very appreciative of your hard work
 CollectibleComplete4,"""Ok, let's arrange the words of the inscription and see what it says:""",,,,,,
 CollectibleComplete4,"<i>""Thunder splits the sky,
 
-Waves are rushing high.""</i>",,,,,,
+Waves are rushing high.""</i>","<i>""Thunder splits the sky,
+
+Waves are rushing high.""</i>",,,,,
 CollectibleComplete4,"""Seems like a rough time out at sea. Not my idea of a vacation.""",,,,,,
 CollectibleComplete4,"""Let's keep going. I get the feeling there's a lot more to this poem, but we need the full picture. Bring me ten more Ancient Manuscripts please.""",,,,,,
-CollectibleComplete5,"""Another ten in the bag! Great job!""",,,,,,
-CollectibleComplete5,"""These manuscripts are such a hit! I've got people stopping by daily to ask when the entire collection will be complete, so you have my gratitude for firing up their enthusiasm.""",,,,,,
-CollectibleComplete5,"""Now let's see if we can put the new words of the poem together...""",,,,,,
-CollectibleComplete5,"""<i>The sea pulls me below,
+CollectibleComplete5,"""Wow! You have found over thirty so far! Excellent work!""",,,,,,
+CollectibleComplete5,"""Let's take a quick look at the poem...""",,,,,,
+CollectibleComplete5,"<i>""We call to heavens above,
+
+For mercy, strength, and love.""</i>","<i>""We call to heavens above,
+
+For mercy, strength, and love.""</i>",,,,,
+CollectibleComplete5,"""Well, you know me, any time is a good time to pray for mercy, strength, and love.""",,,,,,
+CollectibleComplete5,"""Thank you for these manuscripts. I'm having such a lovely time poring over them.""",,,,,,
+CollectibleComplete5,"""Off to find the next ten!""",,,,,,
+CollectibleComplete6,"""Another ten in the bag! Great job!""",,,,,,
+CollectibleComplete6,"""These manuscripts are such a hit! I've got people stopping by daily to ask when the entire collection will be complete, so you have my gratitude for firing up their enthusiasm.""",,,,,,
+CollectibleComplete6,"""Now let's see if we can put the new words of the poem together...""",,,,,,
+CollectibleComplete6,"""<i>The sea pulls me below,
+
+Time begins to slow.""</i>","""<i>The sea pulls me below,
+
+Time begins to slow.""</i>",,,,,
+CollectibleComplete6,"""Hmm, I wonder...""",,,,,,
+CollectibleComplete6,"""Anyway, we can't jump to conclusions until we have what I assume to be the final piece of the poem, given that there are only ten more manuscripts to find.""",,,,,,
+CollectibleComplete6,"""You know what to do!""",,,,,,
+CollectibleComplete7,"""Masterful work, young postulant! Simply masterful. You found them all! I'm so proud of you.""",,,,,,
+CollectibleComplete7,"""This completes the quest for gathering all the Ancient Manuscripts. The islanders are going to be ecstatic, and for that I am eternally grateful for your efforts.""",,,,,,
+CollectibleComplete7,"""And now for the final stanza to the poem. Ready?""",,,,,,
+CollectibleComplete7,"<i>""The cold wraps around me tight,
+
+As I surrender to the night.""</i>","<i>""The cold wraps around me tight,
+
+As I surrender to the night.""</i>",,,,,
+CollectibleComplete7,"""That ends on a pretty dark note, doesn't it?""",,,,,,
+CollectibleComplete7,"""Okay, let's put it all together now.""",,,,,,
+CollectibleComplete7,"<i>""War tears through our land,
+
+We escape by sea with trembling hands.""</i>",,,,,,
+CollectibleComplete7,"<i>""The boat rocks side to side,
+
+No place we can hide.""</i>",,,,,,
+CollectibleComplete7,"<i>""Thunder splits the sky,
+
+Waves are rushing high.""</i>",,,,,,
+CollectibleComplete7,"<i>""We call to heavens above,
+
+For mercy, strength, and love.""</i>",,,,,,
+CollectibleComplete7,"""<i>The sea pulls me below,
 
 Time begins to slow.""</i>",,,,,,
-CollectibleComplete5,"""Hmm, I wonder...""",,,,,,
-CollectibleComplete5,"""Anyway, we can't jump to conclusions until we have what I assume to be the final piece of the poem, given that there are only ten more manuscripts to find.""",,,,,,
-CollectibleComplete5,"""You know what to do!""",,,,,,
-CollectibleComplete6,"""Masterful work, young postulant! Simply masterful. You found them all! I'm so proud of you.""","""Wow! You have found over fifty so far! Excellent work!""",,,,,
-CollectibleComplete6,"""This completes the quest for gathering all the Ancient Manuscripts. The islanders are going to be ecstatic, and for that I am eternally grateful for your efforts.""","""I'm afraid things are only going to get a bit more difficult from here though. The Spirits are starting to catch on to you.""",,,,,
-CollectibleComplete6,"""And now for the final stanza to the poem. Ready?""","""Moving forward, they might be a bit more tricky to find.""",,,,,
-CollectibleComplete6,"<i>""The cold wraps around me tight,
+CollectibleComplete7,"<i>""The cold wraps around me tight,
 
 As I surrender to the night.""</i>",,,,,,
-CollectibleComplete6,"""That ends on a pretty dark note, doesn't it?""",,,,,,
-CollectibleComplete6,"""It feels so surreal, like the final words of one's subconscious before death.""",,,,,,
-CollectibleComplete6,"""Perhaps something to ponder on during the rest of your time here.""",,,,,,
-CollectibleComplete6,"""Anyway, in more uplifting news, now that this quest is over, I hope you can get back to focusing on your main duties. Chop chop!""","""Good luck with finding the next ten!""",,,,,
-CollectibleComplete7,"""Look at you go! Over half of the Sacred Items collected! The work you're doing is incredible!""",,,,,,
-CollectibleComplete7,"""I can't wait to see what you find next!""",,,,,,
+CollectibleComplete7,"""It feels so surreal, like the final words of one's subconscious before death.""",,,,,,
+CollectibleComplete7,"""Perhaps something to ponder on during the rest of your time here.""",,,,,,
+CollectibleComplete7,"""Anyway, in more uplifting news, now that this quest is over, I hope you can get back to focusing on your main duties. Chop chop!""",,,,,,
 CollectibleComplete8,"""You found another ten, awesome!""",,,,,,
 CollectibleComplete8,"""There are still quite a few more books to find out there. Good luck!""",,,,,,
 CollectibleComplete9,"""Well done, another ten! Lovely work.""",,,,,,
