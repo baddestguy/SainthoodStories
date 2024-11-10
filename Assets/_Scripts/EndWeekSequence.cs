@@ -36,8 +36,17 @@ public class EndWeekSequence : MonoBehaviour
         var donation = InventoryManager.Instance.GetProvision(Provision.ALLOWANCE);
         cashAmount += donation?.Coin ?? 0;
         TreasuryManager.Instance.DonateMoney(cashAmount);   //Will not get this if player closes before RunSequence
-        SaintProgressBar.currentPercent = fp * 100f / fpTarget;
-        SaintProgressBar.endPercent = (fpPool + fp) * 100f / fpTarget;
+
+        if (SaintsManager.Instance.UnlockedSaints.Count < GameDataManager.TOTAL_UNLOCKABLE_SAINTS)
+        {
+            SaintProgressBar.currentPercent = fp * 100f / fpTarget;
+            SaintProgressBar.endPercent = (fpPool + fp) * 100f / fpTarget;
+        }
+        else
+        {
+            SaintProgressBar.currentPercent = 0;
+            SaintProgressBar.endPercent = 0;
+        }
 
         BG.SetActive(true);
         CPFPObj.SetActive(true);
@@ -72,7 +81,6 @@ public class EndWeekSequence : MonoBehaviour
             yield return null;
         }
 
-        if(SaintsManager.Instance.UnlockedSaints.Count < GameDataManager.TOTAL_UNLOCKABLE_SAINTS)
         {
             ContinueObj.SetActive(false);
             Continue = false;
@@ -82,9 +90,9 @@ public class EndWeekSequence : MonoBehaviour
             CashUnlockObj.SetActive(false);
             Title.text = LocalizationManager.Instance.GetText("FP_ENDGAME_TITLE");
             SaintScore.DOCounter(fp, fp + fpPool, 2f);
-            SaintsUnlockObj.SetActive(true);
+            SaintsUnlockObj.SetActive(SaintsManager.Instance.UnlockedSaints.Count < GameDataManager.TOTAL_UNLOCKABLE_SAINTS);
             SaintProgressBar.gameObject.SetActive(true);
-            SaintProgressBar.isOn = true;
+            SaintProgressBar.isOn = SaintsManager.Instance.UnlockedSaints.Count < GameDataManager.TOTAL_UNLOCKABLE_SAINTS;
             SaintProgressBar.speed = 1;
 
             TotalFPProgress.currentPercent = fp * 100f / MissionManager.TOTAL_FP_TARGET;
