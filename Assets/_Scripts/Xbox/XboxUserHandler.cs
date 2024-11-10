@@ -16,7 +16,9 @@ namespace Assets._Scripts.Xbox
         public event XboxUserLoginStatusChange OnXboxUserLoginStatusChange;
         public XboxSavedDataHandler SavedDataHandler;
 
+        public ulong UserId { get; private set; }
         public string GamerTag { get; private set; }
+        public ulong LocalUserId { get; private set; }
         public static string GameConfigTitleId => "60FCC671";
         public static string GameConfigSandbox => "DVKLWP.1";
 
@@ -26,7 +28,6 @@ namespace Assets._Scripts.Xbox
 
 
         private bool _isUserLoggedIn;
-        private ulong _userId;
         private XUserHandle _userHandle;
         private XUserChangeRegistrationToken _registrationToken;
         private XblContextHandle _xblContextHandle;
@@ -199,6 +200,9 @@ namespace Assets._Scripts.Xbox
             }
 
             SavedDataHandler.IsProcessingAsyncSave = false;
+            
+            // Eltee: I can probably remove it but things work, and I'm not in the mood to start debugging why it would stop working if removing the below statement breaks it.
+            // ReSharper disable once RedundantJumpStatement
             yield break;
         }
 
@@ -217,7 +221,7 @@ namespace Assets._Scripts.Xbox
             // will be returned.
             SDK.XBL.XblAchievementsUpdateAchievementAsync(
                 _xblContextHandle,
-                _userId,
+                UserId,
                 achievementId,
                 (uint)progressLevel,
                 hResult =>
@@ -345,8 +349,8 @@ namespace Assets._Scripts.Xbox
                 return;
             }
 
-            var userIdHResult = SDK.XUserGetId(_userHandle, out _userId);
-            if (Unity.XGamingRuntime.Interop.HR.FAILED(hResult))
+            var userIdHResult = SDK.XUserGetId(_userHandle, out var userId);
+            if (Unity.XGamingRuntime.Interop.HR.FAILED(userIdHResult))
             {
                 Debug.LogError($"FAILED: Could not get user ID, hResult=0x{userIdHResult:X} ({HR.NameOf(userIdHResult)})");
                 OnXboxUserLoginStatusChange?.Invoke(false, $"FAILED: Could not get user ID, hResult=0x{userIdHResult:X} ({HR.NameOf(userIdHResult)})", true);
@@ -357,8 +361,17 @@ namespace Assets._Scripts.Xbox
             //{
             //    Debug.Log("WE can find controller for user");
             //});
+            var localIdResult =  SDK.XUserGetLocalId(_userHandle, out var userLocalId);
+            if (Unity.XGamingRuntime.Interop.HR.FAILED(localIdResult))
+            {
+                Debug.LogError($"FAILED: Could not get user ID, hResult=0x{localIdResult:X} ({HR.NameOf(localIdResult)})");
+                OnXboxUserLoginStatusChange?.Invoke(false, $"FAILED: Could not get user local ID, hResult=0x{localIdResult:X} ({HR.NameOf(localIdResult)})", true);
+                return;
+            }
 
-            Debug.Log($"SUCCESS: XUserGetGamertag() returned: '{gamertag}'");
+            Debug.Log($"SUCCESS: XUserGetGamertag() returned: '{gamertag}' for UserId: '{userId}' and LocalId: '{userLocalId.Value}'");
+            UserId = userId;
+            LocalUserId = userLocalId.Value;
             GamerTag = gamertag;
             IsUserLoggedIn = true;
 

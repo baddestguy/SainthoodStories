@@ -115,11 +115,10 @@ namespace Assets._Scripts.Xbox
 #endif
         }
 
-        /// <summary>
-        /// This is a move of last resort. There are very VERY few cases where we would need to call this directly.
-        /// </summary>
         public void AlertNoControllerDetected()
         {
+            if (GameSettings.Instance.IsXboxMode) return;
+
             OnInputMethodChanged?.Invoke(false);
         }
 

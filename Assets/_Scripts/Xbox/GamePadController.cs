@@ -54,9 +54,12 @@ namespace Assets._Scripts.Xbox
 
     public static class GamePadController
     {
-        private static Gamepad GamePad => Gamepad.current;
 #if MICROSOFT_GDK_SUPPORT
-        private static Gamepad GamePad => GameSettings.Instance.IsXboxMode ? GXDKGamepad.current : Gamepad.current;
+        private static Gamepad GamePad => GameSettings.Instance.IsXboxMode ? 
+            GXDKGamepad.all.FirstOrDefault(x => x.added && x.gxdkUserId == XboxUserHandler.Instance.LocalUserId) : 
+            Gamepad.current;
+#else
+        private static Gamepad GamePad => Gamepad.current;
 #endif
         private static StickControl LeftStick => GamePad.leftStick;
         private static DpadControl DPad => GamePad.dpad;
