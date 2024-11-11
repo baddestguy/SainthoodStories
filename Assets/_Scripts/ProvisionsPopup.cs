@@ -67,6 +67,12 @@ public class ProvisionsPopup : MonoBehaviour
         CloseUI();
     }
 
+    public void SkipProvision()
+    {
+        InventoryManager.HasChosenProvision = true;
+        CloseUI();
+    }
+
     public void UpgradeProvision(ProvisionData prov)
     {
         if (PopupPhase == ProvisionsPopupPhase.REPLACE)
