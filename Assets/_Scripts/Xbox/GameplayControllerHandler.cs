@@ -115,11 +115,10 @@ namespace Assets._Scripts.Xbox
 #endif
         }
 
-        /// <summary>
-        /// This is a move of last resort. There are very VERY few cases where we would need to call this directly.
-        /// </summary>
         public void AlertNoControllerDetected()
         {
+            if (GameSettings.Instance.IsXboxMode) return;
+
             OnInputMethodChanged?.Invoke(false);
         }
 
@@ -333,7 +332,9 @@ namespace Assets._Scripts.Xbox
             _provisionsPopUp = provisionsPopup;
             if (_provisionsPopUp == null) return;
 
-            _provisionItems = provisionsPopup.NewProvisionUIItems.Concat(provisionsPopup.UpgradeProvisionUIItems).Where(x => x.HasProvision).ToArray();
+            _provisionItems = provisionsPopup.NewProvisionUIItems
+                .Concat(provisionsPopup.UpgradeProvisionUIItems).Where(x => x.HasProvision)
+                .ToArray();
 
             if (GameSettings.Instance.IsUsingController)
             {
@@ -477,7 +478,7 @@ namespace Assets._Scripts.Xbox
 
                 if (_currentInventoryGameObject == null)
                 {
-                    _currentInventoryGameObject = _provisionItems.First().gameObject;
+                    _currentInventoryGameObject = inventoryTooltips.First().gameObject;
                 }
 
                 _currentInventoryGameObject.GetComponent<TooltipMouseOver>().HandleControllerHover();
@@ -686,20 +687,32 @@ namespace Assets._Scripts.Xbox
             {
                 DeselectProvision();
 
+                var gameObjectsToConsider = _provisionItems.Select(x => x.gameObject).Concat(new[] { _provisionsPopUp.ExitGameObject }).ToArray();
                 var closestProvisionGameObject = pressedDirection.Input.GetClosestGameObjectOnCanvasInDirection(
-                    _currentProvisionUIItem?.gameObject,
-                    _provisionItems.Select(x => x.gameObject).ToArray());
-                if (closestProvisionGameObject != null)
-                {
-                    _currentProvisionUIItem = closestProvisionGameObject.GetComponentInChildren<ProvisionUIItem>();
-                }
+                    _currentProvisionUIItem?.gameObject ?? _provisionsPopUp.ExitGameObject,
+                    gameObjectsToConsider
+                    );
 
-                if (_currentProvisionUIItem == null)
+                if (closestProvisionGameObject == _provisionsPopUp.ExitGameObject)
                 {
-                    _currentProvisionUIItem = _provisionItems.FirstOrDefault();
+                    _provisionsPopUp.HandleExitButtonControllerHover();
+                    _currentProvisionUIItem = null;
                 }
+                else
+                {
 
-                _currentProvisionUIItem?.HandleControllerHover();
+                    if (closestProvisionGameObject != null)
+                    {
+                        _currentProvisionUIItem = closestProvisionGameObject.GetComponentInChildren<ProvisionUIItem>();
+                    }
+
+                    if (_currentProvisionUIItem == null)
+                    {
+                        _currentProvisionUIItem = _provisionItems.FirstOrDefault();
+                    }
+
+                    _currentProvisionUIItem?.HandleControllerHover();
+                }
             }
             else if (pressedButton.Control.WasPressedThisFrame)
             {
@@ -716,21 +729,28 @@ namespace Assets._Scripts.Xbox
                         SelectFirstProvision();
                     }
                 }
-                else if (pressedButton.Button == GamePadButton.South && _currentProvisionUIItem != null)
+                else if (pressedButton.Button == GamePadButton.South)
                 {
-                    _currentProvisionUIItem.OnClick();
-                    DeselectProvision();
-
-                    //If we are at the limit and have to replace a provision, hover over the first existing provision
-                    if (_currentProvisionUIItem.Type == ProvisionUIItemType.NEW &&
-                        _provisionsPopUp != null &&
-                        _provisionsPopUp.PopupPhase == ProvisionsPopupPhase.REPLACE)
+                    if (_currentProvisionUIItem == null)
                     {
-                        SelectFirstProvision();
+                        _provisionsPopUp.CloseUI();
                     }
                     else
                     {
-                        _currentProvisionUIItem = null;
+                        _currentProvisionUIItem.OnClick();
+                        DeselectProvision();
+
+                        //If we are at the limit and have to replace a provision, hover over the first existing provision
+                        if (_currentProvisionUIItem.Type == ProvisionUIItemType.NEW &&
+                            _provisionsPopUp != null &&
+                            _provisionsPopUp.PopupPhase == ProvisionsPopupPhase.REPLACE)
+                        {
+                            SelectFirstProvision();
+                        }
+                        else
+                        {
+                            _currentProvisionUIItem = null;
+                        }
                     }
                 }
             }
@@ -747,6 +767,10 @@ namespace Assets._Scripts.Xbox
             if (_currentProvisionUIItem != null)
             {
                 _currentProvisionUIItem.EndControllerHover();
+            }
+            else
+            {
+                _provisionsPopUp.EndExitButtonControllerHover();
             }
         }
 

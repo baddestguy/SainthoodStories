@@ -70,10 +70,7 @@ public class ProvisionUIItem : MonoBehaviour
         ToolTipManager.Instance.ShowToolTip("");
     }
 
-    #region XboxSupport
-
-    private Vector3? _preHoverScale;
-
+    #region ControllerSupport
 
     /// <summary>
     /// Enlarge an action button to visibly show a user that it is the current action button that will be triggered by the controller
