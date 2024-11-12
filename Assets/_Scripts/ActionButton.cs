@@ -57,7 +57,7 @@ public class ActionButton : MonoBehaviour
         Timer = timer;
     }
 
-    #region XboxSupport
+    #region ControllerSupport
 
     public bool HasControllerHover => GetComponent<TooltipMouseOver>().HasControllerHover;
 

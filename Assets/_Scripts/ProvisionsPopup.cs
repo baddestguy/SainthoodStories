@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Assets._Scripts.Extensions;
 using Assets._Scripts.Xbox;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class ProvisionsPopup : MonoBehaviour
     public ProvisionUIItem[] NewProvisionUIItems = new ProvisionUIItem[2];
     public ProvisionUIItem[] UpgradeProvisionUIItems = new ProvisionUIItem[5];
     public InteractableHouse House;
+    public GameObject ExitGameObject { get; set; }
 
     public void Init(ProvisionData prov1, ProvisionData prov2)
     {
@@ -36,6 +38,7 @@ public class ProvisionsPopup : MonoBehaviour
         }
 
         GameplayControllerHandler.Instance.SetCurrentProvisionsPopUp(this);
+        ExitGameObject = gameObject.FindDeepChild("Exit");
     }
 
     public void AddProvisionUIItem(ProvisionData prov, ScrollRect scroller, ProvisionUIItemType type)
@@ -138,7 +141,7 @@ public class ProvisionsPopup : MonoBehaviour
         }
     }
 
-    private void CloseUI()
+    public void CloseUI()
     {
         var bonusEnergy = InventoryManager.Instance.GetProvision(Provision.ENERGY_DRINK);
         Player player = GameManager.Instance.Player;
@@ -154,4 +157,22 @@ public class ProvisionsPopup : MonoBehaviour
 
         House.GoToWorldMap();
     }
+
+    #region ControllerSupport
+
+    /// <summary>
+    /// Enlarge an action button to visibly show a user that it is the current action button that will be triggered by the controller
+    /// </summary>
+    public void HandleExitButtonControllerHover()
+    {
+        ExitGameObject.GetComponent<TooltipMouseOver>().HandleControllerHover();
+    }
+    /// <summary>
+    /// Reset an action button to visibly show a user that it is no longer the current action button that will be triggered by the controller
+    /// </summary>
+    public void EndExitButtonControllerHover()
+    {
+        ExitGameObject.GetComponent<TooltipMouseOver>().HandleControllerExit();
+    }
+    #endregion
 }

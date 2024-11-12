@@ -198,7 +198,7 @@ public class TooltipMouseOver : MonoBehaviour
     }
 
 
-    #region XboxSupport
+    #region ControllerSupport
 
     private const float ScaleValue = 1.25f;
     public bool HasControllerHover;
