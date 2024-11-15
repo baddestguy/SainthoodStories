@@ -103,7 +103,7 @@ public class PrayerManager : MonoBehaviour
         StopCoroutine(prayerCoroutine);
         StopCoroutine("HitFx");
         ExitButtonsGroup.transform.DOMoveY(PrayerButtons.transform.position.y, 1f);
-        RosaryRing.transform.DOMoveY(2f, 2f);
+        RosaryRing.transform.DOMoveY(7f, 2f);
         CurrentAudioSource.Stop();
         PrayerButtons.transform.DOMoveY(PrayerButtonsAnchor.position.y, 1f);
         MainGlowFx.SetActive(false);
