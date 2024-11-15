@@ -27,6 +27,9 @@ public class PrayerManager : MonoBehaviour
     public GameObject[] BuildingInteriors;
     public AudioSource CurrentAudioSource;
 
+    public GameObject MainGlowFx;
+    public GameObject MainGlowHitFx;
+
     private float prevMusicVol;
     private float prevAmbiantVol;
     private bool MoveNext;
@@ -34,22 +37,22 @@ public class PrayerManager : MonoBehaviour
     public float[] RingPositions = new float[] 
     {
         327.1f,
-        364.7f,
+        367f,
         399f,
         428.5f,
-        454.5f,
-        488.5f,
-        518.5f,
+        460.5f,
+        491.5f,
+        523f,
         554.5f,
         584.5f,
-        618.5f,
-        644.5f
+        615.5f,
+        647f
     };
 
     // Start is called before the first frame update
     void Start()
     {
-        SoundManager.Instance.PlayAmbience("SummerNight_Ambience");
+        SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
         SoundManager.Instance.PlayMusic("Ave Maria (Piano Version)");
 
         var interiorIndex = Random.Range(0, BuildingInteriors.Length+1);
@@ -79,10 +82,12 @@ public class PrayerManager : MonoBehaviour
         GameSettings.Instance.SetVolume("Ambiance", prevAmbiantVol);
 
         StopCoroutine(prayerCoroutine);
+        StopCoroutine("HitFx");
         ExitButtonsGroup.transform.DOMoveY(PrayerButtons.transform.position.y, 1f);
         RosaryRing.transform.DOMoveY(2f, 2f);
         CurrentAudioSource.Stop();
         PrayerButtons.transform.DOMoveY(PrayerButtonsAnchor.position.y, 1f);
+        MainGlowFx.SetActive(false);
     }
 
     public void OnMoveNext()
@@ -101,6 +106,9 @@ public class PrayerManager : MonoBehaviour
         switch (prayer)
         {
             case PrayerType.ROSARY_JOYFUL:
+            case PrayerType.ROSARY_GLORIOUS:
+            case PrayerType.ROSARY_LUMINOUS:
+            case PrayerType.ROSARY_SORROWFUL:
                 prayerCoroutine = StartCoroutine(RosaryPrayer());
                 break;
 
@@ -109,19 +117,30 @@ public class PrayerManager : MonoBehaviour
         }
     }
 
+    IEnumerator HitFx()
+    {
+        MainGlowFx.SetActive(false);
+        yield return new WaitForSeconds(1);
+        MainGlowHitFx.SetActive(true);
+        MainGlowFx.SetActive(true);
+        SoundManager.Instance.PlayOneShotSfx("Walk_SFX", 0.2f);
+    }
+
     IEnumerator RosaryPrayer()
     {
-        var rosaryRingIndex = 0;
+        SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 10f);
 
         yield return new WaitForSeconds(2f);
 
         TitleText.DOFade(0, 2);
         RosaryRing.transform.DOMoveY(-3.7f, 2f);
-        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[rosaryRingIndex], 0), 2f);
+        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 2f);
 
         yield return new WaitForSeconds(2f);
 
         ExitButtonsGroup.transform.DOMoveY(PrayerButtonsAnchor.position.y, 1f);
+        MainGlowFx.SetActive(true);
+        MainGlowHitFx.SetActive(true);
         CurrentAudioSource = SoundManager.Instance.PlayVoice("Opening");
         while(CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
 
@@ -139,15 +158,18 @@ public class PrayerManager : MonoBehaviour
         for (int i = 1; i <= 3; i++)
         {
             while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+            RosaryRing.transform.DORotate(new Vector3(270, RingPositions[i], 0), 1f);
+            StartCoroutine("HitFx");
             if (!MoveNext)
             {
                 yield return new WaitForSeconds(1f);
             }
             MoveNext = false;
             CurrentAudioSource = SoundManager.Instance.PlayVoice("HailMary");
-            RosaryRing.transform.DORotate(new Vector3(270, RingPositions[i], 0), 1f);
         }
         while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 1f);
+        StartCoroutine("HitFx");
         if (!MoveNext)
         {
             yield return new WaitForSeconds(2f);
@@ -155,7 +177,6 @@ public class PrayerManager : MonoBehaviour
         MoveNext = false;
 
         CurrentAudioSource = SoundManager.Instance.PlayVoice("GloryBe");
-        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 1f);
         while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
         if (!MoveNext)
         {
@@ -179,15 +200,18 @@ public class PrayerManager : MonoBehaviour
             for (int j = 1; j <= 10; j++)
             {
                 while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+                RosaryRing.transform.DORotate(new Vector3(270, RingPositions[j], 0), 1f);
+                StartCoroutine("HitFx");
                 if (!MoveNext)
                 {
                     yield return new WaitForSeconds(1f);
                 }
                 MoveNext = false;
                 CurrentAudioSource = SoundManager.Instance.PlayVoice("HailMary");
-                RosaryRing.transform.DORotate(new Vector3(270, RingPositions[j], 0), 1f);
             }
             while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+            RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 1f);
+            StartCoroutine("HitFx");
             if (!MoveNext)
             {
                 yield return new WaitForSeconds(2f);
@@ -195,7 +219,6 @@ public class PrayerManager : MonoBehaviour
             MoveNext = false;
 
             CurrentAudioSource = SoundManager.Instance.PlayVoice("GloryBe");
-            RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 1f);
             while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
             if (!MoveNext)
             {
