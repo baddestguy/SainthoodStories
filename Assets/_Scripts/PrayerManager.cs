@@ -1,10 +1,9 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
-using Newtonsoft.Json.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+using Random = UnityEngine.Random;
 
 public enum PrayerType
 {
@@ -22,6 +21,7 @@ public class PrayerManager : MonoBehaviour
     public PrayerType PrayerType;
     public GameObject RosaryRing;
     public GameObject PrayerButtons;
+    public GameObject PrayerButtonTypes;
     public GameObject ExitButtonsGroup;
     public Transform PrayerButtonsAnchor;
     public GameObject[] BuildingInteriors;
@@ -52,28 +52,47 @@ public class PrayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
         SoundManager.Instance.PlayMusic("Ave Maria (Piano Version)");
+        SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
 
         var interiorIndex = Random.Range(0, BuildingInteriors.Length+1);
         if(interiorIndex < BuildingInteriors.Length)
         {
             BuildingInteriors[interiorIndex].SetActive(true);
         }
+        StartCoroutine(LightningThunder());
+        StartCoroutine(StartPlaylistAsync());
+    }
+
+    IEnumerator StartPlaylistAsync()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(5);
+            if (SoundManager.Instance.MusicAudioSourceChannel1.isPlaying) continue;
+
+            yield return new WaitForSeconds(Random.Range(40, 60));
+            SoundManager.Instance.PlayMusic("Ave Maria (Piano Version)");
+        }
     }
 
     public void OnRosaryBtnClick()
     {
-        //Popup more options for choosing a Mystery
+        PrayerButtonTypes.SetActive(!PrayerButtonTypes.activeSelf);
+    }
 
+    public void SelectRosaryType(string prayerType)
+    {
         PrayerButtons.transform.DOMoveY(-300f, 1f);
+        PrayerButtonTypes.SetActive(false);
 
-        TitleText.DOFade(1,0);
+        TitleText.DOFade(1, 0);
         TitleText.text = "ROSARY";
         SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
-      
-        PrayerType = PrayerType.ROSARY_JOYFUL;
-        StartPrayerSequence(PrayerType.ROSARY_JOYFUL);
+
+        PrayerType = (PrayerType)Enum.Parse(typeof(PrayerType), prayerType);
+        StartPrayerSequence(PrayerType);
+
     }
 
     public void StopPrayerSequence()
@@ -253,7 +272,24 @@ public class PrayerManager : MonoBehaviour
         }
         MoveNext = false;
 
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("Opening");
+        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 1f);
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+        if (!MoveNext)
+        {
+            yield return new WaitForSeconds(2f);
+        }
+        MoveNext = false;
+
         StopPrayerSequence();
     }
 
+    private IEnumerator LightningThunder()
+    {
+        while (true)
+        {
+            SoundManager.Instance.PlayOneShotSfx("Thunder_SFX", 0.2f, 30);
+            yield return new WaitForSeconds(Random.Range(30f, 60f));
+        }
+    }
 }
