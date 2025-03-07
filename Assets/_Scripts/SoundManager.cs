@@ -197,6 +197,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlayWeatherAmbience(bool start)
     {
+        if(MissionManager.Instance.CurrentMission == null) return;
         string weather = "";
 
         switch (MissionManager.Instance.CurrentMission.Season)

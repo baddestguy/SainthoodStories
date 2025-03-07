@@ -3,6 +3,7 @@ using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public enum PrayerType
@@ -49,6 +50,8 @@ public class PrayerManager : MonoBehaviour
         647f
     };
 
+    public bool Praying;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,7 +63,7 @@ public class PrayerManager : MonoBehaviour
         {
             BuildingInteriors[interiorIndex].SetActive(true);
         }
-        StartCoroutine(LightningThunder());
+    //    StartCoroutine(LightningThunder());
         StartCoroutine(StartPlaylistAsync());
     }
 
@@ -97,6 +100,22 @@ public class PrayerManager : MonoBehaviour
 
     public void StopPrayerSequence()
     {
+        if(!Praying)
+        {
+            transform.Find("Exit").DOMoveY(-300f, 0.2f);
+            PrayerButtons.transform.DOMoveY(-300f, 0.2f);
+
+            StartCoroutine(ScheduleCallback(() =>
+            {
+                SoundManager.Instance.EndAllTracks();
+                GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+            }, 1));
+
+            return;
+        }
+
+        Praying = false;
+        TitleText.DOFade(0, 0);
         GameSettings.Instance.SetVolume("Music", prevMusicVol);
         GameSettings.Instance.SetVolume("Ambiance", prevAmbiantVol);
 
@@ -104,7 +123,8 @@ public class PrayerManager : MonoBehaviour
         StopCoroutine("HitFx");
         ExitButtonsGroup.transform.DOMoveY(PrayerButtons.transform.position.y, 1f);
         RosaryRing.transform.DOMoveY(7f, 2f);
-        CurrentAudioSource.Stop();
+        if(CurrentAudioSource != null)
+            CurrentAudioSource.Stop();
         PrayerButtons.transform.DOMoveY(PrayerButtonsAnchor.position.y, 1f);
         MainGlowFx.SetActive(false);
     }
@@ -117,6 +137,7 @@ public class PrayerManager : MonoBehaviour
 
     public void StartPrayerSequence(PrayerType prayer)
     {
+        Praying = true;
         prevMusicVol = GameSettings.Instance.musicVolume;
         prevAmbiantVol = GameSettings.Instance.ambianceVolume;
         GameSettings.Instance.SetVolume("Music", 0.25f);
@@ -292,4 +313,11 @@ public class PrayerManager : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(30f, 60f));
         }
     }
+
+    private IEnumerator ScheduleCallback(Action callback, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        callback?.Invoke();
+    }
+
 }
