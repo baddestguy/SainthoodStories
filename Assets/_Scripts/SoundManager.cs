@@ -16,6 +16,7 @@ public class SoundManager : MonoBehaviour
     [HideInInspector]public AudioSource HouseAmbience;
     [HideInInspector]public AudioSource WeatherAmbientAudioSource;
     [HideInInspector]public AudioSource OneShotSource;
+    [HideInInspector]public AudioSource VoiceOverSource;
     private string AmbientTrackName;
     [HideInInspector]public AudioSource gameplayTrack;
     [HideInInspector]public AudioLowPassFilter lowPassFilter;
@@ -196,6 +197,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlayWeatherAmbience(bool start)
     {
+        if(MissionManager.Instance.CurrentMission == null) return;
         string weather = "";
 
         switch (MissionManager.Instance.CurrentMission.Season)
@@ -284,6 +286,20 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public AudioSource PlayVoice(string name)
+    {
+        if (VoiceOverSource == null)
+        {
+            VoiceOverSource = gameObject.AddComponent<AudioSource>();
+            VoiceOverSource.outputAudioMixerGroup = audioMixerGroup["VO"];
+        }
+
+        VoiceOverSource.clip = Resources.Load("Audio/Prayers/" + name, typeof(AudioClip)) as AudioClip;
+        VoiceOverSource.Play();
+        VoiceOverSource.loop = false;
+
+        return VoiceOverSource;
+    }
 
     public void PlayOneShotSfx(string name, float volume = 1f, float timeToDie = 1f, bool modifyPitch = false)
     {

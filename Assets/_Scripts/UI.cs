@@ -165,6 +165,11 @@ public class UI : MonoBehaviour
         }
     }
 
+    public void GoToPrayer()
+    {
+        GameManager.Instance.LoadScene("PrayerScene");
+    }
+
     public void InventoryPopupEnable()
     {
         if (!FullUIVisible && !InventoryPopup.activeSelf) return;
