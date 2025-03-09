@@ -15,8 +15,12 @@ Get access to the [Unity for Game Downloads Unity Forum](https://discussions.uni
     1. Microsoft GDK API Package: This is a Unity wrapper class that gives you access to the native APIS. It has decent documentation and sample projects that show you how to implement features.
     1. Microsoft GDK Tools Package: Not to be confused with the [tools xbox package](#tools), this makes it easy to manage assets and configs for your depoys.
 
-## 2. Build
-1. Double click the Assets -> _Scripts -> Xbox -> Sign-in -> GdkSignInSample.gdksettings file to make it the current active settings.
+## 2a. Pre-Build
+1. Run CreateBuilds.ps1 located in XBuilds directory
+1. Enter the build version you plan on building and follow the prompts until the script tells you to create the build
+
+## 2b. Build
+1. Back in Unity, Double click the Assets -> _Scripts -> Xbox -> Sign-in -> GdkSignInSample.gdksettings file to make it the current active settings.
     1. Note that the Game Version set here supercedes whatever is set in the player settings.
 1. Change Playform to Game Core - [Xbox version you want]
 1. Ensure the following settings:
@@ -26,8 +30,12 @@ Get access to the [Unity for Game Downloads Unity Forum](https://discussions.uni
     1. Script Debugging - Checked off
     1. **Build**. Do not Build and run.
 
+## 2c. Post-Build
+1. Back to the script, continue to follow the prompts if any post-build actions are needed.
 
-## 3. Deploy
+## 3a. Deploy Via Device Portal
+
+1. If you are having issues getting this to work try using the Xbox Manager SDK method.
 1. I'm going to assume your xbox is already in dev mode. If not, look it up.
 1. Get the remote access url
     1. If you set up a username and password in the remote access settings, well you're gonna need them. Or you can easily change it on the xbox if you can't remember it.
@@ -38,6 +46,13 @@ Get access to the [Unity for Game Downloads Unity Forum](https://discussions.uni
 1. Source should point to *{buildOutputDirectory}\Loose*
 1. Destination will be the desired folder name it gets installed to on the xbox. I use Sainthood
 1. On clicking next, a terminal window should open letting you know the status of the files being transferred. Once that's done, you're ready to play your game.
+
+## 3a. Deploy Via Xbox Manager GDK
+
+1. Can't remember where I got this from.
+1. Click Install Application
+1. Select XVC file
+1. Be sure to close Manager after deploy as it keeps the game stuck on the title screen.
 
 ## 4. Debug
 After the game has launched (typically once you see the Unity log) you can attach to the Xbox to see log messages. On the Console window, select the dropdown beside "Error Pause" and select Remote -> GameCoreXbox -> Console. You should now start seeing log messages in the console.

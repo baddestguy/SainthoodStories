@@ -73,17 +73,12 @@ if (-not (Test-Path -Path $packageDirectory)) {
     }
 
     
-    Write-Host "**********************"
-    if ($shouldAutoComplete -eq "Y") {
+    if ($shouldAutoComplete -ne "Y") {
+        Write-Host "**********************"
         Write-Host "Package directory found. Zipping files..."
-    }
-    else {
-        $nextStepChoice = Read-Host "Package directory found. Proceed to zip or end process? Y/N"
-        if ($nextStepChoice -ne "Y") {
-            Write-Host "Exiting..."
-            Read-Host -Prompt "Press Enter to exit"
-            exit;
-        }
+        Write-Host "Exiting..."
+        Read-Host -Prompt "Press Enter to exit"
+        exit;
     }
 }
 
