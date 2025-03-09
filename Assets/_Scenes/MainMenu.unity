@@ -11855,6 +11855,7 @@ MonoBehaviour:
   NewGameGameObject: {fileID: 1011201787}
   ContinueGameObject: {fileID: 58004107}
   ExitGameObject: {fileID: 921558570}
+  PrayerModeGameObject: {fileID: 165123538}
   SettingsButtonGameObject: {fileID: 189673516}
   SteamWishListGameObject: {fileID: 57460584}
   DiscordGameObject: {fileID: 2041105733}

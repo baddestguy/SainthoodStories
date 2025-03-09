@@ -9,16 +9,19 @@ namespace Assets._Scripts.Xbox
     /// </summary>
     public class MainMenuControllerHandler : MonoBehaviour
     {
+        [Header("Vertical Buttons")]
         public GameObject NewGameGameObject;
         public GameObject ContinueGameObject;
         public GameObject ExitGameObject;
 
+        [Header("Horizontal Buttons")]
+        public GameObject PrayerModeGameObject;
         public GameObject SettingsButtonGameObject;
         public GameObject SteamWishListGameObject;
         public GameObject DiscordGameObject;
         public GameObject CreditsGameObject;
 
-        private GameObject[] _verticalButtons; 
+        private GameObject[] _verticalButtons;
         private GameObject[] _horizontalButtons;
 
         private Button _activeMainMenuButton;
@@ -49,16 +52,16 @@ namespace Assets._Scripts.Xbox
                     DiscordGameObject.transform.localPosition.y);
 
                 _verticalButtons = new[] { NewGameGameObject, ContinueGameObject };
-                _horizontalButtons = new[] { SettingsButtonGameObject, CreditsGameObject };
+                _horizontalButtons = new[] { PrayerModeGameObject, SettingsButtonGameObject, CreditsGameObject };
             }
             else
             {
                 _verticalButtons = new[] { NewGameGameObject, ContinueGameObject, ExitGameObject };
-                _horizontalButtons = new[] { SettingsButtonGameObject, DiscordGameObject, CreditsGameObject };
+                _horizontalButtons = new[] { PrayerModeGameObject, SettingsButtonGameObject, DiscordGameObject, CreditsGameObject };
             }
 
-            _verticalButtonsLength = GameSettings.Instance.IsXboxMode ? 2 : _verticalButtons.Length;
-            _horizontalButtonCount = GameSettings.Instance.IsXboxMode ? 2 : _horizontalButtons.Length;
+            _verticalButtonsLength = _verticalButtons.Length;
+            _horizontalButtonCount = _horizontalButtons.Length;
             _currentVerticalButtonIndex = 0;
         }
 
@@ -185,7 +188,7 @@ namespace Assets._Scripts.Xbox
                         SetNewActiveMainMenuButton(_verticalButtons[_currentVerticalButtonIndex]);
                         break;
                     case >= 0 when buttonIndex < _horizontalButtonCount:
-                        _currentHorizontalButtonIndex =  buttonIndex;
+                        _currentHorizontalButtonIndex = buttonIndex;
                         SetNewActiveMainMenuButton(_horizontalButtons[_currentHorizontalButtonIndex]);
                         break;
                 }
