@@ -194,15 +194,13 @@ namespace Assets._Scripts.Xbox
                 }
             }
 
-            _activeMainMenuButton.colors = _activeMainMenuColorBlock;
-
             return;
 
             void SetNewActiveMainMenuButton(GameObject gameObjectHoldingMenuButton)
             {
-
                 _activeMainMenuButton.colors = _defaultMainMenuColorBlock;
                 _activeMainMenuButton = gameObjectHoldingMenuButton.GetComponent<Button>();
+                _activeMainMenuButton.colors = _activeMainMenuColorBlock;
             }
         }
     }
