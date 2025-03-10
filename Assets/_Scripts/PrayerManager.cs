@@ -3,6 +3,7 @@ using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
@@ -18,6 +19,8 @@ public enum PrayerType
 
 public class PrayerManager : MonoBehaviour
 {
+    public static PrayerManager Instance { get; private set; }
+
     public TextMeshProUGUI TitleText;
     public PrayerType PrayerType;
     public GameObject RosaryRing;
@@ -50,7 +53,13 @@ public class PrayerManager : MonoBehaviour
         647f
     };
 
-    public bool Praying;
+    public bool Praying { get; private set; }
+
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
