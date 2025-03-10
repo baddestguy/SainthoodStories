@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Assets._Scripts.Xbox;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,12 +19,13 @@ public class PrayerModeController : MonoBehaviour
     private ColorBlock _activeMainMenuColorBlock;
     private Button _activeButton;
     private Button[] _rosaryMysteryButtons;
-
+    private GameObject[] _acceptableButtonsWhilePraying;
 
     // Start is called before the first frame update
     void Start()
     {
         GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
+        _acceptableButtonsWhilePraying = new[] { ExitButton, SkipButton };
     }
 
     public void OnDisable()
@@ -84,6 +86,11 @@ public class PrayerModeController : MonoBehaviour
         var pressedButton = GamePadController.GetButton();
         if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame)
         {
+            if (PrayerManager.Instance.Praying && !_acceptableButtonsWhilePraying.Contains(_activeButton.gameObject))
+            {
+                return;
+            }
+
             _activeButton.onClick.Invoke();
         }
         else
