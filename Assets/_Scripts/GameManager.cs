@@ -301,7 +301,7 @@ public class GameManager : MonoBehaviour
     private void OnTick(double time, int day)
     {
         PlayAmbience(time, day);
-        if (GameClock.DeltaTime && time % 2 == 0)
+        if (GameClock.DeltaTime && time % 5 == 0)
         {
             foreach (var h in Houses)
             {
@@ -309,11 +309,12 @@ public class GameManager : MonoBehaviour
                 if (h.MyObjective.Event > BuildingEventType.URGENT)
                 {
                     MissionManager.Instance.UpdateCharityPoints(-1, null);
+                    break;
                 }
             }
         }
 
-        if (time >= 19 || time < 6)
+        if (time < 6)
         {
             SoundManager.Instance.StartPlaylist(false);
         }

@@ -167,7 +167,7 @@ public class MissionManager : MonoBehaviour
         {
             if (house.BuildingState == BuildingState.HAZARDOUS)
             {
-                UpdateCharityPoints(-3, null);
+               // UpdateCharityPoints(-3, null);
                 house.BuildingState = BuildingState.NORMAL;
             }
         }
@@ -227,17 +227,17 @@ public class MissionManager : MonoBehaviour
         {
             SteamManager.Instance.UnlockAchievement("FINISHED");
             XboxUserHandler.Instance.UnlockAchievement("12");
-            if (FaithPoints < 100 || CharityPoints < 100)
+            if (FaithPoints < 80 || CharityPoints < 80)
             {
-                if (FaithPoints < 100 && CharityPoints < 100)
+                if (FaithPoints < 80 && CharityPoints < 80)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.WORST_ENDING);
                 }
-                else if (FaithPoints < 100)
+                else if (FaithPoints < 80)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
                 }
-                else if (CharityPoints < 100)
+                else if (CharityPoints < 80)
                 {
                     EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
                 }
