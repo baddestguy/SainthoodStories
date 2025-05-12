@@ -5519,6 +5519,7 @@ GameObject:
   - component: {fileID: 921558574}
   - component: {fileID: 921558573}
   - component: {fileID: 921558572}
+  - component: {fileID: 921558575}
   m_Layer: 5
   m_Name: Quit
   m_TagString: Untagged
@@ -5641,6 +5642,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 921558570}
   m_CullTransparentMesh: 0
+--- !u!114 &921558575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921558570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c510cc121c577464c820ba89931c06f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConditionsList:
+  - {fileID: 11400000, guid: abfc437fecf96554c8d7dbd7beb1a67e, type: 2}
 --- !u!1 &963448484
 GameObject:
   m_ObjectHideFlags: 0
@@ -5821,6 +5836,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &965536242
 MonoBehaviour:
@@ -6521,7 +6537,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 86.20355, y: 20.160011}
+  m_AnchoredPosition: {x: 86.20355, y: 20.160034}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1079558877
@@ -9489,6 +9505,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &1697573345
 MonoBehaviour:
@@ -10521,6 +10538,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &1934790856
 MonoBehaviour:
@@ -11008,6 +11026,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &2011179192
 MonoBehaviour:
