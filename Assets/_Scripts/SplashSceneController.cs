@@ -76,8 +76,10 @@ namespace Assets._Scripts
 
             if (GameSettings.Instance.IsXboxMode)
             {
+#if MICROSOFT_GDK_SUPPORT
                 XboxUserHandler.Instance.OnXboxUserLoginStatusChange += OnXboxUserLoginStatusChange;
                 XboxUserHandler.Instance.TryLogInUser();
+#endif
             }
             else
             {

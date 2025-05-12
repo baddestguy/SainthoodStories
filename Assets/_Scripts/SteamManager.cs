@@ -1,4 +1,4 @@
-#if !MICROSOFT_GDK_SUPPORT
+#if STEAM_API
 using System.Collections.Generic;
 using Steamworks;
 using Steamworks.Data;
@@ -9,7 +9,7 @@ public class SteamManager : MonoBehaviour
 {
     public static SteamManager Instance;
 
-#if !MICROSOFT_GDK_SUPPORT
+#if STEAM_API
     public Dictionary<string, Achievement> Achievements = new Dictionary<string, Achievement>()
     {
         {"GETTING_STARTED", new Achievement("GETTING_STARTED")},
@@ -37,7 +37,7 @@ public class SteamManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-#if !MICROSOFT_GDK_SUPPORT
+#if STEAM_API
         try
         {
             SteamClient.Init(GameDataManager.APP_ID);
@@ -51,7 +51,7 @@ public class SteamManager : MonoBehaviour
 
     private void Update()
     {
-#if !MICROSOFT_GDK_SUPPORT
+#if STEAM_API
         if (GameSettings.Instance.IsXboxMode) return;
         
         SteamClient.RunCallbacks();
@@ -61,7 +61,7 @@ public class SteamManager : MonoBehaviour
     public void UnlockAchievement(string id)
     {
 
-#if !MICROSOFT_GDK_SUPPORT
+#if STEAM_API
         if (!Achievements.ContainsKey(id) || GameSettings.Instance.IsXboxMode) return;
 
         try
@@ -77,7 +77,7 @@ public class SteamManager : MonoBehaviour
 
     public void ClearAchievement(string id)
     {
-#if !MICROSOFT_GDK_SUPPORT
+#if STEAM_API
         
         if (!Achievements.ContainsKey(id)) return;
 

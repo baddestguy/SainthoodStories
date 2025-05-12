@@ -124,6 +124,28 @@ public class PopUI : MonoBehaviour
             }
         }
 
+#if PLATFORM_MOBILE
+        if (name.Contains("Construct"))
+        {
+            //exit
+            Buttons[0].transform.localPosition = new Vector3(3.4f, Buttons[0].transform.localPosition.y, Buttons[0].transform.localPosition.z);
+            var btn0Panel = Buttons[0].GetComponent<TooltipMouseOver>().InfoPanel;
+            btn0Panel.transform.localPosition = new Vector3(2.5f, 1.6f, btn0Panel.transform.localPosition.z);
+            btn0Panel.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+
+            var btn1Panel = Buttons[1].GetComponent<TooltipMouseOver>().InfoPanel;
+            btn1Panel.transform.localPosition = new Vector3(3.84f, btn1Panel.transform.localPosition.y, btn1Panel.transform.localPosition.z);
+            btn1Panel.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+
+            //pray
+            Buttons[2].transform.localPosition = new Vector3(-2.2f, Buttons[2].transform.localPosition.y, Buttons[2].transform.localPosition.z);
+            var btn2Panel = Buttons[2].GetComponent<TooltipMouseOver>().InfoPanel;
+            btn2Panel.transform.localPosition = new Vector3(1.58f, btn2Panel.transform.localPosition.y, btn2Panel.transform.localPosition.z);
+            btn2Panel.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+
+        }
+#endif
+
         var canvas = GetComponent<Canvas>();
         if (canvas != null)
         {
@@ -141,6 +163,27 @@ public class PopUI : MonoBehaviour
         }
 
         var myButton = Buttons.Where(b => b.ButtonName == button).FirstOrDefault();
+
+#if PLATFORM_MOBILE
+        if(!PointerDown)
+        {
+            var tt = myButton.GetComponent<TooltipMouseOver>();
+            if (tt != null && !tt.TurnOnInfoPanel)
+            {
+                foreach (var b in Buttons)
+                {
+                    b.GetComponent<TooltipMouseOver>().TurnOnInfoPanel = false;
+                    b.GetComponent<TooltipMouseOver>().HideToolTip();
+                }
+                tt.TurnOnInfoPanel = true;
+                tt.ShowToolTip();
+                return;
+            }
+
+            tt.TurnOnInfoPanel = false;
+        }
+#endif
+
         if (GameSettings.Instance.FTUE)
         {
             if (!TutorialManager.Instance.CheckTutorialButton(button))
@@ -196,8 +239,10 @@ public class PopUI : MonoBehaviour
             transform.Find("Heart").GetComponent<TooltipMouseOver>().Loc_Key = $"{LocalizationManager.Instance.GetText("Tooltip_RP")}\n\n<b>Next Milestone: {MyHouse.GetNextRPMilestone()} RP</b>";
         }
 
+#if !PLATFORM_MOBILE
         if (myButton.ButtonName != "EXIT" && myButton.ButtonName != "WORLD")
             myButton.SendMessage("ShowToolTip", SendMessageOptions.DontRequireReceiver);
+#endif
     }
 
     public void OnPointerDown(string button)
@@ -205,6 +250,23 @@ public class PopUI : MonoBehaviour
         if (Player.LockMovement) return;
 
         var myButton = Buttons.FirstOrDefault(b => b.ButtonName == button);
+
+#if PLATFORM_MOBILE
+        var tt = myButton.GetComponent<TooltipMouseOver>();
+        if(tt != null && !tt.TurnOnInfoPanel)
+        {
+            foreach(var b in Buttons)
+            {
+                b.GetComponent<TooltipMouseOver>().TurnOnInfoPanel = false;
+                b.GetComponent<TooltipMouseOver>().HideToolTip();
+            }
+            tt.TurnOnInfoPanel = true;
+            tt.ShowToolTip();
+            return;
+        }
+
+        tt.TurnOnInfoPanel = false;
+#endif
 
         if (GameSettings.Instance.FTUE)
         {
@@ -260,7 +322,7 @@ public class PopUI : MonoBehaviour
         }
         CriticalCircleFX.SetActive(true);
         CriticalCircleFX.transform.SetParent(ChargeFx.transform, true);
-        CriticalCircleFX.transform.localScale = new Vector3(0.005f, 0.005f, 0.005f);
+        CriticalCircleFX.transform.localScale = new Vector3(0.0075f, 0.0075f, 0.0075f);
         CriticalCircleFX.transform.localPosition = Vector3.zero;
         CriticalCircleFX.transform.localEulerAngles = Vector3.zero;
 
@@ -295,13 +357,13 @@ public class PopUI : MonoBehaviour
                 //CRITICAL HIT!
                 CameraControls?.MyCamera.DOShakeRotation(1f, 1f);
                 Debug.LogWarning("CRITICAL HIT!");
-                PointerDown = false;
                 ButtonTimer = 0f;
                 if (CriticalHitCount > -1)
                 {
                     CriticalHitCount++;
                 }
                 OnClick(ButtonName);
+                PointerDown = false;
                 ButtonPressFx.SetActive(true);
                 ButtonPressFx.transform.position = ChargeFx.transform.position;
                 SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX", timeToDie: 5f);
@@ -311,10 +373,10 @@ public class PopUI : MonoBehaviour
                 //Regular HIT!
                 Debug.LogWarning("Regular HIT!");
                 //  if(CriticalHitCount >= 1) SoundManager.Instance.PlayOneShotSfx("Crit_Bad");
-                PointerDown = false;
                 ButtonTimer = 0f;
                 CriticalHitCount = -1;
                 OnClick(ButtonName);
+                PointerDown = false;
             }
         }
 
@@ -336,9 +398,9 @@ public class PopUI : MonoBehaviour
                 Debug.LogWarning("LEft Lingering Regular HIT!");
                 if (CriticalHitCount >= 1) SoundManager.Instance.PlayOneShotSfx("Crit_Bad");
                 CriticalHitCount = -1;
-                PointerDown = false;
                 ButtonTimer = 0f;
                 OnClick(ButtonName);
+                PointerDown = false;
             }
         }
         else

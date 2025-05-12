@@ -8,6 +8,12 @@ public class DataClasses : MonoBehaviour
 
 }
 
+public interface ICondition
+{
+    bool IsTrue();
+}
+
+
 public enum MinigameType
 {
     CONSTRUCT,

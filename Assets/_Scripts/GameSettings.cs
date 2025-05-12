@@ -87,7 +87,9 @@ public class GameSettings : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+#if STEAM_API
         resolutions = Screen.resolutions;
+#endif
     }
 
     private void Start()
@@ -128,7 +130,9 @@ public class GameSettings : MonoBehaviour
     {
         var savedGameSettings =  GetSavedDataSet();
         Load(savedGameSettings);
+#if STEAM_API
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
+#endif
     }
 
     private SaveSettingsData GetSavedDataSet()
@@ -137,6 +141,7 @@ public class GameSettings : MonoBehaviour
         {
             if (IsXboxMode)
             {
+#if MICROSOFT_GDK_SUPPORT
                 while (!XboxUserHandler.Instance?.SaveHandlerInitialized ?? true)
                 {
                     //This shouldn't be possible anymore, but just in case
@@ -146,6 +151,7 @@ public class GameSettings : MonoBehaviour
                 Debug.Log("Loading game settings");
                 var savedData = XboxUserHandler.Instance.LoadData<SaveSettingsData>(SettingsFileName, killAsyncSaves: false);
                 return savedData;
+#endif
             }
 
             BinaryFormatter bf = new BinaryFormatter();
@@ -208,7 +214,7 @@ public class GameSettings : MonoBehaviour
 
         }
     }
-    #endregion
+#endregion
 
     public void Save()
     {
@@ -240,7 +246,9 @@ public class GameSettings : MonoBehaviour
 
         if (IsXboxMode)
         {
+#if MICROSOFT_GDK_SUPPORT
             XboxUserHandler.Instance.Save(SettingsFileName, data);
+#endif
         }
         else
         {
@@ -274,6 +282,7 @@ public class GameSettings : MonoBehaviour
             return bestResolutionBelowMax?.Resolution ?? orderedResolutions.Last().Resolution;
         }
 
+#if STEAM_API
         string[] val = value.Replace(" ", "").Split('x');
         Resolution? res = resolutions.FirstOrDefault(x => x.width.ToString() == val[0] && x.height.ToString() == val[1]);
 
@@ -282,12 +291,16 @@ public class GameSettings : MonoBehaviour
             return new Resolution(){ width = Screen.mainWindowDisplayInfo.width, height = Screen.mainWindowDisplayInfo.height };
         }
         return res.Value;
+#endif
+        return new Resolution();
     }
 
     public void SetResolution(string resolution)
     {
+#if STEAM_API
         currentResolution = GetResolution(resolution);
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
+#endif
     }
     public void SetQuality(QualityLevel quality)
     {
@@ -302,8 +315,10 @@ public class GameSettings : MonoBehaviour
     }
     public void SetFullScreen(bool value)
     {
+#if STEAM_API
         fullScreenMode = value;
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
+#endif
     }
     public void SetStoryToggle(bool value)
     {

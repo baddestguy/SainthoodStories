@@ -16,6 +16,12 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.build-report-inspector": {
+      "version": "file:../Mobile Builds/BuildReportInspector-master/com.unity.build-report-inspector",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "2.5.1",
       "depth": 0,

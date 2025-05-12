@@ -342,3 +342,6 @@ sysinfo.txt
 /XBuilds/XS/
 /XBuilds/*.zip
 /XBuilds/Loose/
+/Mobile Builds/
+/Assets/BuildReports/
+/Assets/iOS Project Builder

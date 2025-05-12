@@ -103,7 +103,8 @@ QualitySettings:
     terrainBillboardStart: 50
     terrainFadeLength: 5
     terrainMaxTrees: 50
-    excludedTargetPlatforms: []
+    excludedTargetPlatforms:
+    - Android
   - serializedVersion: 3
     name: Medium
     pixelLightCount: 1
@@ -204,6 +205,7 @@ QualitySettings:
     excludedTargetPlatforms:
     - Windows Store Apps
     - GameCoreXboxOne
+    - Android
   - serializedVersion: 3
     name: Very High
     pixelLightCount: 3
@@ -255,6 +257,7 @@ QualitySettings:
     excludedTargetPlatforms:
     - Windows Store Apps
     - GameCoreXboxOne
+    - Android
   - serializedVersion: 3
     name: Ultra
     pixelLightCount: 4
@@ -306,9 +309,10 @@ QualitySettings:
     excludedTargetPlatforms:
     - Windows Store Apps
     - GameCoreXboxOne
+    - Android
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
-    Android: 5
+    Android: 2
     GameCoreScarlett: 5
     GameCoreXboxOne: 2
     Server: 5

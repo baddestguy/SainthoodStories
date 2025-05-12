@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PackageItem : MonoBehaviour
@@ -22,6 +23,10 @@ public class PackageItem : MonoBehaviour
 
     public bool PackageSelectorIsNew = false;
     private TextMeshProUGUI provisionDescription;
+
+    //Mobile only!
+    private bool Selected;
+    public static UnityAction HasSelected;
 
     // Start is called before the first frame update
     void Start()
@@ -88,6 +93,15 @@ public class PackageItem : MonoBehaviour
     public void Select()
     {
         if (InventoryPopup.Open) return;
+#if PLATFORM_MOBILE
+        if (!Selected)
+        {
+            HasSelected?.Invoke();
+            Selected = true;
+            return;
+        }
+#endif
+
         PackageSelectorIsNew = true;
         SendMessageUpwards("PackageSelected", this);
     }
@@ -99,14 +113,21 @@ public class PackageItem : MonoBehaviour
         SendMessageUpwards("PackageDeselected", this);
     }
 
+    public void PackageSelected()
+    {
+        Selected = false;
+    }
+
     private void OnEnable()
     {
+        HasSelected += PackageSelected;
         provisionDescription = GameObject.Find("ProvisionDescription")?.GetComponent<TextMeshProUGUI>();
         SetLocalizedText(Item);
     }
 
     public void OnDisable()
     {
+        HasSelected -= PackageSelected;
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
         mouseOverBtn.Loc_Key = "";
 

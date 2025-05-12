@@ -487,7 +487,7 @@ public class GameManager : MonoBehaviour
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
         GameClock.Ticked -= OnTick;
 
-#if !MICROSOFT_GDK_SUPPORT
+#if STEAM_API
         Steamworks.SteamClient.Shutdown();
 #endif
     }

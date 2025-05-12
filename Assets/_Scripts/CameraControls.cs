@@ -91,7 +91,7 @@ public class CameraControls : MonoBehaviour
 
         if(newTarget.magnitude == 0)
         {
-            SetZoomTarget(11f);
+            SetZoomTarget(9f);
             if (modifyPostProcess)
             {
                 DepthOfField.active = false;

@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Unity.XGamingRuntime;
 using UnityEngine;
+#if MICROSOFT_GDK_SUPPORT
+using Unity.XGamingRuntime;
 using HR = Unity.XGamingRuntime.Interop.HR;
+#endif
 
 namespace Assets._Scripts.Xbox
 {
@@ -16,6 +18,7 @@ namespace Assets._Scripts.Xbox
         public bool IsProcessingAsyncSave { get; set; }
         public ConcurrentQueue<(string Filename, object SaveData)> SaveQueue { get; private set; } = new();
 
+#if MICROSOFT_GDK_SUPPORT
         private XUserHandle _userHandle;
         private XGameSaveProviderHandle _gameSaveProviderHandle;
         private bool _shouKillAsyncSaves;
@@ -26,7 +29,8 @@ namespace Assets._Scripts.Xbox
             SDK.XGameSaveCloseProvider(_gameSaveProviderHandle);
             SDK.XUserCloseHandle(_userHandle);
         }
-
+#endif
+#if MICROSOFT_GDK_SUPPORT
         /// <summary>
         /// Intializes the save game wrapper and may initiate a sync of all of the containers for specified user of the game.
         /// </summary>
@@ -320,5 +324,6 @@ namespace Assets._Scripts.Xbox
             return true;
         }
 
+#endif
     }
 }
