@@ -65,14 +65,15 @@ public class PrayerManager : MonoBehaviour
     void Start()
     {
         SoundManager.Instance.PlayMusic("Ave Maria (Piano Version)");
-        SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
+    //    SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
+        SoundManager.Instance.PlayAmbience("RainInterior_Ambience");
 
         var interiorIndex = Random.Range(0, BuildingInteriors.Length+1);
-        if(interiorIndex < BuildingInteriors.Length)
+     //   if(interiorIndex < BuildingInteriors.Length)
         {
-            BuildingInteriors[interiorIndex].SetActive(true);
+            BuildingInteriors[0].SetActive(true);
         }
-    //    StartCoroutine(LightningThunder());
+        StartCoroutine(LightningThunder());
         StartCoroutine(StartPlaylistAsync());
     }
 
@@ -104,7 +105,19 @@ public class PrayerManager : MonoBehaviour
 
         PrayerType = (PrayerType)Enum.Parse(typeof(PrayerType), prayerType);
         StartPrayerSequence(PrayerType);
+    }
 
+    public void OnDivineMercyBtnClick()
+    {
+        PrayerButtons.transform.DOMoveY(-300f, 1f);
+        PrayerButtonTypes.SetActive(false);
+
+        TitleText.DOFade(1, 0);
+        TitleText.text = "DIVINE MERCY CHAPLET";
+        SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+
+        PrayerType = PrayerType.DIVINE_MERCY;
+        StartPrayerSequence(PrayerType);
     }
 
     public void StopPrayerSequence()
@@ -113,6 +126,7 @@ public class PrayerManager : MonoBehaviour
         {
             transform.Find("Exit").DOMoveY(-300f, 0.2f);
             PrayerButtons.transform.DOMoveY(-300f, 0.2f);
+            PrayerButtonTypes.SetActive(false);
 
             StartCoroutine(ScheduleCallback(() =>
             {
@@ -162,6 +176,7 @@ public class PrayerManager : MonoBehaviour
                 break;
 
             case PrayerType.DIVINE_MERCY:
+                prayerCoroutine = StartCoroutine(DivineMercyPrayer());
                 break;
         }
     }
@@ -173,6 +188,145 @@ public class PrayerManager : MonoBehaviour
         MainGlowHitFx.SetActive(true);
         MainGlowFx.SetActive(true);
         SoundManager.Instance.PlayOneShotSfx("Walk_SFX", 0.2f);
+    }
+
+    IEnumerator DivineMercyPrayer()
+    {
+        SoundManager.Instance.PlayOneShotSfx("MassBells_SFX", timeToDie: 10f);
+
+        yield return new WaitForSeconds(2f);
+
+        TitleText.DOFade(0, 2);
+        RosaryRing.transform.DOMoveY(-3.7f, 2f);
+        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 2f);
+
+        yield return new WaitForSeconds(2f);
+
+        ExitButtonsGroup.transform.DOMoveY(PrayerButtonsAnchor.position.y, 1f);
+        MainGlowFx.SetActive(true);
+        MainGlowHitFx.SetActive(true);
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("Opening");
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+
+        if (!MoveNext)
+        {
+            yield return new WaitForSeconds(1f);
+        }
+        MoveNext = false;
+
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("DIVINE_MERCY_OPENING");
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("DIVINE_MERCY_BLOOD1");
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("DIVINE_MERCY_BLOOD2");
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("DIVINE_MERCY_BLOOD3");
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+
+        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[1], 0), 1f);
+        StartCoroutine("HitFx");
+        if (!MoveNext)
+        {
+            yield return new WaitForSeconds(2f);
+        }
+        MoveNext = false;
+
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("LordsPrayer");
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+
+        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[2], 0), 1f);
+        StartCoroutine("HitFx");
+        if (!MoveNext)
+        {
+            yield return new WaitForSeconds(2f);
+        }
+        MoveNext = false;
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("HailMary");
+
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[3], 0), 1f);
+        StartCoroutine("HitFx");
+        if (!MoveNext)
+        {
+            yield return new WaitForSeconds(2f);
+        }
+        MoveNext = false;
+
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("Creed");
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 1f);
+        StartCoroutine("HitFx");
+        if (!MoveNext)
+        {
+            yield return new WaitForSeconds(2f);
+        }
+        MoveNext = false;
+
+        for (int i = 1; i <= 5; i++)
+        {
+            CurrentAudioSource = SoundManager.Instance.PlayVoice("DIVINE_MERCY_ETERNAL_FATHER");
+            while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+            if (!MoveNext)
+            {
+                yield return new WaitForSeconds(2f);
+            }
+            MoveNext = false;
+
+            //Loop 10 SORROWFUL PASSION
+            for (int j = 1; j <= 10; j++)
+            {
+                while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+                RosaryRing.transform.DORotate(new Vector3(270, RingPositions[j], 0), 1f);
+                StartCoroutine("HitFx");
+                if (!MoveNext)
+                {
+                    yield return new WaitForSeconds(1f);
+                }
+                MoveNext = false;
+                CurrentAudioSource = SoundManager.Instance.PlayVoice("DIVINE_MERCY_SAKE_"+Random.Range(1,4));
+            }
+            while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+            RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 1f);
+            StartCoroutine("HitFx");
+            if (!MoveNext)
+            {
+                yield return new WaitForSeconds(2f);
+            }
+            MoveNext = false;
+        }
+
+        for(int i = 0; i<3; i++)
+        {
+            CurrentAudioSource = SoundManager.Instance.PlayVoice("DIVINE_MERCY_HOLYGOD_"+Random.Range(1,3));
+            RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 1f);
+            while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+            if (!MoveNext)
+            {
+                yield return new WaitForSeconds(2f);
+            }
+            MoveNext = false;
+        }
+
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("DIVINE_MERCY_CLOSING_2");
+        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 1f);
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+        if (!MoveNext)
+        {
+            yield return new WaitForSeconds(2f);
+        }
+        MoveNext = false;
+
+        CurrentAudioSource = SoundManager.Instance.PlayVoice("Opening");
+        RosaryRing.transform.DORotate(new Vector3(270, RingPositions[0], 0), 1f);
+        while (CurrentAudioSource.isPlaying && !MoveNext) yield return new WaitForSeconds(0.5f);
+        if (!MoveNext)
+        {
+            yield return new WaitForSeconds(2f);
+        }
+        MoveNext = false;
+
+        StopPrayerSequence();
     }
 
     IEnumerator RosaryPrayer()
@@ -318,7 +472,7 @@ public class PrayerManager : MonoBehaviour
     {
         while (true)
         {
-            SoundManager.Instance.PlayOneShotSfx("Thunder_SFX", 0.2f, 30);
+            SoundManager.Instance.PlayOneShotSfx("Thunder_SFX", 0.1f, 30);
             yield return new WaitForSeconds(Random.Range(30f, 60f));
         }
     }

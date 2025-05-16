@@ -1890,10 +1890,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2067170397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 530.04, y: -9.199951}
-  m_SizeDelta: {x: 191.33, y: 50}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -2.960022, y: -9.199951}
+  m_SizeDelta: {x: 191.33002, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &186590431
 MonoBehaviour:
@@ -1915,7 +1915,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\xA9 2024 Bisong Taiwo"
+  m_text: "\xA9 2025 Bisong Taiwo"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8ae74acaca4098d43b2cb0b87ca19184, type: 2}
   m_sharedMaterial: {fileID: 3407360472737979991, guid: 8ae74acaca4098d43b2cb0b87ca19184,
