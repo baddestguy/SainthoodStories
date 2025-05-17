@@ -25,7 +25,7 @@ public class CustomEventPopup : MonoBehaviour
 
     public GameObject StoryBG;
     public GameObject EventBG;
-    public Text StoryEventText;
+    public TextMeshProUGUI StoryEventText;
     public Image StoryImage;
 
     public GameObject IconsGO;
@@ -44,12 +44,16 @@ public class CustomEventPopup : MonoBehaviour
     public DOTween Dotween;
     public CameraControls CameraControls;
 
+    //Mobile only!
+    public bool YesSelected;
+
     public void Setup(CustomEventData customEvent)
     {
         IsDisplaying = true;
         ToolTipManager.Instance.ShowToolTip("");
         transform.DOJump(transform.position, 30f, 1, 1f);
         EventData = customEvent;
+        YesSelected = true;
         YesNoGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         IconsGO.SetActive(customEvent.EventPopupType == EventPopupType.YESNO);
         OKGO.SetActive(customEvent.EventPopupType == EventPopupType.OK);
@@ -89,8 +93,9 @@ public class CustomEventPopup : MonoBehaviour
         {
             CurrentSequenceNumber = 0;
             var text = LocalizationManager.Instance.GetText(customEvent.LocalizationKey, CurrentSequenceNumber);
-            StoryEventText.text = "";
-            StoryEventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
+            StoryEventText.text = text;
+            StoryEventText.color = new Color(StoryEventText.color.r, StoryEventText.color.g, StoryEventText.color.b, 0f);
+            StoryEventText.DOFade(1f, 0.5f).SetEase(Ease.Linear);
             YesNoGO.SetActive(false);
             OKGO.SetActive(false);
             IconsGO.SetActive(false);
@@ -99,8 +104,9 @@ public class CustomEventPopup : MonoBehaviour
         else
         {
             var text = LocalizationManager.Instance.GetText(customEvent.LocalizationKey);
-            StoryEventText.text = "";
-            StoryEventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
+            StoryEventText.text = text;
+            StoryEventText.color = new Color(StoryEventText.color.r, StoryEventText.color.g, StoryEventText.color.b, 0f);
+            StoryEventText.DOFade(1f, 0.5f).SetEase(Ease.Linear);
             NextGO.SetActive(false);
         }
 
@@ -211,6 +217,15 @@ public class CustomEventPopup : MonoBehaviour
             return;
         }
 
+#if PLATFORM_MOBILE
+        if (YesSelected)
+        {
+            YesSelected = false;
+            RefreshDisplayStats(true);
+            return;
+        }
+#endif
+
         InteractableHouse.HouseTriggeredEvent = CustomEventType.NONE;
         Player player = GameManager.Instance.Player;
         if (EventData.RewardType == CustomEventRewardType.FP)
@@ -275,8 +290,9 @@ public class CustomEventPopup : MonoBehaviour
         }
 
         var text = LocalizationManager.Instance.GetText(EventData.LocalizationKey, CurrentSequenceNumber);
-        StoryEventText.text = "";
-        StoryEventText.DOText(text, text.Length / 30f).SetEase(Ease.Linear);
+        StoryEventText.text = text;
+        StoryEventText.color = new Color(StoryEventText.color.r, StoryEventText.color.g, StoryEventText.color.b, 0f);
+        StoryEventText.DOFade(1f, 0.5f).SetEase(Ease.Linear);
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 
@@ -287,6 +303,16 @@ public class CustomEventPopup : MonoBehaviour
             DOTween.Complete(StoryEventText);
             return;
         }
+#if PLATFORM_MOBILE
+        if (!YesSelected)
+        {
+            YesSelected = true;
+            RefreshDisplayStats(false);
+            return;
+        }
+
+#endif
+
         Player player = GameManager.Instance.Player;
         var moddedEnergy = player.ModifyEnergyConsumption(amount: EventData.EnergyCost);
         if (player.CanUseEnergy(moddedEnergy) || player.CurrentBuilding.BuildingState == BuildingState.RUBBLE)
