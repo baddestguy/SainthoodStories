@@ -144,7 +144,7 @@ public class PrayerManager : MonoBehaviour
 
         StopCoroutine(prayerCoroutine);
         StopCoroutine("HitFx");
-        ExitButtonsGroup.SetActive(true);
+        ExitButtonsGroup.SetActive(false);
         RosaryRing.transform.DOMoveY(7f, 2f);
         if(CurrentAudioSource != null)
             CurrentAudioSource.Stop();
@@ -202,7 +202,7 @@ public class PrayerManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        ExitButtonsGroup.transform.DOMoveY(PrayerButtonsAnchor.position.y, 1f);
+        ExitButtonsGroup.SetActive(true);
         MainGlowFx.SetActive(true);
         MainGlowHitFx.SetActive(true);
         CurrentAudioSource = SoundManager.Instance.PlayVoice("Opening");
@@ -341,7 +341,7 @@ public class PrayerManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        ExitButtonsGroup.transform.DOMoveY(PrayerButtonsAnchor.position.y, 1f);
+        ExitButtonsGroup.SetActive(true);
         MainGlowFx.SetActive(true);
         MainGlowHitFx.SetActive(true);
         CurrentAudioSource = SoundManager.Instance.PlayVoice("Opening");
