@@ -96,7 +96,7 @@ public class PrayerManager : MonoBehaviour
 
     public void SelectRosaryType(string prayerType)
     {
-        PrayerButtons.transform.DOMoveY(-300f, 1f);
+        PrayerButtons.SetActive(false);
         PrayerButtonTypes.SetActive(false);
 
         TitleText.DOFade(1, 0);
@@ -109,7 +109,7 @@ public class PrayerManager : MonoBehaviour
 
     public void OnDivineMercyBtnClick()
     {
-        PrayerButtons.transform.DOMoveY(-300f, 1f);
+        PrayerButtons.SetActive(false);
         PrayerButtonTypes.SetActive(false);
 
         TitleText.DOFade(1, 0);
@@ -124,8 +124,8 @@ public class PrayerManager : MonoBehaviour
     {
         if(!Praying)
         {
-            transform.Find("Exit").DOMoveY(-300f, 0.2f);
-            PrayerButtons.transform.DOMoveY(-300f, 0.2f);
+            transform.Find("Exit").gameObject.SetActive(false);
+            PrayerButtons.SetActive(false);
             PrayerButtonTypes.SetActive(false);
 
             StartCoroutine(ScheduleCallback(() =>
@@ -144,11 +144,11 @@ public class PrayerManager : MonoBehaviour
 
         StopCoroutine(prayerCoroutine);
         StopCoroutine("HitFx");
-        ExitButtonsGroup.transform.DOMoveY(PrayerButtons.transform.position.y, 1f);
+        ExitButtonsGroup.SetActive(true);
         RosaryRing.transform.DOMoveY(7f, 2f);
         if(CurrentAudioSource != null)
             CurrentAudioSource.Stop();
-        PrayerButtons.transform.DOMoveY(PrayerButtonsAnchor.position.y, 1f);
+        PrayerButtons.SetActive(true);
         MainGlowFx.SetActive(false);
     }
 
