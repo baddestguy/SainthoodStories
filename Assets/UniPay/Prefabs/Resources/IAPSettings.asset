@@ -15,13 +15,7 @@ MonoBehaviour:
   categoryList:
   - referenceID: 874704cb-86a6-468c-95c8-8def58f2b453
     ID: Unlockable Features
-    storeIDs:
-    - active: 1
-      store: GooglePlay
-      ID: 
-    - active: 1
-      store: AppleAppStore
-      ID: 
+    storeIDs: []
   - referenceID: 3097ec21-dab5-4a80-82d4-1cfe4b4c54e7
     ID: Category 00
     storeIDs: []

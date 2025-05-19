@@ -5,6 +5,7 @@ using System.Linq;
 using Assets._Scripts.Xbox;
 using DG.Tweening;
 using TMPro;
+using UniPay;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -104,6 +105,7 @@ public class UI : MonoBehaviour
     public GameObject InventoryPopup;
     public GameObject SacredItemPopup;
     public GameObject TutorialPopupQuestion;
+    public GameObject PrayerModePopupQuestion;
     public GameObject CreditsObj;
     public bool WasUiHit
     {
@@ -167,7 +169,32 @@ public class UI : MonoBehaviour
 
     public void GoToPrayer()
     {
+#if PLATFORM_MOBILE
+        if (!DBManager.IsPurchased(Constants.PRAYER_MODE_PRODUCT_ID))
+        {
+            PrayerModePopupQuestion.SetActive(true);
+            return;
+        }
+#endif
+
         GameManager.Instance.LoadScene("PrayerScene");
+    }
+
+    public void OnPurchase(string success)
+    {
+        PrayerModePopupQuestion.SetActive(false);
+        IAPManager.purchaseSucceededEvent -= OnPurchase;
+        IAPManager.purchaseFailedEvent -= OnPurchaseFailed;
+        GameManager.Instance.LoadScene("PrayerScene");
+        Debug.Log("SUCCESS! " + success);
+    }
+
+    public void OnPurchaseFailed(string failed)
+    {
+        IAPManager.purchaseSucceededEvent -= OnPurchase;
+        IAPManager.purchaseFailedEvent -= OnPurchaseFailed;
+        Debug.Log("FAILED! " + failed);
+        //Do nothing
     }
 
     public void InventoryPopupEnable()
@@ -835,6 +862,26 @@ public class UI : MonoBehaviour
     {
     }
 
+    public void PrayerModeConfirmation(string response)
+    {
+        switch (response)
+        {
+            case "YES":
+                IAPManager.purchaseSucceededEvent += OnPurchase;
+                IAPManager.purchaseFailedEvent += OnPurchaseFailed;
+                IAPManager.Purchase(Constants.PRAYER_MODE_PRODUCT_ID);
+                break;
+
+            case "NO":
+                PrayerModePopupQuestion.SetActive(false);
+                break;
+
+            case "CLOSE":
+                PrayerModePopupQuestion.SetActive(false);
+                break;
+        }
+    }
+
     public void TutorialConfirmation(string response)
     {
         switch (response)
@@ -1147,6 +1194,12 @@ public class UI : MonoBehaviour
         GameOverPopup.gameObject.SetActive(!GameOverPopup.gameObject.activeSelf);
     }
 
+    public void RestorePurchases()
+    {
+        //DBManager.ClearAll();
+        IAPManager.RestoreTransactions();
+    }
+
     public void QuitGame()
     {
         Application.Quit();
@@ -1160,5 +1213,7 @@ public class UI : MonoBehaviour
         WeatherManager.WeatherForecastActive -= WeatherAlert;
         GameClock.Ticked -= OnTick;
         TreasuryManager.DonatedMoney -= RefreshTreasuryBalance;
+        IAPManager.purchaseSucceededEvent -= OnPurchase;
+        IAPManager.purchaseFailedEvent -= OnPurchaseFailed;
     }
 }

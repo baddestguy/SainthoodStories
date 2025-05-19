@@ -19,7 +19,7 @@ public class ProvisionUIItem : MonoBehaviour
 
     private string HeaderSize = "<size=15>";
     private string SubheaderSize = "<size=10>";
-    private string DescriptionSize = "<size=7>";
+    private string DescriptionSize = "<size=10>";
 
     //Mobile only!
     private bool Selected;
