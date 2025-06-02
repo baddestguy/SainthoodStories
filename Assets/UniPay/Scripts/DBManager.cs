@@ -777,7 +777,7 @@ namespace UniPay
         public static void Save(string key = "")
         {
             //read data from memory and cache as string
-            string str = instance.gameData.ToString();
+            string str = instance.gameData?.ToString();
 
             switch (instance.storageTarget)
             {
