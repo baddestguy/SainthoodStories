@@ -87,7 +87,7 @@ public class GameSettings : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-#if STEAM_API
+#if !PLATFORM_MOBILE 
         resolutions = Screen.resolutions;
 #endif
     }
@@ -130,7 +130,7 @@ public class GameSettings : MonoBehaviour
     {
         var savedGameSettings =  GetSavedDataSet();
         Load(savedGameSettings);
-#if STEAM_API
+#if !PLATFORM_MOBILE 
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
 #endif
     }
@@ -282,7 +282,7 @@ public class GameSettings : MonoBehaviour
             return bestResolutionBelowMax?.Resolution ?? orderedResolutions.Last().Resolution;
         }
 
-#if STEAM_API
+#if !PLATFORM_MOBILE 
         string[] val = value.Replace(" ", "").Split('x');
         Resolution? res = resolutions.FirstOrDefault(x => x.width.ToString() == val[0] && x.height.ToString() == val[1]);
 
@@ -297,7 +297,7 @@ public class GameSettings : MonoBehaviour
 
     public void SetResolution(string resolution)
     {
-#if STEAM_API
+#if !PLATFORM_MOBILE 
         currentResolution = GetResolution(resolution);
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
 #endif
@@ -315,7 +315,7 @@ public class GameSettings : MonoBehaviour
     }
     public void SetFullScreen(bool value)
     {
-#if STEAM_API
+#if !PLATFORM_MOBILE 
         fullScreenMode = value;
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
 #endif

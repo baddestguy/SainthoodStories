@@ -20,7 +20,7 @@ public class PersistentObjects : MonoBehaviour
 #endif
         DontDestroyOnLoad(gameObject);
 
-#if STEAM_API
+#if !PLATFORM_MOBILE 
         //Safety check, Just in case resolution decides to be 0x0 (yes this can sometimes happen). This resolution is just for the splash screen, as it will be overridden once player hits Main Menu
         Screen.SetResolution(Screen.mainWindowDisplayInfo.width, Screen.mainWindowDisplayInfo.height, false);
 #endif
