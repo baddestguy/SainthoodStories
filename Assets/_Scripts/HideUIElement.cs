@@ -4,19 +4,45 @@ using UnityEngine;
 public class HideUIElement : MonoBehaviour
 {
     public List<ConditionSO> ConditionsList;
+    public Operator Operator;
 
     void Start()
     {
         bool allTrue = true;
-        foreach (var condition in ConditionsList)
+        switch (Operator)
         {
-            if (condition == null || !condition.IsTrue())
-            {
-                allTrue = false;
+            case Operator.AND:
+                foreach (var condition in ConditionsList)
+                {
+                    if (condition == null || !condition.IsTrue())
+                    {
+                        allTrue = false;
+                        break;
+                    }
+                }
+
                 break;
-            }
+
+            case Operator.OR:
+                allTrue = false;
+                foreach (var condition in ConditionsList)
+                {
+                    if (condition != null && condition.IsTrue())
+                    {
+                        allTrue = true;
+                        break;
+                    }
+                }
+
+                break;
         }
 
         gameObject.SetActive(!allTrue);
     }
+}
+
+public enum Operator
+{
+    AND,
+    OR
 }

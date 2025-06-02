@@ -4642,6 +4642,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ConditionsList:
   - {fileID: 11400000, guid: b27a982784e52864183497c84e1d9978, type: 2}
+  - {fileID: 11400000, guid: a032d325aa5860f4a8fd635c489fb744, type: 2}
+  Operator: 1
 --- !u!114 &617365109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6187,6 +6189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ConditionsList:
   - {fileID: 11400000, guid: abfc437fecf96554c8d7dbd7beb1a67e, type: 2}
+  Operator: 0
 --- !u!1 &963448484
 GameObject:
   m_ObjectHideFlags: 0
