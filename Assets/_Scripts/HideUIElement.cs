@@ -6,7 +6,17 @@ public class HideUIElement : MonoBehaviour
     public List<ConditionSO> ConditionsList;
     public Operator Operator;
 
+    private void OnEnable()
+    {
+        Run();
+    }
+
     void Start()
+    {
+        Run();
+    }
+
+    void Run()
     {
         bool allTrue = true;
         switch (Operator)
@@ -40,6 +50,7 @@ public class HideUIElement : MonoBehaviour
         gameObject.SetActive(!allTrue);
     }
 }
+
 
 public enum Operator
 {
