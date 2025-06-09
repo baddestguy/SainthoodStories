@@ -1,5 +1,7 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ProvisionUIItem : MonoBehaviour
@@ -17,7 +19,21 @@ public class ProvisionUIItem : MonoBehaviour
 
     private string HeaderSize = "<size=15>";
     private string SubheaderSize = "<size=10>";
-    private string DescriptionSize = "<size=7>";
+    private string DescriptionSize = "<size=10>";
+
+    //Mobile only!
+    private bool Selected;
+    public static UnityAction HasSelected;
+
+    private void Start()
+    {
+        HasSelected += ProvisionSelected;
+    }
+
+    private void OnDisable()
+    {
+        HasSelected -= ProvisionSelected;
+    }
 
     public void Init(ProvisionData prov, ProvisionUIItemType itemType)
     {
@@ -63,11 +79,25 @@ public class ProvisionUIItem : MonoBehaviour
         if (InventoryPopup.Open) return;
         if (Provision == null) return;
 
+#if PLATFORM_MOBILE
+        if (!Selected)
+        {
+            HasSelected?.Invoke();
+            Selected = true;
+            return;
+        }
+#endif
+
         if (Type == ProvisionUIItemType.NEW) SendMessageUpwards("AddNewProvision", Provision, SendMessageOptions.RequireReceiver);
 
         if (Type == ProvisionUIItemType.UPGRADE) SendMessageUpwards("UpgradeProvision", Provision, SendMessageOptions.RequireReceiver);
 
         ToolTipManager.Instance.ShowToolTip("");
+    }
+
+    public void ProvisionSelected()
+    {
+        Selected = false;
     }
 
     #region ControllerSupport

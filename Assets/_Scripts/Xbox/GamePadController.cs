@@ -16,6 +16,12 @@ namespace Assets._Scripts.Xbox
         Left
     }
 
+    public static class DirectionInputExtensions
+    {
+        public static bool IsHorizontal(this DirectionInput input) => input is DirectionInput.Left || input is DirectionInput.Right;
+        public static bool IsVertical(this DirectionInput input) => input is DirectionInput.Up || input is DirectionInput.Down;
+    }
+
     public enum GamePadButton
     {
         Void = -1,

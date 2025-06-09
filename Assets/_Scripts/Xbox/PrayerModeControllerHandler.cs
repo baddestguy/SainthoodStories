@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Assets._Scripts.Xbox;
 using UnityEngine;
@@ -7,25 +6,25 @@ using UnityEngine.UI;
 
 public class PrayerModeController : MonoBehaviour
 {
-    [Header("Base Buttons")]
-    public GameObject ExitButton;
-    public GameObject RosaryButton;
-    public GameObject SkipButton;
+    [Header("Update RosaryButtonIndex if Rosary is moved")]
+    public GameObject[] HorizonalButtons;
+    public int RosaryButtonIndex = 1;
+    public GameObject RosaryMysteryButtonGroup;
+
+    private int _horizontalButtonIndex = 1;
+    private int _rosaryMysteryIndex;
 
     private bool _skipFrame;
     private bool _hasConfiguredForController;
-    private int _currentVerticalButtonIndex = -1;
     private ColorBlock _defaultMainMenuColorBlock;
     private ColorBlock _activeMainMenuColorBlock;
     private Button _activeButton;
-    private Button[] _rosaryMysteryButtons;
-    private GameObject[] _acceptableButtonsWhilePraying;
+    private GameObject[] _rosaryMysteryButtons;
 
     // Start is called before the first frame update
     void Start()
     {
         GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
-        _acceptableButtonsWhilePraying = new[] { ExitButton, SkipButton };
     }
 
     public void OnDisable()
@@ -38,7 +37,7 @@ public class PrayerModeController : MonoBehaviour
         if (isUsingController)
         {
             _skipFrame = true;
-            _currentVerticalButtonIndex = 0;
+            _rosaryMysteryIndex = 0;
         }
         else
         {
@@ -49,12 +48,17 @@ public class PrayerModeController : MonoBehaviour
     {
         if (!_hasConfiguredForController && GameSettings.Instance.IsUsingController)
         {
-            _activeButton = RosaryButton.GetComponent<Button>();
+            _activeButton = HorizonalButtons[1].GetComponent<Button>();
             _defaultMainMenuColorBlock = _activeButton.colors;
             _activeMainMenuColorBlock = _defaultMainMenuColorBlock;
             _activeMainMenuColorBlock.normalColor = _defaultMainMenuColorBlock.highlightedColor;
             _activeButton.colors = _activeMainMenuColorBlock;
-            _rosaryMysteryButtons = PrayerManager.Instance.PrayerButtonTypes.GetComponentsInChildren<Button>();
+
+            _rosaryMysteryButtons = RosaryMysteryButtonGroup.GetComponentsInChildren<Button>().Select(x => x.gameObject).ToArray()
+                .Concat(new[] { HorizonalButtons[RosaryButtonIndex] })
+                .ToArray();
+            _rosaryMysteryIndex = _rosaryMysteryButtons.Length - 1;
+
             _hasConfiguredForController = true;
         }
 
@@ -84,88 +88,59 @@ public class PrayerModeController : MonoBehaviour
         }
 
         var pressedButton = GamePadController.GetButton();
-        if (pressedButton.Button == GamePadButton.South && pressedButton.Control.WasPressedThisFrame)
-        {
-            if (PrayerManager.Instance.Praying && !_acceptableButtonsWhilePraying.Contains(_activeButton.gameObject))
-            {
-                return;
-            }
+        var pressedDirection = GamePadController.GetDirection();
 
+        if (pressedButton.Control.WasPressedThisFrame && pressedButton.Button == GamePadButton.South)
+        {
             _activeButton.onClick.Invoke();
         }
-        else
+        else if(pressedDirection.Control.WasPressedThisFrame)
         {
-            HandleControllerNavigation();
+            HandleControllerNavigation(pressedDirection.Input);
         }
     }
 
 
-    private void HandleControllerNavigation()
+    private void HandleControllerNavigation(DirectionInput input)
     {
-        var pressedDirection = GamePadController.GetDirection();
-        if (!pressedDirection.Control.WasPressedThisFrame) return;
-
-        //if pressed direction is left, make Exit button active
-        if (pressedDirection.Input == DirectionInput.Left)
+        if (input.IsHorizontal())
         {
-            SetNewActiveMainMenuButton(ExitButton);
-            _currentVerticalButtonIndex = -1;
-            return;
+            _rosaryMysteryIndex = _rosaryMysteryButtons.Length - 1;
+
+            // Increment to the next active game object
+            do
+            {
+                _horizontalButtonIndex += input == DirectionInput.Left ? -1 : +1;
+                //allows looping
+                _horizontalButtonIndex %= HorizonalButtons.Length;
+                if (_horizontalButtonIndex < 0)
+                {
+                    _horizontalButtonIndex = HorizonalButtons.Length - 1;
+                }
+            } while (!HorizonalButtons[_horizontalButtonIndex].activeInHierarchy);
+
+            SetNewActiveMainMenuButton(HorizonalButtons[_horizontalButtonIndex]);
         }
-
-        if (pressedDirection.Input == DirectionInput.Right)
+        else if (input.IsVertical())
         {
-            _currentVerticalButtonIndex = -1;
-            if (PrayerManager.Instance.Praying)
+            if (PrayerManager.Instance.PrayerButtonTypes.activeInHierarchy)
             {
-                SetNewActiveMainMenuButton(SkipButton);
-            }
-            else
-            {
-                SetNewActiveMainMenuButton(RosaryButton);
-            }
-            return;
-        }
+                _horizontalButtonIndex = 1;
 
-        if (PrayerManager.Instance.PrayerButtonTypes.activeInHierarchy && pressedDirection.Input == DirectionInput.Up || pressedDirection.Input == DirectionInput.Down)
-        {
+                // Increment to the next active game object
+                do
+                {
+                    _rosaryMysteryIndex += input == DirectionInput.Up ? -1 : +1;
+                    //allows looping
+                    _rosaryMysteryIndex %= _rosaryMysteryButtons.Length;
+                    if (_rosaryMysteryIndex < 0)
+                    {
+                        _rosaryMysteryIndex = _rosaryMysteryButtons.Length - 1;
+                    }
+                } while (!_rosaryMysteryButtons[_rosaryMysteryIndex].gameObject.activeInHierarchy);
 
-            //if rosary button and up set to last in group.If down, do nothing.
-            if (_currentVerticalButtonIndex == -1)
-            {
-                if (pressedDirection.Input is DirectionInput.Up)
-                {
-                    _currentVerticalButtonIndex = _rosaryMysteryButtons.Length - 1;
-                }
-                else
-                {
-                    return;
-                }
+                SetNewActiveMainMenuButton(_rosaryMysteryButtons[_rosaryMysteryIndex].gameObject);
             }
-            else
-            {
-                _currentVerticalButtonIndex = pressedDirection.Input switch
-                {
-                    DirectionInput.Up => _currentVerticalButtonIndex - 1,
-                    DirectionInput.Down => _currentVerticalButtonIndex + 1,
-                    _ => _currentVerticalButtonIndex //impossible to get here
-                };
-
-                if (_currentVerticalButtonIndex < 0)
-                {
-                    //if at top, stay at top
-                    _currentVerticalButtonIndex = 0;
-                }
-                else if (_currentVerticalButtonIndex >= _rosaryMysteryButtons.Length)
-                {
-                    //swap back to rosary button
-                    _currentVerticalButtonIndex = -1;
-                    SetNewActiveMainMenuButton(RosaryButton);
-                    return;
-                }
-            }
-
-            SetNewActiveMainMenuButton(_rosaryMysteryButtons[_currentVerticalButtonIndex].gameObject);
         }
 
 

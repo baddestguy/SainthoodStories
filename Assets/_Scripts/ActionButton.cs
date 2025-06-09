@@ -14,6 +14,13 @@ public class ActionButton : MonoBehaviour
     public bool ShouldWiggle = true;
     public float WiggleDelay = 1f;
 
+    private void Start()
+    {
+#if PLATFORM_MOBILE 
+        transform.localScale = transform.localScale * 1.75f;
+#endif
+    }
+
     private void OnEnable()
     {
         StartCoroutine(WaitThenWiggleAsync());

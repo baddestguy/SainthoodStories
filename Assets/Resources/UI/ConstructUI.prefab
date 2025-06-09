@@ -156,6 +156,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &8476282149193162250
 MonoBehaviour:
@@ -5427,7 +5428,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &2201728540846385522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5861,7 +5862,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Pray the Rosary in the shed.
+  m_text: Pray / Meditate.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57947fe6abb4f8844b33b6ef60baa197, type: 2}
   m_sharedMaterial: {fileID: 2464505700415875037, guid: 57947fe6abb4f8844b33b6ef60baa197,
@@ -6087,6 +6088,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &4174991926480020527
 MonoBehaviour:
@@ -7353,6 +7355,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 5169854871243787552}
   FPCPStatsDisplay: {fileID: 8210838553938557787}
   InfoPanel: {fileID: 3496715055780734716}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &175725809537359346
 MonoBehaviour:
@@ -8298,6 +8301,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &9071779203461286618
 MonoBehaviour:
@@ -8635,6 +8639,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &7215470441858168109
 MonoBehaviour:
@@ -8912,6 +8917,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &7713106281405674899
 MonoBehaviour:
@@ -13934,6 +13940,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 3297181354404824657}
   FPCPStatsDisplay: {fileID: 2438420442939863985}
   InfoPanel: {fileID: 1785111141069075866}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &2955234174489064912
 MonoBehaviour:
@@ -14553,6 +14560,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &8143026910245118681
 MonoBehaviour:
@@ -15113,6 +15121,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &2782975862689457766
 MonoBehaviour:
@@ -15847,6 +15856,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &1085865409786375851
 MonoBehaviour:
@@ -16461,6 +16471,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &5161051462897927676
 MonoBehaviour:
@@ -21892,6 +21903,7 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 8087087328446761684}
   FPCPStatsDisplay: {fileID: 111546570338719810}
   InfoPanel: {fileID: 3935075423762303301}
+  TurnOnInfoPanel: 0
   HasControllerHover: 0
 --- !u!114 &2266091171667997052
 MonoBehaviour:

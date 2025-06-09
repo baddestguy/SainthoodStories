@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Text;
 using Newtonsoft.Json;
-using Unity.XGamingRuntime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using HR = Unity.XGamingRuntime.HR;
 
+#if MICROSOFT_GDK_SUPPORT
+using Unity.XGamingRuntime;
+using HR = Unity.XGamingRuntime.HR;
+#endif
 namespace Assets._Scripts.Xbox
 {
     public class XboxUserHandler : MonoBehaviour
@@ -22,6 +24,7 @@ namespace Assets._Scripts.Xbox
         public static string GameConfigTitleId => "60FCC671";
         public static string GameConfigSandbox => "DVKLWP.1";
 
+#if MICROSOFT_GDK_SUPPORT
         private static bool Initialized { get; set; }
         private static string GameConfigScId => "00000000-0000-0000-0000-000060fcc671";
         private static string GameSaveContainerName => "com.TaiwoPictures.Sainthood";
@@ -31,7 +34,6 @@ namespace Assets._Scripts.Xbox
         private XUserHandle _userHandle;
         private XUserChangeRegistrationToken _registrationToken;
         private XblContextHandle _xblContextHandle;
-
         public bool SaveHandlerInitialized { get; private set; }
         public bool IsUserLoggedIn
 
@@ -44,6 +46,7 @@ namespace Assets._Scripts.Xbox
             }
         }
 
+#endif
         void Start()
         {
             Instance = this;
@@ -53,6 +56,7 @@ namespace Assets._Scripts.Xbox
 
         private void OnDestroy()
         {
+#if MICROSOFT_GDK_SUPPORT
             if (_userHandle != null)
             {
                 SDK.XUserCloseHandle(_userHandle);
@@ -63,8 +67,10 @@ namespace Assets._Scripts.Xbox
             {
                 SDK.XUserUnregisterForChangeEvent(_registrationToken);
             }
+#endif
         }
 
+#if MICROSOFT_GDK_SUPPORT
         public void TryLogInUser()
         {
             try
@@ -121,7 +127,7 @@ namespace Assets._Scripts.Xbox
                 OnXboxUserLoginStatusChange?.Invoke(false, $"Failed to sign in user. Please try again. \n {e.Message}", true);
             }
         }
-
+#endif
         /// <summary>
         /// Begin the process to load data from local or cloud storage.
         /// </summary>
@@ -130,7 +136,8 @@ namespace Assets._Scripts.Xbox
         /// <param name="killAsyncSaves">Kill any async saves that may be happening</param>
         public T LoadData<T>(string saveFileName, bool killAsyncSaves = true)
         {
-            if (!IsUserLoggedIn || !SaveHandlerInitialized)
+#if MICROSOFT_GDK_SUPPORT
+           if (!IsUserLoggedIn || !SaveHandlerInitialized)
             {
                 Debug.LogError("User is not logged in or save handler has not been initialized");
                 return default;
@@ -148,19 +155,27 @@ namespace Assets._Scripts.Xbox
             Debug.Log($"Returning {loadedDataAsJson}");
             var loadedData = JsonConvert.DeserializeObject<T>(loadedDataAsJson);
             return loadedData;
+#else
+            return JsonConvert.DeserializeObject<T>("");
+#endif
         }
 
         public bool Save<T>(string saveFileName, T data)
         {
+#if MICROSOFT_GDK_SUPPORT
             var dataAsJson = JsonConvert.SerializeObject(data);
             var dataBytes = Encoding.ASCII.GetBytes(dataAsJson);
             var saveSuccess = SavedDataHandler.Save(GameSaveContainerName, saveFileName, dataBytes);
             return saveSuccess;
+#else
+            return true;
+#endif
         }
 
         public void QueueSave<T>(string filename, T data)
         {
-            try
+#if MICROSOFT_GDK_SUPPORT
+           try
             {
                 //Add the save to the queue
                 Debug.Log($"Added {filename} to the save queue");
@@ -177,9 +192,11 @@ namespace Assets._Scripts.Xbox
             {
                 Debug.LogError($"Error trying to queue save: {e.Message}");
             }
+#endif
         }
 
-        private IEnumerator ProcessSaveQueue()
+#if MICROSOFT_GDK_SUPPORT
+      private IEnumerator ProcessSaveQueue()
         {
             Debug.Log("Starting save queue processing");
             // process queue in order until it is empty
@@ -205,7 +222,7 @@ namespace Assets._Scripts.Xbox
             // ReSharper disable once RedundantJumpStatement
             yield break;
         }
-
+#endif
         /// <summary>
         /// Unlock an achievement for the current logged in xbox user.
         /// </summary>
@@ -214,6 +231,7 @@ namespace Assets._Scripts.Xbox
         public void UnlockAchievement(string achievementId, int progressLevel = 100)
         {
             if (!GameSettings.Instance.IsXboxMode) return;
+#if MICROSOFT_GDK_SUPPORT
 
             // This API will work even when offline.  Offline updates will be posted by the system when connection is
             // re-established even if the title isn’t running. If the achievement has already been unlocked or the progress
@@ -241,8 +259,10 @@ namespace Assets._Scripts.Xbox
                     Debug.Log($"SUCCESS: {achievementId} has been updated to level {progressLevel}");
                 }
             );
+#endif
         }
 
+#if MICROSOFT_GDK_SUPPORT
         /// <summary>
         /// Initializes the main Runtime Library.
         /// At the same time we will Creates the Async Dispatch thread which will handle all calls to work.
@@ -409,5 +429,6 @@ namespace Assets._Scripts.Xbox
                 InitializeAndAddUser();
             }
         }
+#endif
     }
 }

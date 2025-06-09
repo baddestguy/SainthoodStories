@@ -488,7 +488,15 @@ public class Player : MonoBehaviour
     {
         if (tile is InteractableHouse)
         {
+#if PLATFORM_MOBILE
+            var iHouse = tile as InteractableHouse;
+            if(iHouse == CurrentBuilding)
+            {
+                iHouse.PopUICallback("ENTER");
+            }
+#else
             (tile as InteractableHouse).HouseJump();
+#endif
         }
         else if (tile == CurrentTile)
         {

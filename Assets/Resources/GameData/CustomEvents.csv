@@ -64,6 +64,8 @@ ICON,OK,ENDWEEK,100,0,0,10,NONE,0,,StoryArt/Hospital,FALSE,Event_IconUnlock,
 SPIRITUALCRISIS,OK,ENDWEEK,100,0,0,0,NONE,0,,StoryArt/Endgame,TRUE,Event_SpiritualCrisis,
 RIOTS,OK,ENDWEEK,100,0,0,0,NONE,0,,StoryArt/Endgame,TRUE,Event_TownRiots,
 ENDGAME,OK,ENDWEEK,100,0,0,0,NONE,0,,StoryArt/EndgameIntro,TRUE,Event_Endgame,
+ENDGAME_MOBILE,OK,ENDWEEK,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,Endgame_Mobile,
+ENDGAME_MOBILE_THANKS,OK,ENDWEEK,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,Endgame_MobileThanks,
 WORST_ENDING,OK,ENDWEEK,100,0,0,0,NONE,0,,StoryArt/Endgame,TRUE,Event_EndgameWorst,
 ENDGAME_DEMO,OK,ENDWEEK,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,Endgame,
 ENDGAME_NORMAL,OK,ENDWEEK,100,0,0,0,NONE,0,,StoryArt/Endgame,TRUE,Event_EndgameNormal,
@@ -224,7 +226,7 @@ COLLECTIBLE_MISSION_9,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,Collectib
 COLLECTIBLE_MISSION_10,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,CollectibleComplete10,
 COLLECTIBLE_MISSION_11,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,CollectibleComplete11,
 COLLECTIBLE_MISSION_12,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Convent,TRUE,CollectibleComplete12,
-INTRO,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Tutorial_1,TRUE,Tutorial_0,StoryArt/Convent:Tutorial_1|StoryArt/PrayIcon:Tutorial_11
+INTRO,OK,STORY,100,0,0,0,NONE,0,,StoryArt/Tutorial_1,TRUE,Tutorial_0,StoryArt/Convent:Tutorial_1
 THANKYOU_UPGRADE_HOSPITAL,OK,THANKYOU,100,0,0,0,CP,0,,StoryArt/Hospital,FALSE,Event_ThankYouItemClothes,
 THANKYOU_UPGRADE_SCHOOL,OK,THANKYOU,100,0,0,0,CP,0,,StoryArt/School,FALSE,Event_ThankYouItemClothes,
 THANKYOU_UPGRADE_ORPHANAGE,OK,THANKYOU,100,0,0,0,CP,0,,StoryArt/Orphanage,FALSE,Event_ThankYouItemClothes,

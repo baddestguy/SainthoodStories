@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Assets._Scripts.Extensions;
 using Assets._Scripts.Xbox;
 using Rewired;
+using UniPay;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -191,6 +192,15 @@ public class GameManager : MonoBehaviour
                 WeatherManager.Instance.OverrideWeatherActivation(0, 1);
             }
 
+#if PLATFORM_MOBILE
+            if (MissionManager.Instance.CurrentMissionId == 4 && !DBManager.IsPurchased(Constants.FULL_GAME_PRODUCT_ID))
+            {
+                StartCoroutine(StartPurchaseSequence());
+                SceneLoaded = true;
+                return;
+            }
+#endif
+
             if (obj != null && obj.DailyEvent != CustomEventType.NONE)
             {
                 var security = InventoryManager.Instance.GetProvision(Provision.SECURITY_GUARDS);
@@ -270,6 +280,38 @@ public class GameManager : MonoBehaviour
         }
 
         SceneLoaded = true;
+    }
+
+    IEnumerator StartPurchaseSequence()
+    {
+        GameSettings.Instance.CustomEventsToggle = true;
+        EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_MOBILE);
+        EventsManager.Instance.ExecuteEvents();
+
+        while (EventsManager.Instance.HasEventsInQueue()) yield return null;
+
+        IAPManager.purchaseSucceededEvent += OnPurchase;
+        IAPManager.purchaseFailedEvent += OnPurchaseFailed;
+        IAPManager.Purchase(Constants.FULL_GAME_PRODUCT_ID);
+    }
+
+    public void OnPurchase(string success)
+    {
+        EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_MOBILE_THANKS);
+        EventsManager.Instance.AddEventToList(CustomEventType.MISSION_4);
+        EventsManager.Instance.TriggeredMissionEvents.Add(CustomEventType.MISSION_4);
+
+        GridCollectibleManager.Instance.ClearAll();
+        GameClock.Ping();
+        IAPManager.purchaseSucceededEvent -= OnPurchase;
+        IAPManager.purchaseFailedEvent -= OnPurchaseFailed;
+    }
+
+    public void OnPurchaseFailed(string failed)
+    {
+        IAPManager.purchaseSucceededEvent -= OnPurchase;
+        IAPManager.purchaseFailedEvent -= OnPurchaseFailed;
+        LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
     public void GetBuildingStates()
@@ -486,8 +528,10 @@ public class GameManager : MonoBehaviour
         MapTile.OnClickEvent -= OnMapTileTap;
         Player.OnMoveSuccessEvent -= OnPlayerMoved;
         GameClock.Ticked -= OnTick;
+        IAPManager.purchaseSucceededEvent -= OnPurchase;
+        IAPManager.purchaseFailedEvent -= OnPurchaseFailed;
 
-#if !MICROSOFT_GDK_SUPPORT
+#if STEAM_API
         Steamworks.SteamClient.Shutdown();
 #endif
     }

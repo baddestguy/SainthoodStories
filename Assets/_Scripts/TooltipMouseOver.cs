@@ -21,6 +21,20 @@ public class TooltipMouseOver : MonoBehaviour
     public TextMeshProUGUI FPCPStatsDisplay;
     public GameObject InfoPanel;
 
+    //Applies to mobile only!
+    public bool TurnOnInfoPanel;
+
+    private void Start()
+    {
+        if(InfoPanel != null)
+        {
+            if (!InfoPanel.transform.parent.name.Contains("Construct"))
+            {
+                InfoPanel.transform.localPosition = new Vector3(InfoPanel.transform.localPosition.x + 20, InfoPanel.transform.localPosition.y, InfoPanel.transform.localPosition.z);
+                InfoPanel.transform.localScale *= 1.25f;
+            }
+        }
+    }
     public void ShowToolTip()
     {
         transform.DOComplete();
@@ -142,7 +156,6 @@ public class TooltipMouseOver : MonoBehaviour
         if (InfoPanel == null) return;
 
         InfoPanel.SetActive(true);
-
         if (stats == null) return;
 
         if(stats.Ticks / 4 == 1)
@@ -192,7 +205,10 @@ public class TooltipMouseOver : MonoBehaviour
 
     public void HideInfoPanel()
     {
-        if (InfoPanel == null) return;
+        if (InfoPanel == null || TurnOnInfoPanel)
+        {
+            return;
+        }
 
         InfoPanel.SetActive(false);
     }

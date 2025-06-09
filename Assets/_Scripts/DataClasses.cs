@@ -8,6 +8,12 @@ public class DataClasses : MonoBehaviour
 
 }
 
+public interface ICondition
+{
+    bool IsTrue();
+}
+
+
 public enum MinigameType
 {
     CONSTRUCT,
@@ -734,6 +740,12 @@ public enum ProvisionUIItemType
     UPGRADE
 }
 
+public class Constants
+{
+    public const string PRAYER_MODE_PRODUCT_ID = "prayer_mode";
+    public const string FULL_GAME_PRODUCT_ID = "full_game";
+}
+
 public enum CustomEventType
 {
     NONE = 0,
@@ -826,6 +838,8 @@ public enum CustomEventType
     , SAVE_KITCHEN
     , SAVE_SHELTER
     , ENDGAME_DEMO
+    , ENDGAME_MOBILE
+    , ENDGAME_MOBILE_THANKS
     , ENDGAME
     , ENDGAME_BEST
     , ENDGAME_NORMAL

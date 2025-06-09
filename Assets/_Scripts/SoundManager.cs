@@ -94,7 +94,8 @@ public class SoundManager : MonoBehaviour
         }
         MusicPlaylist.Shuffle();
         PlayMusic(MusicPlaylist[0]);
-        StartCoroutine(StartPlaylistAsync());
+        StopCoroutine("StartPlaylistAsync");
+        StartCoroutine("StartPlaylistAsync");
     }
 
     IEnumerator StartPlaylistAsync()
