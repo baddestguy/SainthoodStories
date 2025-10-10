@@ -11,9 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/MainMenu.unity
     guid: cf5381a7a50ea6444b9967e9dd71a299
-  - enabled: 0
-    path: Assets/_Scenes/Credits.unity
-    guid: 2c6be4309888e034fb1dc7e7b54322fa
   - enabled: 1
     path: Assets/_Scenes/Levels/SummerLevel Large.unity
     guid: 5ac0cdb7978d0ec47b1f0418596244c6
@@ -26,21 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/PrayerScene.unity
     guid: f26c8daaf701207419e2f6ca5bd036db
-  - enabled: 0
-    path: Assets/_Scenes/Levels/TutorialLevel.unity
-    guid: 9b82bb47391a2e044858aac244f2131c
-  - enabled: 0
-    path: Assets/_Scenes/Trailer.unity
-    guid: aab0ae25b0d05d4419c4d34a042be18d
-  - enabled: 0
-    path: Assets/_Scenes/WeekDaysUI.unity
-    guid: c22b46c7f5e5909469d304371c467235
-  - enabled: 0
-    path: Assets/_Scenes/PauseMenu.unity
-    guid: 4cbe09fffdd709b4f84bafc5be7ee98e
-  - enabled: 0
-    path: Assets/_Scenes/SaintsShowcase_Day.unity
-    guid: c536db3534ec8394ea5714f10c34b2d3
   m_configObjects:
     Unity.Microsoft.GDK.Editor.Settings: {fileID: 11400000, guid: 40437b3521fe8a74fa96b1c6bf929ee4,
       type: 2}
+  m_UseUCBPForAssetBundles: 0

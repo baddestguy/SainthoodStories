@@ -95,21 +95,21 @@ public class Player : MonoBehaviour
 
         if (StatusEffects.Any())
         {
-            FatigueFx.SetActive(true);
+//            FatigueFx.SetActive(true);
         }
         else
         {
-            FatigueFx.SetActive(false);
+ //           FatigueFx.SetActive(false);
         }
 
         if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
         {
-            FrozenFx.SetActive(true);
+     //       FrozenFx.SetActive(true);
             CharacterGO.SetActive(false);
         }
         else
         {
-            FrozenFx.SetActive(false);
+    //        FrozenFx.SetActive(false);
             CharacterGO.SetActive(true);
         }
     }
@@ -430,7 +430,7 @@ public class Player : MonoBehaviour
             AddRandomAilment();
             SnowSplash.Play();
         }
-        FrozenFx.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.3f);
+   //     FrozenFx.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.3f);
 
         ApplyStatusEffect();
 
@@ -502,7 +502,7 @@ public class Player : MonoBehaviour
         {
             if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
             {
-                FrozenFx.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.3f);
+            //    FrozenFx.transform.DOLocalJump(Vector3.zero, 1f, 1, 0.3f);
                 return;
             }
 

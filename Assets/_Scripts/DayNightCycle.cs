@@ -1,17 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 public class DayNightCycle : MonoBehaviour
 {
     [SerializeField]
     public Light Light;
-    public PostProcessVolume PostProcessor;
-    public PostProcessVolume PostProcessorInterior;
+    //public PostProcessVolume PostProcessor;
+    //public PostProcessVolume PostProcessorInterior;
 
-    private Bloom Bloom;
-    private Bloom BloomInterior;
+    //private Bloom Bloom;
+    //private Bloom BloomInterior;
     private Vector3 TargetRotation = new Vector3(0, 0, 0);
     private Color TargetColor = new Color();
     private Color TargetBloomColor = new Color();
@@ -39,8 +38,8 @@ public class DayNightCycle : MonoBehaviour
     {
         GameClock.Ticked += OnTick;
         ShadowStrength = Light.shadowStrength;
-        PostProcessor.profile.TryGetSettings(out Bloom);
-        PostProcessorInterior.profile.TryGetSettings(out BloomInterior);
+        //PostProcessor.profile.TryGetSettings(out Bloom);
+        //PostProcessorInterior.profile.TryGetSettings(out BloomInterior);
         CurrentSkybox.SetFloat("_Blend", 0);
         StartingSkybox();
         OnTick(GameManager.Instance.GameClock.Time, GameManager.Instance.GameClock.Day);
@@ -201,11 +200,11 @@ public class DayNightCycle : MonoBehaviour
             lightTransform.rotation = Quaternion.Lerp(lightTransform.rotation, target, Time.deltaTime * 1.5f);
         }
 
-        if (Mathf.Abs(Bloom.color.GetValue<Color>().r - TargetBloomColor.r) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().g - TargetBloomColor.g) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().b - TargetBloomColor.b) > 0.001f)
-        {
-        //    Bloom.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
-            BloomInterior.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
-        }
+        //if (Mathf.Abs(Bloom.color.GetValue<Color>().r - TargetBloomColor.r) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().g - TargetBloomColor.g) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().b - TargetBloomColor.b) > 0.001f)
+        //{
+        ////    Bloom.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
+        //    //BloomInterior.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
+        //}
 
         if (Mathf.Abs(Light.color.r - TargetColor.r) > 0.001f || Mathf.Abs(Light.color.g - TargetColor.g) > 0.001f || Mathf.Abs(Light.color.b - TargetColor.b) > 0.001f)
         {
@@ -223,8 +222,8 @@ public class DayNightCycle : MonoBehaviour
 
         CurrentSkybox.SetFloat("_Blend", Mathf.Lerp(CurrentSkybox.GetFloat("_Blend"), BlendValue, Time.deltaTime));
 
-        Bloom.intensity.Override(Mathf.Lerp(Bloom.intensity.GetValue<float>(), TargetBloomIntensity, Time.deltaTime * 0.2f));
-        BloomInterior.intensity.Override(Mathf.Lerp(Bloom.intensity.GetValue<float>(), TargetBloomIntensity, Time.deltaTime * 0.2f));
+        //Bloom.intensity.Override(Mathf.Lerp(Bloom.intensity.GetValue<float>(), TargetBloomIntensity, Time.deltaTime * 0.2f));
+        //BloomInterior.intensity.Override(Mathf.Lerp(Bloom.intensity.GetValue<float>(), TargetBloomIntensity, Time.deltaTime * 0.2f));
         if(Mathf.Abs(CurrentSkybox.GetFloat("_Blend") - BlendValue) < 0.01f)
         {
             if(WeatherManager.Instance.IsNormal())
@@ -251,21 +250,21 @@ public class DayNightCycle : MonoBehaviour
                 LockSkybox = true;
                 return;
 
-            case WeatherType.PREHEAT:
-                Bloom.threshold.Override(0.6f);
-                break;
-            case WeatherType.HEATWAVE:
-                Bloom.threshold.Override(0f);
-                break;
+            //case WeatherType.PREHEAT:
+            //    Bloom.threshold.Override(0.6f);
+            //    break;
+            //case WeatherType.HEATWAVE:
+            //    Bloom.threshold.Override(0f);
+            //    break;
 
             case WeatherType.NONE:
-                LockSkybox = false;
-                SetDayNight();
-                if(clock.Time > 19)
-                    TargetBloomIntensity = 2.5f;
-                else
-                    TargetBloomIntensity = 5f;
-                Bloom.threshold.Override(1f);
+            //    LockSkybox = false;
+            //    SetDayNight();
+            //    if(clock.Time > 19)
+            //        TargetBloomIntensity = 2.5f;
+            //    else
+            //        TargetBloomIntensity = 5f;
+            //    Bloom.threshold.Override(1f);
                 return;
         }
     }

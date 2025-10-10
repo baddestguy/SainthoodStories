@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
 
 public class CameraControls : MonoBehaviour
 {
@@ -14,12 +13,12 @@ public class CameraControls : MonoBehaviour
     private Vector3 OriginalCamTarget;
     private Vector3 CamTarget;
     private float ZoomTarget;
-    private DepthOfField DepthOfField;
-    private Bloom Bloom;
+    //private DepthOfField DepthOfField;
+    //private Bloom Bloom;
 
     public Camera UICam3D;
     public Camera MyCamera;
-    public PostProcessVolume PostProcessor;
+    //public PostProcessVolume PostProcessor;
 
     [Header("Mouse Zoom Control (Not Impleamented)")]
     public bool canMouseZoom;
@@ -35,10 +34,10 @@ public class CameraControls : MonoBehaviour
         OriginalCamTarget = transform.position;
         CamTarget = OriginalCamTarget;
         ZoomTarget = MyCamera.orthographicSize;
-        PostProcessor.profile.TryGetSettings(out DepthOfField);
-        PostProcessor.profile.TryGetSettings(out Bloom);
-        DepthOfField.active = false;
-        Bloom.active = true;
+        //PostProcessor.profile.TryGetSettings(out DepthOfField);
+        //PostProcessor.profile.TryGetSettings(out Bloom);
+        //DepthOfField.active = false;
+        //Bloom.active = true;
     }
 
     void Update()
@@ -94,8 +93,8 @@ public class CameraControls : MonoBehaviour
             SetZoomTarget(9f);
             if (modifyPostProcess)
             {
-                DepthOfField.active = false;
-                Bloom.active = true;
+                //DepthOfField.active = false;
+                //Bloom.active = true;
             }
         }
         else
@@ -103,8 +102,8 @@ public class CameraControls : MonoBehaviour
             SetZoomTarget(3f);
             if (modifyPostProcess)
             {
-                DepthOfField.active = true;
-                Bloom.active = true;
+                //DepthOfField.active = true;
+                //Bloom.active = true;
             }
         }
     }
@@ -129,7 +128,7 @@ public class CameraControls : MonoBehaviour
 
     public void EnableDepthOfField(bool enable)
     {
-        DepthOfField.active = enable;
+        //DepthOfField.active = enable;
     }
 
     /// <summary>
