@@ -52,7 +52,7 @@ public class UISettingsHandler : MonoBehaviour
         Language[] lang = (Language[])Enum.GetValues(typeof(Language));
         for (int i = 0; i < lang.Length; i++)
         {
-            TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData($"{lang[i]}", dropdownSprite);
+            TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData($"{lang[i]}", dropdownSprite, Color.white);
             langData.Add(data);
         }
         language.options = langData;

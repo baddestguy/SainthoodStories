@@ -317,8 +317,8 @@ public class UI : MonoBehaviour
         if (time - (int)time == 0.5) newMinute = 30;
         if (time - (int)time == 0.75) newMinute = 45;
 
-        TimeHrDisplay.DOCounter(currentHour, newHour, 1f, "{0:D2}", false);
-        TimeMinDisplay.DOCounter(currentMinute, newMinute, 1f, "{0:D2}", false);
+        TimeHrDisplay.DOCounter(currentHour, newHour, 1f, false);
+        TimeMinDisplay.DOCounter(currentMinute, newMinute, 1f, false);
 
         if(newHour > 21)
         {

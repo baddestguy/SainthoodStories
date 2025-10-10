@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Assets._Scripts.Extensions;
 using Assets._Scripts.Xbox;
-using Rewired;
 using UniPay;
 using UnityEngine;
 using UnityEngine.Events;

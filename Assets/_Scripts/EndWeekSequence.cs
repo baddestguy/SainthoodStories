@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets._Scripts.Xbox;
 using DG.Tweening;
-using Michsky.UI.ModernUIPack;
+using Michsky.MUIP;
 using TMPro;
 using UnityEngine;
 
@@ -40,12 +40,12 @@ public class EndWeekSequence : MonoBehaviour
         if (SaintsManager.Instance.UnlockedSaints.Count < GameDataManager.TOTAL_UNLOCKABLE_SAINTS)
         {
             SaintProgressBar.currentPercent = fp * 100f / fpTarget;
-            SaintProgressBar.endPercent = (fpPool + fp) * 100f / fpTarget;
+        //    SaintProgressBar.endPercent = (fpPool + fp) * 100f / fpTarget;
         }
         else
         {
             SaintProgressBar.currentPercent = 0;
-            SaintProgressBar.endPercent = 0;
+        //    SaintProgressBar.endPercent = 0;
         }
 
         BG.SetActive(true);
@@ -53,7 +53,7 @@ public class EndWeekSequence : MonoBehaviour
         Title.text = LocalizationManager.Instance.GetText("CP_ENDGAME_TITLE");
         Score.DOCounter(cp, cp + cpPool, 2f);
         TotalCPProgress.currentPercent = cp * 100 / MissionManager.TOTAL_CP_TARGET;
-        TotalCPProgress.endPercent = Mathf.Ceil((cp + cpPool) * 100 / MissionManager.TOTAL_CP_TARGET)+1;
+      //  TotalCPProgress.endPercent = Mathf.Ceil((cp + cpPool) * 100 / MissionManager.TOTAL_CP_TARGET)+1;
         //SoundManager.Instance.PlayOneShotSfx("EndgameCharge_SFX", timeToDie:5f);
 
         yield return new WaitForSeconds(2f);
@@ -96,7 +96,7 @@ public class EndWeekSequence : MonoBehaviour
             SaintProgressBar.speed = 1;
 
             TotalFPProgress.currentPercent = fp * 100f / MissionManager.TOTAL_FP_TARGET;
-            TotalFPProgress.endPercent = Mathf.Ceil((fpPool + fp) * 100f / MissionManager.TOTAL_FP_TARGET)+1;
+          //  TotalFPProgress.endPercent = Mathf.Ceil((fpPool + fp) * 100f / MissionManager.TOTAL_FP_TARGET)+1;
             yield return new WaitForSeconds(2f);
 
             var sp = SaintPortraits[1];

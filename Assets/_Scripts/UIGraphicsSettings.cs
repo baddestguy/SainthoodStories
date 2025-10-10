@@ -35,7 +35,7 @@ public class UIGraphicsSettings : MonoBehaviour
         QualityLevel[] gtypes = (QualityLevel[])Enum.GetValues(typeof(QualityLevel));
         for (int i = 0; i < gtypes.Length; i++)
         {
-            TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData(LocalizationManager.Instance.GetText($"{gtypes[i]}"), dropdownSprite);
+            TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData(LocalizationManager.Instance.GetText($"{gtypes[i]}"), dropdownSprite, Color.white);
             qualityData.Add(data);
         }
         quality.options = qualityData;
@@ -46,7 +46,7 @@ public class UIGraphicsSettings : MonoBehaviour
         var resolutions = Screen.resolutions.Select(resolution => new Resolution { width = resolution.width, height = resolution.height }).Distinct().ToArray();
         for (int i = 0; i < resolutions.Length; i++)
         {
-            TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData($"{resolutions[i].width} x {resolutions[i].height}", dropdownSprite);
+            TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData($"{resolutions[i].width} x {resolutions[i].height}", dropdownSprite, Color.white);
             resolutionData.Add(data);
         }
         resolution.options = new List<TMP_Dropdown.OptionData>();
