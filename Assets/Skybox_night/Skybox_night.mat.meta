@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 493af29db14ec2b42903909fdd4bab71
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 7558
+  packageName: Painted Skybox - Night
+  packageVersion: 1.0
+  assetPath: Assets/Skybox_night/Skybox_night.mat
+  uploadId: 27852
