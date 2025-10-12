@@ -17,7 +17,6 @@ public class DayNightCycle : MonoBehaviour
     private float TargetBloomIntensity = 5;
     private float ShadowStrength;
 
-    public Material CurrentSkybox;
     public List<Texture> DaySkyboxTextures;
     public List<Texture> EveningSkyboxTextures;
     public List<Texture> NightSkyboxTextures;
@@ -40,7 +39,6 @@ public class DayNightCycle : MonoBehaviour
         ShadowStrength = Light.shadowStrength;
         //PostProcessor.profile.TryGetSettings(out Bloom);
         //PostProcessorInterior.profile.TryGetSettings(out BloomInterior);
-        CurrentSkybox.SetFloat("_Blend", 0);
         StartingSkybox();
         OnTick(GameManager.Instance.GameClock.Time, GameManager.Instance.GameClock.Day);
     }
@@ -64,18 +62,6 @@ public class DayNightCycle : MonoBehaviour
 
     private void OverrideSkybox(List<Texture> newTextures)
     {
-        CurrentSkybox.SetTexture("_FrontTex2", newTextures[0]);
-        CurrentSkybox.SetTexture("_BackTex2", newTextures[1]);
-        CurrentSkybox.SetTexture("_LeftTex2", newTextures[2]);
-        CurrentSkybox.SetTexture("_RightTex2", newTextures[3]);
-        CurrentSkybox.SetTexture("_UpTex2", newTextures[4]);
-        CurrentSkybox.SetTexture("_DownTex2", newTextures[5]);
-        CurrentSkybox.SetTexture("_FrontTex", newTextures[0]);
-        CurrentSkybox.SetTexture("_BackTex", newTextures[1]);
-        CurrentSkybox.SetTexture("_LeftTex", newTextures[2]);
-        CurrentSkybox.SetTexture("_RightTex", newTextures[3]);
-        CurrentSkybox.SetTexture("_UpTex", newTextures[4]);
-        CurrentSkybox.SetTexture("_DownTex", newTextures[5]);
     }
 
     private void OnTick(double time, int day)
@@ -220,18 +206,18 @@ public class DayNightCycle : MonoBehaviour
             Light.shadowStrength = Mathf.Lerp(Light.shadowStrength, ShadowStrength, Time.deltaTime);
         }
 
-        CurrentSkybox.SetFloat("_Blend", Mathf.Lerp(CurrentSkybox.GetFloat("_Blend"), BlendValue, Time.deltaTime));
+    //    CurrentSkybox.SetFloat("_Blend", Mathf.Lerp(CurrentSkybox.GetFloat("_Blend"), BlendValue, Time.deltaTime));
 
         //Bloom.intensity.Override(Mathf.Lerp(Bloom.intensity.GetValue<float>(), TargetBloomIntensity, Time.deltaTime * 0.2f));
-        //BloomInterior.intensity.Override(Mathf.Lerp(Bloom.intensity.GetValue<float>(), TargetBloomIntensity, Time.deltaTime * 0.2f));
-        if(Mathf.Abs(CurrentSkybox.GetFloat("_Blend") - BlendValue) < 0.01f)
-        {
-            if(WeatherManager.Instance.IsNormal())
-            {
-                LockSkybox = false;
-                SetDayNight();
-            }
-        }
+        ////BloomInterior.intensity.Override(Mathf.Lerp(Bloom.intensity.GetValue<float>(), TargetBloomIntensity, Time.deltaTime * 0.2f));
+        //if(Mathf.Abs(CurrentSkybox.GetFloat("_Blend") - BlendValue) < 0.01f)
+        //{
+        //    if(WeatherManager.Instance.IsNormal())
+        //    {
+        //        LockSkybox = false;
+        //        SetDayNight();
+        //    }
+        //}
     }
 
     public void SetFutureSkyBox(WeatherType type)
@@ -281,31 +267,31 @@ public class DayNightCycle : MonoBehaviour
 
         if (BlendValue < 0.5f)
         {
-            if (CurrentSkybox.GetTexture("_FrontTex2") == newTextures[0])
-            {
-                return;
-            }
+            //if (CurrentSkybox.HasTexture("_FrontTex2") && CurrentSkybox.GetTexture("_FrontTex2") == newTextures[0])
+            //{
+            //    return;
+            //}
 
-            CurrentSkybox.SetTexture("_FrontTex2", newTextures[0]);
-            CurrentSkybox.SetTexture("_BackTex2", newTextures[1]);
-            CurrentSkybox.SetTexture("_LeftTex2", newTextures[2]);
-            CurrentSkybox.SetTexture("_RightTex2", newTextures[3]);
-            CurrentSkybox.SetTexture("_UpTex2", newTextures[4]);
-            CurrentSkybox.SetTexture("_DownTex2", newTextures[5]);
+      //      CurrentSkybox.SetTexture("_FrontTex2", newTextures[0]);
+            //CurrentSkybox.SetTexture("_BackTex2", newTextures[1]);
+            //CurrentSkybox.SetTexture("_LeftTex2", newTextures[2]);
+            //CurrentSkybox.SetTexture("_RightTex2", newTextures[3]);
+            //CurrentSkybox.SetTexture("_UpTex2", newTextures[4]);
+            //CurrentSkybox.SetTexture("_DownTex2", newTextures[5]);
         }
         else
         {
-            if (CurrentSkybox.GetTexture("_FrontTex") == newTextures[0])
-            {
-                return;
-            }
+            //if (CurrentSkybox.GetTexture("_FrontTex") == newTextures[0])
+            //{
+            //    return;
+            //}
 
-            CurrentSkybox.SetTexture("_FrontTex", newTextures[0]);
-            CurrentSkybox.SetTexture("_BackTex", newTextures[1]);
-            CurrentSkybox.SetTexture("_LeftTex", newTextures[2]);
-            CurrentSkybox.SetTexture("_RightTex", newTextures[3]);
-            CurrentSkybox.SetTexture("_UpTex", newTextures[4]);
-            CurrentSkybox.SetTexture("_DownTex", newTextures[5]);
+      //      CurrentSkybox.SetTexture("_FrontTex", newTextures[0]);
+            //CurrentSkybox.SetTexture("_BackTex", newTextures[1]);
+            //CurrentSkybox.SetTexture("_LeftTex", newTextures[2]);
+            //CurrentSkybox.SetTexture("_RightTex", newTextures[3]);
+            //CurrentSkybox.SetTexture("_UpTex", newTextures[4]);
+            //CurrentSkybox.SetTexture("_DownTex", newTextures[5]);
         }
 
         BlendValue = BlendValue < 0.5f ? 1f : 0f;
