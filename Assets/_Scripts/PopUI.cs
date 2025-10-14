@@ -13,12 +13,6 @@ public class PopUI : MonoBehaviour
     public Action<string> Callback;
     private bool LockUI;
 
-    public Image BuildingIcon;
-    public Image ClockIcon;
-    public TextMeshProUGUI ItemsRequiredDisplay;
-    public TextMeshProUGUI DeadlineDisplay;
-    public TextMeshProUGUI IsCurrentlyOpen;
-
     private bool PointerDown;
     public float ButtonTimer;
     private float ButtonTimerTarget;
@@ -53,58 +47,11 @@ public class PopUI : MonoBehaviour
         Callback = callback;
 
         MyHouse = house;
-        BuildingIcon.sprite = Resources.Load<Sprite>($"Icons/{sprite}");
-        ItemsRequiredDisplay.text = $"{items}";
-        DeadlineDisplay.text = $"{(int)deadline.Time}:{(deadline.Time % 1 == 0 ? "00" : "30")}";
         CameraControls = cameraControls;
         if (RPDisplay != null && MyHouse != null)
         {
             RPDisplay.text = $"{MyHouse?.RelationshipPoints ?? 0}";
             transform.Find("Heart").GetComponent<TooltipMouseOver>().Loc_Key = $"{LocalizationManager.Instance.GetText("Tooltip_RP")}\n\n<b>Next Milestone: {MyHouse.GetNextRPMilestone()} RP</b>";
-        }
-        if (items <= 0)
-        {
-            ItemsRequiredDisplay.gameObject.SetActive(false);
-            ClockIcon.gameObject.SetActive(false);
-            //    BuildingIcon.transform.localPosition = new Vector3(0, 1.5f, 0);
-            if (house != null)
-            {
-                var hoursToClose = house.ClosingTime - GameManager.Instance.GameClock.Time;
-                if (house.ClosingTime < 24 && hoursToClose < 2 && hoursToClose > 0)
-                {
-                    IsCurrentlyOpen.text = house.BuildingState == BuildingState.RUBBLE ? LocalizationManager.Instance.GetText("UI_ConstructionSite") : $"(Closing in {hoursToClose} hour(s))";
-                    IsCurrentlyOpen.color = Color.black;
-                }
-                else
-                {
-                    IsCurrentlyOpen.text = house.BuildingState == BuildingState.RUBBLE ? LocalizationManager.Instance.GetText("UI_ConstructionSite") : house.DuringOpenHours() ? LocalizationManager.Instance.GetText("UI_Open") : LocalizationManager.Instance.GetText("UI_Closed");
-                    IsCurrentlyOpen.color = Color.white;
-                }
-
-            }
-            else
-            {
-                IsCurrentlyOpen.text = "";
-            }
-        }
-        else
-        {
-            ItemsRequiredDisplay.gameObject.SetActive(false);
-            ClockIcon.gameObject.SetActive(false);
-            //    BuildingIcon.transform.localPosition = new Vector3(0, 2, 0);
-            IsCurrentlyOpen.text = "";
-        }
-
-        GameClock clock = GameManager.Instance.GameClock;
-        if (clock.TimeDifference(deadline) <= 1.5)
-        {
-            DeadlineDisplay.color = Color.red;
-            ClockIcon.color = Color.red;
-        }
-        else
-        {
-            DeadlineDisplay.color = Color.white;
-            ClockIcon.color = Color.white;
         }
 
         Buttons = gameObject.GetComponentsInChildren<ActionButton>().ToList();

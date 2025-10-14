@@ -197,6 +197,14 @@ public class InteractableChurch : InteractableHouse
             case "SAINTS":
                 OpenUnlockedSaints();
                 break;
+
+            case "ROSARY":
+                UI.Instance.RosaryMode();
+                break;
+
+            case "BIBLE":
+                UI.Instance.OpenBible();
+                break;
         }
     }
 

@@ -1458,6 +1458,8 @@ public class InteractableHouse : InteractableObject
             case "WORLD": return TutorialCanDoAction(actionName);
             case "ENTER": return true;
             case "SAINTS": return !GameSettings.Instance.TUTORIAL_MODE;
+            case "ROSARY": return !GameSettings.Instance.TUTORIAL_MODE;
+            case "BIBLE": return !GameSettings.Instance.TUTORIAL_MODE;
             case "UPGRADE": return !GameSettings.Instance.DEMO_MODE_3 && CanAffordUpgrade();
         }
 

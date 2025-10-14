@@ -12,9 +12,7 @@ public class MarketPopUI : PopUI
 
     public override void Init(Action<string> callback, string sprite, int items, GameClock deadline, InteractableHouse house, CameraControls cameraControls = null)
     {
-        Vector3 BuildingIconPos = BuildingIcon.transform.localPosition;
         base.Init(callback, sprite, items, deadline, house, cameraControls);
-        BuildingIcon.transform.localPosition = BuildingIconPos;
 
         SetDisplayPrice(ItemType.DRUGS, GroceriesDisplayPrice);
         SetDisplayPrice(ItemType.CLOTHES, ClothesDisplayPrice);

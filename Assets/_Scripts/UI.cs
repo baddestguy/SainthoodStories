@@ -167,6 +167,16 @@ public class UI : MonoBehaviour
         }
     }
 
+    public void OpenBible()
+    {
+
+    }
+
+    public void RosaryMode()
+    {
+
+    }
+
     public void GoToPrayer()
     {
 #if PLATFORM_MOBILE
