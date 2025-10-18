@@ -744,6 +744,7 @@ public class Constants
 {
     public const string PRAYER_MODE_PRODUCT_ID = "prayer_mode";
     public const string FULL_GAME_PRODUCT_ID = "full_game";
+    public const double DayTimeStartTime = 10;
 }
 
 public enum CustomEventType

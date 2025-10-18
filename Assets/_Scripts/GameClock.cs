@@ -69,29 +69,32 @@ public class GameClock
     public void Tick()
     {
         Time += 0.25;
-        if(Time > 23.75)
-        {
-            Day++;
-            if (Day > 7) Day = 1;
-            Time = 0;
-            EndofDay = true;
-        }
-        else
-        {
-            EndofDay = false;
-        }
+
+        if (Time > 18.75) Time = 18.75;
+
+        //if(Time > 23.75)
+        //{
+        //    Day++;
+        //    if (Day > 7) Day = 1;
+        //    Time = 0;
+        //    EndofDay = true;
+        //}
+        //else
+        //{
+        //    EndofDay = false;
+        //}
 
         DeltaTime = true;
         Ticked?.Invoke(Time, Day);
-        if (EndofDay)
-        {
-            EndDay?.Invoke(false);
-        }
-        CheckTutorial();
+        //if (EndofDay)
+        //{
+        //    EndDay?.Invoke(false);
+        //}
+        //CheckTutorial();
         ExecuteEvents?.Invoke();
         DeltaTime = false;
 
-    //    Debug.Log(Day + " : " + Time);
+        //    Debug.Log(Day + " : " + Time);
     }
 
     public void Ping()
@@ -122,7 +125,7 @@ public class GameClock
     public void Reset(int dayOverride = 0)
     {
         Day = dayOverride > 0 ? dayOverride : Day++;
-        Time = 5;
+        Time = Constants.DayTimeStartTime;
 
         var ac = InventoryManager.Instance.GetProvision(Provision.REDUCE_SLEEP_TIME);
         if (ac != null)

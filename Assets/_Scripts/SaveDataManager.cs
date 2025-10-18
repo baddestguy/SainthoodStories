@@ -122,7 +122,7 @@ public class SaveDataManager : MonoBehaviour
             Energy = 3,
             Week = 1,
             Day = 1,
-            Time = 5,
+            Time = Constants.DayTimeStartTime,
             TutorialSteps = 40,
             Money = 0
         };
