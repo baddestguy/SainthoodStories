@@ -107,6 +107,9 @@ public class UI : MonoBehaviour
     public GameObject TutorialPopupQuestion;
     public GameObject PrayerModePopupQuestion;
     public GameObject CreditsObj;
+
+    public GameObject RosaryUI;
+
     public bool WasUiHit
     {
         get
@@ -174,7 +177,7 @@ public class UI : MonoBehaviour
 
     public void RosaryMode()
     {
-
+        RosaryUI.SetActive(!RosaryUI.activeSelf);
     }
 
     public void GoToPrayer()
@@ -916,11 +919,11 @@ public class UI : MonoBehaviour
 
     public void HardRun(bool newGame)
     {
-        if (newGame)
-        {
-            TutorialPopupQuestion.SetActive(true);
-        }
-        else
+        //if (newGame)
+        //{
+        //    TutorialPopupQuestion.SetActive(true);
+        //}
+        //else
         {
             GameManager.Instance.SetMissionParameters(MissionDifficulty.HARD, newGame);
         }

@@ -176,6 +176,8 @@ public class InteractableChurch : InteractableHouse
         {
             case "WORLD":
                 return MissionManager.Instance.CurrentMissionId != 1 || GameManager.Instance.GameClock.Time != 5;
+            case "SUBMITROSARY":
+                return true;// Validate rosary submission conditions
         }
 
         return base.CanDoAction(actionName);
@@ -204,6 +206,12 @@ public class InteractableChurch : InteractableHouse
 
             case "BIBLE":
                 UI.Instance.OpenBible();
+                break;
+
+            case "SUBMITROSARY":
+                //validate Rosary completion
+                UI.Instance.RosaryMode();
+                //Begin story on completion
                 break;
         }
     }
