@@ -204,8 +204,8 @@ public class InteractableChurch : InteractableHouse
                 UI.Instance.RosaryMode();
                 break;
 
-            case "BIBLE":
-                UI.Instance.OpenBible();
+            case "LETTERS":
+                UI.Instance.ToggleLettersMode();
                 break;
 
             case "SUBMITROSARY":

@@ -889,26 +889,26 @@ public class InteractableHouse : InteractableObject
                     {
                         EventsManager.Instance.ExecuteEvents();
                     }
-                    else
-                    {
-                        foreach (var house in GameManager.Instance.Houses)
-                        {
-                            if (house.AllObjectivesComplete && house.HouseName.Contains("Shelter") ||
-                                (house.MyObjective != null 
-                                && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT 
-                                || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT
-                                || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)))
-                            {
-                                UI.Instance.EnablePackageSelector(true, this);
-                                return;
-                            }
-                        }
-                        if(!InventoryManager.HasChosenProvision)
-                        {
-                            InventoryManager.Instance.GenerateProvisionsForNewDay();
-                            return;
-                        }
-                    }
+                    //else
+                    //{
+                    //    foreach (var house in GameManager.Instance.Houses)
+                    //    {
+                    //        if (house.AllObjectivesComplete && house.HouseName.Contains("Shelter") ||
+                    //            (house.MyObjective != null 
+                    //            && (house.MyObjective.Event == BuildingEventType.DELIVER_ITEM || house.MyObjective.Event == BuildingEventType.DELIVER_ITEM_URGENT 
+                    //            || house.MyObjective.Event == BuildingEventType.COOK || house.MyObjective.Event == BuildingEventType.COOK_URGENT
+                    //            || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL || house.MyObjective.Event == BuildingEventType.DELIVER_MEAL_URGENT)))
+                    //        {
+                    //            UI.Instance.EnablePackageSelector(true, this);
+                    //            return;
+                    //        }
+                    //    }
+                    //    if(!InventoryManager.HasChosenProvision)
+                    //    {
+                    //        InventoryManager.Instance.GenerateProvisionsForNewDay();
+                    //        return;
+                    //    }
+                    //}
                 }
 
                 GoToWorldMap();
@@ -1459,7 +1459,7 @@ public class InteractableHouse : InteractableObject
             case "ENTER": return true;
             case "SAINTS": return !GameSettings.Instance.TUTORIAL_MODE;
             case "ROSARY": return !GameSettings.Instance.TUTORIAL_MODE;
-            case "BIBLE": return !GameSettings.Instance.TUTORIAL_MODE;
+            case "LETTERS": return !GameSettings.Instance.TUTORIAL_MODE;
             case "UPGRADE": return !GameSettings.Instance.DEMO_MODE_3 && CanAffordUpgrade();
         }
 

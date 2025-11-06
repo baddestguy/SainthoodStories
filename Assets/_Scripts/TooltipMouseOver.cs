@@ -30,7 +30,7 @@ public class TooltipMouseOver : MonoBehaviour
         {
             if (!InfoPanel.transform.parent.name.Contains("Construct"))
             {
-                InfoPanel.transform.localPosition = new Vector3(InfoPanel.transform.localPosition.x + 20, InfoPanel.transform.localPosition.y, InfoPanel.transform.localPosition.z);
+            //    InfoPanel.transform.localPosition = new Vector3(InfoPanel.transform.localPosition.x + 20, InfoPanel.transform.localPosition.y, InfoPanel.transform.localPosition.z);
                 InfoPanel.transform.localScale *= 1.25f;
             }
         }

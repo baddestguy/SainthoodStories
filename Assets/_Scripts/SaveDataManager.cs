@@ -266,7 +266,7 @@ public class SaveDataManager : MonoBehaviour
 
     public void DeleteProgress()
     {
-        if (File.Exists(Application.persistentDataPath + "/Sainthood.save"))
+        if (File.Exists(Application.persistentDataPath + "/SainthoodStories.save"))
         {
             Debug.Log("RESET");
             Dictionary<Days, SaveObject> keyVal = GetSavedDataSet();
@@ -277,7 +277,7 @@ public class SaveDataManager : MonoBehaviour
             newSave.Saints = save.Saints;
             newSave.RunAttempts = GameManager.Instance.RunAttempts;
 
-            File.Delete(Application.persistentDataPath + "/Sainthood.save");
+            File.Delete(Application.persistentDataPath + "/SainthoodStories.save");
 
             Save(new SaveObject[1] { newSave });
         }

@@ -109,6 +109,7 @@ public class UI : MonoBehaviour
     public GameObject CreditsObj;
 
     public GameObject RosaryUI;
+    public GameObject LettersUI;
 
     public bool WasUiHit
     {
@@ -170,9 +171,9 @@ public class UI : MonoBehaviour
         }
     }
 
-    public void OpenBible()
+    public void ToggleLettersMode()
     {
-
+        LettersUI.GetComponent<LettersPopup>().Open();
     }
 
     public void RosaryMode()
