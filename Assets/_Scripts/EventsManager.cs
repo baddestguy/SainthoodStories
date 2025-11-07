@@ -46,7 +46,7 @@ public class EventsManager : MonoBehaviour
 
     public void ExecuteEvents()
     {
-        if (FindObjectOfType<WorldMapManager>() != null) return;
+        if (FindAnyObjectByType<WorldMapManager>() != null) return;
 
         if (!GameSettings.Instance.CustomEventsToggle)
         {

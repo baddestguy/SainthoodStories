@@ -139,7 +139,6 @@ namespace UniPay
                 Destroy(gameObject);
                 return;
             }
-            DontDestroyOnLoad(gameObject);
             isDebug = Debug.isDebugBuild;
 
             //set static reference

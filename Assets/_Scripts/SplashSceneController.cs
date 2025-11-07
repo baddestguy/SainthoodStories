@@ -61,10 +61,6 @@ namespace Assets._Scripts
 
         void OnDisable()
         {
-            if (GameSettings.Instance.IsXboxMode)
-            {
-                XboxUserHandler.Instance.OnXboxUserLoginStatusChange -= OnXboxUserLoginStatusChange;
-            }
         }
 
         public void StartButtonClicked()

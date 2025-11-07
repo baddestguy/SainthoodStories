@@ -185,7 +185,7 @@ public class SaveDataManager : MonoBehaviour
             Dictionary<Days, SaveObject> keyVal = saveObjects.ToDictionary(x => (Days)x.Day, x => x);
             return keyVal;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             //Debug.LogError("Error " + e.Message);
             return null;

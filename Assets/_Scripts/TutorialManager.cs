@@ -69,7 +69,7 @@ public class TutorialManager : MonoBehaviour
 
     public void ShowTutorialArrow()
     {
-        var tutArrows = FindObjectOfType<TutorialMapArrows>();
+        var tutArrows = FindAnyObjectByType<TutorialMapArrows>();
         tutArrows.SetActive(false);
 
         switch (CurrentTutorialStep)

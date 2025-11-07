@@ -202,19 +202,19 @@ public class InteractableMarket : InteractableHouse
         switch (itemType)
         {
             case ItemType.CLOTHES:
-                isHouseAvailable = FindObjectOfType<InteractableClothesBank>()?.BuildingState != BuildingState.RUBBLE;
+                isHouseAvailable = FindAnyObjectByType<InteractableClothesBank>()?.BuildingState != BuildingState.RUBBLE;
                 break;
             case ItemType.GROCERIES:
-                isHouseAvailable = FindObjectOfType<InteractableShelter>()?.BuildingState != BuildingState.RUBBLE;
+                isHouseAvailable = FindAnyObjectByType<InteractableShelter>()?.BuildingState != BuildingState.RUBBLE;
                 break;
             case ItemType.MEDS:
-                isHouseAvailable = FindObjectOfType<InteractableHospital>()?.BuildingState != BuildingState.RUBBLE;
+                isHouseAvailable = FindAnyObjectByType<InteractableHospital>()?.BuildingState != BuildingState.RUBBLE;
                 break;
             case ItemType.STATIONERY:
-                isHouseAvailable = FindObjectOfType<InteractableSchool>()?.BuildingState != BuildingState.RUBBLE;
+                isHouseAvailable = FindAnyObjectByType<InteractableSchool>()?.BuildingState != BuildingState.RUBBLE;
                 break;
             case ItemType.TOYS:
-                isHouseAvailable = FindObjectOfType<InteractableOrphanage>()?.BuildingState != BuildingState.RUBBLE;
+                isHouseAvailable = FindAnyObjectByType<InteractableOrphanage>()?.BuildingState != BuildingState.RUBBLE;
                 break;
 
             case ItemType.ENERGY_BOOST:

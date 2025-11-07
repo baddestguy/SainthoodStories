@@ -131,7 +131,7 @@ public class Player : MonoBehaviour
         {
             if (TutorialManager.Instance.Steps.Contains(CustomEventType.NEW_TUTORIAL_6))
             {
-                return FindObjectOfType<InteractableHospital>();
+                return FindAnyObjectByType<InteractableHospital>();
             }
         }
 
@@ -143,24 +143,24 @@ public class Player : MonoBehaviour
         switch (houseName)
         {
             case "InteractableChurch":
-                return FindObjectOfType<InteractableChurch>();
+                return FindAnyObjectByType<InteractableChurch>();
             case "InteractableHospital":
-                return FindObjectOfType<InteractableHospital>();
+                return FindAnyObjectByType<InteractableHospital>();
             case "InteractableKitchen":
-                return FindObjectOfType<InteractableKitchen>();
+                return FindAnyObjectByType<InteractableKitchen>();
             case "InteractableOrphanage":
-                return FindObjectOfType<InteractableOrphanage>();
+                return FindAnyObjectByType<InteractableOrphanage>();
             case "InteractableShelter":
-                return FindObjectOfType<InteractableShelter>();
+                return FindAnyObjectByType<InteractableShelter>();
             case "InteractableSchool":
-                return FindObjectOfType<InteractableSchool>();
+                return FindAnyObjectByType<InteractableSchool>();
             case "InteractableClothesBank":
-                return FindObjectOfType<InteractableClothesBank>();
+                return FindAnyObjectByType<InteractableClothesBank>();
             case "InteractableMarket":
-                return FindObjectOfType<InteractableMarket>();
+                return FindAnyObjectByType<InteractableMarket>();
         }
 
-        return FindObjectOfType<InteractableChurch>();
+        return FindAnyObjectByType<InteractableChurch>();
     }
 
     IEnumerator WaitThenEnterChurch()

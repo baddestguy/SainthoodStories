@@ -5,7 +5,7 @@ public class GameObjectRenamer : MonoBehaviour
     [ContextMenu("Rename Game Objects")]
     private void RenameGameObjects()
     {
-        CollectibleItem [] sacredItems = FindObjectsOfType<CollectibleItem>(true);
+        CollectibleItem [] sacredItems = FindObjectsByType<CollectibleItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         int index = 1;
         foreach (CollectibleItem item in sacredItems)

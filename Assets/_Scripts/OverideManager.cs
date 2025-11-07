@@ -71,7 +71,7 @@ public class OverideManager : MonoBehaviour
 
     private void TryOveride()
     {
-        CustomEventPopup cev = FindObjectOfType<CustomEventPopup>();
+        CustomEventPopup cev = FindAnyObjectByType<CustomEventPopup>();
         if (cev != null)
             cev.OnOveride();
     }
@@ -127,6 +127,6 @@ public class OverideManager : MonoBehaviour
 
     public void RunDayNightCycle()
     {
-        FindObjectOfType<DayNightCycle>().RunDayNightCycle();
+        FindAnyObjectByType<DayNightCycle>().RunDayNightCycle();
     }
 }

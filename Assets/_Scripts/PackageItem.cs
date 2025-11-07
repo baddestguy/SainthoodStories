@@ -25,9 +25,10 @@ public class PackageItem : MonoBehaviour
     private TextMeshProUGUI provisionDescription;
 
     //Mobile only!
+#if PLATFORM_MOBILE
     private bool Selected;
     public static UnityAction HasSelected;
-
+#endif
     // Start is called before the first frame update
     void Start()
     {
@@ -115,19 +116,25 @@ public class PackageItem : MonoBehaviour
 
     public void PackageSelected()
     {
+#if PLATFORM_MOBILE
         Selected = false;
+#endif
     }
 
     private void OnEnable()
     {
+#if PLATFORM_MOBILE
         HasSelected += PackageSelected;
+#endif
         provisionDescription = GameObject.Find("ProvisionDescription")?.GetComponent<TextMeshProUGUI>();
         SetLocalizedText(Item);
     }
 
     public void OnDisable()
     {
+#if PLATFORM_MOBILE
         HasSelected -= PackageSelected;
+#endif
         TooltipMouseOver mouseOverBtn = GetComponentInChildren<TooltipMouseOver>();
         mouseOverBtn.Loc_Key = "";
 

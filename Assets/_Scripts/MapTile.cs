@@ -29,7 +29,7 @@ public class MapTile : MonoBehaviour
         GameManager.MissionBegin += MissionBegin;
         Player.OnMoveSuccessEvent += OnPlayerMoved;
         TooltipMouseOver.OnHover += HoverExit;
-        GamepadCursor = FindObjectOfType<GamepadCursor>();
+        GamepadCursor = FindAnyObjectByType<GamepadCursor>();
     }
 
     public virtual void OnDisable(){

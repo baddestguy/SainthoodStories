@@ -53,38 +53,38 @@ public class TooltipMouseOver : MonoBehaviour
                 House = transform.GetComponentInParent<InteractableHouse>();
                 break;
             case "Church":
-                House = FindObjectOfType<InteractableChurch>();
+                House = FindAnyObjectByType<InteractableChurch>();
                 break;
             case "Hospital":
-                House = FindObjectOfType<InteractableHospital>();
+                House = FindAnyObjectByType<InteractableHospital>();
                 break;
             case "Orphanage":
-                House = FindObjectOfType<InteractableOrphanage>();
+                House = FindAnyObjectByType<InteractableOrphanage>();
                 break;
             case "School":
-                House = FindObjectOfType<InteractableSchool>();
+                House = FindAnyObjectByType<InteractableSchool>();
                 break;
             case "Kitchen":
-                House = FindObjectOfType<InteractableKitchen>();
+                House = FindAnyObjectByType<InteractableKitchen>();
                 break;
             case "Shelter":
-                House = FindObjectOfType<InteractableShelter>();
+                House = FindAnyObjectByType<InteractableShelter>();
                 break;
             case "Clothes":
-                House = FindObjectOfType<InteractableClothesBank>();
+                House = FindAnyObjectByType<InteractableClothesBank>();
                 break;
             case "Market":
-                House = FindObjectOfType<InteractableMarket>();
+                House = FindAnyObjectByType<InteractableMarket>();
                 break;
             case "RejectEvent":
-                var customEventPopup = FindObjectOfType<CustomEventPopup>();
+                var customEventPopup = FindAnyObjectByType<CustomEventPopup>();
                 if(customEventPopup != null)
                 {
                     customEventPopup.RefreshDisplayStats(true);
                 }
                 break;
             case "AcceptEvent":
-                var customEventPopup2 = FindObjectOfType<CustomEventPopup>();
+                var customEventPopup2 = FindAnyObjectByType<CustomEventPopup>();
                 if (customEventPopup2 != null)
                 {
                     customEventPopup2.RefreshDisplayStats(false);

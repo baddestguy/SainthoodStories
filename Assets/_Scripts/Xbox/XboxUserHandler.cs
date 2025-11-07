@@ -15,7 +15,6 @@ namespace Assets._Scripts.Xbox
     {
         public static XboxUserHandler Instance { get; private set; }
         public delegate void XboxUserLoginStatusChange(bool isLoggedIn, string message = "", bool isError = false);
-        public event XboxUserLoginStatusChange OnXboxUserLoginStatusChange;
         public XboxSavedDataHandler SavedDataHandler;
 
         public ulong UserId { get; private set; }

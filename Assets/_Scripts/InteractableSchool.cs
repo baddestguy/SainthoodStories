@@ -4,7 +4,6 @@ public class InteractableSchool : InteractableHouse
 {
     public int TeachPoints;
     private int TeachCountdown = 0;
-    private float MaxTeachPoints = 4f;
 
     protected override void Start()
     {

@@ -32,7 +32,5 @@ public class ToolTipManager : MonoBehaviour
                 locText += stats.Energy > 0 ? $" <color=\"green\">+{stats.Energy} EN" : $" <color=\"red\">{stats.Energy} EN";
             }
         }
-
-        UI.Instance.DisplayToolTip(locText);
     }
 }

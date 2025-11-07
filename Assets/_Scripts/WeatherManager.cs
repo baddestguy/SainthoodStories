@@ -43,7 +43,7 @@ public class WeatherManager : MonoBehaviour
 
     private IEnumerator MissionBeginAsync(Mission mission) 
     {
-        DayNightCycle = FindObjectOfType<DayNightCycle>();
+        DayNightCycle = FindAnyObjectByType<DayNightCycle>();
         yield return new WaitForSeconds(1f);
     }
 

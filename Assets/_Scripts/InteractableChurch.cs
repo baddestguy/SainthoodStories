@@ -13,8 +13,6 @@ public class InteractableChurch : InteractableHouse
 
     public int PrayerPoints;
 
-    private double LiturgyStartTime = -1;
-    private double LiturgyEndTime = -1;
     public double ConfessionTime;
     public double MassStartTime;
     public double MassEndTime;

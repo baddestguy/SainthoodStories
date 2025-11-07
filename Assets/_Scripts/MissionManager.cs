@@ -205,7 +205,7 @@ public class MissionManager : MonoBehaviour
         SoundManager.Instance.EndAllTracks();
         yield return new WaitForSeconds(5f);
 
-        EndWeekSequence seq = FindObjectOfType<EndWeekSequence>();
+        EndWeekSequence seq = FindAnyObjectByType<EndWeekSequence>();
         yield return seq.RunSequenceAsync(fp, fpPool, fpTarget, cp, cpPool, newSaint, oldMissionId);
 
 
@@ -346,25 +346,25 @@ public class MissionManager : MonoBehaviour
         switch (houseName)
         {
             case "InteractableChurch":
-                house = FindObjectOfType<InteractableChurch>();
+                house = FindAnyObjectByType<InteractableChurch>();
                 break;
             case "InteractableHospital":
-                house = FindObjectOfType<InteractableHospital>();
+                house = FindAnyObjectByType<InteractableHospital>();
                 break;
             case "InteractableKitchen":
-                house = FindObjectOfType<InteractableKitchen>();
+                house = FindAnyObjectByType<InteractableKitchen>();
                 break;
             case "InteractableOrphanage":
-                house = FindObjectOfType<InteractableOrphanage>();
+                house = FindAnyObjectByType<InteractableOrphanage>();
                 break;
             case "InteractableShelter":
-                house = FindObjectOfType<InteractableShelter>();
+                house = FindAnyObjectByType<InteractableShelter>();
                 break;
             case "InteractableSchool":
-                house = FindObjectOfType<InteractableSchool>();
+                house = FindAnyObjectByType<InteractableSchool>();
                 break;
             case "InteractableClothesBank":
-                house = FindObjectOfType<InteractableClothesBank>();
+                house = FindAnyObjectByType<InteractableClothesBank>();
                 break;
         }
 

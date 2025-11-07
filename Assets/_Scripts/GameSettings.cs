@@ -161,7 +161,7 @@ public class GameSettings : MonoBehaviour
             return saveObjects;
 
         }
-        catch (Exception e)
+        catch (Exception)
         {
          //   Debug.LogError(e); //Ideally, this should only throw an error on first boot or if game settings file is deleted
             return null;
@@ -292,7 +292,10 @@ public class GameSettings : MonoBehaviour
         }
         return res.Value;
 #endif
+
+#if PLATFORM_MOBILE 
         return new Resolution();
+#endif
     }
 
     public void SetResolution(string resolution)

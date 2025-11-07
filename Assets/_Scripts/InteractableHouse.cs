@@ -370,9 +370,6 @@ public class InteractableHouse : InteractableObject
         PopIcon.gameObject.SetActive(false);
         UI.Instance.SideNotificationPop(GetType().Name);
         OnActionProgress?.Invoke(1f, this, 1); //Reset all progress bars
-
-        if(HouseUIActive)
-            UI.Instance.SideNotificationPush(GetHazardIcon(), 0, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown/2d, GameManager.Instance.GameClock.Day), GetType().Name + GetHazardIcon());
     }
 
     protected virtual int ModVolunteerEnergyWithProvisions()
@@ -1080,14 +1077,6 @@ public class InteractableHouse : InteractableObject
 
         if (HouseUIActive)
         {
-            if (BuildingState == BuildingState.HAZARDOUS)
-            {
-                UI.Instance.SideNotificationPush(GetHazardIcon(), 0, new GameClock(GameManager.Instance.GameClock.Time + EnvironmentalHazardDestructionCountdown/2d, GameManager.Instance.GameClock.Day), HouseName + GetHazardIcon());
-            }
-            else
-            {
-                UI.Instance.SideNotificationPush(name, items, time, HouseName);
-            }
             PopIcon.gameObject.SetActive(false);
             return;
         }

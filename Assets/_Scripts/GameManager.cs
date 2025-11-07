@@ -149,8 +149,8 @@ public class GameManager : MonoBehaviour
             Instantiate(Resources.Load("UI/UI"));
             EventsManager.Instance.LoadTriggeredMissionEvents(SaveData.MissionEvents);
             MissionManager.MissionOver = false;
-            Player = FindObjectOfType<Player>();
-            Map = FindObjectOfType<GameMap>();
+            Player = FindAnyObjectByType<Player>();
+            Map = FindAnyObjectByType<GameMap>();
             MissionManager.LoadAllMissions(CurrentMission);
             GameClock = new GameClock(SaveData.Time, SaveData.Day);
 
@@ -179,7 +179,7 @@ public class GameManager : MonoBehaviour
             PlayAmbience(GameClock.Time, GameClock.Day);
             TreasuryManager.Instance.Money = SaveData.Money;
             InventoryManager.Instance.LoadInventory(SaveData);
-            Houses = FindObjectsOfType<InteractableHouse>();
+            Houses = FindObjectsByType<InteractableHouse>(FindObjectsSortMode.None);
             if (GameClock.Time == 5)
             {
                 GameClock.StartNewDay?.Invoke();

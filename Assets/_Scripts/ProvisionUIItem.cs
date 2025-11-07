@@ -22,17 +22,22 @@ public class ProvisionUIItem : MonoBehaviour
     private string DescriptionSize = "<size=10>";
 
     //Mobile only!
+#if PLATFORM_MOBILE
     private bool Selected;
     public static UnityAction HasSelected;
-
+#endif
     private void Start()
     {
+#if PLATFORM_MOBILE
         HasSelected += ProvisionSelected;
+#endif
     }
 
     private void OnDisable()
     {
+#if PLATFORM_MOBILE
         HasSelected -= ProvisionSelected;
+#endif
     }
 
     public void Init(ProvisionData prov, ProvisionUIItemType itemType)
@@ -97,7 +102,9 @@ public class ProvisionUIItem : MonoBehaviour
 
     public void ProvisionSelected()
     {
+#if PLATFORM_MOBILE
         Selected = false;
+#endif
     }
 
     #region ControllerSupport

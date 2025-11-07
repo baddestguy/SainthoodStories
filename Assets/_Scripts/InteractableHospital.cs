@@ -6,13 +6,10 @@ public class InteractableHospital : InteractableHouse
 {
     public GameClock EndDelivery;
     private bool DeliveryTimeSet;
-    private bool FailedDelivery;
     private int DeliveryCountdown = 0;
     public int BabyPoints;
     public int FailedDeliveryPoints;
     private float MaxDeliveryPoints = 4f;
-
-    private string RandomBabyIcon;
 
     protected override void Start()
     {
@@ -114,8 +111,6 @@ public class InteractableHospital : InteractableHouse
                     var moddedEnergy = GameManager.Instance.Player.ModifyEnergyConsumption(amount: EnergyConsumption);
                     moddedEnergy += ModVolunteerEnergyWithProvisions();
                     GameManager.Instance.Player.ConsumeEnergy(EnergyConsumption);
-                    var extraPoints = 0;
-                    if (PopUI.CriticalHitCount == MaxDeliveryPoints) extraPoints = 1;
 
                     PopIcon.gameObject.SetActive(false);
                     UI.Instance.SideNotificationPop(GetType().Name);
@@ -194,7 +189,6 @@ public class InteractableHospital : InteractableHouse
 
         EndDelivery = new GameClock(clock.Time, clock.Day);
         EndDelivery.AddTime(bMission != null ? bMission.DeadlineHours : 9);
-        RandomBabyIcon = "Baby" + Random.Range(1, 3);
         SoundManager.Instance.PlayOneShotSfx("Notification_SFX");
         //    UI.Instance.DisplayMessage($"BABY DUE B/W {(int)StartDelivery.Time}:{(StartDelivery.Time % 1 == 0 ? "00" : "30")} AND {(int)EndDelivery.Time}:{(EndDelivery.Time % 1 == 0 ? "00" : "30")}!");
     }
@@ -209,7 +203,6 @@ public class InteractableHospital : InteractableHouse
             {
                 DeliveryTimeSet = false;
                 DeadlineCounter--;
-                FailedDelivery = true;
                 PopIcon.gameObject.SetActive(false);
                 UI.Instance.SideNotificationPop(GetType().Name);
                 UI.Instance.DisplayMessage($"FAILED TO DELIVER BABY!");
@@ -461,7 +454,6 @@ public class InteractableHospital : InteractableHouse
 
         DeliveryTimeSet = data.DeliveryTimeSet;
         EndDelivery = new GameClock(data.DeliveryTime, data.DeliveryDay);
-        RandomBabyIcon = "Baby" + Random.Range(1, 3);
 
         return data;
     }

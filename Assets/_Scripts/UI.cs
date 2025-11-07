@@ -389,19 +389,6 @@ public class UI : MonoBehaviour
         return InstantiatedBuildingAlerts.ContainsKey(owner);
     }
 
-    public void SideNotificationPush(string sprite, int items, GameClock deadline, string owner)
-    {
-        return;
-        if (IsDuplicateSideNotification(owner, items, deadline)) return;
-
-        GameObject SideNotifGO = Instantiate(SideNotificationResource);
-        SideNotifGO.transform.SetParent(SideNotificationScroller.content, false);
-        SideNotifGO.GetComponent<SideNotification>().Init(sprite, items, deadline);
-
-        InstantiatedSideNotifications.Add(owner, new Tuple<GameClock, GameObject, int>(deadline, SideNotifGO, items));
-        SortSideNotifications();
-    }
-
     public void SideNotificationPop(string owner)
     {
         if (SideNotificationScroller.content.childCount <= 0 || !InstantiatedSideNotifications.ContainsKey(owner)) return;
@@ -991,18 +978,6 @@ public class UI : MonoBehaviour
     private string DayofTheWeek(int Day)
     {
         return "Day " + MissionManager.Instance.CurrentMissionId;
-
-        switch (Day)
-        {
-            case 1: return "Mon";
-            case 2: return "Tues";
-            case 3: return "Wed";
-            case 4: return "Thurs";
-            case 5: return "Fri";
-            case 6: return "Sat";
-            case 7: return "Sun";
-        }
-        return "";
     }
 
     public void DisplayStatusEffect()
@@ -1016,28 +991,6 @@ public class UI : MonoBehaviour
         if (!StatusEffectDisplay.gameObject.activeSelf) return;
 
         StatusEffectDisplay.Init();
-    }
-
-    public void DisplayToolTip(string text)
-    {
-        return;
-        if (MissionManager.MissionOver)
-        {
-            TooltipDisplay.transform.parent.gameObject.SetActive(false);
-            return;
-        }
-
-        if (Black.color.a > 0) return;
-        if (TooltipDisplay == null) return;
-        if (text == TooltipDisplay.text) return;
-
-        TooltipDisplay.text = text;
-        TooltipDisplay.transform.parent.gameObject.SetActive(false);
-
-        if (text != "")
-        {
-            TooltipDisplay.transform.parent.gameObject.SetActive(true);
-        }
     }
 
     public void DisplayRunAttempts()
