@@ -70,7 +70,7 @@ public class GameClock
     {
         Time += 0.25;
 
-        if (Time > 18.75) Time = 18.75;
+        if (Time > 19) Time = 19;
 
         //if(Time > 23.75)
         //{

@@ -110,6 +110,7 @@ public class UI : MonoBehaviour
 
     public GameObject RosaryUI;
     public GameObject LettersUI;
+    public GameObject PostManUI;
 
     public bool WasUiHit
     {
@@ -179,6 +180,11 @@ public class UI : MonoBehaviour
     public void RosaryMode()
     {
         RosaryUI.SetActive(!RosaryUI.activeSelf);
+    }
+
+    public void PostManShop()
+    {
+        PostManUI.SetActive(true);
     }
 
     public void GoToPrayer()
@@ -636,7 +642,7 @@ public class UI : MonoBehaviour
         }
 
         int oldAmount = int.Parse(WanderingSpiritsAmount.text, System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowThousands);
-        WanderingSpiritsAmount.DOCounter(oldAmount, (int)InventoryManager.Instance.WanderingSpirits, 0.5f).SetDelay(2f);
+        WanderingSpiritsAmount.DOCounter(oldAmount, (int)TreasuryManager.Instance.WanderingSpirits, 0.5f).SetDelay(2f);
 
         AdditionPoints(WanderingSpiritsAdditionDisplay, WanderingSpiritsDisplayGlow, (int)delta, 2f);
 

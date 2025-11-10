@@ -177,7 +177,8 @@ public class GameManager : MonoBehaviour
             MissionBegin?.Invoke(CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
             PlayAmbience(GameClock.Time, GameClock.Day);
-            TreasuryManager.Instance.Money = SaveData.Money;
+            TreasuryManager.Instance.Load(SaveData);
+
             InventoryManager.Instance.LoadInventory(SaveData);
             Houses = FindObjectsByType<InteractableHouse>(FindObjectsSortMode.None);
             if (GameClock.Time == 5)

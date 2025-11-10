@@ -162,26 +162,8 @@ public class MissionManager : MonoBehaviour
         GameManager.Instance.ScrambleMapTiles();
         GameManager.Instance.CurrentBuilding = "InteractableChurch";
 
-        //if any unresolved building hazards exist, penalize the player
-        foreach (var house in GameManager.Instance.Houses)
-        {
-            if (house.BuildingState == BuildingState.HAZARDOUS)
-            {
-               // UpdateCharityPoints(-3, null);
-                house.BuildingState = BuildingState.NORMAL;
-            }
-        }
 
-        //if final mission, don't save (they can replay the last day if they quit the app at this point. And the save is getting wiped after this point anyway
-        //Also, force story mode to true so they must see the ending story even if they have the toggle off
-        if (oldMissionId == GameDataManager.MAX_MISSION_ID)
-        {
-            GameSettings.Instance.CustomEventsToggle = true;
-        }
-        else
-        {
             SaveDataManager.Instance.SaveGame();
-        }
 
         //Wait for all xbox saves to catch up before going into the house
         if (GameSettings.Instance.IsXboxMode)
@@ -227,65 +209,37 @@ public class MissionManager : MonoBehaviour
         {
             SteamManager.Instance.UnlockAchievement("FINISHED");
             XboxUserHandler.Instance.UnlockAchievement("12");
-            if (FaithPoints < 80 || CharityPoints < 80)
+            EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
+            var houses = GameManager.Instance.Houses;
+            bool hasAtLeastOneEnding = false;
+            foreach (var house in houses)
             {
-                if (FaithPoints < 80 && CharityPoints < 80)
+                if (house.AllObjectivesComplete)
                 {
-                    EventsManager.Instance.AddEventToList(CustomEventType.WORST_ENDING);
+                    hasAtLeastOneEnding = true;
+                    EventsManager.Instance.AddEventToList(house.GetEndGameStory());
                 }
-                else if (FaithPoints < 80)
-                {
-                    EventsManager.Instance.AddEventToList(CustomEventType.SPIRITUALCRISIS);
-                }
-                else if (CharityPoints < 80)
-                {
-                    EventsManager.Instance.AddEventToList(CustomEventType.RIOTS);
-                }
+            }
 
-                SaveDataManager.Instance.DeleteProgress();
-                SoundManager.Instance.EndAllTracks();
-                EventsManager.Instance.ExecuteEvents();
-
-                while (EventsManager.Instance.HasEventsInQueue()) yield return null;
-
-                GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
-                yield break;
+            if (hasAtLeastOneEnding)
+            {
+                EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_BEST);
+                SteamManager.Instance.UnlockAchievement("CANONIZED");
+                XboxUserHandler.Instance.UnlockAchievement("2");
             }
             else
             {
-                EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME);
-                var houses = GameManager.Instance.Houses;
-                bool hasAtLeastOneEnding = false;
-                foreach (var house in houses)
-                {
-                    if (house.AllObjectivesComplete)
-                    {
-                        hasAtLeastOneEnding = true;
-                        EventsManager.Instance.AddEventToList(house.GetEndGameStory());
-                    }
-                }
-
-                if (hasAtLeastOneEnding)
-                {
-                    EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_BEST);
-                    SteamManager.Instance.UnlockAchievement("CANONIZED");
-                    XboxUserHandler.Instance.UnlockAchievement("2");
-                }
-                else
-                {
-                    EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_NORMAL);
-                }
-
-                SaveDataManager.Instance.DeleteProgress();
-                SoundManager.Instance.EndAllTracks();
-                EventsManager.Instance.ExecuteEvents();
-
-                while (EventsManager.Instance.HasEventsInQueue()) yield return null;
-
-                GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
-                yield break;
-
+                EventsManager.Instance.AddEventToList(CustomEventType.ENDGAME_NORMAL);
             }
+
+            SaveDataManager.Instance.DeleteProgress();
+            SoundManager.Instance.EndAllTracks();
+            EventsManager.Instance.ExecuteEvents();
+
+            while (EventsManager.Instance.HasEventsInQueue()) yield return null;
+
+            GameManager.Instance.LoadScene("MainMenu", LoadSceneMode.Single);
+            yield break;
         }
 
         //Wait for all xbox saves to catch up before going into the house

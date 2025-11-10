@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using UnityEditor.Overlays;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.Events;
 
 public class TreasuryManager : MonoBehaviour
@@ -7,6 +9,7 @@ public class TreasuryManager : MonoBehaviour
     public static TreasuryManager Instance { get; private set; }
 
     public double Money { get; set; }
+    public int WanderingSpirits { get; set; }
     public double TemporaryMoneyToDonate;
     public static UnityAction<double> DonatedMoney;
 
@@ -35,9 +38,32 @@ public class TreasuryManager : MonoBehaviour
         }
     }
 
+    public void Load(SaveObject data)
+    {
+        Money = data.Money;
+        WanderingSpirits = data.WanderingSpirits;
+    }
+
+    public void AddWanderers(int amount)
+    {
+        WanderingSpirits += amount;
+        UI.Instance.RefreshWanderingSpiritsBalance(amount);
+    }
+
     public bool CanAfford(double price)
     {
         return Money >= price;
+    }
+
+    public bool CanAffordPostMan(int price)
+    {
+        return WanderingSpirits >= price;
+    }
+
+    public void SpendSpirits(int amount)
+    {
+        WanderingSpirits -= amount;
+        UI.Instance.RefreshWanderingSpiritsBalance(-amount);
     }
 
     public void DonateMoney(double donation)

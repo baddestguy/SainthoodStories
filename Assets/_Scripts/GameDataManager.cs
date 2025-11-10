@@ -27,6 +27,10 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<TooltipStatId, TooltipStats> ToolTips = new Dictionary<TooltipStatId, TooltipStats>();
     public Dictionary<MinigameType, MinigameData> MinigameData = new Dictionary<MinigameType, MinigameData>();
 
+    //Stories
+    public Dictionary<CollectibleType, PostManShopData> PostManShopData = new Dictionary<CollectibleType, PostManShopData>();
+
+
     public int MidnightEventChosenIndex;
     public List<CustomEventType> TriggeredDailyEvents;
 
@@ -99,6 +103,17 @@ public class GameDataManager : MonoBehaviour
             {
                 LocalizationData.Add(loc.Key, new List<LocalizationData>() { loc });
             }
+        }
+
+        yield return null;
+
+        //PostmanShop Data
+        csvFile = Resources.Load<TextAsset>("GameData/PostmanShop");
+        var pShopData = CsvSerializer.Deserialize<PostManShopData>(csvFile.text);
+
+        foreach (var shop in pShopData)
+        {
+            PostManShopData.Add(shop.Id, shop);
         }
 
         yield return null;

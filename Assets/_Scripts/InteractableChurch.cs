@@ -211,6 +211,10 @@ public class InteractableChurch : InteractableHouse
                 UI.Instance.RosaryMode();
                 //Begin story on completion
                 break;
+
+            case "POSTMAN":
+                UI.Instance.PostManShop();
+                break;
         }
     }
 

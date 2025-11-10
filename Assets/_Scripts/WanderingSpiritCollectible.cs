@@ -80,7 +80,7 @@ public class WanderingSpiritCollectible : GridCollectibleItem
     {
         if(Behaviour == SacredItemBehaviour.HARMLESS)
         {
-            InventoryManager.Instance.AddWanderers(TotalAmount);
+            TreasuryManager.Instance.AddWanderers(TotalAmount);
             Instantiate(MyExplosion, transform.position, transform.rotation);
             ExteriorCamera.Instance.GetComponent<CameraControls>()?.MyCamera.DOShakeRotation(1f, 0.25f);
             SoundManager.Instance.PlayOneShotSfx("ActionButton_SFX");

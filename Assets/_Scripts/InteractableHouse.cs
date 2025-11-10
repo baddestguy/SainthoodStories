@@ -1449,6 +1449,7 @@ public class InteractableHouse : InteractableObject
             case "SAINTS": return !GameSettings.Instance.TUTORIAL_MODE;
             case "ROSARY": return !GameSettings.Instance.TUTORIAL_MODE;
             case "LETTERS": return !GameSettings.Instance.TUTORIAL_MODE;
+            case "POSTMAN": return !GameSettings.Instance.TUTORIAL_MODE;
             case "UPGRADE": return !GameSettings.Instance.DEMO_MODE_3 && CanAffordUpgrade();
         }
 
@@ -1479,7 +1480,7 @@ public class InteractableHouse : InteractableObject
         cost += chapelBlueprint?.Coin ?? 0;
         cost -= cost * (buildingBlueprint?.Value / 100d ?? 0);
 
-        return InventoryManager.Instance.WanderingSpirits >= GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel + 1}"].IntValue && TreasuryManager.Instance.CanAfford(cost);
+        return TreasuryManager.Instance.WanderingSpirits >= GameDataManager.Instance.Constants[$"UPGRADE_SPIRITS_LEVEL_{UpgradeLevel + 1}"].IntValue && TreasuryManager.Instance.CanAfford(cost);
     }
 
     public void UpgradeBuilding()

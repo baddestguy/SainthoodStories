@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CsvHelper.Configuration.Attributes;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class DataClasses : MonoBehaviour
@@ -312,6 +313,24 @@ public enum TooltipStatId
     TIME,
     PURCHASE
 }
+
+public enum CollectibleType
+{
+    LETTER = 0,
+    SAINT_WRITING,
+    SAINT_FRAGMENT,
+    WORLD_TRIVIA
+}
+
+[System.Serializable]
+public class PostManShopData
+{
+    public CollectibleType Id { get; set; }
+    public int Price { get; set; }
+    public string DescriptionKey { get; set; }
+    public string IconPath { get; set; }
+}
+
 
 [System.Serializable]
 public class HouseSaveData
@@ -745,6 +764,7 @@ public class Constants
     public const string PRAYER_MODE_PRODUCT_ID = "prayer_mode";
     public const string FULL_GAME_PRODUCT_ID = "full_game";
     public const double DayTimeStartTime = 10;
+    public const int POSTMAN_DAILY_STOCK_COUNT = 5;
 }
 
 public enum CustomEventType
