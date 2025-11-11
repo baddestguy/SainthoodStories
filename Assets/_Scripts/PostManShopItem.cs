@@ -11,7 +11,7 @@ public class PostManShopItem : MonoBehaviour
     public void Init(PostManShopData data)
     {
         Data = data;
-        Icon = Resources.Load<Image>(data.IconPath);
+        Icon.sprite = Resources.Load<Sprite>(data.IconPath);
         PriceDisplay.text = data.Price.ToString();
     }
 
