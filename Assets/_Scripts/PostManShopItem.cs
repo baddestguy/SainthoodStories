@@ -1,8 +1,9 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PostManShopItem : MonoBehaviour
+public class PostManShopItem : MonoBehaviour, IPointerEnterHandler
 {
     public PostManShopData Data;
     public Image Icon;
@@ -18,5 +19,10 @@ public class PostManShopItem : MonoBehaviour
     public void Purchase()
     {
         SendMessageUpwards("PurchaseItem", this);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SendMessageUpwards("UpdatePostManText", this);
     }
 }
