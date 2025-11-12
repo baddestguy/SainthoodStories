@@ -7,6 +7,85 @@ POSTMAN_STORE_GREETING,Long time no see!,,,,,,
 POSTMAN_STORE_GREETING,Hi there!,,,,,,
 POSTMAN_STORE_GREETING,Got some orbs for me?,,,,,,
 POSTMAN_STORE_GREETING,Can't say I'm a fan of this place.,,,,,,
+TRIVIA_1_NAME,Weddings in Buganda,,,,,,
+TRIVIA_1_DESCRIPTION,Weddings are an especially big event to look forward to in Buganda.,,,,,,
+TRIVIA_1_DESCRIPTION,Many people get married for various reasons.,,,,,,
+TRIVIA_1_DESCRIPTION,Some get married to connect wealthy families.,,,,,,
+TRIVIA_1_DESCRIPTION,Others marry to escape their family ties.,,,,,,
+TRIVIA_1_DESCRIPTION,"Whichever the case, you do not want to miss a wedding in Buganda!",,,,,,
+DEMBE_NAME,Dembe,,,,,,
+DEMBE_DESCRIPTION_1,"Dear sister,",,,,,,
+DEMBE_DESCRIPTION_1,I am writing to let you know that I will be leaving my wife.,,,,,,
+DEMBE_DESCRIPTION_1,"I have tried to calm her down, but she will not listen to reason.",,,,,,
+DEMBE_DESCRIPTION_1,Yesterday she cooked a meal that I found absolutely disgusting.,,,,,,
+DEMBE_DESCRIPTION_1,"Eba and soup, with no meat. Can you imagine?",,,,,,
+DEMBE_DESCRIPTION_1,I did the only thing I could think of in the moment.,,,,,,
+DEMBE_DESCRIPTION_1,I threw it in the garbage and asked her to cook me a decent meal.,,,,,,
+DEMBE_DESCRIPTION_1,"She screamed at me and said 'No', very emphatically.",,,,,,
+DEMBE_DESCRIPTION_1,"I told her that if she doesn't cook me a proper meal, I will walk out.",,,,,,
+DEMBE_DESCRIPTION_1,She thought I was joking.,,,,,,
+DEMBE_DESCRIPTION_1,I walked out of the house and have not returned since.,,,,,,
+DEMBE_DESCRIPTION_1,I write this letter to you from my brother's house.,,,,,,
+DEMBE_DESCRIPTION_1,"If she does not cook this meal, I will not return to the house.",,,,,,
+DEMBE_DESCRIPTION_1,"I just wanted to let you know, in case you heard the story from somewhere else.",,,,,,
+DEMBE_DESCRIPTION_1,I am a simple man.,,,,,,
+DEMBE_DESCRIPTION_1,I don't ask for much.,,,,,,
+DEMBE_DESCRIPTION_1,I work in the farm all day. All I want is a decent meal from my wife.,,,,,,
+DEMBE_DESCRIPTION_1,"If you have any words of wisdom, I am all ears.",,,,,,
+DEMBE_DESCRIPTION_1,- Dembe,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,"Dear sister,",,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,I took the words you sent me to heart.,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,I have returned to the house.,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,"I explained my position to my wife, and begged her forgiveness.",,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,"She accepted, and cooked the most delicious meal I have ever eaten in my life.",,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,Everything is alright now.,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,Thank you very much for your help.,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,- Dembe,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,"Dear sister,",,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,Maybe you don't understand the gravity of the situation.,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,I did not understand the words you sent.,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,"If you cannot help me, I will seek wisdom from someone more capable.",,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,I will not be responding until you send me something I can use.,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,- Dembe,,,,,,
+HILDEGARD_NAME,St. Hildegard von Bingen,,,,,,
+HILDEGARD_TITLE_1,O Viridissima Virga,,,,,,
+HILDEGARD_WRITING_1,"Hail, O greenest branch,
+sprung forth in the airy breezes
+of the prayers of the saints.",,,,,,
+HILDEGARD_WRITING_1,"So the time has come
+that your sprays have flourished:
+hail, hail to you,
+because the heat of the sun has exuded from you
+like the aroma of balm.",,,,,,
+HILDEGARD_WRITING_1,"For the beautiful flower sprung from you
+which gave all parched perfumes
+their aroma.",,,,,,
+HILDEGARD_WRITING_1,"And they have radiated anew
+in their full freshness.",,,,,,
+HILDEGARD_WRITING_1,"Whence the skies bestowed dew upon the pasture,
+and all the earth was made joyful
+because her womb
+brought forth corn,
+and because the birds of the firmament
+built their nests in her.",,,,,,
+HILDEGARD_WRITING_1,"Then there was harvest ready for Man
+and a great rejoicing of banqueters,
+whence, O sweet Virgin,
+no joy is lacking in you.",,,,,,
+HILDEGARD_WRITING_1,Eve rejected all these things.,,,,,,
+HILDEGARD_WRITING_1,Now let there be praise to the Highest.,,,,,,
+ANDREW_NAME,St. Andrew Kim Taegon,,,,,,
+ANDREW_DESCRIPTION_1,"Andrew Kim Taegon was the first Korean priest and patron saint of Korean clergy. Kim's father was martyred for practicing Christianity, which was highly prohibited in a heavily Confucian Korea.",,,,,,
+ANDREW_DESCRIPTION_2,"Kim studied at seminaries at the Portuguese colony of Macau as well as at Lolomboy, Bocaue, Bulacan, Philippines, eventually attaining his ordination as a priest in Shanghai by the French bishop Jean Joseph Jean-Baptiste Ferréol after almost a decade in training.",,,,,,
+ANDREW_DESCRIPTION_3,"Kim returned to Korea to preach and evangelize even as many Christians were persecuted. At the age of 25, he was tortured and beheaded near Seoul on the Han River. Pope John Paul II canonized Kim along with 102 other Korean Martyrs on 6 May 1984.",,,,,,
+ANDREW_Bio,"Andrew Kim Taegon was the first Korean priest and patron saint of Korean clergy. Kim's father was martyred for practicing Christianity, which was highly prohibited in a heavily Confucian Korea.
+
+Kim studied at seminaries at the Portuguese colony of Macau as well as at Lolomboy, Bocaue, Bulacan, Philippines, eventually attaining his ordination as a priest in Shanghai by the French bishop Jean Joseph Jean-Baptiste Ferréol after almost a decade in training.
+
+Kim returned to Korea to preach and evangelize even as many Christians were persecuted. At the age of 25, he was tortured and beheaded near Seoul on the Han River. Pope John Paul II canonized Kim along with 102 other Korean Martyrs on 6 May 1984.",,,,,,
+ANN_Bio,"Elizabeth Ann Bayley Seton grew up in the upper class New York society and married a wealthy young man. Tragedy befell her as she lost her father in-law, her husband's business, and finally, her husband to tuberculosis.
+
+Elizabeth's deep concern for the spiritual welfare of her family and friends eventually led her into the Catholic Church, and she, along with two other young women who helped her in her work, began plans for a Sisterhood, establishing the first free Catholic school in America.",,,,,,
 BAKHITA_Bio,"Saint Josephine Margaret Bakhita was born around 1869 in the village of Olgossa in the Darfur region of Sudan. Enjoying a happy childhood, she was soon kidnapped by Arab slave traders and forced to walk barefoot over 600 miles to a slave market in El Obeid.
 
 After spending several years in captivity, where she suffered devastating abuse, she was eventually sold to an Italian Vice Consul, eventually making her way to Italy and joining the Canossian Sisters in Venice where she remained for the rest of her life. She was affectionately known as the ""little brown sister"", or honorably as the ""black mother"".",,,,,,

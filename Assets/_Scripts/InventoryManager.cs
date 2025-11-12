@@ -21,6 +21,11 @@ public class InventoryManager : MonoBehaviour
     public List<ProvisionData> GeneratedProvisions = new List<ProvisionData>();
     public static bool HasChosenProvision;
 
+    public List<WorldTriviaData> WorldTrivia = new List<WorldTriviaData>();
+    public List<SaintWritingData> SaintWritings = new List<SaintWritingData>();
+    public Dictionary<SaintID, List<SaintFragmentData>> SaintFragments = new Dictionary<SaintID, List<SaintFragmentData>>();
+    public List<LetterData> Letters = new List<LetterData>();
+
     private void Awake()
     {
         Instance = this;
@@ -39,6 +44,35 @@ public class InventoryManager : MonoBehaviour
         Collectibles = save.Collectibles?.ToList() ?? new List<string>();
         RefreshInventoryUI?.Invoke();
         UI.Instance.RefreshWanderingSpiritsBalance(0);
+    }
+
+    public void AddCollectibleType(CollectibleType collectible)
+    {
+        switch (collectible)
+        {
+            case CollectibleType.WORLD_TRIVIA:
+                var trivia = GameDataManager.Instance.GetRandomWorldTrivia();
+                WorldTrivia.Add(trivia);
+                break;
+
+            case CollectibleType.SAINT_WRITING:
+                var writing = GameDataManager.Instance.GetRandomSaintWriting();
+                SaintWritings.Add(writing);
+                break;
+
+            case CollectibleType.SAINT_FRAGMENT:
+                var fragment = GameDataManager.Instance.GetRandomSaintFragment();
+                if (SaintFragments.ContainsKey(fragment.Id))
+                    SaintFragments[fragment.Id].Add(fragment);
+                else
+                    SaintFragments.Add(fragment.Id, new List<SaintFragmentData>() { fragment });
+                break;
+
+            case CollectibleType.LETTER:
+                var letter = GameDataManager.Instance.GetRandomLetter();
+                Letters.Add(letter);
+                break;
+        }
     }
 
     public bool IsInventoryFull()

@@ -15,7 +15,7 @@ public class PostManShop : MonoBehaviour
     public GameObject ShopItemGo;
     public int ItemSpawnCount;
     public List<GameObject> InstantiatedGos;
-    public List<PostManShopItem> InstantiatedItems;
+    public List<PostManShopData> InstantiatedItems;
     public TextMeshProUGUI PostManText;
     public bool VisitedToday;
 
@@ -41,9 +41,7 @@ public class PostManShop : MonoBehaviour
                 var pItem = item.GetComponent<PostManShopItem>();
                 item.transform.SetParent(Scroller.content);
 
-                var itemType = Extensions.GetRandomEnumValue<CollectibleType>();
-                var shopData = GameDataManager.Instance.PostManShopData[itemType];
-                pItem.Init(InstantiatedItems[i].Data);
+                pItem.Init(InstantiatedItems[i]);
                 InstantiatedGos.Add(item);
 
                 if (i > 3) //Expand scroll view if items spawned go beyond the current single-page view
@@ -61,16 +59,34 @@ public class PostManShop : MonoBehaviour
             //Before spawning, you need to check if player has collected all of that type
             for (int i = 0; i < ItemSpawnCount; i++)
             {
+                var itemType = Extensions.GetRandomEnumValue<CollectibleType>();
+
+                //Todo: need to consider that the case where there could be one collectible left, this will always pass, which means we should remove items from the total list once the store picks it.
+                switch (itemType)
+                {
+                    case CollectibleType.WORLD_TRIVIA:
+                        if (GameDataManager.Instance.GetRandomWorldTrivia() == null) continue;
+                        break;
+                    case CollectibleType.SAINT_FRAGMENT:
+                        if (GameDataManager.Instance.GetRandomSaintFragment() == null) continue;
+                        break;
+                    case CollectibleType.SAINT_WRITING:
+                        if (GameDataManager.Instance.GetRandomSaintWriting() == null) continue;
+                        break;
+                    case CollectibleType.LETTER:
+                        if (GameDataManager.Instance.GetRandomLetter() == null) continue;
+                        break;
+                }
+
                 var item = Instantiate(ShopItemGo);
                 item.transform.SetParent(Scroller.content);
                 var pItem = item.GetComponent<PostManShopItem>();
                 item.transform.SetParent(Scroller.content);
 
-                var itemType = Extensions.GetRandomEnumValue<CollectibleType>();
                 var shopData = GameDataManager.Instance.PostManShopData[itemType];
                 pItem.Init(shopData);
                 InstantiatedGos.Add(item);
-                InstantiatedItems.Add(pItem);
+                InstantiatedItems.Add(shopData);
 
                 if (i > 3) //Expand scroll view if items spawned go beyond the current single-page view
                 {
@@ -85,21 +101,24 @@ public class PostManShop : MonoBehaviour
 
     public void UpdatePostManText(PostManShopItem item)
     {
-        PostManText.text = LocalizationManager.Instance.GetText(item.Data.DescriptionKey);
+        PostManText.text = LocalizationManager.Instance.GetText(item.ShopData.DescriptionKey);
     }
 
     public void PurchaseItem(PostManShopItem item)
     {
-        if (!TreasuryManager.Instance.CanAffordPostMan(item.Data.Price))
+        if (!TreasuryManager.Instance.CanAffordPostMan(item.ShopData.Price))
         {
             SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX", timeToDie: 2f);
             return;
         }
 
-        Debug.Log("Purchased: " + item.Data.Id);
+        Debug.Log("Purchased: " + item.ShopData.Id);
         SoundManager.Instance.PlayOneShotSfx("Success_SFX", timeToDie: 3f);
-        TreasuryManager.Instance.SpendSpirits(item.Data.Price);
-        InstantiatedItems.Remove(item);
+        TreasuryManager.Instance.SpendSpirits(item.ShopData.Price);
+
+        InventoryManager.Instance.AddCollectibleType(item.ShopData.Id);
+
+        InstantiatedItems.Remove(item.ShopData);
         InstantiatedGos.Remove(item.gameObject);
         Destroy(item.gameObject);
     }

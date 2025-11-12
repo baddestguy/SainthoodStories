@@ -322,12 +322,69 @@ public enum CollectibleType
     WORLD_TRIVIA
 }
 
+public enum Theme
+{
+    Hope
+    ,Forgiveness
+    ,Suffering
+    ,Faith
+    ,Obedience
+    ,Justice
+    ,Doubt
+    ,Love
+}
+
 [System.Serializable]
 public class PostManShopData
 {
     public CollectibleType Id { get; set; }
     public int Price { get; set; }
     public string DescriptionKey { get; set; }
+    public string IconPath { get; set; }
+}
+
+[System.Serializable]
+public class WorldTriviaData
+{
+    public string Id { get; set; }
+    public string NameKey { get; set; }
+    public string DescriptionKey { get; set; }
+    public int FirstAppearance { get; set; }
+    public string IconPath { get; set; }
+}
+
+[System.Serializable]
+public class SaintWritingData
+{
+    public string Id { get; set; }
+    public string NameKey { get; set; }
+    public string TitleKey { get; set; }
+    public string DescriptionKey { get; set; }
+    public int FirstAppearance { get; set; }
+    public string IconPath { get; set; }
+}
+
+[System.Serializable]
+public class SaintFragmentData
+{
+    public SaintID Id { get; set; }
+    public string NameKey { get; set; }
+    public string DescriptionKey { get; set; }
+    public int FirstAppearance { get; set; }
+    public string IconPath { get; set; }
+    public int SequenceNumber { get; set; }
+}
+
+[System.Serializable]
+public class LetterData
+{
+    public int Id { get; set; }
+    public string NameKey { get; set; }
+    public string DescriptionKey { get; set; }
+    public string ResponseGood { get; set; }
+    public string ResponseBad { get; set; }
+    public int FirstAppearance { get; set; }
+    public Theme Theme { get; set; }
     public string IconPath { get; set; }
 }
 

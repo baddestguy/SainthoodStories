@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets._Scripts.Helpers;
@@ -29,6 +30,10 @@ public class GameDataManager : MonoBehaviour
 
     //Stories
     public Dictionary<CollectibleType, PostManShopData> PostManShopData = new Dictionary<CollectibleType, PostManShopData>();
+    public Dictionary<string, WorldTriviaData> WorldTriviaData = new Dictionary<string, WorldTriviaData>();
+    public Dictionary<SaintID, List<SaintFragmentData>> SaintFragmentData = new Dictionary<SaintID, List<SaintFragmentData>>();
+    public Dictionary<string, SaintWritingData> SaintWritingData = new Dictionary<string, SaintWritingData>();
+    public Dictionary<int, LetterData> LetterData = new Dictionary<int, LetterData>();
 
 
     public int MidnightEventChosenIndex;
@@ -111,9 +116,60 @@ public class GameDataManager : MonoBehaviour
         csvFile = Resources.Load<TextAsset>("GameData/PostmanShop");
         var pShopData = CsvSerializer.Deserialize<PostManShopData>(csvFile.text);
 
-        foreach (var shop in pShopData)
+        foreach (var data in pShopData)
         {
-            PostManShopData.Add(shop.Id, shop);
+            PostManShopData.Add(data.Id, data);
+        }
+
+        yield return null;
+
+        //world trivia Data
+        csvFile = Resources.Load<TextAsset>("GameData/WorldTrivia");
+        var triviaData = CsvSerializer.Deserialize<WorldTriviaData>(csvFile.text);
+
+        foreach (var data in triviaData)
+        {
+            WorldTriviaData.Add(data.Id, data);
+        }
+
+        yield return null;
+  
+        //saint writing Data
+        csvFile = Resources.Load<TextAsset>("GameData/SaintWritings");
+        var writingData = CsvSerializer.Deserialize<SaintWritingData>(csvFile.text);
+
+        foreach (var data in writingData)
+        {
+            SaintWritingData.Add(data.Id, data);
+        }
+
+        yield return null;
+
+        //saint fragment Data
+        csvFile = Resources.Load<TextAsset>("GameData/SaintFragments");
+        var fragmentData = CsvSerializer.Deserialize<SaintFragmentData>(csvFile.text);
+
+        foreach (var data in fragmentData)
+        {
+            if (SaintFragmentData.ContainsKey(data.Id))
+            {
+                SaintFragmentData[data.Id].Add(data);
+            }
+            else
+            {
+                SaintFragmentData.Add(data.Id, new List<SaintFragmentData>() { data });
+            }
+        }
+
+        yield return null;
+
+        //letters Data
+        csvFile = Resources.Load<TextAsset>("GameData/Letters");
+        var letterData = CsvSerializer.Deserialize<LetterData>(csvFile.text);
+
+        foreach (var data in letterData)
+        {
+            LetterData.Add(data.Id, data);
         }
 
         yield return null;
@@ -320,6 +376,96 @@ public class GameDataManager : MonoBehaviour
         yield return null;
 
     }
+
+    public WorldTriviaData GetRandomWorldTrivia(bool excludeInventory = true)
+    {
+        var triviaList = WorldTriviaData.Values;
+        if (excludeInventory)
+        {
+            triviaList.Except(InventoryManager.Instance.WorldTrivia);
+        }
+
+        if (!triviaList.Any()) return null;
+
+        var trivia = triviaList.ElementAt(Random.Range(0, triviaList.Count()));
+
+        return trivia;
+    }
+
+    public SaintWritingData GetRandomSaintWriting(bool excludeInventory = true)
+    {
+        var triviaList = SaintWritingData.Values;
+        if (excludeInventory)
+        {
+            triviaList.Except(InventoryManager.Instance.SaintWritings);
+        }
+
+        if (!triviaList.Any()) return null;
+
+        var trivia = triviaList.ElementAt(Random.Range(0, triviaList.Count()));
+
+        return trivia;
+    }
+
+    public SaintFragmentData GetRandomSaintFragment()
+    {
+        // Safety check
+        if (SaintFragmentData == null || SaintFragmentData.Count == 0)
+        {
+            Debug.LogWarning("No SaintFragments defined in GameDataManager.");
+            return null;
+        }
+
+        // Copy all SaintIDs so we can shuffle and iterate
+        var saintIDs = SaintFragmentData.Keys.ToList();
+        saintIDs = saintIDs.OrderBy(_ => Random.value).ToList(); // shuffle list
+
+        foreach (var saintID in saintIDs)
+        {
+            var allFragments = SaintFragmentData[saintID]
+                .OrderBy(f => f.SequenceNumber)
+                .ToList();
+
+            InventoryManager.Instance.SaintFragments.TryGetValue(saintID, out var ownedFragments);
+
+            if (ownedFragments == null || ownedFragments.Count == 0)
+            {
+                // Player doesn't have any fragments → pick sequence 0
+                return allFragments.FirstOrDefault(f => f.SequenceNumber == 0);
+            }
+
+            // Player has some fragments → find first missing sequence
+            var ownedSeqs = ownedFragments.Select(f => f.SequenceNumber).ToHashSet();
+            var nextFragment = allFragments.FirstOrDefault(f => !ownedSeqs.Contains(f.SequenceNumber));
+
+            if (nextFragment != null)
+            {
+                return nextFragment; // Found next missing fragment for this saint
+            }
+
+            // Else: player owns all fragments for this saint → continue to next
+        }
+
+        // No available saints left (player owns everything)
+        Debug.Log("Player already owns all saint fragments!");
+        return null;
+    }
+
+    public LetterData GetRandomLetter(bool excludeInventory = true)
+    {
+        var triviaList = LetterData.Values;
+        if (excludeInventory)
+        {
+            triviaList.Except(InventoryManager.Instance.Letters);
+        }
+
+        if (!triviaList.Any()) return null;
+
+        var trivia = triviaList.ElementAt(Random.Range(0, triviaList.Count()));
+
+        return trivia;
+    }
+
 
     public StatusEffectData GetStatusEffectData(PlayerStatusEffect id)
     {

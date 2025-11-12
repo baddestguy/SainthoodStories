@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class PostManShopItem : MonoBehaviour, IPointerEnterHandler
 {
-    public PostManShopData Data;
+    public PostManShopData ShopData;
     public Image Icon;
     public TextMeshProUGUI PriceDisplay;
 
     public void Init(PostManShopData data)
     {
-        Data = data;
+        ShopData = data;
         Icon.sprite = Resources.Load<Sprite>(data.IconPath);
         PriceDisplay.text = data.Price.ToString();
     }
