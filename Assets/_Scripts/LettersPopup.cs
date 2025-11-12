@@ -1,12 +1,15 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LettersPopup : MonoBehaviour
 {
     public Image CharPotrait;
-    public Text Letter;
-    public Text CharName;
+    public TextMeshProUGUI Letter;
+    public TextMeshProUGUI CharName;
     public ScrollRect ScrollRect;
+    public List<LetterData> Data;
 
     public void Open()
     {
@@ -15,6 +18,7 @@ public class LettersPopup : MonoBehaviour
         gameObject.SetActive(true);
 
         //Load/Refresh data
+        Data = InventoryManager.Instance.Letters;
     }
 
     public void Close()

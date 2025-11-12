@@ -110,6 +110,9 @@ public class UI : MonoBehaviour
 
     public GameObject RosaryUI;
     public GameObject LettersUI;
+    public GameObject SaintFragmentsUI;
+    public GameObject WorldTriviaUI;
+    public GameObject SaintWritingsUI;
     public GameObject PostManUI;
 
     public bool WasUiHit
@@ -175,6 +178,19 @@ public class UI : MonoBehaviour
     public void ToggleLettersMode()
     {
         LettersUI.GetComponent<LettersPopup>().Open();
+    }
+
+    public void ToggleSaintFragmentsPopup()
+    {
+        SaintFragmentsUI.GetComponent<SaintFragmentsPopup>().Open();
+    }
+    public void ToggleWorldTriviaPopup()
+    {
+        WorldTriviaUI.GetComponent<WorldTriviaPopup>().Open();
+    }
+    public void ToggleSaintWritingsPopup()
+    {
+      //  SaintWritingsUI.GetComponent<SaintFragmentsPopup>().Open(writing);
     }
 
     public void RosaryMode()

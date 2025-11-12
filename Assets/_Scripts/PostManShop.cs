@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -101,6 +102,7 @@ public class PostManShop : MonoBehaviour
 
     public void UpdatePostManText(PostManShopItem item)
     {
+        //text animation
         PostManText.text = LocalizationManager.Instance.GetText(item.ShopData.DescriptionKey);
     }
 

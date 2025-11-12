@@ -195,7 +195,7 @@ public class InteractableChurch : InteractableHouse
                 break;
 
             case "SAINTS":
-                OpenUnlockedSaints();
+                UI.Instance.ToggleSaintFragmentsPopup();
                 break;
 
             case "ROSARY":
@@ -204,6 +204,12 @@ public class InteractableChurch : InteractableHouse
 
             case "LETTERS":
                 UI.Instance.ToggleLettersMode();
+                break;
+            case "TRIVIA":
+                UI.Instance.ToggleWorldTriviaPopup();
+                break;
+            case "WRITING":
+                UI.Instance.ToggleSaintWritingsPopup();
                 break;
 
             case "SUBMITROSARY":

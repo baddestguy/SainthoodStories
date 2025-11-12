@@ -1449,6 +1449,8 @@ public class InteractableHouse : InteractableObject
             case "SAINTS": return !GameSettings.Instance.TUTORIAL_MODE;
             case "ROSARY": return !GameSettings.Instance.TUTORIAL_MODE;
             case "LETTERS": return !GameSettings.Instance.TUTORIAL_MODE;
+            case "WRITING": return !GameSettings.Instance.TUTORIAL_MODE;
+            case "TRIVIA": return !GameSettings.Instance.TUTORIAL_MODE;
             case "POSTMAN": return !GameSettings.Instance.TUTORIAL_MODE;
             case "UPGRADE": return !GameSettings.Instance.DEMO_MODE_3 && CanAffordUpgrade();
         }
