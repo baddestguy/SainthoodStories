@@ -163,7 +163,7 @@ public class PopUI : MonoBehaviour
         SoundManager.Instance.PlayOneShotSfx("Button_SFX");
         //else
 
-        CameraControls?.SetZoomTarget(6f);
+        CameraControls?.SetZoomTarget(Constants.INTERIOR_ZOOM_IN_TARGET);
 
         if (myButton.ButtonName == "EXIT" || myButton.ButtonName == "ENTER" || myButton.ButtonName == "WORLD")
         {
@@ -254,8 +254,8 @@ public class PopUI : MonoBehaviour
             MyHouse.PlaySpecialChargeVfx(ButtonName);
             ChargeFx.transform.position = myButton.transform.position + new Vector3(0,0, -5f);
         }
-        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
-        CameraControls?.SetZoomTarget(5.5f);
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(Constants.EXTERIOR_POINTER_DOWN_ZOOM_IN_TARGET);
+        CameraControls?.SetZoomTarget(Constants.POINTER_DOWN_ZOOM_IN_TARGET);
 
         SoundManager.Instance.PlayOneShotSfx("Charge_SFX", timeToDie: myButton.Timer);
         StartCoroutine("CriticalCircle", myButton);
@@ -329,8 +329,8 @@ public class PopUI : MonoBehaviour
 
         PointerDown = false;
         ChargeFx.SetActive(false);
-        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
-        CameraControls?.SetZoomTarget(6f);
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(Constants.EXTERIOR_ZOOM_IN_TARGET);
+        CameraControls?.SetZoomTarget(Constants.INTERIOR_ZOOM_IN_TARGET);
         SoundManager.Instance.StopOneShotSfx("Charge");
     }
 

@@ -168,8 +168,8 @@ public class CustomEventPopup : MonoBehaviour
         var moddedEnergy = player.ModifyEnergyConsumption(amount: EventData.EnergyCost);
         if (player.CanUseEnergy(moddedEnergy)) return;
 
-        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
-        CameraControls?.SetZoomTarget(6f);
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(Constants.EXTERIOR_ZOOM_IN_TARGET);
+        CameraControls?.SetZoomTarget(Constants.INTERIOR_ZOOM_IN_TARGET);
         ChargeFx.SetActive(false);
         ButtonPressFx.SetActive(true);
 
@@ -326,8 +326,8 @@ public class CustomEventPopup : MonoBehaviour
 
         PointerDown = true;
         ChargeFx.SetActive(true);
-        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
-        CameraControls?.SetZoomTarget(5.5f);
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(Constants.EXTERIOR_POINTER_DOWN_ZOOM_IN_TARGET);
+        CameraControls?.SetZoomTarget(Constants.POINTER_DOWN_ZOOM_IN_TARGET);
         SoundManager.Instance.PlayOneShotSfx("Charge_SFX");
     }
 
@@ -335,8 +335,8 @@ public class CustomEventPopup : MonoBehaviour
     {
         PointerDown = false;
         ChargeFx.SetActive(false);
-        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
-        CameraControls?.SetZoomTarget(6f);
+        ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(Constants.EXTERIOR_ZOOM_IN_TARGET);
+        CameraControls?.SetZoomTarget(Constants.INTERIOR_ZOOM_IN_TARGET);
         SoundManager.Instance.StopOneShotSfx("Charge_SFX");
     }
 

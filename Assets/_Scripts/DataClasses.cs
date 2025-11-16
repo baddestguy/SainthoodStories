@@ -822,6 +822,10 @@ public class Constants
     public const string FULL_GAME_PRODUCT_ID = "full_game";
     public const double DayTimeStartTime = 10;
     public const int POSTMAN_DAILY_STOCK_COUNT = 5;
+    public const float POINTER_DOWN_ZOOM_IN_TARGET = 5.5f;
+    public const float INTERIOR_ZOOM_IN_TARGET = 12f;
+    public const float EXTERIOR_POINTER_DOWN_ZOOM_IN_TARGET = 2.5f;
+    public const float EXTERIOR_ZOOM_IN_TARGET = 3f;
 }
 
 public enum CustomEventType

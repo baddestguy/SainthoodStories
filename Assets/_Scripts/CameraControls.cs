@@ -99,7 +99,7 @@ public class CameraControls : MonoBehaviour
         }
         else
         {
-            SetZoomTarget(3f);
+            SetZoomTarget(Constants.EXTERIOR_ZOOM_IN_TARGET);
             if (modifyPostProcess)
             {
                 //DepthOfField.active = true;

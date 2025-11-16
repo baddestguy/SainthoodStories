@@ -77,7 +77,7 @@ public class GameSettings : MonoBehaviour
 
     [HideInInspector] public Language currentLanguage;
 
-    private string SettingsFileName => "Settings.dat";
+    private string SettingsFileName => "SS_Settings.dat";
     string GetPath() => Path.Combine(Application.persistentDataPath, SettingsFileName);
 
 

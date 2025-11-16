@@ -343,31 +343,33 @@ public class UI : MonoBehaviour
 
     public void TimeDisplay(double time)
     {
-        var currentMinute = int.Parse(TimeMinDisplay.text);
-        var currentHour = int.Parse(TimeHrDisplay.text);
+        //var currentMinute = int.Parse(TimeMinDisplay.text);
+        //var currentHour = int.Parse(TimeHrDisplay.text);
 
-        var newMinute = 0;
-        var newHour = (int)time;
-        if (time - (int)time == 0) newMinute = 0;
-        if (time - (int)time == 0.25) newMinute = 15;
-        if (time - (int)time == 0.5) newMinute = 30;
-        if (time - (int)time == 0.75) newMinute = 45;
+        //var newMinute = 0;
+        //var newHour = (int)time;
+        //if (time - (int)time == 0) newMinute = 0;
+        //if (time - (int)time == 0.25) newMinute = 15;
+        //if (time - (int)time == 0.5) newMinute = 30;
+        //if (time - (int)time == 0.75) newMinute = 45;
 
-        TimeHrDisplay.DOCounter(currentHour, newHour, 1f, false);
-        TimeMinDisplay.DOCounter(currentMinute, newMinute, 1f, false);
+        //TimeHrDisplay.DOCounter(currentHour, newHour, 1f, false);
+        //TimeMinDisplay.DOCounter(currentMinute, newMinute, 1f, false);
 
-        if(newHour > 21)
-        {
-            TimeHrDisplay.color = Color.red;
-            TimeMinDisplay.color = Color.red;
-            DayDisplay.color = Color.red;
-        }
-        else
-        {
-            TimeHrDisplay.color = Color.white;
-            TimeMinDisplay.color = Color.white;
-            DayDisplay.color = Color.white;
-        }
+        TimeHrDisplay.text = System.DateTime.Now.ToString("HH:mm");
+        TimeMinDisplay.text = "";
+        //if(newHour > 21)
+        //{
+        //    TimeHrDisplay.color = Color.red;
+        //    TimeMinDisplay.color = Color.red;
+        //    DayDisplay.color = Color.red;
+        //}
+        //else
+        //{
+        //    TimeHrDisplay.color = Color.white;
+        //    TimeMinDisplay.color = Color.white;
+        //    DayDisplay.color = Color.white;
+        //}
     }
 
     public void EnableProvisionPopup(ProvisionData prov1, ProvisionData prov2)
@@ -999,7 +1001,7 @@ public class UI : MonoBehaviour
 
     private string DayofTheWeek(int Day)
     {
-        return "Day " + MissionManager.Instance.CurrentMissionId;
+        return System.DateTime.Now.DayOfWeek.ToString();
     }
 
     public void DisplayStatusEffect()

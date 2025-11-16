@@ -50,7 +50,7 @@ public class Mission
             switch (Season)
             {
                 case Season.SPRING: return "SpringLevel";
-                case Season.SUMMER: return "SummerLevel Large";
+                case Season.SUMMER: return "StoriesLevel";
                 case Season.FALL: return "FallLevel Large";
                 case Season.WINTER: return "WinterLevel Large";
             }

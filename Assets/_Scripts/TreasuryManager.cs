@@ -57,6 +57,8 @@ public class TreasuryManager : MonoBehaviour
 
     public bool CanAffordPostMan(int price)
     {
+        WanderingSpirits = 500;
+
         return WanderingSpirits >= price;
     }
 

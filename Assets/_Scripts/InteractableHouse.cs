@@ -68,7 +68,6 @@ public class InteractableHouse : InteractableObject
     public static UnityAction<float, InteractableHouse, int> OnActionProgress;
 
     public Camera InteriorCam;
-    public Camera InteriorUICamera;
     public GameObject[] InteriorSpaces;
     public int UpgradeLevel;
 
@@ -405,7 +404,7 @@ public class InteractableHouse : InteractableObject
             else
             {
                 ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
-                ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+                ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(Constants.EXTERIOR_ZOOM_IN_TARGET);
                 HouseUIActive = true;
                 PopIcon.gameObject.SetActive(false);
 
@@ -875,7 +874,7 @@ public class InteractableHouse : InteractableObject
                 SoundManager.Instance.PlayHouseAmbience(GetType().Name, false, 0.3f);
                 InsideHouse = false;
                 OnEnterHouse?.Invoke(InsideHouse);
-                ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+                ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(Constants.EXTERIOR_ZOOM_IN_TARGET);
                 StartCoroutine(FadeAndSwitchCamerasAsync(InteriorLightsOff));
                 break;
 
@@ -962,8 +961,7 @@ public class InteractableHouse : InteractableObject
     {
         InteriorPopUI.gameObject.SetActive(false);
         InteriorCam.enabled = false;
-        InteriorUICamera.enabled = false;
-        InteriorCam.GetComponent<CameraControls>().SetZoomTarget(7f);
+        InteriorCam.GetComponent<CameraControls>().SetZoomTarget(Constants.INTERIOR_ZOOM_IN_TARGET+1);
         InteriorSpaces[UpgradeLevel].SetActive(false);
         ExteriorCamera.Instance.Camera.enabled = true;
         ExteriorCamera.Instance.UICamera.enabled = true;
@@ -978,7 +976,6 @@ public class InteractableHouse : InteractableObject
         PopIcon.UIPopped(true);
         InteriorCam.enabled = true;
         InteriorCam.GetComponent<CameraControls>().EnableDepthOfField(true);
-        InteriorUICamera.enabled = true;
         ExteriorCamera.Instance.Camera.enabled = false;
         ExteriorCamera.Instance.UICamera.enabled = false;
         InteriorSpaces[UpgradeLevel].SetActive(true);
@@ -1164,12 +1161,12 @@ public class InteractableHouse : InteractableObject
             GameManager.Instance.CurrentHouse = this;
             GameManager.Instance.CurrentBuilding = GameManager.Instance.CurrentHouse.GetType().Name;
             ExteriorCamera.Instance.GetComponent<CameraControls>().SetCameraTarget(transform.TransformPoint(-7.95f, 10.92f, -6.11f));
-            ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(3f);
+            ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(Constants.EXTERIOR_ZOOM_IN_TARGET);
             if (InteriorCam)
             {
-                ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(2.5f);
-                InteriorCam.GetComponent<CameraControls>().SetCameraTarget(InteriorSpaces[UpgradeLevel].transform.TransformPoint(3.68f, 7.44f, -1.12f), false);
-                InteriorCam.GetComponent<CameraControls>().SetZoomTarget(6f);
+                ExteriorCamera.Instance.GetComponent<CameraControls>().SetZoomTarget(Constants.EXTERIOR_POINTER_DOWN_ZOOM_IN_TARGET);
+                InteriorCam.GetComponent<CameraControls>().SetCameraTarget(InteriorSpaces[UpgradeLevel].transform.TransformPoint(-2.16f, 6.01f, 4.93f), false); //vector obtained by placing InteriorCam within the specific interior space gameobject
+                InteriorCam.GetComponent<CameraControls>().SetZoomTarget(Constants.INTERIOR_ZOOM_IN_TARGET);
             }
             CameraLockOnMe = true;
             HouseUIActive = true;

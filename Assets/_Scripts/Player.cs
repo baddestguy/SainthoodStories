@@ -670,7 +670,7 @@ public class Player : MonoBehaviour
 
     public void RefreshGrid()
     {
-        Grid.SetActive(GameSettings.Instance.ShowGrid);
+    //    Grid.SetActive(GameSettings.Instance.ShowGrid);
     }
 
     public MapTile GetCurrentTile()

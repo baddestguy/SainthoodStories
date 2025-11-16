@@ -12,12 +12,15 @@ EditorBuildSettings:
     path: Assets/_Scenes/MainMenu.unity
     guid: cf5381a7a50ea6444b9967e9dd71a299
   - enabled: 1
+    path: Assets/_Scenes/Levels/StoriesLevel.unity
+    guid: 5e9c0ec3de4211a4b919f10c8035904d
+  - enabled: 0
     path: Assets/_Scenes/Levels/SummerLevel Large.unity
     guid: 5ac0cdb7978d0ec47b1f0418596244c6
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Levels/FallLevel Large.unity
     guid: 50669bc875ac2754a99b08e97e4bd81c
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/Levels/WinterLevel Large.unity
     guid: be2c16ef08c46594dad41da36cbfa93e
   - enabled: 1

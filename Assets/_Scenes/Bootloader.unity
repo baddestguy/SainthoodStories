@@ -5588,6 +5588,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: IAPManager
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 49391968bbdfc4a42b76d1fec9c92400, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 49391968bbdfc4a42b76d1fec9c92400, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -5631,6 +5635,14 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 49391968bbdfc4a42b76d1fec9c92400, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 49391968bbdfc4a42b76d1fec9c92400, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400004, guid: 49391968bbdfc4a42b76d1fec9c92400, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400004, guid: 49391968bbdfc4a42b76d1fec9c92400, type: 3}
       propertyPath: obfuscKey
@@ -7174,10 +7186,12 @@ MonoBehaviour:
   Items: 
   Collectibles: []
   Provisions: []
-  WanderingSpirits: 0
   MaxInventorySlots: 2
   MaxProvisionsSlots: 5
   GeneratedProvisions: []
+  WorldTrivia: []
+  SaintWritings: []
+  Letters: []
 --- !u!1 &632705939
 GameObject:
   m_ObjectHideFlags: 0
@@ -23366,7 +23380,7 @@ RectTransform:
   m_GameObject: {fileID: 1765869539}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 968352301}
@@ -23374,7 +23388,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 1473, y: -558}
-  m_SizeDelta: {x: 3840, y: 1240}
+  m_SizeDelta: {x: 3840, y: 1241.52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1765869541
 MonoBehaviour:
