@@ -238,8 +238,6 @@ public class GameManager : MonoBehaviour
                     TutorialManager.Instance.SkipTutorial = true;
                 }
 
-                UI.Instance.DisplayRunAttempts();
-
                 if (data.Maptiles == null)
                 {
                     UI.Instance.DisableMainMenuContinueBtn();
@@ -416,7 +414,6 @@ public class GameManager : MonoBehaviour
                         StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
                     }
 
-                    UI.Instance.DisplayRunAttempts();
                 }, newGame, false, !activeScene.name.Contains("MainMenu"), showUI: showUI);
                 break;
         }

@@ -184,7 +184,7 @@ public class GameSettings : MonoBehaviour
             ambianceEnabled = data.ambianceEnabled;
             TutorialToggle = data.tutorialEnabled;
             ShowGrid = data.ShowGrid;
-            CustomEventsToggle = data.CustomEventsToggle;
+            CustomEventsToggle = false;// data.CustomEventsToggle;
 
             SetVolume("Global", data.globalVolume);
             SetVolume("Music", data.musicVolume);
@@ -204,7 +204,7 @@ public class GameSettings : MonoBehaviour
             musicEnabled = true;
             ambianceEnabled = true;
             ShowGrid = true;
-            CustomEventsToggle = true;
+            CustomEventsToggle = false;// true;
             SetVolume("Global", 1);
             SetVolume("Music", 1);
             SetVolume("SFX", 0.85f);

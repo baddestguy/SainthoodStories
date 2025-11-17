@@ -124,7 +124,8 @@ public class SaveDataManager : MonoBehaviour
             Day = 1,
             Time = Constants.DayTimeStartTime,
             TutorialSteps = 40,
-            Money = 0
+            Money = 0,
+            Saints = new SaintID[] {SaintID.ANDREW, SaintID.JOSE, SaintID.BAKHITA}
         };
     }
 
@@ -274,8 +275,6 @@ public class SaveDataManager : MonoBehaviour
             SaveObject[] saveObjects = keyVal.Values.ToArray();
             SaveObject save = saveObjects.OrderBy(x => x.Day).LastOrDefault();
             var newSave = NewGameData();
-            newSave.Saints = save.Saints;
-            newSave.RunAttempts = GameManager.Instance.RunAttempts;
 
             File.Delete(Application.persistentDataPath + "/SainthoodStories.save");
 

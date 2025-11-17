@@ -24,7 +24,6 @@ public class UI : MonoBehaviour
     public TextMeshProUGUI TimeMinDisplay;
     public TextMeshProUGUI DayDisplay;
     public TextMeshProUGUI MessageDisplay;
-    public TextMeshProUGUI ReportDisplay;
     public TextMeshProUGUI CPDisplay;
     public Image CPFillBar;
     public TextMeshProUGUI FPDisplay;
@@ -94,7 +93,6 @@ public class UI : MonoBehaviour
     private PointerEventData m_PointerEventData;
 
     public StatusEffectDisplay StatusEffectDisplay;
-    public TextMeshProUGUI RunAttemptsDisplay;
     public Button ContinueBtn;
 
     public MinigamePlayer MinigamePlayer;
@@ -260,9 +258,7 @@ public class UI : MonoBehaviour
 
     public void InitTimeEnergy(GameClock clock, Energy energy)
     {
-        EnergyDisplay.text = $"{energy.Amount}";
-        TimeDisplay(clock.Time);
-        DayDisplay.text = DayofTheWeek(clock.Day);
+        StartCoroutine(UpdateClock());
     }
 
     private void OnPlayerMoved(Energy energy, MapTile tile)
@@ -329,10 +325,6 @@ public class UI : MonoBehaviour
             ClearDisplay = false;
             DisplayMessage("");
         }
-        if (time > 0)
-        {
-            ReportDisplay.text = "";
-        }
 
         TimeDisplay(time);
         DayDisplay.text = DayofTheWeek(day);
@@ -356,8 +348,6 @@ public class UI : MonoBehaviour
         //TimeHrDisplay.DOCounter(currentHour, newHour, 1f, false);
         //TimeMinDisplay.DOCounter(currentMinute, newMinute, 1f, false);
 
-        TimeHrDisplay.text = System.DateTime.Now.ToString("HH:mm");
-        TimeMinDisplay.text = "";
         //if(newHour > 21)
         //{
         //    TimeHrDisplay.color = Color.red;
@@ -370,6 +360,16 @@ public class UI : MonoBehaviour
         //    TimeMinDisplay.color = Color.white;
         //    DayDisplay.color = Color.white;
         //}
+    }
+
+    IEnumerator UpdateClock()
+    {
+        while (true)
+        {
+            TimeHrDisplay.text = System.DateTime.Now.ToString("HH:mm");
+            DayofTheWeek(0);
+            yield return new WaitForSeconds(1f);
+        }
     }
 
     public void EnableProvisionPopup(ProvisionData prov1, ProvisionData prov2)
@@ -462,31 +462,32 @@ public class UI : MonoBehaviour
 
     public void WeatherAlert(WeatherType weather, GameClock start, GameClock end)
     {
-        GameClock clock = GameManager.Instance.GameClock;
-        if(weather != WeatherType.NONE)
-        {
-        //    WeatherGO.SetActive(true);
-            WeatherDisplay.text = clock >= start ? "" : $"{(int)start.Time}:{(start.Time % 1 == 0 ? "00" : "30")}";
+        WeatherIcon.gameObject.SetActive(false);
+        //GameClock clock = GameManager.Instance.GameClock;
+        //if(weather != WeatherType.NONE)
+        //{
+        ////    WeatherGO.SetActive(true);
+        //    WeatherDisplay.text = clock >= start ? "" : $"{(int)start.Time}:{(start.Time % 1 == 0 ? "00" : "30")}";
             
-            switch (MissionManager.Instance.CurrentMission.Season) {
-                case Season.SPRING:
-                    WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Hail");
-                    break;
-                    //WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Heatwave");
-                    //break;
-                case Season.SUMMER:
-                case Season.FALL:
-                    WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Rain");
-                    break;
-                case Season.WINTER:
-                    WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Snow");
-                    break;
-            }
-        }
-        else
-        {
-            WeatherGO.SetActive(false);
-        }
+        //    switch (MissionManager.Instance.CurrentMission.Season) {
+        //        case Season.SPRING:
+        //            WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Hail");
+        //            break;
+        //            //WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Heatwave");
+        //            //break;
+        //        case Season.SUMMER:
+        //        case Season.FALL:
+        //            WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Rain");
+        //            break;
+        //        case Season.WINTER:
+        //            WeatherIcon.sprite = Resources.Load<Sprite>($"Icons/Snow");
+        //            break;
+        //    }
+        //}
+        //else
+        //{
+        //    WeatherGO.SetActive(false);
+        //}
     }
 
     public void UpdateDayNightIcon(DayNight dayNight)
@@ -518,7 +519,7 @@ public class UI : MonoBehaviour
             {
                 if (t.name == item)
                 {
-                    RightItems.SetActive(true);
+                //    RightItems.SetActive(true);
                     if(item != "TreasuryBalance" && item != "Spirits")
                         RightItems.transform.Find("Image").gameObject.SetActive(true);
                     t.gameObject.SetActive(true);
@@ -544,7 +545,7 @@ public class UI : MonoBehaviour
         switch (customEvent.EventGroup)
         {
             case EventGroup.THANKYOU:
-                RightItems.SetActive(true);
+            //    RightItems.SetActive(true);
                 foreach(Transform t in RightItems.transform)
                 {
                     if(customEvent.RewardType == CustomEventRewardType.COIN && t.name == "TreasuryBalance")
@@ -565,7 +566,7 @@ public class UI : MonoBehaviour
 
             case EventGroup.CHURCH:
                 CenterItems.SetActive(true);
-                RightItems.SetActive(true);
+              //  RightItems.SetActive(true);
                 foreach (Transform t in RightItems.transform)
                 {
                     if (t.name == "FP")
@@ -596,7 +597,7 @@ public class UI : MonoBehaviour
             case EventGroup.SAVE_SHELTER:
 
                 CenterItems.SetActive(true);
-                RightItems.SetActive(true);
+           //     RightItems.SetActive(true);
                 foreach (Transform t in RightItems.GetComponentsInChildren<Transform>(true))
                 {
                     if (customEvent.RewardType == CustomEventRewardType.COIN && t.name == "TreasuryBalance")
@@ -679,12 +680,12 @@ public class UI : MonoBehaviour
 
     public void EnableInventoryUI(bool enable)
     {
-        if (GameSettings.Instance.FTUE)
-        {
-            GameClock c = GameManager.Instance.GameClock;
-            if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day == 1 && c.Time < 13.5) return;
-        }
-        InventoryUI.SetActive(enable);
+        //if (GameSettings.Instance.FTUE)
+        //{
+        //    GameClock c = GameManager.Instance.GameClock;
+        //    if (GameManager.Instance.MissionManager.CurrentMission.CurrentWeek == 1 && c.Day == 1 && c.Time < 13.5) return;
+        //}
+        //InventoryUI.SetActive(enable);
     }
 
     public void EnableCurrentUI(bool enable)
@@ -841,11 +842,6 @@ public class UI : MonoBehaviour
         CPDisplayGlow.transform.localScale = Vector3.one;
         FPDisplayGlow.transform.localScale = Vector3.one;
         EnergyDisplayGlow.transform.localScale = Vector3.one;
-    }
-
-    public void DisplayReport(string report)
-    {
-        ReportDisplay.text += report + '\n';
     }
 
     public void DisplayMessage(string message)
@@ -1017,14 +1013,6 @@ public class UI : MonoBehaviour
         StatusEffectDisplay.Init();
     }
 
-    public void DisplayRunAttempts()
-    {
-        if(RunAttemptsDisplay != null)
-        {
-            RunAttemptsDisplay.text = "Run Attempts: " + GameManager.Instance.RunAttempts;
-        }
-    }
-
     public void ShowWeekBeginText(string text)
     {
         StartCoroutine(ShowWeekBeginTextAsync(text));
@@ -1125,7 +1113,7 @@ public class UI : MonoBehaviour
         {
             g.gameObject.SetActive(enable);
         }
-        RightItems.SetActive(enable);
+        //RightItems.SetActive(enable);
         foreach (Transform g in RightItems.transform)
         {
             g.gameObject.SetActive(enable);
@@ -1133,7 +1121,7 @@ public class UI : MonoBehaviour
         CenterItems.SetActive(enable);
         SideNotifItems.SetActive(enable);
         UIHidden?.Invoke(enable);
-        WeatherManager.Instance.BroadcastWeather();
+    //    WeatherManager.Instance.BroadcastWeather();
         EnergyAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         TreasuryAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
         CPAdditionDisplay.transform.GetChild(0).gameObject.SetActive(false);
