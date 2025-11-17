@@ -6,14 +6,7 @@ public class LightColors : MonoBehaviour
     public ParticleSystem Particles;
     public float Alpha = 0;
 
-    void OnEnable()
-    {
-        if (GameManager.Instance == null || GameManager.Instance.GameClock == null) return;
-        GameClock.Ticked += OnTick;
-        OnTick(GameManager.Instance.GameClock.Time, GameManager.Instance.GameClock.Day);
-    }
-
-    private void OnTick(double time, int day)
+    public void UpdateLight(double time)
     {
         if(time >= 19 || time < 6)
         {
@@ -80,10 +73,5 @@ public class LightColors : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void OnDisable()
-    {
-        GameClock.Ticked -= OnTick;
     }
 }

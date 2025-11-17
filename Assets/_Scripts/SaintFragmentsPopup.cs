@@ -20,14 +20,7 @@ public class SaintFragmentsPopup : MonoBehaviour
         UI.Instance.EnableAllUIElements(false);
         gameObject.SetActive(true);
 
-        //Load/Refresh data
         Data = InventoryManager.Instance.SaintFragments;
-        //SaintName.text = LocalizationManager.Instance.GetText(Data.NameKey);
-        //CharPotrait.sprite = Resources.Load<Sprite>(Data.IconPath);
-        //foreach(var d in data)
-        //{
-        //    Fragment.text += LocalizationManager.Instance.GetText(d.DescriptionKey) + "\n\n";
-        //}
 
         UpdateSaint();
     }
@@ -39,7 +32,6 @@ public class SaintFragmentsPopup : MonoBehaviour
             return;
         }
 
-    //    ScrollRect.verticalNormalizedPosition = 1f;
         SaintData saintData = SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex];
 
         //populate the saint data
@@ -48,6 +40,10 @@ public class SaintFragmentsPopup : MonoBehaviour
         SaintName.text = saintData.Name;
     }
 
+    public void SelectSaint()
+    {
+
+    }
 
     public void NextCharacter()
     {

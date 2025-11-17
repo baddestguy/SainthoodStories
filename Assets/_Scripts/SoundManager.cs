@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -108,7 +109,7 @@ public class SoundManager : MonoBehaviour
             yield return new WaitForSeconds(5);
             if (MusicAudioSourceChannel1.isPlaying) continue;
 
-            yield return new WaitForSeconds(Random.Range(40, 60));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(40, 60));
             if (index >= MusicPlaylist.Length) index = 0;
             PlayMusic(MusicPlaylist[index]);
             index++;
@@ -144,15 +145,14 @@ public class SoundManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(overrideSeasons))
         {
-            GameClock clock = GameManager.Instance.GameClock;
             switch (MissionManager.Instance.CurrentMission.Season)
             {
                 case Season.SUMMER:
-                    if (clock.Time >= 19 || clock.Time < 6)
+                    if (DateTime.Now.Hour >= 19 || DateTime.Now.Hour < 6)
                     {
                         ambience = "SummerNight_Ambience";
                     }
-                    else if (clock.Time >= 6)
+                    else if (DateTime.Now.Hour >= 6)
                     {
                         ambience = "SummerDay_Ambience";
                     }

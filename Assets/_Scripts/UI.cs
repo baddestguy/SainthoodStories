@@ -492,11 +492,11 @@ public class UI : MonoBehaviour
 
     public void UpdateDayNightIcon(DayNight dayNight)
     {
-        if (WeatherManager.Instance.IsStormy()) return;
-        if(DayNightIcon != null)
-        {
-            DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{dayNight}");
-        }
+        //if (WeatherManager.Instance.IsStormy()) return;
+        //if(DayNightIcon != null)
+        //{
+        //    DayNightIcon.sprite = Resources.Load<Sprite>($"Icons/{dayNight}");
+        //}
     }
 
     public void HideUIItemsExcept(List<string> items)
