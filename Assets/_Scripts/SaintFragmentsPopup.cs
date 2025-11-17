@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,8 +13,12 @@ public class SaintFragmentsPopup : MonoBehaviour
     public TextMeshProUGUI SaintName;
     public ScrollRect ScrollRect;
 
+    //Story Sequence
+    public GameObject StorySequenceObj;
+    public TextMeshProUGUI StoryEventText;
     private int CurrentSaintIndex = 0;
-
+    private int CurrentSequenceNumber = 0;
+    
     public void Open()
     {
         CustomEventPopup.IsDisplaying = true;
@@ -42,7 +47,28 @@ public class SaintFragmentsPopup : MonoBehaviour
 
     public void SelectSaint()
     {
+        StorySequenceObj.SetActive(true);
+        Proceed();
+    }
 
+    public void Proceed()
+    {
+        var currentSaintId = SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex].Id;
+        var currentSaintFragment = GameDataManager.Instance.SaintFragmentData[currentSaintId];
+
+        if (CurrentSequenceNumber >= currentSaintFragment.Count)
+        {
+            StorySequenceObj.SetActive(false);
+            CurrentSequenceNumber = 0;
+            return;
+        }
+
+        var text = LocalizationManager.Instance.GetText(currentSaintFragment[CurrentSequenceNumber].DescriptionKey);
+        StoryEventText.text = text;
+        StoryEventText.color = new Color(StoryEventText.color.r, StoryEventText.color.g, StoryEventText.color.b, 0f);
+        StoryEventText.DOFade(1f, 0.5f).SetEase(Ease.Linear);
+        CurrentSequenceNumber++;
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
     }
 
     public void NextCharacter()
