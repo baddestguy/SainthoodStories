@@ -14,12 +14,17 @@ namespace Assets._Scripts
 
         private bool _clickedStart;
         private const string DefaultStatusText = "PRESS ANY BUTTON TO START";
+        private const string DefaultMobileStatusText = "TAP TO START";
 
         // Start is called before the first frame update
         void Start()
         {
             Instance = this;
             StatusText.text = DefaultStatusText;
+
+#if UNITY_IOS || UNITY_ANDROID
+            StatusText.text = DefaultMobileStatusText;
+#endif
         }
 
         // Update is called once per frame

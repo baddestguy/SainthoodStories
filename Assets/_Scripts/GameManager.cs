@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour
     public Mission CurrentMission;
     public InteractableHouse CurrentHouse;
     public string CurrentBuilding;
-    private Scene activeScene;
     public SceneID CurrentSceneID;
     public SceneID PreviousSceneID;
     public bool InGameSession;
@@ -93,7 +92,9 @@ public class GameManager : MonoBehaviour
         GameSettings.Instance.BeginLoad();
         SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 
-        LoadScene("MainMenu", LoadSceneMode.Single);
+
+        SetMissionParameters(MissionDifficulty.HARD, true);
+        //LoadScene("MainMenu", LoadSceneMode.Single);
         yield return null;
 
         PlayerHasLoggedIn = true;
@@ -137,10 +138,6 @@ public class GameManager : MonoBehaviour
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         Time.timeScale = 1f;
-        if (loadSceneMode == LoadSceneMode.Single)
-        {
-            activeScene = scene;
-        }
 
         if (scene.IsGameLevel())
         {
@@ -414,7 +411,7 @@ public class GameManager : MonoBehaviour
                         StartCoroutine(WaitAndLoadScene(CurrentMission.SeasonLevel));
                     }
 
-                }, newGame, false, !activeScene.name.Contains("MainMenu"), showUI: showUI);
+                }, newGame, false, showUI: showUI);
                 break;
         }
 

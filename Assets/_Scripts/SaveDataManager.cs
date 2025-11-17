@@ -198,7 +198,7 @@ public class SaveDataManager : MonoBehaviour
     /// Load the game data 
     /// </summary>
     /// <param name="callback"></param>
-    public void LoadGame(Action<SaveObject, bool> callback, bool newGame, bool lastDay = false, bool ingameLoading = false, bool showUI = true)
+    public void LoadGame(Action<SaveObject, bool> callback, bool newGame, bool lastDay = false, bool showUI = true)
     {
         if (GameSettings.Instance.IsXboxMode || Directory.Exists(Application.persistentDataPath))
         {
