@@ -46,12 +46,13 @@ public class DayNightCycle : MonoBehaviour
 
         TimeOfDayKeyFrames.AddRange(new List<TimeOfDayKeyframe>() 
         {
-            new TimeOfDayKeyframe { time = 0, rotation = new Vector3(10, -30, 0), color = new Color32(104, 222, 211, 255), skybox = NightSkyboxTextures },
-            new TimeOfDayKeyframe { time = 6, rotation = new Vector3(55, -30, 0), color = new Color32(198, 255, 250, 255), skybox = DaySkyboxTextures },
-            new TimeOfDayKeyframe { time = 12, rotation = new Vector3(90, -30, 0), color = Color.white, skybox = DaySkyboxTextures },
-            new TimeOfDayKeyframe { time = 16, rotation = new Vector3(115, -30, 0), color = new Color32(255, 211, 160, 255), skybox = EveningSkyboxTextures },
-            new TimeOfDayKeyframe { time = 19, rotation = new Vector3(135, -30, 0), color = new Color32(104, 222, 211, 255), skybox = NightSkyboxTextures },
-            new TimeOfDayKeyframe { time = 24, rotation = new Vector3(170, -30, 0), color = new Color32(104, 222, 211, 255), skybox = NightSkyboxTextures }
+            new TimeOfDayKeyframe { time = 0, rotation = new Vector3(10, -30, 0), color = new Color32(104, 222, 211, 255), skybox = NightSkyboxTextures, LightIntensity = 0 },
+            new TimeOfDayKeyframe { time = 6, rotation = new Vector3(55, 0, 0), color = new Color32(198, 255, 250, 255), skybox = DaySkyboxTextures, LightIntensity = 0 },
+            new TimeOfDayKeyframe { time = 12, rotation = new Vector3(90, 0, 0), color = Color.white, skybox = DaySkyboxTextures, LightIntensity = 0.5f },
+            new TimeOfDayKeyframe { time = 16, rotation = new Vector3(115, -30, 0), color = new Color32(255, 211, 160, 255), skybox = DaySkyboxTextures, LightIntensity = 0.5f },
+            new TimeOfDayKeyframe { time = 19, rotation = new Vector3(135, -30, 0), color = new Color32(104, 222, 211, 255), skybox = EveningSkyboxTextures, LightIntensity = 0.5f },
+            new TimeOfDayKeyframe { time = 22, rotation = new Vector3(155, -30, 0), color = new Color32(104, 222, 211, 255), skybox = NightSkyboxTextures, LightIntensity = 0 },
+            new TimeOfDayKeyframe { time = 24, rotation = new Vector3(170, -30, 0), color = new Color32(104, 222, 211, 255), skybox = NightSkyboxTextures, LightIntensity = 0 }
         });
 
     //    StartingSkybox();
@@ -69,6 +70,7 @@ public class DayNightCycle : MonoBehaviour
 
     void UpdateLighting(float currentTime)
     {
+        //currentTime = 21;
         // Normalize to 0–24
         if (currentTime < 0) currentTime = 0;
         if (currentTime >= 24) currentTime -= 24;
@@ -93,6 +95,7 @@ public class DayNightCycle : MonoBehaviour
 
         TargetRotation = Vector3.Lerp(a.rotation, b.rotation, t);
         TargetColor = Color.Lerp(a.color, b.color, t);
+        Light.intensity = Mathf.Lerp(a.LightIntensity, b.LightIntensity, t);
 
         // Skybox switches immediately at a keyframe boundary
         SetFutureSkybox(t < 0.5f ? a.skybox : b.skybox);
@@ -120,14 +123,14 @@ public class DayNightCycle : MonoBehaviour
             Light.color = Color.Lerp(Light.color, TargetColor, Time.deltaTime);
         }
 
-        if (!WeatherManager.Instance.IsNormal())
-        {
-            Light.shadowStrength = Mathf.Lerp(Light.shadowStrength, 0.6f, Time.deltaTime);
-        }
-        else
-        {
-            Light.shadowStrength = Mathf.Lerp(Light.shadowStrength, ShadowStrength, Time.deltaTime);
-        }
+        //if (!WeatherManager.Instance.IsNormal())
+        //{
+        //    Light.shadowStrength = Mathf.Lerp(Light.shadowStrength, 0.6f, Time.deltaTime);
+        //}
+        //else
+        //{
+        //    Light.shadowStrength = Mathf.Lerp(Light.shadowStrength, ShadowStrength, Time.deltaTime);
+        //}
 
         //    CurrentSkybox.SetFloat("_Blend", Mathf.Lerp(CurrentSkybox.GetFloat("_Blend"), BlendValue, Time.deltaTime));
 
@@ -223,5 +226,6 @@ public class TimeOfDayKeyframe
     public float time;  // 0–24
     public Vector3 rotation;
     public Color color;
+    public float LightIntensity;
     public List<Texture> skybox;
 }

@@ -112,23 +112,23 @@ public class PopUI : MonoBehaviour
         var myButton = Buttons.Where(b => b.ButtonName == button).FirstOrDefault();
 
 #if PLATFORM_MOBILE
-        if(!PointerDown)
-        {
-            var tt = myButton.GetComponent<TooltipMouseOver>();
-            if (tt != null && !tt.TurnOnInfoPanel)
-            {
-                foreach (var b in Buttons)
-                {
-                    b.GetComponent<TooltipMouseOver>().TurnOnInfoPanel = false;
-                    b.GetComponent<TooltipMouseOver>().HideToolTip();
-                }
-                tt.TurnOnInfoPanel = true;
-                tt.ShowToolTip();
-                return;
-            }
+        //if(!PointerDown)
+        //{
+        //    var tt = myButton.GetComponent<TooltipMouseOver>();
+        //    if (tt != null && !tt.TurnOnInfoPanel)
+        //    {
+        //        foreach (var b in Buttons)
+        //        {
+        //            b.GetComponent<TooltipMouseOver>().TurnOnInfoPanel = false;
+        //            b.GetComponent<TooltipMouseOver>().HideToolTip();
+        //        }
+        //        tt.TurnOnInfoPanel = true;
+        //        tt.ShowToolTip();
+        //        return;
+        //    }
 
-            tt.TurnOnInfoPanel = false;
-        }
+        //    tt.TurnOnInfoPanel = false;
+        //}
 #endif
 
         if (GameSettings.Instance.FTUE)

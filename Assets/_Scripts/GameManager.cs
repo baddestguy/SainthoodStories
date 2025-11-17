@@ -150,6 +150,7 @@ public class GameManager : MonoBehaviour
             Map = FindAnyObjectByType<GameMap>();
             MissionManager.LoadAllMissions(CurrentMission);
             GameClock = new GameClock(SaveData.Time, SaveData.Day);
+            SaintsManager.Instance.LoadSaints(SaveData.Saints);
 
             if (PreviousSceneID == SceneID.SaintsShowcase_Day || PreviousSceneID == SceneID.WorldMap)
             {
@@ -240,7 +241,6 @@ public class GameManager : MonoBehaviour
                     UI.Instance.DisableMainMenuContinueBtn();
                 }
 
-                SaintsManager.Instance.LoadSaints(SaveData.Saints);
 
                 //    EventsManager.Instance.CurrentEvents.Add(data.CurrentDailyEvent);
             }, false, true);
