@@ -334,6 +334,27 @@ public enum Theme
     ,Love
 }
 
+public enum StorySequenceType
+{
+    STORY,
+    CHOICE_PROMPT,
+    CHOICE,
+    WORD_PROMPT,
+    WORD_RESULT
+}
+
+[System.Serializable]
+public class SaintsEvent
+{
+    public string Id { get; set; }
+    public StorySequenceType SequenceType { get; set; }
+    public string DescriptionKey { get; set; }
+    public string BackgroundColor {  get; set; }
+    public string Font {  get; set; }
+    public string FontColor {  get; set; }
+    public string SoundEffect {  get; set; }
+}
+
 [System.Serializable]
 public class PostManShopData
 {
@@ -659,6 +680,7 @@ public class LocalizationData
 {
     public string Key {get; set; }
     public string English {get; set; }
+    public string EnglishVoice {get; set; }
     public string French {get; set; }
     public string BrPt {get; set; }
     public string Filipino {get; set; }

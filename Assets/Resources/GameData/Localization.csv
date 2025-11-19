@@ -1,199 +1,272 @@
-Key,English,French,BrPt,Filipino,LatAmSpanish,Italian,German
-POSTMAN_STORE_LETTER_DESCRIPTION,A letter from a villager.,,,,,,
-POSTMAN_STORE_SAINT_WRITING_DESCRIPTION,Writings from the saints.,,,,,,
-POSTMAN_STORE_SAINT_FRAGMENT_DESCRIPTION,A fragment of a Saint's hagiography.,,,,,,
-POSTMAN_STORE_WORLD_TRIVIA_DESCRIPTION,Trivia about Buganda.,,,,,,
-POSTMAN_STORE_GREETING,Long time no see!,,,,,,
-POSTMAN_STORE_GREETING,Hi there!,,,,,,
-POSTMAN_STORE_GREETING,Got some orbs for me?,,,,,,
-POSTMAN_STORE_GREETING,Can't say I'm a fan of this place.,,,,,,
-TRIVIA_1_NAME,Weddings in Buganda,,,,,,
-TRIVIA_1_DESCRIPTION,Weddings are an especially big event to look forward to in Buganda.,,,,,,
-TRIVIA_1_DESCRIPTION,Many people get married for various reasons.,,,,,,
-TRIVIA_1_DESCRIPTION,Some get married to connect wealthy families.,,,,,,
-TRIVIA_1_DESCRIPTION,Others marry to escape their family ties.,,,,,,
-TRIVIA_1_DESCRIPTION,"Whichever the case, you do not want to miss a wedding in Buganda!",,,,,,
-DEMBE_NAME,Dembe,,,,,,
-DEMBE_DESCRIPTION_1,"Dear sister,",,,,,,
-DEMBE_DESCRIPTION_1,I am writing to let you know that I will be leaving my wife.,,,,,,
-DEMBE_DESCRIPTION_1,"I have tried to calm her down, but she will not listen to reason.",,,,,,
-DEMBE_DESCRIPTION_1,Yesterday she cooked a meal that I found absolutely disgusting.,,,,,,
-DEMBE_DESCRIPTION_1,"Eba and soup, with no meat. Can you imagine?",,,,,,
-DEMBE_DESCRIPTION_1,I did the only thing I could think of in the moment.,,,,,,
-DEMBE_DESCRIPTION_1,I threw it in the garbage and asked her to cook me a decent meal.,,,,,,
-DEMBE_DESCRIPTION_1,"She screamed at me and said 'No', very emphatically.",,,,,,
-DEMBE_DESCRIPTION_1,"I told her that if she doesn't cook me a proper meal, I will walk out.",,,,,,
-DEMBE_DESCRIPTION_1,She thought I was joking.,,,,,,
-DEMBE_DESCRIPTION_1,I walked out of the house and have not returned since.,,,,,,
-DEMBE_DESCRIPTION_1,I write this letter to you from my brother's house.,,,,,,
-DEMBE_DESCRIPTION_1,"If she does not cook this meal, I will not return to the house.",,,,,,
-DEMBE_DESCRIPTION_1,"I just wanted to let you know, in case you heard the story from somewhere else.",,,,,,
-DEMBE_DESCRIPTION_1,I am a simple man.,,,,,,
-DEMBE_DESCRIPTION_1,I don't ask for much.,,,,,,
-DEMBE_DESCRIPTION_1,I work in the farm all day. All I want is a decent meal from my wife.,,,,,,
-DEMBE_DESCRIPTION_1,"If you have any words of wisdom, I am all ears.",,,,,,
-DEMBE_DESCRIPTION_1,- Dembe,,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_GOOD,"Dear sister,",,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_GOOD,I took the words you sent me to heart.,,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_GOOD,I have returned to the house.,,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_GOOD,"I explained my position to my wife, and begged her forgiveness.",,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_GOOD,"She accepted, and cooked the most delicious meal I have ever eaten in my life.",,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_GOOD,Everything is alright now.,,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_GOOD,Thank you very much for your help.,,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_GOOD,- Dembe,,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_BAD,"Dear sister,",,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_BAD,Maybe you don't understand the gravity of the situation.,,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_BAD,I did not understand the words you sent.,,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_BAD,"If you cannot help me, I will seek wisdom from someone more capable.",,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_BAD,I will not be responding until you send me something I can use.,,,,,,
-DEMBE_DESCRIPTION_1_RESPONSE_BAD,- Dembe,,,,,,
-HILDEGARD_NAME,St. Hildegard von Bingen,,,,,,
-HILDEGARD_TITLE_1,O Viridissima Virga,,,,,,
+Key,English,EnglishVoice,French,BrPt,Filipino,LatAmSpanish,Italian,German
+POSTMAN_STORE_LETTER_DESCRIPTION,A letter from a villager.,,,,,,,
+POSTMAN_STORE_SAINT_WRITING_DESCRIPTION,Writings from the saints.,,,,,,,
+POSTMAN_STORE_SAINT_FRAGMENT_DESCRIPTION,A fragment of a Saint's hagiography.,,,,,,,
+POSTMAN_STORE_WORLD_TRIVIA_DESCRIPTION,Trivia about Buganda.,,,,,,,
+POSTMAN_STORE_GREETING,Long time no see!,,,,,,,
+POSTMAN_STORE_GREETING,Hi there!,,,,,,,
+POSTMAN_STORE_GREETING,Got some orbs for me?,,,,,,,
+POSTMAN_STORE_GREETING,Can't say I'm a fan of this place.,,,,,,,
+TRIVIA_1_NAME,Weddings in Buganda,,,,,,,
+TRIVIA_1_DESCRIPTION,Weddings are an especially big event to look forward to in Buganda.,,,,,,,
+TRIVIA_1_DESCRIPTION,Many people get married for various reasons.,,,,,,,
+TRIVIA_1_DESCRIPTION,Some get married to connect wealthy families.,,,,,,,
+TRIVIA_1_DESCRIPTION,Others marry to escape their family ties.,,,,,,,
+TRIVIA_1_DESCRIPTION,"Whichever the case, you do not want to miss a wedding in Buganda!",,,,,,,
+DEMBE_NAME,Dembe,,,,,,,
+DEMBE_DESCRIPTION_1,"Dear sister,",,,,,,,
+DEMBE_DESCRIPTION_1,I am writing to let you know that I will be leaving my wife.,,,,,,,
+DEMBE_DESCRIPTION_1,"I have tried to calm her down, but she will not listen to reason.",,,,,,,
+DEMBE_DESCRIPTION_1,Yesterday she cooked a meal that I found absolutely disgusting.,,,,,,,
+DEMBE_DESCRIPTION_1,"Eba and soup, with no meat. Can you imagine?",,,,,,,
+DEMBE_DESCRIPTION_1,I did the only thing I could think of in the moment.,,,,,,,
+DEMBE_DESCRIPTION_1,I threw it in the garbage and asked her to cook me a decent meal.,,,,,,,
+DEMBE_DESCRIPTION_1,"She screamed at me and said 'No', very emphatically.",,,,,,,
+DEMBE_DESCRIPTION_1,"I told her that if she doesn't cook me a proper meal, I will walk out.",,,,,,,
+DEMBE_DESCRIPTION_1,She thought I was joking.,,,,,,,
+DEMBE_DESCRIPTION_1,I walked out of the house and have not returned since.,,,,,,,
+DEMBE_DESCRIPTION_1,I write this letter to you from my brother's house.,,,,,,,
+DEMBE_DESCRIPTION_1,"If she does not cook this meal, I will not return to the house.",,,,,,,
+DEMBE_DESCRIPTION_1,"I just wanted to let you know, in case you heard the story from somewhere else.",,,,,,,
+DEMBE_DESCRIPTION_1,I am a simple man.,,,,,,,
+DEMBE_DESCRIPTION_1,I don't ask for much.,,,,,,,
+DEMBE_DESCRIPTION_1,I work in the farm all day. All I want is a decent meal from my wife.,,,,,,,
+DEMBE_DESCRIPTION_1,"If you have any words of wisdom, I am all ears.",,,,,,,
+DEMBE_DESCRIPTION_1,- Dembe,,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,"Dear sister,",,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,I took the words you sent me to heart.,,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,I have returned to the house.,,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,"I explained my position to my wife, and begged her forgiveness.",,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,"She accepted, and cooked the most delicious meal I have ever eaten in my life.",,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,Everything is alright now.,,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,Thank you very much for your help.,,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_GOOD,- Dembe,,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,"Dear sister,",,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,Maybe you don't understand the gravity of the situation.,,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,I did not understand the words you sent.,,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,"If you cannot help me, I will seek wisdom from someone more capable.",,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,I will not be responding until you send me something I can use.,,,,,,,
+DEMBE_DESCRIPTION_1_RESPONSE_BAD,- Dembe,,,,,,,
+HILDEGARD_NAME,St. Hildegard von Bingen,,,,,,,
+HILDEGARD_TITLE_1,O Viridissima Virga,,,,,,,
 HILDEGARD_WRITING_1,"Hail, O greenest branch,
 sprung forth in the airy breezes
-of the prayers of the saints.",,,,,,
+of the prayers of the saints.",,,,,,,
 HILDEGARD_WRITING_1,"So the time has come
 that your sprays have flourished:
 hail, hail to you,
 because the heat of the sun has exuded from you
-like the aroma of balm.",,,,,,
+like the aroma of balm.",,,,,,,
 HILDEGARD_WRITING_1,"For the beautiful flower sprung from you
 which gave all parched perfumes
-their aroma.",,,,,,
+their aroma.",,,,,,,
 HILDEGARD_WRITING_1,"And they have radiated anew
-in their full freshness.",,,,,,
+in their full freshness.",,,,,,,
 HILDEGARD_WRITING_1,"Whence the skies bestowed dew upon the pasture,
 and all the earth was made joyful
 because her womb
 brought forth corn,
 and because the birds of the firmament
-built their nests in her.",,,,,,
+built their nests in her.",,,,,,,
 HILDEGARD_WRITING_1,"Then there was harvest ready for Man
 and a great rejoicing of banqueters,
 whence, O sweet Virgin,
-no joy is lacking in you.",,,,,,
-HILDEGARD_WRITING_1,Eve rejected all these things.,,,,,,
-HILDEGARD_WRITING_1,Now let there be praise to the Highest.,,,,,,
-ANDREW_NAME,St. Andrew Kim Taegon,,,,,,
-ANDREW_DESCRIPTION_1,"Andrew Kim Taegon was the first Korean priest and patron saint of Korean clergy. Kim's father was martyred for practicing Christianity, which was highly prohibited in a heavily Confucian Korea.",,,,,,
-ANDREW_DESCRIPTION_2,"Kim studied at seminaries at the Portuguese colony of Macau as well as at Lolomboy, Bocaue, Bulacan, Philippines, eventually attaining his ordination as a priest in Shanghai by the French bishop Jean Joseph Jean-Baptiste Ferréol after almost a decade in training.",,,,,,
-ANDREW_DESCRIPTION_3,"Kim returned to Korea to preach and evangelize even as many Christians were persecuted. At the age of 25, he was tortured and beheaded near Seoul on the Han River. Pope John Paul II canonized Kim along with 102 other Korean Martyrs on 6 May 1984.",,,,,,
+no joy is lacking in you.",,,,,,,
+HILDEGARD_WRITING_1,Eve rejected all these things.,,,,,,,
+HILDEGARD_WRITING_1,Now let there be praise to the Highest.,,,,,,,
+ANDREW_NAME,St. Andrew Kim Taegon,,,,,,,
+ANDREW_DESCRIPTION_1,"Andrew Kim Taegon was the first Korean priest and patron saint of Korean clergy. Kim's father was martyred for practicing Christianity, which was highly prohibited in a heavily Confucian Korea.",,,,,,,
+ANDREW_DESCRIPTION_2,"Kim studied at seminaries at the Portuguese colony of Macau as well as at Lolomboy, Bocaue, Bulacan, Philippines, eventually attaining his ordination as a priest in Shanghai by the French bishop Jean Joseph Jean-Baptiste Ferréol after almost a decade in training.",,,,,,,
+ANDREW_DESCRIPTION_3,"Kim returned to Korea to preach and evangelize even as many Christians were persecuted. At the age of 25, he was tortured and beheaded near Seoul on the Han River. Pope John Paul II canonized Kim along with 102 other Korean Martyrs on 6 May 1984.",,,,,,,
 ANDREW_Bio,"Andrew Kim Taegon was the first Korean priest and patron saint of Korean clergy. Kim's father was martyred for practicing Christianity, which was highly prohibited in a heavily Confucian Korea.
 
 Kim studied at seminaries at the Portuguese colony of Macau as well as at Lolomboy, Bocaue, Bulacan, Philippines, eventually attaining his ordination as a priest in Shanghai by the French bishop Jean Joseph Jean-Baptiste Ferréol after almost a decade in training.
 
-Kim returned to Korea to preach and evangelize even as many Christians were persecuted. At the age of 25, he was tortured and beheaded near Seoul on the Han River. Pope John Paul II canonized Kim along with 102 other Korean Martyrs on 6 May 1984.",,,,,,
+Kim returned to Korea to preach and evangelize even as many Christians were persecuted. At the age of 25, he was tortured and beheaded near Seoul on the Han River. Pope John Paul II canonized Kim along with 102 other Korean Martyrs on 6 May 1984.",,,,,,,
 ANN_Bio,"Elizabeth Ann Bayley Seton grew up in the upper class New York society and married a wealthy young man. Tragedy befell her as she lost her father in-law, her husband's business, and finally, her husband to tuberculosis.
 
-Elizabeth's deep concern for the spiritual welfare of her family and friends eventually led her into the Catholic Church, and she, along with two other young women who helped her in her work, began plans for a Sisterhood, establishing the first free Catholic school in America.",,,,,,
+Elizabeth's deep concern for the spiritual welfare of her family and friends eventually led her into the Catholic Church, and she, along with two other young women who helped her in her work, began plans for a Sisterhood, establishing the first free Catholic school in America.",,,,,,,
 BAKHITA_Bio,"Saint Josephine Margaret Bakhita was born around 1869 in the village of Olgossa in the Darfur region of Sudan. Enjoying a happy childhood, she was soon kidnapped by Arab slave traders and forced to walk barefoot over 600 miles to a slave market in El Obeid.
 
-After spending several years in captivity, where she suffered devastating abuse, she was eventually sold to an Italian Vice Consul, eventually making her way to Italy and joining the Canossian Sisters in Venice where she remained for the rest of her life. She was affectionately known as the ""little brown sister"", or honorably as the ""black mother"".",,,,,,
+After spending several years in captivity, where she suffered devastating abuse, she was eventually sold to an Italian Vice Consul, eventually making her way to Italy and joining the Canossian Sisters in Venice where she remained for the rest of her life. She was affectionately known as the ""little brown sister"", or honorably as the ""black mother"".",,,,,,,
 CANUTE_Bio,"The first Danish king to be canonized, Canute ruled for six short years, succeeding his brother Harald III Hen in 1081. He married Adela, the sister of Count Robert of Flanders and went on to build many churches and monasteries.
 
 In 1085, he set his eyes on the throne of England and devised a plan to invade the country. However, the nobles of the court rebelled against him, forcing him to flee to the isle of Funen where he, his brother Benedict, and seventeen companions were slain by rebels.
 
-He was recognized by the Roman Catholic Church as patron saint of Denmark in 1101.",,,,,,
+He was recognized by the Roman Catholic Church as patron saint of Denmark in 1101.",,,,,,,
 ELIZABETH_Bio,"Saint Elizabeth of Hungary was a princess of the Kingdom of Hungary, Landgravine of Thuringia, Germany. Elizabeth was married at the young age of 14 to Ludwig IV of Thuringia, a German nobleman, with whom she had three beautiful children.
 
 Her happiness was short lived however, as tragedy struck her family during a disease outbreak which took the life of her husband. Her spirit unbroken, she continued to help the less fortunate, providing food for the poor and building a hospital for the sick.
 
-Vowing never to remarry despite pressure from relatives, Elizabeth eventually joined the Third Order of St. Francis where she devoted the rest of her life to God and charitable labor. She died at 24 years of age and was canonized in 1235.",,,,,,
+Vowing never to remarry despite pressure from relatives, Elizabeth eventually joined the Third Order of St. Francis where she devoted the rest of her life to God and charitable labor. She died at 24 years of age and was canonized in 1235.",,,,,,,
 FRANCOIS_Bio,"The first Roman Catholic bishop of Quebec and the father of the Canadian Church, Blessed François-Xavier de Montmorency-Laval was one of the most influential men of his day.
 
 As bishop, Laval's dream was not only to expand the Catholic Church in New France, but also to train and teach its future leaders, opening the Grand Séminaire in 1663 with the goal of training missionary priests. He also took interest in practical education for craftsmen and farmers, founding a school of arts and crafts at Saint-Joachim. 
 
-In his later years, Laval continued to collaborate with the colony's high religious authorities, until his last days. The city of Laval, Quebec, north of Montreal, is named after him.",,,,,,
+In his later years, Laval continued to collaborate with the colony's high religious authorities, until his last days. The city of Laval, Quebec, north of Montreal, is named after him.",,,,,,,
 FREDERICK_Bio,"Saint Frederick of Hallum was born to a poor widow, later becoming a Premonstratensian priest, founder and first abbot of Mariengaarde Abbey in Friesland in the Netherlands.
 
 He was also the parish priest of Hallum, his birthplace, and founder of Bethlehem Abbey for Premonstratensian canonesses.
 
-He died and was buried at Mariengaarde but in 1614, to save his relics from the Calvinists, they were removed and taken to Bonne-Espérance Abbey near Estinnes in Belgium, where they were reinterred in 1616 or 1617. They were transferred to Leffe Abbey near Dinant in 1938.",,,,,,
+He died and was buried at Mariengaarde but in 1614, to save his relics from the Calvinists, they were removed and taken to Bonne-Espérance Abbey near Estinnes in Belgium, where they were reinterred in 1616 or 1617. They were transferred to Leffe Abbey near Dinant in 1938.",,,,,,,
 FREI_Bio,"Saint Anthony of Saint Ann Galvăo, commonly known in Brazil as Frei (Friar) Galvão, was a Brazilian friar of the Franciscan Order, and one of the best-known religious figures in colonial Brazil. 
 
 At age 16, he became a novice at St. Bonaventure Friary in Vila de Macacu, Rio de Janeiro where he was known for his piety, zeal and exemplary virtues. Galvão was a man of great and intense prayer, and mystic phenomena attributed to him include telepathy, premonition and levitation. He was also known for his healing powers.
 
-He was canonized by Pope Benedict XVI on May 11, 2007, becoming the first Brazilian-born saint.",,,,,,
+He was canonized by Pope Benedict XVI on May 11, 2007, becoming the first Brazilian-born saint.",,,,,,,
 IRMA_Bio,"Saint Dulce of the Poor was a Brazilian Franciscan Sister who was the founder of the Obras Sociais Irmã Dulce. Born to an upper-middle class family, she was deeply affected after a visit to the poor area of the city with her aunt. She then began to care for the homeless and beggars in her neighborhood.
 
 Immediately after graduation at 18, she joined the Missionary Sisters of the Immaculate Conception of the Mother of God, in Sergipe and shortly after founded the ""São Francisco's Workers Union"", the first Christian worker's movement in Bahia.
 
-She later founded Obras Sociais Irmã Dulce, one of the most well-known philanthropic organizations in Brazil, and was nominated for a Nobel Peace Prize by Queen Silvia of Sweden. She was canonized in 2019, making her the first Brazilian female saint.",,,,,,
+She later founded Obras Sociais Irmã Dulce, one of the most well-known philanthropic organizations in Brazil, and was nominated for a Nobel Peace Prize by Queen Silvia of Sweden. She was canonized in 2019, making her the first Brazilian female saint.",,,,,,,
 JADWIGA_Bio,"Queen Jadwiga, also known as Hedwig, was the first female monarch of Poland, ascending to the throne at age 13. An exceptional ruler, she brought about the unification of Poland and Lithuania through her marriage to Władysław-Jogaila and preserved the peace with the Teutonic Order. 
 
 She opened schools, churches, and hospitals while restoring old ones to their former glory. She attended Mass everyday, and in accordance with her family's tradition, was especially devoted to the Blessed Virgin Mary. 
 
-Jadwiga often prayed before a large black crucifix hanging in the north aisle of Wawel Cathedral. During one of these prayers, the Christ on the cross is said to have spoken to her. Pope John Paul II canonized Jadwiga in Kraków on 8 June 1997.",,,,,,
+Jadwiga often prayed before a large black crucifix hanging in the north aisle of Wawel Cathedral. During one of these prayers, the Christ on the cross is said to have spoken to her. Pope John Paul II canonized Jadwiga in Kraków on 8 June 1997.",,,,,,,
 JOHN_Bio,"John Roberts was born in a small village in north Wales into a family descended from Welsh nobility. Initially baptized as an Anglican, he later converted to Catholicism during his travels in Europe, eventually making his profession as a Benedictan missionary in 1600.
 
 During a tumultuous period in England at the height of the Protestant Reformation, there was great hostility towards Catholic priests, and John Roberts was arrested on several occasions during his time there; saying Mass and providing aid for plague victims.
 
-He was eventually tried and found guilty under the Act forbidding priests to minister in England, and was hanged, drawn, and quartered, at the age of thirty-three. On 25 October 1970, Roberts was canonized by Pope Paul VI.",,,,,,
+He was eventually tried and found guilty under the Act forbidding priests to minister in England, and was hanged, drawn, and quartered, at the age of thirty-three. On 25 October 1970, Roberts was canonized by Pope Paul VI.",,,,,,,
 JOSE_Bio,"Brochero was born in Argentina as the fourth of ten children to Ignacio Brochero and Petrona Davila. At age 16, he commenced his studies to become a priest at the College Seminary of Our Lady of Loreto, where he met future president Miguel Ángel Juárez Celman.
 
 Brochero founded a home known as the Houses of Exercises in 1875, and later established a school for girls in 1880. He was known to travel long distances in Argentina on the back of a mule dressed in a sombrero and a poncho to serve the needs of the Christian faith throughout his huge parish. 
 
-He cared for the sick during the cholera epidemic of 1867 and contracted leprosy during his travels, which eventually led to blindness and deafness towards the end of his life. ",,,,,,
+He cared for the sick during the cholera epidemic of 1867 and contracted leprosy during his travels, which eventually led to blindness and deafness towards the end of his life. ",,,,,,,
 JOSEPH_Bio,"Balikuddembe was enrolled as a catechumen and baptized in 1882, taking the baptismal name of ""Joseph"". After the Catholic missionaries, for reasons of security, moved to the southern end of Lake Victoria, Balikuddembe became leader of the Christians.
 
 Now Danieri Mwanga II succeeded to the throne as King, and began to crack down on Christian missionaries and converts in his country, executing the British Anglican bishop James Hannington and his companions on October 29, 1885, despite Balikuddembe's pleas.
 
-Mwanga, viewing Balikuddembe's disapproval as disrespectful, ordered him executed. He was beheaded and his body was thrown onto a pile of burning firewood. St. Joseph Mukasa Balikuddembe Parish in Kisoga is named after him.",,,,,,
+Mwanga, viewing Balikuddembe's disapproval as disrespectful, ordered him executed. He was beheaded and his body was thrown onto a pile of burning firewood. St. Joseph Mukasa Balikuddembe Parish in Kisoga is named after him.",,,,,,,
 KATERI_Bio,"Kateri was born in the Mohawk village of Ossernenon. She contracted smallpox during an epidemic which scarred her face at a very young age and killed her entire family. She subsequently moved into the care of her uncle who was the chief of a Mohawk clan.
 
 Trouble came when she refused to marry, despite the many attempts by her adoptive parents. She later converted to Catholicism, taking a vow of chastity and pledging to marry only Jesus Christ, a decision that was met with disdain among her adoptive parents and neighbors.
 
-She eventually moved to a Christian native community south of Montreal, where she practiced a very devout lifestyle. She died at the young age of 24. Her name, Kateri, is the Mohawk form of Catherine, which she took from St. Catherine of Siena.",,,,,,
+She eventually moved to a Christian native community south of Montreal, where she practiced a very devout lifestyle. She died at the young age of 24. Her name, Kateri, is the Mohawk form of Catherine, which she took from St. Catherine of Siena.",,,,,,,
 KATHARINE_Bio,"Born in Philadelphia to a prominent and wealthy banker, Katharine Drexel received a solid education from private tutors and traveled throughout the United States and Europe. 
 
 Sometime after receiving spiritual direction from Father James O' Connor, she began her six-month postulancy at the Sisters of Mercy Convent in Pittsburgh in 1889. Shortly after taking her vows, she dedicated her life and fortune to working for the American Indians and African-Americans in the Western United States.
 
-By the time of her death, she had more than 500 Sisters teaching in 63 schools throughout the country and she established 50 missions for Native Americans in 16 different states. She was canonized on October 1, 2000 by Pope John Paul II.",,,,,,
+By the time of her death, she had more than 500 Sisters teaching in 63 schools throughout the country and she established 50 missions for Native Americans in 16 different states. She was canonized on October 1, 2000 by Pope John Paul II.",,,,,,,
 LORENZO_Bio,"Born around the year 1600 in the Philippines to a Chinese father and a Filipino mother, Lorenzo Ruiz fled the country to Japan after being accused of the murder of a Spaniard.
 
 Unfortunately for him, Japan was ruled by the Tokugawa Shogunate, who were persecuting Christians. Lorenzo and his companions were immediately arrested for being Christians and ordered to recant their faith. On refusal to do so, they were imprisoned for two years.
 
-They were later taken to Nagasaki to be tortured and killed, but Lorenzo and his companions were faithful until the very end. He was canonized at the Vatican on October 18, 1987.",,,,,,
+They were later taken to Nagasaki to be tortured and killed, but Lorenzo and his companions were faithful until the very end. He was canonized at the Vatican on October 18, 1987.",,,,,,,
 MAGDALENE_Bio,"Born in 1611 near Nagasaki, Magdalene was the daughter of a Christian couple who were martyred during the reign of the Tokugawa Shogunate. Magdalene later served as an interpreter for the friars Francis of Jesus Terrero and Vincent of Saint Anthony Simoens and, in 1625, became a tertiary of the Order of Augustinian Recollects.
 
-As the friars were tortured and killed under severe persecution, with many Christians apostatizing, Magdalene turned herself to the authorities, declaring herself a Christian. She was tortured for thirteen days, enduring suffocation, being hung upside down over a pit of offal on a gibbet, and finally, drowning. She died at age 23.",,,,,,
+As the friars were tortured and killed under severe persecution, with many Christians apostatizing, Magdalene turned herself to the authorities, declaring herself a Christian. She was tortured for thirteen days, enduring suffocation, being hung upside down over a pit of offal on a gibbet, and finally, drowning. She died at age 23.",,,,,,,
 MARIAM_Bio,"Saint Mariam Thresia, an Indian Syro-Malabar Catholic nun, was the founder of the Congregation of the Holy Family and was best known for her frequent visions and ecstasies, as well as receiving the stigmata.
 
 Throughout much of her life, Thresia received several different spiritual experiences including prophecy, healing, aura of light, frequent ecstasies and levitations. Because of the extreme nature of some diabolical attacks and vexations, Thresia was subjected to several different exorcisms by the Venerable Joseph Vithayathil, under the Bishop's orders.
 
-In 1926, after receiving an injury on her leg which eventually proved to be fatal, St. Mariam Thresia died with her final words being: ""Jesus, Mary and Joseph; I give you my heart and my soul.""",,,,,,
+In 1926, after receiving an injury on her leg which eventually proved to be fatal, St. Mariam Thresia died with her final words being: ""Jesus, Mary and Joseph; I give you my heart and my soul.""",,,,,,,
 MARIE_Bio,"St. Marguerite D'Youville, born in Quebec, studied under the Ursulines, married Francois D'Youville in 1722, and became a widow in 1730. 
 
 She worked to support herself and her three children, devoting much of her time to the Confraternity of the Holy Family in charitable activities and later founding the Sisters of Charity, the Grey Nuns of Canada.
 
-The Grey Nuns established schools, hospitals and orphanages throughout Canada, the U.S., South America, and Africa and are famous for their work among the Eskimos.",,,,,,
+The Grey Nuns established schools, hospitals and orphanages throughout Canada, the U.S., South America, and Africa and are famous for their work among the Eskimos.",,,,,,,
 MONICA_Bio,"Saint Monica, also known as Monica of Hippo, is the mother of St. Augustine. Born in 331 A.D., Monica was married at a young age to the Roman pagan Patricius and had three children including Augustine. She managed to convert her husband and mother-in-law to Christianity after several years.
 
 Two of her kids entered the religious life, but Augustine cared little for Christianity, so Monica sent him off to Carthage for schooling. To her dismay, Augustine returned a Manichaean, but with great patience, Monica prayed for her son for several years, and with the help of St. Ambrose, Augustine finally converted to the faith.
 
-She was buried at Ostia, and her body was removed during the 6th century to a hidden crypt in the church of Santa Aurea in Osta, near the tomb of St. Aurea of Ostia. The city of Santa Monica in California is named after her.",,,,,,
+She was buried at Ostia, and her body was removed during the 6th century to a hidden crypt in the church of Santa Aurea in Osta, near the tomb of St. Aurea of Ostia. The city of Santa Monica in California is named after her.",,,,,,,
 MOSES_Bio,"Moses, an Egyptian government official's slave until his dismissal, was part of a violent gang of robbers until he took shelter with some monks in a colony in the desert of Wadi El Natrun, near Alexandria. 
 
 Moses was so moved by the monks that he gave up his old way of life, became a Christian, was baptized and joined the monastic community at Scetes. He proved to be a prophetic spiritual leader, settling disputes within and outside the community of monks and sometimes carrying a leaking sack of sand on his shoulders to show humility.
 
-After word came of an attack on the monastery by a group of Berbers, Moses ordered the others to leave while staying behind, believing his life had come full circle. He was joined by seven others, and together they were martyred by the bandits around 405 A.D.",,,,,,
+After word came of an attack on the monastery by a group of Berbers, Moses ordered the others to leave while staying behind, believing his life had come full circle. He was joined by seven others, and together they were martyred by the bandits around 405 A.D.",,,,,,,
 PEDRO_Bio,"Saint Pedro Calungsod, a Filipino Roman Catholic, was a skilled sacristan and teacher of catechism. He accompanied Blessed Diego Luis de San Vitores to the Marianas Islands where many received the sacraments, especially that of baptism.
 
 A plot to have him killed began when a criminal named Choco began spreading false rumors that the baptismal water contained poison. Given that some sickly infants who were baptized eventually died, the story stuck and people began to despise the missionaries.
 
-It came to head when the local chief, who now opposed the missionaries because of the rumors, learned of his newborn daughter's baptism. A violent assault followed, and Pedro, along with San Vitores, were killed in the attack. On October 21, 2012, Pope Benedict XVI canonized Calungsod in Saint Peter's Square.",,,,,,
+It came to head when the local chief, who now opposed the missionaries because of the rumors, learned of his newborn daughter's baptism. A violent assault followed, and Pedro, along with San Vitores, were killed in the attack. On October 21, 2012, Pope Benedict XVI canonized Calungsod in Saint Peter's Square.",,,,,,,
 ROQUE_Bio,"Roque Gonzalez de Santa Cruz was the son of noble Spanish parents, ordained at twenty-three, and joining the Society of Jesus after a decade of preaching to the Indians of Paraguay in remote regions.
 
 Over the next two decades, Father Roque Gonzalez set up multiple ""reductions"" - settlements of Christian Indians run by the Jesuit missionaries - grappling with hardships and dangers against fierce tribes and with the opposition of the European colonists.
 
-In 1628, Father Roque Gonzalez met his untimely end when a raiding party, led by a powerful ""medicine man"", attacked the Mission, killing him and setting the chapel on fire. He was canonized in 1988 by Pope John Paul II.",,,,,,
+In 1628, Father Roque Gonzalez met his untimely end when a raiding party, led by a powerful ""medicine man"", attacked the Mission, killing him and setting the chapel on fire. He was canonized in 1988 by Pope John Paul II.",,,,,,,
 SANMARTIN_Bio,"St. Martin de Porres was born in Lima, Peru. Being of mixed race, he experienced a great deal of ridicule as a young boy. The law in Peru at the time prevented Africans and Native Indians from becoming full members of religious orders, so Martin began as a servant boy at the Dominican Convent of the Rosary.
 
 Martin worked hard and made his way up from church officer to lay brother and finally took his vows as a member of the Third Order of Saint Dominic, granted by the prior who disregarded the racial laws that prohibited his entry. He cared for many people unconditionally, from Spanish nobles to African slaves.
 
-Towards the end of his life, Martin fell very ill with chills, fevers and tremors causing him agonizing pain. He would suffer this illness for almost a year until his eventual death in 1639.",,,,,,
+Towards the end of his life, Martin fell very ill with chills, fevers and tremors causing him agonizing pain. He would suffer this illness for almost a year until his eventual death in 1639.",,,,,,,
 VICTOR_Bio,"Victor Maurus, a Mauretanian native, was a soldier in the Praetorian guard. A Christian from a very young age, Maurus was sent to the Hippodrome in the presence of the Roman emperor Maximian Herculean to recant his faith.
 
 Refusing to betray his beliefs, Maurus was whipped, imprisoned and, after an almost miraculous escape, imprisoned again. He was then dragged into a nearby elm wood and decapitated around the year 303.
 
-His relics are now part of the Basilica of Sant'Ambrogio, built by Ambrose, fourth-century bishop of Milan.",,,,,,
+His relics are now part of the Basilica of Sant'Ambrogio, built by Ambrose, fourth-century bishop of Milan.",,,,,,,
+BAKHITA_001,"I was born in the region of Darfur, in what is now Sudan.",,,,,,,
+BAKHITA_002,My childhood was peaceful and filled with the love of my family.,,,,,,,
+BAKHITA_003,I remember the sun on the fields and the laughter of my sister.,,,,,,,
+BAKHITA_004,Everything changed when strangers came to our village.,,,,,,,
+BAKHITA_005,"One day, armed men took me and my sister away from our home.",,,,,,,
+BAKHITA_006,"When you hear stories of suffering, what do you feel?",,,,,,,
+BAKHITA_007,Fearful,,,,,,,
+BAKHITA_008,"Fear is natural and I knew it well, but it can become a prayer.",,,,,,,
+BAKHITA_009,Sad,,,,,,,
+BAKHITA_010,Sadness shows the heart is alive and capable of compassion.,,,,,,,
+BAKHITA_011,Angry,,,,,,,
+BAKHITA_012,Anger can be strong but must not rule the heart; I learned this slowly.,,,,,,,
+BAKHITA_013,Unsure,,,,,,,
+BAKHITA_014,Not knowing how to feel is honest; it is the beginning of understanding.,,,,,,,
+BAKHITA_015,I was taken far from my village and sold as a slave.,,,,,,,
+BAKHITA_016,Many years passed with hard work and suffering.,,,,,,,
+BAKHITA_017,At times I did not know if I would survive each day.,,,,,,,
+BAKHITA_018,Yet I kept a small hope in my heart that God was near.,,,,,,,
+BAKHITA_019,"Finally, I arrived in Italy, where I met the Sisters of the Canossian Institute.",,,,,,,
+BAKHITA_020,"For the first time, someone looked at me with kindness and dignity.",,,,,,,
+BAKHITA_021,Tap each word to discover what I felt.,,,,,,,
+BAKHITA_022,Seen: I was no longer invisible.,,,,,,,
+BAKHITA_023,Safe: No one raised a hand against me.,,,,,,,
+BAKHITA_024,Loved: A feeling I had not known before.,,,,,,,
+BAKHITA_025,The sisters taught me about Christ and His love for all people.,,,,,,,
+BAKHITA_026,By His wounds you have been healed. 1 Peter 2:24,,,,,,,
+BAKHITA_027,I asked to be baptized and became a child of God.,,,,,,,
+BAKHITA_028,"Through baptism, I felt a peace I had never known.",,,,,,,
+BAKHITA_029,"My former master wanted me returned, and I faced the court to seek freedom.",,,,,,,
+BAKHITA_030,What does freedom mean to you?,,,,,,,
+BAKHITA_031,To be safe,,,,,,,
+BAKHITA_032,Freedom means to have safety and protection in life.,,,,,,,
+BAKHITA_033,To belong,,,,,,,
+BAKHITA_034,Freedom can also mean a place where you are accepted and loved.,,,,,,,
+BAKHITA_035,To choose,,,,,,,
+BAKHITA_036,The greatest part of freedom is being able to make good choices.,,,,,,,
+BAKHITA_037,I don’t know yet,,,,,,,
+BAKHITA_038,It is okay not to know; freedom is something we grow to understand.,,,,,,,
+BAKHITA_039,"When I stood in court, I spoke a word I had never said aloud before.",,,,,,,
+BAKHITA_040,No.,,,,,,,
+BAKHITA_041,That simple word marked the beginning of my life in God’s grace.,,,,,,,
+BAKHITA_042,"After my baptism, I chose to live as a Canossian Sister.",,,,,,,
+BAKHITA_043,"I served the poor, welcomed visitors, and prayed daily.",,,,,,,
+BAKHITA_044,"Many years later, I reflected on the people who had hurt me.",,,,,,,
+BAKHITA_045,"I found the courage to forgive them, knowing God was with me.",,,,,,,
+BAKHITA_046,"Through forgiveness, my heart knew peace.",,,,,,,
+BAKHITA_047,Take a deep breath in.,,,,,,,
+BAKHITA_048,Now slowly breathe out.,,,,,,,
+BAKHITA_049,My life as a sister was simple and filled with devotion.,,,,,,,
+BAKHITA_050,"I cared for the sick, taught children, and prayed for souls in need.",,,,,,,
+BAKHITA_051,"As I grew older, my body became weak.",,,,,,,
+BAKHITA_052,But my soul was full of joy and trust in God.,,,,,,,
+BAKHITA_053,"In my final days, I called upon Our Lady.",,,,,,,
+BAKHITA_054,"My last words were, “Our Lady… Our Lady!”",,,,,,,
+BAKHITA_055,Birth in Darfur,,,,,,,
+BAKHITA_056,Childhood in family home,,,,,,,
+BAKHITA_057,Kidnapped by armed men,,,,,,,
+BAKHITA_058,Enslavement in Sudan,,,,,,,
+BAKHITA_059,Arrival in Italy,,,,,,,
+BAKHITA_060,Meeting Canossian Sisters,,,,,,,
+BAKHITA_061,Baptism and Confirmation,,,,,,,
+BAKHITA_062,Legal freedom,,,,,,,
+BAKHITA_063,Entering religious life,,,,,,,
+BAKHITA_064,Lifelong service as a Canossian Sister,,,,,,,
+BAKHITA_065,Death in 1947,,,,,,,
+BAKHITA_066,Canonization by Pope John Paul II,,,,,,,
+BAKHITA_067,How did you overcome fear?,,,,,,,
+BAKHITA_068,"Fear is natural, but through prayer and trust in God, it can be transformed into courage.",,,,,,,
+BAKHITA_069,How do I forgive someone who hurt me?,,,,,,,
+BAKHITA_070,"Forgiveness is a gift. It does not forget, but it frees your heart to live in peace.",,,,,,,
+BAKHITA_071,Why does God allow suffering?,,,,,,,
+BAKHITA_072,"Suffering is part of the human condition, but God is present in our weakness and helps us grow in love.",,,,,,,
+BAKHITA_073,"Today, offer a small act of kindness to someone who cannot repay you.",,,,,,,

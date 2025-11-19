@@ -34,6 +34,7 @@ public class GameDataManager : MonoBehaviour
     public Dictionary<SaintID, List<SaintFragmentData>> SaintFragmentData = new Dictionary<SaintID, List<SaintFragmentData>>();
     public Dictionary<string, SaintWritingData> SaintWritingData = new Dictionary<string, SaintWritingData>();
     public Dictionary<int, LetterData> LetterData = new Dictionary<int, LetterData>();
+    public Dictionary<string, SaintsEvent> SaintsEvent = new Dictionary<string, SaintsEvent>();
 
 
     public int MidnightEventChosenIndex;
@@ -108,6 +109,17 @@ public class GameDataManager : MonoBehaviour
             {
                 LocalizationData.Add(loc.Key, new List<LocalizationData>() { loc });
             }
+        }
+
+        yield return null;
+
+        //Saints events
+        csvFile = Resources.Load<TextAsset>("GameData/SaintsEvent");
+        var sainteventData = CsvSerializer.Deserialize<SaintsEvent>(csvFile.text);
+
+        foreach (var data in sainteventData)
+        {
+            SaintsEvent.Add(data.Id, data);
         }
 
         yield return null;

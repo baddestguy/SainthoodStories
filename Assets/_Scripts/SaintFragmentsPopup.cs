@@ -16,8 +16,10 @@ public class SaintFragmentsPopup : MonoBehaviour
     //Story Sequence
     public GameObject StorySequenceObj;
     public TextMeshProUGUI StoryEventText;
+    public Image StoryEventBackground;
     private int CurrentSaintIndex = 0;
     private int CurrentSequenceNumber = 0;
+    private IEnumerable<SaintsEvent> EventList;
     
     public void Open()
     {
@@ -48,22 +50,22 @@ public class SaintFragmentsPopup : MonoBehaviour
     public void SelectSaint()
     {
         StorySequenceObj.SetActive(true);
+        
+        var currentSaintId = SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex].Id;
+        EventList = GameDataManager.Instance.SaintsEvent.Values.Where(e => e.Id.Contains(currentSaintId.ToString()));
         Proceed();
     }
 
     public void Proceed()
     {
-        var currentSaintId = SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex].Id;
-        var currentSaintFragment = GameDataManager.Instance.SaintFragmentData[currentSaintId];
-
-        if (CurrentSequenceNumber >= currentSaintFragment.Count)
+        if (CurrentSequenceNumber >= EventList.Count())
         {
             StorySequenceObj.SetActive(false);
             CurrentSequenceNumber = 0;
             return;
         }
 
-        var text = LocalizationManager.Instance.GetText(currentSaintFragment[CurrentSequenceNumber].DescriptionKey);
+        var text = LocalizationManager.Instance.GetText(EventList.ElementAt(CurrentSequenceNumber).DescriptionKey);
         StoryEventText.text = text;
         StoryEventText.color = new Color(StoryEventText.color.r, StoryEventText.color.g, StoryEventText.color.b, 0f);
         StoryEventText.DOFade(1f, 0.5f).SetEase(Ease.Linear);
