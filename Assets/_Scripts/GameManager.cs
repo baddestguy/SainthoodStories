@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using UniPay;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 
 public enum SceneID
@@ -174,7 +176,14 @@ public class GameManager : MonoBehaviour
             Player.GameStart(CurrentMission);
             MissionBegin?.Invoke(CurrentMission);
             UI.Instance.InitTimeEnergy(GameClock, MissionManager.CurrentMission.StartingEnergy);
-            PlayAmbience(GameClock.Time, GameClock.Day);
+            if (DateTime.Now.Hour > 19 || DateTime.Now.Hour < 6)
+            {
+                SoundManager.Instance.PlayAmbience("SummerNight_Ambience");
+            }
+            else if (DateTime.Now.Hour >= 6)
+            {
+                SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
+            }
             TreasuryManager.Instance.Load(SaveData);
 
             InventoryManager.Instance.LoadInventory(SaveData);
@@ -351,14 +360,14 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (time < 6)
-        {
-            SoundManager.Instance.StartPlaylist(false);
-        }
-        else
-        {
-            SoundManager.Instance.StartPlaylist();
-        }
+        //if (time < 6)
+        //{
+        //    SoundManager.Instance.StartPlaylist(false);
+        //}
+        //else
+        //{
+        //    SoundManager.Instance.StartPlaylist();
+        //}
     }
 
     public void PlayAmbience(double time, int day)

@@ -29,6 +29,7 @@ public class SoundManager : MonoBehaviour
     public Dictionary<string, AudioMixerGroup> audioMixerGroup = new Dictionary<string, AudioMixerGroup>();
 
     Coroutine WeatherCoroutine;
+    Coroutine AmbienceCoroutine;
 
     void Awake()
     {
@@ -136,46 +137,10 @@ public class SoundManager : MonoBehaviour
         Destroy(oldTrack, 5);
         FadeMusic(1f);
         StartCoroutine(FadeAudioAsync(0f, oldTrack));
-
     }
 
-    public void PlayAmbience(string overrideSeasons = "")
+    public void PlayAmbience(string ambience = "")
     {
-        string ambience = "";
-
-        if (string.IsNullOrEmpty(overrideSeasons))
-        {
-            switch (MissionManager.Instance.CurrentMission.Season)
-            {
-                case Season.SUMMER:
-                    if (DateTime.Now.Hour >= 19 || DateTime.Now.Hour < 6)
-                    {
-                        ambience = "SummerNight_Ambience";
-                    }
-                    else if (DateTime.Now.Hour >= 6)
-                    {
-                        ambience = "SummerDay_Ambience";
-                    }
-                    break;
-
-                case Season.FALL:
-                    ambience = "Fall_Ambience";
-                    break;
-
-                case Season.WINTER:
-                    ambience = "Winter_Ambience";
-                    break;
-
-                case Season.SPRING:
-                    ambience = "Spring_Ambience";
-                    break;
-            }
-        }
-        else
-        {
-            ambience = overrideSeasons;
-        }
-
         if (string.IsNullOrEmpty(ambience) || AmbientTrackName == ambience)
             return;
 
@@ -251,9 +216,13 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void FadeAmbience(float volume)
+    public void FadeAmbience(float volume, bool destroyCurrentSource = false)
     {
-        StartCoroutine(FadeAudioAsync(volume, AmbientAudioSource));
+        if (AmbienceCoroutine != null) StopCoroutine(AmbienceCoroutine);
+        if (destroyCurrentSource)
+            AmbientTrackName = "";
+
+        AmbienceCoroutine = StartCoroutine(FadeAudioAsync(volume, AmbientAudioSource));
     }
 
     public void FadeMusic(float volume, AudioSource newSource = null)
@@ -271,6 +240,7 @@ public class SoundManager : MonoBehaviour
                 src.volume = Mathf.Lerp(src.volume, volume, Time.deltaTime);
                 yield return null;
             }
+            if (src != null) src.volume = volume;
         }
     }
 
@@ -295,7 +265,7 @@ public class SoundManager : MonoBehaviour
             VoiceOverSource.outputAudioMixerGroup = audioMixerGroup["VO"];
         }
 
-        VoiceOverSource.clip = Resources.Load("Audio/Prayers/" + name, typeof(AudioClip)) as AudioClip;
+        VoiceOverSource.clip = Resources.Load("Audio/Narration/" + name, typeof(AudioClip)) as AudioClip;
         VoiceOverSource.Play();
         VoiceOverSource.loop = false;
 
@@ -315,9 +285,9 @@ public class SoundManager : MonoBehaviour
         Destroy(OneShotSource, timeToDie);
     }
 
-    public void StopOneShotSfx(string name)
+    public void StopOneShotSfx(string name = "")
     {
-        if (OneShotSource != null && OneShotSource.clip.name == name)
+        if (OneShotSource != null && (string.IsNullOrEmpty(name) || OneShotSource.clip.name == name))
         {
             Destroy(OneShotSource);
         }

@@ -353,6 +353,8 @@ public class SaintsEvent
     public string Font {  get; set; }
     public string FontColor {  get; set; }
     public string SoundEffect {  get; set; }
+    public string Music {  get; set; }
+    public string Ambience {  get; set; }
 }
 
 [System.Serializable]

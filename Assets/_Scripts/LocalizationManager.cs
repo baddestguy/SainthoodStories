@@ -38,6 +38,12 @@ public class LocalizationManager : MonoBehaviour
         return key;
     }
 
+    public string GetVoice(string key)
+    {
+        if (!GameDataManager.Instance.LocalizationData.ContainsKey(key)) return "";
+        return GameDataManager.Instance.LocalizationData[key][0].EnglishVoice;
+    }
+
     public int GetTotalSequences(string key)
     {
         return GameDataManager.Instance.LocalizationData[key].Count;

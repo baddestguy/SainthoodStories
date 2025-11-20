@@ -155,7 +155,7 @@ public class TooltipMouseOver : MonoBehaviour
     {
         if (InfoPanel == null) return;
 
-        InfoPanel.SetActive(true);
+        InfoPanel.SetActive(false);
         if (stats == null) return;
 
         if(stats.Ticks / 4 == 1)
