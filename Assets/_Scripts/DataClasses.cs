@@ -355,6 +355,7 @@ public class SaintsEvent
     public string SoundEffect {  get; set; }
     public string Music {  get; set; }
     public string Ambience {  get; set; }
+    public string InteractionSfx {  get; set; }    
 }
 
 [System.Serializable]

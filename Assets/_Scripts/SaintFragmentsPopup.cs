@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class SaintFragmentsPopup : MonoBehaviour
@@ -27,6 +28,8 @@ public class SaintFragmentsPopup : MonoBehaviour
     public AudioSource CurrentAudioSource;
     private float prevMusicVol;
     private float prevAmbiantVol;
+
+    private string[] InteractionSfx;
 
     public void Open()
     {
@@ -68,6 +71,38 @@ public class SaintFragmentsPopup : MonoBehaviour
         GameSettings.Instance.SetVolume("SFX", 0.5f);
 
         Proceed();
+    }
+
+    public void Interact()
+    {
+        var currentEvent = EventList.ElementAt(CurrentSequenceNumber-1); //getting minus 1 since it would have already increased at the end of the Proceed()
+        if (InteractionSfx.Length == 0 && string.IsNullOrEmpty(currentEvent.InteractionSfx)) return;
+
+        if(!string.IsNullOrEmpty(currentEvent.InteractionSfx))
+            InteractionSfx = currentEvent.InteractionSfx.Split(',');
+
+        Vector2 screenPos = Input.mousePosition;
+
+        // Play sound
+        var sfx = InteractionSfx[Random.Range(0, InteractionSfx.Length)];
+        SoundManager.Instance.PlayOneShotSfx(sfx);
+
+        // Spawn ripple
+        //RectTransform ripple = Instantiate(ripplePrefab, rippleParent);
+        //ripple.position = screenPos;
+        //ripple.localScale = Vector3.zero;
+
+        //Image img = ripple.GetComponent<Image>();
+        //Color c = img.color;
+        //c.a = rippleStartAlpha;
+        //img.color = c;
+
+        //// Tween scale
+        //ripple.DOScale(rippleMaxScale, rippleDuration).SetEase(Ease.OutCubic);
+
+        //// Tween fade
+        //img.DOFade(0f, rippleDuration).SetEase(Ease.OutCubic)
+        //    .OnComplete(() => Destroy(ripple.gameObject));
     }
 
     public void Proceed()
@@ -133,6 +168,7 @@ public class SaintFragmentsPopup : MonoBehaviour
         SoundManager.Instance.StopOneShotSfx();
         SoundManager.Instance.FadeMusic(0, SoundManager.Instance.MusicAudioSourceChannel1);
         SoundManager.Instance.FadeAmbience(0, true);
+        InteractionSfx = new string[0];
 
         var currentEvent = EventList.ElementAt(CurrentSequenceNumber);
         CurrentSequenceNumber++;
