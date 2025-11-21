@@ -282,7 +282,10 @@ public class SoundManager : MonoBehaviour
         OneShotSource.loop = false;
         OneShotSource.volume = volume;
 
-        Destroy(OneShotSource, timeToDie);
+        if (modifyPitch)
+            OneShotSource.pitch = UnityEngine.Random.Range(0.5f, 1.5f);
+
+        Destroy(OneShotSource, timeToDie == 1f ? OneShotSource.clip.length : timeToDie);
     }
 
     public void StopOneShotSfx(string name = "")

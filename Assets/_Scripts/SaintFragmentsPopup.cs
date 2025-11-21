@@ -80,7 +80,7 @@ public class SaintFragmentsPopup : MonoBehaviour
     public void Interact()
     {
         var currentEvent = EventList.ElementAt(CurrentSequenceNumber-1); //getting minus 1 since it would have already increased at the end of the Proceed()
-        if (InteractionSfx.Length == 0 && string.IsNullOrEmpty(currentEvent.InteractionSfx)) return;
+        if (SoundManager.Instance.OneShotSource != null || (InteractionSfx.Length == 0 && string.IsNullOrEmpty(currentEvent.InteractionSfx))) return;
 
         if(!string.IsNullOrEmpty(currentEvent.InteractionSfx))
             InteractionSfx = currentEvent.InteractionSfx.Split(',');
@@ -89,7 +89,7 @@ public class SaintFragmentsPopup : MonoBehaviour
 
         // Play sound
         var sfx = InteractionSfx[Random.Range(0, InteractionSfx.Length)];
-        SoundManager.Instance.PlayOneShotSfx(sfx);
+        SoundManager.Instance.PlayOneShotSfx(sfx, modifyPitch:true);
 
         // Spawn ripple
         RectTransform ripple = Instantiate(RipplePrefab, StorySequenceObj.transform);
@@ -102,6 +102,7 @@ public class SaintFragmentsPopup : MonoBehaviour
         img.color = c;
 
         // Tween scale
+        RippleDuration = SoundManager.Instance.OneShotSource.clip.length;
         ripple.DOScale(RippleMaxScale, RippleDuration).SetEase(Ease.OutCubic);
 
         // Tween fade

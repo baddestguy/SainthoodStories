@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using CsvHelper.Configuration.Attributes;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class DataClasses : MonoBehaviour
@@ -337,10 +336,7 @@ public enum Theme
 public enum StorySequenceType
 {
     STORY,
-    CHOICE_PROMPT,
-    CHOICE,
-    WORD_PROMPT,
-    WORD_RESULT
+    CHOICE
 }
 
 [System.Serializable]

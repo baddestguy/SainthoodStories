@@ -1,7 +1,7 @@
 Id,SequenceType,DescriptionKey,BackgroundColor,Font,FontColor,SoundEffect,Music,Ambience,InteractionSfx
 BAKHITA_001,STORY,BAKHITA_001,#000000,,"<color=""white"">",SaintUnlock_Ambience,,,
 BAKHITA_002,STORY,BAKHITA_002,#000000,,"<color=""white"">",,,,
-BAKHITA_003,STORY,BAKHITA_003,#FFFFFF,,<color=#74664B>,STOP,,SummerDay_Ambience,"GrassTouch_SFX,Crit_Good,Hey_SFX,HouseJump_SFX"
+BAKHITA_003,STORY,BAKHITA_003,#FFFFFF,,<color=#74664B>,STOP,,SummerDay_Ambience,"GrassTouch_SFX"
 BAKHITA_004,STORY,BAKHITA_004,#FFFFFF,,<color=#74664B>,,,,
 BAKHITA_005,STORY,BAKHITA_005,#FFFFFF,,<color=#74664B>,,,,
 BAKHITA_006,STORY,BAKHITA_006,#FFFFFF,,<color=#74664B>,,,,
