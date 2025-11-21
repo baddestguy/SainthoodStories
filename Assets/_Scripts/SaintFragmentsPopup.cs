@@ -4,7 +4,6 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class SaintFragmentsPopup : MonoBehaviour
@@ -30,6 +29,11 @@ public class SaintFragmentsPopup : MonoBehaviour
     private float prevAmbiantVol;
 
     private string[] InteractionSfx;
+    public RectTransform RipplePrefab;
+    [Header("Ripple Settings")]
+    public float RippleDuration = 0.3f;
+    public float RippleMaxScale = 1.5f;
+    public float RippleStartAlpha = 0.35f;
 
     public void Open()
     {
@@ -81,28 +85,28 @@ public class SaintFragmentsPopup : MonoBehaviour
         if(!string.IsNullOrEmpty(currentEvent.InteractionSfx))
             InteractionSfx = currentEvent.InteractionSfx.Split(',');
 
-        Vector2 screenPos = Input.mousePosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(UI.Instance.GetComponent<RectTransform>(), Input.mousePosition, UI.Instance.GetComponent<Canvas>().worldCamera, out Vector2 screenPos);
 
         // Play sound
         var sfx = InteractionSfx[Random.Range(0, InteractionSfx.Length)];
         SoundManager.Instance.PlayOneShotSfx(sfx);
 
         // Spawn ripple
-        //RectTransform ripple = Instantiate(ripplePrefab, rippleParent);
-        //ripple.position = screenPos;
-        //ripple.localScale = Vector3.zero;
+        RectTransform ripple = Instantiate(RipplePrefab, StorySequenceObj.transform);
+        ripple.localPosition = screenPos;
+        ripple.localScale = Vector3.zero;
 
-        //Image img = ripple.GetComponent<Image>();
-        //Color c = img.color;
-        //c.a = rippleStartAlpha;
-        //img.color = c;
+        Image img = ripple.GetComponent<Image>();
+        Extensions.TryExtractColorFromRichText(currentEvent.FontColor, out Color c);
+        c.a = RippleStartAlpha;
+        img.color = c;
 
-        //// Tween scale
-        //ripple.DOScale(rippleMaxScale, rippleDuration).SetEase(Ease.OutCubic);
+        // Tween scale
+        ripple.DOScale(RippleMaxScale, RippleDuration).SetEase(Ease.OutCubic);
 
-        //// Tween fade
-        //img.DOFade(0f, rippleDuration).SetEase(Ease.OutCubic)
-        //    .OnComplete(() => Destroy(ripple.gameObject));
+        // Tween fade
+        img.DOFade(0f, RippleDuration).SetEase(Ease.OutCubic)
+            .OnComplete(() => Destroy(ripple.gameObject));
     }
 
     public void Proceed()
