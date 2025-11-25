@@ -133,6 +133,7 @@ public class SoundManager : MonoBehaviour
         MusicAudioSourceChannel1.outputAudioMixerGroup = audioMixerGroup["Music"];
         MusicAudioSourceChannel1.clip = Resources.Load("Audio/Music/" + songName, typeof(AudioClip)) as AudioClip;
         MusicAudioSourceChannel1.Play();
+        MusicAudioSourceChannel1.loop = true;
 
         Destroy(oldTrack, 5);
         FadeMusic(1f);
@@ -274,6 +275,9 @@ public class SoundManager : MonoBehaviour
 
     public void PlayOneShotSfx(string name, float volume = 1f, float timeToDie = 1f, bool modifyPitch = false)
     {
+        if (string.IsNullOrEmpty(name))
+            return;
+
         OneShotSource = gameObject.AddComponent<AudioSource>();
         OneShotSource.outputAudioMixerGroup = audioMixerGroup["SFX"];
 

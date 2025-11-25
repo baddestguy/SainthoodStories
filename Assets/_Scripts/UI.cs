@@ -282,7 +282,6 @@ public class UI : MonoBehaviour
         {
             EnergyDisplay.color = Color.red;
             EnergyDisplayGlow.color = Color.red;
-            SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
         }
         else
         {
@@ -718,7 +717,6 @@ public class UI : MonoBehaviour
 
             {
                 CPDisplayGlow.color = Color.red;
-                SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
             }
             else
             {
@@ -772,7 +770,6 @@ public class UI : MonoBehaviour
             if (fp < 1)
             {
                 FPDisplayGlow.color = Color.red;
-                SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
             }
             else
             {
@@ -817,7 +814,6 @@ public class UI : MonoBehaviour
 
     public void ErrorFlash(string displayGlow)
     {
-        SoundManager.Instance.PlayOneShotSfx("LowEnergy_SFX");
         switch (displayGlow) {
             case "Energy":
                 ErrorFlash(EnergyDisplayGlow);

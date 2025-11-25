@@ -23,7 +23,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/_Scenes/Levels/WinterLevel Large.unity
     guid: be2c16ef08c46594dad41da36cbfa93e
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Scenes/PrayerScene.unity
     guid: f26c8daaf701207419e2f6ca5bd036db
   m_configObjects:

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +6,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class SaintFragmentsPopup : MonoBehaviour
 {
@@ -12,7 +14,6 @@ public class SaintFragmentsPopup : MonoBehaviour
     public Image CharPotrait;
     public TextMeshProUGUI Fragment;
     public TextMeshProUGUI SaintName;
-    public ScrollRect ScrollRect;
 
     //Story Sequence
     public GameObject StorySequenceObj;
@@ -34,6 +35,11 @@ public class SaintFragmentsPopup : MonoBehaviour
     public float RippleDuration = 0.3f;
     public float RippleMaxScale = 1.5f;
     public float RippleStartAlpha = 0.35f;
+
+    public GameObject ProceedBtn;
+    public GameObject CloseStoryBtn;
+    public ScrollRect ChoiceScroller;
+    public GameObject ChoicePrefab;
 
     public void Open()
     {
@@ -70,9 +76,9 @@ public class SaintFragmentsPopup : MonoBehaviour
 
         prevMusicVol = GameSettings.Instance.musicVolume;
         prevAmbiantVol = GameSettings.Instance.ambianceVolume;
-        GameSettings.Instance.SetVolume("Music", 0.5f);
-        GameSettings.Instance.SetVolume("Ambiance", 0.5f);
-        GameSettings.Instance.SetVolume("SFX", 0.5f);
+        //GameSettings.Instance.SetVolume("Music", 0.5f);
+        //GameSettings.Instance.SetVolume("Ambiance", 0.5f);
+        //GameSettings.Instance.SetVolume("SFX", 0.5f);
 
         Proceed();
     }
@@ -80,10 +86,7 @@ public class SaintFragmentsPopup : MonoBehaviour
     public void Interact()
     {
         var currentEvent = EventList.ElementAt(CurrentSequenceNumber-1); //getting minus 1 since it would have already increased at the end of the Proceed()
-        if (SoundManager.Instance.OneShotSource != null || (InteractionSfx.Length == 0 && string.IsNullOrEmpty(currentEvent.InteractionSfx))) return;
-
-        if(!string.IsNullOrEmpty(currentEvent.InteractionSfx))
-            InteractionSfx = currentEvent.InteractionSfx.Split(',');
+        if (SoundManager.Instance.OneShotSource != null || (InteractionSfx.Length == 0)) return;
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(UI.Instance.GetComponent<RectTransform>(), Input.mousePosition, UI.Instance.GetComponent<Canvas>().worldCamera, out Vector2 screenPos);
 
@@ -101,11 +104,9 @@ public class SaintFragmentsPopup : MonoBehaviour
         c.a = RippleStartAlpha;
         img.color = c;
 
-        // Tween scale
         RippleDuration = SoundManager.Instance.OneShotSource.clip.length;
-        ripple.DOScale(RippleMaxScale, RippleDuration).SetEase(Ease.OutCubic);
 
-        // Tween fade
+        ripple.DOScale(RippleMaxScale, RippleDuration).SetEase(Ease.OutCubic);
         img.DOFade(0f, RippleDuration).SetEase(Ease.OutCubic)
             .OnComplete(() => Destroy(ripple.gameObject));
     }
@@ -114,13 +115,13 @@ public class SaintFragmentsPopup : MonoBehaviour
     {
         if (ShowingIntro && !CanSkipIntro) return;
 
+        ChoiceScroller.gameObject.SetActive(false);
+        StoryEventText.alignment = TextAlignmentOptions.Midline;
         StopCoroutine("SaintIntro");
+
         if (CurrentSequenceNumber >= EventList.Count())
         {
-            StorySequenceObj.SetActive(false);
-            CurrentSequenceNumber = 0;
-            GameSettings.Instance.SetVolume("Music", prevMusicVol);
-            GameSettings.Instance.SetVolume("Ambiance", prevAmbiantVol);
+            CloseStory();
             return;
         }
 
@@ -135,7 +136,18 @@ public class SaintFragmentsPopup : MonoBehaviour
         var text = LocalizationManager.Instance.GetText(currentEvent.DescriptionKey);
         StoryEventText.text = $"{currentEvent.FontColor}{text}";
         StoryEventText.color = new Color(StoryEventText.color.r, StoryEventText.color.g, StoryEventText.color.b, 0f);
+
+        StoryEventText.DOKill();
         StoryEventText.DOFade(1f, 1f).SetEase(Ease.Linear);
+
+        Extensions.TryExtractColorFromRichText(currentEvent.FontColor, out Color c);
+        ProceedBtn.GetComponent<Image>().color = c;
+        CloseStoryBtn.GetComponent<Image>().color = c;
+        
+        if(currentEvent.SequenceType == StorySequenceType.CHOICE)
+        {
+            StartCoroutine(ChoiceSequence(currentEvent));
+        }
 
         var voice = LocalizationManager.Instance.GetVoice(currentEvent.DescriptionKey);
         if (CurrentAudioSource != null) CurrentAudioSource.Stop();
@@ -162,14 +174,17 @@ public class SaintFragmentsPopup : MonoBehaviour
         else
             SoundManager.Instance.PlayAmbience(currentEvent.Ambience);
 
+        if (!string.IsNullOrEmpty(currentEvent.InteractionSfx))
+            InteractionSfx = currentEvent.InteractionSfx.Split(',');
 
-        SoundManager.Instance.PlayOneShotSfx("Button_SFX");
+        Interact();
         CurrentSequenceNumber++;
     }
 
     IEnumerator SaintIntro()
     {
         ShowingIntro = true;
+        CloseStoryBtn.SetActive(false);
         SoundManager.Instance.StopOneShotSfx();
         SoundManager.Instance.FadeMusic(0, SoundManager.Instance.MusicAudioSourceChannel1);
         SoundManager.Instance.FadeAmbience(0, true);
@@ -181,6 +196,10 @@ public class SaintFragmentsPopup : MonoBehaviour
         var text = LocalizationManager.Instance.GetText(currentEvent.DescriptionKey);
         StoryEventText.text = $"{currentEvent.FontColor}{text}";
         StoryEventText.color = new Color(StoryEventText.color.r, StoryEventText.color.g, StoryEventText.color.b, 0f);
+   
+        Extensions.TryExtractColorFromRichText(currentEvent.FontColor, out Color c);
+        ProceedBtn.GetComponent<Image>().color = c;
+        CloseStoryBtn.GetComponent<Image>().color = c;
 
         Color newColor;
         if (ColorUtility.TryParseHtmlString(currentEvent.BackgroundColor, out newColor))
@@ -198,7 +217,91 @@ public class SaintFragmentsPopup : MonoBehaviour
         StoryEventText.DOFade(1f, 7f).SetEase(Ease.OutSine);
         yield return new WaitForSeconds(5f);
 
+        CloseStoryBtn.SetActive(true);
         ShowingIntro = false;
+    }
+
+    IEnumerator ChoiceSequence(SaintsEvent currentEvent)
+    {
+        StoryEventText.alignment = TextAlignmentOptions.Top;
+
+        foreach (var child in ChoiceScroller.transform.GetComponentsInChildren<SaintFragmentChoiceItem>().ToList())
+        {
+            Destroy(child.gameObject);
+        }
+
+        yield return new WaitForSeconds(0.1f);
+
+        ChoiceScroller.gameObject.SetActive(true);
+        if (!string.IsNullOrEmpty(currentEvent.Choice1))
+        {
+            var go = Instantiate(ChoicePrefab);
+            go.transform.SetParent(ChoiceScroller.content, false);
+            go.GetComponent<SaintFragmentChoiceItem>().Init(currentEvent, currentEvent.Choice1, currentEvent.Choice1Response);
+        }
+
+        yield return new WaitForSeconds(0.1f);
+        if (!string.IsNullOrEmpty(currentEvent.Choice2))
+        {
+            var go = Instantiate(ChoicePrefab);
+            go.transform.SetParent(ChoiceScroller.content, false);
+            go.GetComponent<SaintFragmentChoiceItem>().Init(currentEvent, currentEvent.Choice2, currentEvent.Choice2Response);
+        }
+
+        yield return new WaitForSeconds(0.1f);
+        if (!string.IsNullOrEmpty(currentEvent.Choice3))
+        {
+            var go = Instantiate(ChoicePrefab);
+            go.transform.SetParent(ChoiceScroller.content, false);
+            go.GetComponent<SaintFragmentChoiceItem>().Init(currentEvent, currentEvent.Choice3, currentEvent.Choice3Response);
+        }
+    }
+
+    public void SelectFragmentChoice(SaintsEvent currentEvent)
+    {
+        var text = LocalizationManager.Instance.GetText(currentEvent.DescriptionKey);
+        StoryEventText.text = $"{currentEvent.FontColor}{text}";
+        StoryEventText.color = new Color(StoryEventText.color.r, StoryEventText.color.g, StoryEventText.color.b, 0f);
+        StoryEventText.DOFade(1f, 1f).SetEase(Ease.Linear);
+
+        Extensions.TryExtractColorFromRichText(currentEvent.FontColor, out Color c);
+        ProceedBtn.GetComponent<Image>().color = c;
+        CloseStoryBtn.GetComponent<Image>().color = c;
+
+        if (currentEvent.SequenceType == StorySequenceType.CHOICE)
+        {
+            StartCoroutine(ChoiceSequence(currentEvent));
+        }
+
+        var voice = LocalizationManager.Instance.GetVoice(currentEvent.DescriptionKey);
+        if (CurrentAudioSource != null) CurrentAudioSource.Stop();
+        CurrentAudioSource = SoundManager.Instance.PlayVoice(voice);
+
+        Color newColor;
+        if (ColorUtility.TryParseHtmlString(currentEvent.BackgroundColor, out newColor))
+        {
+            StoryEventBackground.DOColor(newColor, 1f);
+        }
+
+        if (currentEvent.SoundEffect == "STOP")
+            SoundManager.Instance.StopOneShotSfx();
+        else
+            SoundManager.Instance.PlayOneShotSfx(currentEvent.SoundEffect, timeToDie: 15);
+
+        if (currentEvent.Music == "STOP")
+            SoundManager.Instance.FadeMusic(0, SoundManager.Instance.MusicAudioSourceChannel1);
+        else
+            SoundManager.Instance.PlayMusic(currentEvent.Music);
+
+        if (currentEvent.Ambience == "STOP")
+            SoundManager.Instance.FadeAmbience(0, true);
+        else
+            SoundManager.Instance.PlayAmbience(currentEvent.Ambience);
+
+        if (!string.IsNullOrEmpty(currentEvent.InteractionSfx))
+            InteractionSfx = currentEvent.InteractionSfx.Split(',');
+
+        Interact();
     }
 
     public void NextCharacter()
@@ -214,6 +317,24 @@ public class SaintFragmentsPopup : MonoBehaviour
         UpdateSaint();
     }
 
+    public void CloseStory()
+    {
+        CurrentSequenceNumber = 0;
+        GameSettings.Instance.SetVolume("Music", prevMusicVol);
+        GameSettings.Instance.SetVolume("Ambiance", prevAmbiantVol);
+
+        if (DateTime.Now.Hour > 19 || DateTime.Now.Hour < 6)
+        {
+            SoundManager.Instance.PlayAmbience("SummerNight_Ambience");
+        }
+        else if (DateTime.Now.Hour >= 6)
+        {
+            SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
+        }
+
+        ShowingIntro = false;
+        StorySequenceObj.SetActive(false);
+    }
 
     public void Close()
     {

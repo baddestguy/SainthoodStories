@@ -160712,7 +160712,6 @@ MonoBehaviour:
   CharPotrait: {fileID: 6603481586339296996}
   Fragment: {fileID: 0}
   SaintName: {fileID: 7734186813096677235}
-  ScrollRect: {fileID: 0}
   StorySequenceObj: {fileID: 3443682720051338817}
   StoryEventText: {fileID: 1854960487810625317}
   StoryEventBackground: {fileID: 0}
@@ -160721,6 +160720,10 @@ MonoBehaviour:
   RippleDuration: 0.3
   RippleMaxScale: 1.5
   RippleStartAlpha: 0.35
+  ProceedBtn: {fileID: 0}
+  CloseStoryBtn: {fileID: 0}
+  ChoiceScroller: {fileID: 0}
+  ChoicePrefab: {fileID: 0}
 --- !u!1 &3111453143847782896
 GameObject:
   m_ObjectHideFlags: 0
