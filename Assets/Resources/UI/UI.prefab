@@ -88029,6 +88029,7 @@ RectTransform:
   - {fileID: 2604002156715763953}
   - {fileID: 5095350783221437251}
   - {fileID: 1806003768191345751}
+  - {fileID: 8339196217942919083}
   m_Father: {fileID: 2496101587387426663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -656795,6 +656796,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 275fc5543f4e43c48a8b9ce3c3b559e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8563729973567739551
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8339196217942919083}
+  - component: {fileID: 5760644650859738758}
+  - component: {fileID: 8542675920097548818}
+  m_Layer: 5
+  m_Name: WeatherFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8339196217942919083
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8563729973567739551}
+  m_LocalRotation: {x: 0, y: 0, z: -0.17364825, w: 0.9848078}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2921728552647091807}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -20}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -238, y: 23.280033}
+  m_SizeDelta: {x: 388.49, y: 477.41992}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5760644650859738758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8563729973567739551}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b3d98df0b83b8f40a28ebadcb67eea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnArea: {fileID: 8339196217942919083}
+  rainDropPrefab: {fileID: 6372562902955953992, guid: d193eda1281df0f4da9624cb6befbf45,
+    type: 3}
+  spawnRate: 20
+  fallSpeed: 1200
+--- !u!114 &8542675920097548818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8563729973567739551}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e11839ab4564dd1499bd624d2501cfc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnArea: {fileID: 8339196217942919083}
+  SnowFxPrefab: {fileID: 7995597793078648260, guid: e0e214f95f6f4e94abd9899eb0fab4f1,
+    type: 3}
+  spawnRate: 20
+  fallSpeed: 500
 --- !u!1 &8567720842803962059
 GameObject:
   m_ObjectHideFlags: 0

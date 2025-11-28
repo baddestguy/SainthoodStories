@@ -53,11 +53,14 @@ public enum SaintID
 
 public enum WeatherId
 {
+    NONE,
     CLEAR = 6,
     FOG = 10,
     SANDSTORM = 22,
     RAIN = 24,
-    BLIZZARD = 17
+    BLIZZARD = 17,
+    HEATWAVE,
+    SNOW
 }
 
 public enum SacredItemBehaviour
@@ -352,6 +355,7 @@ public class SaintsEvent
     public string Music {  get; set; }
     public string Ambience {  get; set; }
     public string InteractionSfx {  get; set; }
+    public WeatherId Weather {  get; set; }
     public string Choice1 {  get; set; }
     public string Choice1Response {  get; set; }
     public string Choice2 {  get; set; }

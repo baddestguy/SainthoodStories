@@ -86,7 +86,7 @@ public class SaintFragmentsPopup : MonoBehaviour
     public void Interact()
     {
         var currentEvent = EventList.ElementAt(CurrentSequenceNumber-1); //getting minus 1 since it would have already increased at the end of the Proceed()
-        if (SoundManager.Instance.OneShotSource != null || (InteractionSfx.Length == 0)) return;
+        if (InteractionSfx.Length == 0) return;
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(UI.Instance.GetComponent<RectTransform>(), Input.mousePosition, UI.Instance.GetComponent<Canvas>().worldCamera, out Vector2 screenPos);
 
@@ -139,6 +139,8 @@ public class SaintFragmentsPopup : MonoBehaviour
 
         StoryEventText.DOKill();
         StoryEventText.DOFade(1f, 1f).SetEase(Ease.Linear);
+
+        WeatherManager.Instance.UpdateWeather(currentEvent.Weather);
 
         Extensions.TryExtractColorFromRichText(currentEvent.FontColor, out Color c);
         ProceedBtn.GetComponent<Image>().color = c;
@@ -196,7 +198,8 @@ public class SaintFragmentsPopup : MonoBehaviour
         var text = LocalizationManager.Instance.GetText(currentEvent.DescriptionKey);
         StoryEventText.text = $"{currentEvent.FontColor}{text}";
         StoryEventText.color = new Color(StoryEventText.color.r, StoryEventText.color.g, StoryEventText.color.b, 0f);
-   
+        WeatherManager.Instance.UpdateWeather(currentEvent.Weather);
+
         Extensions.TryExtractColorFromRichText(currentEvent.FontColor, out Color c);
         ProceedBtn.GetComponent<Image>().color = c;
         CloseStoryBtn.GetComponent<Image>().color = c;
@@ -323,6 +326,7 @@ public class SaintFragmentsPopup : MonoBehaviour
         GameSettings.Instance.SetVolume("Music", prevMusicVol);
         GameSettings.Instance.SetVolume("Ambiance", prevAmbiantVol);
 
+        SoundManager.Instance.FadeMusic(0, SoundManager.Instance.MusicAudioSourceChannel1);
         if (DateTime.Now.Hour > 19 || DateTime.Now.Hour < 6)
         {
             SoundManager.Instance.PlayAmbience("SummerNight_Ambience");

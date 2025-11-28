@@ -17,6 +17,9 @@ public class WeatherManager : MonoBehaviour
     public GameClock WeatherEndTime;
     public DayNightCycle DayNightCycle;
 
+    public RainSpawner RainSpawner;
+    public SnowSpawner SnowSpawner;
+
     public static UnityAction<WeatherType, GameClock, GameClock> WeatherForecastActive;
 
     private void Awake()
@@ -33,7 +36,44 @@ public class WeatherManager : MonoBehaviour
         WeatherStartTime = new GameClock(0);
         WeatherEndTime = new GameClock(0);
         RainResource = Resources.Load("Weather/Rain");
+    }
 
+    public void UpdateWeather(WeatherId id)
+    {
+        switch (id)
+        {
+            case WeatherId.RAIN:
+                if (RainSpawner == null)
+                    RainSpawner = FindFirstObjectByType<RainSpawner>(FindObjectsInactive.Include);
+
+                RainSpawner.enabled = true;
+                break;
+
+            case WeatherId.BLIZZARD:
+                break;
+
+            case WeatherId.HEATWAVE:
+                break;
+
+            case WeatherId.SANDSTORM:
+                break;
+
+            case WeatherId.SNOW:
+                if (SnowSpawner == null)
+                    SnowSpawner = FindFirstObjectByType<SnowSpawner>(FindObjectsInactive.Include);
+
+                SnowSpawner.enabled = true;
+                break;
+
+            case WeatherId.CLEAR:
+                if (RainSpawner != null)
+                    RainSpawner.enabled = false;
+
+                if (SnowSpawner != null)
+                    SnowSpawner.enabled = false;
+                break;
+        }
+        
     }
 
     private void MissionBegin(Mission mission)
