@@ -5,6 +5,7 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -80,6 +81,7 @@ public class SaintFragmentsPopup : MonoBehaviour
         //GameSettings.Instance.SetVolume("Ambiance", 0.5f);
         //GameSettings.Instance.SetVolume("SFX", 0.5f);
 
+        UI.Instance.GetComponent<Canvas>().worldCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
         Proceed();
     }
 
@@ -337,6 +339,7 @@ public class SaintFragmentsPopup : MonoBehaviour
         }
 
         ShowingIntro = false;
+        UI.Instance.GetComponent<Canvas>().worldCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
         StorySequenceObj.SetActive(false);
     }
 

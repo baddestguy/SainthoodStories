@@ -2,12 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI.Table;
+using UnityEngine.Rendering.Universal;
 
 public class DayNightCycle : MonoBehaviour
 {
     [SerializeField]
     public Light Light;
+    public UniversalRenderPipelineAsset PostProcessing;
     //public PostProcessVolume PostProcessor;
     //public PostProcessVolume PostProcessorInterior;
 
@@ -112,38 +113,10 @@ public class DayNightCycle : MonoBehaviour
             lightTransform.rotation = Quaternion.Lerp(lightTransform.rotation, target, Time.deltaTime * 1.5f);
         }
 
-        //if (Mathf.Abs(Bloom.color.GetValue<Color>().r - TargetBloomColor.r) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().g - TargetBloomColor.g) > 0.001f || Mathf.Abs(Bloom.color.GetValue<Color>().b - TargetBloomColor.b) > 0.001f)
-        //{
-        ////    Bloom.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
-        //    //BloomInterior.color.Override(Color.Lerp(Bloom.color.GetValue<Color>(), TargetBloomColor, Time.deltaTime * 0.2f));
-        //}
-
         if (Mathf.Abs(Light.color.r - TargetColor.r) > 0.001f || Mathf.Abs(Light.color.g - TargetColor.g) > 0.001f || Mathf.Abs(Light.color.b - TargetColor.b) > 0.001f)
         {
             Light.color = Color.Lerp(Light.color, TargetColor, Time.deltaTime);
         }
-
-        //if (!WeatherManager.Instance.IsNormal())
-        //{
-        //    Light.shadowStrength = Mathf.Lerp(Light.shadowStrength, 0.6f, Time.deltaTime);
-        //}
-        //else
-        //{
-        //    Light.shadowStrength = Mathf.Lerp(Light.shadowStrength, ShadowStrength, Time.deltaTime);
-        //}
-
-        //    CurrentSkybox.SetFloat("_Blend", Mathf.Lerp(CurrentSkybox.GetFloat("_Blend"), BlendValue, Time.deltaTime));
-
-        //Bloom.intensity.Override(Mathf.Lerp(Bloom.intensity.GetValue<float>(), TargetBloomIntensity, Time.deltaTime * 0.2f));
-        ////BloomInterior.intensity.Override(Mathf.Lerp(Bloom.intensity.GetValue<float>(), TargetBloomIntensity, Time.deltaTime * 0.2f));
-        //if(Mathf.Abs(CurrentSkybox.GetFloat("_Blend") - BlendValue) < 0.01f)
-        //{
-        //    if(WeatherManager.Instance.IsNormal())
-        //    {
-        //        LockSkybox = false;
-        //        SetDayNight();
-        //    }
-        //}
 
         int minute = DateTime.Now.Minute;
 
