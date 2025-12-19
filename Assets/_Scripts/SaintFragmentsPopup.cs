@@ -5,16 +5,18 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class SaintFragmentsPopup : MonoBehaviour
+public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
 {
     public Dictionary<SaintID, List<SaintFragmentData>> Data;
     public Image CharPotrait;
     public TextMeshProUGUI Fragment;
     public TextMeshProUGUI SaintName;
+    public Image Divider;
 
     //Story Sequence
     public GameObject StorySequenceObj;
@@ -42,15 +44,24 @@ public class SaintFragmentsPopup : MonoBehaviour
     public ScrollRect ChoiceScroller;
     public GameObject ChoicePrefab;
 
+    [Header("Swipe Settings")]
+    public float SwipeThreshold = 100f;
+    private Vector2 DragStartPos;
+
+
     public void Open()
     {
         CustomEventPopup.IsDisplaying = true;
         UI.Instance.EnableAllUIElements(false);
         gameObject.SetActive(true);
+        UI.Instance.GetComponent<Canvas>().worldCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
 
         Data = InventoryManager.Instance.SaintFragments;
 
         UpdateSaint();
+        //var xPos = transform.localPosition.x;
+        //transform.DOLocalMoveX(-300, 0);
+        //transform.DOLocalMoveX(xPos, 0.5f);
     }
 
     private void UpdateSaint()
@@ -65,7 +76,19 @@ public class SaintFragmentsPopup : MonoBehaviour
         //populate the saint data
         CharPotrait.enabled = true;
         CharPotrait.sprite = Resources.Load<Sprite>(saintData.IconPath);
-        SaintName.text = saintData.Name;
+        CharPotrait.transform.localPosition = new Vector3(-10f, CharPotrait.transform.localPosition.y, CharPotrait.transform.localPosition.z);
+        CharPotrait.transform.DOLocalMoveX(0, 0.5f);
+        CharPotrait.DOFade(0, 0);
+        CharPotrait.DOFade(1, 0.5f);
+
+        SaintName.text = $"<b>{LocalizationManager.Instance.GetText("Name")}:</b> {saintData.Name}\r\n<b>{LocalizationManager.Instance.GetText("Born")}:</b> {saintData.Birthday}\r\n<b>{LocalizationManager.Instance.GetText("Died")}:</b> {saintData.Death}\r\n<b>{LocalizationManager.Instance.GetText("FeastDay")}:</b> {saintData.FeastDay}\r\n<b>{LocalizationManager.Instance.GetText("Patron")}:</b> {LocalizationManager.Instance.GetText(saintData.PatronKey)}";
+        SaintName.transform.localPosition = new Vector3(-10f, SaintName.transform.localPosition.y, SaintName.transform.localPosition.z);
+        SaintName.transform.DOLocalMoveX(0, 0.5f);
+        SaintName.DOFade(0, 0);
+        SaintName.DOFade(1, 0.5f);
+
+        Divider.transform.DOScaleY(0, 0);
+        Divider.transform.DOScaleY(1, 0.5f);
     }
 
     public void SelectSaint()
@@ -81,7 +104,6 @@ public class SaintFragmentsPopup : MonoBehaviour
         //GameSettings.Instance.SetVolume("Ambiance", 0.5f);
         //GameSettings.Instance.SetVolume("SFX", 0.5f);
 
-        UI.Instance.GetComponent<Canvas>().worldCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
         Proceed();
     }
 
@@ -189,6 +211,7 @@ public class SaintFragmentsPopup : MonoBehaviour
     {
         ShowingIntro = true;
         CloseStoryBtn.SetActive(false);
+        ProceedBtn.SetActive(false);
         SoundManager.Instance.StopOneShotSfx();
         SoundManager.Instance.FadeMusic(0, SoundManager.Instance.MusicAudioSourceChannel1);
         SoundManager.Instance.FadeAmbience(0, true);
@@ -223,6 +246,7 @@ public class SaintFragmentsPopup : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
         CloseStoryBtn.SetActive(true);
+        ProceedBtn.SetActive(true);
         ShowingIntro = false;
     }
 
@@ -339,7 +363,6 @@ public class SaintFragmentsPopup : MonoBehaviour
         }
 
         ShowingIntro = false;
-        UI.Instance.GetComponent<Canvas>().worldCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
         StorySequenceObj.SetActive(false);
     }
 
@@ -347,6 +370,32 @@ public class SaintFragmentsPopup : MonoBehaviour
     {
         CustomEventPopup.IsDisplaying = false;
         UI.Instance.EnableAllUIElements(true);
+        UI.Instance.GetComponent<Canvas>().worldCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
         gameObject.SetActive(false);
+    }
+
+    // Called while dragging
+    public void OnDrag(PointerEventData eventData)
+    {
+        // Only record start once
+        if (DragStartPos == Vector2.zero)
+            DragStartPos = eventData.pressPosition;
+    }
+
+    // Called when touch/mouse is released
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Vector2 dragEndPos = eventData.position;
+        float deltaX = dragEndPos.x - DragStartPos.x;
+
+        if (Mathf.Abs(deltaX) > SwipeThreshold)
+        {
+            if (deltaX > 0)
+                NextCharacter();
+            else
+                PreviousCharacter();
+        }
+
+        DragStartPos = Vector2.zero; // reset
     }
 }

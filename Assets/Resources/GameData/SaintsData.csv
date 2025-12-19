@@ -1,0 +1,26 @@
+Id,NameKey,DescriptionKey,Birthday,Death,FeastDay,PatronKey,Portrait
+ANDREW,Saint Andrew Kim Taegon,ANDREW_Bio,"August 21, 1821","September 16, 1846",September 16,ANDREW_Patron,Icons/Saints/ANDREW
+ANN,Saint Elizabeth Ann Seton,ANN_Bio,"August 28, 1774","January 4, 1821",January 4,ANN_Patron,Icons/Saints/ANN
+BAKHITA,Saint Josephine Bakhita,BAKHITA_Bio,1869,"February 8, 1947",February 8,BAKHITA_Patron,Icons/Saints/BAKHITA
+CANUTE,Saint Canute IV,CANUTE_Bio,1042 AD,"July 10, 1086",July 10,CANUTE_Patron,Icons/Saints/CANUTE
+ELIZABETH,Saint Elizabeth of Hungary,ELIZABETH_Bio,"July 7, 1207","November 17, 1231",November 17,ELIZABETH_Patron,Icons/Saints/ELIZABETH
+FRANCOIS,Saint Francois de Laval,FRANCOIS_Bio,"April 30, 1623","May 6, 1708",May 6,FRANCOIS_Patron,Icons/Saints/FRANCOIS
+FREDERICK,Saint Frederick of Hallum,FREDERICK_Bio,1113 AD,"March 3, 1175",March 3,FREDERICK_Patron,Icons/Saints/FREDERICK
+FREI,Saint Frei Galvao,FREI_Bio,"May 13, 1739","December 23, 1822",May 11,FREI_Patron,Icons/Saints/FREI
+IRMA,Saint Irma Dulce Pontes,IRMA_Bio,"May 26, 1914","March 13, 1992",August 13,IRMA_Patron,Icons/Saints/IRMA
+JADWIGA,Saint Jadwiga of Poland,JADWIGA_Bio,1373 AD,"July 17, 1399",June 8,JADWIGA_Patron,Icons/Saints/JADWIGA
+JOHN,Saint John Roberts,JOHN_Bio,1577,"December 10, 1610",October 25,JOHN_Patron,Icons/Saints/JOHN
+JOSE,Saint Jose Gabriel del Rosario Brochero,JOSE_Bio,"March 16, 1840","January 26, 1914",March 16,JOSE_Patron,Icons/Saints/JOSE
+JOSEPH,Saint Joseph Mukasa Balikuddembe,JOSEPH_Bio,1860,"November 15, 1885",June 3,JOSEPH_Patron,Icons/Saints/JOSEPH
+KATERI,Saint Kateri Tekakwitha,KATERI_Bio,1656,"April 17, 1680",July 14,KATERI_Patron,Icons/Saints/KATERI
+KATHARINE,Saint Katharine Drexel,KATHARINE_Bio,"November 26, 1858","March 3, 1955",March 3,KATHARINE_Patron,Icons/Saints/KATHARINE
+LORENZO,Saint Lorenzo Ruiz,LORENZO_Bio,"November 28, 1594","September 29, 1637",September 28,LORENZO_Patron,Icons/Saints/LORENZO
+MAGDALENE,Saint Magdalene of Nagasaki,MAGDALENE_Bio,1611,"October 15, 1634",October 20,MAGDALENE_Patron,Icons/Saints/MAGDALENE
+MARIAM,Saint Mariam Thresia Mankidiyan,MARIAM_Bio,"April 28, 1876","June 8, 1926",June 8,MARIAM_Patron,Icons/Saints/MARIAM
+MARIE,Saint Marie-Marguerite d'Youville,MARIE_Bio,"October 15, 1701","December 23, 1771",October 16,MARIE_Patron,Icons/Saints/MARIE
+MONICA,Saint Monica of Hippo,MONICA_Bio,332 AD,387 AD,August 27,MONICA_Patron,Icons/Saints/MONICA
+MOSES,Saint Moses the Black,MOSES_Bio,330 AD,405 AD,July 1,MOSES_Patron,Icons/Saints/MOSES
+PEDRO,Saint Pedro Calungsod,PEDRO_Bio,"July 21, 1654","April 2, 1672",March 27,PEDRO_Patron,Icons/Saints/PEDRO
+ROQUE,Saint Roque Gonzalez de Santa Cruz,ROQUE_Bio,"November 17, 1576","November 15, 1628",November 16,ROQUE_Patron,Icons/Saints/ROQUE
+SANMARTIN,Saint Martin de Porres,SANMARTIN_Bio,"December 9, 1579","November 3, 1639",November 3,SANMARTIN_Patron,Icons/Saints/SANMARTIN
+VICTOR,Saint Victor Maurus of Milan,VICTOR_Bio,3rd Century,303 AD,May 8,VICTOR_Patron,Icons/Saints/VICTOR
