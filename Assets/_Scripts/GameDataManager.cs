@@ -190,20 +190,20 @@ public class GameDataManager : MonoBehaviour
         yield return null;
 
         //Provisions
-        csvFile = Resources.Load<TextAsset>("GameData/Provisions");
-        var provData = CsvSerializer.Deserialize<ProvisionData>(csvFile.text);
+        //csvFile = Resources.Load<TextAsset>("GameData/Provisions");
+        //var provData = CsvSerializer.Deserialize<ProvisionData>(csvFile.text);
 
-        foreach (var prov in provData)
-        {
-            if (ProvisionData.ContainsKey(prov.Id))
-            {
-                ProvisionData[prov.Id].Add(prov);
-            }
-            else
-            {
-                ProvisionData.Add(prov.Id, new List<ProvisionData>() { prov });
-            }
-        }
+        //foreach (var prov in provData)
+        //{
+        //    if (ProvisionData.ContainsKey(prov.Id))
+        //    {
+        //        ProvisionData[prov.Id].Add(prov);
+        //    }
+        //    else
+        //    {
+        //        ProvisionData.Add(prov.Id, new List<ProvisionData>() { prov });
+        //    }
+        //}
 
         yield return null;
 
@@ -351,20 +351,20 @@ public class GameDataManager : MonoBehaviour
         yield return null;
 
         //Status Effects
-        csvFile = Resources.Load<TextAsset>("GameData/StatusEffects");
-        var statusData = CsvSerializer.Deserialize<StatusEffectData>(csvFile.text);
+        //csvFile = Resources.Load<TextAsset>("GameData/StatusEffects");
+        //var statusData = CsvSerializer.Deserialize<StatusEffectData>(csvFile.text);
 
-        foreach (var status in statusData)
-        {
-            if (StatusEffectData.ContainsKey(status.Id))
-            {
-                StatusEffectData[status.Id].Add(status);
-            }
-            else
-            {
-                StatusEffectData.Add(status.Id, new List<StatusEffectData>() { status });
-            }
-        }
+        //foreach (var status in statusData)
+        //{
+        //    if (StatusEffectData.ContainsKey(status.Id))
+        //    {
+        //        StatusEffectData[status.Id].Add(status);
+        //    }
+        //    else
+        //    {
+        //        StatusEffectData.Add(status.Id, new List<StatusEffectData>() { status });
+        //    }
+        //}
 
         yield return null;
 

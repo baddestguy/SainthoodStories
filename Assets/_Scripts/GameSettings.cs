@@ -87,7 +87,7 @@ public class GameSettings : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-#if !PLATFORM_MOBILE 
+#if !PLATFORM_MOBILE && !UNITY_WEBGL 
         resolutions = Screen.resolutions;
 #endif
     }
@@ -130,7 +130,7 @@ public class GameSettings : MonoBehaviour
     {
         var savedGameSettings =  GetSavedDataSet();
         Load(savedGameSettings);
-#if !PLATFORM_MOBILE 
+#if !PLATFORM_MOBILE && !UNITY_WEBGL
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
 #endif
     }
@@ -282,7 +282,7 @@ public class GameSettings : MonoBehaviour
             return bestResolutionBelowMax?.Resolution ?? orderedResolutions.Last().Resolution;
         }
 
-#if !PLATFORM_MOBILE 
+#if !PLATFORM_MOBILE  && !UNITY_WEBGL
         string[] val = value.Replace(" ", "").Split('x');
         Resolution? res = resolutions.FirstOrDefault(x => x.width.ToString() == val[0] && x.height.ToString() == val[1]);
 
@@ -293,14 +293,14 @@ public class GameSettings : MonoBehaviour
         return res.Value;
 #endif
 
-#if PLATFORM_MOBILE 
+#if PLATFORM_MOBILE || UNITY_WEBGL
         return new Resolution();
 #endif
     }
 
     public void SetResolution(string resolution)
     {
-#if !PLATFORM_MOBILE 
+#if !PLATFORM_MOBILE && !UNITY_WEBGL
         currentResolution = GetResolution(resolution);
         Screen.SetResolution(currentResolution.width, currentResolution.height, fullScreenMode);
 #endif

@@ -74,8 +74,15 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
         SaintData saintData = SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex];
 
         //populate the saint data
+        var rawPath = saintData.IconPath;
+
+        // Strip whitespace, CR/LF, and stray quotes
+        var cleanPath = rawPath?
+            .Trim()    
+            .Trim('"');
+
         CharPotrait.enabled = true;
-        CharPotrait.sprite = Resources.Load<Sprite>(saintData.IconPath);
+        CharPotrait.sprite = Resources.Load<Sprite>(cleanPath);
         CharPotrait.transform.localPosition = new Vector3(-10f, CharPotrait.transform.localPosition.y, CharPotrait.transform.localPosition.z);
         CharPotrait.transform.DOLocalMoveX(0, 0.5f);
         CharPotrait.DOFade(0, 0);
