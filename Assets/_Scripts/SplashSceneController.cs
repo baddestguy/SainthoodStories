@@ -20,48 +20,21 @@ namespace Assets._Scripts
         void Start()
         {
             Instance = this;
-            StatusText.text = DefaultStatusText;
-
-#if UNITY_IOS || UNITY_ANDROID
-            StatusText.text = DefaultMobileStatusText;
-#endif
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (GameManager.Instance == null || GameSettings.Instance == null)
+            if (GameManager.Instance == null || GameSettings.Instance == null || !GameDataManager.Loaded)
             {
-                Debug.Log("Splash screen controller waiting for Game manager and settings");
+           //     Debug.Log("Splash screen controller waiting for Game manager and settings");
                 return;  // We can't do anything without GameManager or GameSettings is ready
             }
 
             if (_clickedStart)
                 return;
 
-            (GamePadButton Button, CustomButtonControl Control) pressedButton = (GamePadButton.Void, new CustomButtonControl());
-
-            if (GameSettings.Instance.IsUsingController)
-            {
-                if (GameSettings.Instance.IsUsingController)
-                {
-                    pressedButton = GamePadController.GetButton();
-                }
-
-                if (pressedButton.Button != GamePadButton.Void && pressedButton.Control.WasPressedThisFrame)
-                {
-                    StartButtonClicked();
-                }
-            }
-            else
-            {
-                if (Input.anyKeyDown || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
-                {
-                    StartButtonClicked();
-                }
-            }
-
-
+            StartButtonClicked();
         }
 
         void OnDisable()

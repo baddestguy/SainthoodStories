@@ -184,6 +184,7 @@ public class GameManager : MonoBehaviour
             {
                 SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
             }
+            SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay: 70);
             TreasuryManager.Instance.Load(SaveData);
 
             InventoryManager.Instance.LoadInventory(SaveData);

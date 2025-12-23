@@ -105,6 +105,14 @@ public class InteractableChurch : InteractableHouse
             ExteriorPopUI.gameObject.SetActive(false);
             PopIcon.UIPopped(false);
         }
+
+        StartCoroutine(WaitAndShowStoryPopup());
+    }
+
+    IEnumerator WaitAndShowStoryPopup()
+    {
+        yield return new WaitForSeconds(2);
+        UI.Instance.ToggleSaintFragmentsPopup();
     }
 
     public void CheckCollectibleObjectives()

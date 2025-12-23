@@ -49,6 +49,8 @@ public class GameDataManager : MonoBehaviour
 
     public const int APP_ID = 1748600;
 
+    public static bool Loaded;
+
     void Awake()
     {
         Instance = this;
@@ -56,6 +58,7 @@ public class GameDataManager : MonoBehaviour
 
     void Start()
     {
+        Loaded = false;
         LoadData();        
     }
 
@@ -385,8 +388,9 @@ public class GameDataManager : MonoBehaviour
             MinigameData.Add(item.Id, item);
         }
 
-        yield return null;
+        yield return new WaitForSeconds(0.1f);
 
+        Loaded = true;
     }
 
     public WorldTriviaData GetRandomWorldTrivia(bool excludeInventory = true)
