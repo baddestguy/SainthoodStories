@@ -308,8 +308,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 3
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 57947fe6abb4f8844b33b6ef60baa197, type: 2}
-  m_sharedMaterial: {fileID: 2464505700415875037, guid: 57947fe6abb4f8844b33b6ef60baa197,
+  m_fontAsset: {fileID: 11400000, guid: 7085816a5d4d9d5448657d48c5927dda, type: 2}
+  m_sharedMaterial: {fileID: 2464505700415875037, guid: 7085816a5d4d9d5448657d48c5927dda,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -350,15 +350,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -487,15 +489,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -532,6 +536,8 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
+  HasControllerHover: 0
 --- !u!114 &7841192364472103472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -742,11 +748,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a137e850f0498648bf0acc411004a93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuildingIcon: {fileID: 5308414909769554670}
-  ClockIcon: {fileID: 1875524634861954161}
-  ItemsRequiredDisplay: {fileID: 1199175786180299996}
-  DeadlineDisplay: {fileID: 7370839711564860615}
-  IsCurrentlyOpen: {fileID: 3775691716610290806}
   ButtonTimer: 0
   ChargeFx: {fileID: 4348354766303475754}
   ButtonPressFx: {fileID: 7364127437655529492}
@@ -755,6 +756,8 @@ MonoBehaviour:
   Buttons: []
   CameraControls: {fileID: 0}
   RPDisplay: {fileID: 0}
+  GlowImage: {fileID: 0}
+  GlowImages: []
 --- !u!1 &1642041007806061184
 GameObject:
   m_ObjectHideFlags: 0
@@ -1167,15 +1170,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1212,6 +1217,8 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
+  HasControllerHover: 0
 --- !u!114 &6733854198747589113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1463,6 +1470,8 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
+  HasControllerHover: 0
 --- !u!114 &6410130718355254878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6321,6 +6330,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -10978,6 +10990,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -15712,6 +15727,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -20509,6 +20527,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -20966,15 +20987,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -21198,6 +21221,8 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 5546236733428082297}
   FPCPStatsDisplay: {fileID: 2357170025333034725}
   InfoPanel: {fileID: 6902329710566551621}
+  TurnOnInfoPanel: 0
+  HasControllerHover: 0
 --- !u!114 &4388680928915249406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21352,15 +21377,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -21877,6 +21904,8 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
+  HasControllerHover: 0
 --- !u!1 &8003028318867410911
 GameObject:
   m_ObjectHideFlags: 0
@@ -21944,8 +21973,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 23:30
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 57947fe6abb4f8844b33b6ef60baa197, type: 2}
-  m_sharedMaterial: {fileID: 2464505700415875037, guid: 57947fe6abb4f8844b33b6ef60baa197,
+  m_fontAsset: {fileID: 11400000, guid: 7085816a5d4d9d5448657d48c5927dda, type: 2}
+  m_sharedMaterial: {fileID: 2464505700415875037, guid: 7085816a5d4d9d5448657d48c5927dda,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -21986,15 +22015,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -22255,15 +22286,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -22300,6 +22333,8 @@ MonoBehaviour:
   EnergyStatsDisplay: {fileID: 0}
   FPCPStatsDisplay: {fileID: 0}
   InfoPanel: {fileID: 0}
+  TurnOnInfoPanel: 0
+  HasControllerHover: 0
 --- !u!114 &1795013184978927729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22412,8 +22447,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: (Closed)
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 427881d3fb8226d4b9a21a0f863144e3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7085816a5d4d9d5448657d48c5927dda, type: 2}
+  m_sharedMaterial: {fileID: 2464505700415875037, guid: 7085816a5d4d9d5448657d48c5927dda,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -22453,15 +22489,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -22588,15 +22626,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
