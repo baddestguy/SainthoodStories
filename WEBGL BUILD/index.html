@@ -1,16 +1,75 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity Web Player | Sainthood Stories</title>
-  </head>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=1080 height=1920 tabindex="-1" style="width: 1080px; height: 1920px; background: #ECDACE"></canvas>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+        }
+
+        /* Loader overlay */
+        #unity-loading-root {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            text-align: center;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #b8563f;
+        }
+
+        #unity-loading-bar-container {
+            width: 60vw;
+            max-width: 400px;
+            height: 16px;
+            border: 1px solid #b8563f;
+            background: #222222;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+
+        #unity-loading-bar {
+            width: 0%;
+            height: 100%;
+            background: #b8563f;
+            transition: width 0.1s linear;
+        }
+
+        #unity-loading-text {
+            margin-top: 8px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+
+    <!-- Simple loading UI -->
+    <div id="unity-loading-root">
+        <div id="unity-loading-bar-container">
+            <div id="unity-loading-bar"></div>
+        </div>
+        <div id="unity-loading-text">Loading... 0%</div>
+    </div>
+
+    <!-- Unity canvas -->
+    <canvas id="unity-canvas"
+            width=360
+            height=640
+            tabindex="-1"
+            style="width: 360px;
+                   height: 640px;
+                   background: #ECDACE"></canvas>
+
     <script src="Build/WEBGL BUILD.loader.js"></script>
     <script>
+      // Mobile sizing logic from Minimal template
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
         var meta = document.createElement('meta');
         meta.name = 'viewport';
         meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
@@ -24,18 +83,40 @@
         document.body.style.textAlign = "left";
       }
 
-      createUnityInstance(document.querySelector("#unity-canvas"), {
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingRoot = document.getElementById("unity-loading-root");
+      var loadingBar = document.getElementById("unity-loading-bar");
+      var loadingText = document.getElementById("unity-loading-text");
+
+      var config = {
         arguments: [],
-        dataUrl: "Build/WEBGL BUILD.data",
-        frameworkUrl: "Build/WEBGL BUILD.framework.js",
-        codeUrl: "Build/WEBGL BUILD.wasm",
+        dataUrl: "Build/WEBGL BUILD.data.gz",
+        frameworkUrl: "Build/WEBGL BUILD.framework.js.gz",
+        codeUrl: "Build/WEBGL BUILD.wasm.gz",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "SainthoodProject",
         productName: "Sainthood Stories",
         productVersion: "0.0.1",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+        // matchWebGLToCanvasSize: false,
+        // devicePixelRatio: 1,
+      };
+
+      createUnityInstance(canvas, config, function (progress) {
+        // progress is 0..1
+        var pct = Math.round(progress * 100);
+        loadingBar.style.width = pct + "%";
+        loadingText.textContent = "Loading... " + pct + "%";
+      }).then(function (unityInstance) {
+        // hide loader when done
+        if (loadingRoot) {
+          loadingRoot.style.display = "none";
+        }
+      }).catch(function (message) {
+        console.error(message);
+        if (loadingText) {
+          loadingText.textContent = "Error loading: " + message;
+        }
       });
     </script>
-  </body>
+</body>
 </html>
