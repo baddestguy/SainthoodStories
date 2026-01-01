@@ -174,7 +174,7 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
         WeatherManager.Instance.UpdateWeather(currentEvent.Weather);
 
         Extensions.TryExtractColorFromRichText(currentEvent.FontColor, out Color c);
-        ProceedBtn.GetComponent<Image>().color = c;
+        ProceedBtn.GetComponentsInChildren<Image>()[1].color = c;
         CloseStoryBtn.GetComponent<Image>().color = c;
         
         if(currentEvent.SequenceType == StorySequenceType.CHOICE)
@@ -233,7 +233,7 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
         WeatherManager.Instance.UpdateWeather(currentEvent.Weather);
 
         Extensions.TryExtractColorFromRichText(currentEvent.FontColor, out Color c);
-        ProceedBtn.GetComponent<Image>().color = c;
+        ProceedBtn.GetComponentsInChildren<Image>()[1].color = c;
         CloseStoryBtn.GetComponent<Image>().color = c;
 
         Color newColor;
@@ -301,7 +301,7 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
         StoryEventText.DOFade(1f, 1f).SetEase(Ease.Linear);
 
         Extensions.TryExtractColorFromRichText(currentEvent.FontColor, out Color c);
-        ProceedBtn.GetComponent<Image>().color = c;
+        ProceedBtn.GetComponentsInChildren<Image>()[1].color = c;
         CloseStoryBtn.GetComponent<Image>().color = c;
 
         if (currentEvent.SequenceType == StorySequenceType.CHOICE)

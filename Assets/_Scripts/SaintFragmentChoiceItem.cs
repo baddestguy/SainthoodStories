@@ -26,7 +26,7 @@ public class SaintFragmentChoiceItem : MonoBehaviour
 
     public void Select()
     {
-        var newevent = GameDataManager.Instance.SaintsEvent[ResponseKey];
+        var newevent = GameDataManager.Instance.SaintsEvent[ResponseKey.Trim().Trim('"')];
         SendMessageUpwards("SelectFragmentChoice", newevent);
     }
 }
