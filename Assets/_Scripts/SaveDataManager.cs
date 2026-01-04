@@ -127,16 +127,16 @@ public class SaveDataManager : MonoBehaviour
             Money = 0,
             Saints = new SaintID[] 
             { 
-                SaintID.KATERI, 
-                SaintID.MARIE, 
-                SaintID.SANMARTIN, 
-                SaintID.BAKHITA,
-                SaintID.FRANCIS,
-                SaintID.MICHAEL,
-                SaintID.JUDE,
                 SaintID.THERESE,
+                SaintID.MICHAEL,
+                SaintID.KATERI, 
+                SaintID.FRANCIS,
+                SaintID.MARIE, 
                 SaintID.JOSEPH,
-                SaintID.JOAN
+                SaintID.SANMARTIN, 
+                SaintID.JOAN,
+                SaintID.BAKHITA,
+                SaintID.JUDE
             }
         };
     }
