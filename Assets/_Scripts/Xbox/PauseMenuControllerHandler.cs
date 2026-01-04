@@ -117,51 +117,51 @@ namespace Assets._Scripts.Xbox
             }
         }
 
-        private void Update()
-        {
+        //private void Update()
+        //{
 
-            if (!GameManager.Instance.PlayerHasLoggedIn) return;
+        //    if (!GameManager.Instance.PlayerHasLoggedIn) return;
 
-            if (!_hasRegisteredForInputMethodChanged)
-            {
-                GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
-                _hasRegisteredForInputMethodChanged = true;
-            }
+        //    if (!_hasRegisteredForInputMethodChanged)
+        //    {
+        //        GameplayControllerHandler.Instance.OnInputMethodChanged += HandleInputMethodChanged;
+        //        _hasRegisteredForInputMethodChanged = true;
+        //    }
 
-            if (!GameSettings.Instance.IsUsingController) return;
+        //    if (!GameSettings.Instance.IsUsingController) return;
 
-            var pressedButton = GamePadController.GetButton();
-            var pressedDirection = GamePadController.GetDirection();
+        //    var pressedButton = GamePadController.GetButton();
+        //    var pressedDirection = GamePadController.GetDirection();
 
-            if (pressedButton.Control.WasPressedThisFrame && pressedButton.Button == GamePadButton.Start)
-            {
-                PauseMenu.Instance.Activate();
-                return;
-            }
+        //    if (pressedButton.Control.WasPressedThisFrame && pressedButton.Button == GamePadButton.Start)
+        //    {
+        //        PauseMenu.Instance.Activate();
+        //        return;
+        //    }
 
-            if (!PauseMenu.Instance.active) return;
+        //    if (!PauseMenu.Instance.active) return;
 
-            if (_skipFrame)
-            {
-                _skipFrame = false;
-                return;
-            }
+        //    if (_skipFrame)
+        //    {
+        //        _skipFrame = false;
+        //        return;
+        //    }
 
-            if (!_isDropdownOpen && pressedButton.Control.WasPressedThisFrame)
-            {
-                switch (pressedButton.Button)
-                {
-                    case GamePadButton.East:
-                        PauseMenu.Instance.Activate();
-                        return;
-                    case GamePadButton.LeftShoulder or GamePadButton.RightShoulder:
-                        HandleTabSwitch(pressedButton);
-                        return;
-                }
-            }
+        //    if (!_isDropdownOpen && pressedButton.Control.WasPressedThisFrame)
+        //    {
+        //        switch (pressedButton.Button)
+        //        {
+        //            case GamePadButton.East:
+        //                PauseMenu.Instance.Activate();
+        //                return;
+        //            case GamePadButton.LeftShoulder or GamePadButton.RightShoulder:
+        //                HandleTabSwitch(pressedButton);
+        //                return;
+        //        }
+        //    }
 
-            HandleTabInputs(pressedButton, pressedDirection);
-        }
+        //    HandleTabInputs(pressedButton, pressedDirection);
+        //}
 
         public void Activate()
         {

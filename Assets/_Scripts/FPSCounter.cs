@@ -13,12 +13,12 @@ public class FPSCounter : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        if (!GameSettings.Instance.ShowFPSCounter) return;
+    //void Update()
+    //{
+    //    if (!GameSettings.Instance.ShowFPSCounter) return;
 
-        _deltaTime += (Time.unscaledDeltaTime - _deltaTime) * 0.1f;
-        var fps = 1.0f / _deltaTime;
-        TextMesh.text = $"{fps:0.} fps";
-    }
+    //    _deltaTime += (Time.unscaledDeltaTime - _deltaTime) * 0.1f;
+    //    var fps = 1.0f / _deltaTime;
+    //    TextMesh.text = $"{fps:0.} fps";
+    //}
 }

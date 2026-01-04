@@ -57,6 +57,10 @@ public class DayNightCycle : MonoBehaviour
         });
 
     //    StartingSkybox();
+    }
+
+    private void OnEnable()
+    {
         int minute = DateTime.Now.Minute;
         lastMinute = minute;
         float time = DateTime.Now.Hour + (minute / 60f);
@@ -64,51 +68,15 @@ public class DayNightCycle : MonoBehaviour
         FindFirstObjectByType<LightColors>(FindObjectsInactive.Include).UpdateLight(time);
     }
 
-
     private void OnTick(double time, int day)
     {
     }
 
     void UpdateLighting(float currentTime)
     {
-        //currentTime = 21;
-        // Normalize to 0–24
-        if (currentTime < 0) currentTime = 0;
-        if (currentTime >= 24) currentTime -= 24;
-
-        TimeOfDayKeyframe a = null, b = null;
-
-        // Find keyframes surrounding the time
-        for (int i = 0; i < TimeOfDayKeyFrames.Count - 1; i++)
-        {
-            if (currentTime >= TimeOfDayKeyFrames[i].time && currentTime <= TimeOfDayKeyFrames[i + 1].time)
-            {
-                a = TimeOfDayKeyFrames[i];
-                b = TimeOfDayKeyFrames[i + 1];
-                break;
-            }
-        }
-
-        if (a == null || b == null)
-            return;
-
-        float t = Mathf.InverseLerp(a.time, b.time, currentTime);
-
-        TargetRotation = Vector3.Lerp(a.rotation, b.rotation, t);
-        TargetColor = Color.Lerp(a.color, b.color, t);
-        Light.intensity = Mathf.Lerp(a.LightIntensity, b.LightIntensity, t);
-
-        // Skybox switches immediately at a keyframe boundary
-        SetFutureSkybox(t < 0.5f ? a.skybox : b.skybox);
-
-        LockSkybox = true;
-    }   
-
-    void Update()
-    {
         Transform lightTransform = Light.transform;
         Quaternion target = Quaternion.Euler(TargetRotation);
-        if(Mathf.Abs(Quaternion.Angle(Light.transform.rotation, target)) > 0.1f)
+        if (Mathf.Abs(Quaternion.Angle(Light.transform.rotation, target)) > 0.1f)
         {
             lightTransform.rotation = Quaternion.Lerp(lightTransform.rotation, target, Time.deltaTime * 1.5f);
         }
@@ -124,10 +92,37 @@ public class DayNightCycle : MonoBehaviour
         {
             lastMinute = minute;
             float time = DateTime.Now.Hour + (minute / 60f);
-            UpdateLighting(time);
-            FindFirstObjectByType<LightColors>(FindObjectsInactive.Include).UpdateLight(time);
+            if (currentTime < 0) currentTime = 0;
+            if (currentTime >= 24) currentTime -= 24;
+
+            TimeOfDayKeyframe a = null, b = null;
+
+            // Find keyframes surrounding the time
+            for (int i = 0; i < TimeOfDayKeyFrames.Count - 1; i++)
+            {
+                if (currentTime >= TimeOfDayKeyFrames[i].time && currentTime <= TimeOfDayKeyFrames[i + 1].time)
+                {
+                    a = TimeOfDayKeyFrames[i];
+                    b = TimeOfDayKeyFrames[i + 1];
+                    break;
+                }
+            }
+
+            if (a == null || b == null)
+                return;
+
+            float t = Mathf.InverseLerp(a.time, b.time, currentTime);
+
+            TargetRotation = Vector3.Lerp(a.rotation, b.rotation, t);
+            TargetColor = Color.Lerp(a.color, b.color, t);
+            Light.intensity = Mathf.Lerp(a.LightIntensity, b.LightIntensity, t);
+
+            // Skybox switches immediately at a keyframe boundary
+            SetFutureSkybox(t < 0.5f ? a.skybox : b.skybox);
+
+            LockSkybox = true;
         }
-    }
+    }   
 
     public void SetFutureSkyBox(WeatherType type)
     {

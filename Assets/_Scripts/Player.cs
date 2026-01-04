@@ -71,48 +71,48 @@ public class Player : MonoBehaviour
         GroundMoveFX = Instantiate(Resources.Load("Environment/GroundMoveFx") as GameObject);
     }
 
-    void Update()
-    {
-        if ((transform.position - TargetPosition).magnitude > 0.11)
-        {
-            transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime * 5);
+//    void Update()
+//    {
+//        if ((transform.position - TargetPosition).magnitude > 0.11)
+//        {
+//            transform.position = Vector3.Lerp(transform.position, TargetPosition, Time.deltaTime * 5);
 
-            if (DissapearInHouse)
-            {
-                transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, Time.deltaTime * 5);
-            }
-        }
-        else
-        {
-            Animator.SetBool("Run", false);
+//            if (DissapearInHouse)
+//            {
+//                transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, Time.deltaTime * 5);
+//            }
+//        }
+//        else
+//        {
+//            Animator.SetBool("Run", false);
 
-            if (DissapearInHouse)
-            {
-                transform.localScale = Vector3.zero;
-                DissapearInHouse = false;
-            }
-        }
+//            if (DissapearInHouse)
+//            {
+//                transform.localScale = Vector3.zero;
+//                DissapearInHouse = false;
+//            }
+//        }
 
-        if (StatusEffects.Any())
-        {
-//            FatigueFx.SetActive(true);
-        }
-        else
-        {
- //           FatigueFx.SetActive(false);
-        }
+//        if (StatusEffects.Any())
+//        {
+////            FatigueFx.SetActive(true);
+//        }
+//        else
+//        {
+// //           FatigueFx.SetActive(false);
+//        }
 
-        if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
-        {
-     //       FrozenFx.SetActive(true);
-            CharacterGO.SetActive(false);
-        }
-        else
-        {
-    //        FrozenFx.SetActive(false);
-            CharacterGO.SetActive(true);
-        }
-    }
+//        if (StatusEffects.Contains(PlayerStatusEffect.FROZEN))
+//        {
+//     //       FrozenFx.SetActive(true);
+//            CharacterGO.SetActive(false);
+//        }
+//        else
+//        {
+//    //        FrozenFx.SetActive(false);
+//            CharacterGO.SetActive(true);
+//        }
+//    }
 
     public void GameStart(Mission missionDetails)
     {

@@ -102,10 +102,6 @@ public class GameManager : MonoBehaviour
         PlayerHasLoggedIn = true;
     }
 
-    private void Update()
-    {
-    }
-
     public void ExitHouse()
     {
         GetBuildingStates();

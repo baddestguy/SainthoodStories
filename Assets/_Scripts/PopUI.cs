@@ -334,36 +334,36 @@ public class PopUI : MonoBehaviour
         SoundManager.Instance.StopOneShotSfx("Charge");
     }
 
-    void Update()
-    {
-        if (PointerDown)
-        {
-            //Play VFX
-            ButtonTimer += Time.deltaTime;
-            if (ButtonTimer >= ButtonTimerTarget)
-            {
-                Debug.LogWarning("LEft Lingering Regular HIT!");
-                if (CriticalHitCount >= 1) SoundManager.Instance.PlayOneShotSfx("Crit_Bad");
-                CriticalHitCount = -1;
-                ButtonTimer = 0f;
-                OnClick(ButtonName);
-                PointerDown = false;
-            }
-        }
-        else
-        {
-            ButtonTimer -= Time.deltaTime;
-            if (ButtonTimer <= 0)
-            {
-                ButtonTimer = 0;
-            }
-        }
+    //void Update()
+    //{
+    //    if (PointerDown)
+    //    {
+    //        //Play VFX
+    //        ButtonTimer += Time.deltaTime;
+    //        if (ButtonTimer >= ButtonTimerTarget)
+    //        {
+    //            Debug.LogWarning("LEft Lingering Regular HIT!");
+    //            if (CriticalHitCount >= 1) SoundManager.Instance.PlayOneShotSfx("Crit_Bad");
+    //            CriticalHitCount = -1;
+    //            ButtonTimer = 0f;
+    //            OnClick(ButtonName);
+    //            PointerDown = false;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        ButtonTimer -= Time.deltaTime;
+    //        if (ButtonTimer <= 0)
+    //        {
+    //            ButtonTimer = 0;
+    //        }
+    //    }
 
-        if (MyHouse?.HasResetActionProgress() ?? false)
-        {
-            CriticalHitCount = 0;
-        }
-    }
+    //    if (MyHouse?.HasResetActionProgress() ?? false)
+    //    {
+    //        CriticalHitCount = 0;
+    //    }
+    //}
 
     private void UpdateProgressBar(float progress, InteractableHouse house, int progressBar = 0)
     {

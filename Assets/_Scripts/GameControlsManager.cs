@@ -21,17 +21,17 @@ public class GameControlsManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (!GameManager.Instance.InGameSession) return;
+    //void Update()
+    //{
+    //    if (!GameManager.Instance.InGameSession) return;
 
-        float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
-        if (mouseScroll != 0 && (PauseMenu.Instance == null || !PauseMenu.Instance.active))
-        {
-            TryZoom?.Invoke(mouseScroll);
-        }
+    //    float mouseScroll = Input.GetAxis("Mouse ScrollWheel");
+    //    if (mouseScroll != 0 && (PauseMenu.Instance == null || !PauseMenu.Instance.active))
+    //    {
+    //        TryZoom?.Invoke(mouseScroll);
+    //    }
 
-    }
+    //}
 
     private void OnDisable()
     {

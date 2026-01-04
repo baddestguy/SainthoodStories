@@ -97,16 +97,16 @@ public class GamepadCursor : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        //if (!HasInitialized) return;
+    //private void Update()
+    //{
+    //    //if (!HasInitialized) return;
 
-        //if (PlayerInput.currentControlScheme != PreviousControlScheme)
-        //{
-        //    OnControlsChanged();
-        //    PreviousControlScheme = PlayerInput.currentControlScheme;
-        //}
-    }
+    //    //if (PlayerInput.currentControlScheme != PreviousControlScheme)
+    //    //{
+    //    //    OnControlsChanged();
+    //    //    PreviousControlScheme = PlayerInput.currentControlScheme;
+    //    //}
+    //}
 
     private void UpdateMotion()
     {

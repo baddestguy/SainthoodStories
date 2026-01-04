@@ -48,13 +48,17 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
     public float SwipeThreshold = 100f;
     private Vector2 DragStartPos;
 
+    private LayerMask CameraMask;
 
     public void Open()
     {
+        Application.targetFrameRate = 20;
         CustomEventPopup.IsDisplaying = true;
         UI.Instance.EnableAllUIElements(false);
         gameObject.SetActive(true);
-        UI.Instance.GetComponent<Canvas>().worldCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
+        FindAnyObjectByType<DayNightCycle>(FindObjectsInactive.Include).gameObject.SetActive(false);
+        CameraMask = Camera.main.cullingMask;
+        Camera.main.cullingMask = 0;
 
         Data = InventoryManager.Instance.SaintFragments;
 
@@ -377,7 +381,8 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         CustomEventPopup.IsDisplaying = false;
         UI.Instance.EnableAllUIElements(true);
-        UI.Instance.GetComponent<Canvas>().worldCamera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
+        FindAnyObjectByType<DayNightCycle>(FindObjectsInactive.Include).gameObject.SetActive(true);
+        Camera.main.cullingMask = CameraMask;
         gameObject.SetActive(false);
     }
 

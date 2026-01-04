@@ -181,105 +181,105 @@ namespace Assets._Scripts.Xbox
 
 
         // Update is called once per frame
-        void Update()
-        {
-            // Check if mouse has moved, so we can switch to mouse mode
-            if (GameSettings.Instance.IsUsingController && !GameSettings.Instance.IsXboxMode)
-            {
-                //var currentMousePosition = Mouse.current.position.ReadValue();
-                var mouseX = Input.GetAxis("Mouse X");
-                var mouseY = Input.GetAxis("Mouse Y");
-                if (mouseX != 0 || mouseY != 0 || Gamepad.current == null)
-                {
-                    OnInputMethodChanged?.Invoke(false);
-                    return;
-                }
-            }
-            //else check if any controller button is pressed, so we can switch to controller mode
-            else if (!GameSettings.Instance.IsUsingController)
-            {
-                var button = GamePadController.GetButton();
-                var direction = GamePadController.GetDirection();
+        //void Update()
+        //{
+        //    // Check if mouse has moved, so we can switch to mouse mode
+        //    if (GameSettings.Instance.IsUsingController && !GameSettings.Instance.IsXboxMode)
+        //    {
+        //        //var currentMousePosition = Mouse.current.position.ReadValue();
+        //        var mouseX = Input.GetAxis("Mouse X");
+        //        var mouseY = Input.GetAxis("Mouse Y");
+        //        if (mouseX != 0 || mouseY != 0 || Gamepad.current == null)
+        //        {
+        //            OnInputMethodChanged?.Invoke(false);
+        //            return;
+        //        }
+        //    }
+        //    //else check if any controller button is pressed, so we can switch to controller mode
+        //    else if (!GameSettings.Instance.IsUsingController)
+        //    {
+        //        var button = GamePadController.GetButton();
+        //        var direction = GamePadController.GetDirection();
 
-                if (button.Button != GamePadButton.Void || direction.Input != DirectionInput.Void)
-                {
-                    OnInputMethodChanged?.Invoke(true);
-                    return;
-                }
-            }
+        //        if (button.Button != GamePadButton.Void || direction.Input != DirectionInput.Void)
+        //        {
+        //            OnInputMethodChanged?.Invoke(true);
+        //            return;
+        //        }
+        //    }
 
-            if (ShouldHandlerReturnEarly) return;
+        //    if (ShouldHandlerReturnEarly) return;
 
-            if (Player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Equals("Jump", StringComparison.InvariantCultureIgnoreCase) &&
-                !Player.StatusEffects.Contains(PlayerStatusEffect.FROZEN) &&
-                !IsInBuilding
-                )
-            {
-                return;
-            }
+        //    if (Player.Animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Equals("Jump", StringComparison.InvariantCultureIgnoreCase) &&
+        //        !Player.StatusEffects.Contains(PlayerStatusEffect.FROZEN) &&
+        //        !IsInBuilding
+        //        )
+        //    {
+        //        return;
+        //    }
 
-            var pressedButton = GamePadController.GetButton();
-            if (PauseMenu.Instance.active)
-            {
-                DeselectBuildingButton();
-                _currentPopUIButton = null;
-            }
-            else if (UI.Instance.SacredItemPopup.activeInHierarchy)
-            {
-                if (pressedButton.Button == GamePadButton.East && pressedButton.Control.WasPressedThisFrame)
-                {
-                    UI.Instance.SacredItemPopup.GetComponent<SacredItemPopup>().Close();
-                }
-            }
-            else if (ShouldHandleSaintCollection)
-            {
-                HandleSaintCollectionPopup();
-            }
-            else if (ShouldHandleConversation)
-            {
-                HandleConversationEventPopup();
-            }
-            else if (ShouldHandlePackageSelector)
-            {
-                HandlePackageItemSelection();
-            }
-            else if (ShouldHandleProvisionsSelector)
-            {
-                HandleProvisionSelectPopup();
-            }
-            else if (pressedButton.Control.WasPressedThisFrame &&
-                     (pressedButton.Button == GamePadButton.North || (pressedButton.Button == GamePadButton.East && IsShowingObjectiveInventoryPopup)))
-            {
-                if (IsShowingObjectiveInventoryPopup)
-                {
-                    DeselectInventoryItem();
-                }
+        //    var pressedButton = GamePadController.GetButton();
+        //    if (PauseMenu.Instance.active)
+        //    {
+        //        DeselectBuildingButton();
+        //        _currentPopUIButton = null;
+        //    }
+        //    else if (UI.Instance.SacredItemPopup.activeInHierarchy)
+        //    {
+        //        if (pressedButton.Button == GamePadButton.East && pressedButton.Control.WasPressedThisFrame)
+        //        {
+        //            UI.Instance.SacredItemPopup.GetComponent<SacredItemPopup>().Close();
+        //        }
+        //    }
+        //    else if (ShouldHandleSaintCollection)
+        //    {
+        //        HandleSaintCollectionPopup();
+        //    }
+        //    else if (ShouldHandleConversation)
+        //    {
+        //        HandleConversationEventPopup();
+        //    }
+        //    else if (ShouldHandlePackageSelector)
+        //    {
+        //        HandlePackageItemSelection();
+        //    }
+        //    else if (ShouldHandleProvisionsSelector)
+        //    {
+        //        HandleProvisionSelectPopup();
+        //    }
+        //    else if (pressedButton.Control.WasPressedThisFrame &&
+        //             (pressedButton.Button == GamePadButton.North || (pressedButton.Button == GamePadButton.East && IsShowingObjectiveInventoryPopup)))
+        //    {
+        //        if (IsShowingObjectiveInventoryPopup)
+        //        {
+        //            DeselectInventoryItem();
+        //        }
 
-                UI.Instance.InventoryPopupEnable();
+        //        UI.Instance.InventoryPopupEnable();
 
-                var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
-                var backpackGameObject = inventoryPopup.Tabs[1].FindDeepChild("PackageUIItem");
-                _currentInventoryGameObject = backpackGameObject;
-            }
-            else if (IsShowingObjectiveInventoryPopup)
-            {
-                HandleObjectiveInventoryPopup();
-            }
-            else if (IsInBuilding)
-            {
-                HandlePlayerActions();
-            }
-            else
-            {
-                HandlePlayerMovement();
-            }
+        //        var inventoryPopup = UI.Instance.InventoryPopup.GetComponent<InventoryPopup>();
+        //        var backpackGameObject = inventoryPopup.Tabs[1].FindDeepChild("PackageUIItem");
+        //        _currentInventoryGameObject = backpackGameObject;
+        //    }
+        //    else if (IsShowingObjectiveInventoryPopup)
+        //    {
+        //        HandleObjectiveInventoryPopup();
+        //    }
+        //    else if (IsInBuilding)
+        //    {
+        //        HandlePlayerActions();
+        //    }
+        //    else
+        //    {
+        //        HandlePlayerMovement();
+        //    }
 
-            if (!IsShowingObjectiveInventoryPopup)
-            {
-                HandleZoom();
-            }
+        //    if (!IsShowingObjectiveInventoryPopup)
+        //    {
+        //        HandleZoom();
+        //    }
 
-        }
+        //}
 
         /// <summary>
         /// Sets the current PopUI when entering/exiting a building to enable/disable movement controls and enable/disable action button cycling.
