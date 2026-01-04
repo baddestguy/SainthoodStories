@@ -78,7 +78,7 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
         SaintData saintData = SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex];
 
         //populate the saint data
-        var rawPath = saintData.IconPath;
+        var rawPath = saintData.Portrait;
 
         // Strip whitespace, CR/LF, and stray quotes
         var cleanPath = rawPath?
@@ -92,7 +92,7 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
         CharPotrait.DOFade(0, 0);
         CharPotrait.DOFade(1, 0.5f);
 
-        SaintName.text = $"<b>{LocalizationManager.Instance.GetText("Name")}:</b> {saintData.Name}\r\n<b>{LocalizationManager.Instance.GetText("Born")}:</b> {saintData.Birthday}\r\n<b>{LocalizationManager.Instance.GetText("Died")}:</b> {saintData.Death}\r\n<b>{LocalizationManager.Instance.GetText("FeastDay")}:</b> {saintData.FeastDay}\r\n<b>{LocalizationManager.Instance.GetText("Patron")}:</b> {LocalizationManager.Instance.GetText(saintData.PatronKey)}";
+        SaintName.text = $"<b>{LocalizationManager.Instance.GetText("Name")}:</b> {saintData.Name}\r\n<b>{LocalizationManager.Instance.GetText("Born")}:</b> {saintData.Birthday}\r\n<b>{LocalizationManager.Instance.GetText("Died")}:</b> {saintData.Death}\r\n<b>{LocalizationManager.Instance.GetText("FeastDay")}:</b> {saintData.FeastDay}\r\n<b>{LocalizationManager.Instance.GetText("Patronage")}:</b> {LocalizationManager.Instance.GetText(saintData.PatronKey)}";
         SaintName.transform.localPosition = new Vector3(-10f, SaintName.transform.localPosition.y, SaintName.transform.localPosition.z);
         SaintName.transform.DOLocalMoveX(0, 0.5f);
         SaintName.DOFade(0, 0);

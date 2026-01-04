@@ -340,7 +340,7 @@ public class GameDataManager : MonoBehaviour
         yield return null;
 
         //Saints
-        csvFile = Resources.Load<TextAsset>("GameData/Saints");
+        csvFile = Resources.Load<TextAsset>("GameData/SaintsData");
         var saintData = CsvSerializer.Deserialize<SaintData>(csvFile.text);
 
         foreach (var item in saintData)

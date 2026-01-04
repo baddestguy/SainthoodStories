@@ -125,7 +125,19 @@ public class SaveDataManager : MonoBehaviour
             Time = Constants.DayTimeStartTime,
             TutorialSteps = 40,
             Money = 0,
-            Saints = new SaintID[] { SaintID.KATERI, SaintID.MARIE, SaintID.SANMARTIN, SaintID.BAKHITA}
+            Saints = new SaintID[] 
+            { 
+                SaintID.KATERI, 
+                SaintID.MARIE, 
+                SaintID.SANMARTIN, 
+                SaintID.BAKHITA,
+                SaintID.FRANCIS,
+                SaintID.MICHAEL,
+                SaintID.JUDE,
+                SaintID.THERESE,
+                SaintID.JOSEPH,
+                SaintID.JOAN
+            }
         };
     }
 

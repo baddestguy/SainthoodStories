@@ -49,6 +49,11 @@ public enum SaintID
     , ROQUE
     , SANMARTIN
     , VICTOR
+    , FRANCIS
+    , THERESE
+    , JOAN
+    , JUDE
+    , MICHAEL
 }
 
 public enum WeatherId
@@ -713,13 +718,15 @@ public class ConstructionAvailabilityData
 public class SaintData
 {
     public SaintID Id {get; set; }
-    public string Name {get; set; }
+    public string Name {get{ return LocalizationManager.Instance.GetText(NameKey); } }
+    public string NameKey {get; set; }
+
+    public string DescriptionKey {get; set; }
     public string Birthday {get; set; }
     public string Death {get; set; }
     public string FeastDay {get; set; }
     public string PatronKey {get; set; }
-    public string BioKey {get; set; }
-    public string IconPath {get; set; }
+    public string Portrait {get; set; }
 }
 
 

@@ -86,8 +86,8 @@ public class SaintShowcaseHandler : MonoBehaviour
 
         //populate the saint data
         SaintPotrait.enabled = true;
-        SaintPotrait.sprite = Resources.Load<Sprite>(saintData.IconPath);
-        Bio.text = LocalizationManager.Instance.GetText(saintData.BioKey);
+        SaintPotrait.sprite = Resources.Load<Sprite>(saintData.Portrait);
+        Bio.text = LocalizationManager.Instance.GetText(saintData.DescriptionKey);
         Title.text = saintData.Name;
     }
 

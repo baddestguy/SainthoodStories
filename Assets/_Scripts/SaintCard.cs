@@ -18,6 +18,6 @@ public class SaintCard : MonoBehaviour
 {LocalizationManager.Instance.GetText("Died")}: {Saint.Death}
 {LocalizationManager.Instance.GetText("FeastDay")}: {Saint.FeastDay}
 {LocalizationManager.Instance.GetText("Patron")}: {LocalizationManager.Instance.GetText(Saint.PatronKey)}";
-        SaintIcon.sprite = Resources.Load<Sprite>(Saint.IconPath);
+        SaintIcon.sprite = Resources.Load<Sprite>(Saint.Portrait);
     }
 }
