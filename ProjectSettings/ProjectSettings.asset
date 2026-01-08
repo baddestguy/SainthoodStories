@@ -14,7 +14,7 @@ PlayerSettings:
   accelerometerFrequency: 60
   companyName: SainthoodProject
   productName: Sainthood Stories
-  defaultCursor: {fileID: 2800000, guid: 8b2021bcb0cc4ed4d808a56f8e29f25a, type: 3}
+  defaultCursor: {fileID: 0}
   cursorHotspot: {x: 16, y: 16}
   m_SplashScreenBackgroundColor: {r: 0.92549026, g: 0.854902, b: 0.8078432, a: 1}
   m_ShowUnitySplashScreen: 0
@@ -1002,7 +1002,7 @@ PlayerSettings:
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
   cloudServicesEnabled:
-    Purchasing: 0
+    Purchasing: 1
     UNet: 1
   luminIcon:
     m_Name: 

@@ -129,14 +129,14 @@ public class SaveDataManager : MonoBehaviour
             { 
                 SaintID.THERESE,
                 SaintID.MICHAEL,
-                SaintID.KATERI, 
-                SaintID.FRANCIS,
-                SaintID.MARIE, 
-                SaintID.JOSEPH,
-                SaintID.SANMARTIN, 
-                SaintID.JOAN,
-                SaintID.BAKHITA,
-                SaintID.JUDE
+                SaintID.KATERI
+                //SaintID.FRANCIS,
+                //SaintID.MARIE, 
+                //SaintID.JOSEPH,
+                //SaintID.SANMARTIN, 
+                //SaintID.JOAN,
+                //SaintID.BAKHITA,
+                //SaintID.JUDE
             }
         };
     }
