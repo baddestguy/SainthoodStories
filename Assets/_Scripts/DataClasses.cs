@@ -727,6 +727,11 @@ public class SaintData
     public string FeastDay {get; set; }
     public string PatronKey {get; set; }
     public string Portrait {get; set; }
+    public string Preview { get
+        {
+            return $"<b>{LocalizationManager.Instance.GetText("Name")}:</b> {Name}\r\n<b>{LocalizationManager.Instance.GetText("Born")}:</b> {Birthday}\r\n<b>{LocalizationManager.Instance.GetText("Died")}:</b> {Death}\r\n<b>{LocalizationManager.Instance.GetText("FeastDay")}:</b> {FeastDay}\r\n<b>{LocalizationManager.Instance.GetText("Patronage")}:</b> {LocalizationManager.Instance.GetText(PatronKey)}";
+        } 
+    }
 }
 
 

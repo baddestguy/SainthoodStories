@@ -136,8 +136,14 @@ public class GameManager : MonoBehaviour
     private void OnLevelLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         Time.timeScale = 1f;
+        if (scene.name.Contains("StoriesLevelTerminal"))
+        {
+            PreviousSceneID = CurrentSceneID;
+            CurrentSceneID = CurrentMission.SeasonSceneId;
+            SaintsManager.Instance.LoadSaints(SaveData.Saints);
 
-        if (scene.IsGameLevel())
+        }
+        else if (scene.IsGameLevel())
         {
             PreviousSceneID = CurrentSceneID;
             CurrentSceneID = CurrentMission.SeasonSceneId;
