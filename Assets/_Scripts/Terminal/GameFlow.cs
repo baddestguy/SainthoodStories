@@ -18,7 +18,7 @@ public class GameFlow : MonoBehaviour
     public TextMeshProUGUI StoryEventText;
     public Image StoryEventBackground;
     private int CurrentSaintIndex = 0;
-    private int CurrentSequenceNumber = 0;
+    private int CurrentSequenceNumber = 2;
     private IEnumerable<SaintsEvent> EventList;
     private bool CanSkipIntro;
     private bool ShowingIntro;
@@ -82,8 +82,7 @@ public class GameFlow : MonoBehaviour
         yield return terminal.TypeLine("MOUNTING: C:\\ARCHIVE\\SAINTS\\");
         yield return terminal.TypeLine("");
         yield return terminal.TypeLine("NOTICE: READ-ONLY SESSION");
-        yield return terminal.TypeLine("USER: AUTHORIZED VIEWER");
-        yield return terminal.TypeLine("ACCESS: TESTIMONY RECORDS");
+        yield return terminal.TypeLine("USER: Admin");
         yield return terminal.WaitForContinue();
     }
 
@@ -169,6 +168,7 @@ public class GameFlow : MonoBehaviour
     private IEnumerator ReadSaint(SaintData saint)
     {
         terminal.Clear();
+        CurrentSequenceNumber = 2;
         var currentSaintId = SaintsManager.Instance.UnlockedSaints[hubSelectionIndex].Id;
         EventList = GameDataManager.Instance.SaintsEvent.Values.Where(e => e.Id.Contains(currentSaintId.ToString()));
 
@@ -181,12 +181,12 @@ public class GameFlow : MonoBehaviour
         yield return terminal.TypeLine($"{LocalizationManager.Instance.GetText("FeastDay")}: {saint.FeastDay}");
         yield return terminal.TypeLine($"{LocalizationManager.Instance.GetText("Patronage")}: {LocalizationManager.Instance.GetText(saint.PatronKey)}");
         yield return terminal.TypeLine("----------------------------------------");
-        yield return terminal.WaitForContinue("Press Q to quit any time, Enter to begin...");
+        yield return terminal.WaitForContinue("Press Enter to begin, Q to quit any time...");
 
-        while(CurrentSequenceNumber < EventList.Count())
+        while(CurrentSequenceNumber < EventList.Count() && !Input.GetKeyUp(KeyCode.Q) && !Input.GetKeyUp(KeyCode.Escape))
         {
             yield return StartCoroutine(Proceed());
-            yield return terminal.WaitForContinue("");
+            yield return terminal.WaitForContinue(">");
         }
     }
 
@@ -293,22 +293,6 @@ public class GameFlow : MonoBehaviour
             go.transform.SetParent(ChoiceScroller.content, false);
             go.GetComponent<SaintFragmentChoiceItem>().Init(currentEvent, currentEvent.Choice3, currentEvent.Choice3Response);
         }
-    }
-    private string Redact(string text)
-    {
-        // crude redaction effect: replace letters with ? except spaces/punct
-        char RedactChar(char c)
-        {
-            if (char.IsWhiteSpace(c)) return c;
-            if (char.IsPunctuation(c)) return c;
-            return '?';
-        }
-
-        var arr = text.ToCharArray();
-        for (int i = 0; i < arr.Length; i++)
-            arr[i] = RedactChar(arr[i]);
-
-        return new string(arr);
     }
 
     // ---------------- END ----------------

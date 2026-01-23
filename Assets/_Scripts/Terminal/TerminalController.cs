@@ -1,10 +1,13 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TerminalController : MonoBehaviour
 {
+    [Header("UI")]
     [SerializeField] private TMP_Text terminalText;
+    [SerializeField] private ScrollRect scrollRect; // assign your Scroll View's ScrollRect here
 
     [Header("Typing")]
     [SerializeField] private float charsPerSecond = 80f;
@@ -20,6 +23,7 @@ public class TerminalController : MonoBehaviour
 
     private Coroutine _typingRoutine;
     private Coroutine _cursorRoutine;
+    private Coroutine _scrollRoutine;
 
     private void OnEnable()
     {
@@ -31,7 +35,12 @@ public class TerminalController : MonoBehaviour
     private void OnDisable()
     {
         if (_cursorRoutine != null) StopCoroutine(_cursorRoutine);
+        if (_typingRoutine != null) StopCoroutine(_typingRoutine);
+        if (_scrollRoutine != null) StopCoroutine(_scrollRoutine);
+
         _cursorRoutine = null;
+        _typingRoutine = null;
+        _scrollRoutine = null;
     }
 
     // ---------------- Public API ----------------
@@ -57,9 +66,6 @@ public class TerminalController : MonoBehaviour
         Render();
     }
 
-    /// <summary>
-    /// Type a line with optional typewriter effect. Adds a newline at the end.
-    /// </summary>
     public Coroutine TypeLine(string line)
     {
         StopTyping();
@@ -76,23 +82,22 @@ public class TerminalController : MonoBehaviour
         }
     }
 
+    public bool IsTyping => _typingRoutine != null;
+
     public IEnumerator WaitForContinue(string prompt = "[PRESS ENTER]")
     {
         // show prompt on its own line
-        _buffer += "\n" + prompt;
+        if(!string.IsNullOrWhiteSpace(prompt))
+            _buffer += "\n" + prompt;
+
         Render();
 
-        while (!Input.GetKeyUp(KeyCode.Return) && !Input.GetKeyUp(KeyCode.Space))
+        while (!Input.GetKeyUp(KeyCode.Return) && !Input.GetKeyUp(KeyCode.Space) && !Input.GetKeyUp(KeyCode.Q) && !Input.GetKeyUp(KeyCode.Escape))
             yield return null;
 
         _buffer += "\n";
         Render();
     }
-
-    /// <summary>
-    /// If you want: call this in Update when a key is pressed to instantly finish current typing.
-    /// </summary>
-    public bool IsTyping => _typingRoutine != null;
 
     // ---------------- Internals ----------------
 
@@ -134,14 +139,18 @@ public class TerminalController : MonoBehaviour
     {
         if (!terminalText) return;
 
-        if (!showBlinkingCursor)
-        {
-            terminalText.text = _buffer;
-            return;
-        }
+        terminalText.text = showBlinkingCursor
+            ? _buffer + (_cursorVisible ? cursorGlyph : " ")
+            : _buffer;
 
-        // Cursor at end of buffer. Add a space before cursor if you want breathing room:
-        // terminalText.text = _buffer + (_cursorVisible ? cursorGlyph : " ");
-        terminalText.text = _buffer + (_cursorVisible ? cursorGlyph : " ");
+        // Force bottom scroll after layout updates
+        RequestScrollToBottom();
+    }
+
+    private void RequestScrollToBottom()
+    {
+        if (!scrollRect) return;
+
+        scrollRect.verticalNormalizedPosition = 0f;
     }
 }
