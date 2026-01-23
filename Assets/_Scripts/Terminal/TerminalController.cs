@@ -84,7 +84,7 @@ public class TerminalController : MonoBehaviour
 
     public bool IsTyping => _typingRoutine != null;
 
-    public IEnumerator WaitForContinue(string prompt = "[PRESS ENTER]")
+    public IEnumerator WaitForContinue(string prompt = "Press Enter to Continue...")
     {
         // show prompt on its own line
         if(!string.IsNullOrWhiteSpace(prompt))

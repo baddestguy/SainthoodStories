@@ -239,7 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terminalText: {fileID: 1797155046}
   scrollRect: {fileID: 1787301911}
-  charsPerSecond: 200
+  charsPerSecond: 20000
   enableTypewriter: 1
   showBlinkingCursor: 1
   cursorGlyph: _

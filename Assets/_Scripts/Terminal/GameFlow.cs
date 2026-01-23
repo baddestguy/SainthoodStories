@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using TMPro;
-using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Net.Mime.MediaTypeNames;
+using Application = UnityEngine.Application;
+using Image = UnityEngine.UI.Image;
 
 public class GameFlow : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class GameFlow : MonoBehaviour
 
     private int hubSelectionIndex = 0;
     private SaintData hubSelectedSaint;
+
+    private int ChoiceSelectionIndex = 0;
+    private SaintsEvent SelectedChoiceEvent;
 
     public GameObject StorySequenceObj;
     public TextMeshProUGUI StoryEventText;
@@ -38,6 +42,9 @@ public class GameFlow : MonoBehaviour
     public GameObject CloseStoryBtn;
     public ScrollRect ChoiceScroller;
     public GameObject ChoicePrefab;
+    
+    private bool InChoiceMode;
+    private int NumChoices = 0;
 
     private void Start()
     {
@@ -75,14 +82,45 @@ public class GameFlow : MonoBehaviour
     {
         terminal.Clear();
 
-        yield return terminal.TypeLine("S A I N T H O O D   A R C H I V E   T E R M I N A L");
-        yield return terminal.TypeLine("BIOS v2.13  (c) 1994  ECCLESIA SYSTEMS");
-        yield return terminal.TypeLine("MEM CHECK ............... OK");
-        yield return terminal.TypeLine("DRIVE C: ................. OK");
-        yield return terminal.TypeLine("MOUNTING: C:\\ARCHIVE\\SAINTS\\");
-        yield return terminal.TypeLine("");
-        yield return terminal.TypeLine("NOTICE: READ-ONLY SESSION");
-        yield return terminal.TypeLine("USER: Admin");
+        //yield return terminal.TypeLine("S A I N T H O O D   A R C H I V E   T E R M I N A L");
+        //yield return terminal.TypeLine("ECCLESIA BIOS v2.13");
+        //yield return terminal.TypeLine("Copyright (C) 1994 Ecclesia Systems");
+        //yield return terminal.TypeLine("All Rights Reserved.");
+        //yield return terminal.TypeLine("");
+
+        //yield return terminal.TypeLine("CPU ............... 486DX/66 MHz");
+        //yield return terminal.TypeLine("FPU ............... DETECTED");
+        //yield return terminal.TypeLine("BASE MEMORY ....... 640 KB");
+        //yield return terminal.TypeLine("EXTENDED MEMORY ... 8192 KB");
+        //yield return terminal.TypeLine("CACHE ............ ENABLED");
+        //yield return terminal.TypeLine("");
+
+        //yield return terminal.TypeLine("Loading system drivers...");
+        //yield return terminal.TypeLine("HIMEM.SYS ............... OK");
+        //yield return terminal.TypeLine("EMM386.EXE .............. OK");
+        //yield return terminal.TypeLine("ANSI.SYS ................ OK");
+        //yield return terminal.TypeLine("KEYB US ................ OK");
+        //yield return terminal.TypeLine("");
+
+        //yield return terminal.TypeLine("DRIVE C: ................ OK");
+        //yield return terminal.TypeLine("FS TYPE ................ FAT16");
+        //yield return terminal.TypeLine("VOLUME LABEL ............ ECCLESIA_ARCHIVE");
+        //yield return terminal.TypeLine("");
+
+        //yield return terminal.TypeLine("MOUNTING: C:\\ARCHIVE\\SAINTS\\");
+        //yield return terminal.TypeLine("INDEXING RECORDS ........ PLEASE WAIT");
+
+        //yield return terminal.TypeLine($"RECORDS FOUND ........... {SaintsManager.Instance.UnlockedSaints.Count}");
+        //yield return terminal.TypeLine("VERIFICATION ............ COMPLETE");
+        //yield return terminal.TypeLine("");
+
+        //yield return terminal.TypeLine("NOTICE: READ-ONLY SESSION");
+        //yield return terminal.TypeLine("MODIFICATION DISABLED");
+        //yield return terminal.TypeLine("DELETION DISABLED");
+        //yield return terminal.TypeLine("EXPORT DISABLED");
+        //yield return terminal.TypeLine("");
+
+        yield return terminal.TypeLine("USER ............ ADMIN");
         yield return terminal.WaitForContinue();
     }
 
@@ -152,14 +190,6 @@ public class GameFlow : MonoBehaviour
             //    terminal.AppendLineInstant($"   {s.Preview}");
         }
 
-        // show locked count
-        int lockedCount = SaintsManager.Instance.UnlockedSaints.Count - unlocked.Count;
-        if (lockedCount > 0)
-        {
-            terminal.AppendLineInstant("");
-            terminal.AppendLineInstant($"{lockedCount} FILE(S) LOCKED. CONDITION: READ MORE TESTIMONIES.");
-        }
-
         terminal.AppendLineInstant("");
         terminal.AppendLineInstant("UP/DOWN: SELECT   ENTER: OPEN   ESC: EXIT");
     }
@@ -183,60 +213,52 @@ public class GameFlow : MonoBehaviour
         yield return terminal.TypeLine("----------------------------------------");
         yield return terminal.WaitForContinue("Press Enter to begin, Q to quit any time...");
 
+        terminal.Clear();
         while(CurrentSequenceNumber < EventList.Count() && !Input.GetKeyUp(KeyCode.Q) && !Input.GetKeyUp(KeyCode.Escape))
         {
-            yield return StartCoroutine(Proceed());
+            var currentEvent = EventList.ElementAt(CurrentSequenceNumber);
+            yield return StartCoroutine(Proceed(currentEvent));
+            
+            CurrentSequenceNumber++;
+            
             yield return terminal.WaitForContinue(">");
+
+            while (InChoiceMode) yield return null;
+
+            if (CurrentSequenceNumber >= EventList.Count())
+            {
+                yield return terminal.TypeLine("");
+                yield return terminal.TypeLine("END OF RECORD.");
+                yield return terminal.WaitForContinue("[RETURN TO DIRECTORY]");
+                yield break;
+            }
         }
     }
 
-    IEnumerator Proceed()
+    IEnumerator Proceed(SaintsEvent currentEvent)
     {
         if (ShowingIntro && !CanSkipIntro) yield break;
 
-        //ChoiceScroller.gameObject.SetActive(false);
-        //StoryEventText.alignment = TextAlignmentOptions.Midline;
-        StopCoroutine("SaintIntro");
-
-        if (CurrentSequenceNumber >= EventList.Count())
-        {
-            yield return terminal.TypeLine("");
-            yield return terminal.TypeLine("END OF RECORD.");
-            yield return terminal.WaitForContinue("[RETURN TO DIRECTORY]");
-            yield break;
-        }
-
-        var currentEvent = EventList.ElementAt(CurrentSequenceNumber);
-
-        var text = LocalizationManager.Instance.GetText(currentEvent.DescriptionKey);
-        yield return terminal.TypeLine($"{text}");
-
-        //StoryEventText.text = $"{currentEvent.FontColor}{text}";
-        //StoryEventText.color = new Color(StoryEventText.color.r, StoryEventText.color.g, StoryEventText.color.b, 0f);
-
-        //StoryEventText.DOKill();
-        //StoryEventText.DOFade(1f, 1f).SetEase(Ease.Linear);
 
         WeatherManager.Instance.UpdateWeather(currentEvent.Weather);
 
-        //Extensions.TryExtractColorFromRichText(currentEvent.FontColor, out Color c);
-        //ProceedBtn.GetComponentsInChildren<Image>()[1].color = c;
-        //CloseStoryBtn.GetComponent<Image>().color = c;
-
         if (currentEvent.SequenceType == StorySequenceType.CHOICE)
         {
+            terminal.Clear();
+            InChoiceMode = true;
+            var text = LocalizationManager.Instance.GetText(currentEvent.DescriptionKey);
+            yield return terminal.TypeLine($"{text}");
             StartCoroutine(ChoiceSequence(currentEvent));
+        }
+        else
+        {
+            var text = LocalizationManager.Instance.GetText(currentEvent.DescriptionKey);
+            yield return terminal.TypeLine($"{text}");
         }
 
         var voice = LocalizationManager.Instance.GetVoice(currentEvent.DescriptionKey);
         if (CurrentAudioSource != null) CurrentAudioSource.Stop();
         CurrentAudioSource = SoundManager.Instance.PlayVoice(voice);
-
-        //Color newColor;
-        //if (ColorUtility.TryParseHtmlString(currentEvent.BackgroundColor, out newColor))
-        //{
-        //    StoryEventBackground.DOColor(newColor, 1f);
-        //}
 
         if (currentEvent.SoundEffect == "STOP")
             SoundManager.Instance.StopOneShotSfx();
@@ -255,44 +277,109 @@ public class GameFlow : MonoBehaviour
 
         if (!string.IsNullOrEmpty(currentEvent.InteractionSfx))
             InteractionSfx = currentEvent.InteractionSfx.Split(',');
-
-        CurrentSequenceNumber++;
     }
 
-    IEnumerator ChoiceSequence(SaintsEvent currentEvent)
+    void RenderChoices(SaintsEvent currentEvent)
     {
-        StoryEventText.alignment = TextAlignmentOptions.Top;
+        terminal.Clear();
+        var text = LocalizationManager.Instance.GetText(currentEvent.DescriptionKey);
+        terminal.AppendLineInstant($"{text}");
 
-        foreach (var child in ChoiceScroller.transform.GetComponentsInChildren<SaintFragmentChoiceItem>().ToList())
-        {
-            Destroy(child.gameObject);
-        }
+        string cursor = " ";
+        NumChoices = 0;
 
-        yield return new WaitForSeconds(0.1f);
-
-        ChoiceScroller.gameObject.SetActive(true);
         if (!string.IsNullOrEmpty(currentEvent.Choice1))
         {
-            var go = Instantiate(ChoicePrefab);
-            go.transform.SetParent(ChoiceScroller.content, false);
-            go.GetComponent<SaintFragmentChoiceItem>().Init(currentEvent, currentEvent.Choice1, currentEvent.Choice1Response);
+            cursor = ChoiceSelectionIndex == 0 ? ">" : " ";
+            terminal.AppendLineInstant($"{cursor} {LocalizationManager.Instance.GetText(currentEvent.Choice1)}");
+            NumChoices++;
         }
 
-        yield return new WaitForSeconds(0.1f);
         if (!string.IsNullOrEmpty(currentEvent.Choice2))
         {
-            var go = Instantiate(ChoicePrefab);
-            go.transform.SetParent(ChoiceScroller.content, false);
-            go.GetComponent<SaintFragmentChoiceItem>().Init(currentEvent, currentEvent.Choice2, currentEvent.Choice2Response);
+            cursor = ChoiceSelectionIndex == 1 ? ">" : " ";
+            terminal.AppendLineInstant($"{cursor} {LocalizationManager.Instance.GetText(currentEvent.Choice2)}");
+            NumChoices++;
         }
 
-        yield return new WaitForSeconds(0.1f);
         if (!string.IsNullOrEmpty(currentEvent.Choice3))
         {
-            var go = Instantiate(ChoicePrefab);
-            go.transform.SetParent(ChoiceScroller.content, false);
-            go.GetComponent<SaintFragmentChoiceItem>().Init(currentEvent, currentEvent.Choice3, currentEvent.Choice3Response);
+            cursor = ChoiceSelectionIndex == 2 ? ">" : " ";
+            terminal.AppendLineInstant($"{cursor} {LocalizationManager.Instance.GetText(currentEvent.Choice3)}");
+            NumChoices++;
         }
+
+        {
+            cursor = ChoiceSelectionIndex == NumChoices ? ">" : " ";
+            terminal.AppendLineInstant($"{cursor} {LocalizationManager.Instance.GetText("Skip and proceed with story.")}");
+            NumChoices++;
+        }
+
+        terminal.AppendLineInstant("");
+        terminal.AppendLineInstant("UP/DOWN: SELECT   ENTER: OPEN   ESC: EXIT");
+    }
+
+    private IEnumerator ChoiceSequence(SaintsEvent currentEvent)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        SelectedChoiceEvent = null;
+        bool chosen = false;
+
+        while (!chosen)
+        {
+            RenderChoices(currentEvent);
+
+            while (true)
+            {
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    ChoiceSelectionIndex = Mathf.Max(0, ChoiceSelectionIndex - 1);
+                    break;
+                }
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    ChoiceSelectionIndex = Mathf.Min(NumChoices - 1, ChoiceSelectionIndex + 1);
+                    break;
+                }
+                if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.Space))
+                {
+                    ChoiceSelected(currentEvent, ChoiceSelectionIndex);
+                    chosen = true;
+                    break;
+                }
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    SelectedChoiceEvent = null;
+                    chosen = true;
+                    break;
+                }
+
+                yield return null;
+            }
+
+            yield return null;
+        }
+    }
+
+    private void ChoiceSelected(SaintsEvent currentEvent, int selection)
+    {
+        var responseKey = "";
+        switch (selection)
+        {
+            case 0: responseKey = currentEvent.Choice1Response; break;
+            case 1: responseKey = currentEvent.Choice2Response; break;
+            case 2: responseKey = currentEvent.Choice3Response; break;
+        }
+
+        if(selection == NumChoices-1)
+        {
+            InChoiceMode = false;
+            return;
+        }
+
+        var newevent = GameDataManager.Instance.SaintsEvent[responseKey.Trim().Trim('"')];
+        StartCoroutine(Proceed(newevent));
     }
 
     // ---------------- END ----------------
@@ -303,7 +390,7 @@ public class GameFlow : MonoBehaviour
         yield return terminal.TypeLine("");
         yield return terminal.TypeLine("SESSION TERMINATED.");
         yield return terminal.TypeLine("POWERING DOWN...");
-        yield return terminal.WaitForContinue("[PRESS ENTER]");
+        yield return terminal.WaitForContinue("Press Enter to Continue...");
         Application.Quit();
     }
 }
