@@ -82,43 +82,43 @@ public class GameFlow : MonoBehaviour
     {
         terminal.Clear();
 
-        //yield return terminal.TypeLine("S A I N T H O O D   A R C H I V E   T E R M I N A L");
-        //yield return terminal.TypeLine("ECCLESIA BIOS v2.13");
-        //yield return terminal.TypeLine("Copyright (C) 1994 Ecclesia Systems");
-        //yield return terminal.TypeLine("All Rights Reserved.");
-        //yield return terminal.TypeLine("");
+        yield return terminal.TypeLine("S A I N T H O O D   A R C H I V E   T E R M I N A L");
+        yield return terminal.TypeLine("ECCLESIA BIOS v2.13");
+        yield return terminal.TypeLine("Copyright (C) 1994 Ecclesia Systems");
+        yield return terminal.TypeLine("All Rights Reserved.");
+        yield return terminal.TypeLine("");
 
-        //yield return terminal.TypeLine("CPU ............... 486DX/66 MHz");
-        //yield return terminal.TypeLine("FPU ............... DETECTED");
-        //yield return terminal.TypeLine("BASE MEMORY ....... 640 KB");
-        //yield return terminal.TypeLine("EXTENDED MEMORY ... 8192 KB");
-        //yield return terminal.TypeLine("CACHE ............ ENABLED");
-        //yield return terminal.TypeLine("");
+        yield return terminal.TypeLine("CPU ............... 486DX/66 MHz");
+        yield return terminal.TypeLine("FPU ............... DETECTED");
+        yield return terminal.TypeLine("BASE MEMORY ....... 640 KB");
+        yield return terminal.TypeLine("EXTENDED MEMORY ... 8192 KB");
+        yield return terminal.TypeLine("CACHE ............ ENABLED");
+        yield return terminal.TypeLine("");
 
-        //yield return terminal.TypeLine("Loading system drivers...");
-        //yield return terminal.TypeLine("HIMEM.SYS ............... OK");
-        //yield return terminal.TypeLine("EMM386.EXE .............. OK");
-        //yield return terminal.TypeLine("ANSI.SYS ................ OK");
-        //yield return terminal.TypeLine("KEYB US ................ OK");
-        //yield return terminal.TypeLine("");
+        yield return terminal.TypeLine("Loading system drivers...");
+        yield return terminal.TypeLine("HIMEM.SYS ............... OK");
+        yield return terminal.TypeLine("EMM386.EXE .............. OK");
+        yield return terminal.TypeLine("ANSI.SYS ................ OK");
+        yield return terminal.TypeLine("KEYB US ................ OK");
+        yield return terminal.TypeLine("");
 
-        //yield return terminal.TypeLine("DRIVE C: ................ OK");
-        //yield return terminal.TypeLine("FS TYPE ................ FAT16");
-        //yield return terminal.TypeLine("VOLUME LABEL ............ ECCLESIA_ARCHIVE");
-        //yield return terminal.TypeLine("");
+        yield return terminal.TypeLine("DRIVE C: ................ OK");
+        yield return terminal.TypeLine("FS TYPE ................ FAT16");
+        yield return terminal.TypeLine("VOLUME LABEL ............ ECCLESIA_ARCHIVE");
+        yield return terminal.TypeLine("");
 
-        //yield return terminal.TypeLine("MOUNTING: C:\\ARCHIVE\\SAINTS\\");
-        //yield return terminal.TypeLine("INDEXING RECORDS ........ PLEASE WAIT");
+        yield return terminal.TypeLine("MOUNTING: C:\\ARCHIVE\\SAINTS\\");
+        yield return terminal.TypeLine("INDEXING RECORDS ........ PLEASE WAIT");
 
-        //yield return terminal.TypeLine($"RECORDS FOUND ........... {SaintsManager.Instance.UnlockedSaints.Count}");
-        //yield return terminal.TypeLine("VERIFICATION ............ COMPLETE");
-        //yield return terminal.TypeLine("");
+        yield return terminal.TypeLine($"RECORDS FOUND ........... {SaintsManager.Instance.UnlockedSaints.Count}");
+        yield return terminal.TypeLine("VERIFICATION ............ COMPLETE");
+        yield return terminal.TypeLine("");
 
-        //yield return terminal.TypeLine("NOTICE: READ-ONLY SESSION");
-        //yield return terminal.TypeLine("MODIFICATION DISABLED");
-        //yield return terminal.TypeLine("DELETION DISABLED");
-        //yield return terminal.TypeLine("EXPORT DISABLED");
-        //yield return terminal.TypeLine("");
+        yield return terminal.TypeLine("NOTICE: READ-ONLY SESSION");
+        yield return terminal.TypeLine("MODIFICATION DISABLED");
+        yield return terminal.TypeLine("DELETION DISABLED");
+        yield return terminal.TypeLine("EXPORT DISABLED");
+        yield return terminal.TypeLine("");
 
         yield return terminal.TypeLine("USER ............ ADMIN");
         yield return terminal.WaitForContinue();
