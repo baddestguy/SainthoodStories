@@ -95,6 +95,8 @@ public class TerminalController : MonoBehaviour
         while (!Input.GetKeyUp(KeyCode.Return) && !Input.GetKeyUp(KeyCode.Space) && !Input.GetKeyUp(KeyCode.Q) && !Input.GetKeyUp(KeyCode.Escape))
             yield return null;
 
+        SoundManager.Instance.PlayOneShotSfx($"Key_Tap_{Random.Range(1,5)}");
+
         _buffer += "\n";
         Render();
     }

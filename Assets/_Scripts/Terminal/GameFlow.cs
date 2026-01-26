@@ -82,6 +82,9 @@ public class GameFlow : MonoBehaviour
     {
         terminal.Clear();
 
+        SoundManager.Instance.PlayOneShotSfx("PC_Bootup_SFX", timeToDie: 20);
+        SoundManager.Instance.PlayAmbience("Office_Ambience");
+
         yield return terminal.TypeLine("S A I N T H O O D   A R C H I V E   T E R M I N A L");
         yield return terminal.TypeLine("ECCLESIA BIOS v2.13");
         yield return terminal.TypeLine("Copyright (C) 1994 Ecclesia Systems");
@@ -121,6 +124,8 @@ public class GameFlow : MonoBehaviour
         yield return terminal.TypeLine("");
 
         yield return terminal.TypeLine("USER ............ ADMIN");
+        SoundManager.Instance.PlayMusic("Office_Rain");
+
         yield return terminal.WaitForContinue();
     }
 
@@ -140,16 +145,19 @@ public class GameFlow : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
+                    SoundManager.Instance.PlayOneShotSfx($"Key_Tap_{Random.Range(1,5)}");
                     hubSelectionIndex = Mathf.Max(0, hubSelectionIndex - 1);
                     break;
                 }
                 if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
+                    SoundManager.Instance.PlayOneShotSfx($"Key_Tap_{Random.Range(1,5)}");
                     hubSelectionIndex = Mathf.Min(unlocked.Count - 1, hubSelectionIndex + 1);
                     break;
                 }
                 if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.Space))
                 {
+                    SoundManager.Instance.PlayOneShotSfx($"Key_Tap_{Random.Range(1,5)}");
                     hubSelectedSaint = unlocked[hubSelectionIndex];
                     chosen = true;
                     break;
@@ -157,6 +165,7 @@ public class GameFlow : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
                     // ESC = exit game
+                    SoundManager.Instance.PlayOneShotSfx($"Key_Tap_{Random.Range(1,5)}");
                     hubSelectedSaint = null;
                     chosen = true;
                     break;
@@ -191,7 +200,7 @@ public class GameFlow : MonoBehaviour
         }
 
         terminal.AppendLineInstant("");
-        terminal.AppendLineInstant("UP/DOWN: SELECT   ENTER: OPEN   ESC: EXIT");
+        terminal.AppendLineInstant("UP/DOWN: NAVIGATE   ENTER: SELECT   ESC: EXIT");
     }
 
     // ---------------- READING ----------------
@@ -260,23 +269,23 @@ public class GameFlow : MonoBehaviour
         if (CurrentAudioSource != null) CurrentAudioSource.Stop();
         CurrentAudioSource = SoundManager.Instance.PlayVoice(voice);
 
-        if (currentEvent.SoundEffect == "STOP")
-            SoundManager.Instance.StopOneShotSfx();
-        else
-            SoundManager.Instance.PlayOneShotSfx(currentEvent.SoundEffect, timeToDie: 15);
+        //if (currentEvent.SoundEffect == "STOP")
+        //    SoundManager.Instance.StopOneShotSfx();
+        //else
+        //    SoundManager.Instance.PlayOneShotSfx(currentEvent.SoundEffect, timeToDie: 15);
 
-        if (currentEvent.Music == "STOP")
-            SoundManager.Instance.FadeMusic(0, SoundManager.Instance.MusicAudioSourceChannel1);
-        else
-            SoundManager.Instance.PlayMusic(currentEvent.Music);
+        //if (currentEvent.Music == "STOP")
+        //    SoundManager.Instance.FadeMusic(0, SoundManager.Instance.MusicAudioSourceChannel1);
+        //else
+        //    SoundManager.Instance.PlayMusic(currentEvent.Music);
 
-        if (currentEvent.Ambience == "STOP")
-            SoundManager.Instance.FadeAmbience(0, true);
-        else
-            SoundManager.Instance.PlayAmbience(currentEvent.Ambience);
+        //if (currentEvent.Ambience == "STOP")
+        //    SoundManager.Instance.FadeAmbience(0, true);
+        //else
+        //    SoundManager.Instance.PlayAmbience(currentEvent.Ambience);
 
-        if (!string.IsNullOrEmpty(currentEvent.InteractionSfx))
-            InteractionSfx = currentEvent.InteractionSfx.Split(',');
+        //if (!string.IsNullOrEmpty(currentEvent.InteractionSfx))
+        //    InteractionSfx = currentEvent.InteractionSfx.Split(',');
     }
 
     void RenderChoices(SaintsEvent currentEvent)
@@ -316,7 +325,7 @@ public class GameFlow : MonoBehaviour
         }
 
         terminal.AppendLineInstant("");
-        terminal.AppendLineInstant("UP/DOWN: SELECT   ENTER: OPEN   ESC: EXIT");
+        terminal.AppendLineInstant("UP/DOWN: NAVIGATE   ENTER: SELECT   ESC: EXIT");
     }
 
     private IEnumerator ChoiceSequence(SaintsEvent currentEvent)
@@ -334,22 +343,26 @@ public class GameFlow : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
+                    SoundManager.Instance.PlayOneShotSfx($"Key_Tap_{Random.Range(1,5)}");
                     ChoiceSelectionIndex = Mathf.Max(0, ChoiceSelectionIndex - 1);
                     break;
                 }
                 if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
+                    SoundManager.Instance.PlayOneShotSfx($"Key_Tap_{Random.Range(1,5)}");
                     ChoiceSelectionIndex = Mathf.Min(NumChoices - 1, ChoiceSelectionIndex + 1);
                     break;
                 }
                 if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.Space))
                 {
+                    SoundManager.Instance.PlayOneShotSfx($"Key_Tap_{Random.Range(1,5)}");
                     ChoiceSelected(currentEvent, ChoiceSelectionIndex);
                     chosen = true;
                     break;
                 }
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
+                    SoundManager.Instance.PlayOneShotSfx($"Key_Tap_{Random.Range(1,5)}");
                     SelectedChoiceEvent = null;
                     chosen = true;
                     break;

@@ -158,7 +158,7 @@ public class SoundManager : MonoBehaviour
         AmbientAudioSource.volume = 0f;
 
         Destroy(oldTrack, 5);
-        FadeAmbience(0.3f);
+        FadeAmbience(1f);
         StartCoroutine(FadeAudioAsync(0f, oldTrack));
     }
 
