@@ -124,7 +124,7 @@ public class GameFlow : MonoBehaviour
         yield return terminal.TypeLine("");
 
         yield return terminal.TypeLine("USER ............ ADMIN");
-        SoundManager.Instance.PlayMusic("Office_Rain");
+        SoundManager.Instance.PlayMusic("Office_Drone");
 
         yield return terminal.WaitForContinue();
     }
@@ -399,8 +399,6 @@ public class GameFlow : MonoBehaviour
     private IEnumerator EndSequence()
     {
         terminal.Clear();
-        yield return terminal.TypeLine("NO FURTHER RECORDS ARE AVAILABLE.");
-        yield return terminal.TypeLine("");
         yield return terminal.TypeLine("SESSION TERMINATED.");
         yield return terminal.TypeLine("POWERING DOWN...");
         yield return terminal.WaitForContinue("Press Enter to Continue...");

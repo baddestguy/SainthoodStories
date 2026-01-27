@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: SainthoodProject
-  productName: Sainthood Stories
+  productName: Sainthood Terminal
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 16, y: 16}
   m_SplashScreenBackgroundColor: {r: 0.92549026, g: 0.854902, b: 0.8078432, a: 1}
@@ -46,8 +46,8 @@ PlayerSettings:
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
-  defaultScreenWidthWeb: 360
-  defaultScreenHeightWeb: 640
+  defaultScreenWidthWeb: 640
+  defaultScreenHeightWeb: 360
   m_StereoRenderingPath: 0
   m_ActiveColorSpace: 1
   unsupportedMSAAFallback: 0
@@ -172,7 +172,7 @@ PlayerSettings:
   androidMinAspectRatio: 1
   applicationIdentifier:
     Android: com.SainthoodProject.SainthoodStories
-    Standalone: com.BisongTaiwo.Sainthood
+    Standalone: com.SainthoodProject.SainthoodTerminal
     iPhone: com.bisongtaiwo.sainthood
   buildNumber:
     Standalone: 0
@@ -909,6 +909,7 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
+    Standalone: 1
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration:
     Android: 0
