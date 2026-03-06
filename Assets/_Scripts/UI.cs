@@ -180,7 +180,7 @@ public class UI : MonoBehaviour
 
     public void ToggleSaintFragmentsPopup()
     {
-        SaintFragmentsUI.GetComponent<SaintFragmentsPopup>().Open();
+        //SaintFragmentsUI.GetComponent<SaintFragmentsPopup>().Open();
     }
     public void ToggleWorldTriviaPopup()
     {

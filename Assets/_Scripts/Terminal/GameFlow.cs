@@ -249,7 +249,7 @@ public class GameFlow : MonoBehaviour
         if (ShowingIntro && !CanSkipIntro) yield break;
 
 
-        WeatherManager.Instance.UpdateWeather(currentEvent.Weather);
+    //    WeatherManager.Instance.UpdateWeather(currentEvent.Weather);
 
         if (currentEvent.SequenceType == StorySequenceType.CHOICE)
         {

@@ -18,6 +18,14 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
     public TextMeshProUGUI SaintName;
     public Image Divider;
 
+    public Image CharPotrait1;
+    public TextMeshProUGUI SaintName1;
+    public Image Divider1;
+    public Image CharPotrait2;
+    public TextMeshProUGUI SaintName2;
+    public Image Divider2;
+
+
     //Story Sequence
     public GameObject StorySequenceObj;
     public TextMeshProUGUI StoryEventText;
@@ -43,20 +51,22 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
     public GameObject CloseStoryBtn;
     public ScrollRect ChoiceScroller;
     public GameObject ChoicePrefab;
+    public GameObject PortraitSelector;
+    public GameObject LandscapeSelector;
 
     [Header("Swipe Settings")]
     public float SwipeThreshold = 100f;
     private Vector2 DragStartPos;
 
     private LayerMask CameraMask;
+    private bool IsPortrait;
 
-    public void Open()
+    public void Start()
     {
+        SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
+        SoundManager.Instance.PlayMusic("MainMenu_Music", loopDelay: 70);
         Application.targetFrameRate = 20;
         CustomEventPopup.IsDisplaying = true;
-        UI.Instance.EnableAllUIElements(false);
-        gameObject.SetActive(true);
-        FindAnyObjectByType<DayNightCycle>(FindObjectsInactive.Include).gameObject.SetActive(false);
         CameraMask = Camera.main.cullingMask;
         Camera.main.cullingMask = 0;
 
@@ -70,6 +80,14 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
 
     private void UpdateSaint()
     {
+        IsPortrait = Screen.height > Screen.width;
+        PortraitSelector.SetActive(IsPortrait);
+        LandscapeSelector.SetActive(!IsPortrait);
+
+        CharPotrait = IsPortrait ? CharPotrait1 : CharPotrait2;
+        SaintName = IsPortrait ? SaintName1 : SaintName2;
+        Divider = IsPortrait ? Divider1 : Divider2;
+
         if (!SaintsManager.Instance.UnlockedSaints.Any())
         {
             return;
@@ -87,23 +105,27 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
 
         CharPotrait.enabled = true;
         CharPotrait.sprite = Resources.Load<Sprite>(cleanPath);
-        CharPotrait.transform.localPosition = new Vector3(-10f, CharPotrait.transform.localPosition.y, CharPotrait.transform.localPosition.z);
-        CharPotrait.transform.DOLocalMoveX(0, 0.5f);
+        CharPotrait.transform.localPosition = new Vector3(CharPotrait.transform.localPosition.x - 10f, CharPotrait.transform.localPosition.y, CharPotrait.transform.localPosition.z);
+        CharPotrait.transform.DOLocalMoveX(CharPotrait.transform.localPosition.x+10, 0.5f);
         CharPotrait.DOFade(0, 0);
         CharPotrait.DOFade(1, 0.5f);
 
         SaintName.text = $"<b>{LocalizationManager.Instance.GetText("Name")}:</b> {saintData.Name}\r\n<b>{LocalizationManager.Instance.GetText("Born")}:</b> {saintData.Birthday}\r\n<b>{LocalizationManager.Instance.GetText("Died")}:</b> {saintData.Death}\r\n<b>{LocalizationManager.Instance.GetText("FeastDay")}:</b> {saintData.FeastDay}\r\n<b>{LocalizationManager.Instance.GetText("Patronage")}:</b> {LocalizationManager.Instance.GetText(saintData.PatronKey)}";
-        SaintName.transform.localPosition = new Vector3(-10f, SaintName.transform.localPosition.y, SaintName.transform.localPosition.z);
-        SaintName.transform.DOLocalMoveX(0, 0.5f);
+        SaintName.transform.localPosition = new Vector3(SaintName.transform.localPosition.x - 10f, SaintName.transform.localPosition.y, SaintName.transform.localPosition.z);
+        SaintName.transform.DOLocalMoveX(SaintName.transform.localPosition.x+10, 0.5f);
         SaintName.DOFade(0, 0);
         SaintName.DOFade(1, 0.5f);
 
         Divider.transform.DOScaleY(0, 0);
         Divider.transform.DOScaleY(1, 0.5f);
+
+        SoundManager.Instance.PlayOneShotSfx("Zoom_SFX", timeToDie: 2);
     }
 
     public void SelectSaint()
     {
+        SoundManager.Instance.PlayOneShotSfx("Button_SFX", timeToDie: 2);
+
         StorySequenceObj.SetActive(true);
         
         var currentSaintId = SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex].Id;
@@ -120,10 +142,11 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public void Interact()
     {
+        Debug.Log(Screen.width > Screen.height ? "Landscape" : "Portrait");
         var currentEvent = EventList.ElementAt(CurrentSequenceNumber-1); //getting minus 1 since it would have already increased at the end of the Proceed()
         if (InteractionSfx.Length == 0) return;
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(UI.Instance.GetComponent<RectTransform>(), Input.mousePosition, UI.Instance.GetComponent<Canvas>().worldCamera, out Vector2 screenPos);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(transform.parent.GetComponent<RectTransform>(), Input.mousePosition, transform.parent.GetComponent<Canvas>().worldCamera, out Vector2 screenPos);
 
         // Play sound
         var sfx = InteractionSfx[Random.Range(0, InteractionSfx.Length)];

@@ -12,11 +12,11 @@ EditorBuildSettings:
     path: Assets/_Scenes/MainMenu.unity
     guid: cf5381a7a50ea6444b9967e9dd71a299
   - enabled: 1
-    path: Assets/_Scenes/Levels/StoriesLevelTerminal.unity
-    guid: 6b8b4b3c3926f72408aecbabc01a6b96
-  - enabled: 0
     path: Assets/_Scenes/Levels/StoriesLevel.unity
     guid: 5e9c0ec3de4211a4b919f10c8035904d
+  - enabled: 0
+    path: Assets/_Scenes/Levels/StoriesLevelTerminal.unity
+    guid: 6b8b4b3c3926f72408aecbabc01a6b96
   - enabled: 0
     path: Assets/_Scenes/Levels/SummerLevel Large.unity
     guid: 5ac0cdb7978d0ec47b1f0418596244c6
