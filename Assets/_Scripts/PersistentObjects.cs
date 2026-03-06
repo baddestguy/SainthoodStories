@@ -12,6 +12,7 @@ public class PersistentObjects : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
         instance = this;
         Application.targetFrameRate = 60;
 #if PLATFORM_MOBILE

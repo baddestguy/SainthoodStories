@@ -899,7 +899,7 @@ PlayerSettings:
     Stadia: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3
     Standalone: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;GAIA_2_PRESENT;GAIA_MESH_PRESENT;CROSS_PLATFORM_INPUT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT;DOTWEEN
     VisionOS: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;DOTWEEN
-    WebGL: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;DOTWEEN
+    WebGL: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;DOTWEEN;UNITY_ANALYTICS_EVENT_LOGS
     Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2;MOBILE_INPUT;GAIA_MESH_PRESENT;THIRD_PERSON_CONTROLLER;TEXTMESH_PRO_PRESENT;MICROSOFT_GAME_CORE;GAIA_2_PRESENT;DOTWEEN
     XboxOne: UNITY_POST_PROCESSING_STACK_V2;ENVIRO_3;DOTWEEN
     iPhone: UNITY_POST_PROCESSING_STACK_V2;CROSS_PLATFORM_INPUT;MOBILE_INPUT;PLATFORM_MOBILE;DOTWEEN
@@ -1003,7 +1003,7 @@ PlayerSettings:
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
   cloudServicesEnabled:
-    Purchasing: 1
+    Purchasing: 0
     UNet: 1
   luminIcon:
     m_Name: 
@@ -1026,10 +1026,10 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 08ccdc5a-5f46-4046-8418-86ee22900216
+  cloudProjectId: e42e0ffe-7097-4431-a51c-3731336ff36e
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Sainthood
+  projectName: Sainthood Stories
   organizationId: mr_recursion
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

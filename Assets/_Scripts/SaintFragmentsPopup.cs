@@ -137,12 +137,13 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
         //GameSettings.Instance.SetVolume("Ambiance", 0.5f);
         //GameSettings.Instance.SetVolume("SFX", 0.5f);
 
+        SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+        UGS_Analytics.Instance.LogSaintBegin(SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex].Name);
         Proceed();
     }
 
     public void Interact()
     {
-        Debug.Log(Screen.width > Screen.height ? "Landscape" : "Portrait");
         var currentEvent = EventList.ElementAt(CurrentSequenceNumber-1); //getting minus 1 since it would have already increased at the end of the Proceed()
         if (InteractionSfx.Length == 0) return;
 
@@ -179,6 +180,8 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
 
         if (CurrentSequenceNumber >= EventList.Count())
         {
+            UGS_Analytics.Instance.LogCompletedSaint(SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex].Name);
+
             CloseStory();
             return;
         }
@@ -382,19 +385,15 @@ public class SaintFragmentsPopup : MonoBehaviour, IDragHandler, IEndDragHandler
 
     public void CloseStory()
     {
+        if (CurrentSequenceNumber < EventList.Count())
+            UGS_Analytics.Instance.LogQuitStory(SaintsManager.Instance.UnlockedSaints[CurrentSaintIndex].Name, CurrentSequenceNumber);
+
         CurrentSequenceNumber = 0;
         GameSettings.Instance.SetVolume("Music", prevMusicVol);
         GameSettings.Instance.SetVolume("Ambiance", prevAmbiantVol);
 
         SoundManager.Instance.FadeMusic(0, SoundManager.Instance.MusicAudioSourceChannel1);
-        if (DateTime.Now.Hour > 19 || DateTime.Now.Hour < 6)
-        {
-            SoundManager.Instance.PlayAmbience("SummerNight_Ambience");
-        }
-        else if (DateTime.Now.Hour >= 6)
-        {
-            SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
-        }
+        SoundManager.Instance.PlayAmbience("SummerDay_Ambience");
 
         ShowingIntro = false;
         StorySequenceObj.SetActive(false);

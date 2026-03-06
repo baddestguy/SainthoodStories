@@ -71,7 +71,6 @@ public class MissionManager : MonoBehaviour
         CurrentCollectibleCounter = saveData.CurrentCollectibleCounter;
         FaithPointsPermanentlyLost = saveData.FaithPointsPermanentlyLost;
 
-        Debug.Log("CURRENT MISSION: " + CurrentMissionId);
     }
 
     public void Collect(string item)

@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
         }
 
         GameSettings.Instance.BeginLoad();
-        SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+     //   SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 
 
         SetMissionParameters(MissionDifficulty.HARD, true);
@@ -404,9 +404,8 @@ public class GameManager : MonoBehaviour
                         TutorialManager.Instance.CurrentTutorialStep = data.TutorialSteps;
                     }
                     SaveData = data;
-                    Debug.Log("Run Attempts: " + RunAttempts);
                     CurrentMission = new Mission(SaveData.FP, SaveData.FPPool, SaveData.CP, SaveData.CPPool, SaveData.Energy, SaveData.Time, SaveData.Day, SaveData.Week);
-                    SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
+                   // SoundManager.Instance.PlayOneShotSfx("StartGame_SFX", 1f, 10);
 
                     MissionManager.MissionsBegin();
                     if (GameSettings.Instance.FTUE)
